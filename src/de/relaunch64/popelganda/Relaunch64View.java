@@ -85,15 +85,15 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
     private EditorPanes editorPanes;
-    private AcceleratorKeys acceleratorKeys;
-    private FindReplace findReplace;
+    private final AcceleratorKeys acceleratorKeys;
+    private final FindReplace findReplace;
     /**
      * Initiate the settings-class. this class first of all loads some user settings
      * and e.g. the filepath of the currently used datafile, so it can be automatically opened
      */
-    private Settings settings;
+    private final Settings settings;
     private File outputFile = null;
-    private org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
+    private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
     public Relaunch64View(SingleFrameApplication app, Settings set, AcceleratorKeys ak) {
@@ -145,21 +145,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         Relaunch64View.super.getFrame().addWindowListener(this);
         Relaunch64View.super.getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // init actionlistener
-        jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                if (editorPanes.checkIfSyntaxChangeRequired()) {
-                    editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
-                }
+        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
+            if (editorPanes.checkIfSyntaxChangeRequired()) {
+                editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
             }
         });
-        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
-            @Override public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                // update tabbed pane               
-                editorPanes.updateTabbedPane();
-                // and reset find/replace values, because the content has changed and former
-                // find-index-values are no longer valid
-                findReplace.resetValues();
-            }
+        jTabbedPane1.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+            editorPanes.updateTabbedPane();
+            // and reset find/replace values, because the content has changed and former
+            // find-index-values are no longer valid
+            findReplace.resetValues();
         });
         jTextFieldParams.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void changedUpdate(DocumentEvent e) { editorPanes.updateParams(); }
@@ -209,68 +204,52 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void menuDeselected(javax.swing.event.MenuEvent evt) {}
             @Override public void menuCanceled(javax.swing.event.MenuEvent evt) {}
         });
-        recent1MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(1);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent1MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(1);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent2MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(2);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent2MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(2);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent3MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(3);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent3MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(3);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent4MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(4);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent4MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(4);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent5MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(5);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent5MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(5);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent6MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(6);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent6MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(6);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent7MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(7);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent7MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(7);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
-        recent8MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                File fp = settings.getRecentDoc(8);
-                if (fp!=null && fp.exists()) {
-                    openFile(fp);
-                }
+        recent8MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+            File fp = settings.getRecentDoc(8);
+            if (fp!=null && fp.exists()) {
+                openFile(fp);
             }
         });
     }
