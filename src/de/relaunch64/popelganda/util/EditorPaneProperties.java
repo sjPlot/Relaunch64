@@ -47,7 +47,7 @@ public class EditorPaneProperties {
     private File filePath;
     private int compiler;
     private String param;
-    private Settings settings;
+    private final Settings settings;
     private MyUndoManager undomanager;
     
     public EditorPaneProperties(Settings set) {

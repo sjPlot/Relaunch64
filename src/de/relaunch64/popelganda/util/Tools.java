@@ -113,7 +113,7 @@ public class Tools {
                     // other accepted files are located in the resource map
                     boolean retval = false;
                     String fileext = "."+getFileExtension(f);
-                    if (f!=null && acceptedext!=null && acceptedext.length>0) {
+                    if (acceptedext.length>0) {
                         for (String ext : acceptedext) {
                             if (fileext.equals(ext.toLowerCase())) {
                                 retval = true;

@@ -60,7 +60,7 @@ public final class EditorPaneLineNumbers extends JPanel
     public final static float CENTER = 0.5f;
     public final static float RIGHT = 1.0f;
     private final static Border OUTER = new MatteBorder(0, 0, 0, 2, Color.LIGHT_GRAY);
-    private final static int HEIGHT = Integer.MAX_VALUE - 1000000;
+    private final static int RHEIGHT = Integer.MAX_VALUE - 1000000;
     //  Text component this TextTextLineNumber component is in sync with
     private JTextComponent component;
     //  Properties that can be changed
@@ -93,13 +93,14 @@ public final class EditorPaneLineNumbers extends JPanel
      * @param minimumDisplayDigits the number of digits used to calculate the minimum width of the
      * component
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public EditorPaneLineNumbers(JTextComponent component, int minimumDisplayDigits) {
         this.component = component;
 
         setFont(component.getFont());
 
         setBorderGap(5);
-        setCurrentLineForeground(Color.red);
+        setCurrentLineForeground(Color.MAGENTA);
         setDigitAlignment(RIGHT);
         setMinimumDisplayDigits(minimumDisplayDigits);
 
@@ -182,8 +183,7 @@ public final class EditorPaneLineNumbers extends JPanel
      * Specify the horizontal alignment of the digits within the component. Common values would be:
      * <ul> <li>TextLineNumber.LEFT <li>TextLineNumber.CENTER <li>TextLineNumber.RIGHT (default)
      * </ul>
-     *
-     * @param currentLineForeground the Color used to render the current line
+     * @param digitAlignment 
      */
     public void setDigitAlignment(float digitAlignment) {
         this.digitAlignment =
@@ -228,7 +228,7 @@ public final class EditorPaneLineNumbers extends JPanel
             int preferredWidth = insets.left + insets.right + width;
 
             Dimension d = getPreferredSize();
-            d.setSize(preferredWidth, HEIGHT);
+            d.setSize(preferredWidth, RHEIGHT);
             setPreferredSize(d);
             setSize(d);
         }
@@ -257,8 +257,10 @@ public final class EditorPaneLineNumbers extends JPanel
             try {
                 if (isCurrentLine(rowStartOffset)) {
                     g.setColor(getCurrentLineForeground());
+                    g.setFont(getFont().deriveFont(Font.BOLD));
                 } else {
                     g.setColor(getForeground());
+                    g.setFont(getFont().deriveFont(Font.PLAIN));
                 }
 
                 //  Get the line number as a string and then determine the
@@ -273,7 +275,7 @@ public final class EditorPaneLineNumbers extends JPanel
                 //  Move to the next row
 
                 rowStartOffset = Utilities.getRowEnd(component, rowStartOffset) + 1;
-            } catch (Exception e) {
+            } catch (BadLocationException e) {
             }
         }
     }
@@ -285,12 +287,7 @@ public final class EditorPaneLineNumbers extends JPanel
     private boolean isCurrentLine(int rowStartOffset) {
         int caretPosition = component.getCaretPosition();
         Element root = component.getDocument().getDefaultRootElement();
-
-        if (root.getElementIndex(rowStartOffset) == root.getElementIndex(caretPosition)) {
-            return true;
-        } else {
-            return false;
-        }
+        return root.getElementIndex(rowStartOffset) == root.getElementIndex(caretPosition);
     }
 
     /*
@@ -337,7 +334,7 @@ public final class EditorPaneLineNumbers extends JPanel
         } else // We need to check all the attributes for font changes
         {
             if (fonts == null) {
-                fonts = new HashMap<String, FontMetrics>();
+                fonts = new HashMap<>();
             }
 
             Element root = component.getDocument().getDefaultRootElement();
@@ -411,19 +408,14 @@ public final class EditorPaneLineNumbers extends JPanel
         //  Preferred size of the component has not been updated at the time
         //  the DocumentEvent is fired
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                int preferredHeight = component.getPreferredSize().height;
-
-                //  Document change has caused a change in the number of lines.
-                //  Repaint to reflect the new line numbers
-
-                if (lastHeight != preferredHeight) {
-                    setPreferredWidth();
-                    repaint();
-                    lastHeight = preferredHeight;
-                }
+        SwingUtilities.invokeLater(() -> {
+            int preferredHeight = component.getPreferredSize().height;
+            //  Document change has caused a change in the number of lines.
+            //  Repaint to reflect the new line numbers
+            if (lastHeight != preferredHeight) {
+                setPreferredWidth();
+                repaint();
+                lastHeight = preferredHeight;
             }
         });
     }

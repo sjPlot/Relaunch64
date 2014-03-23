@@ -116,7 +116,7 @@ public class SyntaxScheme {
      * jEditorPanes to enable Syntax Highlighting.
      */
     public static HashMap<String, MutableAttributeSet> getStyleAttributes() {
-        final HashMap<String, MutableAttributeSet> sasArray = new HashMap<String, MutableAttributeSet>();
+        final HashMap<String, MutableAttributeSet> sasArray = new HashMap<>();
         sasArray.put(ConstantsR64.STRING_NORMAL, DEFAULT_NORMAL);
         sasArray.put(ConstantsR64.STRING_COMMENT, DEFAULT_COMMENT);
         sasArray.put(ConstantsR64.STRING_STRING, DEFAULT_STRING);
@@ -170,7 +170,7 @@ public class SyntaxScheme {
      * @return 
      */
     public static HashMap<String, MutableAttributeSet> getKeywordHashMap(int compiler) {
-        final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<String, MutableAttributeSet>();
+        final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<>();
         asmKeywords.put("LDA", DEFAULT_KEYWORD);
         asmKeywords.put("STA", DEFAULT_KEYWORD);
         asmKeywords.put("INC", DEFAULT_KEYWORD);

@@ -60,23 +60,23 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     /**
      * Highlights syntax in a DefaultStyledDocument.  Allows any number of keywords.
      */
-    private DefaultStyledDocument doc;
-    private Element rootElement;
+    private final DefaultStyledDocument doc;
+    private final Element rootElement;
     private boolean multiLineComment;
-    private MutableAttributeSet normal;
-    private MutableAttributeSet comment;
-    private MutableAttributeSet quote;
-    private MutableAttributeSet hexa;
-    private MutableAttributeSet macro;
-    private MutableAttributeSet binary;
-    private MutableAttributeSet jump;
-    private MutableAttributeSet number;
-    private HashMap<String, MutableAttributeSet> keywords;
+    private final MutableAttributeSet normal;
+    private final MutableAttributeSet comment;
+    private final MutableAttributeSet quote;
+    private final MutableAttributeSet hexa;
+    private final MutableAttributeSet macro;
+    private final MutableAttributeSet binary;
+    private final MutableAttributeSet jump;
+    private final MutableAttributeSet number;
+    private final HashMap<String, MutableAttributeSet> keywords;
     private int fontSize;
     private String fontName;
-    private String singleLineComment;
-    private String delimiterList;
-    private int compiler;
+    private final String singleLineComment;
+    private final String delimiterList;
+    private final int compiler;
  
     @SuppressWarnings("LeakingThisInConstructor")
     public SyntaxHighlighting(final HashMap<String, MutableAttributeSet> keywords,
@@ -91,7 +91,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         hexa = attributes.get(ConstantsR64.STRING_HEXA);
         jump = attributes.get(ConstantsR64.STRING_JUMP);
         binary = attributes.get(ConstantsR64.STRING_BIN);
-        binary = attributes.get(ConstantsR64.STRING_MACRO);
+        macro = attributes.get(ConstantsR64.STRING_MACRO);
         
         singleLineComment = slc;
         delimiterList = dll;
@@ -208,7 +208,10 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         keywords.remove(keyword);
     }
  
-    /** sets the number of characters per tab */
+    /**
+     * sets the number of characters per tab
+     * @param charactersPerTab
+     */
     public void setTabs(int charactersPerTab) {
         Font f = new Font(fontName, Font.PLAIN, fontSize);
         FontMetrics fm = java.awt.Toolkit.getDefaultToolkit().getFontMetrics(f);
@@ -584,12 +587,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         // Komma ergänzt
         String operands = delimiterList+additional_operands;
         // String operands = ";:{}()[]+-/%<=>!&|^~*";
-        if (Character.isWhitespace(character.charAt(0))
-                || operands.indexOf(character) != -1) {
-            return true;
-        } else {
-            return false;
-        }
+        return Character.isWhitespace(character.charAt(0)) || operands.contains(character);
     }
     /*
      *  Override for other languages
@@ -617,11 +615,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     protected boolean isQuoteDelimiter(String character) {
         String quoteDelimiters = "\"'";
-        if (quoteDelimiters.indexOf(character) < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return quoteDelimiters.contains(character);
     }
  
     /*
@@ -629,11 +623,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     protected boolean isHexCharDelimiter(String character) {
         String quoteDelimiters = "#";
-        if (quoteDelimiters.indexOf(character) < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return quoteDelimiters.contains(character);
     }
     
     /*
@@ -641,11 +631,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     protected boolean isJumpDelimiter(String character) {
         String quoteDelimiters = ".";
-        if (quoteDelimiters.indexOf(character) < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return quoteDelimiters.contains(character);
     }
     
     /*
@@ -653,11 +639,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     protected boolean isBinCharDelimiter(String character) {
         String quoteDelimiters = "#%";
-        if (quoteDelimiters.indexOf(character) < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return quoteDelimiters.contains(character);
     }
     
     /*
@@ -665,13 +647,9 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     protected boolean isLoHiByteDelimiter(String character) {
         String quoteDelimiters = "#<";
-        if (quoteDelimiters.indexOf(character) < 0) {
+        if (!quoteDelimiters.contains(character)) {
             quoteDelimiters = "#>";
-            if (quoteDelimiters.indexOf(character) < 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return quoteDelimiters.contains(character);
         } else {
             return true;
         }
@@ -682,11 +660,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     protected boolean isHexAddressDelimiter(String character) {
         String quoteDelimiters = "$";
-        if (quoteDelimiters.indexOf(character) < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return quoteDelimiters.contains(character);
     }
     
     /*
@@ -733,12 +707,18 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         return "{\n" + whiteSpace.toString() + "\t\n" + whiteSpace.toString() + "}";
     }
  
-    /** gets the current font size */
+    /** 
+     * gets the current font size
+     * @return  
+     */
     public int getFontSize() {
         return fontSize;
     }
  
-    /** sets the current font size (affects all built-in styles) */
+    /**
+     * sets the current font size (affects all built-in styles)
+     * @param fontSize
+     */
     public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
         StyleConstants.setFontSize(normal, fontSize);
@@ -751,12 +731,18 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         StyleConstants.setFontSize(comment, fontSize);
     }
  
-    /** gets the current font family */
+    /** 
+     * gets the current font family
+     * @return 
+     */
     public String getFontName() {
         return fontName;
     }
  
-    /** sets the current font family (affects all built-in styles) */
+    /** 
+     * sets the current font family (affects all built-in styles)
+     * @param fontName
+     */
     public void setFontName(String fontName) {
         this.fontName = fontName;
         StyleConstants.setFontFamily(normal, fontName);

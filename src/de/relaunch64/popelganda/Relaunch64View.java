@@ -437,21 +437,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 else {
                     p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
                 }
-                // create scanner to receive compiler messages
-                Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"));
                 // write output to text area
-                while (sc.hasNextLine()) {
-                    jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                // create scanner to receive compiler messages
+                try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
+                    // write output to text area
+                    while (sc.hasNextLine()) {
+                        jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                    }
                 }
-                // close scanner and destroy process
-                sc.close();
                 p.waitFor();
                 p.destroy();
             }
-            catch (IOException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-            }
-            catch (InterruptedException ex) {
+            catch (IOException | InterruptedException ex) {
                 ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             }
         }
@@ -495,14 +492,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     pb.directory(compPath.getParentFile());
                     // start process
                     Process p = pb.start();
-                    // create scanner to receive compiler messages
-                    Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"));
                     // write output to text area
-                    while (sc.hasNextLine()) {
-                        jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                    // create scanner to receive compiler messages
+                    try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
+                        // write output to text area
+                        while (sc.hasNextLine()) {
+                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                        }
                     }
-                    // close scanner and destroy process
-                    sc.close();
                     p.destroy();
                     // specifiy output file
                     outputFile = Tools.setFileExtension(afile, "prg");
@@ -601,13 +598,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         try {
             // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             UIManager.setLookAndFeel(lafclassname);
-        } catch (UnsupportedLookAndFeelException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-        } catch (ClassNotFoundException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-        } catch (InstantiationException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-        } catch (IllegalAccessException ex) {
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
@@ -689,13 +680,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // check for valid values
                 if (files!=null && files.size()>0) {
                     // create list with final image files
-                    List<File> anyfiles = new ArrayList<File>();
+                    List<File> anyfiles = new ArrayList<>();
                     // dummy
                     File file;
-                    // iterate droplist
-                    for (int i = 0; i < files.size(); i++) {
+                    for (Object file1 : files) {
                         // get each single object from droplist
-                        file = (File) files.get(i);
+                        file = (File) file1;
                         // check whether it is a file
                         if (file.isFile()) {
                             // if it's an image, add it to image file list
@@ -709,10 +699,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // i.e. any files have been dragged and dropped
                     // if so, insert attachments
                     if (anyfiles.size()>0) {
-                        // open all dropped files
-                        for (File f : anyfiles) {
+//                        for (File f : anyfiles) {
+//                            openFile(f);
+//                        }
+                        anyfiles.stream().forEach((f) -> {
                             openFile(f);
-                        }
+                        });
                     }
                 }
                 dtde.getDropTargetContext().dropComplete(true);
@@ -721,10 +713,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 dtde.rejectDrop();
             }
         }
-        catch (IOException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-            dtde.rejectDrop();
-        } catch (UnsupportedFlavorException ex) {
+        catch (IOException | UnsupportedFlavorException ex) {
             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             dtde.rejectDrop();
         }
@@ -784,7 +773,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private boolean askForSaveChanges(String title) {
         // first check whether we have unsaved changes
-        StringBuilder confirmText = new StringBuilder("");
+        String confirmText = "";
         // check, which part of the data file has unsaved changes and set the related
         // warning message and title strings.
         // check whether we have any changes at all
@@ -792,7 +781,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // if we have any strings, we can assume we have to save changes
         if (anychanges) {
             // if so, open a confirm dialog
-            int option = JOptionPane.showConfirmDialog(getFrame(), getResourceMap().getString("msgSaveChangesOnExit",confirmText.toString()), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int option = JOptionPane.showConfirmDialog(getFrame(), getResourceMap().getString("msgSaveChangesOnExit", confirmText), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             // if no save is requested, exit immediately
             if (JOptionPane.NO_OPTION == option) {
                 return true;
@@ -814,21 +803,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public class TextAreaHandler extends java.util.logging.Handler {
         @Override
         public void publish(final LogRecord record) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    StringWriter text = new StringWriter();
-                    PrintWriter out = new PrintWriter(text);
-                    out.println(jTextAreaLog.getText());
-                    // get source class name
-                    String scn = record.getSourceClassName();
-                    int p = scn.lastIndexOf(".");
-                    if (p>0) {
-                        scn = scn.substring(p+1);
-                    }
-                    out.printf("%s.%s"+System.getProperty("line.separator")+"[%s] %s", scn ,record.getSourceMethodName(), record.getLevel(), record.getMessage());
-                    jTextAreaLog.setText(text.toString());
+            SwingUtilities.invokeLater(() -> {
+                StringWriter text = new StringWriter();
+                PrintWriter out = new PrintWriter(text);
+                out.println(jTextAreaLog.getText());
+                // get source class name
+                String scn = record.getSourceClassName();
+                int p = scn.lastIndexOf(".");
+                if (p>0) {
+                    scn = scn.substring(p+1);
                 }
+                out.printf("%s.%s"+System.getProperty("line.separator")+"[%s] %s", scn ,record.getSourceMethodName(), record.getLevel(), record.getMessage());
+                jTextAreaLog.setText(text.toString());
             });
         }
 

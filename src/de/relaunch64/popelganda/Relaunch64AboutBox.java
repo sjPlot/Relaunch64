@@ -60,11 +60,9 @@ public class Relaunch64AboutBox extends javax.swing.JDialog {
         // presses the escape-key, the same action is performed as if the user
         // presses the cancel button...
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        ActionListener cancelAction = new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
-                setVisible(false);
-                dispose();
-            }
+        ActionListener cancelAction = (ActionEvent evt) -> {
+            setVisible(false);
+            dispose();
         };
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
         URL licenceText = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResource("/de/relaunch64/popelganda/resources/licence.html");
@@ -146,10 +144,7 @@ public class Relaunch64AboutBox extends javax.swing.JDialog {
                     jEditorPane1.scrollToReference(linktype.substring(1));
                 }
             }
-            catch (IOException e) {
-                ConstantsR64.r64logger.log(Level.WARNING,e.getLocalizedMessage());
-            }
-            catch (URISyntaxException e) {
+            catch (IOException | URISyntaxException e) {
                 ConstantsR64.r64logger.log(Level.WARNING,e.getLocalizedMessage());
             }
         }

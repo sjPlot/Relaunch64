@@ -45,7 +45,7 @@ import javax.swing.text.BadLocationException;
  */
 public class FindReplace {
     private int findpos = -1;
-    private LinkedList<Integer[]> findselections = new LinkedList<Integer[]>();
+    private final LinkedList<Integer[]> findselections = new LinkedList<>();
     private String findText;
     private String replaceText;
     private String content;

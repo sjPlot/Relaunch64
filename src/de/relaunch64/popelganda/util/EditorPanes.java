@@ -62,13 +62,13 @@ import javax.swing.text.StyledEditorKit;
  * @author Daniel Luedecke
  */
 public class EditorPanes {
-    private List<EditorPaneProperties> editorPaneArray = new ArrayList<EditorPaneProperties>();
+    private final List<EditorPaneProperties> editorPaneArray = new ArrayList<>();
     private JTabbedPane tabbedPane = null;
     private JComboBox comboBox = null;
     private JTextField textField = null;
-    private Relaunch64View mainFrame;
-    private Settings settings;
-    private org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
+    private final Relaunch64View mainFrame;
+    private final Settings settings;
+    private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
     /**
@@ -415,6 +415,7 @@ public class EditorPanes {
     /**
      * 
      * @param filepath 
+     * @param compiler 
      */
     public void loadFile(File filepath, int compiler) {
         // retrieve current tab
@@ -426,10 +427,8 @@ public class EditorPanes {
                 if (filepath!=null && filepath.exists()) {
                     // read file
                     byte[] buffer = new byte[(int) filepath.length()];
-                    try {
-                        InputStream in = new FileInputStream(filepath);
+                    try (InputStream in = new FileInputStream(filepath)) {
                         in.read(buffer);
-                        in.close();
                     }
                     catch (IOException ex) {
                         ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
@@ -481,7 +480,6 @@ public class EditorPanes {
                             fw.close();
                             setModified(false);
                             setTabTitle(selectedTab, filepath);
-                            return true;
                         } catch (IOException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
                             return false;
@@ -528,7 +526,7 @@ public class EditorPanes {
             String fpath = "";
             String fname = "";
             // check for valid value
-            if (null==fp) {
+            if (null!=fp) {
                 fpath = fp.getPath();
                 fname = fp.getName();
             }

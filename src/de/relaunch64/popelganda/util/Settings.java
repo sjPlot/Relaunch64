@@ -62,10 +62,11 @@ public class Settings {
     private static final String SETTING_PARAM_KICKASSEMBLER = "paramKickAssembler";
     private static final String SETTING_PARAM_ACME = "paramAcme";
     
-    private File filepath;
-    private boolean IS_WINDOWS;
+    private final File filepath;
+    private final boolean IS_WINDOWS;
     /**
      * Indicates whether the OS is a windows OS
+     * @return 
      */
     public boolean isWindows() {
         return IS_WINDOWS;
@@ -106,10 +107,7 @@ public class Settings {
                 SAXBuilder builder = new SAXBuilder();
                 settingsFile = builder.build(filepath);
             }
-            catch (JDOMException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-            }
-            catch (IOException ex) {
+            catch (JDOMException | IOException ex) {
                 ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             }
         }
@@ -253,7 +251,7 @@ public class Settings {
             return;
         }
         // create linked list
-        LinkedList<String> recdocs = new LinkedList<String>();
+        LinkedList<String> recdocs = new LinkedList<>();
         // add new filepath to linked list
         recdocs.add(fp);
         // iterate all current recent documents
@@ -417,7 +415,7 @@ public class Settings {
     }
     /**
      * 
-     * @param compiler
+     * @param emulator
      * @return 
      */
     public File getEmulatorPath(int emulator) {
