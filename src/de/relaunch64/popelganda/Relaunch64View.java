@@ -428,12 +428,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             try {
                 ProcessBuilder pb;
                 Process p;
+                // Start ProcessBuilder
                 if (settings.isWindows()) {
                     pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
                     pb.directory(emuPath.getParentFile());
                     // start process
                     p = pb.start();
                 }
+                // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
                 else {
                     p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
                 }
@@ -479,43 +481,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 String path = compPath.toString();
                 try {
                     // start process, i.e. compile file
-                    ProcessBuilder pb = null;
-                    Process p = null;
+                    ProcessBuilder pb;
                     // use parameters according to the compiler
                     switch (compiler) {
                         case ConstantsR64.COMPILER_KICKASSEMBLER:
                             pb = new ProcessBuilder("java", "-jar", path, param);                        
                             break;
                         case ConstantsR64.COMPILER_ACME:
-                            if (settings.isWindows()) {
-                                // TODO wie exe aus windows starten?
-                                pb = new ProcessBuilder(path, outputFile.toString(), param);
-                            }
-                            else {
-                                p = Runtime.getRuntime().exec(new String[] {"open", compPath.toString(), outputFile.toString(), param});
-                            }
+                            // TODO wie exe aus windows starten?
+                            pb = new ProcessBuilder(path, param);
+                            // p = Runtime.getRuntime().exec(new String[] {"open", compPath.toString(), param});
                             break;
                         default:
                             pb = new ProcessBuilder("java", "-jar", path, param);                        
                             break;
                     }
-                    if (pb!=null) {
-                        pb.directory(compPath.getParentFile());
-                        // start process
-                        p = pb.start();
-                    }
-                    if (p!=null) {
+                    pb.directory(compPath.getParentFile());
+                    // start process
+                    Process p = pb.start();
+                    // write output to text area
+                    // create scanner to receive compiler messages
+                    try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
                         // write output to text area
-                        // create scanner to receive compiler messages
-                        try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
-                            // write output to text area
-                            while (sc.hasNextLine()) {
-                                jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
-                            }
+                        while (sc.hasNextLine()) {
+                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
                         }
-                        p.waitFor();
-                        p.destroy();
                     }
+                    p.waitFor();
+                    p.destroy();
                     // specifiy output file
                     outputFile = Tools.setFileExtension(afile, "prg");
                 }
