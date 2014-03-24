@@ -67,12 +67,28 @@ public class Settings {
     
     private final File filepath;
     private final boolean IS_WINDOWS;
+    private final boolean IS_OSX;
+    private final boolean IS_LINUX;
     /**
      * Indicates whether the OS is a windows OS
      * @return 
      */
     public boolean isWindows() {
         return IS_WINDOWS;
+    }
+    /**
+     * Indicates whether the OS is a Mac OS X
+     * @return 
+     */
+    public boolean isOSX() {
+        return IS_OSX;
+    }
+    /**
+     * Indicates whether the OS is Linux
+     * @return 
+     */
+    public boolean isLinux() {
+        return IS_LINUX;
     }
     /**
      * XML-Document that stores the settings-information
@@ -84,6 +100,8 @@ public class Settings {
         settingsFile = new Document(new Element("settings"));
         // check os
         IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");
+        IS_OSX = System.getProperty("os.name").toLowerCase().startsWith("mac os");
+        IS_LINUX = System.getProperty("os.name").toLowerCase().contains("linux");
         // create file path to settings file
         filepath = createFilePath("relaunch64-settings.xml");
         // now fill the initoal elements
@@ -441,7 +459,7 @@ public class Settings {
      * @return 
      */
     public File getEmulatorPath(int emulator) {
-        Element el;
+        Element el = null;
         switch (emulator) {
             case ConstantsR64.EMU_VICE:
                 el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE);
@@ -451,9 +469,6 @@ public class Settings {
                 break;
             case ConstantsR64.EMU_FRODO:
                 el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO);
-                break;
-            default:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU);
                 break;
         }
         File value = null;
@@ -469,7 +484,7 @@ public class Settings {
      */
     public void setEmulatorPath(int emulator, File path) {
         if (path!=null) {
-            Element el;
+            Element el = null;
             switch (emulator) {
                 case ConstantsR64.EMU_VICE:
                     el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE);
@@ -492,15 +507,10 @@ public class Settings {
                         settingsFile.getRootElement().addContent(el);
                     }
                     break;
-                default:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_EMU);
-                        settingsFile.getRootElement().addContent(el);
-                    }
-                    break;
             }
-            el.setText(path.toString());
+            if (el!=null) {
+                el.setText(path.toString());
+            }
         }
     }
 }

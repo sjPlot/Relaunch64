@@ -477,34 +477,49 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
                 // convert file object to string
                 String path = compPath.toString();
-                // start process, i.e. compile file
-                ProcessBuilder pb;
-                // use parameters according to the compiler
-                switch (compiler) {
-                    case ConstantsR64.COMPILER_KICKASSEMBLER:
-                        pb = new ProcessBuilder("java", "-jar", path, param);                        
-                        break;
-                    default:
-                        pb = new ProcessBuilder("java", "-jar", path, param);                        
-                        break;
-                }
                 try {
-                    pb.directory(compPath.getParentFile());
-                    // start process
-                    Process p = pb.start();
-                    // write output to text area
-                    // create scanner to receive compiler messages
-                    try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
-                        // write output to text area
-                        while (sc.hasNextLine()) {
-                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
-                        }
+                    // start process, i.e. compile file
+                    ProcessBuilder pb = null;
+                    Process p = null;
+                    // use parameters according to the compiler
+                    switch (compiler) {
+                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                            pb = new ProcessBuilder("java", "-jar", path, param);                        
+                            break;
+                        case ConstantsR64.COMPILER_ACME:
+                            if (settings.isWindows()) {
+                                // TODO wie exe aus windows starten?
+                                pb = new ProcessBuilder(path, outputFile.toString(), param);
+                            }
+                            else {
+                                p = Runtime.getRuntime().exec(new String[] {"open", compPath.toString(), outputFile.toString(), param});
+                            }
+                            break;
+                        default:
+                            pb = new ProcessBuilder("java", "-jar", path, param);                        
+                            break;
                     }
-                    p.destroy();
+                    if (pb!=null) {
+                        pb.directory(compPath.getParentFile());
+                        // start process
+                        p = pb.start();
+                    }
+                    if (p!=null) {
+                        // write output to text area
+                        // create scanner to receive compiler messages
+                        try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
+                            // write output to text area
+                            while (sc.hasNextLine()) {
+                                jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                            }
+                        }
+                        p.waitFor();
+                        p.destroy();
+                    }
                     // specifiy output file
                     outputFile = Tools.setFileExtension(afile, "prg");
                 }
-                catch (IOException ex) {
+                catch (IOException | InterruptedException ex) {
                     ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
                 }
             }
