@@ -59,6 +59,9 @@ public class Settings {
     private static final String SETTING_PATH_KICKASSEMBLER = "pathKickAssembler";
     private static final String SETTING_PATH_ACME = "pathAcme";
     private static final String SETTING_PATH_EMU = "pathEmulator";
+    private static final String SETTING_PATH_EMU_VICE = "pathEmulatorVice";
+    private static final String SETTING_PATH_EMU_CCS64 = "pathEmulatorCCS64";
+    private static final String SETTING_PATH_EMU_FRODO = "pathEmulatorFrodo";
     private static final String SETTING_PARAM_KICKASSEMBLER = "paramKickAssembler";
     private static final String SETTING_PARAM_ACME = "paramAcme";
     
@@ -111,9 +114,7 @@ public class Settings {
                 ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             }
         }
-        else {
-            fillElements();
-        }
+        fillElements();
     }
     /**
      * Loads the settings file
@@ -179,6 +180,27 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU)) {
             // create element
             Element el = new Element(SETTING_PATH_EMU);
+            el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE)) {
+            // create element
+            Element el = new Element(SETTING_PATH_EMU_VICE);
+            el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_CCS64)) {
+            // create element
+            Element el = new Element(SETTING_PATH_EMU_CCS64);
+            el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO)) {
+            // create element
+            Element el = new Element(SETTING_PATH_EMU_FRODO);
             el.setText("");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
@@ -422,7 +444,13 @@ public class Settings {
         Element el;
         switch (emulator) {
             case ConstantsR64.EMU_VICE:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU);
+                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE);
+                break;
+            case ConstantsR64.EMU_CCS64:
+                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_CCS64);
+                break;
+            case ConstantsR64.EMU_FRODO:
+                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO);
                 break;
             default:
                 el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU);
@@ -436,14 +464,35 @@ public class Settings {
     }
     /**
      * 
-     * @param compiler
+     * @param emulator
      * @param path 
      */
-    public void setEmulatorPath(int compiler, File path) {
+    public void setEmulatorPath(int emulator, File path) {
         if (path!=null) {
-            Element el = null;
-            switch (compiler) {
+            Element el;
+            switch (emulator) {
                 case ConstantsR64.EMU_VICE:
+                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE);
+                    if (null==el) {
+                        el = new Element(SETTING_PATH_EMU_VICE);
+                        settingsFile.getRootElement().addContent(el);
+                    }
+                    break;
+                case ConstantsR64.EMU_CCS64:
+                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_CCS64);
+                    if (null==el) {
+                        el = new Element(SETTING_PATH_EMU_CCS64);
+                        settingsFile.getRootElement().addContent(el);
+                    }
+                    break;
+                case ConstantsR64.EMU_FRODO:
+                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO);
+                    if (null==el) {
+                        el = new Element(SETTING_PATH_EMU_FRODO);
+                        settingsFile.getRootElement().addContent(el);
+                    }
+                    break;
+                default:
                     el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU);
                     if (null==el) {
                         el = new Element(SETTING_PATH_EMU);
@@ -451,9 +500,7 @@ public class Settings {
                     }
                     break;
             }
-            if (el!=null) {
-                el.setText(path.toString());
-            }
+            el.setText(path.toString());
         }
     }
 }

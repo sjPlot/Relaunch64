@@ -20,9 +20,11 @@ import org.jdesktop.application.Action;
  * @author danielludecke
  */
 public class SettingsDlg extends javax.swing.JDialog {
-    private Settings settings;
+    private final Settings settings;
     /**
      * Creates new form SettingsDlg
+     * @param parent
+     * @param s
      */
     public SettingsDlg(java.awt.Frame parent, Settings s) {
         super(parent);
@@ -40,24 +42,18 @@ public class SettingsDlg extends javax.swing.JDialog {
         // presses the escape-key, the same action is performed as if the user
         // presses the cancel button...
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        ActionListener cancelAction = new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
-                setVisible(false);
-                dispose();
-            }
+        ActionListener cancelAction = (ActionEvent evt) -> {
+            setVisible(false);
+            dispose();
         };
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
-        jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateCompilerSettings();
-                setModifiedTabCompiler(false);
-            }
+        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
+            updateCompilerSettings();
+            setModifiedTabCompiler(false);
         });
-        jComboBoxEmulators.addActionListener(new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateEmulatorSettings();
-                setModifiedTabEmulator(false);
-            }
+        jComboBoxEmulators.addActionListener((java.awt.event.ActionEvent evt) -> {
+            updateEmulatorSettings();
+            setModifiedTabEmulator(false);
         });
         jTextFieldCompilerParam.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -172,7 +168,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         if (selected!=-1) {
             // retrieve compiler path
             File path = new File(jTextFieldCompilerPath.getText());
-            if (path.isFile() && path.exists()) {
+            if (path.exists()) {
                 settings.setCompilerPath(selected, path);
             }
             // retrieve compiler param
@@ -192,7 +188,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         if (selected!=-1) {
             // retrieve compiler path
             File path = new File(jTextFieldEmulatorPath.getText());
-            if (path.isFile() && path.exists()) {
+            if (path.exists()) {
                 settings.setEmulatorPath(selected, path);
             }
             // reset apply button
@@ -302,12 +298,10 @@ public class SettingsDlg extends javax.swing.JDialog {
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jPanel1Layout.createSequentialGroup()
                                         .add(12, 12, 12)
-                                        .add(jLabelParamInfo)
-                                        .add(305, 305, 305))
+                                        .add(jLabelParamInfo))
                                     .add(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(jTextFieldCompilerParam)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))))
+                                        .add(6, 6, 6)
+                                        .add(jTextFieldCompilerParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 370, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jLabel1)
@@ -315,8 +309,8 @@ public class SettingsDlg extends javax.swing.JDialog {
                                 .add(23, 23, 23)
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(jTextFieldCompilerPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 370, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .add(jTextFieldCompilerPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 370, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(jButtonBrowseCompilerPath))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
@@ -341,9 +335,9 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(jTextFieldCompilerParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabelParamInfo)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jButton1)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -381,8 +375,8 @@ public class SettingsDlg extends javax.swing.JDialog {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel2Layout.createSequentialGroup()
-                                .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 386, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(jButtonBrowseEmulatorPath))
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jComboBoxEmulators, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -390,7 +384,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
                         .add(jButton2)))
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -404,7 +398,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(jLabel5)
                     .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButtonBrowseEmulatorPath))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jButton2)
                 .addContainerGap())
         );
@@ -415,11 +409,17 @@ public class SettingsDlg extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
