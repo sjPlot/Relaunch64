@@ -64,6 +64,7 @@ public class Settings {
     private static final String SETTING_PATH_EMU_FRODO = "pathEmulatorFrodo";
     private static final String SETTING_PARAM_KICKASSEMBLER = "paramKickAssembler";
     private static final String SETTING_PARAM_ACME = "paramAcme";
+    private static final String REC_DOC_COMPILER = "compiler";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -260,6 +261,19 @@ public class Settings {
         return null;
     }
     /**
+     * 
+     * @param doc
+     * @return 
+     */
+    public int findRecentDoc(String doc) {
+        if (null==doc || doc.isEmpty()) return -1;
+        // iterate all current recent documents
+        for (int cnt=1; cnt<=recentDocCount; cnt++) {
+            if (getRecentDoc(cnt).getPath().equals(doc)) return cnt;
+        }
+        return -1;
+    }
+    /**
      * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent document
      * does not exist or is empty
      * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
@@ -279,8 +293,9 @@ public class Settings {
      * This method adds the file from the filepath {@code fp} to the list of recent
      * documents and rotates that list, if necessary.
      * @param fp the filepath to the document that should be added to the list of recent documents
+     * @param compiler
      */
-    public void addToRecentDocs(String fp) {
+    public void addToRecentDocs(String fp, int compiler) {
         // check for valid parameter
         if (null==fp || fp.isEmpty()) {
             return;
@@ -313,11 +328,11 @@ public class Settings {
             // check for valid bounds of linked list
             if (recdocs.size()>=cnt) {
                 // and set recent document
-                setRecentDoc(cnt, recdocs.get(cnt-1));
+                setRecentDoc(cnt, recdocs.get(cnt-1), compiler);
             }
             // else fill remaining recent documents with empty strings
             else {
-                setRecentDoc(cnt, "");
+                setRecentDoc(cnt, "", -1);
             }
         }
     }
@@ -325,10 +340,11 @@ public class Settings {
      * Add a new recent document to the position {@code nr} in the list of recent documents.
      * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
      * @param fp the filepath to the recently used document as string
+     * @param compiler
      */
-    public void setRecentDoc(int nr, String fp) {
+    public void setRecentDoc(int nr, String fp, int compiler) {
         // check for valid parameter
-        if (null==fp ) {
+        if (null==fp || -1==nr) {
             return;
         }
         // retrieve element
@@ -337,6 +353,7 @@ public class Settings {
         if (el!=null) {
             // add filepath
             el.setText(fp);
+            el.setAttribute(REC_DOC_COMPILER, String.valueOf(compiler));
         }
         else {
             // create a filepath-element

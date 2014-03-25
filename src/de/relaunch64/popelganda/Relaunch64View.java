@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Scanner;
@@ -346,6 +347,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             settingsDlg.setLocationRelativeTo(getFrame());
         }
         Relaunch64App.getApplication().show(settingsDlg);
+        // save the settings
+        saveSettings();
     }
     @Action
     public void undoAction() {
@@ -368,9 +371,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openFile(fileToOpen);
     }
     private void openFile(File fileToOpen) {
-        editorPanes.loadFile(fileToOpen, jComboBoxCompilers.getSelectedIndex());        
+        openFile(fileToOpen, jComboBoxCompilers.getSelectedIndex());
+    }
+    private void openFile(File fileToOpen, int compiler) {
+        editorPanes.loadFile(fileToOpen, compiler);        
         // add file path to recent documents history
-        settings.addToRecentDocs(fileToOpen.toString());
+        settings.addToRecentDocs(fileToOpen.toString(), compiler);
         // and update menus
         setRecentDocuments();
     }
@@ -477,25 +483,38 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // set filename
                     param = afile.toString();
                 }
+                // check if param contains dest file
+                if (!param.contains(afile.toString())) {
+                    // check whether param contains INPUT constant
+                    // which should be replaced with INPUT file
+                    if (param.contains(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
+                        // replace with file
+                        param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, afile.toString());
+                    }
+                    else {
+                        param = afile.toString()+" "+param;
+                    }
+                }
                 // convert file object to string
                 String path = compPath.toString();
                 try {
                     // start process, i.e. compile file
-                    ProcessBuilder pb;
+                    List<String> args;
                     // use parameters according to the compiler
                     switch (compiler) {
                         case ConstantsR64.COMPILER_KICKASSEMBLER:
-                            pb = new ProcessBuilder("java", "-jar", path, param);                        
+                            args = Arrays.asList("java", "-jar", path, param);
                             break;
                         case ConstantsR64.COMPILER_ACME:
                             // TODO wie exe aus windows starten?
-                            pb = new ProcessBuilder(path, param);
+                            args = Arrays.asList(path, param);
                             // p = Runtime.getRuntime().exec(new String[] {"open", compPath.toString(), param});
                             break;
                         default:
-                            pb = new ProcessBuilder("java", "-jar", path, param);                        
+                            args = Arrays.asList("java", "-jar", path, param);
                             break;
                     }
+                    ProcessBuilder pb = new ProcessBuilder(args);
                     pb.directory(compPath.getParentFile());
                     // start process
                     Process p = pb.start();
@@ -593,7 +612,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 nimbusclassname = laf.getClassName();
             }
         }
-        // check which laf was found and set appropriate default value
+        // check which laf was found and set appropriate default value 
         if (laf_nimbus_found) {
             lafclassname = nimbusclassname;
         }
@@ -733,13 +752,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private class ConfirmExit implements Application.ExitListener {
         @Override
         public boolean canExit(EventObject e) {
+            // save the settings
+            saveSettings();
             // return true to say "yes, we can", or false if exiting should be cancelled
             return askForSaveChanges(getResourceMap().getString("msgSaveChangesOnExitTitle"));
         }
         @Override
         public void willExit(EventObject e) {
-            // save the settings
-            saveSettings();
         }
     }
     @Override

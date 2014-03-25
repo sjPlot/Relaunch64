@@ -49,7 +49,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (beta 2)";
+    public static final String APPLICATION_TITLE = "Relaunch64 (beta 3)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
@@ -77,6 +77,8 @@ public class ConstantsR64 {
     public static final String STRING_MACRO = "macro";
     public static final String STRING_JUMP = "jump";
 
+    public static final String ASSEMBLER_INPUT_FILE = "INPUT";
+    
     public static final int EMU_VICE = 0;
     public static final int EMU_CCS64 = 1;
     public static final int EMU_FRODO = 2;
