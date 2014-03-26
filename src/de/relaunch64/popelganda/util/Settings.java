@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.logging.Level;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -246,6 +247,8 @@ public class Settings {
      * @return the recent document (the file path) as string, or {@code null} if no such element or path exists.
      */
     public File getRecentDoc(int nr) {
+        // checl for valid parameter
+        if (nr<0) return null;
         // retrieve element
         Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
@@ -259,6 +262,33 @@ public class Settings {
         }
         // else return null
         return null;
+    }
+    /**
+     * 
+     * @param nr
+     * @return 
+     */
+    public int getRecentDocCompiler(int nr) {
+        // checl for valid parameter
+        if (nr<0) return 0;
+        // retrieve element
+        Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        // if we have any valid document
+        if (el!=null) {
+            // retrieve compiler attribute
+            Attribute comp = el.getAttribute(REC_DOC_COMPILER);
+            // if we have any valid attribute
+            if (comp!=null) {
+                try {
+                    return Integer.parseInt(comp.getValue());
+                }
+                catch (NumberFormatException ex) {
+                    return 0;
+                }
+            }
+        }
+        // else return null
+        return 0;
     }
     /**
      * 
@@ -307,18 +337,23 @@ public class Settings {
         }
         // create linked list
         LinkedList<String> recdocs = new LinkedList<>();
+        // linked list for compilers
+        LinkedList<Integer> reccomps = new LinkedList<>();
         // add new filepath to linked list
         recdocs.add(fp);
+        reccomps.add(compiler);
         // iterate all current recent documents
         for (int cnt=1; cnt<=recentDocCount; cnt++) {
             // retrieve recent document
             String recentDoc = getRecentDocAsString(cnt);
+            int comp = getRecentDocCompiler(cnt);
             // check whether the linked list already contains such a document
             if (recentDoc!=null && !recentDoc.isEmpty()) {
                 // check for existing file
                 dummy = new File(recentDoc);
                 // if not, add it to the list
                 if (dummy.exists() && !recdocs.contains(recentDoc)) {
+                    reccomps.add(comp);
                     recdocs.add(recentDoc);
                 }
             }
@@ -328,7 +363,7 @@ public class Settings {
             // check for valid bounds of linked list
             if (recdocs.size()>=cnt) {
                 // and set recent document
-                setRecentDoc(cnt, recdocs.get(cnt-1), compiler);
+                setRecentDoc(cnt, recdocs.get(cnt-1), reccomps.get(cnt-1));
             }
             // else fill remaining recent documents with empty strings
             else {

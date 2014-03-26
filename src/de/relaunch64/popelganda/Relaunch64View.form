@@ -12,7 +12,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jSplitPane1" pref="0" max="32767" attributes="0"/>
+                  <Component id="jSplitPane1" pref="788" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Component id="jPanel5" alignment="0" max="32767" attributes="0"/>
@@ -400,7 +400,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jComboBoxCompilers" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextFieldParams" min="-2" pref="200" max="-2" attributes="0"/>
+                      <Component id="jTextFieldParams" min="-2" pref="240" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonRun" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -414,8 +414,8 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jComboBoxCompilers" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldParams" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldParams" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -437,18 +437,18 @@
                 <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextFieldParams">
-              <Properties>
-                <Property name="toolTipText" type="java.lang.String" resourceKey="jTextFieldParams.toolTipText"/>
-                <Property name="name" type="java.lang.String" value="jTextFieldParams" noResource="true"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JButton" name="jButtonRun">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="runFile" methodName="runFile"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jButtonRun" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jTextFieldParams">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jTextFieldParams.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jTextFieldParams" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

@@ -269,7 +269,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             highlightLinesAfter(content, endLine);
         }
     }
- 
+    
     private boolean commentLinesBefore(String content, int line) {
         int offset = rootElement.getElement(line).getStartOffset();
         //  Start of comment not found, nothing to do
@@ -352,7 +352,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         }
         checkForTokens(content, startOffset, endOffset);
     }
- 
+    
     private boolean startingMultiLineComment(String content, int startOffset, int endOffset)
             throws BadLocationException {
         int index = indexOf(content, getStartDelimiter(), startOffset);

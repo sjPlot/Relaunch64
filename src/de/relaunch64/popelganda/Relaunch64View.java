@@ -208,49 +208,49 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         recent1MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(1);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(1));
             }
         });
         recent2MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(2);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(2));
             }
         });
         recent3MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(3);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(3));
             }
         });
         recent4MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(4);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(4));
             }
         });
         recent5MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(5);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(5));
             }
         });
         recent6MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(6);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(6));
             }
         });
         recent7MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(7);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(7));
             }
         });
         recent8MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
             File fp = settings.getRecentDoc(8);
             if (fp!=null && fp.exists()) {
-                openFile(fp);
+                openFile(fp, settings.getRecentDocCompiler(8));
             }
         });
     }
@@ -894,8 +894,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5 = new javax.swing.JPanel();
         jComboBoxCompilers = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldParams = new javax.swing.JTextField();
         jButtonRun = new javax.swing.JButton();
+        jTextFieldParams = new javax.swing.JTextField();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         addTabMenuItem = new javax.swing.JMenuItem();
@@ -1153,11 +1153,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jTextFieldParams.setToolTipText(resourceMap.getString("jTextFieldParams.toolTipText")); // NOI18N
-        jTextFieldParams.setName("jTextFieldParams"); // NOI18N
-
         jButtonRun.setAction(actionMap.get("runFile")); // NOI18N
         jButtonRun.setName("jButtonRun"); // NOI18N
+
+        jTextFieldParams.setToolTipText(resourceMap.getString("jTextFieldParams.toolTipText")); // NOI18N
+        jTextFieldParams.setName("jTextFieldParams"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1169,7 +1169,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTextFieldParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jTextFieldParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 240, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonRun)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1181,8 +1181,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1)
-                    .add(jTextFieldParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButtonRun))
+                    .add(jButtonRun)
+                    .add(jTextFieldParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1192,7 +1192,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
                 .addContainerGap())
             .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
