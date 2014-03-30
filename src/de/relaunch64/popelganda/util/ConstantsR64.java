@@ -45,7 +45,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140323)";
+    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140330)";
     /**
      * This variable stores the application title that appears in the main window
      */
@@ -77,6 +77,9 @@ public class ConstantsR64 {
     public static final String STRING_MACRO = "macro";
     public static final String STRING_JUMP = "jump";
 
+    public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
+    public static final int DEFAULT_FONT_SIZE = 13;
+    
     public static final String ASSEMBLER_INPUT_FILE = "INPUT";
     
     public static final int EMU_VICE = 0;

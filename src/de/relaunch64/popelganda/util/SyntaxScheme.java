@@ -44,8 +44,8 @@ import javax.swing.text.StyleConstants;
  * @author Daniel Luedecke
  */
 public class SyntaxScheme {
-    public static final String DEFAULT_FONT_FAMILY = "Arial";
-    public static final int DEFAULT_FONT_SIZE = 13;
+    public static final String DEFAULT_FONT_FAMILY = ConstantsR64.DEFAULT_FONT;
+    public static final int DEFAULT_FONT_SIZE = ConstantsR64.DEFAULT_FONT_SIZE;
     public static final SimpleAttributeSet DEFAULT_NORMAL;
     public static final SimpleAttributeSet DEFAULT_NUMBER;
     public static final SimpleAttributeSet DEFAULT_COMMENT;

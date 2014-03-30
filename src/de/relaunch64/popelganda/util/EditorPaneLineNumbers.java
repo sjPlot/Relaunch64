@@ -81,9 +81,10 @@ public final class EditorPaneLineNumbers extends JPanel
      * on 3 digits.
      *
      * @param component the related text component
+     * @param settings
      */
-    public EditorPaneLineNumbers(JTextComponent component) {
-        this(component, 3);
+    public EditorPaneLineNumbers(JTextComponent component, Settings settings) {
+        this(component, 3, settings);
     }
 
     /**
@@ -92,12 +93,13 @@ public final class EditorPaneLineNumbers extends JPanel
      * @param component the related text component
      * @param minimumDisplayDigits the number of digits used to calculate the minimum width of the
      * component
+     * @param settings
      */
     @SuppressWarnings("LeakingThisInConstructor")
-    public EditorPaneLineNumbers(JTextComponent component, int minimumDisplayDigits) {
+    public EditorPaneLineNumbers(JTextComponent component, int minimumDisplayDigits, Settings settings) {
         this.component = component;
 
-        setFont(component.getFont());
+        setFont(new Font(ConstantsR64.DEFAULT_FONT, Font.PLAIN, ConstantsR64.DEFAULT_FONT_SIZE));
 
         setBorderGap(5);
         setCurrentLineForeground(Color.MAGENTA);

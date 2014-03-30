@@ -32,6 +32,7 @@
  */
 package de.relaunch64.popelganda.util;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -66,17 +67,37 @@ public class Settings {
     private static final String SETTING_PARAM_KICKASSEMBLER = "paramKickAssembler";
     private static final String SETTING_PARAM_ACME = "paramAcme";
     private static final String REC_DOC_COMPILER = "compiler";
+    private static final String SETTING_MAINFONT = "editorfont";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
+    private final boolean IS_WINDOWS7;
+    private final boolean IS_WINDOWS8;
     private final boolean IS_OSX;
     private final boolean IS_LINUX;
+    
+    public static final int FONTNAME = 1;
+    public static final int FONTSIZE = 2;
     /**
      * Indicates whether the OS is a windows OS
      * @return 
      */
     public boolean isWindows() {
         return IS_WINDOWS;
+    }
+    /**
+     * Indicates whether the OS is windows 7
+     * @return 
+     */
+    public boolean isWindows7() {
+        return IS_WINDOWS7;
+    }
+    /**
+     * Indicates whether the OS is windows 8
+     * @return 
+     */
+    public boolean isWindows8() {
+        return IS_WINDOWS8;
     }
     /**
      * Indicates whether the OS is a Mac OS X
@@ -104,6 +125,8 @@ public class Settings {
         IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");
         IS_OSX = System.getProperty("os.name").toLowerCase().startsWith("mac os");
         IS_LINUX = System.getProperty("os.name").toLowerCase().contains("linux");
+        IS_WINDOWS7 = System.getProperty("os.name").toLowerCase().startsWith("windows 7");
+        IS_WINDOWS8 = System.getProperty("os.name").toLowerCase().startsWith("windows 8");
         // create file path to settings file
         filepath = createFilePath("relaunch64-settings.xml");
         // now fill the initoal elements
@@ -171,6 +194,20 @@ public class Settings {
      * new elements. This ensures compatibility to older/news settings-file-versions.
      */
     private void fillElements() {
+        // init standard font. on mac, it's helvetica
+        String font = "Helvetica";
+        // on older windows arial
+        if (isWindows()) {
+            font = "Arial";
+            // on new windows Calibri
+            if (isWindows7() || isWindows8()) {
+                font="Calibri";
+            }
+        } 
+        // and on linux we take Nimbus Sans L Regular
+        else if (isLinux()) {
+            font = "Nimbus Sans L Regular";
+        }
         for (int cnt=0; cnt<recentDocCount; cnt++) {
             // create field-identifier
             String fi = SETTING_RECENT_DOC+String.valueOf(cnt+1);
@@ -182,6 +219,13 @@ public class Settings {
                 // and add it to the document
                 settingsFile.getRootElement().addContent(el);
             }
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_MAINFONT)) {
+            // create element for font
+            Element el = new Element(SETTING_MAINFONT);
+            settingsFile.getRootElement().addContent(el);
+            el.setText(font);
+            el.setAttribute("size", "11");
         }
         if (null==settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER)) {
             // create element
@@ -564,5 +608,44 @@ public class Settings {
                 el.setText(path.toString());
             }
         }
+    }
+    /**
+     * Retrieves settings for the mainfont (the font used for the main-entry-textfield).
+     * @param what (indicates, which font-characteristic we want to have. use following constants:<br>
+     * - FONTNAME<br>
+     * - FONTSIZE<br>
+     * - FONTCOLOR<br>
+     * - FONTSTYLE<br>
+     * - FONTWEIGHT<br>
+     * @return the related font-information as string.
+     */
+    public String getMainfont(int what) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_MAINFONT);
+        String retval = "";
+        if (el!=null) {
+            switch (what) {
+                case FONTNAME: retval = el.getText(); break;
+                case FONTSIZE: retval = el.getAttributeValue("size"); break;
+            }
+        }
+        return retval;
+    }
+    /**
+     * Retrieves the main font as font-object.
+     * @return the main-font as {@code Font} variable.
+     */
+    public Font getMainFont() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_MAINFONT);
+        int fsize = Integer.parseInt(el.getAttributeValue("size"));
+        return new Font(el.getText(), Font.PLAIN, fsize);
+    }
+    public void setMainfont(Font f) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_MAINFONT);
+        if (null==el) {
+            el = new Element(SETTING_MAINFONT);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(f.getName());
+        el.setAttribute("size", String.valueOf(f.getSize()));
     }
 }

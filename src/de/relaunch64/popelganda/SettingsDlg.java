@@ -31,6 +31,8 @@ public class SettingsDlg extends javax.swing.JDialog {
         settings = s;
         initComponents();
         initListeners();
+        java.awt.Font mf = settings.getMainFont();
+        jLabelFontName.setText(mf.getName()+" ,"+String.valueOf(mf.getSize())+"pt");
         jComboBoxCompilers.setSelectedIndex(0);
         jComboBoxEmulators.setSelectedIndex(0);
         // set application icon
@@ -158,6 +160,16 @@ public class SettingsDlg extends javax.swing.JDialog {
             setModifiedTabEmulator(true);
         }
     }
+    @Action
+    public void changeEditorFont() {
+        if (null == fontDlg) {
+            fontDlg = new FontChooser(null, settings.getMainFont());
+            fontDlg.setLocationRelativeTo(null);
+        }
+        Relaunch64App.getApplication().show(fontDlg);
+        java.awt.Font f = fontDlg.getSelectedFont();
+        if (f!=null) settings.setMainfont(f);
+    }
     /**
      * 
      */
@@ -246,6 +258,10 @@ public class SettingsDlg extends javax.swing.JDialog {
         jTextFieldEmulatorPath = new javax.swing.JTextField();
         jButtonBrowseEmulatorPath = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabelFontName = new javax.swing.JLabel();
+        jButtonChangeFont = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -405,6 +421,42 @@ public class SettingsDlg extends javax.swing.JDialog {
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
+        jPanel3.setName("jPanel3"); // NOI18N
+
+        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+        jLabel6.setName("jLabel6"); // NOI18N
+
+        jLabelFontName.setName("jLabelFontName"); // NOI18N
+
+        jButtonChangeFont.setAction(actionMap.get("changeEditorFont")); // NOI18N
+        jButtonChangeFont.setName("jButtonChangeFont"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel6)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabelFontName)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonChangeFont)
+                .addContainerGap(419, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel6)
+                    .add(jLabelFontName)
+                    .add(jButtonChangeFont))
+                .addContainerGap(121, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -430,6 +482,7 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonBrowseCompilerPath;
     private javax.swing.JButton jButtonBrowseEmulatorPath;
+    private javax.swing.JButton jButtonChangeFont;
     private javax.swing.JComboBox jComboBoxCompilers;
     private javax.swing.JComboBox jComboBoxEmulators;
     private javax.swing.JLabel jLabel1;
@@ -437,12 +490,16 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelFontName;
     private javax.swing.JLabel jLabelParamInfo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextFieldCompilerParam;
     private javax.swing.JTextField jTextFieldCompilerPath;
     private javax.swing.JTextField jTextFieldEmulatorPath;
     // End of variables declaration//GEN-END:variables
+    private FontChooser fontDlg;
 }

@@ -32,6 +32,7 @@
  */
 package de.relaunch64.popelganda.util;
 
+import com.sun.glass.events.KeyEvent;
 import de.relaunch64.popelganda.Relaunch64View;
 import java.awt.dnd.DropTarget;
 import java.io.File;
@@ -52,10 +53,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyledEditorKit;
+import javax.swing.text.Utilities;
 
 /**
  *
@@ -116,7 +119,7 @@ public class EditorPanes {
         // add key listener
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
-                autoInsertTab();
+                if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown()) autoInsertTab();
             }
         });
         // configure propeties of editor pane
@@ -145,7 +148,46 @@ public class EditorPanes {
         return editorPaneArray.size();
     }
     private void autoInsertTab() {
-        // TODO anzahl tabs voriger zeile auslesen und setzn
+        JEditorPane ep = getActiveEditorPane();
+        try {
+            int caret = ep.getCaretPosition();
+            // get start offset of current row
+            int rowstart = Utilities.getRowStart(ep, caret);
+            // get start offset of previous row
+            int prevrow = Utilities.getRowStart(ep, rowstart-1);
+            // if we have a valid value, go on
+            if (prevrow>=0) {
+                int offlen = rowstart-prevrow;
+                // get line string
+                String line = ep.getText(prevrow, offlen);
+                StringBuilder tabs = new StringBuilder("");
+                // iterate line string and read amount of leading spaces / tabs
+                for (int i=0; i<offlen; i++) {
+                    // get each char
+                    char c = line.charAt(i);
+                    if (' '==c || '\t'==c) {
+                        tabs.append(c);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                ep.getDocument().insertString(caret, tabs.toString(), null);
+            }
+        } catch (BadLocationException ex) {
+        }
+    }
+    public static int getRow(int pos, JEditorPane editor) {
+        int rn = (pos==0) ? 1 : 0;
+        try {
+            int offs=pos;
+            while(offs>0) {
+                offs=Utilities.getRowStart(editor, offs)-1;
+                rn++;
+            }
+        } catch (BadLocationException e) {
+        }
+        return rn;
     }
     public void undo() {
         EditorPaneProperties ep = getActiveEditorPaneProperties();
@@ -299,7 +341,7 @@ public class EditorPanes {
         JEditorPane editorPane = new JEditorPane();
         editorPane.setName("jEditorPaneMain");
         // init line numbers
-        EditorPaneLineNumbers epln = new EditorPaneLineNumbers(editorPane);
+        EditorPaneLineNumbers epln = new EditorPaneLineNumbers(editorPane, settings);
         scrollPane.setRowHeaderView(epln);
         // enable drag&drop
         editorPane.setDragEnabled(true);

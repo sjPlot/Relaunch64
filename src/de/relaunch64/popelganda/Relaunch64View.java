@@ -125,7 +125,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jTextFieldParams, this, settings);
         // init line numbers
         // init line numbers
-        EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain);
+        EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain, settings);
         jScrollPaneMainEditorPane.setRowHeaderView(epln);
         // init syntax highlighting for editor pane
         editorPanes.addEditorPane(jEditorPaneMain, null, null, ConstantsR64.COMPILER_KICKASSEMBLER);
