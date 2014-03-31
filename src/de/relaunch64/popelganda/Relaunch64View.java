@@ -480,7 +480,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     for (String param : params) {
                         param = param.trim();
                         if (param.equals(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
-                            param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, afile.toString());
+                            String infile = (ConstantsR64.COMPILER_ACME==compiler) ? afile.getName() : afile.toString();
+                            param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, infile);
                         }
                         if (param.equals(ConstantsR64.ASSEMBLER_OUPUT_FILE)) {
                             // output file
@@ -828,10 +829,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private boolean askForSaveChanges() {
         // check whether we have any changes at all
-        while(editorPanes.getActiveEditorPane()!=null) {
-            boolean success = editorPanes.closeFile();
-            if (!success) return false;
-        }
+//        while(editorPanes.getActiveEditorPane()!=null) {
+//            boolean success = editorPanes.closeFile();
+//            if (!success) return false;
+//        }
         // no changes, so everything is ok
         return true;
     }
