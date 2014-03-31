@@ -87,6 +87,7 @@ public class FindReplace {
         Matcher findmatcher;
         // retrieve findtext
         String text = findText;
+        updateContent();
         // if we have no findtext, reset buttons
         if (null==text || text.isEmpty()) {
             resetValues();

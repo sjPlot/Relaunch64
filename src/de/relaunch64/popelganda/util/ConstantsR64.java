@@ -80,7 +80,8 @@ public class ConstantsR64 {
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
     public static final int DEFAULT_FONT_SIZE = 13;
     
-    public static final String ASSEMBLER_INPUT_FILE = "INPUT";
+    public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
+    public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";
     
     public static final int EMU_VICE = 0;
     public static final int EMU_CCS64 = 1;

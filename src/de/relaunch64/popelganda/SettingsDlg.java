@@ -98,7 +98,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                     parainfo = "No parameter required. Refer to manual for parameter list.";
                     break;
                 case ConstantsR64.COMPILER_ACME:
-                    parainfo = "... to come";
+                    parainfo = "Recommended: \"--outfile OUTFILE --format cbm SOURCEFILE\"";
                     break;
             }
             // update lable text
@@ -210,6 +210,19 @@ public class SettingsDlg extends javax.swing.JDialog {
     /**
      * 
      */
+    @Action
+    public void resetCompilerParameter() {
+        // get selectec compiler
+        int selected = jComboBoxCompilers.getSelectedIndex();
+        if (selected!=-1) {
+            jTextFieldCompilerParam.setText(settings.getDefaultCompilerParam(selected));
+            // enable apply button
+            setModifiedTabEmulator(true);
+        }
+    }
+    /**
+     * 
+     */
     private boolean modifiedTabCompiler = false;
     public boolean isModifiedTabCompiler() {
         return modifiedTabCompiler;
@@ -251,6 +264,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jTextFieldCompilerParam = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabelParamInfo = new javax.swing.JLabel();
+        jButtonReset = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jComboBoxEmulators = new javax.swing.JComboBox();
@@ -300,6 +314,9 @@ public class SettingsDlg extends javax.swing.JDialog {
         jLabelParamInfo.setText(resourceMap.getString("jLabelParamInfo.text")); // NOI18N
         jLabelParamInfo.setName("jLabelParamInfo"); // NOI18N
 
+        jButtonReset.setAction(actionMap.get("resetCompilerParameter")); // NOI18N
+        jButtonReset.setName("jButtonReset"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -326,10 +343,12 @@ public class SettingsDlg extends javax.swing.JDialog {
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                     .add(jTextFieldCompilerPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 370, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 8, Short.MAX_VALUE)
                         .add(jButtonBrowseCompilerPath))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
+                        .add(jButtonReset)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButton1)))
                 .addContainerGap())
         );
@@ -352,7 +371,9 @@ public class SettingsDlg extends javax.swing.JDialog {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabelParamInfo)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jButton1)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButton1)
+                    .add(jButtonReset))
                 .addContainerGap())
         );
 
@@ -483,6 +504,7 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JButton jButtonBrowseCompilerPath;
     private javax.swing.JButton jButtonBrowseEmulatorPath;
     private javax.swing.JButton jButtonChangeFont;
+    private javax.swing.JButton jButtonReset;
     private javax.swing.JComboBox jComboBoxCompilers;
     private javax.swing.JComboBox jComboBoxEmulators;
     private javax.swing.JLabel jLabel1;

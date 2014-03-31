@@ -157,6 +157,18 @@ public class Tools {
     /**
      * 
      * @param f
+     * @return 
+     */
+    public static String getFilePath(File f) {
+        if (f!=null && f.exists()) {
+            String path = f.getAbsolutePath();
+            return path.substring(0,path.lastIndexOf(File.separator));
+        }
+        return null;
+    }
+    /**
+     * 
+     * @param f
      * @param ext
      * @return 
      */

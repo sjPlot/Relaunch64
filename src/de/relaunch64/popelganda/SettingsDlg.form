@@ -97,11 +97,13 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="8" max="32767" attributes="0"/>
                               <Component id="jButtonBrowseCompilerPath" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jButtonReset" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -131,7 +133,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelParamInfo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonReset" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -194,6 +199,14 @@
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jLabelParamInfo.text"/>
                 <Property name="name" type="java.lang.String" value="jLabelParamInfo" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButtonReset">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.SettingsDlg" id="resetCompilerParameter" methodName="resetCompilerParameter"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jButtonReset" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

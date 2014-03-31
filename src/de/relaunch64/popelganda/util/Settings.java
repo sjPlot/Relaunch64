@@ -68,6 +68,7 @@ public class Settings {
     private static final String SETTING_PARAM_ACME = "paramAcme";
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String SETTING_MAINFONT = "editorfont";
+    private static final String DEFAULT_ACME_PARAM = "--outfile "+ConstantsR64.ASSEMBLER_OUPUT_FILE+" --format cbm "+ConstantsR64.ASSEMBLER_INPUT_FILE;
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -78,6 +79,8 @@ public class Settings {
     
     public static final int FONTNAME = 1;
     public static final int FONTSIZE = 2;
+
+    
     /**
      * Indicates whether the OS is a windows OS
      * @return 
@@ -279,7 +282,7 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_ACME)) {
             // create element
             Element el = new Element(SETTING_PARAM_ACME);
-            el.setText("");
+            el.setText(DEFAULT_ACME_PARAM);
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -647,5 +650,18 @@ public class Settings {
         }
         el.setText(f.getName());
         el.setAttribute("size", String.valueOf(f.getSize()));
+    }
+    /**
+     * 
+     * @param compiler
+     * @return 
+     */
+    public String getDefaultCompilerParam(int compiler) {
+        switch(compiler) {
+            case ConstantsR64.COMPILER_ACME:
+                return DEFAULT_ACME_PARAM;
+            default:
+                return "";
+        }
     }
 }

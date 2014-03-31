@@ -58,7 +58,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Scanner;
@@ -68,14 +67,11 @@ import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
@@ -122,7 +118,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // init editorpane-dataclass
-        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jTextFieldParams, this, settings);
+        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, this, settings);
         // init line numbers
         // init line numbers
         EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain, settings);
@@ -156,11 +152,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // and reset find/replace values, because the content has changed and former
             // find-index-values are no longer valid
             findReplace.resetValues();
-        });
-        jTextFieldParams.getDocument().addDocumentListener(new DocumentListener() {
-            @Override public void changedUpdate(DocumentEvent e) { editorPanes.updateParams(); }
-            @Override public void insertUpdate(DocumentEvent e) { editorPanes.updateParams(); }
-            @Override public void removeUpdate(DocumentEvent e) { editorPanes.updateParams(); }
         });
         jTextFieldFind.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -401,7 +392,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
             if (jTabbedPane1.getTabCount()<1) {
                 // init editorpane-dataclass
-                editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jTextFieldParams, this, settings);
+                editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, this, settings);
                 // init syntax highlighting for editor pane
                 editorPanes.addNewTab(null, null, "untitled", ConstantsR64.COMPILER_KICKASSEMBLER);
                 // set input focus
@@ -477,45 +468,82 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // check whether it exists
             if (afile!=null && afile.exists()) {
                 // retrieve default parameter
-                String param = settings.getCompilerParameter(compiler);
-                // check if empty, and if so, set default parameter
-                if (param.isEmpty()) {
-                    // set filename
-                    param = afile.toString();
-                }
-                // check if param contains dest file
-                if (!param.contains(afile.toString())) {
-                    // check whether param contains INPUT constant
-                    // which should be replaced with INPUT file
-                    if (param.contains(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
-                        // replace with file
-                        param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, afile.toString());
-                    }
-                    else {
-                        param = afile.toString()+" "+param;
-                    }
-                }
+                String[] params = settings.getCompilerParameter(compiler).split(" ");
                 // convert file object to string
                 String path = compPath.toString();
                 try {
-                    // start process, i.e. compile file
-                    List<String> args;
+                    // create argument list
+                    List<String> args = new ArrayList<>();
+                    // compiler-path is first argument
+                    args.add(path);
+                    // iterate parameter parts
+                    for (String param : params) {
+                        param = param.trim();
+                        if (param.equals(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
+                            param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, afile.toString());
+                        }
+                        if (param.equals(ConstantsR64.ASSEMBLER_OUPUT_FILE)) {
+                            // output file
+                            String outfile = afile.getParentFile().toString()+File.separator+Tools.getFileName(afile)+".prg";
+                            param = param.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outfile);
+                        }
+                        if (!param.isEmpty()) args.add(param);
+                    }
                     // use parameters according to the compiler
                     switch (compiler) {
+                        // **************************************
+                        // Preparing Parameters for Compiler Kickassembler
+                        // **************************************
                         case ConstantsR64.COMPILER_KICKASSEMBLER:
-                            args = Arrays.asList("java", "-jar", path, param);
+                            if (!args.contains(afile.toString())) args.add(afile.toString());
+                            args.add(0, "java");
+                            args.add(1, "-jar");
                             break;
+                        // **************************************
+                        // Preparing Parameters for Compiler ACME
+                        // **************************************
                         case ConstantsR64.COMPILER_ACME:
-                            // TODO wie exe aus windows starten?
-                            args = Arrays.asList(path, param);
-                            // p = Runtime.getRuntime().exec(new String[] {"open", compPath.toString(), param});
+                            // retrieve source and check for "!to" command
+                            String source = editorPanes.getActiveSourceCode();
+                            // find !to
+                            if (source!=null && source.contains("!to")) {
+                                // if we have a !to command, we don't use the --outfile parameter
+                                int poff = args.indexOf("--outfile");
+                                if (poff!=-1) {
+                                    try {
+                                        args.remove(poff+1);
+                                        args.remove(poff);
+                                    }
+                                    catch(ClassCastException | NullPointerException | UnsupportedOperationException ex) {
+                                        ConstantsR64.r64logger.log(Level.SEVERE, ex.getLocalizedMessage());
+                                    }
+                                }
+                            }
                             break;
                         default:
-                            args = Arrays.asList("java", "-jar", path, param);
                             break;
                     }
+                    StringBuilder sb = new StringBuilder("");
+                    args.stream().forEach((arg) -> {
+                        sb.append(System.getProperty("line.separator")).append(arg);
+                    });
+                    // log compiler paramater
+                    String log = "Compiler-Parameter: "+sb.toString();
+                    ConstantsR64.r64logger.log(Level.INFO, log);
+                    // *************************************************
+                    // start new process builder
+                    // *************************************************
                     ProcessBuilder pb = new ProcessBuilder(args);
-                    pb.directory(compPath.getParentFile());
+                    // if we have ACME, set different working directory
+                    String wd = (ConstantsR64.COMPILER_ACME==compiler) ?
+                            afile.getParentFile().toString() :
+                            compPath.getParentFile().toString();
+                    // ste process working dir
+                    pb = pb.directory(new File(wd));
+                    pb = pb.redirectErrorStream(true);
+                    // log working directory
+                    log = "Working-Directory: "+pb.directory().getAbsolutePath();
+                    ConstantsR64.r64logger.log(Level.INFO, log);
                     // start process
                     Process p = pb.start();
                     // write output to text area
@@ -755,7 +783,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // save the settings
             saveSettings();
             // return true to say "yes, we can", or false if exiting should be cancelled
-            return askForSaveChanges(getResourceMap().getString("msgSaveChangesOnExitTitle"));
+            return askForSaveChanges();
         }
         @Override
         public void willExit(EventObject e) {
@@ -798,28 +826,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      * the program can go on. <i>false</i> if the user cancelled the dialog and the program should <i>not</i> go on
      * or not quit.
      */
-    private boolean askForSaveChanges(String title) {
-        // first check whether we have unsaved changes
-        String confirmText = "";
-        // check, which part of the data file has unsaved changes and set the related
-        // warning message and title strings.
+    private boolean askForSaveChanges() {
         // check whether we have any changes at all
-        boolean anychanges = false; // = data.isMetaModified() | data.isModifiedTabCompiler() | searchrequests.isModifiedTabCompiler() | bookmarks.isModifiedTabCompiler() | desktop.isModifiedTabCompiler();
-        // if we have any strings, we can assume we have to save changes
-        if (anychanges) {
-            // if so, open a confirm dialog
-            int option = JOptionPane.showConfirmDialog(getFrame(), getResourceMap().getString("msgSaveChangesOnExit", confirmText), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            // if no save is requested, exit immediately
-            if (JOptionPane.NO_OPTION == option) {
-                return true;
-            }
-            // if action is cancelled, return to the program
-            if (JOptionPane.CANCEL_OPTION == option || JOptionPane.CLOSED_OPTION==option /* User pressed cancel key */) {
-                return false;
-            }
-            // else save the data
-            // and exit
-            return saveDocument();
+        while(editorPanes.getActiveEditorPane()!=null) {
+            boolean success = editorPanes.closeFile();
+            if (!success) return false;
         }
         // no changes, so everything is ok
         return true;
@@ -840,7 +851,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (p>0) {
                     scn = scn.substring(p+1);
                 }
-                out.printf("%s.%s"+System.getProperty("line.separator")+"[%s] %s", scn ,record.getSourceMethodName(), record.getLevel(), record.getMessage());
+                out.printf("%s.%s"+System.getProperty("line.separator")+"[%s] %s"+System.getProperty("line.separator"), scn ,record.getSourceMethodName(), record.getLevel(), record.getMessage());
                 jTextAreaLog.setText(text.toString());
             });
         }
@@ -895,7 +906,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxCompilers = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jButtonRun = new javax.swing.JButton();
-        jTextFieldParams = new javax.swing.JTextField();
+        jComboBoxParam = new javax.swing.JComboBox();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         addTabMenuItem = new javax.swing.JMenuItem();
@@ -1156,8 +1167,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRun.setAction(actionMap.get("runFile")); // NOI18N
         jButtonRun.setName("jButtonRun"); // NOI18N
 
-        jTextFieldParams.setToolTipText(resourceMap.getString("jTextFieldParams.toolTipText")); // NOI18N
-        jTextFieldParams.setName("jTextFieldParams"); // NOI18N
+        jComboBoxParam.setEditable(true);
+        jComboBoxParam.setName("jComboBoxParam"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1169,7 +1180,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTextFieldParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 240, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 290, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonRun)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1182,7 +1193,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1)
                     .add(jButtonRun)
-                    .add(jTextFieldParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1414,6 +1425,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JButton jButtonReplace;
     private javax.swing.JButton jButtonRun;
     private javax.swing.JComboBox jComboBoxCompilers;
+    private javax.swing.JComboBox jComboBoxParam;
     private javax.swing.JEditorPane jEditorPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1446,7 +1458,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JTextArea jTextAreaCompilerOutput;
     private javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldFind;
-    private javax.swing.JTextField jTextFieldParams;
     private javax.swing.JTextField jTextFieldReplace;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;

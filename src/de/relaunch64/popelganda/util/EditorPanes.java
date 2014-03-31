@@ -50,7 +50,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -68,7 +67,6 @@ public class EditorPanes {
     private final List<EditorPaneProperties> editorPaneArray = new ArrayList<>();
     private JTabbedPane tabbedPane = null;
     private JComboBox comboBox = null;
-    private JTextField textField = null;
     private final Relaunch64View mainFrame;
     private final Settings settings;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
@@ -78,18 +76,16 @@ public class EditorPanes {
      * 
      * @param tp
      * @param cb
-     * @param tf
      * @param frame
      * @param set 
      */
-    public EditorPanes(JTabbedPane tp, JComboBox cb, JTextField tf, Relaunch64View frame, Settings set) {
+    public EditorPanes(JTabbedPane tp, JComboBox cb, Relaunch64View frame, Settings set) {
         // reset editor list
         mainFrame = frame;
         settings = set;
         editorPaneArray.clear();
         tabbedPane = tp;
         comboBox = cb;
-        textField = tf;
     }
     /**
      * Adds a new editor pane to a new created tab of the tabbed pane. Usually only called from 
@@ -302,8 +298,10 @@ public class EditorPanes {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(selectedTab);
             // change syntax scheme for recent docs
-            int rd = settings.findRecentDoc(getActiveFilePath().getPath());
-            settings.setRecentDoc(rd, getActiveFilePath().getPath(), compiler);
+            if(getActiveFilePath()!=null) {
+                int rd = settings.findRecentDoc(getActiveFilePath().getPath());
+                settings.setRecentDoc(rd, getActiveFilePath().getPath(), compiler);
+            }
             // disable undo/redo events
             ep.getUndoManager().enableRegisterUndoEvents(false);
             // get editor pane
@@ -369,6 +367,17 @@ public class EditorPanes {
             EditorPaneProperties ep = editorPaneArray.get(selectedTab);
             // get editor pane
             return ep.getEditorPane();
+        }
+        return null;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public String getActiveSourceCode() {
+        JEditorPane ep = getActiveEditorPane();
+        if (ep!=null) {
+            return ep.getText();
         }
         return null;
     }
@@ -645,9 +654,6 @@ public class EditorPanes {
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
             // select compiler, so we update the highlight, if necessary
             comboBox.setSelectedIndex(editorPaneArray.get(selectedTab).getCompiler());
-            // update the parameter
-            String par = editorPaneArray.get(selectedTab).getParam();
-            textField.setText((par!=null)?par:"");
         }
     }
     /**
@@ -671,22 +677,17 @@ public class EditorPanes {
     }
     /**
      * 
+     * @return 
      */
-    public void updateParams() {
-        // get selected tab
-        int selectedTab = tabbedPane.getSelectedIndex();
-        // check whether textbox indicates a different param
-        // from what was associated with the currently selected editor pane
-        String savedParam = editorPaneArray.get(selectedTab).getParam();
-        String curParam = textField.getText();
-        // check for valid values
-        if (savedParam!=null && curParam!=null) { 
-            // check whether we have changes
-            if (!savedParam.equals(curParam)) {
-                // store new value
-                editorPaneArray.get(selectedTab).setParam(curParam);
-            }
+    public boolean isModified() {
+        // retrieve active editor pane
+        EditorPaneProperties ep = getActiveEditorPaneProperties();
+        // check for valid value
+        if (ep!=null) {
+            // check whether modified
+            return (ep.isModified());
         }
+        return false;
     }
     /**
      * 
