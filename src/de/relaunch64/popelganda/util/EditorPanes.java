@@ -118,6 +118,15 @@ public class EditorPanes {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown()) autoInsertTab();
             }
         });
+        // add caret listener
+        editorPane.addCaretListener((javax.swing.event.CaretEvent e) -> {
+            // retrieve selection
+            int selection = e.getMark()-e.getDot();
+            // here we have selected text
+            if (selection!=0) {
+                mainFrame.autoConvertNumbers(editorPane.getSelectedText());
+            }
+        });
         // configure propeties of editor pane
         EditorPaneProperties editorPaneProperties = new EditorPaneProperties(settings);
         // set editor pane

@@ -65,11 +65,14 @@ public class FindReplace {
         resetValues();
     }
     public void initValues(String ft, String rt, int at, JEditorPane ep) {
+        boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
+                               (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
         findText = ft;
         replaceText = rt;
         activeTab = at;
         editorPane = ep;
         updateContent();
+        if (newFindTerm) initmatcher();
     }
     /**
      * 
@@ -130,8 +133,9 @@ public class FindReplace {
     }
     /**
      * 
+     * @return 
      */
-    public void findNext() {
+    public boolean findNext() {
         // when we have no founds or when the user changed the tab, init matcher
         if (findselections.isEmpty() || lastActiveTab!=activeTab) {
             initmatcher();
@@ -161,10 +165,14 @@ public class FindReplace {
             editorPane.requestFocusInWindow();
         }
         else {
+            // reset find values
             resetValues();
+            // nothing found
+            return false;
         }
+        return true;
     }
-    public void findPrev() {
+    public boolean findPrev() {
         // check whether we have any found at all
         if (findselections.size()>0) {
             // decrease our find-counter
@@ -193,9 +201,11 @@ public class FindReplace {
         }
         else {
             resetValues();
+            return false;
         }
+        return true;
     }
-    public void replace() {
+    public boolean replace() {
         if (editorPane.getText()!=null) {
             if (editorPane.getSelectedText()!=null) {
                 editorPane.replaceSelection(replaceText);
@@ -205,11 +215,14 @@ public class FindReplace {
             }
             else {
                 resetValues();
+                return false;
             }
         }
         else {
             resetValues();
+            return false;
         }
+        return true;
     }
     public void replaceAll() {
         if (initmatcher()) {

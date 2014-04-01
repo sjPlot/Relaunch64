@@ -33,7 +33,6 @@
 
 package de.relaunch64.popelganda;
 
-import de.relaunch64.popelganda.util.AcceleratorKeys;
 import de.relaunch64.popelganda.util.Settings;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -43,7 +42,6 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class Relaunch64App extends SingleFrameApplication {
     // and so we do with the user defined accelerator keys
-    AcceleratorKeys accKeys;
     Settings settings;
     /**
      * At startup create and show the main frame of the application.
@@ -51,11 +49,10 @@ public class Relaunch64App extends SingleFrameApplication {
     @Override protected void startup() {
         // prepare the class which stores the accelerator keys. this is needed here,
         // because the Settings-class loads and saves this information
-        accKeys = new AcceleratorKeys();
         settings = new Settings();
         // load settings
         settings.loadSettings();
-        show(new Relaunch64View(this, settings, accKeys));
+        show(new Relaunch64View(this, settings));
     }
 
     /**
