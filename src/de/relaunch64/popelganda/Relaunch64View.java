@@ -57,6 +57,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -417,46 +418,60 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void runFile() {
         // first, compile file
         compileFile();
-        // get path to emulator
-        // TODO parameter anpassen
-        File emuPath = settings.getEmulatorPath(0);
-        // check for valid value
-        if (emuPath!=null && emuPath.exists()) {
-            try {
-                ProcessBuilder pb;
-                Process p;
-                // Start ProcessBuilder
-                if (settings.isWindows()) {
-                    pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
-                    pb.directory(emuPath.getParentFile());
-                    // start process
-                    p = pb.start();
-                }
-                // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
-                else {
-                    p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
-                }
-                // write output to text area
-                // create scanner to receive compiler messages
-                try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
-                    // write output to text area
-                    while (sc.hasNextLine()) {
-                        jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+        if (outputFile!=null && outputFile.exists()) {
+            // get path to emulator
+            // TODO parameter anpassen
+            File emuPath = settings.getEmulatorPath(0);
+            // check for valid value
+            if (emuPath!=null && emuPath.exists()) {
+                try {
+                    ProcessBuilder pb;
+                    Process p;
+                    // Start ProcessBuilder
+                    if (settings.isWindows()) {
+                        pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
+                        pb = pb.directory(emuPath.getParentFile());
+                        pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
+                        // start process
+                        p = pb.start();
                     }
+                    // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
+                    else {
+                        p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
+                    }
+                    // write output to text area
+                    // create scanner to receive compiler messages
+                    try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
+                        // write output to text area
+                        while (sc.hasNextLine()) {
+                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                        }
+                    }
+                    try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
+                        // write output to text area
+                        while (sc.hasNextLine()) {
+                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                        }
+                    }
+                    // finally, append new line
+                    jTextAreaCompilerOutput.append(System.getProperty("line.separator"));
+                    // wait for other process to be finished
+                    p.waitFor();
+                    p.destroy();
                 }
-                p.waitFor();
-                p.destroy();
+                catch (IOException | InterruptedException ex) {
+                    ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                }
             }
-            catch (IOException | InterruptedException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+            else {
+                ConstantsR64.r64logger.log(Level.WARNING,"No filepath to emulator specified! Could not run the compiled file in an emulator.");
             }
-        }
-        else {
-            ConstantsR64.r64logger.log(Level.WARNING,"No filepath to emulator specified! Could not run the compiled file in an emulator.");
         }
     }
     @Action
     public void compileFile() {
+        // reste outfile
+        outputFile = null;
         // get current compiler
         int compiler = editorPanes.getActiveCompiler();
         // get path to compiler
@@ -541,7 +556,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             compPath.getParentFile().toString();
                     // ste process working dir
                     pb = pb.directory(new File(wd));
-                    pb = pb.redirectErrorStream(true);
+                    pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
                     // log working directory
                     log = "Working-Directory: "+pb.directory().getAbsolutePath();
                     ConstantsR64.r64logger.log(Level.INFO, log);
@@ -555,10 +570,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
                         }
                     }
+                    // write output to text area
+                    // create scanner to receive compiler messages
+                    try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
+                        // write output to text area
+                        while (sc.hasNextLine()) {
+                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                        }
+                    }
+                    // finally, append new line
+                    jTextAreaCompilerOutput.append(System.getProperty("line.separator"));
+                    // wait for other process to be finished
                     p.waitFor();
                     p.destroy();
                     // specifiy output file
                     outputFile = Tools.setFileExtension(afile, "prg");
+                    // check if exists
+                    if (!outputFile.exists()) outputFile = null;
                 }
                 catch (IOException | InterruptedException ex) {
                     ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
@@ -571,6 +599,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         else {
             ConstantsR64.r64logger.log(Level.WARNING,"No filepath to compiler specified! Could not compile file.");
         }
+        // finally, append new line
+        jTextAreaLog.append(System.getProperty("line.separator"));
+    }
+    @Action
+    public void clearLog1() {
+        // set sys info
+        jTextAreaLog.setText(Tools.getSystemInformation()+System.getProperty("line.separator"));
+    }
+    @Action
+    public void clearLog2() {
+        // set sys info
+        jTextAreaCompilerOutput.setText("");
     }
     @Action
     public void selectAllText() {
@@ -893,21 +933,22 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel4 = new javax.swing.JLabel();
         jTextFieldReplace = new javax.swing.JTextField();
         jButtonReplace = new javax.swing.JButton();
+        jComboBoxParam = new javax.swing.JComboBox();
+        jButtonRun = new javax.swing.JButton();
+        jComboBoxCompilers = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaLog = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        jButtonCarLog1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextAreaCompilerOutput = new javax.swing.JTextArea();
-        jPanel5 = new javax.swing.JPanel();
-        jComboBoxCompilers = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
-        jButtonRun = new javax.swing.JButton();
-        jComboBoxParam = new javax.swing.JComboBox();
+        jButtonClearLog2 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         addTabMenuItem = new javax.swing.JMenuItem();
@@ -1009,14 +1050,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextFieldFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButtonFindPrev)
-                    .add(jButtonFindNext)
-                    .add(jLabel5))
-                .addContainerGap())
+            .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(jTextFieldFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jButtonFindPrev)
+                .add(jButtonFindNext)
+                .add(jLabel5))
         );
 
         jPanelReplace.setName("jPanelReplace"); // NOI18N
@@ -1046,26 +1084,51 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanelReplaceLayout.setVerticalGroup(
             jPanelReplaceLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelReplaceLayout.createSequentialGroup()
-                .add(jPanelReplaceLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel4)
-                    .add(jTextFieldReplace, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButtonReplace))
-                .add(0, 0, Short.MAX_VALUE))
+            .add(jPanelReplaceLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(jLabel4)
+                .add(jTextFieldReplace, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jButtonReplace))
         );
+
+        jComboBoxParam.setEditable(true);
+        jComboBoxParam.setName("jComboBoxParam"); // NOI18N
+
+        jButtonRun.setAction(actionMap.get("runFile")); // NOI18N
+        jButtonRun.setName("jButtonRun"); // NOI18N
+
+        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
+        jComboBoxCompilers.setName("jComboBoxCompilers"); // NOI18N
+
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
             .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jPanelReplace, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jComboBoxParam, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonRun))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel1)
+                    .add(jButtonRun)
+                    .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -1092,6 +1155,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
+        jButtonCarLog1.setAction(actionMap.get("clearLog1")); // NOI18N
+        jButtonCarLog1.setName("jButtonCarLog1"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1100,14 +1166,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel2)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
+                .add(jButtonCarLog1))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .add(jLabel2)
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jButtonCarLog1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
         );
 
         jSplitPane2.setTopComponent(jPanel3);
@@ -1123,6 +1193,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextAreaCompilerOutput.setName("jTextAreaCompilerOutput"); // NOI18N
         jScrollPane3.setViewportView(jTextAreaCompilerOutput);
 
+        jButtonClearLog2.setAction(actionMap.get("clearLog2")); // NOI18N
+        jButtonClearLog2.setName("jButtonClearLog2"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1130,16 +1203,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel3)
-                .addContainerGap(59, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jButtonClearLog2))
+            .add(jScrollPane3)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel3)
+                .add(5, 5, 5)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(jButtonClearLog2))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
         );
 
         jSplitPane2.setRightComponent(jPanel4);
@@ -1152,51 +1228,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane2)
+            .add(jSplitPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
         );
 
         jSplitPane1.setRightComponent(jPanel2);
-
-        jPanel5.setName("jPanel5"); // NOI18N
-
-        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
-        jComboBoxCompilers.setName("jComboBoxCompilers"); // NOI18N
-
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-
-        jButtonRun.setAction(actionMap.get("runFile")); // NOI18N
-        jButtonRun.setName("jButtonRun"); // NOI18N
-
-        jComboBoxParam.setEditable(true);
-        jComboBoxParam.setName("jComboBoxParam"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 290, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonRun)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel1)
-                    .add(jButtonRun)
-                    .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -1204,15 +1239,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
+                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
-            .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, mainPanelLayout.createSequentialGroup()
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jSplitPane1)
                 .addContainerGap())
         );
@@ -1395,7 +1427,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1421,6 +1453,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem findNextMenuItem;
     private javax.swing.JMenuItem findPrevMenuItem;
     private javax.swing.JMenuItem findStartMenuItem;
+    private javax.swing.JButton jButtonCarLog1;
+    private javax.swing.JButton jButtonClearLog2;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
     private javax.swing.JButton jButtonReplace;
@@ -1437,7 +1471,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanelReplace;
     private javax.swing.JScrollPane jScrollPane2;
