@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\Luedeke\Documents\Yavin4\NetBeans\Relaunch64\store\Relaunch64.jar</jar>
-  <outfile>C:\Users\Luedeke\Desktop\Relaunch64.exe</outfile>
+  <jar>/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/store/Relaunch64.jar</jar>
+  <outfile>/Users/danielludecke/Desktop/Relaunch64_win.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -11,7 +11,7 @@
   <supportUrl></supportUrl>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>C:\Users\Luedeke\Documents\Yavin4\NetBeans\Relaunch64\r64.ico</icon>
+  <icon>/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/r64.ico</icon>
   <singleInstance>
     <mutexName>Relaunch64_V3</mutexName>
     <windowTitle></windowTitle>
@@ -24,4 +24,10 @@
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
   </jre>
+  <splash>
+    <file>/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/R64splash.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>60</timeout>
+    <timeoutErr>true</timeoutErr>
+  </splash>
 </launch4jConfig>
