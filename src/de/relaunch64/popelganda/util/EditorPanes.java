@@ -35,16 +35,25 @@ package de.relaunch64.popelganda.util;
 import com.sun.glass.events.KeyEvent;
 import de.relaunch64.popelganda.Relaunch64View;
 import java.awt.dnd.DropTarget;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.LineNumberReader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -55,6 +64,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
+import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.Utilities;
@@ -69,6 +79,7 @@ public class EditorPanes {
     private JComboBox comboBox = null;
     private final Relaunch64View mainFrame;
     private final Settings settings;
+    private boolean eatReaturn = false;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
@@ -115,7 +126,7 @@ public class EditorPanes {
         // add key listener
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
-                if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown()) autoInsertTab();
+                if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) autoInsertTab();
             }
         });
         // add caret listener
@@ -153,6 +164,7 @@ public class EditorPanes {
         return editorPaneArray.size();
     }
     private void autoInsertTab() {
+        eatReaturn = false;
         JEditorPane ep = getActiveEditorPane();
         try {
             int caret = ep.getCaretPosition();
@@ -182,7 +194,8 @@ public class EditorPanes {
         } catch (BadLocationException ex) {
         }
     }
-    public static int getRow(int pos, JEditorPane editor) {
+    public int getLineNumber(int pos, JEditorPane editor) {
+        if (null==editor) return 0;
         int rn = (pos==0) ? 1 : 0;
         try {
             int offs=pos;
@@ -193,6 +206,39 @@ public class EditorPanes {
         } catch (BadLocationException e) {
         }
         return rn;
+    }
+    public int getCurrentLineNumber() {
+        JEditorPane ep = getActiveEditorPane();
+        return getLineNumber(ep.getCaretPosition(), ep);
+    }
+    public void gotoLine(int line) {
+        gotoLine(getActiveEditorPane(), line);
+    }
+    public void gotoLine(JEditorPane ep, int line) {
+        if (line>0) {
+            line--;
+            if (ep!=null) {
+                try {
+                    // retrieve element and check whether line is inside bounds
+                    Element e = ep.getDocument().getDefaultRootElement().getElement(line);
+                    if (e!=null) {
+                        // retrieve caret of requested line
+                        int caret = e.getStartOffset();
+                        // set new caret position
+                        ep.setCaretPosition(caret);
+                        // scroll some lines further, if possible
+                        e = ep.getDocument().getDefaultRootElement().getElement(line+10);
+                        if (e!=null) caret = e.getStartOffset();
+                        // scroll rect to visible
+                        ep.scrollRectToVisible(ep.modelToView(caret));
+                        // request focus
+                        ep.requestFocusInWindow();
+                    }
+                }
+                catch(BadLocationException | IllegalArgumentException ex) {
+                }
+            }
+        }
     }
     public void undo() {
         EditorPaneProperties ep = getActiveEditorPaneProperties();
@@ -282,6 +328,138 @@ public class EditorPanes {
         // link editorkit to editorpane
         editorPane.setEditorKitForContentType("text/plain", editorKit);
         editorPane.setContentType("text/plain");
+    }
+
+    public String getCompilerCommentString() {
+        return getCompilerCommentString(getActiveCompiler());
+    }
+    public String getCompilerCommentString(int compiler) {
+        return SyntaxScheme.getCommentString(compiler);
+    }
+    public LinkedHashMap getSections() {
+        // prepare return values
+        LinkedHashMap<Integer, String> sectionValues = new LinkedHashMap<>();
+        // retrieve current source and compiler
+        String s = getActiveSourceCode();
+        String c = getCompilerCommentString();
+        // init vars
+        int lineNumber = 0;
+        String line;
+        // go if not null
+        if (s!=null) {
+            // create buffered reader, needed for line number reader
+            BufferedReader br = new BufferedReader(new StringReader(s));
+            LineNumberReader lineReader = new LineNumberReader(br);
+            // Section-pattern is a comment line with "@<section description>@"
+            Pattern p = Pattern.compile("@(.*?)@");
+            Matcher m = p.matcher("");
+            // read line by line
+            try {
+                while ((line = lineReader.readLine())!=null) {
+                    // increase line counter
+                    lineNumber++;
+                    //reset the input (matcher)
+                    m.reset(line); 
+                    line = line.trim();
+                    // check if line is a comment line and contains section pattern
+                    if (line.startsWith(c) && m.find()) {
+                        // if yes, add to return value
+                        sectionValues.put(lineNumber, m.group(1));
+                    }
+                }
+            }
+            catch (IOException ex) {
+            }
+        }
+        return sectionValues;
+    }
+    public ArrayList getSectionNames() {
+        // init return value
+        ArrayList<String> retval = new ArrayList<>();
+        // retrieve sections
+        LinkedHashMap<Integer, String> map = getSections();
+        // check for valid value
+        if (map!=null && !map.isEmpty()) {
+            // retrieve only string values of sections
+            Collection<String> c = map.values();
+            // create iterator
+            Iterator<String> i = c.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) retval.add(i.next());
+            // return result
+            return retval;
+        }
+        return null;
+    }
+    public ArrayList getSectionLineNumbers() {
+        // init return value
+        ArrayList<Integer> retval = new ArrayList<>();
+        // retrieve sections
+        LinkedHashMap<Integer, String> map = getSections();
+        // check for valid value
+        if (map!=null && !map.isEmpty()) {
+            // retrieve only string values of sections
+            Set<Integer> ks = map.keySet();
+            // create iterator
+            Iterator<Integer> i = ks.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) retval.add(i.next());
+            // return result
+            return retval;
+        }
+        return null;
+    }
+    public void insertSection(String name) {
+        eatReaturn = true;
+        // retrieve section names
+        ArrayList<String> names = getSectionNames();
+        // check whether we either have no sections or new name does not already exists
+        if (null==names || names.isEmpty() || !names.contains(name)) {
+            // get current editor
+            JEditorPane ep = getActiveEditorPane();
+            // retrieve element and check whether line is inside bounds
+            Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber());
+            if (e!=null) {
+                try {
+                    // set up section name
+                    String insertString = getCompilerCommentString() + " ----- @" + name + "@ -----" + System.getProperty("line.separator");
+                    // insert section
+                    ep.getDocument().insertString(e.getStartOffset(), insertString, SyntaxScheme.DEFAULT_COMMENT);
+                }
+                catch (BadLocationException ex) {}
+            }
+        }
+        else {
+            ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");            
+        }
+    }
+    public void gotoSection(String name) {
+        // names and linenumbers
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Integer> lines = new ArrayList<>();
+        // retrieve sections
+        LinkedHashMap<Integer, String> map = getSections();
+        // check for valid value
+        if (map!=null && !map.isEmpty()) {
+            // retrieve only string values of sections
+            Collection<String> c = map.values();
+            // create iterator
+            Iterator<String> i = c.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) names.add(i.next());
+            // retrieve only string values of sections
+            Set<Integer> ks = map.keySet();
+            // create iterator
+            Iterator<Integer> ksi = ks.iterator();
+            // add all ssction names to return value
+            while(ksi.hasNext()) lines.add(ksi.next());
+            // find section name
+            int pos = names.indexOf(name);
+            if (pos!=-1) {
+                // retrieve associated line number
+                gotoLine(lines.get(pos));
+            }
+        }
     }
     /**
      * 

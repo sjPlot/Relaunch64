@@ -49,6 +49,8 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -67,10 +69,12 @@ import java.util.logging.LogRecord;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.PopupMenuEvent;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.FrameView;
@@ -89,8 +93,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private final Settings settings;
     private File outputFile = null;
-    private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
-                                                                                                   .getContext().getResourceMap(Relaunch64View.class);
     
     public Relaunch64View(SingleFrameApplication app, Settings set) {
         super(app);
@@ -107,6 +109,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
+        // init emulator combobox
+        jComboBoxEmulator.setSelectedIndex(0);
+        jComboBoxGotoSection.removeAllItems();
+        jComboBoxGotoSection.addItem("Goto section...");
         // init listeners and accelerator table
         initListeners();
         initDropTargets();
@@ -145,6 +151,32 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
             }
         });
+        jComboBoxGotoSection.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                // get all action listeners from the combo box
+                ActionListener[] al = jComboBoxGotoSection.getActionListeners();
+                // remove all action listeners so we don't fire several action-events
+                // when we update the combo box. we can set the action listener later again
+                for (ActionListener listener : al) jComboBoxGotoSection.removeActionListener(listener);
+                // add all section names to combobox
+                jComboBoxGotoSection.removeAllItems();
+                jComboBoxGotoSection.addItem("Goto section...");
+                ArrayList<String> sections = editorPanes.getSectionNames();
+                if (sections!=null && !sections.isEmpty()) {
+                    sections.stream().forEach((arg) -> {
+                        jComboBoxGotoSection.addItem(arg);
+                    });
+                }
+                // reset listener
+                jComboBoxGotoSection.addActionListener((ActionEvent evt) -> {
+                    editorPanes.gotoSection(jComboBoxGotoSection.getSelectedItem().toString());
+                });
+            }
+            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+            @Override public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+        });
         jTabbedPane1.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
             editorPanes.updateTabbedPane();
             // and reset find/replace values, because the content has changed and former
@@ -170,6 +202,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
                     replaceTerm();
+                }
+            }
+        });
+        jTextFieldGotoLine.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+                if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                    try {
+                        int line = Integer.parseInt(jTextFieldGotoLine.getText());
+                        editorPanes.gotoLine(line);
+                    }
+                    catch (NumberFormatException ex) {
+                    }
                 }
             }
         });
@@ -401,6 +445,46 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void gotoLine() {
+        jTextFieldGotoLine.requestFocusInWindow();
+    }
+    @Action
+    public void insertSection() {
+        // open an input-dialog
+        String sectionName = (String)JOptionPane.showInputDialog(getFrame(),"Section name:", "Insert section", JOptionPane.PLAIN_MESSAGE);
+        // check
+        if (sectionName!=null && !sectionName.isEmpty()) {
+            editorPanes.insertSection(sectionName);
+        }
+    }
+    @Action
+    public void gotoNextSection() {
+        // check for valid item count
+        if (jComboBoxGotoSection.getItemCount()<=1) return;
+        // get selection
+        int selected = jComboBoxGotoSection.getSelectedIndex();
+        // set default if nothing selected
+        if (-1==selected) selected = 0;
+        // increase counter
+        selected++;
+        // check for bounbs
+        if (selected>=jComboBoxGotoSection.getItemCount()) selected = 1;
+        // select item
+        jComboBoxGotoSection.setSelectedIndex(selected);
+    }
+    @Action
+    public void gotoPrevSection() {
+        // check for valid item count
+        if (jComboBoxGotoSection.getItemCount()<1) return;
+        // get selection
+        int selected = jComboBoxGotoSection.getSelectedIndex();
+        // set default if nothing selected
+        if (-1==selected) selected = jComboBoxGotoSection.getItemCount();
+        // decrease counter
+        selected--;
+        // check for bounbs
+        if (selected<1) selected = jComboBoxGotoSection.getItemCount()-1;
+        // select item
+        jComboBoxGotoSection.setSelectedIndex(selected);
     }
     /**
      * 
@@ -473,7 +557,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (outputFile!=null && outputFile.exists()) {
             // get path to emulator
             // TODO parameter anpassen
-            File emuPath = settings.getEmulatorPath(0);
+            File emuPath = settings.getEmulatorPath(jComboBoxEmulator.getSelectedIndex());
             // check for valid value
             if (emuPath!=null && emuPath.exists()) {
                 try {
@@ -1029,6 +1113,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRun = new javax.swing.JButton();
         jComboBoxCompilers = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jComboBoxEmulator = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
@@ -1084,19 +1170,25 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         compileMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         gotoLineMenuItem = new javax.swing.JMenuItem();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        insertSectionMenuItem = new javax.swing.JMenuItem();
+        gotoNextSectionMenuItem = new javax.swing.JMenuItem();
+        gotoPrevSectionMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
         javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
-        jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldConvDez = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jTextFieldConvHex = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jTextFieldConvBin = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTextFieldGotoLine = new javax.swing.JTextField();
+        jComboBoxGotoSection = new javax.swing.JComboBox();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1142,7 +1234,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .addContainerGap()
                 .add(jLabel5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTextFieldFind)
+                .add(jTextFieldFind, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonFindPrev)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -1204,6 +1296,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
+        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+        jLabel11.setName("jLabel11"); // NOI18N
+
+        jComboBoxEmulator.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.EMU_NAMES));
+        jComboBoxEmulator.setName("jComboBoxEmulator"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1213,11 +1311,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             .add(jPanelReplace, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .add(jLabel11)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jComboBoxEmulator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBoxParam, 0, 403, Short.MAX_VALUE)
+                .add(jComboBoxParam, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonRun))
         );
@@ -1229,9 +1331,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1)
                     .add(jButtonRun)
-                    .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel11)
+                    .add(jComboBoxEmulator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanelFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -1269,7 +1373,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel2)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 90, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 26, Short.MAX_VALUE)
                 .add(jButtonCarLog1))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1316,7 +1420,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jLabel3)
                     .add(jButtonClearLog2))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
         );
 
         jSplitPane2.setRightComponent(jPanel4);
@@ -1329,7 +1433,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane2)
+            .add(jSplitPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
         );
 
         jSplitPane1.setRightComponent(jPanel2);
@@ -1501,6 +1605,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         gotoLineMenuItem.setName("gotoLineMenuItem"); // NOI18N
         sourceMenu.add(gotoLineMenuItem);
 
+        jSeparator11.setName("jSeparator11"); // NOI18N
+        sourceMenu.add(jSeparator11);
+
+        insertSectionMenuItem.setAction(actionMap.get("insertSection")); // NOI18N
+        insertSectionMenuItem.setName("insertSectionMenuItem"); // NOI18N
+        sourceMenu.add(insertSectionMenuItem);
+
+        gotoNextSectionMenuItem.setAction(actionMap.get("gotoNextSection")); // NOI18N
+        gotoNextSectionMenuItem.setName("gotoNextSectionMenuItem"); // NOI18N
+        sourceMenu.add(gotoNextSectionMenuItem);
+
+        gotoPrevSectionMenuItem.setAction(actionMap.get("gotoPrevSection")); // NOI18N
+        gotoPrevSectionMenuItem.setName("gotoPrevSectionMenuItem"); // NOI18N
+        sourceMenu.add(gotoPrevSectionMenuItem);
+
         menuBar.add(sourceMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
@@ -1523,8 +1642,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
 
-        jPanel5.setName("jPanel5"); // NOI18N
-
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
@@ -1543,12 +1660,31 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldConvBin.setColumns(8);
         jTextFieldConvBin.setName("jTextFieldConvBin"); // NOI18N
 
-        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
+        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setName("jLabel9"); // NOI18N
+
+        jTextFieldGotoLine.setColumns(5);
+        jTextFieldGotoLine.setName("jTextFieldGotoLine"); // NOI18N
+
+        jComboBoxGotoSection.setName("jComboBoxGotoSection"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(statusPanelLayout.createSequentialGroup()
+                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(statusPanelLayout.createSequentialGroup()
+                        .add(statusPanelSeparator)
+                        .add(18, 18, 18))
+                    .add(statusPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel9)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jTextFieldGotoLine, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jComboBoxGotoSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 170, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 235, Short.MAX_VALUE)))
                 .add(jLabel6)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldConvDez, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -1560,36 +1696,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jLabel8)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(5, 5, 5))
+                .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(statusPanelLayout.createSequentialGroup()
+                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(jLabel9)
+                    .add(jTextFieldGotoLine, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel6)
                     .add(jTextFieldConvDez, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel7)
                     .add(jTextFieldConvHex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel8)
-                    .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(5, 5, 5))
-        );
-
-        org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, statusPanelLayout.createSequentialGroup()
-                .add(0, 624, Short.MAX_VALUE)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelLayout.createSequentialGroup()
-                .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jComboBoxGotoSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
         setComponent(mainPanel);
@@ -1610,6 +1733,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem findPrevMenuItem;
     private javax.swing.JMenuItem findStartMenuItem;
     private javax.swing.JMenuItem gotoLineMenuItem;
+    private javax.swing.JMenuItem gotoNextSectionMenuItem;
+    private javax.swing.JMenuItem gotoPrevSectionMenuItem;
+    private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JButton jButtonCarLog1;
     private javax.swing.JButton jButtonClearLog2;
     private javax.swing.JButton jButtonFindNext;
@@ -1617,9 +1743,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JButton jButtonReplace;
     private javax.swing.JButton jButtonRun;
     private javax.swing.JComboBox jComboBoxCompilers;
+    private javax.swing.JComboBox jComboBoxEmulator;
+    private javax.swing.JComboBox jComboBoxGotoSection;
     private javax.swing.JComboBox jComboBoxParam;
     private javax.swing.JEditorPane jEditorPaneMain;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1627,11 +1756,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1639,6 +1768,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JScrollPane jScrollPaneMainEditorPane;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
+    private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -1656,6 +1786,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JTextField jTextFieldConvDez;
     private javax.swing.JTextField jTextFieldConvHex;
     private javax.swing.JTextField jTextFieldFind;
+    private javax.swing.JTextField jTextFieldGotoLine;
     private javax.swing.JTextField jTextFieldReplace;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;

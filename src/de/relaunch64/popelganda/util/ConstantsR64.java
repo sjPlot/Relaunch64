@@ -45,11 +45,11 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140401)";
+    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140402)";
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (beta 5)";
+    public static final String APPLICATION_TITLE = "Relaunch64 (beta 6)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
@@ -86,8 +86,9 @@ public class ConstantsR64 {
     public static final int EMU_VICE = 0;
     public static final int EMU_CCS64 = 1;
     public static final int EMU_FRODO = 2;
+    public static final int EMU_EMU64 = 3;
     // CAUTION! MUST HAVE SAME SIZE AS DEFAULT EMULATORS AVAILABLE
-    public static final String[] EMU_NAMES = new String[] { "Vice", "CCS64", "Frodo" };
+    public static final String[] EMU_NAMES = new String[] { "Vice", "CCS64", "Frodo", "Emu64" };
     
     public static final int COMPILER_KICKASSEMBLER = 0;
     public static final int COMPILER_ACME = 1;
