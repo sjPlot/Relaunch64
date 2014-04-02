@@ -132,20 +132,9 @@ public class Settings {
         IS_WINDOWS7 = System.getProperty("os.name").toLowerCase().startsWith("windows 7");
         IS_WINDOWS8 = System.getProperty("os.name").toLowerCase().startsWith("windows 8");
         // create file path to settings file
-        filepath = createFilePath("relaunch64-settings.xml");
+        filepath = Tools.createFilePath("relaunch64-settings.xml");
         // now fill the initoal elements
         fillElements();
-    }
-    /**
-     * 
-     * @param filename
-     * @return 
-     */
-    private File createFilePath(String filename) {
-        // first of all, we want to check for a subdirectory ".Zettelkasten" in the user's home-directory
-        File sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+filename);
-        // return result
-        return sFile;
     }
     /**
      * Loads the settings file

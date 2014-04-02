@@ -53,8 +53,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -83,7 +81,7 @@ import org.jdesktop.application.SingleFrameApplication;
 /**
  * The application's main frame.
  */
-public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
+public class Relaunch64View extends FrameView implements DropTargetListener {
     private EditorPanes editorPanes;
     private final FindReplace findReplace;
     private final List<String> compilerParams = new ArrayList<>();
@@ -93,6 +91,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private final Settings settings;
     private File outputFile = null;
+    private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
+                                                                                                   .getContext().getResourceMap(Relaunch64View.class);
     
     public Relaunch64View(SingleFrameApplication app, Settings set) {
         super(app);
@@ -143,7 +143,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // upper right cross on Windows OS, quits the application. Instead, it just makes
         // the frame disapear, but does not quit, so it looks like the application was quit
         // but asking for changes took place. So, we simply add a windows-listener additionally
-        Relaunch64View.super.getFrame().addWindowListener(this);
         Relaunch64View.super.getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // init actionlistener
         jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
@@ -457,6 +456,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
     }
     @Action
+    public void insertSeparatorLine() {
+        editorPanes.insertSeparatorLine();
+    }
+    @Action
     public void gotoNextSection() {
         // check for valid item count
         if (jComboBoxGotoSection.getItemCount()<=1) return;
@@ -511,6 +514,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void saveFile() {
         editorPanes.saveFile();
+    }
+    @Action
+    public void saveAllFiles() {
+        editorPanes.saveAllFiles();
     }
     @Action
     public void closeFile() {
@@ -804,6 +811,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldFind.setForeground(findReplace.findPrev() ? Color.black : Color.red);
     }
     private void findCancel() {
+        // cancel replace
+        replaceCancel();
         // reset values
         findReplace.resetValues();
         jTextFieldFind.setForeground(Color.black);
@@ -841,40 +850,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // retrieve all installed Look and Feels
         UIManager.LookAndFeelInfo[] installed_laf = UIManager.getInstalledLookAndFeels();
         // init found-variables
-        boolean laf_aqua_found = false;
-        boolean laf_nimbus_found = false;
-        String aquaclassname = "";
         String nimbusclassname = "";
-        String lafclassname;
         // in case we find "nimbus" LAF, set this as default on non-mac-os
         // because it simply looks the best.
         for (UIManager.LookAndFeelInfo laf : installed_laf) {
-            // check whether laf is mac os x
-            if (laf.getName().equalsIgnoreCase("mac os x") || laf.getClassName().contains("Aqua")) {
-                laf_aqua_found = true;
-                aquaclassname = laf.getClassName();
-            }
             // check whether laf is nimbus
-            if (laf.getName().equalsIgnoreCase("nimbus") || laf.getClassName().contains("Nimbus")) {
-                laf_nimbus_found = true;
+            if (laf.getClassName().toLowerCase().contains("nimbus")) {
                 nimbusclassname = laf.getClassName();
             }
         }
         // check which laf was found and set appropriate default value 
-        if (laf_nimbus_found) {
-            lafclassname = nimbusclassname;
-        }
-        else if (laf_aqua_found) {
-            lafclassname = aquaclassname;
-        }
-        else {
-            lafclassname = UIManager.getSystemLookAndFeelClassName();
-        }
-        try {
-            // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            UIManager.setLookAndFeel(lafclassname);
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+        if (!nimbusclassname.isEmpty()) {
+            try {
+                // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel(nimbusclassname);
+            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+            }
         }
     }
     /**
@@ -1006,30 +998,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         public void willExit(EventObject e) {
         }
     }
-    @Override
-    public void windowOpened(WindowEvent e) {
-    }
-    @Override
-    public void windowClosing(WindowEvent e) {
-        // call the general exit-handler from the desktop-application-api
-        // here we do all the stuff we need when exiting the application
-        Relaunch64App.getApplication().exit();
-    }
-    @Override
-    public void windowClosed(WindowEvent e) {
-    }
-    @Override
-    public void windowIconified(WindowEvent e) {
-    }
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-    @Override
-    public void windowActivated(WindowEvent e) {
-    }
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-    }
     /**
      * This method checks whether there are unsaved changes in the data-files (maindata, bookmarks,
      * searchrequests, desktop-data...) and prepares a msg to save these changes. Usually, this
@@ -1044,11 +1012,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      * or not quit.
      */
     private boolean askForSaveChanges() {
+        boolean changes = false;
+        int count = editorPanes.getCount();
         // check whether we have any changes at all
-//        while(editorPanes.getActiveEditorPane()!=null) {
-//            boolean success = editorPanes.closeFile();
-//            if (!success) return false;
-//        }
+        for (int i=0; i<count; i++) {
+            if (editorPanes.isModified(i)) changes = true;
+        }
+        // ask for save
+        if (changes) {
+            // open a confirm dialog
+            int option = JOptionPane.showConfirmDialog(getFrame(), resourceMap.getString("msgSaveChangesOnExit"), resourceMap.getString("msgSaveChangesOnExitTitle"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            // if action is cancelled, return to the program
+            if (JOptionPane.YES_OPTION == option || JOptionPane.CANCEL_OPTION == option || JOptionPane.CLOSED_OPTION==option /* User pressed cancel key */) {
+                return false;
+            }
+        }
         // no changes, so everything is ok
         return true;
     }
@@ -1144,6 +1122,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
+        saveAllMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         closeFileMenuItem = new javax.swing.JMenuItem();
         closeAllMenuItem = new javax.swing.JMenuItem();
@@ -1174,6 +1153,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertSectionMenuItem = new javax.swing.JMenuItem();
         gotoNextSectionMenuItem = new javax.swing.JMenuItem();
         gotoPrevSectionMenuItem = new javax.swing.JMenuItem();
+        jSeparator12 = new javax.swing.JPopupMenu.Separator();
+        insertSeparatorMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
@@ -1505,6 +1486,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         saveAsMenuItem.setName("saveAsMenuItem"); // NOI18N
         fileMenu.add(saveAsMenuItem);
 
+        saveAllMenuItem.setAction(actionMap.get("saveAllFiles")); // NOI18N
+        saveAllMenuItem.setName("saveAllMenuItem"); // NOI18N
+        fileMenu.add(saveAllMenuItem);
+
         jSeparator1.setName("jSeparator1"); // NOI18N
         fileMenu.add(jSeparator1);
 
@@ -1619,6 +1604,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         gotoPrevSectionMenuItem.setAction(actionMap.get("gotoPrevSection")); // NOI18N
         gotoPrevSectionMenuItem.setName("gotoPrevSectionMenuItem"); // NOI18N
         sourceMenu.add(gotoPrevSectionMenuItem);
+
+        jSeparator12.setName("jSeparator12"); // NOI18N
+        sourceMenu.add(jSeparator12);
+
+        insertSeparatorMenuItem.setAction(actionMap.get("insertSeparatorLine")); // NOI18N
+        insertSeparatorMenuItem.setName("insertSeparatorMenuItem"); // NOI18N
+        sourceMenu.add(insertSeparatorMenuItem);
 
         menuBar.add(sourceMenu);
 
@@ -1736,6 +1728,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem gotoNextSectionMenuItem;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
+    private javax.swing.JMenuItem insertSeparatorMenuItem;
     private javax.swing.JButton jButtonCarLog1;
     private javax.swing.JButton jButtonClearLog2;
     private javax.swing.JButton jButtonFindNext;
@@ -1769,6 +1762,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
+    private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -1804,6 +1798,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem redoMenuItem;
     private javax.swing.JMenuItem replaceMenuItem;
     private javax.swing.JMenuItem runDefaultMenuItem;
+    private javax.swing.JMenuItem saveAllMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JMenuItem selectAllMenuItem;

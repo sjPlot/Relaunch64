@@ -99,7 +99,7 @@ public final class EditorPaneLineNumbers extends JPanel
     public EditorPaneLineNumbers(JTextComponent component, int minimumDisplayDigits, Settings settings) {
         this.component = component;
 
-        setFont(new Font(ConstantsR64.DEFAULT_FONT, Font.PLAIN, ConstantsR64.DEFAULT_FONT_SIZE));
+        setFont(new Font(SyntaxScheme.getFontName(), Font.PLAIN, SyntaxScheme.getFontSize()));
 
         setBorderGap(5);
         setCurrentLineForeground(Color.MAGENTA);

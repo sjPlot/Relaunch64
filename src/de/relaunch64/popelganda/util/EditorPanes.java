@@ -112,7 +112,9 @@ public class EditorPanes {
      */
     public int addEditorPane(JEditorPane editorPane, File fp, String content, int c) {
         // set syntax scheme
-        setSyntaxScheme(editorPane, c);
+       setSyntaxScheme(editorPane, c);
+        // set backcolor
+        editorPane.setBackground(SyntaxScheme.getBackgroundColor());
         // set content, if available
         if (content!= null && !content.isEmpty()) {
             editorPane.setText(content);
@@ -194,22 +196,24 @@ public class EditorPanes {
         } catch (BadLocationException ex) {
         }
     }
-    public int getLineNumber(int pos, JEditorPane editor) {
-        if (null==editor) return 0;
-        int rn = (pos==0) ? 1 : 0;
-        try {
-            int offs=pos;
-            while(offs>0) {
-                offs=Utilities.getRowStart(editor, offs)-1;
-                rn++;
-            }
-        } catch (BadLocationException e) {
-        }
-        return rn;
+    public int getCurrentRow() {
+        JEditorPane ep = getActiveEditorPane();
+        int caretPosition = ep.getCaretPosition();
+        return getRow(ep, caretPosition);
+    }
+    public int getRow(JEditorPane ep, int caretPosition) {
+        return (ep!=null) ? ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition) : 0;
+    }
+    
+    public int getLineNumber(JEditorPane ep, int caretPosition) {
+        return getRow(ep, caretPosition);
     }
     public int getCurrentLineNumber() {
+        return getCurrentRow();
+    }
+    public void gotoLineFromCaret(int caretpos) {
         JEditorPane ep = getActiveEditorPane();
-        return getLineNumber(ep.getCaretPosition(), ep);
+        gotoLine(ep, getRow(ep, caretpos));
     }
     public void gotoLine(int line) {
         gotoLine(getActiveEditorPane(), line);
@@ -226,6 +230,11 @@ public class EditorPanes {
                         int caret = e.getStartOffset();
                         // set new caret position
                         ep.setCaretPosition(caret);
+                        // scroll some lines back, if possible
+                        e = ep.getDocument().getDefaultRootElement().getElement(line-10);
+                        if (e!=null) caret = e.getStartOffset();
+                        // scroll rect to visible
+                        ep.scrollRectToVisible(ep.modelToView(caret));
                         // scroll some lines further, if possible
                         e = ep.getDocument().getDefaultRootElement().getElement(line+10);
                         if (e!=null) caret = e.getStartOffset();
@@ -307,27 +316,31 @@ public class EditorPanes {
      * @param editorPane
      * @param c 
      */
-    private void setSyntaxScheme(JEditorPane editorPane, int c) {
+    private JEditorPane setSyntaxScheme(JEditorPane editorPane, int c) {
         // declare compiler var as final
         final int compiler = c;
         // get hash map with keywords
         final HashMap<String, MutableAttributeSet> kw = SyntaxScheme.getKeywordHashMap(compiler);
+        // get hash map with compiler specific keywords
+        final HashMap<String, MutableAttributeSet> ckw = SyntaxScheme.getCompilerKeywordHashMap(compiler);
         // create new editor kit
         EditorKit editorKit = new StyledEditorKit() {
             // and set highlight scheme
             @Override
             public Document createDefaultDocument() {
-                return new SyntaxHighlighting(kw, SyntaxScheme.DEFAULT_FONT_FAMILY,
-                                                  SyntaxScheme.DEFAULT_FONT_SIZE,
-                                                  SyntaxScheme.getCommentString(compiler),
-                                                  SyntaxScheme.getDelimiterList(compiler),
-                                                  SyntaxScheme.getStyleAttributes(),
-                                                  compiler);
+                return new SyntaxHighlighting(kw, ckw,
+                                              SyntaxScheme.getFontName(),
+                                              SyntaxScheme.getFontSize(),
+                                              SyntaxScheme.getCommentString(compiler),
+                                              SyntaxScheme.getDelimiterList(compiler),
+                                              SyntaxScheme.getStyleAttributes(),
+                                              compiler);
             }
         };
         // link editorkit to editorpane
         editorPane.setEditorKitForContentType("text/plain", editorKit);
         editorPane.setContentType("text/plain");
+        return editorPane;
     }
 
     public String getCompilerCommentString() {
@@ -604,7 +617,14 @@ public class EditorPanes {
      */
     public EditorPaneProperties getActiveEditorPaneProperties() {
         // get selected tab
-        int selectedTab = tabbedPane.getSelectedIndex();
+        return getEditorPaneProperties(tabbedPane.getSelectedIndex());
+    }
+    /**
+     * 
+     * @param selectedTab
+     * @return 
+     */
+    public EditorPaneProperties getEditorPaneProperties(int selectedTab) {
         if (selectedTab != -1) {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(selectedTab);
@@ -693,8 +713,9 @@ public class EditorPanes {
      * @return 
      */
     private boolean saveFile(File filepath) {
-        // retrieve current tab
-        int selectedTab = tabbedPane.getSelectedIndex();
+        return saveFile(tabbedPane.getSelectedIndex(), filepath);
+    }
+    private boolean saveFile(int selectedTab, File filepath) {
         // check whether we have any tab selected
         if (selectedTab!=-1) {
             // check for modifications
@@ -752,13 +773,32 @@ public class EditorPanes {
         }
         return false;
     }
-    /**
-     * 
-     * @return 
-     */
+    public boolean saveAllFiles() {
+        // global error
+        boolean allOk = true;
+        for (int i=0; i<getCount(); i++) {
+            // retrieve filename
+            File fp = editorPaneArray.get(i).getFilePath();
+            // check for valid value
+            if (fp!=null && fp.exists()) {
+                if (!saveFile(i,fp)) allOk = false;
+            }
+            else {
+                if(!saveFileAs(i)) allOk = false;
+            }
+        }
+        return allOk;
+    }
     public boolean saveFileAs() {
         // retrieve current tab
-        int selectedTab = tabbedPane.getSelectedIndex();
+        return saveFileAs(tabbedPane.getSelectedIndex());
+    }
+    /**
+     * 
+     * @param selectedTab
+     * @return 
+     */
+    public boolean saveFileAs(int selectedTab) {
         // check whether we have any tab selected
         if (selectedTab!=-1) {
             // retrieve filename
@@ -786,7 +826,7 @@ public class EditorPanes {
                         // if not, create file
                         if (fileToSave.createNewFile()) {
                             // save file
-                            return saveFile(fileToSave);
+                            return saveFile(selectedTab, fileToSave);
                         }
                         else {
                             return false;
@@ -804,7 +844,7 @@ public class EditorPanes {
                         return false;
                     }
                     else {
-                        return saveFile(fileToSave);
+                        return saveFile(selectedTab, fileToSave);
                     }
                 }
             }
@@ -844,9 +884,10 @@ public class EditorPanes {
         }
     }
     /**
+     * Gets the filename's name of a file-path (w/o extension).
      * 
-     * @param f
-     * @return 
+     * @param f A filepath.
+     * @return the filename's name of a file-path (w/o extension).
      */
     private String getFileName(File f) {
         // check whether we have any valid filepath at all
@@ -863,12 +904,33 @@ public class EditorPanes {
         return null;
     }
     /**
+     * The count of editor panes.
+     * 
+     * @return The count of editor panes.
+     */
+    public int getCount() {
+        return (null==editorPaneArray) ? 0 : editorPaneArray.size();
+    }
+    /**
+     * Checks whether the file / editor pane on the currently activated
+     * JTabbedPane's selected tab is modified or not.
      * 
      * @return 
      */
     public boolean isModified() {
+        return isModified(tabbedPane.getSelectedIndex());
+    }
+    /**
+     * Checks whether the file / editor pane on the JTabbedPane with the
+     * index {@code selectedTab} is modified or not.
+     * 
+     * @param selectedTab
+     * @return {@code true} if editor pane's content on the JTabbedPane's tab
+     * with index {@code selectedTab} is modified.
+     */
+    public boolean isModified(int selectedTab) {
         // retrieve active editor pane
-        EditorPaneProperties ep = getActiveEditorPaneProperties();
+        EditorPaneProperties ep = getEditorPaneProperties(selectedTab);
         // check for valid value
         if (ep!=null) {
             // check whether modified
@@ -877,8 +939,15 @@ public class EditorPanes {
         return false;
     }
     /**
+     * Closes the current activated editor pane file. If editor content is
+     * modified, an JOptionPane will popup and asks for saving changes.
+     * After that, the currently activated editor pane will be removed
+     * from the {@link #editorPaneArray}.
      * 
-     * @return 
+     * <b>Note that the currently selected tab from the {@link #tabbedPane}
+     * has to be removed manually!</b>
+     * 
+     * @return {@code true} if editor pane (file) was successfully closed.
      */
     public boolean closeFile() {
         // retrieve active editor pane
@@ -889,26 +958,47 @@ public class EditorPanes {
             if (ep.isModified()) {
                 // if so, open a confirm dialog
                 int option = JOptionPane.showConfirmDialog(null, resourceMap.getString("msgSaveChanges"), resourceMap.getString("msgSaveChangesTitle"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                // if no save is requested, exit immediately
-                if (JOptionPane.NO_OPTION == option) {
-                    return true;
-                }
                 // if action is cancelled, return to the program
                 if (JOptionPane.CANCEL_OPTION == option || JOptionPane.CLOSED_OPTION==option /* User pressed cancel key */) {
                     return false;
                 }
-                // else, save file now
-                if(!saveFile()) {
+                // if save is requested, try to save
+                if (JOptionPane.YES_OPTION == option && !saveFile()) {
                     return false;
-                }  
+                }
             }
             // get selected tab
             int selectedTab = tabbedPane.getSelectedIndex();
-            // if save successful, remove data
-            editorPaneArray.remove(selectedTab);
+            try {
+                // if save successful, remove data
+                editorPaneArray.remove(selectedTab);
+            }
+            catch (IndexOutOfBoundsException | UnsupportedOperationException ex) {
+            }
             // success
             return true;
         }
         return false;
+    }
+    /**
+     * Inserts a (commented) separator line into the source. The current line of
+     * the caret position is moved down and the separator line is inserted at
+     * the beginning of the caret's current line.
+     */
+    public void insertSeparatorLine() {
+        eatReaturn = true;
+        // get current editor
+        JEditorPane ep = getActiveEditorPane();
+        // retrieve element and check whether line is inside bounds
+        Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber());
+        if (e!=null) {
+            try {
+                // set up section name
+                String insertString = getCompilerCommentString() + " ----------------------------------------" + System.getProperty("line.separator");
+                // insert section
+                ep.getDocument().insertString(e.getStartOffset(), insertString, SyntaxScheme.DEFAULT_COMMENT);
+            }
+            catch (BadLocationException ex) {}
+        }
     }
 }

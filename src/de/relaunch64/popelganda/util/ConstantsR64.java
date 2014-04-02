@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Relaunch64View;
+import java.awt.Color;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
@@ -49,7 +50,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (beta 6)";
+    public static final String APPLICATION_TITLE = "Relaunch64 (beta 7)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
@@ -72,13 +73,16 @@ public class ConstantsR64 {
     public static final String STRING_STRING = "string";
     public static final String STRING_NUMBER = "number";
     public static final String STRING_KEYWORD = "keyword";
+    public static final String STRING_COMPILER_KEYWORD = "compilerkeyword";
     public static final String STRING_HEXA = "hexa";
+    public static final String STRING_LOHI = "lohi";
     public static final String STRING_BIN = "binary";
     public static final String STRING_MACRO = "macro";
     public static final String STRING_JUMP = "jump";
 
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
     public static final int DEFAULT_FONT_SIZE = 13;
+    public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
     
     public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
     public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";

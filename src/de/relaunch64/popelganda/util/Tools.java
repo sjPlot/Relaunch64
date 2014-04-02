@@ -247,4 +247,31 @@ public class Tools {
         }
         return null;
     }
+    /**
+     * 
+     * @param filename
+     * @return 
+     */
+    public static File createFilePath(String filename) {
+        File sFile;
+        if (!new File(System.getProperty("user.home")+java.io.File.separatorChar+".Relaunch64").exists()) {
+            try {
+                // first of all, we want to check for a subdirectory ".Zettelkasten" in the user's home-directory
+                if (new File(System.getProperty("user.home")+java.io.File.separatorChar+".Relaunch64").mkdirs()) {
+                    sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+".Relaunch64"+java.io.File.separatorChar+filename);
+                }
+            else {
+                sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+filename);
+            }
+            }
+            catch (SecurityException ex) {
+                sFile = null;
+            }
+        }
+        else {
+            sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+".Relaunch64"+java.io.File.separatorChar+filename);
+        }
+        // return result
+        return sFile;
+    }    
 }
