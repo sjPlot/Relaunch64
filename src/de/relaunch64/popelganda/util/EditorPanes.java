@@ -818,7 +818,7 @@ public class EditorPanes {
                 // check whether the user entered a file extension. if not,
                 // add ".zkn3" as extension
                 if (!Tools.hasValidFileExtension(fileToSave)) {
-                    fileToSave = new File(fileToSave.getPath()+"asm");
+                    fileToSave = new File(fileToSave.getPath()+".asm");
                 }
                 // check whether file exists
                 if (!fileToSave.exists()) { 

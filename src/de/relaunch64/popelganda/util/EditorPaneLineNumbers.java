@@ -218,7 +218,7 @@ public final class EditorPaneLineNumbers extends JPanel
     private void setPreferredWidth() {
         Element root = component.getDocument().getDefaultRootElement();
         int lines = root.getElementCount();
-        int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits);
+        int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits) + 2; // added "+2"
 
         //  Update sizes when number of digits in the line number changes
 
@@ -257,9 +257,11 @@ public final class EditorPaneLineNumbers extends JPanel
 
         while (rowStartOffset <= endOffset) {
             try {
+                boolean drawExtra = false;
                 if (isCurrentLine(rowStartOffset)) {
                     g.setColor(getCurrentLineForeground());
                     g.setFont(getFont().deriveFont(Font.BOLD));
+                    drawExtra = true;
                 } else {
                     g.setColor(getForeground());
                     g.setFont(getFont().deriveFont(Font.PLAIN));
@@ -273,7 +275,10 @@ public final class EditorPaneLineNumbers extends JPanel
                 int x = getOffsetX(availableWidth, stringWidth) + insets.left;
                 int y = getOffsetY(rowStartOffset, fontMetrics);
                 g.drawString(lineNumber, x, y);
-
+                if (drawExtra) {
+//                    g.setColor(Color.red);
+//                    g.drawRect(x-10, y-8, 2, 2);
+                }
                 //  Move to the next row
 
                 rowStartOffset = Utilities.getRowEnd(component, rowStartOffset) + 1;

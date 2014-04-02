@@ -49,7 +49,7 @@
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jComboBoxEmulator" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jComboBoxCompilers" min="-2" max="-2" attributes="0"/>
@@ -57,6 +57,7 @@
                           <Component id="jComboBoxParam" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButtonRun" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -73,7 +74,7 @@
                               <Component id="jComboBoxEmulator" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTabbedPane1" pref="449" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane1" pref="430" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jPanelFind" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -299,7 +300,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="0" pref="540" max="32767" attributes="0"/>
+                      <Component id="jSplitPane2" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -326,63 +327,15 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane2" max="32767" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="26" max="32767" attributes="0"/>
-                                  <Component id="jButtonCarLog1" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <EmptySpace min="0" pref="285" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jButtonCarLog1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane2" pref="220" max="32767" attributes="0"/>
-                              </Group>
+                              <EmptySpace min="0" pref="248" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
-                      <SubComponents>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                          </AuxValues>
-
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                          <SubComponents>
-                            <Component class="javax.swing.JTextArea" name="jTextAreaLog">
-                              <Properties>
-                                <Property name="editable" type="boolean" value="false"/>
-                                <Property name="wrapStyleWord" type="boolean" value="true"/>
-                                <Property name="name" type="java.lang.String" value="jTextAreaLog" noResource="true"/>
-                              </Properties>
-                            </Component>
-                          </SubComponents>
-                        </Container>
-                        <Component class="javax.swing.JLabel" name="jLabel2">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
-                            <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JButton" name="jButtonCarLog1">
-                          <Properties>
-                            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                              <action class="de.relaunch64.popelganda.Relaunch64View" id="clearLog1" methodName="clearLog1"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="jButtonCarLog1" noResource="true"/>
-                          </Properties>
-                        </Component>
-                      </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="jPanel4">
                       <Properties>
@@ -397,61 +350,122 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jButtonClearLog2" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jScrollPane3" max="32767" attributes="0"/>
+                              <Component id="jTabbedPaneLogs" alignment="0" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jButtonClearLog2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane3" pref="244" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jTabbedPaneLogs" alignment="0" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Component class="javax.swing.JLabel" name="jLabel3">
+                        <Container class="javax.swing.JTabbedPane" name="jTabbedPaneLogs">
                           <Properties>
-                            <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
-                            <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
+                            <Property name="name" type="java.lang.String" value="jTabbedPaneLogs" noResource="true"/>
                           </Properties>
-                        </Component>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane3">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                          </AuxValues>
 
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JTextArea" name="jTextAreaCompilerOutput">
+                            <Container class="javax.swing.JPanel" name="jPanel6">
                               <Properties>
-                                <Property name="editable" type="boolean" value="false"/>
-                                <Property name="name" type="java.lang.String" value="jTextAreaCompilerOutput" noResource="true"/>
+                                <Property name="name" type="java.lang.String" value="jPanel6" noResource="true"/>
                               </Properties>
-                            </Component>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                  <JTabbedPaneConstraints tabName="Relaunch64 Log">
+                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel6.TabConstraints.tabTitle"/>
+                                  </JTabbedPaneConstraints>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout>
+                                <DimensionLayout dim="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <EmptySpace min="0" pref="264" max="32767" attributes="0"/>
+                                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                          <Component id="jScrollPane2" alignment="0" pref="264" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                </DimensionLayout>
+                                <DimensionLayout dim="1">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <EmptySpace min="0" pref="233" max="32767" attributes="0"/>
+                                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                          <Component id="jScrollPane2" alignment="0" pref="233" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                </DimensionLayout>
+                              </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                                  <Properties>
+                                    <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+                                  </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTextArea" name="jTextAreaLog">
+                                      <Properties>
+                                        <Property name="editable" type="boolean" value="false"/>
+                                        <Property name="wrapStyleWord" type="boolean" value="true"/>
+                                        <Property name="name" type="java.lang.String" value="jTextAreaLog" noResource="true"/>
+                                      </Properties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
+                            <Container class="javax.swing.JPanel" name="jPanel5">
+                              <Properties>
+                                <Property name="name" type="java.lang.String" value="jPanel5" noResource="true"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                  <JTabbedPaneConstraints tabName="Compiler Log">
+                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel5.TabConstraints.tabTitle"/>
+                                  </JTabbedPaneConstraints>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout>
+                                <DimensionLayout dim="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane3" alignment="0" pref="264" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                                <DimensionLayout dim="1">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane3" alignment="1" pref="233" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                              </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                                  <Properties>
+                                    <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
+                                  </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTextArea" name="jTextAreaCompilerOutput">
+                                      <Properties>
+                                        <Property name="editable" type="boolean" value="false"/>
+                                        <Property name="name" type="java.lang.String" value="jTextAreaCompilerOutput" noResource="true"/>
+                                      </Properties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JButton" name="jButtonClearLog2">
-                          <Properties>
-                            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                              <action class="de.relaunch64.popelganda.Relaunch64View" id="clearLog2" methodName="clearLog2"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="jButtonClearLog2" noResource="true"/>
-                          </Properties>
-                        </Component>
                       </SubComponents>
                     </Container>
                   </SubComponents>
@@ -810,6 +824,30 @@
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="insertSeparatorLine" methodName="insertSeparatorLine"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="insertSeparatorMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="viewMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="viewMenu.text"/>
+            <Property name="name" type="java.lang.String" value="viewMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="viewLog1MenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog1" methodName="selectLog1"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="viewLog1MenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="viewLog2MenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog2" methodName="selectLog2"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="viewLog2MenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>

@@ -513,7 +513,12 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     }
     @Action
     public void saveFile() {
-        editorPanes.saveFile();
+        if (editorPanes.saveFile()) {
+            // add file path to recent documents history
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex());
+            // and update menus
+            setRecentDocuments();
+        }
     }
     @Action
     public void saveAllFiles() {
@@ -555,7 +560,12 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     }
     @Action
     public void saveFileAs() {
-        editorPanes.saveFileAs();
+        if (editorPanes.saveFileAs()) {
+            // add file path to recent documents history
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex());
+            // and update menus
+            setRecentDocuments();
+        }
     }
     @Action
     public void runFile() {
@@ -789,6 +799,14 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jTextAreaCompilerOutput.setText("");
     }
     @Action
+    public void selectLog1() {
+        jTabbedPaneLogs.setSelectedIndex(0);
+    }
+    @Action
+    public void selectLog2() {
+        jTabbedPaneLogs.setSelectedIndex(1);
+    }
+    @Action
     public void selectAllText() {
     }
     @Action
@@ -868,13 +886,6 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             }
         }
-    }
-    /**
-     * 
-     * @return 
-     */
-    private boolean saveDocument() {
-        return editorPanes.saveFile();
     }
     /**
      * 
@@ -1096,15 +1107,14 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jTabbedPaneLogs = new javax.swing.JTabbedPane();
+        jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaLog = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
-        jButtonCarLog1 = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextAreaCompilerOutput = new javax.swing.JTextArea();
-        jButtonClearLog2 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         addTabMenuItem = new javax.swing.JMenuItem();
@@ -1155,6 +1165,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         gotoPrevSectionMenuItem = new javax.swing.JMenuItem();
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        viewLog1MenuItem = new javax.swing.JMenuItem();
+        viewLog2MenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
@@ -1295,14 +1308,15 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 .add(jLabel11)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxEmulator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxParam, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonRun))
+                .add(jButtonRun)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1316,7 +1330,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     .add(jLabel11)
                     .add(jComboBoxEmulator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanelFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -1333,6 +1347,25 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 285, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 248, Short.MAX_VALUE)
+        );
+
+        jSplitPane2.setTopComponent(jPanel3);
+
+        jPanel4.setName("jPanel4"); // NOI18N
+
+        jTabbedPaneLogs.setName("jTabbedPaneLogs"); // NOI18N
+
+        jPanel6.setName("jPanel6"); // NOI18N
+
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         jTextAreaLog.setEditable(false);
@@ -1340,39 +1373,24 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jTextAreaLog.setName("jTextAreaLog"); // NOI18N
         jScrollPane2.setViewportView(jTextAreaLog);
 
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
-        jButtonCarLog1.setAction(actionMap.get("clearLog1")); // NOI18N
-        jButtonCarLog1.setName("jButtonCarLog1"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane2)
-            .add(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel2)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 26, Short.MAX_VALUE)
-                .add(jButtonCarLog1))
+        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 264, Short.MAX_VALUE)
+            .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel2)
-                    .add(jButtonCarLog1))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 233, Short.MAX_VALUE)
+            .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
         );
 
-        jSplitPane2.setTopComponent(jPanel3);
+        jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
 
-        jPanel4.setName("jPanel4"); // NOI18N
-
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
+        jPanel5.setName("jPanel5"); // NOI18N
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
@@ -1380,28 +1398,28 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jTextAreaCompilerOutput.setName("jTextAreaCompilerOutput"); // NOI18N
         jScrollPane3.setViewportView(jTextAreaCompilerOutput);
 
-        jButtonClearLog2.setAction(actionMap.get("clearLog2")); // NOI18N
-        jButtonClearLog2.setName("jButtonClearLog2"); // NOI18N
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+        );
+
+        jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel3)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jButtonClearLog2))
-            .add(jScrollPane3)
+            .add(jTabbedPaneLogs)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel3)
-                    .add(jButtonClearLog2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
+            .add(jTabbedPaneLogs)
         );
 
         jSplitPane2.setRightComponent(jPanel4);
@@ -1414,7 +1432,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+            .add(jSplitPane2)
         );
 
         jSplitPane1.setRightComponent(jPanel2);
@@ -1614,6 +1632,19 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         menuBar.add(sourceMenu);
 
+        viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
+        viewMenu.setName("viewMenu"); // NOI18N
+
+        viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
+        viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
+        viewMenu.add(viewLog1MenuItem);
+
+        viewLog2MenuItem.setAction(actionMap.get("selectLog2")); // NOI18N
+        viewLog2MenuItem.setName("viewLog2MenuItem"); // NOI18N
+        viewMenu.add(viewLog2MenuItem);
+
+        menuBar.add(viewMenu);
+
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
 
@@ -1729,8 +1760,6 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
-    private javax.swing.JButton jButtonCarLog1;
-    private javax.swing.JButton jButtonClearLog2;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
     private javax.swing.JButton jButtonReplace;
@@ -1742,8 +1771,6 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JEditorPane jEditorPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1754,6 +1781,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1774,6 +1803,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPaneLogs;
     private javax.swing.JTextArea jTextAreaCompilerOutput;
     private javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldConvBin;
@@ -1806,6 +1836,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenu sourceMenu;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JMenuItem undoMenuItem;
+    private javax.swing.JMenuItem viewLog1MenuItem;
+    private javax.swing.JMenuItem viewLog2MenuItem;
+    private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 
     private JDialog aboutBox;
