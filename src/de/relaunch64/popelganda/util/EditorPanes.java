@@ -127,6 +127,7 @@ public class EditorPanes {
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) autoInsertTab();
+                if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
             }
         });
         // add caret listener
@@ -164,7 +165,6 @@ public class EditorPanes {
         return editorPaneArray.size();
     }
     private void autoInsertTab() {
-        eatReaturn = false;
         JEditorPane ep = getActiveEditorPane();
         try {
             int caret = ep.getCaretPosition();
