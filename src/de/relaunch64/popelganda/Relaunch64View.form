@@ -747,6 +747,14 @@
                 <Property name="name" type="java.lang.String" value="replaceMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="replaceAllMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="replaceAll" methodName="replaceAll"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="replaceAllMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="sourceMenu">

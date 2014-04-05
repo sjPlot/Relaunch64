@@ -65,6 +65,9 @@ public class FindReplace {
         resetValues();
     }
     public void initValues(String ft, String rt, int at, JEditorPane ep) {
+        initValues(ft, rt, at, ep, false);
+    }
+    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean forceInit) {
         boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
                                (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
         findText = ft;
@@ -72,7 +75,7 @@ public class FindReplace {
         activeTab = at;
         editorPane = ep;
         updateContent();
-        if (newFindTerm) initmatcher();
+        if (newFindTerm || forceInit) initmatcher();
     }
     /**
      * 

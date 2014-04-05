@@ -840,7 +840,16 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         editorPanes.setFocus();
     }
     @Action
+    public void replaceAll() {
+        findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane(), true);
+        int findCounter = 0;
+        while (findReplace.replace()) findCounter++;
+        JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter)+" occurences were replaced.");
+    }
+    @Action
     public void replaceTerm() {
+        // make it visible
+        jPanelFind.setVisible(true);
         // check whether textfield is visible
         if (!jPanelReplace.isVisible()) {
             // make it visible
@@ -1051,13 +1060,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 StringWriter text = new StringWriter();
                 PrintWriter out = new PrintWriter(text);
                 out.println(jTextAreaLog.getText());
-                // get source class name
-                String scn = record.getSourceClassName();
-                int p = scn.lastIndexOf(".");
-                if (p>0) {
-                    scn = scn.substring(p+1);
-                }
-                out.printf("%s.%s"+System.getProperty("line.separator")+"[%s] %s"+System.getProperty("line.separator"), scn ,record.getSourceMethodName(), record.getLevel(), record.getMessage());
+                out.printf("[%s] %s"+System.getProperty("line.separator"), record.getLevel(), record.getMessage());
                 jTextAreaLog.setText(text.toString());
             });
         }
@@ -1154,6 +1157,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         findNextMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         replaceMenuItem = new javax.swing.JMenuItem();
+        replaceAllMenuItem = new javax.swing.JMenuItem();
         sourceMenu = new javax.swing.JMenu();
         runDefaultMenuItem = new javax.swing.JMenuItem();
         compileMenuItem = new javax.swing.JMenuItem();
@@ -1588,6 +1592,10 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         replaceMenuItem.setName("replaceMenuItem"); // NOI18N
         findMenu.add(replaceMenuItem);
 
+        replaceAllMenuItem.setAction(actionMap.get("replaceAll")); // NOI18N
+        replaceAllMenuItem.setName("replaceAllMenuItem"); // NOI18N
+        findMenu.add(replaceAllMenuItem);
+
         menuBar.add(findMenu);
 
         sourceMenu.setText(resourceMap.getString("sourceMenu.text")); // NOI18N
@@ -1826,6 +1834,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem recent8MenuItem;
     private javax.swing.JMenu recentDocsSubmenu;
     private javax.swing.JMenuItem redoMenuItem;
+    private javax.swing.JMenuItem replaceAllMenuItem;
     private javax.swing.JMenuItem replaceMenuItem;
     private javax.swing.JMenuItem runDefaultMenuItem;
     private javax.swing.JMenuItem saveAllMenuItem;
