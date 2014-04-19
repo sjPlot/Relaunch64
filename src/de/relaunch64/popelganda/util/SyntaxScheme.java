@@ -478,6 +478,23 @@ public class SyntaxScheme {
      * @param compiler
      * @return 
      */
+    public static String getMacroString(int compiler) {
+        String str = ".";
+        switch (compiler) {
+            case ConstantsR64.COMPILER_ACME:
+                str = "!";
+                break;
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+                str = ".";
+                break;
+        }
+        return str;
+    }
+    /**
+     * 
+     * @param compiler
+     * @return 
+     */
     public static HashMap<String, MutableAttributeSet> getKeywordHashMap(int compiler) {
         final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<>();
         asmKeywords.put("LDA", DEFAULT_KEYWORD);

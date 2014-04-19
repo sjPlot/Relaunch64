@@ -274,4 +274,38 @@ public class Tools {
         // return result
         return sFile;
     }    
+    public static boolean isValidLabel(String keyword, int compiler) {
+        // check for valid chars
+        keyword = keyword.trim();
+        return !keyword.startsWith(SyntaxScheme.getMacroString(compiler)) && !keyword.startsWith(SyntaxScheme.getCommentString(compiler)) && !keyword.startsWith("$") && !keyword.startsWith("#");
+    }
+    public static String getLabelFromLine(String line, int compiler) {
+        // check for valid chars
+        line = line.trim();
+        // check if we have valid label start
+        if (isValidLabel(line, compiler)) {
+            // separator strings
+            int i = 0;
+            String addDelim = (ConstantsR64.COMPILER_ACME==compiler) ? ":" : "";
+            String keyword;
+            try {
+                while (!isDelimiter(line.substring(i, i+1), addDelim) && i<line.length()) i++;
+                keyword = line.substring(0, i);
+            }
+            catch (IndexOutOfBoundsException ex) {
+                keyword = line.substring(0, line.length());
+            }
+            // check if a) keyword is not null and not empty, b) is longer than 2 chars and 3) is not an ASM keyword
+            if (keyword!=null && !keyword.isEmpty() && keyword.length()>2 && !SyntaxScheme.getKeywordHashMap(compiler).containsKey(keyword.toUpperCase())) return keyword;
+        }
+        return null;
+    }
+    /*
+     *  Override for other languages
+     */
+    public static boolean isDelimiter(String character, String additionalChars) {
+        // Komma ergänzt
+        String delimiterList = ",;{}()[]+-/<=>&|^~*#"+additionalChars;
+        return Character.isWhitespace(character.charAt(0)) || delimiterList.contains(character);
+    }
 }

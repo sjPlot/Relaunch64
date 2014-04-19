@@ -34,7 +34,11 @@ package de.relaunch64.popelganda.util;
 
 import com.sun.glass.events.KeyEvent;
 import de.relaunch64.popelganda.Relaunch64View;
+import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.dnd.DropTarget;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +50,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -57,8 +62,12 @@ import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -80,6 +89,9 @@ public class EditorPanes {
     private final Relaunch64View mainFrame;
     private final Settings settings;
     private boolean eatReaturn = false;
+    private JPopupMenu suggestionPopup = null;
+    private JList suggestionList;
+    private String suggestionSubWord;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
@@ -129,7 +141,13 @@ public class EditorPanes {
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) autoInsertTab();
-                if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
+                else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
+                else if (evt.getKeyCode() == KeyEvent.VK_SPACE && evt.isControlDown()) {
+                    showSuggestion();
+                }
+                else if (Character.isWhitespace(evt.getKeyChar())) {
+                    hideSuggestion();
+                }
             }
         });
         // add caret listener
@@ -139,6 +157,15 @@ public class EditorPanes {
             // here we have selected text
             if (selection!=0) {
                 mainFrame.autoConvertNumbers(editorPane.getSelectedText());
+            }
+        });
+        // add focus listener
+        editorPane.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override public void focusGained(java.awt.event.FocusEvent evt) {
+                if (suggestionPopup != null) {
+                    suggestionPopup.setVisible(false);
+                    suggestionPopup=null;
+                }
             }
         });
         // configure propeties of editor pane
@@ -1000,5 +1027,175 @@ public class EditorPanes {
             }
             catch (BadLocationException ex) {}
         }
+    }
+    
+    
+    protected void showSuggestion() {
+        // hide old popup
+        hideSuggestion();
+        JEditorPane ep = getActiveEditorPane();
+        // get caret to retrieve position
+        final int position = ep.getCaretPosition();
+        Point location;
+        try {
+            location = ep.modelToView(position).getLocation();
+        } catch (BadLocationException e2) {
+            return;
+        }
+        String text;
+        // retrieve text from caret to last whitespace
+        try {
+            text = ep.getDocument().getText(0, position);
+        }
+        catch(BadLocationException ex) {
+            return;
+        }
+        String addDelim = (ConstantsR64.COMPILER_ACME==getActiveCompiler()) ? "\n\r:" : "\n\r";
+        int start = Math.max(0, position - 1);
+        while (start > 0) {
+            char a = text.charAt(start);
+            String b = text.substring(start, start+1);
+            boolean c = Tools.isDelimiter(text.substring(start, start+1), addDelim);
+            
+            if (!Character.isWhitespace(text.charAt(start)) && !Tools.isDelimiter(text.substring(start, start+1), addDelim)) {
+                start--;
+            } else {
+                start++;
+                break;
+            }
+        }
+        if (start > position) {
+            return;
+        }
+        try {
+            // retrieve chars that have already been typed
+            suggestionSubWord = text.substring(start, position);
+    //        if (suggestionSubWord.length() < 2) {
+    //            return;
+    //        }
+            // retrieve label list
+            Object[] labels = getLabelList(suggestionSubWord.trim());
+            // check if we have any labels
+            if (labels!=null && labels.length>0) {
+                // create suggestion pupup
+                suggestionPopup = new JPopupMenu();
+                suggestionPopup.removeAll();
+                suggestionPopup.setOpaque(false);
+                suggestionPopup.setBorder(null);
+                suggestionPopup.add(suggestionList = createSuggestionList(labels), BorderLayout.CENTER);
+                suggestionPopup.show(ep, location.x, ep.getBaseline(0, 0) + location.y);
+                // set input focus to popup
+                SwingUtilities.invokeLater(() -> {
+                    suggestionList.requestFocusInWindow();
+                });
+            }
+        }
+        catch (IndexOutOfBoundsException ex) {
+        }
+    }
+    protected void hideSuggestion() {
+        if (suggestionPopup != null) {
+            suggestionPopup.setVisible(false);
+            suggestionPopup=null;
+        }
+        // set focus back to editorpane
+        getActiveEditorPane().requestFocusInWindow();
+    }
+    protected JList createSuggestionList(final Object[] labels) {
+        // create list
+        JList sList = new JList(labels);
+        sList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        sList.setSelectedIndex(0);
+        sList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    insertSelection();
+                }
+            }
+        });
+        sList.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyTyped(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_UP) {
+                    evt.consume();
+                    int index = Math.min(suggestionList.getSelectedIndex() - 1, 0);
+                    suggestionList.setSelectedIndex(index);
+                }
+                if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_DOWN) {
+                    evt.consume();
+                    int index = Math.min(suggestionList.getSelectedIndex() + 1, suggestionList.getModel().getSize() - 1);
+                    suggestionList.setSelectedIndex(index);
+                }
+            }
+            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER) {
+                    evt.consume();
+                    insertSelection();
+                }
+            }
+        });
+        return sList;
+    }
+
+    protected boolean insertSelection() {
+        if (suggestionList.getSelectedValue() != null) {
+            try {
+                JEditorPane ep = getActiveEditorPane();
+                final String selectedSuggestion = ((String) suggestionList.getSelectedValue()).substring(suggestionSubWord.length());
+                ep.getDocument().insertString(ep.getCaretPosition(), selectedSuggestion, null);
+                ep.requestFocusInWindow();
+                return true;
+            } catch (BadLocationException e1) {
+            }
+        }
+        return false;
+    }
+
+    public ArrayList getLabelsList() {
+        // prepare return values
+        ArrayList<String> sectionValues = new ArrayList<>();
+        // retrieve current source and compiler
+        String s = getActiveSourceCode();
+        int c = getActiveCompiler();
+        String line;
+        // go if not null
+        if (s!=null) {
+            // create buffered reader, needed for line number reader
+            BufferedReader br = new BufferedReader(new StringReader(s));
+            LineNumberReader lineReader = new LineNumberReader(br);
+            // read line by line
+            try {
+                while ((line = lineReader.readLine())!=null) {
+                    String keyword = Tools.getLabelFromLine(line, c);
+                    // check if we have valid label and if it's new. If yes, add to results
+                    if (keyword!=null && !sectionValues.contains(keyword)) {
+                        sectionValues.add(keyword);
+                    }
+                }
+            }
+            catch (IOException ex) {
+            }
+        }
+        return sectionValues;
+    }
+    
+    public Object[] getLabelList(String subWord) {
+        // get labels here
+        ArrayList<String> labels = getLabelsList();
+        // check for valid values
+        if (null==labels || labels.isEmpty()) return null;
+//        labels.stream().forEach((label) -> {
+//            System.out.println(label);
+//        });
+        // remove all labels that do not start with already typed chars
+        if (!subWord.isEmpty()) {
+            for (int i=labels.size()-1; i>=0; i--) {
+                if (!labels.get(i).startsWith(subWord)) labels.remove(i);
+            }
+        }
+        // sort list
+        Collections.sort(labels);
+        // return as object array
+        return labels.toArray();
     }
 }

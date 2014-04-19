@@ -130,7 +130,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         // init syntax highlighting for editor pane
         editorPanes.addEditorPane(jEditorPaneMain, null, null, ConstantsR64.COMPILER_KICKASSEMBLER);
         // set input focus
-        jEditorPaneMain.requestFocusInWindow();
+        SwingUtilities.invokeLater(() -> {
+            jEditorPaneMain.requestFocusInWindow();
+        });
     }
     /**
      * 
