@@ -52,7 +52,9 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -109,10 +111,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
-        // init emulator combobox
-        jComboBoxEmulator.setSelectedIndex(0);
-        jComboBoxGotoSection.removeAllItems();
-        jComboBoxGotoSection.addItem("Goto section...");
+        // init combo boxes
+        initComboBoxes();
         // init listeners and accelerator table
         initListeners();
         initDropTargets();
@@ -133,6 +133,15 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         SwingUtilities.invokeLater(() -> {
             jEditorPaneMain.requestFocusInWindow();
         });
+    }
+    private void initComboBoxes() {
+        // init emulator combobox
+        jComboBoxEmulator.setSelectedIndex(0);
+        // init goto comboboxes
+        jComboBoxGotoSection.removeAllItems();
+        jComboBoxGotoSection.addItem(ConstantsR64.CB_GOTO_SECTION_STRING);
+        jComboBoxGotoLabel.removeAllItems();
+        jComboBoxGotoLabel.addItem(ConstantsR64.CB_GOTO_LABEL_STRING);
     }
     /**
      * 
@@ -155,13 +164,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jComboBoxGotoSection.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 // get all action listeners from the combo box
-                ActionListener[] al = jComboBoxGotoSection.getActionListeners();
+                KeyListener[] kl = jComboBoxGotoSection.getKeyListeners();
                 // remove all action listeners so we don't fire several action-events
                 // when we update the combo box. we can set the action listener later again
-                for (ActionListener listener : al) jComboBoxGotoSection.removeActionListener(listener);
+                for (KeyListener listener : kl) jComboBoxGotoSection.removeKeyListener(listener);
                 // add all section names to combobox
                 jComboBoxGotoSection.removeAllItems();
-                jComboBoxGotoSection.addItem("Goto section...");
+                jComboBoxGotoSection.addItem(ConstantsR64.CB_GOTO_SECTION_STRING);
                 ArrayList<String> sections = editorPanes.getSectionNames();
                 if (sections!=null && !sections.isEmpty()) {
                     sections.stream().forEach((arg) -> {
@@ -169,8 +178,38 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     });
                 }
                 // reset listener
-                jComboBoxGotoSection.addActionListener((ActionEvent evt) -> {
-                    editorPanes.gotoSection(jComboBoxGotoSection.getSelectedItem().toString());
+                jComboBoxGotoSection.addKeyListener(new java.awt.event.KeyAdapter() {
+                    @Override public void keyReleased(java.awt.event.KeyEvent e) {
+                        if (KeyEvent.VK_ENTER==e.getKeyCode()) editorPanes.gotoSection(jComboBoxGotoSection.getSelectedItem().toString());
+                    }
+                });
+            }
+            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+            @Override public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+        });
+        jComboBoxGotoLabel.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                // get all action listeners from the combo box
+                KeyListener[] kl = jComboBoxGotoLabel.getKeyListeners();
+                // remove all action listeners so we don't fire several action-events
+                // when we update the combo box. we can set the action listener later again
+                for (KeyListener listener : kl) jComboBoxGotoLabel.removeKeyListener(listener);
+                // add all section names to combobox
+                jComboBoxGotoLabel.removeAllItems();
+                jComboBoxGotoLabel.addItem(ConstantsR64.CB_GOTO_LABEL_STRING);
+                ArrayList<String> sections = editorPanes.getSectionNames();
+                if (sections!=null && !sections.isEmpty()) {
+                    sections.stream().forEach((arg) -> {
+                        jComboBoxGotoLabel.addItem(arg);
+                    });
+                }
+                // reset listener
+                jComboBoxGotoLabel.addKeyListener(new java.awt.event.KeyAdapter() {
+                    @Override public void keyReleased(java.awt.event.KeyEvent e) {
+                        if (KeyEvent.VK_ENTER==e.getKeyCode()) editorPanes.gotoLabel(jComboBoxGotoLabel.getSelectedItem().toString());
+                    }
                 });
             }
             @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
@@ -447,6 +486,16 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     @Action
     public void gotoLine() {
         jTextFieldGotoLine.requestFocusInWindow();
+    }
+    @Action
+    public void gotoSection() {
+        jComboBoxGotoSection.showPopup();
+        jComboBoxGotoSection.requestFocusInWindow();
+    }
+    @Action
+    public void gotoLabel() {
+        jComboBoxGotoLabel.showPopup();
+        jComboBoxGotoLabel.requestFocusInWindow();
     }
     @Action
     public void insertSection() {
@@ -1165,6 +1214,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         compileMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         gotoLineMenuItem = new javax.swing.JMenuItem();
+        gotoSectionMenuItem = new javax.swing.JMenuItem();
+        gotoLabelMenuItem = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         gotoNextSectionMenuItem = new javax.swing.JMenuItem();
@@ -1189,6 +1240,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jLabel9 = new javax.swing.JLabel();
         jTextFieldGotoLine = new javax.swing.JTextField();
         jComboBoxGotoSection = new javax.swing.JComboBox();
+        jComboBoxGotoLabel = new javax.swing.JComboBox();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1618,6 +1670,14 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         gotoLineMenuItem.setName("gotoLineMenuItem"); // NOI18N
         sourceMenu.add(gotoLineMenuItem);
 
+        gotoSectionMenuItem.setAction(actionMap.get("gotoSection")); // NOI18N
+        gotoSectionMenuItem.setName("gotoSectionMenuItem"); // NOI18N
+        sourceMenu.add(gotoSectionMenuItem);
+
+        gotoLabelMenuItem.setAction(actionMap.get("gotoLabel")); // NOI18N
+        gotoLabelMenuItem.setName("gotoLabelMenuItem"); // NOI18N
+        sourceMenu.add(gotoLabelMenuItem);
+
         jSeparator11.setName("jSeparator11"); // NOI18N
         sourceMenu.add(jSeparator11);
 
@@ -1701,6 +1761,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         jComboBoxGotoSection.setName("jComboBoxGotoSection"); // NOI18N
 
+        jComboBoxGotoLabel.setName("jComboBoxGotoLabel"); // NOI18N
+
         org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
@@ -1717,7 +1779,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                         .add(jTextFieldGotoLine, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jComboBoxGotoSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 170, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 235, Short.MAX_VALUE)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jComboBoxGotoLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 170, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 59, Short.MAX_VALUE)))
                 .add(jLabel6)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldConvDez, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -1743,7 +1807,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     .add(jTextFieldConvHex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel8)
                     .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxGotoSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxGotoSection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jComboBoxGotoLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
@@ -1765,9 +1830,11 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem findNextMenuItem;
     private javax.swing.JMenuItem findPrevMenuItem;
     private javax.swing.JMenuItem findStartMenuItem;
+    private javax.swing.JMenuItem gotoLabelMenuItem;
     private javax.swing.JMenuItem gotoLineMenuItem;
     private javax.swing.JMenuItem gotoNextSectionMenuItem;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
+    private javax.swing.JMenuItem gotoSectionMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
     private javax.swing.JButton jButtonFindNext;
@@ -1776,6 +1843,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JButton jButtonRun;
     private javax.swing.JComboBox jComboBoxCompilers;
     private javax.swing.JComboBox jComboBoxEmulator;
+    private javax.swing.JComboBox jComboBoxGotoLabel;
     private javax.swing.JComboBox jComboBoxGotoSection;
     private javax.swing.JComboBox jComboBoxParam;
     private javax.swing.JEditorPane jEditorPaneMain;

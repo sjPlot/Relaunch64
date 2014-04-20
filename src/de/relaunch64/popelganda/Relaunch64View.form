@@ -792,6 +792,22 @@
                 <Property name="name" type="java.lang.String" value="gotoLineMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="gotoSectionMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoSection" methodName="gotoSection"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="gotoSectionMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="gotoLabelMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoLabel" methodName="gotoLabel"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="gotoLabelMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator11">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator11" noResource="true"/>
@@ -920,7 +936,9 @@
                           <Component id="jTextFieldGotoLine" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jComboBoxGotoSection" min="-2" pref="170" max="-2" attributes="0"/>
-                          <EmptySpace pref="235" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jComboBoxGotoLabel" min="-2" pref="170" max="-2" attributes="0"/>
+                          <EmptySpace pref="59" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
@@ -951,6 +969,7 @@
                       <Component id="jLabel8" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldConvBin" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxGotoSection" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboBoxGotoLabel" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="statusPanelSeparator" min="-2" pref="0" max="-2" attributes="0"/>
@@ -1019,6 +1038,11 @@
         <Component class="javax.swing.JComboBox" name="jComboBoxGotoSection">
           <Properties>
             <Property name="name" type="java.lang.String" value="jComboBoxGotoSection" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jComboBoxGotoLabel">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jComboBoxGotoLabel" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

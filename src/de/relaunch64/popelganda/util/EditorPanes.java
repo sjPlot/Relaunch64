@@ -501,6 +501,34 @@ public class EditorPanes {
             }
         }
     }
+    public void gotoLabel(String name) {
+        // names and linenumbers
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Integer> lines = new ArrayList<>();
+        // retrieve sections
+        LinkedHashMap<Integer, String> map = getLabels();
+        // check for valid value
+        if (map!=null && !map.isEmpty()) {
+            // retrieve only string values of sections
+            Collection<String> c = map.values();
+            // create iterator
+            Iterator<String> i = c.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) names.add(i.next());
+            // retrieve only string values of sections
+            Set<Integer> ks = map.keySet();
+            // create iterator
+            Iterator<Integer> ksi = ks.iterator();
+            // add all label names to return value
+            while(ksi.hasNext()) lines.add(ksi.next());
+            // find section name
+            int pos = names.indexOf(name);
+            if (pos!=-1) {
+                // retrieve associated line number
+                gotoLine(lines.get(pos));
+            }
+        }
+    }
     /**
      * 
      * @return 
@@ -1053,10 +1081,6 @@ public class EditorPanes {
         String addDelim = (ConstantsR64.COMPILER_ACME==getActiveCompiler()) ? "\n\r:" : "\n\r";
         int start = Math.max(0, position - 1);
         while (start > 0) {
-            char a = text.charAt(start);
-            String b = text.substring(start, start+1);
-            boolean c = Tools.isDelimiter(text.substring(start, start+1), addDelim);
-            
             if (!Character.isWhitespace(text.charAt(start)) && !Tools.isDelimiter(text.substring(start, start+1), addDelim)) {
                 start--;
             } else {
@@ -1074,7 +1098,7 @@ public class EditorPanes {
     //            return;
     //        }
             // retrieve label list
-            Object[] labels = getLabelList(suggestionSubWord.trim());
+            Object[] labels = getLabelsList(suggestionSubWord.trim());
             // check if we have any labels
             if (labels!=null && labels.length>0) {
                 // create suggestion pupup
@@ -1082,7 +1106,19 @@ public class EditorPanes {
                 suggestionPopup.removeAll();
                 suggestionPopup.setOpaque(false);
                 suggestionPopup.setBorder(null);
-                suggestionPopup.add(suggestionList = createSuggestionList(labels), BorderLayout.CENTER);
+                // create JList with label items
+                suggestionList = createSuggestionList(labels);
+                // check minimum length of list and add scroll pane if list is too long
+                if (labels.length>20) {
+                    javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
+                    listScrollPane.setBorder(null);
+                    listScrollPane.setPreferredSize(new java.awt.Dimension(150,400));
+                    suggestionPopup.add(listScrollPane, BorderLayout.CENTER);
+                }
+                else {
+                    // else just add list w/o scroll pane
+                    suggestionPopup.add(suggestionList = createSuggestionList(labels), BorderLayout.CENTER);
+                }
                 suggestionPopup.show(ep, location.x, ep.getBaseline(0, 0) + location.y);
                 // set input focus to popup
                 SwingUtilities.invokeLater(() -> {
@@ -1136,7 +1172,11 @@ public class EditorPanes {
         });
         return sList;
     }
-
+    /**
+     * Inserts the selected auto-completion label string at the current caret position.
+     * 
+     * @return {@code true} if auto-completion was successful.
+     */
     protected boolean insertSelection() {
         if (suggestionList.getSelectedValue() != null) {
             try {
@@ -1150,10 +1190,16 @@ public class EditorPanes {
         }
         return false;
     }
-
-    public ArrayList getLabelsList() {
+    /**
+     * Retrieves a list of all labels from the current activated source code
+     * (see {@link #getActiveSourceCode()}).
+     * 
+     * @param sortList If {@code true}, labels are sorted in alphabetical order.
+     * @return An array list of all label names from the source code.
+     */
+    public ArrayList getLabelsList(boolean sortList) {
         // prepare return values
-        ArrayList<String> sectionValues = new ArrayList<>();
+        ArrayList<String> labelValues = new ArrayList<>();
         // retrieve current source and compiler
         String s = getActiveSourceCode();
         int c = getActiveCompiler();
@@ -1168,20 +1214,32 @@ public class EditorPanes {
                 while ((line = lineReader.readLine())!=null) {
                     String keyword = Tools.getLabelFromLine(line, c);
                     // check if we have valid label and if it's new. If yes, add to results
-                    if (keyword!=null && !sectionValues.contains(keyword)) {
-                        sectionValues.add(keyword);
+                    if (keyword!=null && !labelValues.contains(keyword)) {
+                        labelValues.add(keyword);
                     }
                 }
+                // sort list
+                if (sortList) Collections.sort(labelValues);
             }
             catch (IOException ex) {
             }
         }
-        return sectionValues;
+        return labelValues;
     }
-    
-    public Object[] getLabelList(String subWord) {
+    /**
+     * Retrieves a list of all labels from the current activated source code
+     * (see {@link #getActiveSourceCode()}) that start with the currently
+     * typed characters at the caret position (usually passed as parameter
+     * {@code subWord}.
+     * 
+     * @param subWord A string which filters the list of labels. Only labels that start with
+     * {@code subWord} will be returned in this list.
+     * 
+     * @return An object array of labels, where only those labels are returned that start with {@code subWord}.
+     */
+    public Object[] getLabelsList(String subWord) {
         // get labels here
-        ArrayList<String> labels = getLabelsList();
+        ArrayList<String> labels = getLabelsList(false);
         // check for valid values
         if (null==labels || labels.isEmpty()) return null;
 //        labels.stream().forEach((label) -> {
@@ -1197,5 +1255,46 @@ public class EditorPanes {
         Collections.sort(labels);
         // return as object array
         return labels.toArray();
+    }
+    /**
+     * This method retrieves all labels from the current activated source code
+     * (see {@link #getActiveSourceCode()}) and returns both line number of label
+     * and label name as linked HashMap.
+     * 
+     * @return All labels with their line numbers, or {@code null} if there are no labels
+     * in the source code.
+     */
+    public LinkedHashMap getLabels() {
+        // prepare return values
+        LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
+        // retrieve current source and compiler
+        String s = getActiveSourceCode();
+        int c = getActiveCompiler();
+        // init vars
+        int lineNumber = 0;
+        String line;
+        // go if not null
+        if (s!=null) {
+            // create buffered reader, needed for line number reader
+            BufferedReader br = new BufferedReader(new StringReader(s));
+            LineNumberReader lineReader = new LineNumberReader(br);
+            // read line by line
+            try {
+                while ((line = lineReader.readLine())!=null) {
+                    // increase line counter
+                    lineNumber++;
+                    //reset the input (matcher)
+                    String keyword = Tools.getLabelFromLine(line, c);
+                    // check if we have valid label and if it's new. If yes, add to results
+                    if (keyword!=null && !labelValues.containsValue(keyword)) {
+                        // if yes, add to return value
+                        labelValues.put(lineNumber, keyword);
+                    }
+                }
+            }
+            catch (IOException ex) {
+            }
+        }
+        return labelValues;
     }
 }
