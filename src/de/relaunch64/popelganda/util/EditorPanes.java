@@ -474,60 +474,13 @@ public class EditorPanes {
         }
     }
     public void gotoSection(String name) {
-        // names and linenumbers
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<Integer> lines = new ArrayList<>();
-        // retrieve sections
-        LinkedHashMap<Integer, String> map = getSections();
-        // check for valid value
-        if (map!=null && !map.isEmpty()) {
-            // retrieve only string values of sections
-            Collection<String> c = map.values();
-            // create iterator
-            Iterator<String> i = c.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) names.add(i.next());
-            // retrieve only string values of sections
-            Set<Integer> ks = map.keySet();
-            // create iterator
-            Iterator<Integer> ksi = ks.iterator();
-            // add all ssction names to return value
-            while(ksi.hasNext()) lines.add(ksi.next());
-            // find section name
-            int pos = names.indexOf(name);
-            if (pos!=-1) {
-                // retrieve associated line number
-                gotoLine(lines.get(pos));
-            }
-        }
+        gotoLine(getSections(), name);
     }
     public void gotoLabel(String name) {
-        // names and linenumbers
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<Integer> lines = new ArrayList<>();
-        // retrieve sections
-        LinkedHashMap<Integer, String> map = getLabels();
-        // check for valid value
-        if (map!=null && !map.isEmpty()) {
-            // retrieve only string values of sections
-            Collection<String> c = map.values();
-            // create iterator
-            Iterator<String> i = c.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) names.add(i.next());
-            // retrieve only string values of sections
-            Set<Integer> ks = map.keySet();
-            // create iterator
-            Iterator<Integer> ksi = ks.iterator();
-            // add all label names to return value
-            while(ksi.hasNext()) lines.add(ksi.next());
-            // find section name
-            int pos = names.indexOf(name);
-            if (pos!=-1) {
-                // retrieve associated line number
-                gotoLine(lines.get(pos));
-            }
-        }
+        gotoLine(getLabels(), name);
+    }
+    public void gotoFunction(String name) {
+        gotoLine(getFunctions(), name);
     }
     /**
      * 
@@ -1061,46 +1014,26 @@ public class EditorPanes {
     protected void showSuggestion() {
         // hide old popup
         hideSuggestion();
-        JEditorPane ep = getActiveEditorPane();
-        // get caret to retrieve position
-        final int position = ep.getCaretPosition();
-        Point location;
-        try {
-            location = ep.modelToView(position).getLocation();
-        } catch (BadLocationException e2) {
-            return;
-        }
-        String text;
-        // retrieve text from caret to last whitespace
-        try {
-            text = ep.getDocument().getText(0, position);
-        }
-        catch(BadLocationException ex) {
-            return;
-        }
-        String addDelim = (ConstantsR64.COMPILER_ACME==getActiveCompiler()) ? "\n\r:" : "\n\r";
-        int start = Math.max(0, position - 1);
-        while (start > 0) {
-            if (!Character.isWhitespace(text.charAt(start)) && !Tools.isDelimiter(text.substring(start, start+1), addDelim)) {
-                start--;
-            } else {
-                start++;
-                break;
-            }
-        }
-        if (start > position) {
-            return;
-        }
         try {
             // retrieve chars that have already been typed
-            suggestionSubWord = text.substring(start, position);
+            suggestionSubWord = getCaretString(false);
+            // check for valid value
+            if (null==suggestionSubWord) return;
     //        if (suggestionSubWord.length() < 2) {
     //            return;
     //        }
+            JEditorPane ep = getActiveEditorPane();
             // retrieve label list
             Object[] labels = getLabelsList(suggestionSubWord.trim());
             // check if we have any labels
             if (labels!=null && labels.length>0) {
+                Point location;
+                try {
+                    final int position = ep.getCaretPosition();
+                    location = ep.modelToView(position).getLocation();
+                } catch (BadLocationException e2) {
+                    return;
+                }
                 // create suggestion pupup
                 suggestionPopup = new JPopupMenu();
                 suggestionPopup.removeAll();
@@ -1112,7 +1045,7 @@ public class EditorPanes {
                 if (labels.length>20) {
                     javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
                     listScrollPane.setBorder(null);
-                    listScrollPane.setPreferredSize(new java.awt.Dimension(150,400));
+                    listScrollPane.setPreferredSize(new java.awt.Dimension(150,300));
                     suggestionPopup.add(listScrollPane, BorderLayout.CENTER);
                 }
                 else {
@@ -1296,5 +1229,136 @@ public class EditorPanes {
             }
         }
         return labelValues;
+    }
+    /**
+     * 
+     * @param wholeWord
+     * @return 
+     */
+    public String getCaretString(boolean wholeWord) {
+        JEditorPane ep = getActiveEditorPane();
+        final int position = ep.getCaretPosition();
+        String text;
+        // retrieve text from caret to last whitespace
+        try {
+            if (wholeWord) {
+                text = ep.getDocument().getText(0, ep.getDocument().getLength());
+            }
+            else {
+                text = ep.getDocument().getText(0, position);
+            }
+        }
+        catch(BadLocationException ex) {
+            return null;
+        }
+        String addDelim = (ConstantsR64.COMPILER_ACME==getActiveCompiler()) ? "\n\r:" : "\n\r";
+        int start = Math.max(0, position - 1);
+        while (start > 0) {
+            if (!Character.isWhitespace(text.charAt(start)) && !Tools.isDelimiter(text.substring(start, start+1), addDelim)) {
+                start--;
+            } else {
+                start++;
+                break;
+            }
+        }
+        if (start > position) {
+            return null;
+        }
+        // check if we want the complete word at the caret
+        if (wholeWord) {
+            int end = start;
+            while (end<text.length() && !Character.isWhitespace(text.charAt(end)) && !Tools.isDelimiter(text.substring(end, end+1), addDelim)) end++;
+            return text.substring(start, end);
+        }
+        // retrieve chars that have already been typed
+        return text.substring(start, position);
+    }
+    /**
+     * This method retrieves all functions from the current activated source code
+     * (see {@link #getActiveSourceCode()}) and returns both line number of function
+     * and function name as linked HashMap.
+     * 
+     * @return All functions with their line numbers, or {@code null} if there are no functions
+     * in the source code.
+     */
+    public LinkedHashMap getFunctions() {
+        // prepare return values
+        LinkedHashMap<Integer, String> functions = new LinkedHashMap<>();
+        // retrieve current source and compiler
+        String s = getActiveSourceCode();
+        int c = getActiveCompiler();
+        // check if compiler supports functions
+        if (c!=ConstantsR64.COMPILER_KICKASSEMBLER) return null;
+        // init vars
+        int lineNumber = 0;
+        String line;
+        // go if not null
+        if (s!=null) {
+            // create buffered reader, needed for line number reader
+            BufferedReader br = new BufferedReader(new StringReader(s));
+            LineNumberReader lineReader = new LineNumberReader(br);
+            // read line by line
+            try {
+                while ((line = lineReader.readLine())!=null) {
+                    // increase line counter
+                    lineNumber++;
+                    //reset the input (matcher)
+                    String keyword = Tools.getFunctionFromLine(line, c);
+                    // check if we have valid label and if it's new. If yes, add to results
+                    if (keyword!=null && !functions.containsValue(keyword)) {
+                        // if yes, add to return value
+                        functions.put(lineNumber, keyword);
+                    }
+                }
+            }
+            catch (IOException ex) {
+            }
+        }
+        return functions;
+    }
+    public ArrayList getFunctionNames() {
+        // init return value
+        ArrayList<String> retval = new ArrayList<>();
+        // retrieve sections
+        LinkedHashMap<Integer, String> map = getFunctions();
+        // check for valid value
+        if (map!=null && !map.isEmpty()) {
+            // retrieve only string values of sections
+            Collection<String> c = map.values();
+            // create iterator
+            Iterator<String> i = c.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) retval.add(i.next());
+            // return result
+            return retval;
+        }
+        return null;
+    }
+
+    protected void gotoLine(LinkedHashMap<Integer, String> map, String name) {
+        // names and linenumbers
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Integer> lines = new ArrayList<>();
+        // check for valid value
+        if (map!=null && !map.isEmpty() && name!=null && !name.isEmpty()) {
+            // retrieve only string values of sections
+            Collection<String> c = map.values();
+            // create iterator
+            Iterator<String> i = c.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) names.add(i.next());
+            // retrieve only string values of sections
+            Set<Integer> ks = map.keySet();
+            // create iterator
+            Iterator<Integer> ksi = ks.iterator();
+            // add all label names to return value
+            while(ksi.hasNext()) lines.add(ksi.next());
+            // find section name
+            int pos = names.indexOf(name);
+            if (pos!=-1) {
+                // retrieve associated line number
+                gotoLine(lines.get(pos));
+            }
+        }
     }
 }

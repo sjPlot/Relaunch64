@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140418)";
+    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140421)";
     /**
      * This variable stores the application title that appears in the main window
      */
@@ -80,6 +80,8 @@ public class ConstantsR64 {
     public static final String STRING_MACRO = "macro";
     public static final String STRING_JUMP = "jump";
 
+    public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
+    
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
     public static final int DEFAULT_FONT_SIZE = 13;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
@@ -89,6 +91,7 @@ public class ConstantsR64 {
     
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";
     public static final String CB_GOTO_LABEL_STRING = "Goto label ...";
+    public static final String CB_GOTO_FUNCTION_STRING = "Goto function ...";
     
     public static final int EMU_VICE = 0;
     public static final int EMU_CCS64 = 1;

@@ -279,6 +279,11 @@ public class Tools {
         keyword = keyword.trim();
         return !keyword.startsWith(SyntaxScheme.getMacroString(compiler)) && !keyword.startsWith(SyntaxScheme.getCommentString(compiler)) && !keyword.startsWith("$") && !keyword.startsWith("#");
     }
+    public static boolean isValidFunction(String keyword, int compiler) {
+        // check for valid chars
+        keyword = keyword.trim();
+        return keyword.startsWith(getFunctionString(compiler));
+    }
     public static String getLabelFromLine(String line, int compiler) {
         // check for valid chars
         line = line.trim();
@@ -300,6 +305,28 @@ public class Tools {
         }
         return null;
     }
+    public static String getFunctionFromLine(String line, int compiler) {
+        // check for valid chars
+        line = line.trim();
+        // check if we have valid label start
+        if (isValidFunction(line, compiler)) {
+            // separator strings
+            int i = 0;
+            String keyword; 
+            // remove function macro string
+            line = line.substring(getFunctionString(compiler).length()).trim();
+            try {
+                while (!isDelimiter(line.substring(i, i+1), "") && i<line.length()) i++;
+                keyword = line.substring(0, i);
+            }
+            catch (IndexOutOfBoundsException ex) {
+                keyword = line.substring(0, line.length());
+            }
+            // check if a) keyword is not null and not empty, b) is longer than 2 chars and 3) is not an ASM keyword
+            if (keyword!=null && !keyword.isEmpty() && keyword.length()>2) return keyword;
+        }
+        return null;
+    }
     /*
      *  Override for other languages
      */
@@ -307,5 +334,12 @@ public class Tools {
         // Komma ergänzt
         String delimiterList = ",;{}()[]+-/<=>&|^~*#"+additionalChars;
         return Character.isWhitespace(character.charAt(0)) || delimiterList.contains(character);
+    }
+    public static String getFunctionString(int compiler) {
+        switch(compiler) {
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+                return ConstantsR64.STRING_FUNCTION_KICKASSEMBLER;
+        }
+        return ConstantsR64.STRING_FUNCTION_KICKASSEMBLER;
     }
 }
