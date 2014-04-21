@@ -33,9 +33,13 @@
 
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
+import de.relaunch64.popelganda.Editor.EditorPanes;
+import de.relaunch64.popelganda.Editor.FunctionExtractor;
+import de.relaunch64.popelganda.Editor.LabelExtractor;
+import de.relaunch64.popelganda.Editor.SectionExtractor;
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.util.EditorPaneLineNumbers;
-import de.relaunch64.popelganda.util.EditorPanes;
+import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
@@ -170,7 +174,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 // add all section names to combobox
                 jComboBoxGotoSection.removeAllItems();
                 jComboBoxGotoSection.addItem(ConstantsR64.CB_GOTO_SECTION_STRING);
-                ArrayList<String> sections = editorPanes.getSectionNames();
+                ArrayList<String> sections = SectionExtractor.getSectionNames(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
                 if (sections!=null && !sections.isEmpty()) {
                     sections.stream().forEach((arg) -> {
                         jComboBoxGotoSection.addItem(arg);
@@ -193,9 +197,15 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 // add all section names to combobox
                 jComboBoxGotoFunction.removeAllItems();
                 jComboBoxGotoFunction.addItem(ConstantsR64.CB_GOTO_FUNCTION_STRING);
-                ArrayList<String> functions = editorPanes.getFunctionNames();
+                ArrayList<String> functions = FunctionExtractor.getFunctionNames(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
                 if (functions!=null && !functions.isEmpty()) {
                     functions.stream().forEach((arg) -> {
+                        jComboBoxGotoFunction.addItem(arg);
+                    });
+                }
+                ArrayList<String> macros = FunctionExtractor.getMacroNames(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+                if (macros!=null && !macros.isEmpty()) {
+                    macros.stream().forEach((arg) -> {
                         jComboBoxGotoFunction.addItem(arg);
                     });
                 }
@@ -216,7 +226,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 // add all section names to combobox
                 jComboBoxGotoLabel.removeAllItems();
                 jComboBoxGotoLabel.addItem(ConstantsR64.CB_GOTO_LABEL_STRING);
-                ArrayList<String> labels = editorPanes.getLabelsList(true);
+                ArrayList<String> labels = LabelExtractor.getLabelsList(true, false, editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
                 if (labels!=null && !labels.isEmpty()) {
                     labels.stream().forEach((arg) -> {
                         jComboBoxGotoLabel.addItem(arg);
@@ -381,7 +391,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             // make menu visible, if recent document is valid
             menuItem.setVisible(true);
             // set filename as text
-            menuItem.setText(Tools.getFileName(recDoc));
+            menuItem.setText(FileTools.getFileName(recDoc));
             menuItem.setToolTipText(recDoc.getPath());
         }
     }  
@@ -569,7 +579,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     }
     @Action
     public void openFile() {
-        File fileToOpen = Tools.chooseFile(getFrame(), JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, "", "", "Open ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
+        File fileToOpen = FileTools.chooseFile(getFrame(), JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, "", "", "Open ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
         openFile(fileToOpen);
     }
     private void openFile(File fileToOpen) {
@@ -730,12 +740,20 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     for (String param : params) {
                         param = param.trim();
                         if (param.equals(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
-                            String infile = (ConstantsR64.COMPILER_ACME==compiler) ? afile.getName() : afile.toString();
+                            String infile;
+                            switch (compiler) {
+                                case ConstantsR64.COMPILER_ACME:
+                                    infile = afile.getName();
+                                    break;
+                                default:
+                                    infile = afile.toString();
+                                    break;
+                            }
                             param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, infile);
                         }
                         if (param.equals(ConstantsR64.ASSEMBLER_OUPUT_FILE)) {
                             // output file
-                            String outfile = afile.getParentFile().toString()+File.separator+Tools.getFileName(afile)+".prg";
+                            String outfile = afile.getParentFile().toString()+File.separator+FileTools.getFileName(afile)+".prg";
                             param = param.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outfile);
                         }
                         if (!param.isEmpty()) args.add(param);
@@ -786,10 +804,16 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     // *************************************************
                     ProcessBuilder pb = new ProcessBuilder(args);
                     // if we have ACME, set different working directory
-                    String wd = (ConstantsR64.COMPILER_ACME==compiler) ?
-                            afile.getParentFile().toString() :
-                            compPath.getParentFile().toString();
-                    // ste process working dir
+                    String wd;
+                    switch (compiler) {
+                        case ConstantsR64.COMPILER_ACME:
+                            wd = afile.getParentFile().toString();
+                            break;
+                        default:
+                            wd = compPath.getParentFile().toString();
+                            break;
+                    }
+                    // set process working dir
                     pb = pb.directory(new File(wd));
                     pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
                     // log working directory
@@ -819,7 +843,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     p.waitFor();
                     p.destroy();
                     // specifiy output file
-                    outputFile = Tools.setFileExtension(afile, "prg");
+                    outputFile = FileTools.setFileExtension(afile, "prg");
                     // check if exists
                     if (!outputFile.exists()) outputFile = null;
                 }
@@ -1047,7 +1071,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                         // check whether it is a file
                         if (file.isFile()) {
                             // if it's an image, add it to image file list
-                            if (Tools.hasValidFileExtension(file) && validDropLocation) {
+                            if (FileTools.hasValidFileExtension(file) && validDropLocation) {
                                 // if so, add it to list
                                 anyfiles.add(file);
                             }
@@ -1229,10 +1253,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         replaceMenuItem = new javax.swing.JMenuItem();
         replaceAllMenuItem = new javax.swing.JMenuItem();
-        sourceMenu = new javax.swing.JMenu();
-        runDefaultMenuItem = new javax.swing.JMenuItem();
-        compileMenuItem = new javax.swing.JMenuItem();
-        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        gotoMenu = new javax.swing.JMenu();
         gotoLineMenuItem = new javax.swing.JMenuItem();
         gotoSectionMenuItem = new javax.swing.JMenuItem();
         gotoLabelMenuItem = new javax.swing.JMenuItem();
@@ -1240,10 +1261,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
         jumpToLabelMenuItem = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
-        insertSectionMenuItem = new javax.swing.JMenuItem();
         gotoNextSectionMenuItem = new javax.swing.JMenuItem();
         gotoPrevSectionMenuItem = new javax.swing.JMenuItem();
-        jSeparator12 = new javax.swing.JPopupMenu.Separator();
+        sourceMenu = new javax.swing.JMenu();
+        runDefaultMenuItem = new javax.swing.JMenuItem();
+        compileMenuItem = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         viewLog1MenuItem = new javax.swing.JMenuItem();
@@ -1676,6 +1700,45 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         menuBar.add(findMenu);
 
+        gotoMenu.setText(resourceMap.getString("gotoMenu.text")); // NOI18N
+        gotoMenu.setName("gotoMenu"); // NOI18N
+
+        gotoLineMenuItem.setAction(actionMap.get("gotoLine")); // NOI18N
+        gotoLineMenuItem.setName("gotoLineMenuItem"); // NOI18N
+        gotoMenu.add(gotoLineMenuItem);
+
+        gotoSectionMenuItem.setAction(actionMap.get("gotoSection")); // NOI18N
+        gotoSectionMenuItem.setName("gotoSectionMenuItem"); // NOI18N
+        gotoMenu.add(gotoSectionMenuItem);
+
+        gotoLabelMenuItem.setAction(actionMap.get("gotoLabel")); // NOI18N
+        gotoLabelMenuItem.setName("gotoLabelMenuItem"); // NOI18N
+        gotoMenu.add(gotoLabelMenuItem);
+
+        gotoFunctionMenuItem.setAction(actionMap.get("gotoFunction")); // NOI18N
+        gotoFunctionMenuItem.setName("gotoFunctionMenuItem"); // NOI18N
+        gotoMenu.add(gotoFunctionMenuItem);
+
+        jSeparator11.setName("jSeparator11"); // NOI18N
+        gotoMenu.add(jSeparator11);
+
+        jumpToLabelMenuItem.setAction(actionMap.get("jumpToLabel")); // NOI18N
+        jumpToLabelMenuItem.setName("jumpToLabelMenuItem"); // NOI18N
+        gotoMenu.add(jumpToLabelMenuItem);
+
+        jSeparator13.setName("jSeparator13"); // NOI18N
+        gotoMenu.add(jSeparator13);
+
+        gotoNextSectionMenuItem.setAction(actionMap.get("gotoNextSection")); // NOI18N
+        gotoNextSectionMenuItem.setName("gotoNextSectionMenuItem"); // NOI18N
+        gotoMenu.add(gotoNextSectionMenuItem);
+
+        gotoPrevSectionMenuItem.setAction(actionMap.get("gotoPrevSection")); // NOI18N
+        gotoPrevSectionMenuItem.setName("gotoPrevSectionMenuItem"); // NOI18N
+        gotoMenu.add(gotoPrevSectionMenuItem);
+
+        menuBar.add(gotoMenu);
+
         sourceMenu.setText(resourceMap.getString("sourceMenu.text")); // NOI18N
         sourceMenu.setName("sourceMenu"); // NOI18N
 
@@ -1690,46 +1753,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jSeparator8.setName("jSeparator8"); // NOI18N
         sourceMenu.add(jSeparator8);
 
-        gotoLineMenuItem.setAction(actionMap.get("gotoLine")); // NOI18N
-        gotoLineMenuItem.setName("gotoLineMenuItem"); // NOI18N
-        sourceMenu.add(gotoLineMenuItem);
-
-        gotoSectionMenuItem.setAction(actionMap.get("gotoSection")); // NOI18N
-        gotoSectionMenuItem.setName("gotoSectionMenuItem"); // NOI18N
-        sourceMenu.add(gotoSectionMenuItem);
-
-        gotoLabelMenuItem.setAction(actionMap.get("gotoLabel")); // NOI18N
-        gotoLabelMenuItem.setName("gotoLabelMenuItem"); // NOI18N
-        sourceMenu.add(gotoLabelMenuItem);
-
-        gotoFunctionMenuItem.setAction(actionMap.get("gotoFunction")); // NOI18N
-        gotoFunctionMenuItem.setName("gotoFunctionMenuItem"); // NOI18N
-        sourceMenu.add(gotoFunctionMenuItem);
-
-        jSeparator11.setName("jSeparator11"); // NOI18N
-        sourceMenu.add(jSeparator11);
-
-        jumpToLabelMenuItem.setAction(actionMap.get("jumpToLabel")); // NOI18N
-        jumpToLabelMenuItem.setName("jumpToLabelMenuItem"); // NOI18N
-        sourceMenu.add(jumpToLabelMenuItem);
-
-        jSeparator13.setName("jSeparator13"); // NOI18N
-        sourceMenu.add(jSeparator13);
-
         insertSectionMenuItem.setAction(actionMap.get("insertSection")); // NOI18N
         insertSectionMenuItem.setName("insertSectionMenuItem"); // NOI18N
         sourceMenu.add(insertSectionMenuItem);
-
-        gotoNextSectionMenuItem.setAction(actionMap.get("gotoNextSection")); // NOI18N
-        gotoNextSectionMenuItem.setName("gotoNextSectionMenuItem"); // NOI18N
-        sourceMenu.add(gotoNextSectionMenuItem);
-
-        gotoPrevSectionMenuItem.setAction(actionMap.get("gotoPrevSection")); // NOI18N
-        gotoPrevSectionMenuItem.setName("gotoPrevSectionMenuItem"); // NOI18N
-        sourceMenu.add(gotoPrevSectionMenuItem);
-
-        jSeparator12.setName("jSeparator12"); // NOI18N
-        sourceMenu.add(jSeparator12);
 
         insertSeparatorMenuItem.setAction(actionMap.get("insertSeparatorLine")); // NOI18N
         insertSeparatorMenuItem.setName("insertSeparatorMenuItem"); // NOI18N
@@ -1873,6 +1899,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem gotoFunctionMenuItem;
     private javax.swing.JMenuItem gotoLabelMenuItem;
     private javax.swing.JMenuItem gotoLineMenuItem;
+    private javax.swing.JMenu gotoMenu;
     private javax.swing.JMenuItem gotoNextSectionMenuItem;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem gotoSectionMenuItem;
@@ -1911,7 +1938,6 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
-    private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;

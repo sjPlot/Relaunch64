@@ -132,7 +132,7 @@ public class Settings {
         IS_WINDOWS7 = System.getProperty("os.name").toLowerCase().startsWith("windows 7");
         IS_WINDOWS8 = System.getProperty("os.name").toLowerCase().startsWith("windows 8");
         // create file path to settings file
-        filepath = Tools.createFilePath("relaunch64-settings.xml");
+        filepath = FileTools.createFilePath("relaunch64-settings.xml");
         // now fill the initoal elements
         fillElements();
     }
