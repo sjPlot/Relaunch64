@@ -41,6 +41,7 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -90,8 +91,29 @@ public class EditorPanes {
     private JPopupMenu suggestionPopup = null;
     private JList suggestionList;
     private String suggestionSubWord;
+    private static final String sugListContainerName="sugListContainerName";
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
+    KeyListener SugestionKeyListener = new java.awt.event.KeyAdapter() {
+        @Override public void keyTyped(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_UP) {
+                evt.consume();
+                int index = Math.min(suggestionList.getSelectedIndex() - 1, 0);
+                suggestionList.setSelectedIndex(index);
+            }
+            if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_DOWN) {
+                evt.consume();
+                int index = Math.min(suggestionList.getSelectedIndex() + 1, suggestionList.getModel().getSize() - 1);
+                suggestionList.setSelectedIndex(index);
+            }
+        }
+        @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER) {
+                evt.consume();
+                insertSelection();
+            }
+        }
+    };
     
     /**
      * 
@@ -234,7 +256,7 @@ public class EditorPanes {
         return getRow(ep, caretPosition);
     }
     public int getCurrentLineNumber() {
-        return getCurrentRow();
+        return getCurrentRow()+1;
     }
     public void gotoLineFromCaret(int caretpos) {
         JEditorPane ep = getActiveEditorPane();
@@ -406,7 +428,7 @@ public class EditorPanes {
             // get current editor
             JEditorPane ep = getActiveEditorPane();
             // retrieve element and check whether line is inside bounds
-            Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber());
+            Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber()-1);
             if (e!=null) {
                 try {
                     // set up section name
@@ -438,6 +460,12 @@ public class EditorPanes {
     }
     public void gotoFunction(String name, int index) {
         gotoLine(FunctionExtractor.getFunctions(getSourceCode(index), getActiveCompiler()), name);
+    }
+    public void gotoMacro(String name) {
+        gotoLine(FunctionExtractor.getMacros(getActiveSourceCode(), getActiveCompiler()), name);
+    }
+    public void gotoMacro(String name, int index) {
+        gotoLine(FunctionExtractor.getMacros(getSourceCode(index), getActiveCompiler()), name);
     }
     /**
      * 
@@ -661,8 +689,9 @@ public class EditorPanes {
      * 
      * @param filepath 
      * @param compiler 
+     * @return  
      */
-    public void loadFile(File filepath, int compiler) {
+    public boolean loadFile(File filepath, int compiler) {
         // retrieve current tab
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether we have any tab selected
@@ -677,19 +706,23 @@ public class EditorPanes {
                     }
                     catch (IOException ex) {
                         ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                        return false;
                     }
                     finally {
                         // if yes, add new tab
                         selectedTab = addNewTab(filepath, new String(buffer), getFileName(filepath), compiler)-1;
                         // set cursor
                         setCursor(editorPaneArray.get(selectedTab).getEditorPane());
+                        return true;
                     }
                 }
             }
             catch (IndexOutOfBoundsException ex) {
                 ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                return false;
             }
         }
+        return false;
     }
     /**
      * 
@@ -974,7 +1007,7 @@ public class EditorPanes {
         // get current editor
         JEditorPane ep = getActiveEditorPane();
         // retrieve element and check whether line is inside bounds
-        Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber());
+        Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber()-1);
         if (e!=null) {
             try {
                 // set up section name
@@ -985,7 +1018,11 @@ public class EditorPanes {
             catch (BadLocationException ex) {}
         }
     }
+
     
+    public void preventAutoInsertTab() {
+        eatReaturn = true;
+    }
     
     protected void showSuggestion() {
         // hide old popup
@@ -1000,7 +1037,7 @@ public class EditorPanes {
     //        }
             JEditorPane ep = getActiveEditorPane();
             // retrieve label list, remove last colon
-            Object[] labels = LabelExtractor.getLabelsList(suggestionSubWord.trim(), true, getActiveSourceCode(), getActiveCompiler());
+            Object[] labels = LabelExtractor.getLabelNames(suggestionSubWord.trim(), true, getActiveSourceCode(), getActiveCompiler());
             // check if we have any labels
             if (labels!=null && labels.length>0) {
                 Point location;
@@ -1022,11 +1059,12 @@ public class EditorPanes {
                     javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
                     listScrollPane.setBorder(null);
                     listScrollPane.setPreferredSize(new java.awt.Dimension(150,300));
+                    listScrollPane.setName(sugListContainerName);
                     suggestionPopup.add(listScrollPane, BorderLayout.CENTER);
                 }
                 else {
                     // else just add list w/o scroll pane
-                    suggestionPopup.add(suggestionList = createSuggestionList(labels), BorderLayout.CENTER);
+                    suggestionPopup.add(suggestionList, BorderLayout.CENTER);
                 }
                 suggestionPopup.show(ep, location.x, ep.getBaseline(0, 0) + location.y);
                 // set input focus to popup
@@ -1059,26 +1097,7 @@ public class EditorPanes {
                 }
             }
         });
-        sList.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyTyped(java.awt.event.KeyEvent evt) {
-                if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_UP) {
-                    evt.consume();
-                    int index = Math.min(suggestionList.getSelectedIndex() - 1, 0);
-                    suggestionList.setSelectedIndex(index);
-                }
-                if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_DOWN) {
-                    evt.consume();
-                    int index = Math.min(suggestionList.getSelectedIndex() + 1, suggestionList.getModel().getSize() - 1);
-                    suggestionList.setSelectedIndex(index);
-                }
-            }
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
-                if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER) {
-                    evt.consume();
-                    insertSelection();
-                }
-            }
-        });
+        sList.addKeyListener(SugestionKeyListener);
         return sList;
     }
     /**
@@ -1093,8 +1112,12 @@ public class EditorPanes {
                 final String selectedSuggestion = ((String) suggestionList.getSelectedValue()).substring(suggestionSubWord.length());
                 ep.getDocument().insertString(ep.getCaretPosition(), selectedSuggestion, null);
                 ep.requestFocusInWindow();
+                SwingUtilities.invokeLater(() -> {
+                    if (suggestionPopup!=null) suggestionPopup.setVisible(false);
+                });
                 return true;
-            } catch (BadLocationException e1) {
+            }
+            catch (BadLocationException e1) {
             }
         }
         return false;
@@ -1186,6 +1209,6 @@ public class EditorPanes {
                 return gotoLine(lines.get(pos));
             }
         }
-    return false;
+        return false;
     }
 }

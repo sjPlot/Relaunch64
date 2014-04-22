@@ -97,13 +97,14 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private final static int GOTO_LABEL = 1;
     private final static int GOTO_SECTION = 2;
     private final static int GOTO_FUNCTION = 3;
+    private final static int GOTO_MACRO = 4;
     private int comboBoxGotoIndex = -1;
     private final Settings settings;
     private File outputFile = null;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
-    public Relaunch64View(SingleFrameApplication app, Settings set) {
+    public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());
         // tell logger to log everthing
@@ -136,6 +137,10 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jScrollPaneMainEditorPane.setRowHeaderView(epln);
         // init syntax highlighting for editor pane
         editorPanes.addEditorPane(jEditorPaneMain, null, null, ConstantsR64.COMPILER_KICKASSEMBLER);
+        // check if we have any parmater
+        if (params!=null && params.length>0) {
+            for (String p : params) openFile(new File(p));
+        }
         // set input focus
         SwingUtilities.invokeLater(() -> {
             jEditorPaneMain.requestFocusInWindow();
@@ -148,7 +153,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jComboBoxGoto.removeAllItems();
         jComboBoxGoto.addItem(ConstantsR64.CB_GOTO_DEFAULT_STRING);
         jComboBoxGoto.setRenderer(new ComboBoxRenderer());
-        jComboBoxGoto.setMaximumRowCount(12);
+        jComboBoxGoto.setMaximumRowCount(20);
     }
     /**
      * 
@@ -168,13 +173,116 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
             }
         });
-        // reset listener
         jComboBoxGoto.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyReleased(java.awt.event.KeyEvent e) {
+            @Override public void keyPressed(java.awt.event.KeyEvent e) {
+                if (KeyEvent.VK_ENTER==e.getKeyCode()) editorPanes.preventAutoInsertTab();
+            }
+        });
+        jComboBoxGoto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            boolean cbCancelled = false;
+            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                jComboBoxGoto.removeAllItems();
+                String header = ConstantsR64.CB_GOTO_DEFAULT_STRING;
+                // add all names to combobox, depending on which menu item was selected
+                switch (comboBoxGotoIndex) {
+                    case GOTO_FUNCTION:
+                        header = ConstantsR64.CB_GOTO_FUNCTION_STRING;
+                        break;
+                    case GOTO_SECTION:
+                        header = ConstantsR64.CB_GOTO_SECTION_STRING;
+                        break;
+                    case GOTO_LABEL:
+                        header = ConstantsR64.CB_GOTO_LABEL_STRING;
+                        break;
+                    case GOTO_MACRO:
+                        header = ConstantsR64.CB_GOTO_MACRO_STRING;
+                        break;
+                }
+                // add first element as "title" of combo box
+                jComboBoxGoto.addItem(header);
+                // check if we have any valid goto-menu-call
+                if (comboBoxGotoIndex<1) return;
+                // create a list with index numbers of tabs
+                // (i.e. all index numbers of opened source code tabs)
+                ArrayList<Integer> eps = new ArrayList<>();
+                // here we store all items that should be added to the combo box
+                // we don't add items directly to the cb, because labels / section names
+                // may appear multiple times over all source codes, thus scrolling combo
+                // box with keys won't work. We check this array list before adding items,
+                // and if it is a multiple occurence, we add a suffix to avoid equal
+                // item names in cb.
+                ArrayList<String> completeComboBoxList = new ArrayList<>();
+                // add current activated source code index first
+                eps.add(jTabbedPane1.getSelectedIndex());
+                // than add indices of remaining tabs
+                for (int i=0; i<editorPanes.getCount(); i++) {
+                    if (!eps.contains(i)) eps.add(i);
+                }
+                // clear headings
+                comboBoxHeadings.clear();
+                // clear heading related editor pane indices
+                comboBoxHeadingsEditorPaneIndex.clear();
+                // go through all opened editorpanes
+                eps.stream().forEach((epIndex) -> {
+                    // extract and retrieve sections from each editor pane
+                    ArrayList<String> token;
+                    int doubleCounter = 2;
+                    switch (comboBoxGotoIndex) {
+                        case GOTO_SECTION:
+                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
+                            break;
+                        case GOTO_LABEL:
+                            token = LabelExtractor.getLabelNames(true, false, editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
+                            break;
+                        case GOTO_FUNCTION:
+                            token = FunctionExtractor.getFunctionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
+                            break;
+                        case GOTO_MACRO:
+                            token = FunctionExtractor.getMacroNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
+                            break;
+                        default:
+                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
+                            break;
+                    }
+                    // check if anything found
+                    if (token!=null && !token.isEmpty()) {
+                        // add item index of header to list. we need this for the custom cell renderer
+                        comboBoxHeadings.add(completeComboBoxList.size()+1);
+                        // add index of related editor pane
+                        comboBoxHeadingsEditorPaneIndex.add(epIndex);
+                        // if yes, add file name of editor pane as "heading" for following sections
+                        completeComboBoxList.add(FileTools.getFileName(editorPanes.getEditorPaneProperties(epIndex).getFilePath()));
+                        // add all found section strings to combo box
+                        for (String arg : token) {
+                            // items have a small margin, headings do not
+                            String item = "   "+arg;
+                            if (completeComboBoxList.contains(item)) {
+                                // we have found multiple occurence of equal item names,
+                                // so we add a suffix to it.
+                                item = item+" [#"+String.valueOf(doubleCounter)+"]";
+                                doubleCounter++;
+                            }
+                            // add item to list
+                            completeComboBoxList.add(item);
+                        }
+                    }
+                });
+                // finally, add all items to combo box
+                completeComboBoxList.stream().forEach((arg) -> {
+                    jComboBoxGoto.addItem(arg);
+                });
+            }
+            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                // check if combo box was cancelled
+                if (cbCancelled) {
+                    // if yes, reset flag and return
+                    cbCancelled = false;
+                    return;
+                }
                 // retrieve index of selected item
                 int selectedIndex = jComboBoxGoto.getSelectedIndex();
                 // check if > 0 and key was return
-                if (selectedIndex>0 && KeyEvent.VK_ENTER==e.getKeyCode()) {
+                if (selectedIndex>0) {
                     int index = 0;
                     // for (int i : comboBoxHeadings) if (i<=selectedIndex) index++;
                     // retrieve index position of selectedIndex within combo box heading. by this, we 
@@ -191,7 +299,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     // in case we have equal items multiple times (because they're spread
                     // over different source tabs), we number them in order to let the combo box
                     // work. Now we must remove this index.
-                    item = item.replaceAll(" \\[#\\d\\]", "");
+                    item = item.replaceAll(" \\[#\\d+\\]", "");
                     // select where to go...
                     switch (comboBoxGotoIndex) {
                         case GOTO_FUNCTION:
@@ -205,80 +313,15 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                         case GOTO_LABEL:
                             // goto label
                             editorPanes.gotoLabel(item, epIndex);
+                        case GOTO_MACRO:
+                            // goto label
+                            editorPanes.gotoMacro(item, epIndex);
                             break;
                     }
                 }
-            }
-        });
-        jComboBoxGoto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                jComboBoxGoto.removeAllItems();
-                String header = ConstantsR64.CB_GOTO_DEFAULT_STRING;
-                // add all names to combobox, depending on which menu item was selected
-                switch (comboBoxGotoIndex) {
-                    case GOTO_FUNCTION:
-                        header = ConstantsR64.CB_GOTO_FUNCTION_STRING;
-                        break;
-                    case GOTO_SECTION:
-                        header = ConstantsR64.CB_GOTO_SECTION_STRING;
-                        break;
-                    case GOTO_LABEL:
-                        header = ConstantsR64.CB_GOTO_LABEL_STRING;
-                        break;
-                }
-                // add first element as "title" of combo box
-                jComboBoxGoto.addItem(header);
-                // check if we have any valid goto-menu-call
-                if (comboBoxGotoIndex<1) return;
-                // create a list with index numbers of tabs
-                // (i.e. all index numbers of opened source code tabs)
-                ArrayList<Integer> eps = new ArrayList<>();
-                // add current activated source code index first
-                eps.add(jTabbedPane1.getSelectedIndex());
-                // than add indices of remaining tabs
-                for (int i=1; i<editorPanes.getCount(); i++) {
-                    if (!eps.contains(i)) eps.add(i);
-                }
-                // clear headings
-                comboBoxHeadings.clear();
-                // clear heading related editor pane indices
-                comboBoxHeadingsEditorPaneIndex.clear();
-                // go through all opened editorpanes
-                eps.stream().forEach((epIndex) -> {
-                    // extract and retrieve sections from each editor pane
-                    ArrayList<String> token;
-                    switch (comboBoxGotoIndex) {
-                        case GOTO_SECTION:
-                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
-                            break;
-                        case GOTO_LABEL:
-                            token = LabelExtractor.getLabelsList(true, false, editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
-                            break;
-                        case GOTO_FUNCTION:
-                            token = FunctionExtractor.getFunctionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
-                            break;
-                        default:
-                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
-                            break;
-                    }
-                    // check if anything found
-                    if (token!=null && !token.isEmpty()) {
-                        // add item index of header to list. we need this for the custom cell renderer
-                        comboBoxHeadings.add(jComboBoxGoto.getItemCount());
-                        // add index of related editor pane
-                        comboBoxHeadingsEditorPaneIndex.add(epIndex);
-                        // if yes, add file name of editor pane as "heading" for following sections
-                        jComboBoxGoto.addItem("--- "+FileTools.getFileName(editorPanes.getEditorPaneProperties(epIndex).getFilePath())+" ---");
-                        // add all found section strings to combo box
-                        token.stream().forEach((arg) -> {
-                            jComboBoxGoto.addItem("  "+arg);
-                        });
-                    }
-                });
-            }
-            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
             }
             @Override public void popupMenuCanceled(PopupMenuEvent e) {
+                cbCancelled = true;
             }
         });
         jTabbedPane1.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
@@ -570,6 +613,12 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jComboBoxGoto.requestFocusInWindow();
     }
     @Action
+    public void gotoMacro() {
+        comboBoxGotoIndex = GOTO_MACRO;
+        jComboBoxGoto.showPopup();
+        jComboBoxGoto.requestFocusInWindow();
+    }
+    @Action
     public void jumpToLabel() {
         editorPanes.gotoLabel(editorPanes.getCaretString(true));
     }
@@ -588,33 +637,87 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     }
     @Action
     public void gotoNextSection() {
-        // check for valid item count
-        if (jComboBoxGoto.getItemCount()<=1) return;
-        // get selection
-        int selected = jComboBoxGoto.getSelectedIndex();
-        // set default if nothing selected
-        if (-1==selected) selected = 0;
-        // increase counter
-        selected++;
-        // check for bounbs
-        if (selected>=jComboBoxGoto.getItemCount()) selected = 1;
-        // select item
-        jComboBoxGoto.setSelectedIndex(selected);
+        // retrieve line numbers and section names
+        ArrayList<Integer> ln = SectionExtractor.getSectionLineNumbers(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
+        ArrayList<String> names = SectionExtractor.getSectionNames(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
+        // get current line of caret
+        int currentLine = editorPanes.getCurrentLineNumber();
+        String dest = null;
+        // iterate all line numbers
+        for (int i=0; i<ln.size(); i++) {
+            // if we found a line number greater than current
+            // line, we found the next section from caret position
+            if (ln.get(i)>currentLine) {
+                dest = names.get(i);
+                break;
+            }
+        }
+        // goto next section
+        editorPanes.gotoSection(dest);
     }
     @Action
     public void gotoPrevSection() {
-        // check for valid item count
-        if (jComboBoxGoto.getItemCount()<1) return;
-        // get selection
-        int selected = jComboBoxGoto.getSelectedIndex();
-        // set default if nothing selected
-        if (-1==selected) selected = jComboBoxGoto.getItemCount();
-        // decrease counter
-        selected--;
-        // check for bounbs
-        if (selected<1) selected = jComboBoxGoto.getItemCount()-1;
-        // select item
-        jComboBoxGoto.setSelectedIndex(selected);
+        // retrieve line numbers and section names
+        ArrayList<Integer> ln = SectionExtractor.getSectionLineNumbers(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
+        ArrayList<String> names = SectionExtractor.getSectionNames(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
+        // get current line of caret
+        int currentLine = editorPanes.getCurrentLineNumber();
+        String dest = null;
+        // iterate all line numbers
+        for (int i=ln.size()-1; i>=0; i--) {
+            // if we found a line number smaller than current
+            // line, we found the previous section from caret position
+            if (ln.get(i)<currentLine) {
+                dest = names.get(i);
+                break;
+            }
+        }
+        // goto previous section
+        editorPanes.gotoSection(dest);
+    }
+    @Action
+    public void gotoNextLabel() {
+        // retrieve line numbers and label names
+        ArrayList<Integer> ln = LabelExtractor.getLabelLineNumbers(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+        ArrayList<String> names = LabelExtractor.getLabelNames(false, false, editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+        // get current line of caret
+        int currentLine = editorPanes.getCurrentLineNumber();
+        String dest = null;
+        // iterate all line numbers
+        for (int i=0; i<ln.size(); i++) {
+            // if we found a line number greater than current
+            // line, we found the next label from caret position
+            if (ln.get(i)>currentLine) {
+                dest = names.get(i);
+                break;
+            }
+        }
+        // goto next label
+        editorPanes.gotoLabel(dest);
+    }
+    @Action
+    public void gotoPrevLabel() {
+        // retrieve line numbers and label names
+        ArrayList<Integer> ln = LabelExtractor.getLabelLineNumbers(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+        ArrayList<String> names = LabelExtractor.getLabelNames(false, false, editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+        // get current line of caret
+        int currentLine = editorPanes.getCurrentLineNumber();
+        String dest = null;
+        // iterate all line numbers
+        for (int i=ln.size()-1; i>=0; i--) {
+            // if we found a line number smaller than current
+            // line, we found the previous label from caret position
+            if (ln.get(i)<currentLine) {
+                dest = names.get(i);
+                break;
+            }
+        }
+        // goto previous label
+        editorPanes.gotoLabel(dest);
+    }
+    @Action
+    public void setFocusToTabbedPane() {
+        jTabbedPane1.requestFocusInWindow();
     }
     /**
      * 
@@ -632,11 +735,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         openFile(fileToOpen, jComboBoxCompilers.getSelectedIndex());
     }
     private void openFile(File fileToOpen, int compiler) {
-        editorPanes.loadFile(fileToOpen, compiler);        
-        // add file path to recent documents history
-        settings.addToRecentDocs(fileToOpen.toString(), compiler);
-        // and update menus
-        setRecentDocuments();
+        // check if file could be opened
+        if (editorPanes.loadFile(fileToOpen, compiler)) {
+            // add file path to recent documents history
+            settings.addToRecentDocs(fileToOpen.toString(), compiler);
+            // and update menus
+            setRecentDocuments();
+        } 
     }
     @Action
     public void saveFile() {
@@ -785,6 +890,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     // iterate parameter parts
                     for (String param : params) {
                         param = param.trim();
+                        // **************************************
+                        // Handle INPUT FILE parameter here
+                        // **************************************
                         if (param.equals(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
                             String infile;
                             switch (compiler) {
@@ -797,6 +905,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                             }
                             param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, infile);
                         }
+                        // **************************************
+                        // Handle OUTPUT FILE parameter here
+                        // **************************************
                         if (param.equals(ConstantsR64.ASSEMBLER_OUPUT_FILE)) {
                             // output file
                             String outfile = afile.getParentFile().toString()+File.separator+FileTools.getFileName(afile)+".prg";
@@ -828,6 +939,17 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                                     try {
                                         args.remove(poff+1);
                                         args.remove(poff);
+                                        // but we have to update the "afile", because else
+                                        // the "outputFile" variable contains a different (wrong)
+                                        // filepath!
+                                        // retrieve !to macro
+                                        int position = source.indexOf("!to");
+                                        // find file name
+                                        int fileNameStart = source.indexOf("\"", position);
+                                        int fileNameEnd = source.indexOf("\"", fileNameStart+1);
+                                        System.out.println(source.substring(fileNameStart+1, fileNameEnd));
+                                        // and set new file name to variable
+                                        afile = new File(afile.getParentFile().toString()+File.separator+source.substring(fileNameStart+1, fileNameEnd));
                                     }
                                     catch(IndexOutOfBoundsException | UnsupportedOperationException ex) {
                                         ConstantsR64.r64logger.log(Level.SEVERE, ex.getLocalizedMessage());
@@ -1201,7 +1323,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 StringWriter text = new StringWriter();
                 PrintWriter out = new PrintWriter(text);
                 out.println(jTextAreaLog.getText());
-                out.printf("[%s] %s"+System.getProperty("line.separator"), record.getLevel(), record.getMessage());
+                out.printf("[%s] %s", record.getLevel(), record.getMessage());
                 jTextAreaLog.setText(text.toString());
             });
         }
@@ -1316,13 +1438,17 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         replaceMenuItem = new javax.swing.JMenuItem();
         replaceAllMenuItem = new javax.swing.JMenuItem();
         gotoMenu = new javax.swing.JMenu();
-        gotoLineMenuItem = new javax.swing.JMenuItem();
-        gotoSectionMenuItem = new javax.swing.JMenuItem();
-        gotoLabelMenuItem = new javax.swing.JMenuItem();
         gotoFunctionMenuItem = new javax.swing.JMenuItem();
+        gotoLabelMenuItem = new javax.swing.JMenuItem();
+        gotoLineMenuItem = new javax.swing.JMenuItem();
+        gotoMacroMenuItem = new javax.swing.JMenuItem();
+        gotoSectionMenuItem = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
         jumpToLabelMenuItem = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
+        gotoNextLabel = new javax.swing.JMenuItem();
+        gotoPrevLabel = new javax.swing.JMenuItem();
+        jSeparator12 = new javax.swing.JPopupMenu.Separator();
         gotoNextSectionMenuItem = new javax.swing.JMenuItem();
         gotoPrevSectionMenuItem = new javax.swing.JMenuItem();
         sourceMenu = new javax.swing.JMenu();
@@ -1332,6 +1458,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
+        viewMainTabMenuItem = new javax.swing.JMenuItem();
+        jSeparator14 = new javax.swing.JPopupMenu.Separator();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         viewLog2MenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -1763,21 +1891,25 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         gotoMenu.setText(resourceMap.getString("gotoMenu.text")); // NOI18N
         gotoMenu.setName("gotoMenu"); // NOI18N
 
-        gotoLineMenuItem.setAction(actionMap.get("gotoLine")); // NOI18N
-        gotoLineMenuItem.setName("gotoLineMenuItem"); // NOI18N
-        gotoMenu.add(gotoLineMenuItem);
-
-        gotoSectionMenuItem.setAction(actionMap.get("gotoSection")); // NOI18N
-        gotoSectionMenuItem.setName("gotoSectionMenuItem"); // NOI18N
-        gotoMenu.add(gotoSectionMenuItem);
+        gotoFunctionMenuItem.setAction(actionMap.get("gotoFunction")); // NOI18N
+        gotoFunctionMenuItem.setName("gotoFunctionMenuItem"); // NOI18N
+        gotoMenu.add(gotoFunctionMenuItem);
 
         gotoLabelMenuItem.setAction(actionMap.get("gotoLabel")); // NOI18N
         gotoLabelMenuItem.setName("gotoLabelMenuItem"); // NOI18N
         gotoMenu.add(gotoLabelMenuItem);
 
-        gotoFunctionMenuItem.setAction(actionMap.get("gotoFunction")); // NOI18N
-        gotoFunctionMenuItem.setName("gotoFunctionMenuItem"); // NOI18N
-        gotoMenu.add(gotoFunctionMenuItem);
+        gotoLineMenuItem.setAction(actionMap.get("gotoLine")); // NOI18N
+        gotoLineMenuItem.setName("gotoLineMenuItem"); // NOI18N
+        gotoMenu.add(gotoLineMenuItem);
+
+        gotoMacroMenuItem.setAction(actionMap.get("gotoMacro")); // NOI18N
+        gotoMacroMenuItem.setName("gotoMacroMenuItem"); // NOI18N
+        gotoMenu.add(gotoMacroMenuItem);
+
+        gotoSectionMenuItem.setAction(actionMap.get("gotoSection")); // NOI18N
+        gotoSectionMenuItem.setName("gotoSectionMenuItem"); // NOI18N
+        gotoMenu.add(gotoSectionMenuItem);
 
         jSeparator11.setName("jSeparator11"); // NOI18N
         gotoMenu.add(jSeparator11);
@@ -1788,6 +1920,17 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         jSeparator13.setName("jSeparator13"); // NOI18N
         gotoMenu.add(jSeparator13);
+
+        gotoNextLabel.setAction(actionMap.get("gotoNextLabel")); // NOI18N
+        gotoNextLabel.setName("gotoNextLabel"); // NOI18N
+        gotoMenu.add(gotoNextLabel);
+
+        gotoPrevLabel.setAction(actionMap.get("gotoPrevLabel")); // NOI18N
+        gotoPrevLabel.setName("gotoPrevLabel"); // NOI18N
+        gotoMenu.add(gotoPrevLabel);
+
+        jSeparator12.setName("jSeparator12"); // NOI18N
+        gotoMenu.add(jSeparator12);
 
         gotoNextSectionMenuItem.setAction(actionMap.get("gotoNextSection")); // NOI18N
         gotoNextSectionMenuItem.setName("gotoNextSectionMenuItem"); // NOI18N
@@ -1825,6 +1968,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
+
+        viewMainTabMenuItem.setAction(actionMap.get("setFocusToTabbedPane")); // NOI18N
+        viewMainTabMenuItem.setName("viewMainTabMenuItem"); // NOI18N
+        viewMenu.add(viewMainTabMenuItem);
+
+        jSeparator14.setName("jSeparator14"); // NOI18N
+        viewMenu.add(jSeparator14);
 
         viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
@@ -1949,8 +2099,11 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem gotoFunctionMenuItem;
     private javax.swing.JMenuItem gotoLabelMenuItem;
     private javax.swing.JMenuItem gotoLineMenuItem;
+    private javax.swing.JMenuItem gotoMacroMenuItem;
     private javax.swing.JMenu gotoMenu;
+    private javax.swing.JMenuItem gotoNextLabel;
     private javax.swing.JMenuItem gotoNextSectionMenuItem;
+    private javax.swing.JMenuItem gotoPrevLabel;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem gotoSectionMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
@@ -1986,7 +2139,9 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
+    private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
+    private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -2035,6 +2190,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem undoMenuItem;
     private javax.swing.JMenuItem viewLog1MenuItem;
     private javax.swing.JMenuItem viewLog2MenuItem;
+    private javax.swing.JMenuItem viewMainTabMenuItem;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 

@@ -763,20 +763,12 @@
             <Property name="name" type="java.lang.String" value="gotoMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="gotoLineMenuItem">
+            <MenuItem class="javax.swing.JMenuItem" name="gotoFunctionMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoLine" methodName="gotoLine"/>
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoFunction" methodName="gotoFunction"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="gotoLineMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="gotoSectionMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoSection" methodName="gotoSection"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="gotoSectionMenuItem" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="gotoFunctionMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="gotoLabelMenuItem">
@@ -787,12 +779,28 @@
                 <Property name="name" type="java.lang.String" value="gotoLabelMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="gotoFunctionMenuItem">
+            <MenuItem class="javax.swing.JMenuItem" name="gotoLineMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoFunction" methodName="gotoFunction"/>
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoLine" methodName="gotoLine"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="gotoFunctionMenuItem" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="gotoLineMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="gotoMacroMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoMacro" methodName="gotoMacro"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="gotoMacroMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="gotoSectionMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoSection" methodName="gotoSection"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="gotoSectionMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator11">
@@ -811,6 +819,27 @@
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator13">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator13" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="gotoNextLabel">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoNextLabel" methodName="gotoNextLabel"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="gotoNextLabel" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="gotoPrevLabel">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoPrevLabel" methodName="gotoPrevLabel"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="gotoPrevLabel" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator12">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator12" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="gotoNextSectionMenuItem">
@@ -882,6 +911,19 @@
             <Property name="name" type="java.lang.String" value="viewMenu" noResource="true"/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="viewMainTabMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="setFocusToTabbedPane" methodName="setFocusToTabbedPane"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="viewMainTabMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator14">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator14" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="viewLog1MenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">

@@ -43,6 +43,7 @@ import org.jdesktop.application.SingleFrameApplication;
 public class Relaunch64App extends SingleFrameApplication {
     // and so we do with the user defined accelerator keys
     Settings settings;
+    private String[] params;
     /**
      * At startup create and show the main frame of the application.
      */
@@ -52,7 +53,7 @@ public class Relaunch64App extends SingleFrameApplication {
         settings = new Settings();
         // load settings
         settings.loadSettings();
-        show(new Relaunch64View(this, settings));
+        show(new Relaunch64View(this, settings, params));
     }
 
     /**
@@ -78,5 +79,10 @@ public class Relaunch64App extends SingleFrameApplication {
      */
     public static void main(String[] args) {
         launch(Relaunch64App.class, args);
+    }
+    @Override
+    protected void initialize(String[] args) {
+        this.params = args;
+        super.initialize(args);
     }
 }

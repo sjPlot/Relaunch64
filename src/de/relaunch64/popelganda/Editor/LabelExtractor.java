@@ -25,7 +25,9 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  *
@@ -83,11 +85,11 @@ public class LabelExtractor {
      * @param source
      * @param compiler
      * 
-     * @return An object array of labels, where only those labels are returned that start with {@code subWord}.
+     * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
-    public static Object[] getLabelsList(String subWord, boolean removeLastColon, String source, int compiler) {
+    public static Object[] getLabelNames(String subWord, boolean removeLastColon, String source, int compiler) {
         // get labels here
-        ArrayList<String> labels = getLabelsList(false, removeLastColon, source, compiler);
+        ArrayList<String> labels = LabelExtractor.getLabelNames(false, removeLastColon, source, compiler);
         // check for valid values
         if (null==labels || labels.isEmpty()) return null;
 //        labels.stream().forEach((label) -> {
@@ -114,7 +116,7 @@ public class LabelExtractor {
      * @param compiler
      * @return An array list of all label names from the source code.
      */
-    public static ArrayList getLabelsList(boolean sortList, boolean removeLastColon, String source, int compiler) {
+    public static ArrayList getLabelNames(boolean sortList, boolean removeLastColon, String source, int compiler) {
         // prepare return values
         ArrayList<String> labelValues = new ArrayList<>();
         String line;
@@ -180,5 +182,23 @@ public class LabelExtractor {
             }
         }
         return labelValues;
+    }
+    public static ArrayList getLabelLineNumbers(String source, int compiler) {
+        // init return value
+        ArrayList<Integer> retval = new ArrayList<>();
+        // retrieve sections
+        LinkedHashMap<Integer, String> map = getLabels(source, compiler);
+        // check for valid value
+        if (map!=null && !map.isEmpty()) {
+            // retrieve only string values of sections
+            Set<Integer> ks = map.keySet();
+            // create iterator
+            Iterator<Integer> i = ks.iterator();
+            // add all ssction names to return value
+            while(i.hasNext()) retval.add(i.next());
+            // return result
+            return retval;
+        }
+        return null;
     }
 }
