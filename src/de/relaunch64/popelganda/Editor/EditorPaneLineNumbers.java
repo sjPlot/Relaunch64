@@ -33,13 +33,33 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.Settings;
-import java.awt.*;
-import java.beans.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.Utilities;
 
 /**
  * This class will display line numbers for a related text component. The text component must use
@@ -415,17 +435,32 @@ public final class EditorPaneLineNumbers extends JPanel
     private void documentChanged() {
         //  Preferred size of the component has not been updated at the time
         //  the DocumentEvent is fired
-
-        SwingUtilities.invokeLater(() -> {
-            int preferredHeight = component.getPreferredSize().height;
-            //  Document change has caused a change in the number of lines.
-            //  Repaint to reflect the new line numbers
-            if (lastHeight != preferredHeight) {
-                setPreferredWidth();
-                repaint();
-                lastHeight = preferredHeight;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                int preferredHeight = component.getPreferredSize().height;
+                //  Document change has caused a change in the number of lines.
+                //  Repaint to reflect the new line numbers
+                if (lastHeight != preferredHeight) {
+                    setPreferredWidth();
+                    repaint();
+                    lastHeight = preferredHeight;
+                }
             }
         });
+        /**
+         * JDK 8 Lambda
+         */
+//        SwingUtilities.invokeLater(() -> {
+//            int preferredHeight = component.getPreferredSize().height;
+//            //  Document change has caused a change in the number of lines.
+//            //  Repaint to reflect the new line numbers
+//            if (lastHeight != preferredHeight) {
+//                setPreferredWidth();
+//                repaint();
+//                lastHeight = preferredHeight;
+//            }
+//        });
     }
 
 //

@@ -43,18 +43,44 @@ public class SettingsDlg extends javax.swing.JDialog {
         // presses the escape-key, the same action is performed as if the user
         // presses the cancel button...
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        ActionListener cancelAction = (ActionEvent evt) -> {
-            setVisible(false);
-            dispose();
-        };
+        /**
+         * JDK 8 Lambda
+         */
+//        ActionListener cancelAction = (ActionEvent evt) -> {
+//            setVisible(false);
+//            dispose();
+//        };
+        ActionListener cancelAction = new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                setVisible(false);
+                dispose();
+            }
+        };        
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
-        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
-            updateCompilerSettings();
-            setModifiedTabCompiler(false);
+        /**
+         * JDK 8 Lambda
+         */
+//        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            updateCompilerSettings();
+//            setModifiedTabCompiler(false);
+//        });
+//        jComboBoxEmulators.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            updateEmulatorSettings();
+//            setModifiedTabEmulator(false);
+//        });
+        jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateCompilerSettings();
+                setModifiedTabCompiler(false);
+            }
         });
-        jComboBoxEmulators.addActionListener((java.awt.event.ActionEvent evt) -> {
-            updateEmulatorSettings();
-            setModifiedTabEmulator(false);
+        jComboBoxEmulators.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateEmulatorSettings();
+                setModifiedTabEmulator(false);
+            }
         });
         jTextFieldCompilerParam.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {

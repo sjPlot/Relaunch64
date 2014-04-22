@@ -171,12 +171,26 @@ public class EditorPanes {
             }
         });
         // add caret listener
-        editorPane.addCaretListener((javax.swing.event.CaretEvent e) -> {
-            // retrieve selection
-            int selection = e.getMark()-e.getDot();
-            // here we have selected text
-            if (selection!=0) {
-                mainFrame.autoConvertNumbers(editorPane.getSelectedText());
+        /**
+         * JDK 8 version of caret listener
+         */
+//        editorPane.addCaretListener((javax.swing.event.CaretEvent e) -> {
+//            // retrieve selection
+//            int selection = e.getMark()-e.getDot();
+//            // here we have selected text
+//            if (selection!=0) {
+//                mainFrame.autoConvertNumbers(editorPane.getSelectedText());
+//            }
+//        });
+        // add caret listener
+        editorPane.addCaretListener(new javax.swing.event.CaretListener() {
+            @Override public void caretUpdate(javax.swing.event.CaretEvent e) {
+                // retrieve selection
+                int selection = e.getMark()-e.getDot();
+                // here we have selected text
+                if (selection!=0) {
+                    mainFrame.autoConvertNumbers(getActiveEditorPane().getSelectedText());
+                }
             }
         });
         // add focus listener
@@ -1068,8 +1082,18 @@ public class EditorPanes {
                 }
                 suggestionPopup.show(ep, location.x, ep.getBaseline(0, 0) + location.y);
                 // set input focus to popup
-                SwingUtilities.invokeLater(() -> {
-                    suggestionList.requestFocusInWindow();
+                /**
+                 * JDK 8 Lambda
+                 */
+//                SwingUtilities.invokeLater(() -> {
+//                    suggestionList.requestFocusInWindow();
+//                });
+                // set input focus to popup
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        suggestionList.requestFocusInWindow();
+                    }
                 });
             }
         }
@@ -1112,9 +1136,18 @@ public class EditorPanes {
                 final String selectedSuggestion = ((String) suggestionList.getSelectedValue()).substring(suggestionSubWord.length());
                 ep.getDocument().insertString(ep.getCaretPosition(), selectedSuggestion, null);
                 ep.requestFocusInWindow();
-                SwingUtilities.invokeLater(() -> {
-                    if (suggestionPopup!=null) suggestionPopup.setVisible(false);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (suggestionPopup!=null) suggestionPopup.setVisible(false);
+                    }
                 });
+                /**
+                 * JDK 8 Lambda
+                 */
+//                SwingUtilities.invokeLater(() -> {
+//                    if (suggestionPopup!=null) suggestionPopup.setVisible(false);
+//                });
                 return true;
             }
             catch (BadLocationException e1) {

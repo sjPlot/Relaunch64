@@ -54,6 +54,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -142,8 +143,18 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             for (String p : params) openFile(new File(p));
         }
         // set input focus
-        SwingUtilities.invokeLater(() -> {
-            jEditorPaneMain.requestFocusInWindow();
+        /**
+         * JDK 8 Lamda
+         */
+//        SwingUtilities.invokeLater(() -> {
+//            jEditorPaneMain.requestFocusInWindow();
+//        });
+        // set input focus
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                jEditorPaneMain.requestFocusInWindow();
+            }
         });
     }
     private void initComboBoxes() {
@@ -168,9 +179,20 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         // but asking for changes took place. So, we simply add a windows-listener additionally
         Relaunch64View.super.getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // init actionlistener
-        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
-            if (editorPanes.checkIfSyntaxChangeRequired()) {
-                editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
+        /**
+         * JDK 8 Lamda
+         */
+//        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            if (editorPanes.checkIfSyntaxChangeRequired()) {
+//                editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
+//            }
+//        });
+        jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if (editorPanes.checkIfSyntaxChangeRequired()) {
+                    editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
+                }
             }
         });
         jComboBoxGoto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -223,7 +245,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 // clear heading related editor pane indices
                 comboBoxHeadingsEditorPaneIndex.clear();
                 // go through all opened editorpanes
-                eps.stream().forEach((epIndex) -> {
+                // eps.stream().forEach((epIndex) -> {
+                for (int epIndex : eps) {
                     // extract and retrieve sections from each editor pane
                     ArrayList<String> token;
                     int doubleCounter = 2;
@@ -266,11 +289,15 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                             completeComboBoxList.add(item);
                         }
                     }
-                });
+                }
                 // finally, add all items to combo box
-                completeComboBoxList.stream().forEach((arg) -> {
-                    jComboBoxGoto.addItem(arg);
-                });
+                for (String arg : completeComboBoxList) jComboBoxGoto.addItem(arg);
+                /**
+                 * JDK 8 Lamda
+                 */
+//                completeComboBoxList.stream().forEach((arg) -> {
+//                    jComboBoxGoto.addItem(arg);
+//                });
             }
             @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                 // check if combo box was cancelled
@@ -284,11 +311,14 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 // check if > 0 and key was return
                 if (selectedIndex>0) {
                     int index = 0;
-                    // for (int i : comboBoxHeadings) if (i<=selectedIndex) index++;
                     // retrieve index position of selectedIndex within combo box heading. by this, we 
                     // get the source tab where the section is located
-                    // NOTE: The below line is the lamba-equivalent to the above outcommented line
-                    index = comboBoxHeadings.stream().filter((i) -> (i<=selectedIndex)).map((_item) -> 1).reduce(index, Integer::sum);
+                    for (int i : comboBoxHeadings) if (i<=selectedIndex) index++;
+                    // NOTE: The below line is the lamba-equivalent to the above line
+                    /**
+                     * JDK 8 Lamda
+                     */
+                    // index = comboBoxHeadings.stream().filter((i) -> (i<=selectedIndex)).map((_item) -> 1).reduce(index, Integer::sum);
                     // select specific tab where selected section is
                     jTabbedPane1.setSelectedIndex(comboBoxHeadingsEditorPaneIndex.get(index-1));
                     // set focus
@@ -324,12 +354,23 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 cbCancelled = true;
             }
         });
-        jTabbedPane1.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
-            editorPanes.updateTabbedPane();
-            // and reset find/replace values, because the content has changed and former
-            // find-index-values are no longer valid
-            findReplace.resetValues();
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override public void stateChanged(javax.swing.event.ChangeEvent e) {
+                editorPanes.updateTabbedPane();
+                // and reset find/replace values, because the content has changed and former
+                // find-index-values are no longer valid
+                findReplace.resetValues();
+            }
         });
+        /**
+         * JDK 8 Lambda
+         */
+//        jTabbedPane1.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+//            editorPanes.updateTabbedPane();
+//            // and reset find/replace values, because the content has changed and former
+//            // find-index-values are no longer valid
+//            findReplace.resetValues();
+//        });
         jTextFieldFind.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
@@ -400,54 +441,121 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             @Override public void menuDeselected(javax.swing.event.MenuEvent evt) {}
             @Override public void menuCanceled(javax.swing.event.MenuEvent evt) {}
         });
-        recent1MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(1);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(1));
+        recent1MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(1);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(1));
+                }
+        }
+        });
+        recent2MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(2);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(2));
+                }
             }
         });
-        recent2MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(2);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(2));
+        recent3MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(3);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(3));
+                }
             }
         });
-        recent3MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(3);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(3));
+        recent4MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(4);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(4));
+                }
             }
         });
-        recent4MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(4);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(4));
+        recent5MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(5);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(5));
+                }
             }
         });
-        recent5MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(5);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(5));
+        recent6MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(6);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(6));
+                }
             }
         });
-        recent6MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(6);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(6));
+        recent7MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(7);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(7));
+                }
             }
         });
-        recent7MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(7);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(7));
+        recent8MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(8);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(8));
+                }
             }
         });
-        recent8MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-            File fp = settings.getRecentDoc(8);
-            if (fp!=null && fp.exists()) {
-                openFile(fp, settings.getRecentDocCompiler(8));
-            }
-        });
+        /**
+         * JDK 8 Lambda
+         */
+//        recent1MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(1);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(1));
+//            }
+//        });
+//        recent2MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(2);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(2));
+//            }
+//        });
+//        recent3MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(3);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(3));
+//            }
+//        });
+//        recent4MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(4);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(4));
+//            }
+//        });
+//        recent5MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(5);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(5));
+//            }
+//        });
+//        recent6MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(6);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(6));
+//            }
+//        });
+//        recent7MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(7);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(7));
+//            }
+//        });
+//        recent8MenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+//            File fp = settings.getRecentDoc(8);
+//            if (fp!=null && fp.exists()) {
+//                openFile(fp, settings.getRecentDocCompiler(8));
+//            }
+//        });
     }
     /**
      * This method updates the menu-items with the recent documents
@@ -961,9 +1069,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                             break;
                     }
                     StringBuilder sb = new StringBuilder("");
-                    args.stream().forEach((arg) -> {
-                        sb.append(System.getProperty("line.separator")).append(arg);
-                    });
+                    for (String arg : args) sb.append(System.getProperty("line.separator")).append(arg);
+                    /**
+                     * JDK 8 Lambda
+                     */
+//                    args.stream().forEach((arg) -> {
+//                        sb.append(System.getProperty("line.separator")).append(arg);
+//                    });
                     // log compiler paramater
                     String log = "Compiler-Parameter: "+sb.toString();
                     ConstantsR64.r64logger.log(Level.INFO, log);
@@ -1043,9 +1155,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             if (compilerParams.size()>10) compilerParams.remove(0);
             // update combo box
             jComboBoxParam.removeAllItems();
-            compilerParams.stream().forEach((para) -> {
-                jComboBoxParam.addItem(para);
-            });
+            for (String para : compilerParams) jComboBoxParam.addItem(para);
+            /**
+             * JDK 8 Lambda
+             */
+//            compilerParams.stream().forEach((para) -> {
+//                jComboBoxParam.addItem(para);
+//            });
             // set selection
             jComboBoxParam.setSelectedItem(text);
             jComboBoxParam.setMaximumRowCount(jComboBoxParam.getItemCount());
@@ -1249,9 +1365,13 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                     // i.e. any files have been dragged and dropped
                     // if so, insert attachments
                     if (anyfiles.size()>0) {
-                        anyfiles.stream().forEach((f) -> {
-                            openFile(f);
-                        });
+                        for (File f : anyfiles) openFile(f);
+                        /**
+                         * JDK 8 Lamda
+                         */
+//                        anyfiles.stream().forEach((f) -> {
+//                            openFile(f);
+//                        });
                     }
                 }
                 dtde.getDropTargetContext().dropComplete(true);
@@ -1319,13 +1439,26 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     public class TextAreaHandler extends java.util.logging.Handler {
         @Override
         public void publish(final LogRecord record) {
-            SwingUtilities.invokeLater(() -> {
-                StringWriter text = new StringWriter();
-                PrintWriter out = new PrintWriter(text);
-                out.println(jTextAreaLog.getText());
-                out.printf("[%s] %s", record.getLevel(), record.getMessage());
-                jTextAreaLog.setText(text.toString());
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    StringWriter text = new StringWriter();
+                    PrintWriter out = new PrintWriter(text);
+                    out.println(jTextAreaLog.getText());
+                    out.printf("[%s] %s", record.getLevel(), record.getMessage());
+                    jTextAreaLog.setText(text.toString());
+                }
             });
+            /**
+             * JDK 8 Lambda
+             */
+//            SwingUtilities.invokeLater(() -> {
+//                StringWriter text = new StringWriter();
+//                PrintWriter out = new PrintWriter(text);
+//                out.println(jTextAreaLog.getText());
+//                out.printf("[%s] %s", record.getLevel(), record.getMessage());
+//                jTextAreaLog.setText(text.toString());
+//            });
         }
 
         public JTextArea getTextArea() {

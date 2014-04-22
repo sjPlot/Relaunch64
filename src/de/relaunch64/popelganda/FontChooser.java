@@ -104,8 +104,16 @@ public class FontChooser extends javax.swing.JDialog {
         // presses the escape-key, the same action is performed as if the user
         // presses the cancel button...
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        ActionListener cancelAction = (ActionEvent evt) -> {
-            cancelFont();
+        /**
+         * JDK 8 Lambda
+         */
+//        ActionListener cancelAction = (ActionEvent evt) -> {
+//            cancelFont();
+//        };
+        ActionListener cancelAction = new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                cancelFont();
+            }
         };
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
@@ -119,13 +127,25 @@ public class FontChooser extends javax.swing.JDialog {
         // make sure, the selected item is visible
         jListSize.ensureIndexIsVisible(index);
         // add listeners manually, so we don't fire any events when initiating the lists
-        jListFont.addListSelectionListener((javax.swing.event.ListSelectionEvent evt) -> {
-            fontChanged();
+        /**
+         * JDK 8 Lambda
+         */
+//        jListFont.addListSelectionListener((javax.swing.event.ListSelectionEvent evt) -> {
+//            fontChanged();
+//        });
+//        jListSize.addListSelectionListener((javax.swing.event.ListSelectionEvent evt) -> {
+//            fontChanged();
+//        });
+        jListFont.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                fontChanged();
+            }
         });
-        jListSize.addListSelectionListener((javax.swing.event.ListSelectionEvent evt) -> {
-            fontChanged();
+        jListSize.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                fontChanged();
+            }
         });
-        
         // add document listener, that instantly check for a correct filepath
         jTextFieldFilter.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void changedUpdate(DocumentEvent e) { gotoFont(); }

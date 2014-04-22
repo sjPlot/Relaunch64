@@ -60,9 +60,18 @@ public class Relaunch64AboutBox extends javax.swing.JDialog {
         // presses the escape-key, the same action is performed as if the user
         // presses the cancel button...
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        ActionListener cancelAction = (ActionEvent evt) -> {
-            setVisible(false);
-            dispose();
+        /**
+         * JDK 8 Lambda
+         */
+//        ActionListener cancelAction = (ActionEvent evt) -> {
+//            setVisible(false);
+//            dispose();
+//        };
+        ActionListener cancelAction = new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                setVisible(false);
+                dispose();
+            }
         };
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
         URL licenceText = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResource("/de/relaunch64/popelganda/resources/licence.html");
