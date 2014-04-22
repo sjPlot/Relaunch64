@@ -240,9 +240,23 @@ public class EditorPanes {
         JEditorPane ep = getActiveEditorPane();
         gotoLine(ep, getRow(ep, caretpos));
     }
+    /**
+     * Scrolls the currently active source code to the line {@code line}.
+     * 
+     * @param line The line where the to scroll within the source code.
+     * @return {@code true} if the goto was successful.
+     */
     public boolean gotoLine(int line) {
         return gotoLine(getActiveEditorPane(), line);
     }
+    /**
+     * Scrolls the source code of the editor pane {@code ep} to the line {@code line}.
+     * 
+     * @param ep A JEdiorPane with the source, typically retrieved via
+     * {@link #getActiveEditorPane()} or {@link #getEditorPaneProperties(selectedTab).getEditorPane()}
+     * @param line The line where the to scroll within the source code.
+     * @return {@code true} if the goto was successful.
+     */
     public boolean gotoLine(JEditorPane ep, int line) {
         if (line>0) {
             line--;
@@ -276,6 +290,9 @@ public class EditorPanes {
         }
         return false;
     }
+    /**
+     * Undoes the last edit action.
+     */
     public void undo() {
         EditorPaneProperties ep = getActiveEditorPaneProperties();
         if (ep!=null) {
@@ -283,6 +300,9 @@ public class EditorPanes {
             setFocus();
         }
     }
+    /**
+     * Redoes the last {@link #undo()} action.
+     */
     public void redo() {
         EditorPaneProperties ep = getActiveEditorPaneProperties();
         if (ep!=null) {
@@ -291,6 +311,7 @@ public class EditorPanes {
         }
     }
     /**
+     * Sets the input focus the the editor pane
      * 
      * @param editorPane 
      */
@@ -403,11 +424,20 @@ public class EditorPanes {
     public void gotoSection(String name) {
         gotoLine(SectionExtractor.getSections(getActiveSourceCode(), getCompilerCommentString()), name);
     }
+    public void gotoSection(String name, int index) {
+        gotoLine(SectionExtractor.getSections(getSourceCode(index), getCompilerCommentString()), name);
+    }
     public void gotoLabel(String name) {
         gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveCompiler()), name);
     }
+    public void gotoLabel(String name, int index) {
+        gotoLine(LabelExtractor.getLabels(getSourceCode(index), getActiveCompiler()), name);
+    }
     public void gotoFunction(String name) {
         gotoLine(FunctionExtractor.getFunctions(getActiveSourceCode(), getActiveCompiler()), name);
+    }
+    public void gotoFunction(String name, int index) {
+        gotoLine(FunctionExtractor.getFunctions(getSourceCode(index), getActiveCompiler()), name);
     }
     /**
      * 
@@ -496,21 +526,34 @@ public class EditorPanes {
      */
     public JEditorPane getActiveEditorPane() {
         // get selected tab
-        int selectedTab = tabbedPane.getSelectedIndex();
-        if (selectedTab != -1) {
+        return getEditorPane(tabbedPane.getSelectedIndex());
+    }
+    public JEditorPane getEditorPane(int index) {
+        try {
             // get editor pane
-            EditorPaneProperties ep = editorPaneArray.get(selectedTab);
+            EditorPaneProperties ep = editorPaneArray.get(index);
             // get editor pane
             return ep.getEditorPane();
         }
-        return null;
+        catch (IndexOutOfBoundsException ex) { 
+            return null;
+        }
     }
     /**
      * 
      * @return 
      */
     public String getActiveSourceCode() {
-        JEditorPane ep = getActiveEditorPane();
+        return getSourceCode(getActiveEditorPane());
+    }
+    public String getSourceCode(int index) {
+        JEditorPane ep = getEditorPane(index);
+        if (ep!=null) {
+            return ep.getText();
+        }
+        return null;
+    }
+    public String getSourceCode(JEditorPane ep) {
         if (ep!=null) {
             return ep.getText();
         }
@@ -522,14 +565,18 @@ public class EditorPanes {
      */
     public int getActiveCompiler() {
         // get selected tab
-        int selectedTab = tabbedPane.getSelectedIndex();
-        if (selectedTab != -1) {
+        return getCompiler(tabbedPane.getSelectedIndex());
+    }
+    public int getCompiler(int index) {
+        try {
             // get editor pane
-            EditorPaneProperties ep = editorPaneArray.get(selectedTab);
+            EditorPaneProperties ep = editorPaneArray.get(index);
             // get editor pane
             return ep.getCompiler();
         }
-        return ConstantsR64.COMPILER_KICKASSEMBLER;
+        catch (IndexOutOfBoundsException ex) {
+            return ConstantsR64.COMPILER_KICKASSEMBLER;
+        }
     }
     /**
      * 
@@ -560,13 +607,15 @@ public class EditorPanes {
      * @return 
      */
     public EditorPaneProperties getEditorPaneProperties(int selectedTab) {
-        if (selectedTab != -1) {
+        try {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(selectedTab);
             // get editor pane
             return ep;
         }
-        return null;
+        catch (IndexOutOfBoundsException ex) {
+            return null;
+        }
     }
     /**
      * 
@@ -1101,7 +1150,17 @@ public class EditorPanes {
         // retrieve chars that have already been typed
         return text.substring(start, position);
     }
-
+    /**
+     * Generic goto-line-function. Goes to a line of a specific macro, function or label
+     * given in {@code name}. The retrives function / macro / label names and line numbers
+     * are passed as LinkedHasMap {@code map} and can be retrieved via
+     * {@code getLabels()}, {@code getFunctions()} or {@code getMacros()}.
+     * 
+     * @param map A linked HashMap with label / macro / function names and linenumbers, retrieved via
+     * {@code getLabels()}, {@code getFunctions()} or {@code getMacros()}.
+     * @param name The name of the label / macro / function where to go
+     * @return {@code true} if the goto-line was successful.
+     */
     protected boolean gotoLine(LinkedHashMap<Integer, String> map, String name) {
         // names and linenumbers
         ArrayList<String> names = new ArrayList<>();

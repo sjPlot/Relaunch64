@@ -90,6 +90,7 @@ public class ConstantsR64 {
     public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
     public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";
     
+    public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";
     public static final String CB_GOTO_LABEL_STRING = "Goto label ...";
     public static final String CB_GOTO_FUNCTION_STRING = "Goto function or macro ...";
