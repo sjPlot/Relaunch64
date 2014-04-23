@@ -680,6 +680,29 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //                openFile(fp, settings.getRecentDocCompiler(8));
 //            }
 //        });
+        // if we don't have OS X, we need to change action's accelerator keys
+        // all "meta" (OS X command key) are converted to "ctrl"
+        if (!settings.isOSX()) {
+            // get application's actionmap
+            javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getActionMap(Relaunch64View.class, this);
+            // get all action values ("keys")
+            Object[] keys = actionMap.keys();
+            // iterate all actions
+            for (Object o : keys) {
+                // get accelerator key for action
+                Object accob = actionMap.get(o).getValue(javax.swing.Action.ACCELERATOR_KEY);
+                if (accob!=null) {
+                    String acckey = accob.toString();
+                    // check if it contains "meta"
+                    if (acckey.contains("meta")) {
+                        // and replace it with ctrl
+                        acckey = acckey.replace("meta", "ctrl");
+                        // set back new key
+                        actionMap.get(o).putValue(javax.swing.Action.ACCELERATOR_KEY, javax.swing.KeyStroke.getKeyStroke(acckey));
+                    }
+                }
+            }
+        }
     }
     /**
      * This method updates the menu-items with the recent documents
