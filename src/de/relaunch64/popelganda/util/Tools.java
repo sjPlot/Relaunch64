@@ -17,6 +17,8 @@
 
 package de.relaunch64.popelganda.util;
 
+import java.io.File;
+
 /**
  *
  * @author Luedeke
@@ -38,5 +40,86 @@ public class Tools {
         sysinfo.append(System.getProperty("java.home"));
         return sysinfo.toString();
     }
-    
+    /**
+     * Reads a binary file and returns its content as byte table string.
+     * 
+     * @param f FilePath to the binary file
+     * @param compiler the currently active compiler. used for the compiler-specific byte-token
+     * @return a string value with the complete byte table, i.e. all byte values from the
+     * file are converted to a byte-table. Or {@code null} if an error occured.
+     */
+    public static String getByteTableFromFile(File f, int compiler) {
+        return getByteTableFromFile(f, 0, -1, compiler, 8);
+    }
+    /**
+     * Reads a binary file and returns its content as byte table string.
+     * 
+     * @param f FilePath to the binary file
+     * @param compiler the currently active compiler. used for the compiler-specific byte-token
+     * @param bytesPerLine the amounts of bytes per line in the byte table
+     * @return a string value with the complete byte table, i.e. all byte values from the
+     * file are converted to a byte-table. Or {@code null} if an error occured.
+     */
+    public static String getByteTableFromFile(File f, int compiler, int bytesPerLine) {
+        return getByteTableFromFile(f, 0, -1, compiler, bytesPerLine);
+    }
+    /**
+     * Reads a binary file and returns its content as byte table string.
+     * 
+     * @param f FilePath to the binary file
+     * @param startOffset start offset for the first byte to read from file
+     * @param endOffset end offset, the last byte that should be read from file
+     * @param compiler the currently active compiler. used for the compiler-specific byte-token
+     * @param bytesPerLine the amounts of bytes per line in the byte table
+     * @return a string value with the complete byte table, i.e. all byte values from the
+     * file are converted to a byte-table. Or {@code null} if an error occured.
+     */
+    public static String getByteTableFromFile(File f, int startOffset, int endOffset, int compiler, int bytesPerLine) {
+        // read File and retrieve content as byte arry
+        byte[] content = FileTools.readBinaryFile(f, startOffset, endOffset);
+        // check if we have content
+        if (content!=null && content.length>0) {
+            // get compiler byte-token
+            String byteToken;
+            switch (compiler) {
+                case ConstantsR64.COMPILER_ACME:
+                    byteToken = "!byte";
+                    break;
+                case ConstantsR64.COMPILER_KICKASSEMBLER:
+                    byteToken = ".byte";
+                    break;
+                default:
+                    byteToken = ".byte";
+                    break;
+            }
+            StringBuilder sb = new StringBuilder("");
+            // some indicators for new lines and line-length of table
+            boolean startNewLine = true;
+            int bpl = 0;
+            for (int i=0; i<content.length; i++) {
+                // check if we have a new line
+                if (startNewLine) {
+                    sb.append(byteToken).append(" ");
+                    startNewLine = false;
+                }
+                // append byte
+                sb.append("$").append(String.format("%02x", content[i]));
+                // increase counter for bytes per line
+                bpl++;
+                // check if we reached end of line
+                if (bpl>=bytesPerLine || i==(content.length-1)) {
+                    sb.append(System.getProperty("line.separator"));
+                    // start new line
+                    startNewLine = true;
+                    // reset bytes per line counter
+                    bpl = 0;
+                }
+                else {
+                    sb.append(", ");
+                }
+            }
+            return sb.toString();
+        }
+        return null;
+    }
 }

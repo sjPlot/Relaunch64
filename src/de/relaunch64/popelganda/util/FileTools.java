@@ -34,7 +34,10 @@
 package de.relaunch64.popelganda.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
@@ -281,12 +284,85 @@ public class FileTools {
         // return result
         return sFile;
     }    
-    public static String getRelativePath(File p1, File p2) {
+    /**
+     * Returns the relative path from the source file {@code source} in relation to
+     * the destination file {@code dest}.
+     * 
+     * @param source the source file from which the relative path should be computed.
+     * @param dest the destination file.
+     * @return the relative path from {@code dest} in relation to {@code source}.
+     */
+    public static String getRelativePath(File source, File dest) {
         try {
-            return Paths.get(p1.getAbsolutePath()).relativize(Paths.get(p2.getAbsolutePath())).toString();
+            return Paths.get(source.getAbsolutePath()).relativize(Paths.get(dest.getAbsolutePath())).toString();
         }
         catch (IllegalArgumentException ex) {
         }
         return null;
     }    
+    /**
+     * Reads a binary file and returns its content as byte array.
+     * 
+     * @param sourceFile FilePath to the binary file
+     * @return a byte array with all byte values from the
+     * file, or {@code null} if an error occured.
+     */
+    public static byte[] readBinaryFile(File sourceFile) {
+        return readBinaryFile(sourceFile, 0, -1);
+    }
+    /**
+     * Reads a binary file and returns its content as byte array.
+     * 
+     * @param sourceFile FilePath to the binary file
+     * @param startOffset start offset for the first byte to read from file
+     * @param endOffset end offset, the last byte that should be read from file
+     * @return a byte array with all byte values from the
+     * file, or {@code null} if an error occured.
+     */
+    public static byte[] readBinaryFile(File sourceFile, int startOffset, int endOffset) {
+        // check for valid file
+        if (null==sourceFile || !sourceFile.exists()) return null;
+        FileInputStream in = null;
+        byte[] retVal = null;
+        byte[] buffer;
+        try {
+            in = new FileInputStream(sourceFile);
+            // get file length
+            long fileLength = sourceFile.length();
+            // create byte buffer for content
+            buffer = new byte[(int)fileLength];
+            int counter = 0;
+            // read bytes until EOF
+            for(int i; (i=in.read())!=-1;) {
+                buffer[counter++] = (byte)i;
+            }
+            // check if user wants only specific offset/part of the file
+            if (endOffset!=-1 || startOffset>0) {
+                // check if length is EOF
+                if (-1==endOffset) endOffset = (int)fileLength;
+                // create array with length of sub-data
+                retVal = new byte[endOffset-startOffset];
+                // copy bytes from complete buffer
+                counter = 0;
+                for (int i=startOffset; i<endOffset; i++) {
+                    retVal[counter++] = buffer[i];
+                }
+            }
+        }
+        catch (IOException | SecurityException ex) {
+            ConstantsR64.r64logger.log(Level.SEVERE,ex.getLocalizedMessage());
+            return null;
+        }
+        finally {
+            try {
+                // close file input stream
+                if (in!=null) in.close();
+            }
+            catch (IOException ex) {
+                return null;
+            }
+        }
+        // return offset buffer or buffer, depending on which one has data
+        return (retVal!=null) ? retVal : buffer;
+    }
 }
