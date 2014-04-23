@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda.util;
 
 import java.io.File;
+import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
@@ -209,6 +210,24 @@ public class FileTools {
         }
         return false;
     }
+    public static boolean hasValidIncludeFileExtension(File fp) {
+        // get file extension
+        String ext = getFileExtension(fp);
+        // check for valid value
+        if (null==ext || ext.isEmpty()) {
+            return false;
+        }
+        // add period, since the above method returns extension without period
+        ext = "."+ext;
+        // loop all valid extensions
+        for (String extensions : ConstantsR64.FILE_EXTENSIONS_INCLUDES) {
+            // check each extension
+            if (ext.equalsIgnoreCase(extensions)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * This method returns the file name of a given file-path which is passed as parameter.
      * 
@@ -262,5 +281,12 @@ public class FileTools {
         // return result
         return sFile;
     }    
-
+    public static String getRelativePath(File p1, File p2) {
+        try {
+            return Paths.get(p1.getAbsolutePath()).relativize(Paths.get(p2.getAbsolutePath())).toString();
+        }
+        catch (IllegalArgumentException ex) {
+        }
+        return null;
+    }    
 }

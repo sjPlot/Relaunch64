@@ -40,6 +40,7 @@ import de.relaunch64.popelganda.Editor.LabelExtractor;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
+import de.relaunch64.popelganda.util.RelaunchClipboard;
 import de.relaunch64.popelganda.util.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
@@ -57,11 +58,19 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.ProcessBuilder.Redirect;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -89,8 +98,9 @@ import org.jdesktop.application.SingleFrameApplication;
 /**
  * The application's main frame.
  */
-public class Relaunch64View extends FrameView implements DropTargetListener {
+public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
     private EditorPanes editorPanes;
+    private final RelaunchClipboard clipboards;
     private final FindReplace findReplace;
     private final List<String> compilerParams = new ArrayList<>();
     private final List<Integer> comboBoxHeadings = new ArrayList<>();
@@ -113,8 +123,11 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         // init database variables
         settings = set;
         findReplace = new FindReplace();
+        clipboards = new RelaunchClipboard();
         // init default laf
         setDefaultLookAndFeel();
+        // check for os x
+        if (settings.isOSX()) setupMacOSXApplicationListener();
         // init swing components
         initComponents();
         // hide find & replace textfield
@@ -157,6 +170,72 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             }
         });
     }
+    /**
+     * This is an application listener that is initialised when running the program
+     * on mac os x. by using this appListener, we can use the typical apple-menu bar
+     * which provides own about, preferences and quit-menu-items.
+     */
+    private void setupMacOSXApplicationListener() {
+    // <editor-fold defaultstate="collapsed" desc="Application-listener initiating the stuff for the Apple-menu.">
+        try {
+            // get mac os-x application class
+            Class appc = Class.forName("com.apple.eawt.Application");
+            // create a new instance for it.
+            Object app = appc.newInstance();
+            // get the application-listener class. here we can set our action to the apple menu
+            Class lc = Class.forName("com.apple.eawt.ApplicationListener");
+            Object listener = Proxy.newProxyInstance(lc.getClassLoader(), new Class[] { lc }, new InvocationHandler() {
+                @Override
+                public Object invoke(Object proxy,Method method,Object[] args) {
+                    if (method.getName().equals("handleQuit")) {
+                        // call the general exit-handler from the desktop-application-api
+                        // here we do all the stuff we need when exiting the application
+                        Relaunch64App.getApplication().exit();
+                    }
+                    if (method.getName().equals("handlePreferences")) {
+                        // show settings window
+                        settingsWindow();
+                    }
+                    if (method.getName().equals("handleAbout")) {
+                        // show own aboutbox
+                        showAboutBox();
+                        try {
+                            // set handled to true, so other actions won't take place any more.
+                            // if we leave this out, a second, system-own aboutbox would be displayed
+                            setHandled(args[0], Boolean.TRUE);
+                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                        }
+                    }
+                    return null;
+                }
+                private void setHandled(Object event, Boolean val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+                    Method handleMethod = event.getClass().getMethod("setHandled", new Class[] {boolean.class});
+                    handleMethod.invoke(event, new Object[] {val});
+                }
+            });
+            // tell about success
+            ConstantsR64.r64logger.log(Level.INFO,"Apple Class Loader successfully initiated.");
+            try {
+                // add application listener that listens to actions on the apple menu items
+                Method m = appc.getMethod("addApplicationListener", lc);
+                m.invoke(app, listener);
+                // register that we want that Preferences menu. by default, only the about box is shown
+                // but no pref-menu-item
+                Method enablePreferenceMethod = appc.getMethod("setEnabledPreferencesMenu", new Class[] {boolean.class});
+                enablePreferenceMethod.invoke(app, new Object[] {Boolean.TRUE});
+                // tell about success
+                ConstantsR64.r64logger.log(Level.INFO,"Apple Preference Menu successfully initiated.");
+            } catch (NoSuchMethodException | SecurityException | InvocationTargetException ex) {
+                ConstantsR64.r64logger.log(Level.SEVERE,ex.getLocalizedMessage());
+            }
+        }
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            ConstantsR64.r64logger.log(Level.SEVERE,e.getLocalizedMessage());
+        }
+    // </editor-fold>
+    }
+    
     private void initComboBoxes() {
         // init emulator combobox
         jComboBoxEmulator.setSelectedIndex(0);
@@ -177,6 +256,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         // upper right cross on Windows OS, quits the application. Instead, it just makes
         // the frame disapear, but does not quit, so it looks like the application was quit
         // but asking for changes took place. So, we simply add a windows-listener additionally
+        Relaunch64View.super.getFrame().addWindowListener(this);
         Relaunch64View.super.getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // init actionlistener
         /**
@@ -412,6 +492,16 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 }
             }
         });
+        jTabbedPaneLogs.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getButton()==MouseEvent.BUTTON3) {
+                    switch (jTabbedPaneLogs.getSelectedIndex()) {
+                        case 0: clearLog1(); break;
+                        case 1: clearLog2(); break;
+                    }
+                }
+            }
+        });
         jTextFieldConvDez.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 convertNumber("dez");
@@ -425,6 +515,43 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jTextFieldConvBin.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 convertNumber("bin");
+            }
+        });
+        jButtonClip1.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
+            @Override public void mouseMoved(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(0));
+            }
+            @Override public void mouseDragged(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(0));
+            }
+        });
+        jButtonClip2.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
+            @Override public void mouseMoved(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(1));
+            }
+            @Override public void mouseDragged(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(1));
+            }
+        });
+        jButtonClip3.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
+            @Override public void mouseMoved(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(2));
+            }
+            @Override public void mouseDragged(MouseEvent e) {
+            }
+        });
+        jButtonClip4.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
+            @Override public void mouseMoved(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(3));
+            }
+            @Override public void mouseDragged(MouseEvent e) {
+            }
+        });
+        jButtonClip5.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
+            @Override public void mouseMoved(MouseEvent e) {
+                jTextAreaClipBoard.setText(clipboards.getClipboard(4));
+            }
+            @Override public void mouseDragged(MouseEvent e) {
             }
         });
         recentDocsSubmenu.addMenuListener(new javax.swing.event.MenuListener() {
@@ -827,6 +954,26 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     public void setFocusToTabbedPane() {
         jTabbedPane1.requestFocusInWindow();
     }
+    @Action
+    public void insertClipboard1() {
+        
+    }
+    @Action
+    public void insertClipboard2() {
+        
+    }
+    @Action
+    public void insertClipboard3() {
+        
+    }
+    @Action
+    public void insertClipboard4() {
+        
+    }
+    @Action
+    public void insertClipboard5() {
+        
+    }
     /**
      * 
      */
@@ -836,7 +983,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     }
     @Action
     public void openFile() {
-        File fileToOpen = FileTools.chooseFile(getFrame(), JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, "", "", "Open ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
+        File fileToOpen = FileTools.chooseFile(getFrame(), JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, settings.getLastUsedPath().getAbsolutePath(), "", "Open ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
         openFile(fileToOpen);
     }
     private void openFile(File fileToOpen) {
@@ -849,6 +996,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             settings.addToRecentDocs(fileToOpen.toString(), compiler);
             // and update menus
             setRecentDocuments();
+            // save last used path
+            settings.setLastUsedPath(fileToOpen);
         } 
     }
     @Action
@@ -1256,23 +1405,27 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         // retrieve all installed Look and Feels
         UIManager.LookAndFeelInfo[] installed_laf = UIManager.getInstalledLookAndFeels();
         // init found-variables
-        String nimbusclassname = "";
+        String classname = "";
         // in case we find "nimbus" LAF, set this as default on non-mac-os
         // because it simply looks the best.
         for (UIManager.LookAndFeelInfo laf : installed_laf) {
             // check whether laf is nimbus
             if (laf.getClassName().toLowerCase().contains("nimbus")) {
-                nimbusclassname = laf.getClassName();
+                classname = laf.getClassName();
+                break;
             }
         }
         // check which laf was found and set appropriate default value 
-        if (!nimbusclassname.isEmpty()) {
+        if (!classname.isEmpty()) {
             try {
                 // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                UIManager.setLookAndFeel(nimbusclassname);
+                UIManager.setLookAndFeel(classname);
             } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                 ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             }
+        }
+        if (settings.isOSX()) {
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Relaunch64");
         }
     }
     /**
@@ -1347,6 +1500,7 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                 if (files!=null && files.size()>0) {
                     // create list with final image files
                     List<File> anyfiles = new ArrayList<>();
+                    List<File> includefiles = new ArrayList<>();
                     // dummy
                     File file;
                     for (Object file1 : files) {
@@ -1354,16 +1508,62 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
                         file = (File) file1;
                         // check whether it is a file
                         if (file.isFile()) {
-                            // if it's an image, add it to image file list
+                            // if it's an asm, add it to asm file list
                             if (FileTools.hasValidFileExtension(file) && validDropLocation) {
                                 // if so, add it to list
                                 anyfiles.add(file);
+                            }
+                            // if it's an include file, add it to include file list
+                            else if (FileTools.hasValidIncludeFileExtension(file) && validDropLocation) {
+                                // if so, add it to list
+                                includefiles.add(file);
                             }
                         }
                     }
                     // check if we have any valid values,
                     // i.e. any files have been dragged and dropped
-                    // if so, insert attachments
+                    // if so, include files
+                    if (includefiles.size()>0) {
+                        for (File f : includefiles) {
+                            String insert = "";
+                            // retrieve relative path of iimport file
+                            Path relpath = Paths.get(FileTools.getRelativePath(editorPanes.getActiveFilePath(), f));
+                            if (FileTools.getFileExtension(f).equalsIgnoreCase("bin")) {
+                                switch (editorPanes.getActiveCompiler()) {
+                                    case ConstantsR64.COMPILER_ACME:
+                                        insert = "!bin \""+relpath.toString()+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        insert = ".import binary \""+relpath.toString()+"\""+System.getProperty("line.separator");
+                                        break;
+                                }
+                            }
+                            else if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
+                                switch (editorPanes.getActiveCompiler()) {
+                                    case ConstantsR64.COMPILER_ACME:
+                                        insert = "!bin \""+relpath.toString()+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        insert = ".import text \""+relpath.toString()+"\""+System.getProperty("line.separator");
+                                        break;
+                                }
+                            }
+                            else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64")) {
+                                switch (editorPanes.getActiveCompiler()) {
+                                    case ConstantsR64.COMPILER_ACME:
+                                        insert = "!bin \""+relpath.toString()+"\",,2"+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        insert = ".import c64 \""+relpath.toString()+"\""+System.getProperty("line.separator");
+                                        break;
+                                }
+                            }
+                            editorPanes.insertString(insert);
+                        }
+                    }
+                    // check if we have any valid values,
+                    // i.e. any files have been dragged and dropped
+                    // if so, open asm files
                     if (anyfiles.size()>0) {
                         for (File f : anyfiles) openFile(f);
                         /**
@@ -1384,6 +1584,31 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             dtde.rejectDrop();
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+    @Override
+    public void windowClosing(WindowEvent e) {
+        // call the general exit-handler from the desktop-application-api
+        // here we do all the stuff we need when exiting the application
+        Relaunch64App.getApplication().exit();
+    }
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+    @Override
+    public void windowIconified(WindowEvent e) {
+    }
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+    @Override
+    public void windowDeactivated(WindowEvent e) {
     }
     /**
      * This is the Exit-Listener. Here we put in all the things which should be done
@@ -1522,6 +1747,15 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
+        jTabbedPaneTools = new javax.swing.JTabbedPane();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaClipBoard = new javax.swing.JTextArea();
+        jButtonClip1 = new javax.swing.JButton();
+        jButtonClip2 = new javax.swing.JButton();
+        jButtonClip3 = new javax.swing.JButton();
+        jButtonClip4 = new javax.swing.JButton();
+        jButtonClip5 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jTabbedPaneLogs = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
@@ -1774,15 +2008,73 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
+        jTabbedPaneTools.setName("jTabbedPaneTools"); // NOI18N
+
+        jPanel7.setName("jPanel7"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jTextAreaClipBoard.setName("jTextAreaClipBoard"); // NOI18N
+        jScrollPane1.setViewportView(jTextAreaClipBoard);
+
+        jButtonClip1.setAction(actionMap.get("insertClipboard1")); // NOI18N
+        jButtonClip1.setName("jButtonClip1"); // NOI18N
+
+        jButtonClip2.setAction(actionMap.get("insertClipboard2")); // NOI18N
+        jButtonClip2.setName("jButtonClip2"); // NOI18N
+
+        jButtonClip3.setAction(actionMap.get("insertClipboard3")); // NOI18N
+        jButtonClip3.setName("jButtonClip3"); // NOI18N
+
+        jButtonClip4.setAction(actionMap.get("insertClipboard4")); // NOI18N
+        jButtonClip4.setName("jButtonClip4"); // NOI18N
+
+        jButtonClip5.setAction(actionMap.get("insertClipboard5")); // NOI18N
+        jButtonClip5.setName("jButtonClip5"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .add(jButtonClip1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonClip2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonClip3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonClip4)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonClip5)
+                .addContainerGap(183, Short.MAX_VALUE))
+            .add(jScrollPane1)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jButtonClip1)
+                    .add(jButtonClip2)
+                    .add(jButtonClip3)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonClip4)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonClip5))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+        );
+
+        jTabbedPaneTools.addTab(resourceMap.getString("jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 408, Short.MAX_VALUE)
+            .add(jTabbedPaneTools)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 248, Short.MAX_VALUE)
+            .add(jPanel3Layout.createSequentialGroup()
+                .add(jTabbedPaneTools)
+                .addContainerGap())
         );
 
         jSplitPane2.setTopComponent(jPanel3);
@@ -2241,6 +2533,11 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JMenuItem gotoSectionMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
+    private javax.swing.JButton jButtonClip1;
+    private javax.swing.JButton jButtonClip2;
+    private javax.swing.JButton jButtonClip3;
+    private javax.swing.JButton jButtonClip4;
+    private javax.swing.JButton jButtonClip5;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
     private javax.swing.JButton jButtonReplace;
@@ -2264,8 +2561,10 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneMainEditorPane;
@@ -2287,6 +2586,8 @@ public class Relaunch64View extends FrameView implements DropTargetListener {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPaneLogs;
+    private javax.swing.JTabbedPane jTabbedPaneTools;
+    private javax.swing.JTextArea jTextAreaClipBoard;
     private javax.swing.JTextArea jTextAreaCompilerOutput;
     private javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldConvBin;

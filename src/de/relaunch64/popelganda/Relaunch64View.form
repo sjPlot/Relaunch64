@@ -327,15 +327,135 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="408" max="32767" attributes="0"/>
+                              <Component id="jTabbedPaneTools" alignment="0" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="248" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jTabbedPaneTools" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                         </DimensionLayout>
                       </Layout>
+                      <SubComponents>
+                        <Container class="javax.swing.JTabbedPane" name="jTabbedPaneTools">
+                          <Properties>
+                            <Property name="name" type="java.lang.String" value="jTabbedPaneTools" noResource="true"/>
+                          </Properties>
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+                          <SubComponents>
+                            <Container class="javax.swing.JPanel" name="jPanel7">
+                              <Properties>
+                                <Property name="name" type="java.lang.String" value="jPanel7" noResource="true"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                  <JTabbedPaneConstraints tabName="Clipboard">
+                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel7.TabConstraints.tabTitle"/>
+                                  </JTabbedPaneConstraints>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout>
+                                <DimensionLayout dim="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jButtonClip1" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButtonClip2" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButtonClip3" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButtonClip4" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButtonClip5" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace pref="183" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Component id="jScrollPane1" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                                <DimensionLayout dim="1">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jButtonClip1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jButtonClip2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jButtonClip3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jButtonClip4" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jButtonClip5" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jScrollPane1" pref="163" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                </DimensionLayout>
+                              </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+                                  <Properties>
+                                    <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+                                  </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTextArea" name="jTextAreaClipBoard">
+                                      <Properties>
+                                        <Property name="name" type="java.lang.String" value="jTextAreaClipBoard" noResource="true"/>
+                                      </Properties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                                <Component class="javax.swing.JButton" name="jButtonClip1">
+                                  <Properties>
+                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="insertClipboard1" methodName="insertClipboard1"/>
+                                    </Property>
+                                    <Property name="name" type="java.lang.String" value="jButtonClip1" noResource="true"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="jButtonClip2">
+                                  <Properties>
+                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="insertClipboard2" methodName="insertClipboard2"/>
+                                    </Property>
+                                    <Property name="name" type="java.lang.String" value="jButtonClip2" noResource="true"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="jButtonClip3">
+                                  <Properties>
+                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="insertClipboard3" methodName="insertClipboard3"/>
+                                    </Property>
+                                    <Property name="name" type="java.lang.String" value="jButtonClip3" noResource="true"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="jButtonClip4">
+                                  <Properties>
+                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="insertClipboard4" methodName="insertClipboard4"/>
+                                    </Property>
+                                    <Property name="name" type="java.lang.String" value="jButtonClip4" noResource="true"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="jButtonClip5">
+                                  <Properties>
+                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="insertClipboard5" methodName="insertClipboard5"/>
+                                    </Property>
+                                    <Property name="name" type="java.lang.String" value="jButtonClip5" noResource="true"/>
+                                  </Properties>
+                                </Component>
+                              </SubComponents>
+                            </Container>
+                          </SubComponents>
+                        </Container>
+                      </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="jPanel4">
                       <Properties>

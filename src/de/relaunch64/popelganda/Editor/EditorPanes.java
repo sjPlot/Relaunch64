@@ -1244,4 +1244,13 @@ public class EditorPanes {
         }
         return false;
     }
+    public void insertString(String text) {
+        JEditorPane ep = getActiveEditorPane();
+        try {
+            ep.getDocument().insertString(ep.getCaretPosition(), text, null);
+            ep.requestFocusInWindow();
+        }
+        catch (BadLocationException ex) {
+        }
+    }
 }

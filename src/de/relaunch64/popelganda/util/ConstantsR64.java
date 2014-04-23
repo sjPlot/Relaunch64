@@ -108,5 +108,6 @@ public class ConstantsR64 {
     // CAUTION! MUST HAVE SAME SIZE AS DEFAULT COMPILER AVAILABLE
     public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME" };
     
-    public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".txt"};
+    public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
+    public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};
 }

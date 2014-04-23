@@ -58,6 +58,7 @@ public class Settings {
     private static final int recentDocCount = 8;
     
     private static final String SETTING_RECENT_DOC = "recentDoc";
+    private static final String SETTING_LAST_USED_PATH = "lastusedpath";
     private static final String SETTING_PATH_KICKASSEMBLER = "pathKickAssembler";
     private static final String SETTING_PATH_ACME = "pathAcme";
     private static final String SETTING_PATH_EMU = "pathEmulator";
@@ -219,6 +220,13 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
             el.setText(font);
             el.setAttribute("size", "11");
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH)) {
+            // create element
+            Element el = new Element(SETTING_LAST_USED_PATH);
+            el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
         }
         if (null==settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER)) {
             // create element
@@ -519,6 +527,22 @@ public class Settings {
             value = new File(el.getText());
         }
         return value;
+    }
+    public File getLastUsedPath() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH);
+        File value = null;
+        if (el!=null) {
+            value = new File(el.getText());
+        }
+        return value;
+    }
+    public void setLastUsedPath(File f) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH);
+        if (null==el) {
+            el = new Element(SETTING_LAST_USED_PATH);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(f.getAbsolutePath());
     }
     /**
      * 
