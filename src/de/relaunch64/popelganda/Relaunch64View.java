@@ -147,7 +147,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain, settings);
         jScrollPaneMainEditorPane.setRowHeaderView(epln);
         // init syntax highlighting for editor pane
-        editorPanes.addEditorPane(jEditorPaneMain, null, null, ConstantsR64.COMPILER_KICKASSEMBLER);
+        editorPanes.addEditorPane(jEditorPaneMain, null, null, jComboBoxCompilers.getSelectedIndex());
         // check if we have any parmater
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
@@ -235,7 +235,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     
     private void initComboBoxes() {
         // init emulator combobox
-        jComboBoxEmulator.setSelectedIndex(0);
+        jComboBoxEmulator.setSelectedIndex(settings.getPreferredEmulator());
+        jComboBoxCompilers.setSelectedIndex(settings.getPreferredCompiler());
         // init goto comboboxes
         jComboBoxGoto.removeAllItems();
         jComboBoxGoto.addItem(ConstantsR64.CB_GOTO_DEFAULT_STRING);

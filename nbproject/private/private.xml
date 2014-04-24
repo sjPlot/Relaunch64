@@ -3,14 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Tools.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertByteFromFileDlg.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertSinusTableDlg.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/ConstantsR64.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPanes.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/FileTools.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/LabelExtractor.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/ConstantsR64.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Tools.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/SettingsDlg.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/FileTools.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPanes.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPaneProperties.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/SyntaxHighlighting.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Settings.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
         </group>
     </open-files>
 </project-private>

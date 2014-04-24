@@ -62,6 +62,8 @@ public class Settings {
     private static final String SETTING_PATH_KICKASSEMBLER = "pathKickAssembler";
     private static final String SETTING_PATH_ACME = "pathAcme";
     private static final String SETTING_PATH_EMU = "pathEmulator";
+    private static final String SETTING_PREF_COMP = "preferredCompiler";
+    private static final String SETTING_PREF_EMU = "preferredEmulator";
     private static final String SETTING_PATH_EMU_VICE = "pathEmulatorVice";
     private static final String SETTING_PATH_EMU_CCS64 = "pathEmulatorCCS64";
     private static final String SETTING_PATH_EMU_FRODO = "pathEmulatorFrodo";
@@ -225,6 +227,20 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_LAST_USED_PATH);
             el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PREF_COMP)) {
+            // create element
+            Element el = new Element(SETTING_PREF_COMP);
+            el.setText(String.valueOf(ConstantsR64.COMPILER_KICKASSEMBLER));
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PREF_EMU)) {
+            // create element
+            Element el = new Element(SETTING_PREF_EMU);
+            el.setText(String.valueOf(ConstantsR64.EMU_VICE));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -643,6 +659,41 @@ public class Settings {
             }
         }
     }
+    public int getPreferredCompiler() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
+        try {
+            if (el!=null) return Integer.parseInt(el.getText());
+        }
+        catch (NumberFormatException ex) {
+        }
+        return ConstantsR64.COMPILER_KICKASSEMBLER;
+    }
+    public void setPreferredCompiler(int compiler) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
+        if (null==el) {
+            el = new Element(SETTING_PREF_COMP);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(compiler));
+    }
+    public int getPreferredEmulator() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_EMU);
+        try {
+            if (el!=null) return Integer.parseInt(el.getText());
+        }
+        catch (NumberFormatException ex) {
+        }
+        return ConstantsR64.EMU_VICE;
+    }
+    public void setPreferredEmulator(int emulator) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_EMU);
+        if (null==el) {
+            el = new Element(SETTING_PREF_EMU);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(emulator));
+    }
+    
     /**
      * Retrieves settings for the mainfont (the font used for the main-entry-textfield).
      * @param what (indicates, which font-characteristic we want to have. use following constants:<br>

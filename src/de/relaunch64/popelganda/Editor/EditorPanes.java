@@ -159,6 +159,73 @@ public class EditorPanes {
         MyUndoManager undoman = addUndoManagerToEditorPane(editorPane);
         // add key listener
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
+                JEditorPane ep = (JEditorPane)evt.getSource();
+                if (KeyEvent.VK_TAB==evt.getKeyCode() && !evt.isShiftDown()) {
+                    // check for text selection
+                    String selString = ep.getSelectedText();
+                    // if we have selection, add tab to each selected line
+                    if (selString!=null && !selString.isEmpty()) {
+                        // remember selection range
+                        int selstart = ep.getSelectionStart();
+                        int selend = ep.getSelectionEnd();
+                        // retrieve lines
+                        String[] lines = selString.split("\n");
+                        // create string builder for new insert string
+                        StringBuilder sb = new StringBuilder("");
+                        // add tab infront of each line
+                        for (String l : lines) sb.append("\t").append(l).append("\n");
+                        // insert string
+                        ep.replaceSelection(sb.toString());
+                        // re-select text
+                        ep.setSelectionStart(selstart);
+                        ep.setSelectionEnd(selend+lines.length);
+                    }
+                    else {
+                        try {
+                            ep.getDocument().insertString(ep.getCaretPosition(), "\t", null);
+                        }
+                        catch (BadLocationException ex) {
+                        }
+                    }
+                    evt.consume();
+                }
+                // if user presses shift+tab, selection will be outdented
+                else if (KeyEvent.VK_TAB==evt.getKeyCode() && evt.isShiftDown()) {
+                    // check for text selection
+                    String selString = ep.getSelectedText();
+                    // if we have selection, add tab to each selected line
+                    if (selString!=null && !selString.isEmpty()) {
+                        // remember selection range
+                        int selstart = ep.getSelectionStart();
+                        int selend = ep.getSelectionEnd();
+                        // retrieve lines
+                        String[] lines = selString.split("\n");
+                        // create string builder for new insert string
+                        StringBuilder sb = new StringBuilder("");
+                        // remove counter
+                        int tabsRemoved = 0;
+                        // add tab infront of each line
+                        for (String l : lines) {
+                            // get original length of line
+                            int len = l.length();
+                            // remove first tab
+                            l = l.replaceFirst("\t", "");
+                            // calculate new length and determine if
+                            // a tab has been removed
+                            tabsRemoved = tabsRemoved+(len-l.length());
+                            // append fixex line
+                            sb.append(l).append("\n");
+                        }
+                        // insert string
+                        ep.replaceSelection(sb.toString());
+                        // re-select text
+                        ep.setSelectionStart(selstart);
+                        ep.setSelectionEnd(selend-lines.length);
+                    }
+                    evt.consume();
+                }
+            }
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) autoInsertTab();
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
@@ -723,6 +790,7 @@ public class EditorPanes {
                         return false;
                     }
                     finally {
+                        closeInitialTab();
                         // if yes, add new tab
                         selectedTab = addNewTab(filepath, new String(buffer), getFileName(filepath), compiler)-1;
                         // set cursor
@@ -737,6 +805,27 @@ public class EditorPanes {
             }
         }
         return false;
+    }
+    private void closeInitialTab() {
+        // check if inital tab is empty and unused, and then remove it
+        // initial tab has no file path
+        File f = editorPaneArray.get(0).getFilePath();
+        // title is "untitled"
+        String t = tabbedPane.getTitleAt(0);
+        // initial tab has no content
+        String c = editorPaneArray.get(0).getEditorPane().getText();
+        // and is not modified.
+        boolean m = editorPaneArray.get(0).isModified();
+        if (null==f && t.equalsIgnoreCase("untitled") && (null==c || c.isEmpty()) && !m) {
+            // remove empty initial tab
+            try {
+                // if save successful, remove data
+                editorPaneArray.remove(0);
+                tabbedPane.remove(0);
+            }
+            catch (IndexOutOfBoundsException | UnsupportedOperationException ex) {
+            }
+        }
     }
     /**
      * 
@@ -773,6 +862,8 @@ public class EditorPanes {
                             fw.close();
                             setModified(false);
                             setTabTitle(selectedTab, filepath);
+                            // set file path
+                            editorPaneArray.get(selectedTab).setFilePath(filepath);
                         } catch (IOException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
                             return false;
@@ -856,6 +947,9 @@ public class EditorPanes {
                     try {
                         // if not, create file
                         if (fileToSave.createNewFile()) {
+                            // if user confirms with enter key,
+                            // we don't need auto inser tab...
+                            eatReaturn = true;
                             // save file
                             return saveFile(selectedTab, fileToSave);
                         }
@@ -1003,11 +1097,11 @@ public class EditorPanes {
             try {
                 // if save successful, remove data
                 editorPaneArray.remove(selectedTab);
+                // success
+                return true;
             }
             catch (IndexOutOfBoundsException | UnsupportedOperationException ex) {
             }
-            // success
-            return true;
         }
         return false;
     }
