@@ -18,6 +18,7 @@
 package de.relaunch64.popelganda.util;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  *
@@ -88,6 +89,9 @@ public class Tools {
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                     byteToken = ".byte";
                     break;
+                case ConstantsR64.COMPILER_64TASS:
+                    byteToken = ".byte";
+                    break;
                 default:
                     byteToken = ".byte";
                     break;
@@ -121,5 +125,40 @@ public class Tools {
             return sb.toString();
         }
         return null;
+    }
+    public static String getAcmeToFile(String source) {
+        if (source!=null && source.contains("!to")) {
+            // retrieve !to macro
+            int position = source.indexOf("!to");
+            // find file name
+            int fileNameStart = source.indexOf("\"", position);
+            int fileNameEnd = source.indexOf("\"", fileNameStart+1);
+            // return file name
+            try {
+                return source.substring(fileNameStart+1, fileNameEnd);
+            }
+            catch (IndexOutOfBoundsException ex) {
+            }
+        }
+        return null;
+    }
+    public static boolean isToolInEnvironment(String toolName) {
+        // get all environment vars
+        Map<String, String> env = System.getenv();
+        // check if tool is in path
+        String path = env.get("Path");
+        if (path!=null) {
+            if (path.toLowerCase().contains(toolName.toLowerCase())) return true;
+        }
+        // check if tool is in path
+        path = env.get("PATH");
+        if (path!=null) {
+            if (path.toLowerCase().contains(toolName.toLowerCase())) return true;
+        }
+        // finally, check if tool itself is a key
+        for (String envName : env.keySet()) {
+            if (envName.toLowerCase().contains(toolName.toLowerCase()) || toolName.toLowerCase().contains(envName.toLowerCase())) return true;
+        }
+        return false;
     }
 }

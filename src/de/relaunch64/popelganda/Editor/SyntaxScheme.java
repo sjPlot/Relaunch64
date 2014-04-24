@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -455,6 +455,9 @@ public class SyntaxScheme {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
                 str = ",;:{}()[]+-/<=>&|^~*";
                 break;
+            case ConstantsR64.COMPILER_64TASS:
+                str = ",:{}()[]+-/<=>&|^~*";
+                break;
         }
         return str;
     }
@@ -467,6 +470,7 @@ public class SyntaxScheme {
         String str = "//";
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.COMPILER_64TASS:
                 str = ";";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -487,6 +491,7 @@ public class SyntaxScheme {
                 str = "!";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.COMPILER_64TASS:
                 str = ".";
                 break;
         }
@@ -635,6 +640,98 @@ public class SyntaxScheme {
                 asmKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".VAR", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
+                break;
+            case ConstantsR64.COMPILER_64TASS:
+                asmKeywords.put(".AL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".AS", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ASSERT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".BEND", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".BINARY", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".BINCLUDE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".BLOCK", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".BREAK", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CASE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CDEF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CERROR", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CHAR", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CHECK", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".COMMENT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CONTINUE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CPU", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".CWARN", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".DATABANK", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".DEFAULT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".DINT", DEFAULT_COMPILER_KEYWORD);                
+                asmKeywords.put(".DPAGE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".DSECTION", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".DSTRUCT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".DUNION", DEFAULT_COMPILER_KEYWORD);                
+                asmKeywords.put(".DWORD", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".EDEF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ELSE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ELSIF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENC", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".END", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDC", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDIF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDM", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDP", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDS", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDSWITCH", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDU", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ENDWEAK", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".EOR", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".ERROR", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".FI", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".FILL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".FOR", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".FUNCTION", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".GOTO", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".HERE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".HIDEMAC", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".IF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".IFEQ", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".IFMI", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".IFNE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".IFPL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".INCLUDE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".INT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".LBL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".LINT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".LOGICAL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".LONG", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".MACRO", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".NEXT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".NULL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".OFFS", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".OPTION", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".PAGE", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".PEND", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".PROC", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".PROFF", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".PRON", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".PRTEXT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".REPT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".RTA", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SECTION", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SEGMENT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SEND", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SHIFT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SHIFTL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SHOWMAC", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".STRUCT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".SWITCH", DEFAULT_COMPILER_KEYWORD);                
+                asmKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".UNION", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".VAR", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".WARN", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".WEAK", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".XL", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".XS", DEFAULT_COMPILER_KEYWORD);
                 break;
         }
         return asmKeywords;

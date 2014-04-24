@@ -49,6 +49,7 @@ public class LabelExtractor {
             String addDelim;
             switch (compiler) {
                 case ConstantsR64.COMPILER_ACME:
+                case ConstantsR64.COMPILER_64TASS:
                     addDelim=":";
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:

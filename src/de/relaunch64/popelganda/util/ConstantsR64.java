@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -87,8 +87,13 @@ public class ConstantsR64 {
     public static final int DEFAULT_FONT_SIZE = 13;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
     
+    public static final String DEFAULT_ACME_PARAM = "--outfile "+ConstantsR64.ASSEMBLER_OUPUT_FILE+" --format cbm "+ConstantsR64.ASSEMBLER_INPUT_FILE;
+    public static final String DEFAULT_64TASS_PARAM = "-C -T -a -W -i "+ConstantsR64.ASSEMBLER_INPUT_FILE+" -o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
+    public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ConstantsR64.ASSEMBLER_START_ADDRESS+" "+ConstantsR64.ASSEMBLER_INPUT_FILE+" -o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
+    
     public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
     public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";
+    public static final String ASSEMBLER_START_ADDRESS = "START";
     
     public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";
@@ -100,13 +105,18 @@ public class ConstantsR64 {
     public static final int EMU_CCS64 = 1;
     public static final int EMU_FRODO = 2;
     public static final int EMU_EMU64 = 3;
-    // CAUTION! MUST HAVE SAME SIZE AS DEFAULT EMULATORS AVAILABLE
+    // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT EMULATORS AVAILABLE
     public static final String[] EMU_NAMES = new String[] { "Vice", "CCS64", "Frodo", "Emu64" };
     
     public static final int COMPILER_KICKASSEMBLER = 0;
     public static final int COMPILER_ACME = 1;
-    // CAUTION! MUST HAVE SAME SIZE AS DEFAULT COMPILER AVAILABLE
-    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME" };
+    public static final int COMPILER_64TASS = 2;
+    // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE
+    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass" };
+    
+    public static final int CRUNCHER_EXOMIZER = 0;
+    // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT CRUNCHER AVAILABLE
+    public static final String[] CRUNCHER_NAMES = new String[] { "Exomizer" };
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};

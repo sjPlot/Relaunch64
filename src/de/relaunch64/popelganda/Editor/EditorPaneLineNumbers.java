@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -77,10 +77,14 @@ import javax.swing.text.Utilities;
 public final class EditorPaneLineNumbers extends JPanel
         implements CaretListener, DocumentListener, PropertyChangeListener {
 
+    public final static Color bgColor = new Color(248, 248, 248);
+    public final static Color borderColor = new Color(240, 240, 240);
+    public final static Color foregroundColor = new Color(220, 20, 60);
+
     public final static float LEFT = 0.0f;
     public final static float CENTER = 0.5f;
     public final static float RIGHT = 1.0f;
-    private final static Border OUTER = new MatteBorder(0, 0, 0, 2, Color.LIGHT_GRAY);
+    private final static Border OUTER = new MatteBorder(0, 0, 0, 2, borderColor);
     private final static int RHEIGHT = Integer.MAX_VALUE - 1000000;
     //  Text component this TextTextLineNumber component is in sync with
     private JTextComponent component;
@@ -105,7 +109,7 @@ public final class EditorPaneLineNumbers extends JPanel
      * @param settings
      */
     public EditorPaneLineNumbers(JTextComponent component, Settings settings) {
-        this(component, 3, settings);
+        this(component, 5, settings);
     }
 
     /**
@@ -123,7 +127,8 @@ public final class EditorPaneLineNumbers extends JPanel
         setFont(new Font(SyntaxScheme.getFontName(), Font.PLAIN, SyntaxScheme.getFontSize()));
 
         setBorderGap(5);
-        setCurrentLineForeground(Color.MAGENTA);
+        setBackground(bgColor);
+        setCurrentLineForeground(foregroundColor);
         setDigitAlignment(RIGHT);
         setMinimumDisplayDigits(minimumDisplayDigits);
 
@@ -239,7 +244,7 @@ public final class EditorPaneLineNumbers extends JPanel
     private void setPreferredWidth() {
         Element root = component.getDocument().getDefaultRootElement();
         int lines = root.getElementCount();
-        int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits) + 2; // added "+2"
+        int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits); // added "+2"
 
         //  Update sizes when number of digits in the line number changes
 

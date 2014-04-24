@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -685,6 +685,8 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
                 quoteDelimiters = "!";
                 break;
+            case ConstantsR64.COMPILER_64TASS:
+                return false;
         }
         return quoteDelimiters.contains(character);
     }

@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -60,6 +60,8 @@ public class Settings {
     private static final String SETTING_RECENT_DOC = "recentDoc";
     private static final String SETTING_LAST_USED_PATH = "lastusedpath";
     private static final String SETTING_PATH_KICKASSEMBLER = "pathKickAssembler";
+    private static final String SETTING_PATH_EXOMIZER = "pathExomizer";
+    private static final String SETTING_PATH_64TASS = "path64tass";
     private static final String SETTING_PATH_ACME = "pathAcme";
     private static final String SETTING_PATH_EMU = "pathEmulator";
     private static final String SETTING_PREF_COMP = "preferredCompiler";
@@ -69,10 +71,11 @@ public class Settings {
     private static final String SETTING_PATH_EMU_FRODO = "pathEmulatorFrodo";
     private static final String SETTING_PATH_EMU_EMU64 = "pathEmulatorEmu64";
     private static final String SETTING_PARAM_KICKASSEMBLER = "paramKickAssembler";
+    private static final String SETTING_PARAM_EXOMIZER = "paramExomizer";
+    private static final String SETTING_PARAM_64TASS = "param64tass";
     private static final String SETTING_PARAM_ACME = "paramAcme";
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String SETTING_MAINFONT = "editorfont";
-    private static final String DEFAULT_ACME_PARAM = "--outfile "+ConstantsR64.ASSEMBLER_OUPUT_FILE+" --format cbm "+ConstantsR64.ASSEMBLER_INPUT_FILE;
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -244,9 +247,23 @@ public class Settings {
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_64TASS)) {
+            // create element
+            Element el = new Element(SETTING_PATH_64TASS);
+            el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
         if (null==settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER)) {
             // create element
             Element el = new Element(SETTING_PATH_KICKASSEMBLER);
+            el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EXOMIZER)) {
+            // create element
+            Element el = new Element(SETTING_PATH_EXOMIZER);
             el.setText("");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
@@ -293,6 +310,13 @@ public class Settings {
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_64TASS)) {
+            // create element
+            Element el = new Element(SETTING_PARAM_64TASS);
+            el.setText(ConstantsR64.DEFAULT_64TASS_PARAM);
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
         if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER)) {
             // create element
             Element el = new Element(SETTING_PARAM_KICKASSEMBLER);
@@ -303,7 +327,14 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_ACME)) {
             // create element
             Element el = new Element(SETTING_PARAM_ACME);
-            el.setText(DEFAULT_ACME_PARAM);
+            el.setText(ConstantsR64.DEFAULT_ACME_PARAM);
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_EXOMIZER)) {
+            // create element
+            Element el = new Element(SETTING_PARAM_EXOMIZER);
+            el.setText(ConstantsR64.DEFAULT_EXOMIZER_PARAM);
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -467,6 +498,39 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
     }
+    public String getCruncherParameter(int cruncher) {
+        Element el;
+        switch (cruncher) {
+            case ConstantsR64.CRUNCHER_EXOMIZER:
+                el = settingsFile.getRootElement().getChild(SETTING_PARAM_EXOMIZER);
+                break;
+            default:
+                el = settingsFile.getRootElement().getChild(SETTING_PARAM_EXOMIZER);
+                break;
+        }
+        String value = "";
+        if (el!=null) {
+            value = el.getText();
+        }
+        return value;
+    }
+    public void setCruncherParameter(int cruncher, String param) {
+        if (param!=null) {
+            String crunchParam = "";
+            switch (cruncher) {
+                case ConstantsR64.CRUNCHER_EXOMIZER:
+                    crunchParam = SETTING_PARAM_EXOMIZER;
+                    break;
+            }
+            Element el = settingsFile.getRootElement().getChild(crunchParam);
+            if (null==el) {
+                el = new Element(crunchParam);
+                settingsFile.getRootElement().addContent(el);
+            }
+            el.setText(param);
+        }
+    }
+    
     /**
      * 
      * @param compiler
@@ -480,6 +544,9 @@ public class Settings {
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
                 el = settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER);
+                break;
+            case ConstantsR64.COMPILER_64TASS:
+                el = settingsFile.getRootElement().getChild(SETTING_PARAM_64TASS);
                 break;
             default:
                 el = settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER);
@@ -498,26 +565,24 @@ public class Settings {
      */
     public void setCompilerParameter(int compiler, String param) {
         if (param!=null) {
-            Element el = null;
+            String compParam = "";
             switch (compiler) {
                 case ConstantsR64.COMPILER_ACME:
-                    el = settingsFile.getRootElement().getChild(SETTING_PARAM_ACME);
-                    if (null==el) {
-                        el = new Element(SETTING_PARAM_ACME);
-                        settingsFile.getRootElement().addContent(el);
-                    }
+                    compParam = SETTING_PARAM_ACME;
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    el = settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER);
-                    if (null==el) {
-                        el = new Element(SETTING_PARAM_KICKASSEMBLER);
-                        settingsFile.getRootElement().addContent(el);
-                    }
+                    compParam = SETTING_PARAM_KICKASSEMBLER;
+                    break;
+                case ConstantsR64.COMPILER_64TASS:
+                    compParam = SETTING_PARAM_64TASS;
                     break;
             }
-            if (el!=null) {
-                el.setText(param);
+            Element el = settingsFile.getRootElement().getChild(compParam);
+            if (null==el) {
+                el = new Element(compParam);
+                settingsFile.getRootElement().addContent(el);
             }
+            el.setText(param);
         }
     }
     /**
@@ -534,8 +599,27 @@ public class Settings {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
                 el = settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER);
                 break;
+            case ConstantsR64.COMPILER_64TASS:
+                el = settingsFile.getRootElement().getChild(SETTING_PATH_64TASS);
+                break;
             default:
                 el = settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER);
+                break;
+        }
+        File value = null;
+        if (el!=null) {
+            value = new File(el.getText());
+        }
+        return value;
+    }
+    public File getCruncherPath(int cruncher) {
+        Element el;
+        switch (cruncher) {
+            case ConstantsR64.CRUNCHER_EXOMIZER:
+                el = settingsFile.getRootElement().getChild(SETTING_PATH_EXOMIZER);
+                break;
+            default:
+                el = settingsFile.getRootElement().getChild(SETTING_PATH_EXOMIZER);
                 break;
         }
         File value = null;
@@ -567,26 +651,39 @@ public class Settings {
      */
     public void setCompilerPath(int compiler, File path) {
         if (path!=null) {
-            Element el = null;
+            String compPath = "";
             switch (compiler) {
                 case ConstantsR64.COMPILER_ACME:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_ACME);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_ACME);
-                        settingsFile.getRootElement().addContent(el);
-                    }
+                    compPath = SETTING_PATH_ACME;
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_KICKASSEMBLER);
-                        settingsFile.getRootElement().addContent(el);
-                    }
+                    compPath = SETTING_PATH_KICKASSEMBLER;
+                    break;
+                case ConstantsR64.COMPILER_64TASS:
+                    compPath = SETTING_PATH_64TASS;
+            }
+            Element el = settingsFile.getRootElement().getChild(compPath);
+            if (null==el) {
+                el = new Element(compPath);
+                settingsFile.getRootElement().addContent(el);
+            }
+            el.setText(path.toString());
+        }
+    }
+    public void setCruncherPath(int cruncher, File path) {
+        if (path!=null) {
+            String crunchPath = "";
+            switch (cruncher) {
+                case ConstantsR64.CRUNCHER_EXOMIZER:
+                    crunchPath = SETTING_PATH_EXOMIZER;
                     break;
             }
-            if (el!=null) {
-                el.setText(path.toString());
+            Element el = settingsFile.getRootElement().getChild(crunchPath);
+            if (null==el) {
+                el = new Element(crunchPath);
+                settingsFile.getRootElement().addContent(el);
             }
+            el.setText(path.toString());
         }
     }
     /**
@@ -741,7 +838,9 @@ public class Settings {
     public String getDefaultCompilerParam(int compiler) {
         switch(compiler) {
             case ConstantsR64.COMPILER_ACME:
-                return DEFAULT_ACME_PARAM;
+                return ConstantsR64.DEFAULT_ACME_PARAM;
+            case ConstantsR64.COMPILER_64TASS:
+                return ConstantsR64.DEFAULT_64TASS_PARAM;
             default:
                 return "";
         }

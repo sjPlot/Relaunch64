@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -790,9 +790,11 @@ public class EditorPanes {
                         return false;
                     }
                     finally {
-                        closeInitialTab();
+                        boolean updateTabPane = closeInitialTab();
                         // if yes, add new tab
                         selectedTab = addNewTab(filepath, new String(buffer), getFileName(filepath), compiler)-1;
+                        // check whether compiler combobox needs update
+                        if (updateTabPane) updateTabbedPane();
                         // set cursor
                         setCursor(editorPaneArray.get(selectedTab).getEditorPane());
                         return true;
@@ -806,7 +808,7 @@ public class EditorPanes {
         }
         return false;
     }
-    private void closeInitialTab() {
+    private boolean closeInitialTab() {
         // check if inital tab is empty and unused, and then remove it
         // initial tab has no file path
         File f = editorPaneArray.get(0).getFilePath();
@@ -822,10 +824,12 @@ public class EditorPanes {
                 // if save successful, remove data
                 editorPaneArray.remove(0);
                 tabbedPane.remove(0);
+                return true;
             }
             catch (IndexOutOfBoundsException | UnsupportedOperationException ex) {
             }
         }
+        return false;
     }
     /**
      * 
@@ -1273,6 +1277,7 @@ public class EditorPanes {
         String addDelim;
         switch (getActiveCompiler()) {
             case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.COMPILER_64TASS:
                 addDelim = "\n\r:";
                 break;
             default:

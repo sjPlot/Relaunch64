@@ -6,6 +6,7 @@ package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Settings;
+import de.relaunch64.popelganda.util.Tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -137,7 +138,10 @@ public class SettingsDlg extends javax.swing.JDialog {
                     parainfo = "No parameter required. Refer to manual for parameter list.";
                     break;
                 case ConstantsR64.COMPILER_ACME:
-                    parainfo = "Recommended: \"--outfile OUTFILE --format cbm SOURCEFILE\"";
+                    parainfo = "Recommended: \""+ConstantsR64.DEFAULT_ACME_PARAM+"\"";
+                    break;
+                case ConstantsR64.COMPILER_64TASS:
+                    parainfo = "Recommended: \""+ConstantsR64.DEFAULT_64TASS_PARAM+"\"";
                     break;
             }
             // update lable text
@@ -222,6 +226,10 @@ public class SettingsDlg extends javax.swing.JDialog {
             if (path.exists()) {
                 settings.setCompilerPath(selected, path);
             }
+            // if no valid path, check for environment
+            else if (Tools.isToolInEnvironment(path.toString())) {
+                settings.setCompilerPath(selected, path);
+            }
             // retrieve compiler param
             String param = jTextFieldCompilerParam.getText();
             settings.setCompilerParameter(selected, param);
@@ -242,6 +250,10 @@ public class SettingsDlg extends javax.swing.JDialog {
             // retrieve compiler path
             File path = new File(jTextFieldEmulatorPath.getText());
             if (path.exists()) {
+                settings.setEmulatorPath(selected, path);
+            }
+            // if no valid path, check for environment
+            else if (Tools.isToolInEnvironment(path.toString())) {
                 settings.setEmulatorPath(selected, path);
             }
             // add preferred compiler

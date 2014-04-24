@@ -55,6 +55,7 @@ public class FunctionExtractor {
     public static String getFunctionString(int compiler) {
         switch (compiler) {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.COMPILER_64TASS:
             default:
                 return ConstantsR64.STRING_FUNCTION_KICKASSEMBLER;
         }
@@ -102,7 +103,8 @@ public class FunctionExtractor {
 
     public static LinkedHashMap getFunctionsOrMacros(String funmacString, String source, int compiler) {
         LinkedHashMap<Integer, String> functions = new LinkedHashMap<>();
-        if (compiler != ConstantsR64.COMPILER_KICKASSEMBLER) {
+        // TODO anpassen, wenn function bekannt
+        if (compiler == ConstantsR64.COMPILER_ACME) {
             return null;
         }
         // init vars
@@ -132,6 +134,7 @@ public class FunctionExtractor {
     public static String getMacroString(int compiler) {
         switch (compiler) {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.COMPILER_64TASS:
             default:
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
         }
