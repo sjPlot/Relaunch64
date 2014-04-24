@@ -1266,17 +1266,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // *************************************************
                     ProcessBuilder pb = new ProcessBuilder(args);
                     // if we have ACME, set different working directory
-                    String wd;
+                    File wd;
                     switch (compiler) {
                         case ConstantsR64.COMPILER_ACME:
-                            wd = afile.getParentFile().toString();
+                            wd = afile.getParentFile();
                             break;
                         default:
-                            wd = compPath.getParentFile().toString();
+                            wd = compPath.getParentFile();
                             break;
                     }
                     // set process working dir
-                    pb = pb.directory(new File(wd));
+                    pb = pb.directory(wd);
                     pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
                     // log working directory
                     log = "Working-Directory: "+pb.directory().getAbsolutePath();
