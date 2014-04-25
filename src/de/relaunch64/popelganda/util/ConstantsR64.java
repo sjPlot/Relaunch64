@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140423)";
+    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140425)";
     /**
      * This variable stores the application title that appears in the main window
      */
@@ -94,6 +94,8 @@ public class ConstantsR64 {
     public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
     public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";
     public static final String ASSEMBLER_START_ADDRESS = "START";
+    public static final String ASSEMBLER_UNCOMPRESSED_FILE = "UNCOMPFILE";
+    public static final String ASSEMBLER_COMPRESSED_FILE = "COMPFILE";
     
     public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";

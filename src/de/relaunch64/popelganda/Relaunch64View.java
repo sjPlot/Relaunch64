@@ -1095,6 +1095,75 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 script = script.replaceAll("\r", "");
                 // retrieve script lines
                 String[] lines = script.split("\n");
+                // retrieve ASM-Source file
+                File sourceFile = editorPanes.getActiveFilePath();
+                // create Output file
+                File outFile = new File(sourceFile.getParentFile().toString()+File.separator+FileTools.getFileName(sourceFile)+".prg");
+                // iterate script
+                for (String cmd : lines) {
+                    cmd = cmd.trim();
+                    if (!cmd.isEmpty()) {
+                        // log process
+                        String log = "Processing script-line: "+cmd;
+                        ConstantsR64.r64logger.log(Level.INFO, log);
+                        // replace input and output file
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, sourceFile.toString());
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outFile.toString());
+                        try {
+                            // log process
+                            log = "Converted script-line: "+cmd;
+                            ConstantsR64.r64logger.log(Level.INFO, log);
+                            ProcessBuilder pb;
+                            Process p;
+                            // Start ProcessBuilder
+                            if (settings.isWindows()) {
+                                pb = new ProcessBuilder(cmd.split(" "));
+                            }
+                            // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
+                            else {
+//                                // we need to create a new array with "open" command
+//                                ArrayList<String> cmdline = new ArrayList<>();
+//                                // to append a string and a string array, create a array list
+//                                cmdline.add("open");
+//                                cmdline.addAll(Arrays.asList(cmd.split(" ")));
+//                                // and convert it back to string array
+//                                p = Runtime.getRuntime().exec(cmdline.toArray(new String[cmdline.size()]));
+                                // we need to create a new array with "open" command
+                                ArrayList<String> cmdline = new ArrayList<>();
+                                // to append a string and a string array, create a array list
+                                cmdline.add("open");
+                                cmdline.addAll(Arrays.asList(cmd.split(" ")));
+                                pb = new ProcessBuilder(cmdline.toArray(new String[cmdline.size()]));
+                            }
+                            pb = pb.directory(sourceFile.getParentFile());
+                            pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
+                            // start process
+                            p = pb.start();
+                            // write output to text area
+                            // create scanner to receive compiler messages
+                            try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
+                                // write output to text area
+                                while (sc.hasNextLine()) {
+                                    jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                                }
+                            }
+                            try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
+                                // write output to text area
+                                while (sc.hasNextLine()) {
+                                    jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                                }
+                            }
+                            // finally, append new line
+                            jTextAreaCompilerOutput.append(System.getProperty("line.separator"));
+                            // wait for other process to be finished
+                            p.waitFor();
+                            p.destroy();
+                        }
+                        catch (IOException | InterruptedException ex) {
+                            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                        }
+                    }
+                }
             }
         }
     }
