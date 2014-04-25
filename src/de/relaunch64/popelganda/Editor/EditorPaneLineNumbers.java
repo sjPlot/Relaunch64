@@ -32,7 +32,7 @@
  */
 package de.relaunch64.popelganda.Editor;
 
-import de.relaunch64.popelganda.util.Settings;
+import de.relaunch64.popelganda.database.Settings;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;

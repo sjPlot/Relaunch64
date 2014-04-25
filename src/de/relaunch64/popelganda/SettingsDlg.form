@@ -38,8 +38,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jTabbedPane1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -73,7 +73,7 @@
                           <Group type="102" attributes="0">
                               <Component id="jButtonReset" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonApplyCompiler" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -128,12 +128,12 @@
                           <Component id="jComboBoxPrefComp" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="79" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonApplyCompiler" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonReset" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -183,12 +183,12 @@
                 <Property name="name" type="java.lang.String" value="jTextFieldCompilerParam" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="jButtonApplyCompiler">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.SettingsDlg" id="applyCompilerChanges" methodName="applyCompilerChanges"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="jButtonApplyCompiler" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelParamInfo">
@@ -254,7 +254,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="jComboBoxPrefEmu" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButtonApplyEmu" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="jTextFieldEmulatorPath" min="-2" pref="377" max="-2" attributes="0"/>
@@ -289,13 +289,11 @@
                                   <Component id="jComboBoxPrefEmu" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jButtonBrowseEmulatorPath" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="101" pref="101" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jButtonBrowseEmulatorPath" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="7" max="32767" attributes="0"/>
+                      <EmptySpace pref="133" max="32767" attributes="0"/>
+                      <Component id="jButtonApplyEmu" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -334,12 +332,12 @@
                 <Property name="name" type="java.lang.String" value="jButtonBrowseEmulatorPath" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="jButtonApplyEmu">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.SettingsDlg" id="applyEmulatorChanges" methodName="applyEmulatorChanges"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jButton2" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="jButtonApplyEmu" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
@@ -354,6 +352,134 @@
                   <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.EMU_NAMES)" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jComboBoxPrefEmu" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel3">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Compile &amp; Run Scripts">
+                <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel3.TabConstraints.tabTitle"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jButtonScriptHelp" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButtonApplyScript" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="jComboBoxCustomScripts" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="jTextFieldScriptName" pref="510" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxCustomScripts" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldScriptName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" pref="164" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jButtonApplyScript" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonScriptHelp" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabel8">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jLabel8.text"/>
+                <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBoxCustomScripts">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jComboBoxCustomScripts" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel9">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jLabel9.text"/>
+                <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jTextFieldScriptName">
+              <Properties>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="name" type="java.lang.String" value="jTextFieldScriptName" noResource="true"/>
+              </Properties>
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+              <Properties>
+                <Property name="verticalScrollBarPolicy" type="int" value="22"/>
+                <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="jTextAreaUserScript">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jTextAreaUserScript" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JButton" name="jButtonApplyScript">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.SettingsDlg" id="applyScript" methodName="applyScript"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jButtonApplyScript" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButtonScriptHelp">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.SettingsDlg" id="showScriptHelp" methodName="showScriptHelp"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jButtonScriptHelp" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

@@ -33,7 +33,7 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.util.Settings;
+import de.relaunch64.popelganda.database.Settings;
 import java.io.File;
 import javax.swing.JEditorPane;
 import javax.swing.event.DocumentListener;

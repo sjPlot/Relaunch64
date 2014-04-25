@@ -38,9 +38,10 @@ import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
+import de.relaunch64.popelganda.database.CustomScripts;
+import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
-import de.relaunch64.popelganda.util.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
 import java.awt.Component;
@@ -71,6 +72,7 @@ import java.lang.reflect.Proxy;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Scanner;
@@ -109,6 +111,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final static int GOTO_MACRO = 4;
     private int comboBoxGotoIndex = -1;
     private final Settings settings;
+    private final CustomScripts customScripts;
     private File outputFile = null;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
@@ -121,6 +124,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init database variables
         settings = set;
         findReplace = new FindReplace();
+        customScripts = new CustomScripts();
+        // load custom scripts
+        customScripts.loadScripts();
         // init default laf
         setDefaultLookAndFeel();
         // check for os x
@@ -242,7 +248,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxGoto.addItem(ConstantsR64.CB_GOTO_DEFAULT_STRING);
         jComboBoxGoto.setRenderer(new ComboBoxRenderer());
         jComboBoxGoto.setMaximumRowCount(20);
+        // init scripts
+        initScripts();
     }
+    private void initScripts() {
+        // init custom scripts
+        jComboBoxRunScripts.removeAllItems();
+        // retrieve all script names
+        String[] scriptNames = customScripts.getScriptNames();
+        // check if we have any
+        if (scriptNames!=null && scriptNames.length>0) {
+            // sort
+            Arrays.sort(scriptNames);
+            // add item to cb
+            for (String sn : scriptNames) jComboBoxRunScripts.addItem(sn);
+        }
+    }
+    
     /**
      * 
      */
@@ -831,10 +853,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void settingsWindow() {
         if (null == settingsDlg) {
-            settingsDlg = new SettingsDlg(getFrame(),settings);
+            settingsDlg = new SettingsDlg(getFrame(), settings, customScripts);
             settingsDlg.setLocationRelativeTo(getFrame());
         }
         Relaunch64App.getApplication().show(settingsDlg);
+        // update custom scripta
+        initScripts();
         // save the settings
         saveSettings();
     }
@@ -975,26 +999,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void setFocusToTabbedPane() {
         jTabbedPane1.requestFocusInWindow();
     }
-    @Action
-    public void insertClipboard1() {
-        
-    }
-    @Action
-    public void insertClipboard2() {
-        
-    }
-    @Action
-    public void insertClipboard3() {
-        
-    }
-    @Action
-    public void insertClipboard4() {
-        
-    }
-    @Action
-    public void insertClipboard5() {
-        
-    }
     /**
      * 
      */
@@ -1079,6 +1083,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void runScript() {
+        // get selected item
+        Object item = jComboBoxRunScripts.getSelectedItem();
+        // valid selection?
+        if (item!=null) {
+            // get script
+            String script = customScripts.getScript(item.toString());
+            // valid script?
+            if (script!=null && !script.isEmpty()) {
+                // remove \r
+                script = script.replaceAll("\r", "");
+                // retrieve script lines
+                String[] lines = script.split("\n");
+            }
+        }
     }
 
     @Action
@@ -1502,6 +1520,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private void saveSettings() {
         settings.saveSettings();
+        customScripts.saveScripts();
     }
     /**
      * 

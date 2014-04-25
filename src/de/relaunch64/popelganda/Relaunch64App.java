@@ -33,7 +33,7 @@
 
 package de.relaunch64.popelganda;
 
-import de.relaunch64.popelganda.util.Settings;
+import de.relaunch64.popelganda.database.Settings;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 

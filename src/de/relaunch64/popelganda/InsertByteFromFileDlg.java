@@ -19,7 +19,7 @@ package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
-import de.relaunch64.popelganda.util.Settings;
+import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

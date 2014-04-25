@@ -4,13 +4,15 @@
  */
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.util.Settings;
+import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Arrays;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
@@ -22,25 +24,75 @@ import org.jdesktop.application.Action;
  */
 public class SettingsDlg extends javax.swing.JDialog {
     private final Settings settings;
+    private final CustomScripts scripts;
     /**
      * Creates new form SettingsDlg
      * @param parent
      * @param s
+     * @param scr
      */
-    public SettingsDlg(java.awt.Frame parent, Settings s) {
+    public SettingsDlg(java.awt.Frame parent, Settings s, CustomScripts scr) {
         super(parent);
         settings = s;
+        scripts = scr;
         initComponents();
         java.awt.Font mf = settings.getMainFont();
         jComboBoxCompilers.setSelectedIndex(0);
         jComboBoxEmulators.setSelectedIndex(0);
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         jComboBoxPrefEmu.setSelectedIndex(settings.getPreferredEmulator());
+        initScripts();
         initListeners();
         // set application icon
         setIconImage(ConstantsR64.r64icon.getImage());
     }
-
+    private void initScripts() {
+        // get all action listeners from the combo box
+        ActionListener[] al = jComboBoxCustomScripts.getActionListeners();
+        // remove all action listeners so we don't fire several action-events
+        // when we update the combo box. we can set the action listener later again
+        for (ActionListener listener : al) jComboBoxCustomScripts.removeActionListener(listener);
+        // init custom scripts
+        jComboBoxCustomScripts.removeAllItems();
+        // retrieve all script names
+        String[] scriptNames = scripts.getScriptNames();
+        // check if we have any
+        if (scriptNames!=null && scriptNames.length>0) {
+            // sort
+            Arrays.sort(scriptNames);
+            // add item to cb
+            for (String sn : scriptNames) jComboBoxCustomScripts.addItem(sn);
+        }
+        jComboBoxCustomScripts.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                // get selected script
+                String scriptname = scripts.getScriptName(jComboBoxCustomScripts.getSelectedIndex());
+                // check if valid
+                if (scriptname!=null && !scriptname.isEmpty()) {
+                    // set script name to textfield
+                    jTextFieldScriptName.setText(scriptname);
+                    // set content to text area
+                    jTextAreaUserScript.setText(scripts.getScript(scriptname));
+                    // change button text to update
+                    jButtonApplyScript.setText("Update script");
+                }
+                else {
+                    // set script name to textfield
+                    jTextFieldScriptName.setText("");
+                    // set content to text area
+                    jTextAreaUserScript.setText("");
+                    // change button text to update
+                    jButtonApplyScript.setText("Add script");
+                }
+            }
+        });
+        try {
+            jComboBoxCustomScripts.setSelectedIndex(0);
+        }
+        catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
+        }
+    }
     private void initListeners() {
         // these codelines add an escape-listener to the dialog. so, when the user
         // presses the escape-key, the same action is performed as if the user
@@ -163,6 +215,10 @@ public class SettingsDlg extends javax.swing.JDialog {
             setModifiedTabEmulator(false);
         }
     }
+    @Action
+    public void showScriptHelp() {
+        
+    }
     /**
      * 
      */
@@ -262,6 +318,22 @@ public class SettingsDlg extends javax.swing.JDialog {
             setModifiedTabEmulator(false);
         }
     }
+    @Action
+    public void applyScript() {
+        // get script name
+        String name = jTextFieldScriptName.getText();
+        // get content
+        String content = jTextAreaUserScript.getText();
+        // add script
+        if (scripts.addScript(name, content)) {
+            initScripts();
+            try {
+                jComboBoxCustomScripts.setSelectedItem(name);
+            }
+            catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
+            }
+        }
+    }
     /**
      * 
      */
@@ -317,7 +389,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jButtonBrowseCompilerPath = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jTextFieldCompilerParam = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jButtonApplyCompiler = new javax.swing.JButton();
         jLabelParamInfo = new javax.swing.JLabel();
         jButtonReset = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -328,9 +400,18 @@ public class SettingsDlg extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jTextFieldEmulatorPath = new javax.swing.JTextField();
         jButtonBrowseEmulatorPath = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonApplyEmu = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jComboBoxPrefEmu = new javax.swing.JComboBox();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBoxCustomScripts = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        jTextFieldScriptName = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaUserScript = new javax.swing.JTextArea();
+        jButtonApplyScript = new javax.swing.JButton();
+        jButtonScriptHelp = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -363,8 +444,8 @@ public class SettingsDlg extends javax.swing.JDialog {
 
         jTextFieldCompilerParam.setName("jTextFieldCompilerParam"); // NOI18N
 
-        jButton1.setAction(actionMap.get("applyCompilerChanges")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
+        jButtonApplyCompiler.setAction(actionMap.get("applyCompilerChanges")); // NOI18N
+        jButtonApplyCompiler.setName("jButtonApplyCompiler"); // NOI18N
 
         jLabelParamInfo.setText(resourceMap.getString("jLabelParamInfo.text")); // NOI18N
         jLabelParamInfo.setName("jLabelParamInfo"); // NOI18N
@@ -388,7 +469,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jButtonReset)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton1))
+                        .add(jButtonApplyCompiler))
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel3)
@@ -430,11 +511,11 @@ public class SettingsDlg extends javax.swing.JDialog {
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel6))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 79, Short.MAX_VALUE)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButton1)
+                    .add(jButtonApplyCompiler)
                     .add(jButtonReset))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -455,8 +536,8 @@ public class SettingsDlg extends javax.swing.JDialog {
         jButtonBrowseEmulatorPath.setAction(actionMap.get("browseEmulator")); // NOI18N
         jButtonBrowseEmulatorPath.setName("jButtonBrowseEmulatorPath"); // NOI18N
 
-        jButton2.setAction(actionMap.get("applyEmulatorChanges")); // NOI18N
-        jButton2.setName("jButton2"); // NOI18N
+        jButtonApplyEmu.setAction(actionMap.get("applyEmulatorChanges")); // NOI18N
+        jButtonApplyEmu.setName("jButtonApplyEmu"); // NOI18N
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
@@ -484,7 +565,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jComboBoxPrefEmu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(jButton2))
+                                .add(jButtonApplyEmu))
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 377, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -508,14 +589,84 @@ public class SettingsDlg extends javax.swing.JDialog {
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel7)
                             .add(jComboBoxPrefEmu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(jButtonBrowseEmulatorPath)
-                        .add(101, 101, 101)
-                        .add(jButton2)))
-                .addContainerGap(7, Short.MAX_VALUE))
+                    .add(jButtonBrowseEmulatorPath))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 133, Short.MAX_VALUE)
+                .add(jButtonApplyEmu)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
+
+        jPanel3.setName("jPanel3"); // NOI18N
+
+        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+        jLabel8.setName("jLabel8"); // NOI18N
+
+        jComboBoxCustomScripts.setName("jComboBoxCustomScripts"); // NOI18N
+
+        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setName("jLabel9"); // NOI18N
+
+        jTextFieldScriptName.setColumns(20);
+        jTextFieldScriptName.setName("jTextFieldScriptName"); // NOI18N
+
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jTextAreaUserScript.setName("jTextAreaUserScript"); // NOI18N
+        jScrollPane1.setViewportView(jTextAreaUserScript);
+
+        jButtonApplyScript.setAction(actionMap.get("applyScript")); // NOI18N
+        jButtonApplyScript.setName("jButtonApplyScript"); // NOI18N
+
+        jButtonScriptHelp.setAction(actionMap.get("showScriptHelp")); // NOI18N
+        jButtonScriptHelp.setName("jButtonScriptHelp"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane1)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .add(jButtonScriptHelp)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jButtonApplyScript))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel8)
+                            .add(jLabel9))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel3Layout.createSequentialGroup()
+                                .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 0, Short.MAX_VALUE))
+                            .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel8)
+                    .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel9)
+                    .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButtonApplyScript)
+                    .add(jButtonScriptHelp))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -530,20 +681,23 @@ public class SettingsDlg extends javax.swing.JDialog {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane1)
-                .addContainerGap())
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonApplyCompiler;
+    private javax.swing.JButton jButtonApplyEmu;
+    private javax.swing.JButton jButtonApplyScript;
     private javax.swing.JButton jButtonBrowseCompilerPath;
     private javax.swing.JButton jButtonBrowseEmulatorPath;
     private javax.swing.JButton jButtonReset;
+    private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JComboBox jComboBoxCompilers;
+    private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxEmulators;
     private javax.swing.JComboBox jComboBoxPrefComp;
     private javax.swing.JComboBox jComboBoxPrefEmu;
@@ -554,13 +708,19 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelParamInfo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextAreaUserScript;
     private javax.swing.JTextField jTextFieldCompilerParam;
     private javax.swing.JTextField jTextFieldCompilerPath;
     private javax.swing.JTextField jTextFieldEmulatorPath;
+    private javax.swing.JTextField jTextFieldScriptName;
     // End of variables declaration//GEN-END:variables
     private FontChooser fontDlg;
 }
