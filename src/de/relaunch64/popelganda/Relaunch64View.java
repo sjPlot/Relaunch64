@@ -1130,8 +1130,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //                                p = Runtime.getRuntime().exec(cmdline.toArray(new String[cmdline.size()]));
                                 // we need to create a new array with "open" command
                                 ArrayList<String> cmdline = new ArrayList<>();
+                                // we don't need "open" command for java apps
+                                if (!cmd.startsWith("java ")) cmdline.add("open");
                                 // to append a string and a string array, create a array list
-                                cmdline.add("open");
                                 cmdline.addAll(Arrays.asList(cmd.split(" ")));
                                 pb = new ProcessBuilder(cmdline.toArray(new String[cmdline.size()]));
                             }
@@ -1182,17 +1183,28 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     ProcessBuilder pb;
                     Process p;
                     // Start ProcessBuilder
+//                    if (settings.isWindows()) {
+//                        pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
+//                        pb = pb.directory(emuPath.getParentFile());
+//                        pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
+//                        // start process
+//                        p = pb.start();
+//                    }
+//                    // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
+//                    else {
+//                        p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
+//                    }
                     if (settings.isWindows()) {
                         pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
-                        pb = pb.directory(emuPath.getParentFile());
-                        pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
-                        // start process
-                        p = pb.start();
                     }
                     // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
                     else {
-                        p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
+                        pb = new ProcessBuilder("open", emuPath.toString(), outputFile.toString());
                     }
+                    pb = pb.directory(emuPath.getParentFile());
+                    pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
+                    // start process
+                    p = pb.start();
                     // write output to text area
                     // create scanner to receive compiler messages
                     try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
@@ -1447,6 +1459,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextAreaCompilerOutput.setText("");
     }
     @Action
+    public void selectUserScripts() {
+        jComboBoxRunScripts.requestFocusInWindow();
+    }
+    @Action
     public void selectLog1() {
         jTabbedPaneLogs.setSelectedIndex(0);
     }
@@ -1456,6 +1472,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void selectAllText() {
+        editorPanes.getActiveEditorPane().selectAll();
     }
     @Action
     public void findStart() {
@@ -2002,6 +2019,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMenu = new javax.swing.JMenu();
         viewMainTabMenuItem = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JPopupMenu.Separator();
+        focusScriptMenuItem = new javax.swing.JMenuItem();
+        jSeparator18 = new javax.swing.JPopupMenu.Separator();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         viewLog2MenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -2587,6 +2606,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator14.setName("jSeparator14"); // NOI18N
         viewMenu.add(jSeparator14);
 
+        focusScriptMenuItem.setAction(actionMap.get("selectUserScripts")); // NOI18N
+        focusScriptMenuItem.setName("focusScriptMenuItem"); // NOI18N
+        viewMenu.add(focusScriptMenuItem);
+
+        jSeparator18.setName("jSeparator18"); // NOI18N
+        viewMenu.add(jSeparator18);
+
         viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
         viewMenu.add(viewLog1MenuItem);
@@ -2706,6 +2732,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem findNextMenuItem;
     private javax.swing.JMenuItem findPrevMenuItem;
     private javax.swing.JMenuItem findStartMenuItem;
+    private javax.swing.JMenuItem focusScriptMenuItem;
     private javax.swing.JMenuItem gotoFunctionMenuItem;
     private javax.swing.JMenuItem gotoLabelMenuItem;
     private javax.swing.JMenuItem gotoLineMenuItem;
@@ -2760,6 +2787,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator17;
+    private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;

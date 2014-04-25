@@ -37,12 +37,12 @@ public class SettingsDlg extends javax.swing.JDialog {
         scripts = scr;
         initComponents();
         java.awt.Font mf = settings.getMainFont();
-        jComboBoxCompilers.setSelectedIndex(0);
-        jComboBoxEmulators.setSelectedIndex(0);
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         jComboBoxPrefEmu.setSelectedIndex(settings.getPreferredEmulator());
         initScripts();
         initListeners();
+        jComboBoxCompilers.setSelectedIndex(0);
+        jComboBoxEmulators.setSelectedIndex(0);
         // set application icon
         setIconImage(ConstantsR64.r64icon.getImage());
     }

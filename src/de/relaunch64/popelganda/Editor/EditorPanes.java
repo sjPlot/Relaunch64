@@ -33,11 +33,12 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.Relaunch64View;
+import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
-import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.BorderLayout;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
@@ -154,6 +155,9 @@ public class EditorPanes {
         else {
             editorPane.setText("");
         }
+        // remove default traversal keys
+        editorPane.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
+        editorPane.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);        
         // add document listener ro recognize changes
         DocumentListener docListen = addDocumentListenerToEditorPane(editorPane);
         MyUndoManager undoman = addUndoManagerToEditorPane(editorPane);
@@ -161,7 +165,23 @@ public class EditorPanes {
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyPressed(java.awt.event.KeyEvent evt) {
                 JEditorPane ep = (JEditorPane)evt.getSource();
-                if (KeyEvent.VK_TAB==evt.getKeyCode() && !evt.isShiftDown()) {
+                // cycle through open tabs
+                if (KeyEvent.VK_TAB==evt.getKeyCode() && evt.isControlDown()) {
+                    // get selected tab
+                    int selected = tabbedPane.getSelectedIndex();
+                    // cycle backwards?
+                    if (evt.isShiftDown()) {
+                        selected--;
+                        if (selected<0) selected = tabbedPane.getTabCount()-1;
+                    }
+                    else {
+                        selected++;
+                        if (selected>=tabbedPane.getTabCount()) selected = 0;
+                    }
+                    tabbedPane.setSelectedIndex(selected);
+                    evt.consume();
+                }
+                else if (KeyEvent.VK_TAB==evt.getKeyCode() && !evt.isShiftDown()) {
                     // check for text selection
                     String selString = ep.getSelectedText();
                     // if we have selection, add tab to each selected line
