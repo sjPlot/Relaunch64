@@ -1116,10 +1116,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 String[] lines = script.split("\n");
                 // retrieve ASM-Source file
                 File sourceFile = editorPanes.getActiveFilePath();
+                String parentFile = (null==sourceFile.getParentFile()) ? sourceFile.toString() : sourceFile.getParentFile().toString();
                 // create Output file
-                File outFile = new File(sourceFile.getParentFile().toString()+File.separator+FileTools.getFileName(sourceFile)+".prg");
+                File outFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+".prg");
                 // create compressed file
-                File compressedFile = new File(sourceFile.getParentFile().toString()+File.separator+FileTools.getFileName(sourceFile)+"-compressed.prg");
+                File compressedFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+"-compressed.prg");
                 // iterate script
                 for (String cmd : lines) {
                     cmd = cmd.trim();
@@ -1308,7 +1309,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         // **************************************
                         if (param.equals(ConstantsR64.ASSEMBLER_OUPUT_FILE)) {
                             // output file
-                            String outfile = afile.getParentFile().toString()+File.separator+FileTools.getFileName(afile)+".prg";
+                            String parentFile = (null==afile.getParentFile()) ? afile.toString() : afile.getParentFile().toString();
+                            String outfile = parentFile+File.separator+FileTools.getFileName(afile)+".prg";
                             param = param.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outfile);
                         }
                         if (!param.isEmpty()) args.add(param);
@@ -1348,7 +1350,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                         // the "outputFile" variable contains a different (wrong)
                                         // filepath!
                                         // set new file name to variable
-                                        afile = new File(afile.getParentFile().toString()+File.separator+acmeToFile);
+                                        String parentFile = (null==afile.getParentFile()) ? afile.toString() : afile.getParentFile().toString();
+                                        afile = new File(parentFile+File.separator+acmeToFile);
                                     }
                                     catch(IndexOutOfBoundsException | UnsupportedOperationException ex) {
                                         ConstantsR64.r64logger.log(Level.SEVERE, ex.getLocalizedMessage());

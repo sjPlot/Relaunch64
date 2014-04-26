@@ -40,7 +40,16 @@
 		<li><strong>COMPFILE</strong> - The compressed output file, used for cruncher or packer.</li>
 	</ul>
 
-<h1>Examples</h1>
+<p>
+	<strong>Note 1:</strong> In some cases you may have to add the &quot;open&quot; command to the command line (e.g., on 
+	OS X, starting Vice will throw an access denied error without the open-parameter). See examples below.
+</p>
+<p>
+	<strong>Note 2:</strong> If you need to set SOURCEFILE or DESTFILE in quotes, simply put quotes around these
+	placeholders (see examples below).
+</p>
+
+<h2>Examples</h2>
 
 <p><div class="pcode">java -jar /&lt;path to kickass&gt;/KickAss.jar SOURCEFILE<br>
 open /Applications/Vice/x64.app OUTFILE</div></p>
@@ -48,7 +57,7 @@ open /Applications/Vice/x64.app OUTFILE</div></p>
 <p><div class="pcode">acme -v4 SOURCEFILE<br>
 x64 OUTFILE</div></p>
 
-<p><div class="pcode">acme --outfile OUTFILE --format cbm SOURCEFILE<br>
+<p><div class="pcode">acme --outfile &quot;OUTFILE&quot; --format cbm &quot;SOURCEFILE&quot;<br>
 C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe OUTFILE</div></p>
 
 <p></p>
