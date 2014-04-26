@@ -147,6 +147,7 @@ public class EditorPanes {
         // set syntax scheme
        setSyntaxScheme(editorPane, c);
         // set backcolor
+       // TODO warum klappt bg-color nicht?
         editorPane.setBackground(SyntaxScheme.getBackgroundColor());
         // set content, if available
         if (content!= null && !content.isEmpty()) {

@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.logging.Level;
+import javax.swing.JSplitPane;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -67,6 +68,7 @@ public class Settings {
     private static final String SETTING_PATH_ACME = "pathAcme";
     private static final String SETTING_PATH_EMU = "pathEmulator";
     private static final String SETTING_PREF_COMP = "preferredCompiler";
+    private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_PREF_EMU = "preferredEmulator";
     private static final String SETTING_PATH_EMU_VICE = "pathEmulatorVice";
     private static final String SETTING_PATH_EMU_CCS64 = "pathEmulatorCCS64";
@@ -78,6 +80,8 @@ public class Settings {
     private static final String SETTING_PARAM_ACME = "paramAcme";
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String SETTING_MAINFONT = "editorfont";
+    private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
+    private static final String SETTING_RUNSPLITLAYOUT = "runsplitlayout";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -89,6 +93,8 @@ public class Settings {
     public static final int FONTNAME = 1;
     public static final int FONTSIZE = 2;
 
+    public static final int SPLITPANE_LOG = 1;
+    public static final int SPLITPANE_RUN = 2;
     
     /**
      * Indicates whether the OS is a windows OS
@@ -239,6 +245,27 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_PREF_COMP);
             el.setText(String.valueOf(ConstantsR64.COMPILER_KICKASSEMBLER));
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT)) {
+            // create element
+            Element el = new Element(SETTING_LAST_SCRIPT);
+            el.setText("0");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_LOGSPLITLAYOUT)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_LOGSPLITLAYOUT);
+            el.setText(String.valueOf(JSplitPane.VERTICAL_SPLIT));
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_RUNSPLITLAYOUT)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_RUNSPLITLAYOUT);
+            el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -775,6 +802,23 @@ public class Settings {
         }
         el.setText(String.valueOf(compiler));
     }
+    public int getLastUserScript() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT);
+        try {
+            if (el!=null) return Integer.parseInt(el.getText());
+        }
+        catch (NumberFormatException ex) {
+        }
+        return 0;
+    }
+    public void setLastUserScript(int index) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT);
+        if (null==el) {
+            el = new Element(SETTING_LAST_SCRIPT);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(index));
+    }
     public int getPreferredEmulator() {
         Element el = settingsFile.getRootElement().getChild(SETTING_PREF_EMU);
         try {
@@ -846,5 +890,46 @@ public class Settings {
             default:
                 return "";
         }
+    }
+    public int getSearchFrameSplitLayout(int splitpane) {
+        String splitname = SETTING_LOGSPLITLAYOUT;
+        switch (splitpane) {
+            case SPLITPANE_LOG:
+                splitname = SETTING_LOGSPLITLAYOUT;
+                break;
+            case SPLITPANE_RUN:
+                splitname = SETTING_RUNSPLITLAYOUT;
+                break;
+        }
+        // get attribute which stores last used desktop number
+        Element el = settingsFile.getRootElement().getChild(splitname);
+        // check for valid value
+        if (el!=null) {
+            try {
+                // retrieve value
+                return Integer.parseInt(el.getText());
+            }
+            catch (NumberFormatException e) {
+                return JSplitPane.HORIZONTAL_SPLIT;
+            }
+        }
+        return JSplitPane.HORIZONTAL_SPLIT;
+    }
+    public void setSearchFrameSplitLayout(int val, int splitpane) {
+        String splitname = SETTING_LOGSPLITLAYOUT;
+        switch (splitpane) {
+            case SPLITPANE_LOG:
+                splitname = SETTING_LOGSPLITLAYOUT;
+                break;
+            case SPLITPANE_RUN:
+                splitname = SETTING_RUNSPLITLAYOUT;
+                break;
+        }
+        Element el = settingsFile.getRootElement().getChild(splitname);
+        if (null==el) {
+            el = new Element(splitname);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(val));
     }
 }

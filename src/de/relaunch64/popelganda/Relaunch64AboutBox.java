@@ -50,7 +50,7 @@ import org.jdesktop.application.Action;
 
 public class Relaunch64AboutBox extends javax.swing.JDialog {
 
-    public Relaunch64AboutBox(java.awt.Frame parent) {
+    public Relaunch64AboutBox(java.awt.Frame parent, URL htmlfile) {
         super(parent);
         initComponents();
         // set application icon
@@ -74,9 +74,8 @@ public class Relaunch64AboutBox extends javax.swing.JDialog {
             }
         };
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
-        URL licenceText = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResource("/de/relaunch64/popelganda/resources/licence.html");
         try {
-            jEditorPane1.setPage(licenceText);
+            jEditorPane1.setPage(htmlfile);
         } catch (IOException e) {
             ConstantsR64.r64logger.log(Level.SEVERE,e.getLocalizedMessage());
         }

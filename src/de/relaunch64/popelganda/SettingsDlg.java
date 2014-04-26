@@ -14,8 +14,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Arrays;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.jdesktop.application.Action;
 
 /**
@@ -164,6 +167,31 @@ public class SettingsDlg extends javax.swing.JDialog {
                 setModifiedTabEmulator(true);
             }
         });
+        jTextAreaUserScript.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextAreaUserScript.cut();
+                    evt.consume();
+                }
+                else if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextAreaUserScript.copy();
+                    evt.consume();
+                }
+                else if (evt.getKeyCode()==KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextAreaUserScript.paste();
+                    evt.consume();
+                }
+            }
+        });
+        jTextFieldScriptName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override public void changedUpdate(DocumentEvent e) { switchButtonLabel(); }
+            @Override public void insertUpdate(DocumentEvent e) { switchButtonLabel(); }
+            @Override public void removeUpdate(DocumentEvent e) { switchButtonLabel(); }
+        });
+    }
+    private void switchButtonLabel() {
+        String name = jTextFieldScriptName.getText();
+        if (name!=null) jButtonApplyScript.setText((scripts.findScript(name)!=-1) ? "Update script" : "Add script");
     }
     /**
      * 
@@ -217,7 +245,11 @@ public class SettingsDlg extends javax.swing.JDialog {
     }
     @Action
     public void showScriptHelp() {
-        
+        if (helpBox == null) {
+            helpBox = new Relaunch64AboutBox(null, org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResource("/de/relaunch64/popelganda/resources/help_userscripts.html"));
+            helpBox.setLocationRelativeTo(this);
+        }
+        Relaunch64App.getApplication().show(helpBox);
     }
     /**
      * 
@@ -722,5 +754,6 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldEmulatorPath;
     private javax.swing.JTextField jTextFieldScriptName;
     // End of variables declaration//GEN-END:variables
+    private JDialog helpBox;
     private FontChooser fontDlg;
 }

@@ -50,7 +50,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (beta 11)";
+    public static final String APPLICATION_TITLE = "Relaunch64 (beta 12)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
