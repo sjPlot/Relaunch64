@@ -120,7 +120,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     
     // TODO cruncher support
     // TODO font-chooser
-    // TODO basic-start
     // TODO goto error line
     
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
@@ -1202,13 +1201,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //                    else {
 //                        p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
 //                    }
-                    if (settings.isWindows()) {
-                        pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
-                    }
-                    // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
-                    else {
-                        pb = new ProcessBuilder("open", emuPath.toString(), outputFile.toString());
-                    }
+                    // Start ProcessBuilder
+                    pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
+                    // set working dir
                     pb = pb.directory(emuPath.getParentFile());
                     pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
                     // start process

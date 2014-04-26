@@ -95,6 +95,13 @@ public class EditorPanes {
     private static final String sugListContainerName="sugListContainerName";
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
+    /**
+     * @author Guillaume Polet
+     * 
+     * This example was taken from
+     * http://stackoverflow.com/a/10883946/2094622
+     * and modified for own purposes.
+     */
     KeyListener SugestionKeyListener = new java.awt.event.KeyAdapter() {
         @Override public void keyTyped(java.awt.event.KeyEvent evt) {
             if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_UP) {
@@ -1158,6 +1165,13 @@ public class EditorPanes {
         eatReaturn = true;
     }
     
+    /**
+     * @author Guillaume Polet
+     * 
+     * This example was taken from
+     * http://stackoverflow.com/a/10883946/2094622
+     * and modified for own purposes.
+     */
     protected void showSuggestion() {
         // hide old popup
         hideSuggestion();
