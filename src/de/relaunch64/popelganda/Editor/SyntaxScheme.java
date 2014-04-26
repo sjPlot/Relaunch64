@@ -553,6 +553,8 @@ public class SyntaxScheme {
         asmKeywords.put("CLI", DEFAULT_KEYWORD);
         asmKeywords.put("SED", DEFAULT_KEYWORD);
         asmKeywords.put("CLS", DEFAULT_KEYWORD);
+        asmKeywords.put("CLD", DEFAULT_KEYWORD);
+        asmKeywords.put("CLV", DEFAULT_KEYWORD);
         asmKeywords.put("PHA", DEFAULT_KEYWORD);
         asmKeywords.put("PLA", DEFAULT_KEYWORD);
         asmKeywords.put("PHP", DEFAULT_KEYWORD);

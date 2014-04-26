@@ -159,6 +159,7 @@ public class EditorPanes {
         // remove default traversal keys
         editorPane.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
         editorPane.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);        
+        editorPane.setFocusTraversalKeysEnabled(false);
         // add document listener ro recognize changes
         DocumentListener docListen = addDocumentListenerToEditorPane(editorPane);
         MyUndoManager undoman = addUndoManagerToEditorPane(editorPane);

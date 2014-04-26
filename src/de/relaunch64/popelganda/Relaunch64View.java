@@ -247,6 +247,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     
     private void initComboBoxes() {
+        jSplitPaneRun.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_RUN));
+        jSplitPane2.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN));
+        jSplitPane1.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG));
         try {
             // init emulator combobox
             jComboBoxEmulator.setSelectedIndex(settings.getPreferredEmulator());
@@ -1104,6 +1107,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             String script = customScripts.getScript(item.toString());
             // valid script?
             if (script!=null && !script.isEmpty()) {
+                // clear old log
+                clearLog1();
+                clearLog2();
                 // remove \r
                 script = script.replaceAll("\r", "");
                 // retrieve script lines
@@ -1169,6 +1175,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
     @Action
     public void runFile() {
+        // clear old log
+        clearLog1();
+        clearLog2();
         // first, compile file
         compileFile();
         if (outputFile!=null && outputFile.exists()) {
@@ -1234,6 +1243,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void compileFile() {
+        // clear old log
+        clearLog1();
+        clearLog2();
         // update compiler params
         updateCompilerParams();
         // reste outfile
@@ -1471,6 +1483,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSplitPaneRun.setOrientation(currentlayout);
     }
     @Action
+    public void switchBothPosition() {
+        int currentlayout = settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN);
+        if (JSplitPane.HORIZONTAL_SPLIT == currentlayout) {
+            currentlayout = JSplitPane.VERTICAL_SPLIT;
+        }
+        else {
+            currentlayout = JSplitPane.HORIZONTAL_SPLIT;
+        }
+        settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_BOTHLOGRUN);
+        jSplitPane2.setOrientation(currentlayout);
+    }
+    @Action
     public void clearLog1() {
         // set sys info
         jTextAreaLog.setText(Tools.getSystemInformation()+System.getProperty("line.separator"));
@@ -1574,6 +1598,64 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertByteFromFileDlg = null;
     }
     @Action
+    public void insertBasicStart() {
+        int dezaddress = 0;
+        // open inpu  dialog
+        String startaddress = (String)JOptionPane.showInputDialog(getFrame(), "Enter start address:");
+        // check for return
+        if (startaddress!=null && !startaddress.trim().isEmpty()) {
+            startaddress = startaddress.trim();
+            if (!startaddress.startsWith("$")) {
+                try {
+                    dezaddress = Integer.parseInt(startaddress);
+                }
+                catch (NumberFormatException ex) {
+                    try {
+                        dezaddress = Integer.parseInt(startaddress, 16);
+                    }
+                    catch (NumberFormatException ex2) {
+                    }
+                }
+            }
+            else {
+                try {
+                    dezaddress = Integer.parseInt(startaddress, 16);
+                }
+                catch (NumberFormatException ex2) {
+                }
+            }
+        }
+        if (dezaddress!=0) {
+            // convcert to string, so we can access each single digit
+            startaddress = String.valueOf(dezaddress);
+            StringBuilder output = new StringBuilder("$00,$0c,$08,$0a,$00,$9e");
+            // copy all digits
+            for (int i=0; i<startaddress.length(); i++) {
+                output.append(",$3").append(startaddress.charAt(i));
+            }
+            output.append(System.getProperty("line.separator"));
+            switch (editorPanes.getActiveCompiler()) {
+                case ConstantsR64.COMPILER_ACME:
+                    output.insert(0, "!byte ");
+                    break;
+                case ConstantsR64.COMPILER_64TASS:
+                case ConstantsR64.COMPILER_KICKASSEMBLER:
+                    output.insert(0, ".byte ");
+                    break;
+            }
+            switch (editorPanes.getActiveCompiler()) {
+                case ConstantsR64.COMPILER_ACME:
+                case ConstantsR64.COMPILER_64TASS:
+                    output.insert(0, "*= $0800"+System.getProperty("line.separator"));
+                    break;
+                case ConstantsR64.COMPILER_KICKASSEMBLER:
+                    output.insert(0, ".pc = $0800"+System.getProperty("line.separator"));
+                    break;
+            }
+            editorPanes.insertString(output.toString());
+        }
+    }
+    @Action
     public void insertSinusTable() {
         // open dialog
         if (null==insertSinusTableDlg) {
@@ -1622,6 +1704,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (settings.isOSX()) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Relaunch64");
         }
+        System.setProperty("awt.useSystemAAFontSettings", "on");
     }
     /**
      * 
@@ -2038,6 +2121,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
+        insertBasicStartMenuItem = new javax.swing.JMenuItem();
         insertBytesFromFileMenuItem = new javax.swing.JMenuItem();
         insertSinusMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
@@ -2048,6 +2132,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewLog1MenuItem = new javax.swing.JMenuItem();
         viewLog2MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
+        switchBothMenuItem = new javax.swing.JMenuItem();
         switchRunPosMenuItem = new javax.swing.JMenuItem();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -2068,8 +2153,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        jSplitPane1.setDividerLocation(450);
-        jSplitPane1.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG));
+        jSplitPane1.setDividerLocation(480);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
         jSplitPane1.setOneTouchExpandable(true);
 
@@ -2166,7 +2250,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
             .add(jPanelFind, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jPanelReplace, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -2191,7 +2275,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jSplitPaneRun.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_RUN));
         jSplitPaneRun.setName("jSplitPaneRun"); // NOI18N
         jSplitPaneRun.setOneTouchExpandable(true);
 
@@ -2298,15 +2381,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 414, Short.MAX_VALUE)
+            .add(0, 384, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 408, Short.MAX_VALUE)
+            .add(0, 470, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
@@ -2323,11 +2406,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
@@ -2617,6 +2700,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator15.setName("jSeparator15"); // NOI18N
         sourceMenu.add(jSeparator15);
 
+        insertBasicStartMenuItem.setAction(actionMap.get("insertBasicStart")); // NOI18N
+        insertBasicStartMenuItem.setName("insertBasicStartMenuItem"); // NOI18N
+        sourceMenu.add(insertBasicStartMenuItem);
+
         insertBytesFromFileMenuItem.setAction(actionMap.get("insertBytesFromFile")); // NOI18N
         insertBytesFromFileMenuItem.setName("insertBytesFromFileMenuItem"); // NOI18N
         sourceMenu.add(insertBytesFromFileMenuItem);
@@ -2654,6 +2741,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jSeparator19.setName("jSeparator19"); // NOI18N
         viewMenu.add(jSeparator19);
+
+        switchBothMenuItem.setAction(actionMap.get("switchBothPosition")); // NOI18N
+        switchBothMenuItem.setName("switchBothMenuItem"); // NOI18N
+        viewMenu.add(switchBothMenuItem);
 
         switchRunPosMenuItem.setAction(actionMap.get("switchRunPosition")); // NOI18N
         switchRunPosMenuItem.setName("switchRunPosMenuItem"); // NOI18N
@@ -2785,6 +2876,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem gotoPrevLabel;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem gotoSectionMenuItem;
+    private javax.swing.JMenuItem insertBasicStartMenuItem;
     private javax.swing.JMenuItem insertBytesFromFileMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
@@ -2878,6 +2970,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem settingsMenuItem;
     private javax.swing.JMenu sourceMenu;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JMenuItem switchBothMenuItem;
     private javax.swing.JMenuItem switchLogPosMenuItem;
     private javax.swing.JMenuItem switchRunPosMenuItem;
     private javax.swing.JMenuItem undoMenuItem;

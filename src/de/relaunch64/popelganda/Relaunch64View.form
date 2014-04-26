@@ -22,10 +22,7 @@
       <SubComponents>
         <Container class="javax.swing.JSplitPane" name="jSplitPane1">
           <Properties>
-            <Property name="dividerLocation" type="int" value="450"/>
-            <Property name="orientation" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG)" type="code"/>
-            </Property>
+            <Property name="dividerLocation" type="int" value="480"/>
             <Property name="name" type="java.lang.String" value="jSplitPane1" noResource="true"/>
             <Property name="oneTouchExpandable" type="boolean" value="true"/>
           </Properties>
@@ -45,7 +42,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jTabbedPane1" alignment="0" pref="448" max="32767" attributes="0"/>
+                      <Component id="jTabbedPane1" alignment="0" pref="478" max="32767" attributes="0"/>
                       <Component id="jPanelFind" alignment="0" max="32767" attributes="0"/>
                       <Component id="jPanelReplace" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -277,9 +274,6 @@
                       <SubComponents>
                         <Container class="javax.swing.JSplitPane" name="jSplitPaneRun">
                           <Properties>
-                            <Property name="orientation" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="settings.getSearchFrameSplitLayout(Settings.SPLITPANE_RUN)" type="code"/>
-                            </Property>
                             <Property name="name" type="java.lang.String" value="jSplitPaneRun" noResource="true"/>
                             <Property name="oneTouchExpandable" type="boolean" value="true"/>
                           </Properties>
@@ -476,17 +470,17 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="414" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="384" max="32767" attributes="0"/>
                                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane2" alignment="0" pref="414" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane2" alignment="0" pref="384" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="408" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="470" max="32767" attributes="0"/>
                                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane2" alignment="0" pref="408" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane2" alignment="0" pref="470" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -528,12 +522,12 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" alignment="0" pref="414" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane3" alignment="0" pref="384" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" alignment="0" pref="408" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane3" alignment="0" pref="470" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                               </Layout>
@@ -1038,6 +1032,14 @@
                 <Property name="name" type="java.lang.String" value="jSeparator15" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="insertBasicStartMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="insertBasicStart" methodName="insertBasicStart"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="insertBasicStartMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="insertBytesFromFileMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1107,6 +1109,14 @@
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator19">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator19" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="switchBothMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="switchBothPosition" methodName="switchBothPosition"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="switchBothMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="switchRunPosMenuItem">

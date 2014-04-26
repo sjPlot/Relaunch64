@@ -82,6 +82,7 @@ public class Settings {
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_RUNSPLITLAYOUT = "runsplitlayout";
+    private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -95,6 +96,7 @@ public class Settings {
 
     public static final int SPLITPANE_LOG = 1;
     public static final int SPLITPANE_RUN = 2;
+    public static final int SPLITPANE_BOTHLOGRUN = 3;
     
     /**
      * Indicates whether the OS is a windows OS
@@ -258,6 +260,13 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_LOGSPLITLAYOUT)) {
             // create a filepath-element
             Element el = new Element(SETTING_LOGSPLITLAYOUT);
+            el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_BOTHLOGRUNSPLITLAYOUT)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_BOTHLOGRUNSPLITLAYOUT);
             el.setText(String.valueOf(JSplitPane.VERTICAL_SPLIT));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
@@ -900,6 +909,9 @@ public class Settings {
             case SPLITPANE_RUN:
                 splitname = SETTING_RUNSPLITLAYOUT;
                 break;
+            case SPLITPANE_BOTHLOGRUN:
+                splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;
+                break;
         }
         // get attribute which stores last used desktop number
         Element el = settingsFile.getRootElement().getChild(splitname);
@@ -924,6 +936,8 @@ public class Settings {
             case SPLITPANE_RUN:
                 splitname = SETTING_RUNSPLITLAYOUT;
                 break;
+            case SPLITPANE_BOTHLOGRUN:
+                splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;
         }
         Element el = settingsFile.getRootElement().getChild(splitname);
         if (null==el) {
