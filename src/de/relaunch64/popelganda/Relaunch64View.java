@@ -752,6 +752,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 Tools.convertSpaceToTabs(settings, editorPanes, jTabbedPane1.getSelectedIndex());
                 break;
         }
+        jTextFieldGotoLine.setText("");
     }
     /**
      * This method updates the menu-items with the recent documents

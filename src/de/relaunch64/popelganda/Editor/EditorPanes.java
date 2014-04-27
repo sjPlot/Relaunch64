@@ -212,7 +212,24 @@ public class EditorPanes {
                     }
                     else {
                         try {
-                            ep.getDocument().insertString(ep.getCaretPosition(), settings.getTabChar(), null);
+                            // retrieve tab char
+                            String tabchar = settings.getTabChar();
+                            // if we have spaces, fill up to next "space tab"
+                            if (!tabchar.equals("\t")) {
+                                // retrieve number of spaces
+                                int tablength = tabchar.length();
+                                // calculate how many spaces from caret left to next "space tab"
+                                int remainingSpaces = tablength - (getColumn(ep) % tablength);
+                                StringBuilder sb = new StringBuilder("");
+                                // fill stringbuilder with remaining spaces
+                                while (remainingSpaces>0) {
+                                    remainingSpaces--;
+                                    sb.append(" ");
+                                }
+                                // and use remaining spaces as tab
+                                tabchar = sb.toString();
+                            }
+                            ep.getDocument().insertString(ep.getCaretPosition(), tabchar, null);
                         }
                         catch (BadLocationException ex) {
                         }
@@ -361,7 +378,13 @@ public class EditorPanes {
     public int getRow(JEditorPane ep, int caretPosition) {
         return (ep!=null) ? ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition) : 0;
     }
-    
+    public int getColumn(JEditorPane ep) {
+        int caretPosition = ep.getCaretPosition();
+        int oriCaret = caretPosition;
+        int currentLine = ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition);
+        while(currentLine==ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition) && caretPosition>=0) caretPosition--;
+        return oriCaret-caretPosition;
+    }
     public int getLineNumber(JEditorPane ep, int caretPosition) {
         return getRow(ep, caretPosition);
     }
