@@ -83,6 +83,7 @@ public class Settings {
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_RUNSPLITLAYOUT = "runsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
+    private static final String SETTING_TABCHAR = "tabchar";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -268,6 +269,13 @@ public class Settings {
             // create a filepath-element
             Element el = new Element(SETTING_BOTHLOGRUNSPLITLAYOUT);
             el.setText(String.valueOf(JSplitPane.VERTICAL_SPLIT));
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_TABCHAR)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_TABCHAR);
+            el.setText("\t");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -810,6 +818,19 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(String.valueOf(compiler));
+    }
+    public String getTabChar() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_TABCHAR);
+        if (el!=null) return el.getText();
+        return "\t";
+    }
+    public void setTabChar(String tabchar) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_TABCHAR);
+        if (null==el) {
+            el = new Element(SETTING_TABCHAR);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(tabchar);
     }
     public int getLastUserScript() {
         Element el = settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT);

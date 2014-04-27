@@ -126,7 +126,7 @@ public final class EditorPaneLineNumbers extends JPanel
 
         setFont(new Font(SyntaxScheme.getFontName(), Font.PLAIN, SyntaxScheme.getFontSize()));
 
-        setBorderGap(5);
+        setBorderGap(3);
         setBackground(bgColor);
         setCurrentLineForeground(foregroundColor);
         setDigitAlignment(RIGHT);

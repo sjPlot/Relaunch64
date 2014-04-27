@@ -75,16 +75,7 @@ public class SyntaxScheme {
         // ******************************************
         // read syntax scheme
         // ******************************************
-        File sFile = FileTools.createFilePath("relaunch64-syntaxscheme.xml");
-        Document syntaxFile = new Document(new Element("SyntaxScheme"));
-        if (sFile.exists()) {
-            try {
-                SAXBuilder builder = new SAXBuilder();
-                syntaxFile = builder.build(sFile);
-            }
-            catch (JDOMException | IOException ex) {
-            }
-        }
+        Document syntaxFile = loadSyntax();
         // ******************************************
         // Set default colors
         // ******************************************
@@ -386,6 +377,30 @@ public class SyntaxScheme {
         // ******************************************
         // save syntax scheme
         // ******************************************
+        saveSyntax(syntaxFile);
+    }
+
+    
+    public SyntaxScheme() {
+    }
+    protected static File getFile() {
+        return FileTools.createFilePath("relaunch64-syntaxscheme.xml");
+    }
+    public static Document loadSyntax() {
+        File sFile = getFile();
+        Document syntaxFile = new Document(new Element("SyntaxScheme"));
+        if (sFile.exists()) {
+            try {
+                SAXBuilder builder = new SAXBuilder();
+                syntaxFile = builder.build(sFile);
+            }
+            catch (JDOMException | IOException ex) {
+            }
+        }
+        return syntaxFile;
+    }
+    public static boolean saveSyntax(Document syntaxFile) {
+        File sFile = getFile();
         OutputStream dest = null;
         try {
             XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
@@ -393,6 +408,7 @@ public class SyntaxScheme {
             out.output(syntaxFile, dest);
         }
         catch (IOException ex) {
+            return false;
         }
         finally {
             if (dest!=null) {
@@ -400,13 +416,27 @@ public class SyntaxScheme {
                     dest.close();
                 }
                 catch (IOException ex) {
+                    return false;
                 }
             }
         }
+        return true;
     }
-
-    
-    public SyntaxScheme() {
+    public static void setFont(Document syntaxFile, String fontFamily) {
+        Element e = syntaxFile.getRootElement().getChild("fontFamily");
+        if (null==e) {
+            e = new Element("fontFamily");
+            syntaxFile.getRootElement().addContent(e);
+        }
+        e.setText(fontFamily);
+    }
+    public static void setFontSize(Document syntaxFile, int fontSize) {
+        Element e = syntaxFile.getRootElement().getChild("fontSize");
+        if (null==e) {
+            e = new Element("fontSize");
+            syntaxFile.getRootElement().addContent(e);
+        }
+        e.setText(String.valueOf(fontSize));
     }
     /**
      * This method initializes all mutable attribute sets for the different highlight tokens

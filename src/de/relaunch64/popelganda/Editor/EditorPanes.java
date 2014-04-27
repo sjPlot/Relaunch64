@@ -203,7 +203,7 @@ public class EditorPanes {
                         // create string builder for new insert string
                         StringBuilder sb = new StringBuilder("");
                         // add tab infront of each line
-                        for (String l : lines) sb.append("\t").append(l).append("\n");
+                        for (String l : lines) sb.append(settings.getTabChar()).append(l).append("\n");
                         // insert string
                         ep.replaceSelection(sb.toString());
                         // re-select text
@@ -212,7 +212,7 @@ public class EditorPanes {
                     }
                     else {
                         try {
-                            ep.getDocument().insertString(ep.getCaretPosition(), "\t", null);
+                            ep.getDocument().insertString(ep.getCaretPosition(), settings.getTabChar(), null);
                         }
                         catch (BadLocationException ex) {
                         }
@@ -239,7 +239,7 @@ public class EditorPanes {
                             // get original length of line
                             int len = l.length();
                             // remove first tab
-                            l = l.replaceFirst("\t", "");
+                            l = l.replaceFirst(settings.getTabChar(), "");
                             // calculate new length and determine if
                             // a tab has been removed
                             tabsRemoved = tabsRemoved+(len-l.length());

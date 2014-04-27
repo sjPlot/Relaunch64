@@ -516,6 +516,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         editorPanes.gotoLine(line);
                     }
                     catch (NumberFormatException ex) {
+                        specialFunctions();
                     }
                 }
             }
@@ -740,6 +741,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     }
                 }
             }
+        }
+    }
+    private void specialFunctions() {
+        String text = jTextFieldGotoLine.getText();
+        if (text.equals("t2s")) {
+            
+        }
+        else if (text.equals("s2t")) {
+            
         }
     }
     /**

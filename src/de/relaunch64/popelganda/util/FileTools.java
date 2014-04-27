@@ -270,9 +270,9 @@ public class FileTools {
                 if (new File(System.getProperty("user.home")+java.io.File.separatorChar+".Relaunch64").mkdirs()) {
                     sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+".Relaunch64"+java.io.File.separatorChar+filename);
                 }
-            else {
-                sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+filename);
-            }
+                else {
+                    sFile = new File(System.getProperty("user.home")+java.io.File.separatorChar+filename);
+                }
             }
             catch (SecurityException ex) {
                 sFile = null;

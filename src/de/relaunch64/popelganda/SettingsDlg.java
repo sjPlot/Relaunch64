@@ -4,10 +4,13 @@
  */
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
-import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.database.Settings;
+import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +23,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.jdesktop.application.Action;
+import org.jdom2.Document;
 
 /**
  *
@@ -28,6 +32,8 @@ import org.jdesktop.application.Action;
 public class SettingsDlg extends javax.swing.JDialog {
     private final Settings settings;
     private final CustomScripts scripts;
+    private Font mainfont;
+    private String tabchar; 
     /**
      * Creates new form SettingsDlg
      * @param parent
@@ -39,13 +45,24 @@ public class SettingsDlg extends javax.swing.JDialog {
         settings = s;
         scripts = scr;
         initComponents();
-        java.awt.Font mf = settings.getMainFont();
+        mainfont = settings.getMainFont();
+        jLabelFont.setText(mainfont.getFontName());
+        jLabelFont.setFont(mainfont);
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         jComboBoxPrefEmu.setSelectedIndex(settings.getPreferredEmulator());
         initScripts();
         initListeners();
         jComboBoxCompilers.setSelectedIndex(0);
         jComboBoxEmulators.setSelectedIndex(0);
+        // get tab char
+        tabchar = settings.getTabChar();
+        if (tabchar.equals("\t")) {
+            jRadioButtonTab.setSelected(true);
+        }
+        else {
+            jRadioButtonSpaces.setSelected(true);
+            jTextFieldSpaces.setText(String.valueOf(tabchar.length()));
+        }
         // set application icon
         setIconImage(ConstantsR64.r64icon.getImage());
     }
@@ -126,6 +143,19 @@ public class SettingsDlg extends javax.swing.JDialog {
 //            updateEmulatorSettings();
 //            setModifiedTabEmulator(false);
 //        });
+        jRadioButtonTab.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldSpaces.setEnabled(false);
+            }
+        });
+        jRadioButtonSpaces.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldSpaces.setEnabled(true);
+                jTextFieldSpaces.requestFocusInWindow();
+            }
+        });
         jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -256,18 +286,10 @@ public class SettingsDlg extends javax.swing.JDialog {
      */
     @Action
     public void browseCompiler() {
-        JFileChooser fc = new JFileChooser();
-        // set dialog's title
-        fc.setDialogTitle("Choose Compiler");
-        // accept all files as choosable
-        fc.setAcceptAllFileFilterUsed(true);
-        // only directories should be selected
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int option = fc.showOpenDialog(null);
-        // if a file was chosen, set the filepath
-        if (JFileChooser.APPROVE_OPTION == option) {
+        File fileToOpen = FileTools.chooseFile(null, JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, settings.getLastUsedPath().getAbsolutePath(), "", "Choose Compiler", null, "All files");
+        if (fileToOpen!=null) {
             // get the filepath...
-            jTextFieldCompilerPath.setText(fc.getSelectedFile().toString());
+            jTextFieldCompilerPath.setText(fileToOpen.toString());
             setModifiedTabCompiler(true);
         }
     }
@@ -276,18 +298,10 @@ public class SettingsDlg extends javax.swing.JDialog {
      */
     @Action
     public void browseEmulator() {
-        JFileChooser fc = new JFileChooser();
-        // set dialog's title
-        fc.setDialogTitle("Choose Emulator");
-        // accept all files as choosable
-        fc.setAcceptAllFileFilterUsed(true);
-        // only directories should be selected
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int option = fc.showOpenDialog(null);
-        // if a file was chosen, set the filepath
-        if (JFileChooser.APPROVE_OPTION == option) {
+        File fileToOpen = FileTools.chooseFile(null, JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, settings.getLastUsedPath().getAbsolutePath(), "", "Choose Emulator", null, "All files");
+        if (fileToOpen!=null) {
             // get the filepath...
-            jTextFieldEmulatorPath.setText(fc.getSelectedFile().toString());
+            jTextFieldEmulatorPath.setText(fileToOpen.toString());
             setModifiedTabEmulator(true);
         }
     }
@@ -299,7 +313,11 @@ public class SettingsDlg extends javax.swing.JDialog {
         }
         Relaunch64App.getApplication().show(fontDlg);
         java.awt.Font f = fontDlg.getSelectedFont();
-        if (f!=null) settings.setMainfont(f);
+        if (f!=null) {
+            mainfont = f;
+            jLabelFont.setFont(f);
+            jLabelFont.setText(f.getFontName());
+        }
     }
     /**
      * 
@@ -349,6 +367,31 @@ public class SettingsDlg extends javax.swing.JDialog {
             // reset apply button
             setModifiedTabEmulator(false);
         }
+    }
+    @Action
+    public void applyFontTab() {
+        settings.setMainfont(mainfont);
+        // update syntax scheme
+        Document doc = SyntaxScheme.loadSyntax();
+        SyntaxScheme.setFont(doc, mainfont.getFamily());
+        SyntaxScheme.setFontSize(doc, mainfont.getSize());
+        SyntaxScheme.saveSyntax(doc);
+        // get tab char
+        if (jRadioButtonTab.isSelected()) {
+            tabchar = "\t";
+        }
+        else {
+            try {
+                StringBuilder sb = new StringBuilder("");
+                int numbers = Integer.parseInt(jTextFieldSpaces.getText());
+                for (int i=0; i<numbers; i++) sb.append(" ");
+                tabchar = sb.toString();
+            }
+            catch (NumberFormatException ex) {
+                tabchar = "    ";
+            }
+        }
+        settings.setTabChar(tabchar);
     }
     @Action
     public void applyScript() {
@@ -412,6 +455,7 @@ public class SettingsDlg extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jComboBoxCompilers = new javax.swing.JComboBox();
@@ -435,6 +479,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jButtonApplyEmu = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jComboBoxPrefEmu = new javax.swing.JComboBox();
+        jPanel4 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jComboBoxCustomScripts = new javax.swing.JComboBox();
@@ -444,13 +489,21 @@ public class SettingsDlg extends javax.swing.JDialog {
         jTextAreaUserScript = new javax.swing.JTextArea();
         jButtonApplyScript = new javax.swing.JButton();
         jButtonScriptHelp = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabelFont = new javax.swing.JLabel();
+        jButtonFont = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jRadioButtonTab = new javax.swing.JRadioButton();
+        jRadioButtonSpaces = new javax.swing.JRadioButton();
+        jTextFieldSpaces = new javax.swing.JTextField();
+        jButtonApplyTabAndFont = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
         setTitle(resourceMap.getString("FormSettings.title")); // NOI18N
         setModal(true);
         setName("FormSettings"); // NOI18N
-        setResizable(false);
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
 
@@ -515,8 +568,8 @@ public class SettingsDlg extends javax.swing.JDialog {
                             .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldCompilerParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 378, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(jTextFieldCompilerPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 378, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldCompilerParam, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                                    .add(jTextFieldCompilerPath))
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jButtonBrowseCompilerPath)))))
                 .addContainerGap())
@@ -543,7 +596,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel6))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 79, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 117, Short.MAX_VALUE)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyCompiler)
                     .add(jButtonReset))
@@ -596,10 +649,10 @@ public class SettingsDlg extends javax.swing.JDialog {
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jComboBoxPrefEmu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 295, Short.MAX_VALUE)
                                 .add(jButtonApplyEmu))
                             .add(jPanel2Layout.createSequentialGroup()
-                                .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 377, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jTextFieldEmulatorPath)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jButtonBrowseEmulatorPath)))
                         .addContainerGap())))
@@ -612,22 +665,35 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(jLabel4)
                     .add(jComboBoxEmulators, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel5)
-                            .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel7)
-                            .add(jComboBoxPrefEmu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel5)
+                    .add(jTextFieldEmulatorPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButtonBrowseEmulatorPath))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 133, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel7)
+                    .add(jComboBoxPrefEmu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 163, Short.MAX_VALUE)
                 .add(jButtonApplyEmu)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
+
+        jPanel4.setName("jPanel4"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 545, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 288, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
 
         jPanel3.setName("jPanel3"); // NOI18N
 
@@ -664,18 +730,17 @@ public class SettingsDlg extends javax.swing.JDialog {
                         .add(jButtonScriptHelp)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(jButtonApplyScript))
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
                     .add(jPanel3Layout.createSequentialGroup()
                         .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 597, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jLabel8)
+                            .add(jLabel9))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel3Layout.createSequentialGroup()
-                                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jLabel8)
-                                    .add(jLabel9))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 510, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                        .add(0, 0, Short.MAX_VALUE)))
+                                .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 0, Short.MAX_VALUE))
+                            .add(jTextFieldScriptName))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -690,15 +755,94 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(jLabel9)
                     .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 164, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyScript)
                     .add(jButtonScriptHelp))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
+
+        jPanel5.setName("jPanel5"); // NOI18N
+
+        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+        jLabel10.setName("jLabel10"); // NOI18N
+
+        jLabelFont.setName("jLabelFont"); // NOI18N
+
+        jButtonFont.setAction(actionMap.get("changeEditorFont")); // NOI18N
+        jButtonFont.setName("jButtonFont"); // NOI18N
+
+        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+        jLabel11.setName("jLabel11"); // NOI18N
+
+        buttonGroup1.add(jRadioButtonTab);
+        jRadioButtonTab.setText(resourceMap.getString("jRadioButtonTab.text")); // NOI18N
+        jRadioButtonTab.setName("jRadioButtonTab"); // NOI18N
+
+        buttonGroup1.add(jRadioButtonSpaces);
+        jRadioButtonSpaces.setText(resourceMap.getString("jRadioButtonSpaces.text")); // NOI18N
+        jRadioButtonSpaces.setName("jRadioButtonSpaces"); // NOI18N
+
+        jTextFieldSpaces.setColumns(4);
+        jTextFieldSpaces.setText(resourceMap.getString("jTextFieldSpaces.text")); // NOI18N
+        jTextFieldSpaces.setName("jTextFieldSpaces"); // NOI18N
+
+        jButtonApplyTabAndFont.setAction(actionMap.get("applyFontTab")); // NOI18N
+        jButtonApplyTabAndFont.setName("jButtonApplyTabAndFont"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jLabel10)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabelFont)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonFont))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jLabel11)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel5Layout.createSequentialGroup()
+                                .add(jRadioButtonSpaces)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jTextFieldSpaces, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(jRadioButtonTab))))
+                .addContainerGap(326, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jButtonApplyTabAndFont)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel10)
+                    .add(jLabelFont)
+                    .add(jButtonFont))
+                .add(18, 18, 18)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel11)
+                    .add(jRadioButtonTab))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jRadioButtonSpaces)
+                    .add(jTextFieldSpaces, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 155, Short.MAX_VALUE)
+                .add(jButtonApplyTabAndFont)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -706,26 +850,29 @@ public class SettingsDlg extends javax.swing.JDialog {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jTabbedPane1)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonApplyCompiler;
     private javax.swing.JButton jButtonApplyEmu;
     private javax.swing.JButton jButtonApplyScript;
+    private javax.swing.JButton jButtonApplyTabAndFont;
     private javax.swing.JButton jButtonBrowseCompilerPath;
     private javax.swing.JButton jButtonBrowseEmulatorPath;
+    private javax.swing.JButton jButtonFont;
     private javax.swing.JButton jButtonReset;
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JComboBox jComboBoxCompilers;
@@ -734,6 +881,8 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JComboBox jComboBoxPrefComp;
     private javax.swing.JComboBox jComboBoxPrefEmu;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -742,10 +891,15 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelFont;
     private javax.swing.JLabel jLabelParamInfo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JRadioButton jRadioButtonSpaces;
+    private javax.swing.JRadioButton jRadioButtonTab;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextAreaUserScript;
@@ -753,6 +907,7 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldCompilerPath;
     private javax.swing.JTextField jTextFieldEmulatorPath;
     private javax.swing.JTextField jTextFieldScriptName;
+    private javax.swing.JTextField jTextFieldSpaces;
     // End of variables declaration//GEN-END:variables
     private JDialog helpBox;
     private FontChooser fontDlg;
