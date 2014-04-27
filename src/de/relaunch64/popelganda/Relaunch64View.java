@@ -119,7 +119,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     
     
     // TODO cruncher support
-    // TODO font-chooser
     // TODO goto error line
     
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
@@ -745,11 +744,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     private void specialFunctions() {
         String text = jTextFieldGotoLine.getText();
-        if (text.equals("t2s")) {
-            
-        }
-        else if (text.equals("s2t")) {
-            
+        switch (text) {
+            case "t2s":
+                Tools.convertTabsToSpace(settings, editorPanes, jTabbedPane1.getSelectedIndex());
+                break;
+            case "s2t":
+                Tools.convertSpaceToTabs(settings, editorPanes, jTabbedPane1.getSelectedIndex());
+                break;
         }
     }
     /**
@@ -1240,6 +1241,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
                 catch (IOException | InterruptedException ex) {
                     ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                    // check if permission denied
+                    if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
+                        ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
+                    }
                 }
             }
             else {

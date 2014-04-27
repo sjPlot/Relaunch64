@@ -17,6 +17,8 @@
 
 package de.relaunch64.popelganda.util;
 
+import de.relaunch64.popelganda.Editor.EditorPanes;
+import de.relaunch64.popelganda.database.Settings;
 import java.io.File;
 import java.util.Map;
 
@@ -160,5 +162,15 @@ public class Tools {
             if (envName.toLowerCase().contains(toolName.toLowerCase()) || toolName.toLowerCase().contains(envName.toLowerCase())) return true;
         }
         return false;
+    }
+    public static void convertTabsToSpace(Settings settings, EditorPanes ep, int index) {
+        String source = ep.getSourceCode(index);
+        source = source.replace("\t", settings.getTabChar());
+        ep.setSourceCode(index, source);
+    }
+    public static void convertSpaceToTabs(Settings settings, EditorPanes ep, int index) {
+        String source = ep.getSourceCode(index);
+        source = source.replace(settings.getTabChar(), "\t");
+        ep.setSourceCode(index, source);
     }
 }

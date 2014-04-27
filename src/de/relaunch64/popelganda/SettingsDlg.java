@@ -57,11 +57,16 @@ public class SettingsDlg extends javax.swing.JDialog {
         // get tab char
         tabchar = settings.getTabChar();
         if (tabchar.equals("\t")) {
+            jRadioButtonSpaces.setSelected(false);
             jRadioButtonTab.setSelected(true);
+            jTextFieldSpaces.setText("4");
+            jTextFieldSpaces.setEnabled(false);
         }
         else {
+            jRadioButtonTab.setSelected(false);
             jRadioButtonSpaces.setSelected(true);
             jTextFieldSpaces.setText(String.valueOf(tabchar.length()));
+            jTextFieldSpaces.setEnabled(true);
         }
         // set application icon
         setIconImage(ConstantsR64.r64icon.getImage());
@@ -146,14 +151,18 @@ public class SettingsDlg extends javax.swing.JDialog {
         jRadioButtonTab.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldSpaces.setEnabled(false);
+                if (jRadioButtonTab.isSelected()) {
+                    jTextFieldSpaces.setEnabled(false);
+                }
             }
         });
         jRadioButtonSpaces.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldSpaces.setEnabled(true);
-                jTextFieldSpaces.requestFocusInWindow();
+                if (jRadioButtonSpaces.isSelected()) {
+                    jTextFieldSpaces.setEnabled(true);
+                    jTextFieldSpaces.requestFocusInWindow();
+                }
             }
         });
         jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
@@ -378,17 +387,14 @@ public class SettingsDlg extends javax.swing.JDialog {
         SyntaxScheme.saveSyntax(doc);
         // get tab char
         if (jRadioButtonTab.isSelected()) {
-            tabchar = "\t";
+            tabchar = "";
         }
         else {
             try {
-                StringBuilder sb = new StringBuilder("");
-                int numbers = Integer.parseInt(jTextFieldSpaces.getText());
-                for (int i=0; i<numbers; i++) sb.append(" ");
-                tabchar = sb.toString();
+                tabchar = String.valueOf(Integer.parseInt(jTextFieldSpaces.getText()));
             }
             catch (NumberFormatException ex) {
-                tabchar = "    ";
+                tabchar = "4";
             }
         }
         settings.setTabChar(tabchar);

@@ -275,7 +275,7 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_TABCHAR)) {
             // create a filepath-element
             Element el = new Element(SETTING_TABCHAR);
-            el.setText("\t");
+            el.setText("0");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -821,7 +821,23 @@ public class Settings {
     }
     public String getTabChar() {
         Element el = settingsFile.getRootElement().getChild(SETTING_TABCHAR);
-        if (el!=null) return el.getText();
+        if (el!=null) {
+            String t = el.getText();
+            if (t.isEmpty() || t.equals("0")) {
+                return "\t";
+            }
+            else {
+                try {
+                    StringBuilder sb = new StringBuilder("");
+                    int numbers = Integer.parseInt(t);
+                    for (int i=0; i<numbers; i++) sb.append(" ");
+                    return sb.toString();
+                }
+                catch (NumberFormatException ex) {
+                    return "    ";
+                }
+            }
+        }
         return "\t";
     }
     public void setTabChar(String tabchar) {

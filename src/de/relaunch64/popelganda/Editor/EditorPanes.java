@@ -697,6 +697,12 @@ public class EditorPanes {
         }
         return null;
     }
+    public void setSourceCode(int index, String source) {
+        JEditorPane ep = getEditorPane(index);
+        if (ep!=null) {
+            ep.setText(source);
+        }
+    }
     /**
      * 
      * @return 
