@@ -36,6 +36,8 @@ package de.relaunch64.popelganda.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
@@ -293,10 +295,22 @@ public class FileTools {
      * @return the relative path from {@code dest} in relation to {@code source}.
      */
     public static String getRelativePath(File source, File dest) {
-        try {
-            return Paths.get(source.getAbsolutePath()).relativize(Paths.get(dest.getAbsolutePath())).toString();
-        }
-        catch (IllegalArgumentException ex) {
+        if (null==source && null==dest) return null;
+        else if (null==source && dest!=null) return dest.toString();
+        else if (null==dest && source!=null) return source.toString();
+        else if (source!=null && dest!=null) {
+            try {
+                Path fp = Paths.get(source.getAbsolutePath()).relativize(Paths.get(dest.getAbsolutePath()));
+                if (fp!=null) {
+                    return fp.toString();
+                }
+                else {
+                    return source.toString();
+                }
+            }
+            catch (IllegalArgumentException | SecurityException | FileSystemNotFoundException ex) {
+                return source.toString();
+            }
         }
         return null;
     }    

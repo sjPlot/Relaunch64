@@ -69,8 +69,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventObject;
@@ -1801,7 +1799,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // check whether we have files dropped into textarea
             if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                 // drag&drop was link action
-                dtde.acceptDrop(DnDConstants.ACTION_LINK);
+                dtde.acceptDrop(DnDConstants.ACTION_LINK | DnDConstants.ACTION_COPY_OR_MOVE);
                 // retrieve drop component
                 Component c = dtde.getDropTargetContext().getDropTarget().getComponent();
                 // check for valid value
@@ -1829,6 +1827,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // create list with final image files
                     List<File> anyfiles = new ArrayList<>();
                     List<File> includefiles = new ArrayList<>();
+                    List<File> linkedfiles = new ArrayList<>();
                     // dummy
                     File file;
                     for (Object file1 : files) {
@@ -1836,8 +1835,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         file = (File) file1;
                         // check whether it is a file
                         if (file.isFile()) {
+                            // if we have link action, only insert paths
+                            if (dtde.getDropAction()==DnDConstants.ACTION_LINK && validDropLocation) {
+                                linkedfiles.add(file);
+                            }
                             // if it's an asm, add it to asm file list
-                            if (FileTools.hasValidFileExtension(file) && validDropLocation) {
+                            else if (FileTools.hasValidFileExtension(file) && validDropLocation) {
                                 // if so, add it to list
                                 anyfiles.add(file);
                             }
@@ -1851,48 +1854,63 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // check if we have any valid values,
                     // i.e. any files have been dragged and dropped
                     // if so, include files
+                    if (linkedfiles.size()>0) {
+                        for (File f : linkedfiles) {
+                            editorPanes.insertString("\""+f.toString()+"\""+System.getProperty("line.separator"));
+                        }
+                    }
+                    // check if we have any valid values,
+                    // i.e. any files have been dragged and dropped
+                    // if so, include files
                     if (includefiles.size()>0) {
                         for (File f : includefiles) {
                             String insert = "";
-                            // retrieve relative path of iimport file
-                            Path relpath = Paths.get(FileTools.getRelativePath(editorPanes.getActiveFilePath(), f));
-                            if (FileTools.getFileExtension(f).equalsIgnoreCase("bin")) {
-                                switch (editorPanes.getActiveCompiler()) {
-                                    case ConstantsR64.COMPILER_ACME:
-                                        insert = "!bin \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
-                                        insert = ".import binary \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_64TASS:
-                                        insert = ".binary \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
-                                }
+                            // if user hold down ctrl-key, import bytes from file
+                            if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
+                                insert = Tools.getByteTableFromFile(f, editorPanes.getActiveCompiler());
                             }
-                            else if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
-                                switch (editorPanes.getActiveCompiler()) {
-                                    case ConstantsR64.COMPILER_ACME:
-                                        insert = "!bin \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
-                                        insert = ".import text \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_64TASS:
-                                        insert = ".binary \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
+                            // else use include-directive
+                            else {
+                                // retrieve relative path of iimport file
+                                String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                                if (FileTools.getFileExtension(f).equalsIgnoreCase("bin")) {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                    }
                                 }
-                            }
-                            else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64")) {
-                                switch (editorPanes.getActiveCompiler()) {
-                                    case ConstantsR64.COMPILER_ACME:
-                                        insert = "!bin \""+relpath.toString()+"\",,2"+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
-                                        insert = ".import c64 \""+relpath.toString()+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_64TASS:
-                                        insert = ".binary \""+relpath.toString()+"\",2"+System.getProperty("line.separator");
-                                        break;
+                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import text \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                    }
+                                }
+                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64")) {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\",,2"+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import c64 \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            break;
+                                    }
                                 }
                             }
                             editorPanes.insertString(insert);
@@ -1902,7 +1920,29 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // i.e. any files have been dragged and dropped
                     // if so, open asm files
                     if (anyfiles.size()>0) {
-                        for (File f : anyfiles) openFile(f);
+                        for (File f : anyfiles) {
+                            // if user hold down ctrl-key, use import-directive for asm-files
+                            if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
+                                String insert = "";
+                                String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                                switch (editorPanes.getActiveCompiler()) {
+                                    case ConstantsR64.COMPILER_ACME:
+                                        insert = "!src \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_64TASS:
+                                        insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                }
+                                editorPanes.insertString(insert);
+                            }
+                            else {
+                                // else open files
+                                openFile(f);
+                            }
+                        }
                         /**
                          * JDK 8 Lamda
                          */
