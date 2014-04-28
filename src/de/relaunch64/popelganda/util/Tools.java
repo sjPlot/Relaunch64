@@ -19,7 +19,13 @@ package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.database.Settings;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -27,9 +33,28 @@ import java.util.Map;
  * @author Luedeke
  */
 public class Tools {
+    /**
+     * Checks if a specifc character {@code character} is a syntax delimiter char or not.
+     * 
+     * @param character A string of length 1 (a character) which should be compared to the syntax
+     * delimiter list.
+     * @param additionalChars Additional chars that can be added to the default delimiter list.
+     * @return {@code true} if {@code character} is a syntax delimiter char, {@code false} otherwise.
+     */
     public static boolean isDelimiter(String character, String additionalChars) {
         String delimiterList = ",;{}()[]+-/<=>&|^~*#" + additionalChars;
         return Character.isWhitespace(character.charAt(0)) || delimiterList.contains(character);
+    }
+    /**
+     * Checks if a specifc character {@code character} is a syntax delimiter char or not.
+     * 
+     * @param character A character which should be compared to the syntax delimiter list.
+     * @param additionalChars Additional chars that can be added to the default delimiter list.
+     * @return {@code true} if {@code character} is a syntax delimiter char, {@code false} otherwise.
+     */
+    public static boolean isDelimiter(Character character, String additionalChars) {
+        String delimiterList = ",;{}()[]+-/<=>&|^~*#" + additionalChars;
+        return Character.isWhitespace(character) || delimiterList.indexOf(character)!=-1;
     }
     /**
      * This method retrieves system information like the operating system and version, the architecture,
@@ -172,5 +197,67 @@ public class Tools {
         String source = ep.getSourceCode(index);
         source = source.replace(settings.getTabChar(), "\t");
         ep.setSourceCode(index, source);
+    }
+    public static ArrayList<Integer> getErrorLines(String log) {
+        // return value with lines of errors
+        ArrayList<Integer> errorLines = new ArrayList<>();
+        // create buffered reader, needed for line number reader
+        BufferedReader br = new BufferedReader(new StringReader(log));
+        LineNumberReader lineReader = new LineNumberReader(br);
+        String line;
+        // check for valid values
+        if (log!=null && !log.isEmpty()) {
+            // read line by line
+            try {
+                int err = -1;
+                while ((line = lineReader.readLine())!=null) {
+                    // check if line contains error-token
+                    if (line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) {
+                        // check if we have line number
+                        if (line.toLowerCase().contains("line")) {
+                            err = getErrorLineFromLine(line, "line ");
+                        }
+                        // check if we have no "line", but colon (tass syntax)
+                        else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
+                            err = getErrorLineFromLine(line, ":");
+                        }
+                        // else read next line (kick ass syntax)
+                        else {
+                            // read line
+                            line = lineReader.readLine();
+                            if (line!=null) {
+                                err = getErrorLineFromLine(line, "line ");
+                            }
+                        }
+                    }
+                    // check if we found error line
+                    if (err!=-1 && !errorLines.contains(err)) {
+                        errorLines.add(err);
+                    }
+                }
+                // sort list
+                Collections.sort(errorLines);
+            }
+            catch (IOException ex) {
+            }
+            return errorLines;
+        }
+        return null;
+   }
+    protected static int getErrorLineFromLine(String line, String token) {
+        if (line!=null && !line.isEmpty()) {
+            int start = line.toLowerCase().indexOf(token, 0);
+            if (start!=-1) {
+                int end = start+token.length();
+                while (!isDelimiter(line.charAt(end), "")) end++;
+                try {
+                    return Integer.parseInt(line.substring(start+token.length(), end));
+                }
+                catch (NumberFormatException ex) {
+                    return -1;
+                }
+            }
+        }
+        return -1;
     }
 }

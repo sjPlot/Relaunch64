@@ -113,6 +113,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private int comboBoxGotoIndex = -1;
     private final Settings settings;
     private final CustomScripts customScripts;
+    private ArrayList<Integer> errorLines = new ArrayList<>();
     private File outputFile = null;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
@@ -983,6 +984,33 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes.gotoSection(dest);
     }
     @Action
+    public void gotoNextError() {
+        // get current line of caret
+        int currentLine = editorPanes.getCurrentLineNumber();
+        for (Integer errorLine : errorLines) {
+            // if we found a line number greater than current
+            // line, we found the next label from caret position
+            if (errorLine > currentLine) {
+                editorPanes.gotoLine(errorLine);
+                break;
+            }
+        }
+    }
+    @Action
+    public void gotoPrevError() {
+        // get current line of caret
+        int currentLine = editorPanes.getCurrentLineNumber();
+        // iterate all line numbers
+        for (int i=errorLines.size()-1; i>=0; i--) {
+            // if we found a line number greater than current
+            // line, we found the next label from caret position
+            if (errorLines.get(i)<currentLine) {
+                editorPanes.gotoLine(errorLines.get(i));
+                break;
+            }
+        }
+    }
+    @Action
     public void gotoNextLabel() {
         // retrieve line numbers and label names
         ArrayList<Integer> ln = LabelExtractor.getLabelLineNumbers(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
@@ -1262,6 +1290,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         updateCompilerParams();
         // reste outfile
         outputFile = null;
+        errorLines.clear();
         // get current compiler
         int compiler = editorPanes.getActiveCompiler();
         // get path to compiler
@@ -1407,11 +1436,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // start process
                     Process p = pb.start();
                     // write output to text area
+                    StringBuilder compilerLog = new StringBuilder("");
                     // create scanner to receive compiler messages
                     try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
                         // write output to text area
                         while (sc.hasNextLine()) {
-                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                            compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
                         }
                     }
                     // write output to text area
@@ -1419,14 +1449,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
                         // write output to text area
                         while (sc.hasNextLine()) {
-                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                            compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
                         }
                     }
                     // finally, append new line
-                    jTextAreaCompilerOutput.append(System.getProperty("line.separator"));
+                    compilerLog.append(System.getProperty("line.separator"));
+                    // print log to text area
+                    jTextAreaCompilerOutput.append(compilerLog.toString());
                     // wait for other process to be finished
                     p.waitFor();
                     p.destroy();
+                    // retrieve potential error lines from log
+                    errorLines = Tools.getErrorLines(compilerLog.toString());
                     // specifiy output file
                     outputFile = FileTools.setFileExtension(afile, "prg");
                     // check if exists
@@ -2123,6 +2157,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         gotoNextSectionMenuItem = new javax.swing.JMenuItem();
         gotoPrevSectionMenuItem = new javax.swing.JMenuItem();
+        jSeparator20 = new javax.swing.JPopupMenu.Separator();
+        gotoNextErrorMenuItem = new javax.swing.JMenuItem();
+        gotoPrevErrorMenuItem = new javax.swing.JMenuItem();
         sourceMenu = new javax.swing.JMenu();
         runDefaultMenuItem = new javax.swing.JMenuItem();
         compileMenuItem = new javax.swing.JMenuItem();
@@ -2666,6 +2703,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         gotoPrevSectionMenuItem.setName("gotoPrevSectionMenuItem"); // NOI18N
         gotoMenu.add(gotoPrevSectionMenuItem);
 
+        jSeparator20.setName("jSeparator20"); // NOI18N
+        gotoMenu.add(jSeparator20);
+
+        gotoNextErrorMenuItem.setAction(actionMap.get("gotoNextError")); // NOI18N
+        gotoNextErrorMenuItem.setName("gotoNextErrorMenuItem"); // NOI18N
+        gotoMenu.add(gotoNextErrorMenuItem);
+
+        gotoPrevErrorMenuItem.setAction(actionMap.get("gotoPrevError")); // NOI18N
+        gotoPrevErrorMenuItem.setName("gotoPrevErrorMenuItem"); // NOI18N
+        gotoMenu.add(gotoPrevErrorMenuItem);
+
         menuBar.add(gotoMenu);
 
         sourceMenu.setText(resourceMap.getString("sourceMenu.text")); // NOI18N
@@ -2885,8 +2933,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem gotoLineMenuItem;
     private javax.swing.JMenuItem gotoMacroMenuItem;
     private javax.swing.JMenu gotoMenu;
+    private javax.swing.JMenuItem gotoNextErrorMenuItem;
     private javax.swing.JMenuItem gotoNextLabel;
     private javax.swing.JMenuItem gotoNextSectionMenuItem;
+    private javax.swing.JMenuItem gotoPrevErrorMenuItem;
     private javax.swing.JMenuItem gotoPrevLabel;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem gotoSectionMenuItem;
@@ -2938,6 +2988,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator20;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;

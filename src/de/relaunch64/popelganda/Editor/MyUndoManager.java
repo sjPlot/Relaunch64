@@ -41,6 +41,9 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 /**
+ * Sets up an own undo manager. The default undo-manager would consider each 
+ * syntax-highlighting step as own undo-event. To prevent this, the custom 
+ * undo-manager only receives text-input/changes as undoable events.
  *
  * @author Daniel Luedecke
  */
@@ -62,6 +65,10 @@ public class MyUndoManager extends UndoManager implements UndoableEditListener {
                 AbstractDocument.DefaultDocumentEvent de = (AbstractDocument.DefaultDocumentEvent) e.getEdit();
                 // this selects the style events, the others are INSERT or REMOVE
                 if (de.getType() == DocumentEvent.EventType.CHANGE) {
+                    // style events are caused by syntax highlighting
+                    // these events should not be treated as undoable
+                    // action (else each undo-command would "re-color" all
+                    // tokens before undoing text changes).
                     e.getEdit().die();
                     return;
                 }

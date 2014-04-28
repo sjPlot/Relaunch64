@@ -184,12 +184,15 @@ public class EditorPanes {
                         if (selected<0) selected = tabbedPane.getTabCount()-1;
                     }
                     else {
+                        // cycle forward
                         selected++;
                         if (selected>=tabbedPane.getTabCount()) selected = 0;
                     }
+                    // select new tab
                     tabbedPane.setSelectedIndex(selected);
                     evt.consume();
                 }
+                // tab key w/o shift and control: indent selection or set tab
                 else if (KeyEvent.VK_TAB==evt.getKeyCode() && !evt.isShiftDown()) {
                     // check for text selection
                     String selString = ep.getSelectedText();
@@ -229,6 +232,7 @@ public class EditorPanes {
                                 // and use remaining spaces as tab
                                 tabchar = sb.toString();
                             }
+                            // insert tab
                             ep.getDocument().insertString(ep.getCaretPosition(), tabchar, null);
                         }
                         catch (BadLocationException ex) {
@@ -273,8 +277,11 @@ public class EditorPanes {
                 }
             }
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+                // after enter-key, insert tabs automatically to match text start to column of previous line
                 if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) autoInsertTab();
+                // if enter-key should not auto-insert tab, do nothing
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
+                // ctrl+space opens label-auto-completion
                 else if (evt.getKeyCode() == KeyEvent.VK_SPACE && evt.isControlDown()) {
                     showSuggestion();
                 }
@@ -302,6 +309,7 @@ public class EditorPanes {
                 int selection = e.getMark()-e.getDot();
                 // here we have selected text
                 if (selection!=0) {
+                    // convert numbers and show in textfields
                     mainFrame.autoConvertNumbers(getActiveEditorPane().getSelectedText());
                 }
             }
@@ -309,6 +317,8 @@ public class EditorPanes {
         // add focus listener
         editorPane.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override public void focusGained(java.awt.event.FocusEvent evt) {
+                // we use this method to hide the auto-completion popup. this does
+                // not automatically hide when the JList is wrapped in a JScrollPane
                 if (suggestionPopup != null) {
                     suggestionPopup.setVisible(false);
                     suggestionPopup=null;
@@ -340,6 +350,10 @@ public class EditorPanes {
         // return current count
         return editorPaneArray.size();
     }
+    /**
+     * This method automatically inserts tab or spaces after the user pressed enter key.
+     * Automatic indention of caret position.
+     */
     private void autoInsertTab() {
         JEditorPane ep = getActiveEditorPane();
         try {
@@ -370,27 +384,77 @@ public class EditorPanes {
         } catch (BadLocationException ex) {
         }
     }
+    /**
+     * Get the current row from caret position in acitvated editor pane (source code).
+     * @return The row number of the caret from the current source code.
+     */
     public int getCurrentRow() {
+        // get current editor pane / source code
         JEditorPane ep = getActiveEditorPane();
+        // and get caret
         int caretPosition = ep.getCaretPosition();
+        // retrieve row from generic function
         return getRow(ep, caretPosition);
     }
+    /**
+     * Get the current row from caret position {@code caretPosition} in 
+     * the editor pane (source code) {@code ep}. This is the generic
+     * getRow-/getLineNumber function.
+     * 
+     * @param ep The editor pane with the source code where the row number should be retrieved
+     * @param caretPosition The position of the caret, to determine in which row the
+     * caret is currently positioned.
+     * @return The row number of the caret from the source code in {@code ep}.
+     */
     public int getRow(JEditorPane ep, int caretPosition) {
         return (ep!=null) ? ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition) : 0;
     }
+    /**
+     * Get the current column of the caret in 
+     * the editor pane (source code) {@code ep}.
+     * 
+     * @param ep The editor pane with the source code where the column number should be retrieved
+     * @return The column number of the caret from the source code (editor pane) {@code ep}.
+     */
     public int getColumn(JEditorPane ep) {
+        // retrieve caret position
         int caretPosition = ep.getCaretPosition();
+        // store original caret position
         int oriCaret = caretPosition;
+        // get current line number
         int currentLine = ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition);
+        // decrease caret counter until we reach 0 or previous line
         while(currentLine==ep.getDocument().getDefaultRootElement().getElementIndex(caretPosition) && caretPosition>=0) caretPosition--;
+        // column number is difference between original caret position and position of caret
+        // in previous line
         return oriCaret-caretPosition;
     }
+    /**
+     * Get the current line number from caret position {@code caretPosition} in 
+     * the editor pane (source code) {@code ep}. This is an alias function
+     * which calls {@link #getRow(javax.swing.JEditorPane, int)}.
+     * 
+     * @param ep The editor pane with the source code where the row (line) number should be retrieved
+     * @param caretPosition The position of the caret, to determine in which row (line) the
+     * caret is currently positioned.
+     * @return The row (line) number of the caret from the source code in {@code ep}.
+     */
     public int getLineNumber(JEditorPane ep, int caretPosition) {
         return getRow(ep, caretPosition);
     }
+    /**
+     * Get the current row (line number) from caret position in 
+     * acitvated editor pane (source code).
+     * 
+     * @return The row (line) number of the caret from the current source code.
+     */
     public int getCurrentLineNumber() {
         return getCurrentRow()+1;
     }
+    /**
+     * 
+     * @param caretpos 
+     */
     public void gotoLineFromCaret(int caretpos) {
         JEditorPane ep = getActiveEditorPane();
         gotoLine(ep, getRow(ep, caretpos));
@@ -406,6 +470,8 @@ public class EditorPanes {
     }
     /**
      * Scrolls the source code of the editor pane {@code ep} to the line {@code line}.
+     * This functions tries to show at least 10 lines before and after the destination
+     * line where to go, thus scrolling the goto-line to somewhat the middle of the screen.
      * 
      * @param ep A JEdiorPane with the source, typically retrieved via
      * {@link #getActiveEditorPane()} or {@link #getEditorPaneProperties(selectedTab).getEditorPane()}
@@ -451,7 +517,9 @@ public class EditorPanes {
     public void undo() {
         EditorPaneProperties ep = getActiveEditorPaneProperties();
         if (ep!=null) {
+            // undo last edit
             ep.getUndoManager().undo();
+            // set focus to editorpane
             setFocus();
         }
     }
@@ -461,7 +529,9 @@ public class EditorPanes {
     public void redo() {
         EditorPaneProperties ep = getActiveEditorPaneProperties();
         if (ep!=null) {
+            // redo last edit
             ep.getUndoManager().redo();
+            // set focus
             setFocus();
         }
     }
@@ -480,9 +550,11 @@ public class EditorPanes {
         }
     }
     /**
+     * Adds a document listener to the JEditorPane {@code editorPane}.
      * 
-     * @param editorPane
-     * @return 
+     * @param editorPane The JEditorPane where the document listener should be added to.
+     * @return An installed document listener that is saved in the {@link #editorPaneArray}
+     * if needed to re-install etc.
      */
     private DocumentListener addDocumentListenerToEditorPane(JEditorPane editorPane) {
         DocumentListener docListen = new DocumentListener() {
@@ -494,6 +566,15 @@ public class EditorPanes {
         editorPane.getDocument().addDocumentListener(docListen);
         return docListen;
     }
+    /**
+     * Sets up an own undo manager. The default undo-manager would consider each 
+     * syntax-highlighting step as own undo-event. To prevent this, the custom 
+     * undo-manager only receives text-input/changes as undoable events.
+     * 
+     * @param editorPane The JEditorPane where the undo manager should be added to.
+     * @return An installed undo manager that is saved in the {@link #editorPaneArray}
+     * if needed to re-install etc.
+     */
     private MyUndoManager addUndoManagerToEditorPane(JEditorPane editorPane) {
         MyUndoManager undomanager = new MyUndoManager();
         editorPane.getDocument().addUndoableEditListener(undomanager);
@@ -512,6 +593,17 @@ public class EditorPanes {
         if (editorPane != null && docListen != null) {
             editorPane.getDocument().removeDocumentListener(docListen);
             editorPaneProp.setDocListener(null);
+        }
+    }
+    private void removeUndoManagerFromEditorPane(EditorPaneProperties editorPaneProp) {
+        // get editor pane
+        JEditorPane editorPane = editorPaneProp.getEditorPane();
+        // get doc listener
+        MyUndoManager undomanager = editorPaneProp.getUndoManager();
+        // check for valid values
+        if (editorPane != null && undomanager != null) {
+            editorPane.getDocument().removeUndoableEditListener(undomanager);
+            editorPaneProp.setUndoManager(null);
         }
     }
     /**
@@ -629,11 +721,12 @@ public class EditorPanes {
                 settings.setRecentDoc(rd, getActiveFilePath().getPath(), compiler);
             }
             // disable undo/redo events
-            ep.getUndoManager().enableRegisterUndoEvents(false);
+            // ep.getUndoManager().enableRegisterUndoEvents(false);
             // get editor pane
             JEditorPane editorpane = ep.getEditorPane();
-            // remove listener
+            // remove listeners
             removeDocumentListenerFromEditorPane(ep);
+            removeUndoManagerFromEditorPane(ep);
             // save content, may be deleted due to syntax highlighting
             String text = editorpane.getText();
             // change syntax scheme
@@ -643,7 +736,8 @@ public class EditorPanes {
             // add document listener again
             ep.setDocListener(addDocumentListenerToEditorPane(editorpane));
             // enable undo/redo events again
-            ep.getUndoManager().enableRegisterUndoEvents(true);
+            ep.setUndoManager(addUndoManagerToEditorPane(editorpane));
+            // ep.getUndoManager().enableRegisterUndoEvents(true);
             // set new compiler scheme
             ep.setCompiler(compiler);
             // set cursor
