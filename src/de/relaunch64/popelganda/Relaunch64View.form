@@ -262,162 +262,100 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSplitPaneRun" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jPanel9" alignment="0" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSplitPaneRun" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Container class="javax.swing.JSplitPane" name="jSplitPaneRun">
+                        <Container class="javax.swing.JPanel" name="jPanel9">
                           <Properties>
-                            <Property name="name" type="java.lang.String" value="jSplitPaneRun" noResource="true"/>
-                            <Property name="oneTouchExpandable" type="boolean" value="true"/>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                <TitledBorder title="Compile and Run">
+                                  <Property name="titleX" resourceKey="jPanel9.border.title"/>
+                                </TitledBorder>
+                              </Border>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
                           </Properties>
 
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
-                          <SubComponents>
-                            <Container class="javax.swing.JPanel" name="jPanel8">
-                              <Properties>
-                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                    <TitledBorder title="Compile and run from global settings">
-                                      <Property name="titleX" resourceKey="jPanel8.border.title"/>
-                                    </TitledBorder>
-                                  </Border>
-                                </Property>
-                                <Property name="name" type="java.lang.String" value="jPanel8" noResource="true"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
-                                  <JSplitPaneConstraints position="top"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="jComboBoxParam" max="32767" attributes="0"/>
-                                              <Group type="102" attributes="0">
-                                                  <Component id="jComboBoxEmulator" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="jComboBoxCompilers" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Component id="jButtonRun" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jComboBoxEmulator" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jComboBoxCompilers" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jComboBoxParam" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jComboBoxRunScripts" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jComboBoxCompilers" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
+                                      <EmptySpace pref="161" max="32767" attributes="0"/>
+                                      <Component id="jButtonRunScript" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
-                                </DimensionLayout>
-                              </Layout>
-                              <SubComponents>
-                                <Component class="javax.swing.JComboBox" name="jComboBoxEmulator">
-                                  <Properties>
-                                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                      <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.EMU_NAMES)" type="code"/>
-                                    </Property>
-                                    <Property name="name" type="java.lang.String" value="jComboBoxEmulator" noResource="true"/>
-                                  </Properties>
-                                </Component>
-                                <Component class="javax.swing.JComboBox" name="jComboBoxCompilers">
-                                  <Properties>
-                                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                      <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES)" type="code"/>
-                                    </Property>
-                                    <Property name="name" type="java.lang.String" value="jComboBoxCompilers" noResource="true"/>
-                                  </Properties>
-                                </Component>
-                                <Component class="javax.swing.JComboBox" name="jComboBoxParam">
-                                  <Properties>
-                                    <Property name="editable" type="boolean" value="true"/>
-                                    <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxParam.toolTipText"/>
-                                    <Property name="name" type="java.lang.String" value="jComboBoxParam" noResource="true"/>
-                                  </Properties>
-                                </Component>
-                                <Component class="javax.swing.JButton" name="jButtonRun">
-                                  <Properties>
-                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="runFile" methodName="runFile"/>
-                                    </Property>
-                                    <Property name="name" type="java.lang.String" value="jButtonRun" noResource="true"/>
-                                  </Properties>
-                                </Component>
-                              </SubComponents>
-                            </Container>
-                            <Container class="javax.swing.JPanel" name="jPanel9">
-                              <Properties>
-                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                    <TitledBorder title="Compile and run from user scripts">
-                                      <Property name="titleX" resourceKey="jPanel9.border.title"/>
-                                    </TitledBorder>
-                                  </Border>
-                                </Property>
-                                <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
-                                  <JSplitPaneConstraints position="right"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jComboBoxRunScripts" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="jButtonRunScript" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jComboBoxRunScripts" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButtonRunScript" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jComboBoxCompilers" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
-                                </DimensionLayout>
-                              </Layout>
-                              <SubComponents>
-                                <Component class="javax.swing.JComboBox" name="jComboBoxRunScripts">
-                                  <Properties>
-                                    <Property name="name" type="java.lang.String" value="jComboBoxRunScripts" noResource="true"/>
-                                  </Properties>
-                                </Component>
-                                <Component class="javax.swing.JButton" name="jButtonRunScript">
-                                  <Properties>
-                                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                                      <action class="de.relaunch64.popelganda.Relaunch64View" id="runScript" methodName="runScript"/>
-                                    </Property>
-                                    <Property name="name" type="java.lang.String" value="jButtonRunScript" noResource="true"/>
-                                  </Properties>
-                                </Component>
-                              </SubComponents>
-                            </Container>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="javax.swing.JComboBox" name="jComboBoxRunScripts">
+                              <Properties>
+                                <Property name="name" type="java.lang.String" value="jComboBoxRunScripts" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JButton" name="jButtonRunScript">
+                              <Properties>
+                                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                  <action class="de.relaunch64.popelganda.Relaunch64View" id="runScript" methodName="runScript"/>
+                                </Property>
+                                <Property name="name" type="java.lang.String" value="jButtonRunScript" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JComboBox" name="jComboBoxCompilers">
+                              <Properties>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES)" type="code"/>
+                                </Property>
+                                <Property name="name" type="java.lang.String" value="jComboBoxCompilers" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="jLabel1">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+                                <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="jLabel2">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+                                <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
+                              </Properties>
+                            </Component>
                           </SubComponents>
                         </Container>
                       </SubComponents>
@@ -478,9 +416,9 @@
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="470" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="469" max="32767" attributes="0"/>
                                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane2" alignment="0" pref="470" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane2" alignment="0" pref="469" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -527,7 +465,7 @@
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" alignment="0" pref="470" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane3" alignment="0" pref="469" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                               </Layout>
@@ -648,6 +586,16 @@
                 <MenuItem class="javax.swing.JMenuItem" name="recent8MenuItem">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="recent8MenuItem" noResource="true"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="recent9MenuItem">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="recent9MenuItem" noResource="true"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="recentAMenuItem">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="recentAMenuItem" noResource="true"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -975,27 +923,6 @@
             <Property name="name" type="java.lang.String" value="sourceMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="runDefaultMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="runFile" methodName="runFile"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="runDefaultMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="compileMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="compileFile" methodName="compileFile"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="compileMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator17">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator17" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="runScriptMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1006,27 +933,14 @@
                 <Property name="name" type="java.lang.String" value="runScriptMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator16">
+            <MenuItem class="javax.swing.JMenuItem" name="focusScriptMenuItem">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator16" noResource="true"/>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectUserScripts" methodName="selectUserScripts"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="focusScriptMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenuCruncher">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="jMenuCruncher.text"/>
-                <Property name="name" type="java.lang.String" value="jMenuCruncher" noResource="true"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="crunchExoMenuItem">
-                  <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="de.relaunch64.popelganda.Relaunch64View" id="crunchWithExomizer" methodName="crunchWithExomizer"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="crunchExoMenuItem" noResource="true"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator8">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator8" noResource="true"/>
@@ -1077,6 +991,19 @@
                 <Property name="name" type="java.lang.String" value="insertSinusMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator16">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator16" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="viewMainTabMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="setFocusToSource" methodName="setFocusToSource"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="viewMainTabMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="viewMenu">
@@ -1085,32 +1012,6 @@
             <Property name="name" type="java.lang.String" value="viewMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="viewMainTabMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="setFocusToTabbedPane" methodName="setFocusToTabbedPane"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="viewMainTabMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator14">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator14" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="focusScriptMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectUserScripts" methodName="selectUserScripts"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="focusScriptMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator18">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator18" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="viewLog1MenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1138,14 +1039,6 @@
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="switchBothPosition" methodName="switchBothPosition"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="switchBothMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="switchRunPosMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="switchRunPosition" methodName="switchRunPosition"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="switchRunPosMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="switchLogPosMenuItem">

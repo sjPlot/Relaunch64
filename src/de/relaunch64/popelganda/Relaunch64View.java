@@ -33,6 +33,7 @@
 
 package de.relaunch64.popelganda;
 
+import com.sun.javafx.scene.control.skin.KeyCodeUtils;
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
@@ -76,6 +77,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+import javafx.scene.input.KeyCode;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -101,7 +103,6 @@ import org.jdesktop.application.SingleFrameApplication;
 public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
     private EditorPanes editorPanes;
     private final FindReplace findReplace;
-    private final List<String> compilerParams = new ArrayList<>();
     private final List<Integer> comboBoxHeadings = new ArrayList<>();
     private final List<Integer> comboBoxHeadingsEditorPaneIndex = new ArrayList<>();
     private final static int GOTO_LABEL = 1;
@@ -111,14 +112,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private int comboBoxGotoIndex = -1;
     private final Settings settings;
     private final CustomScripts customScripts;
-    private ArrayList<Integer> errorLines = new ArrayList<>();
-    private File outputFile = null;
+    private final ArrayList<Integer> errorLines = new ArrayList<>();
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
-    
-    // TODO cruncher support
-    // TODO goto error line
     
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
@@ -157,7 +154,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain, settings);
         jScrollPaneMainEditorPane.setRowHeaderView(epln);
         // init syntax highlighting for editor pane
-        editorPanes.addEditorPane(jEditorPaneMain, null, null, jComboBoxCompilers.getSelectedIndex());
+        editorPanes.addEditorPane(jEditorPaneMain, null, null, settings.getPreferredCompiler());
         // check if we have any parmater
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
@@ -244,22 +241,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     
     private void initComboBoxes() {
-        jSplitPaneRun.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_RUN));
         jSplitPane2.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN));
         jSplitPane1.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG));
         try {
+            // init scripts
+            initScripts();
             // init emulator combobox
-            jComboBoxEmulator.setSelectedIndex(settings.getPreferredEmulator());
             jComboBoxCompilers.setSelectedIndex(settings.getPreferredCompiler());
+            // select last used script
+            jComboBoxRunScripts.setSelectedIndex(settings.getLastUserScript());
             // init goto comboboxes
             jComboBoxGoto.removeAllItems();
             jComboBoxGoto.addItem(ConstantsR64.CB_GOTO_DEFAULT_STRING);
             jComboBoxGoto.setRenderer(new ComboBoxRenderer());
             jComboBoxGoto.setMaximumRowCount(20);
-            // init scripts
-            initScripts();
-            // select last used script
-            jComboBoxRunScripts.setSelectedIndex(settings.getLastUserScript());
         }
         catch (IllegalArgumentException ex) {
         }
@@ -304,7 +299,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override
             public void actionPerformed(ActionEvent evt) {
                 if (editorPanes.checkIfSyntaxChangeRequired()) {
-                    editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex());
+                    editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
                 }
             }
         });
@@ -551,43 +546,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 convertNumber("bin");
             }
         });
-//        jButtonClip1.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
-//            @Override public void mouseMoved(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(0));
-//            }
-//            @Override public void mouseDragged(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(0));
-//            }
-//        });
-//        jButtonClip2.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
-//            @Override public void mouseMoved(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(1));
-//            }
-//            @Override public void mouseDragged(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(1));
-//            }
-//        });
-//        jButtonClip3.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
-//            @Override public void mouseMoved(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(2));
-//            }
-//            @Override public void mouseDragged(MouseEvent e) {
-//            }
-//        });
-//        jButtonClip4.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
-//            @Override public void mouseMoved(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(3));
-//            }
-//            @Override public void mouseDragged(MouseEvent e) {
-//            }
-//        });
-//        jButtonClip5.addMouseMotionListener(new java.awt.event.MouseMotionListener() {
-//            @Override public void mouseMoved(MouseEvent e) {
-//                jTextAreaClipBoard.setText(clipboards.getClipboard(4));
-//            }
-//            @Override public void mouseDragged(MouseEvent e) {
-//            }
-//        });
         recentDocsSubmenu.addMenuListener(new javax.swing.event.MenuListener() {
             @Override public void menuSelected(javax.swing.event.MenuEvent evt) {
                 setRecentDocumentMenuItem(recent1MenuItem,1);
@@ -598,6 +556,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 setRecentDocumentMenuItem(recent6MenuItem,6);
                 setRecentDocumentMenuItem(recent7MenuItem,7);
                 setRecentDocumentMenuItem(recent8MenuItem,8);
+                setRecentDocumentMenuItem(recent9MenuItem,9);
+                setRecentDocumentMenuItem(recentAMenuItem,10);
             }
             @Override public void menuDeselected(javax.swing.event.MenuEvent evt) {}
             @Override public void menuCanceled(javax.swing.event.MenuEvent evt) {}
@@ -606,7 +566,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(1);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(1));
+                    openFile(fp, settings.getRecentDocCompiler(1), settings.getRecentDocScript(1));
                 }
         }
         });
@@ -614,7 +574,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(2);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(2));
+                    openFile(fp, settings.getRecentDocCompiler(2), settings.getRecentDocScript(2));
                 }
             }
         });
@@ -622,7 +582,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(3);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(3));
+                    openFile(fp, settings.getRecentDocCompiler(3), settings.getRecentDocScript(3));
                 }
             }
         });
@@ -630,7 +590,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(4);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(4));
+                    openFile(fp, settings.getRecentDocCompiler(4), settings.getRecentDocScript(4));
                 }
             }
         });
@@ -638,7 +598,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(5);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(5));
+                    openFile(fp, settings.getRecentDocCompiler(5), settings.getRecentDocScript(5));
                 }
             }
         });
@@ -646,7 +606,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(6);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(6));
+                    openFile(fp, settings.getRecentDocCompiler(6), settings.getRecentDocScript(6));
                 }
             }
         });
@@ -654,7 +614,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(7);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(7));
+                    openFile(fp, settings.getRecentDocCompiler(7), settings.getRecentDocScript(7));
                 }
             }
         });
@@ -662,7 +622,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(8);
                 if (fp!=null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocCompiler(8));
+                    openFile(fp, settings.getRecentDocCompiler(8), settings.getRecentDocScript(8));
+                }
+            }
+        });
+        recent9MenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(9);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(9), settings.getRecentDocScript(9));
+                }
+            }
+        });
+        recentAMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(ActionEvent evt) {
+                File fp = settings.getRecentDoc(10);
+                if (fp!=null && fp.exists()) {
+                    openFile(fp, settings.getRecentDocCompiler(10), settings.getRecentDocScript(10));
                 }
             }
         });
@@ -765,6 +741,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         setRecentDocumentMenuItem(recent6MenuItem,6);
         setRecentDocumentMenuItem(recent7MenuItem,7);
         setRecentDocumentMenuItem(recent8MenuItem,8);
+        setRecentDocumentMenuItem(recent9MenuItem,9);
+        setRecentDocumentMenuItem(recentAMenuItem,10);
     }
     /**
      * 
@@ -1049,15 +1027,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes.gotoLabel(dest);
     }
     @Action
-    public void setFocusToTabbedPane() {
-        jTabbedPane1.requestFocusInWindow();
+    public void setFocusToSource() {
+        editorPanes.setFocus();
     }
     /**
      * 
      */
     @Action
     public void addNewTab() {
-        editorPanes.addNewTab(null, null, "untitled", jComboBoxCompilers.getSelectedIndex());
+        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler());
     }
     @Action
     public void openFile() {
@@ -1065,24 +1043,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openFile(fileToOpen);
     }
     private void openFile(File fileToOpen) {
-        openFile(fileToOpen, jComboBoxCompilers.getSelectedIndex());
+        openFile(fileToOpen, settings.getPreferredCompiler());
     }
     private void openFile(File fileToOpen, int compiler) {
+        openFile(fileToOpen, compiler, jComboBoxRunScripts.getSelectedIndex());
+    }
+    private void openFile(File fileToOpen, int compiler, int script) {
         // check if file could be opened
         if (editorPanes.loadFile(fileToOpen, compiler)) {
             // add file path to recent documents history
-            settings.addToRecentDocs(fileToOpen.toString(), compiler);
+            settings.addToRecentDocs(fileToOpen.toString(), compiler, script);
             // and update menus
             setRecentDocuments();
             // save last used path
             settings.setLastUsedPath(fileToOpen);
+            // select combobox item
+            try {
+                jComboBoxCompilers.setSelectedIndex(compiler);
+                jComboBoxRunScripts.setSelectedIndex(script);
+            }
+            catch (IllegalArgumentException ex) {
+            }
         } 
     }
     @Action
     public void saveFile() {
         if (editorPanes.saveFile()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
             // and update menus
             setRecentDocuments();
         }
@@ -1110,7 +1098,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // init editorpane-dataclass
                 editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, this, settings);
                 // init syntax highlighting for editor pane
-                editorPanes.addNewTab(null, null, "untitled", jComboBoxCompilers.getSelectedIndex());
+                editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler());
                 // set input focus
                 jEditorPaneMain.requestFocusInWindow();
             }
@@ -1129,7 +1117,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFileAs() {
         if (editorPanes.saveFileAs()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
             // and update menus
             setRecentDocuments();
         }
@@ -1147,6 +1135,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // clear old log
                 clearLog1();
                 clearLog2();
+                // clesr error lines
+                errorLines.clear();
                 // remove \r
                 script = script.replaceAll("\r", "");
                 // retrieve script lines
@@ -1170,10 +1160,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outFile.toString());
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, outFile.toString());
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, compressedFile.toString());
+                        // TODO find start address token, for cruncher
+                        String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode());
                         try {
                             // log process
                             log = "Converted script-line: "+cmd;
                             ConstantsR64.r64logger.log(Level.INFO, log);
+                            // write output to text area
+                            StringBuilder compilerLog = new StringBuilder("");
                             ProcessBuilder pb;
                             Process p;
                             // Start ProcessBuilder
@@ -1187,321 +1181,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
                                 // write output to text area
                                 while (sc.hasNextLine()) {
-                                    jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                                    compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
                                 }
                             }
                             try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
                                 // write output to text area
                                 while (sc.hasNextLine()) {
-                                    jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
+                                    compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
                                 }
                             }
                             // finally, append new line
-                            jTextAreaCompilerOutput.append(System.getProperty("line.separator"));
+                            compilerLog.append(System.getProperty("line.separator"));
+                            // print log to text area
+                            jTextAreaCompilerOutput.append(compilerLog.toString());                            
                             // wait for other process to be finished
                             p.waitFor();
                             p.destroy();
+                            // retrieve potential error lines from log
+                            errorLines.addAll(Tools.getErrorLines(compilerLog.toString()));
                         }
-                        catch (IOException | InterruptedException ex) {
+                        catch (IOException | InterruptedException | SecurityException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-                        }
+                            // check if permission denied
+                            if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
+                                ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
+                            }                        }
                     }
                 }
+                // select error log if we have errors
+                if (!errorLines.isEmpty()) selectLog2();
             }
-        }
-    }
-
-    @Action
-    public void runFile() {
-        // clear old log
-        clearLog1();
-        clearLog2();
-        // first, compile file
-        compileFile();
-        if (outputFile!=null && outputFile.exists()) {
-            // get path to emulator
-            // TODO parameter anpassen
-            File emuPath = settings.getEmulatorPath(jComboBoxEmulator.getSelectedIndex());
-            // check for valid value
-            if (emuPath!=null && emuPath.exists()) {
-                try {
-                    ProcessBuilder pb;
-                    Process p;
-                    // Start ProcessBuilder
-//                    if (settings.isWindows()) {
-//                        pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
-//                        pb = pb.directory(emuPath.getParentFile());
-//                        pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
-//                        // start process
-//                        p = pb.start();
-//                    }
-//                    // ProcessBuilder throws Permission Denied on Unix, so we use runtime instead
-//                    else {
-//                        p = Runtime.getRuntime().exec(new String[] {"open", emuPath.toString(), outputFile.toString()});
-//                    }
-                    // Start ProcessBuilder
-                    pb = new ProcessBuilder(emuPath.toString(), outputFile.toString());
-                    // set working dir
-                    pb = pb.directory(emuPath.getParentFile());
-                    pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
-                    // start process
-                    p = pb.start();
-                    // write output to text area
-                    // create scanner to receive compiler messages
-                    try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
-                        // write output to text area
-                        while (sc.hasNextLine()) {
-                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
-                        }
-                    }
-                    try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
-                        // write output to text area
-                        while (sc.hasNextLine()) {
-                            jTextAreaCompilerOutput.append(System.getProperty("line.separator")+sc.nextLine());
-                        }
-                    }
-                    // finally, append new line
-                    jTextAreaCompilerOutput.append(System.getProperty("line.separator"));
-                    // wait for other process to be finished
-                    p.waitFor();
-                    p.destroy();
-                }
-                catch (IOException | InterruptedException ex) {
-                    ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-                    // check if permission denied
-                    if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
-                        ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
-                    }
-                }
-            }
-            else {
-                ConstantsR64.r64logger.log(Level.WARNING,"No filepath to emulator specified! Could not run the compiled file in an emulator.");
-            }
-        }
-    }
-    @Action
-    public void compileFile() {
-        // clear old log
-        clearLog1();
-        clearLog2();
-        // update compiler params
-        updateCompilerParams();
-        // reste outfile
-        outputFile = null;
-        errorLines.clear();
-        // get current compiler
-        int compiler = editorPanes.getActiveCompiler();
-        // get path to compiler
-        // TODO ggf auch in environment suchen!
-        File compPath = settings.getCompilerPath(compiler);
-        // check for valid value
-        if (compPath!=null && compPath.exists()) {
-            // get assemble file
-            File afile = editorPanes.getActiveFilePath();
-            // check whether it exists
-            if (afile!=null && afile.exists()) {
-                // retrieve on-the-fly-parameter
-                Object selectedItem = jComboBoxParam.getSelectedItem();
-                String[] params;
-                if (selectedItem!=null && !selectedItem.toString().isEmpty()) {
-                    // retrieve on-the-fly-parameter
-                    params = selectedItem.toString().split(" ");
-                }
-                else {
-                    // retrieve default parameter
-                    params = settings.getCompilerParameter(compiler).split(" ");
-                }
-                // convert file object to string
-                String path = compPath.toString();
-                try {
-                    // create argument list
-                    List<String> args = new ArrayList<>();
-                    // compiler-path is first argument
-                    args.add(path);
-                    // **************************************
-                    //
-                    // Handle parameters here! general parameter
-                    // handling, like input- and output-files
-                    //
-                    // **************************************
-                    // iterate parameter parts
-                    for (String param : params) {
-                        param = param.trim();
-                        // **************************************
-                        // Handle INPUT FILE parameter here
-                        // **************************************
-                        if (param.equals(ConstantsR64.ASSEMBLER_INPUT_FILE)) {
-                            String infile;
-                            switch (compiler) {
-                                case ConstantsR64.COMPILER_ACME:
-                                    infile = afile.getName();
-                                    break;
-                                default:
-                                    infile = afile.toString();
-                                    break;
-                            }
-                            param = param.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, infile);
-                        }
-                        // **************************************
-                        // Handle OUTPUT FILE parameter here
-                        // **************************************
-                        if (param.equals(ConstantsR64.ASSEMBLER_OUPUT_FILE)) {
-                            // output file
-                            String parentFile = (null==afile.getParentFile()) ? afile.toString() : afile.getParentFile().toString();
-                            String outfile = parentFile+File.separator+FileTools.getFileName(afile)+".prg";
-                            param = param.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outfile);
-                        }
-                        if (!param.isEmpty()) args.add(param);
-                    }
-                    // **************************************
-                    //
-                    // Handle compiler specific parameter
-                    // options for ProcessBuilder here!
-                    // E.g., add "java -jar" for KickAssembler
-                    //
-                    // **************************************
-                    // use parameters according to the compiler
-                    switch (compiler) {
-                        // **************************************
-                        // Preparing Parameters for Compiler Kickassembler
-                        // **************************************
-                        case ConstantsR64.COMPILER_KICKASSEMBLER:
-                            if (!args.contains(afile.toString())) args.add(afile.toString());
-                            args.add(0, "java");
-                            args.add(1, "-jar");
-                            break;
-                        // **************************************
-                        // Preparing Parameters for Compiler ACME
-                        // **************************************
-                        case ConstantsR64.COMPILER_ACME:
-                            // retrieve source and check for "!to" command
-                            String acmeToFile = Tools.getAcmeToFile(editorPanes.getActiveSourceCode());
-                            // find !to
-                            if (acmeToFile!=null) {
-                                // if we have a !to command, we don't use the --outfile parameter
-                                int poff = args.indexOf("--outfile");
-                                if (poff!=-1) {
-                                    try {
-                                        args.remove(poff+1);
-                                        args.remove(poff);
-                                        // but we have to update the "afile", because else
-                                        // the "outputFile" variable contains a different (wrong)
-                                        // filepath!
-                                        // set new file name to variable
-                                        String parentFile = (null==afile.getParentFile()) ? afile.toString() : afile.getParentFile().toString();
-                                        afile = new File(parentFile+File.separator+acmeToFile);
-                                    }
-                                    catch(IndexOutOfBoundsException | UnsupportedOperationException ex) {
-                                        ConstantsR64.r64logger.log(Level.SEVERE, ex.getLocalizedMessage());
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                    StringBuilder sb = new StringBuilder("");
-                    for (String arg : args) sb.append(System.getProperty("line.separator")).append(arg);
-                    /**
-                     * JDK 8 Lambda
-                     */
-//                    args.stream().forEach((arg) -> {
-//                        sb.append(System.getProperty("line.separator")).append(arg);
-//                    });
-                    // log compiler paramater
-                    String log = "Compiler-Parameter: "+sb.toString();
-                    ConstantsR64.r64logger.log(Level.INFO, log);
-                    // *************************************************
-                    // start new process builder
-                    // *************************************************
-                    ProcessBuilder pb = new ProcessBuilder(args);
-                    // if we have ACME, set different working directory
-                    File wd;
-                    switch (compiler) {
-                        case ConstantsR64.COMPILER_ACME:
-                            wd = afile.getParentFile();
-                            break;
-                        default:
-                            wd = compPath.getParentFile();
-                            break;
-                    }
-                    // set process working dir
-                    pb = pb.directory(wd);
-                    pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
-                    // log working directory
-                    log = "Working-Directory: "+pb.directory().getAbsolutePath();
-                    ConstantsR64.r64logger.log(Level.INFO, log);
-                    // start process
-                    Process p = pb.start();
-                    // write output to text area
-                    StringBuilder compilerLog = new StringBuilder("");
-                    // create scanner to receive compiler messages
-                    try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
-                        // write output to text area
-                        while (sc.hasNextLine()) {
-                            compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
-                        }
-                    }
-                    // write output to text area
-                    // create scanner to receive compiler messages
-                    try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
-                        // write output to text area
-                        while (sc.hasNextLine()) {
-                            compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
-                        }
-                    }
-                    // finally, append new line
-                    compilerLog.append(System.getProperty("line.separator"));
-                    // print log to text area
-                    jTextAreaCompilerOutput.append(compilerLog.toString());
-                    // wait for other process to be finished
-                    p.waitFor();
-                    p.destroy();
-                    // retrieve potential error lines from log
-                    errorLines = Tools.getErrorLines(compilerLog.toString());
-                    // specifiy output file
-                    outputFile = FileTools.setFileExtension(afile, "prg");
-                    // check if exists
-                    if (!outputFile.exists()) outputFile = null;
-                }
-                catch (IOException | InterruptedException ex) {
-                    ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-                }
-            }
-            else {
-                ConstantsR64.r64logger.log(Level.WARNING,"No filepath to source file specified! Could not compile file.");
-            }
-        }
-        else {
-            ConstantsR64.r64logger.log(Level.WARNING,"No filepath to compiler specified! Could not compile file.");
-        }
-        // say that we've finished
-        ConstantsR64.r64logger.log(Level.INFO, "*** Compiling finished ***");
-        // finally, append new line
-        jTextAreaLog.append(System.getProperty("line.separator"));
-    }
-    private void updateCompilerParams() {
-        // get selected item
-        Object selectedItem = jComboBoxParam.getEditor().getItem();
-        if (selectedItem!=null) {
-            // get current text from compiler params
-            String text = selectedItem.toString();
-            // check for valid value and if text does not already is in list
-            if (text!=null && !text.isEmpty() && !compilerParams.contains(text)) compilerParams.add(text);
-            // check for length
-            if (compilerParams.size()>10) compilerParams.remove(0);
-            // update combo box
-            jComboBoxParam.removeAllItems();
-            for (String para : compilerParams) jComboBoxParam.addItem(para);
-            /**
-             * JDK 8 Lambda
-             */
-//            compilerParams.stream().forEach((para) -> {
-//                jComboBoxParam.addItem(para);
-//            });
-            // set selection
-            jComboBoxParam.setSelectedItem(text);
-            jComboBoxParam.setMaximumRowCount(jComboBoxParam.getItemCount());
         }
     }
     @Action
@@ -1515,18 +1224,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_LOG);
         jSplitPane1.setOrientation(currentlayout);
-    }
-    @Action
-    public void switchRunPosition() {
-        int currentlayout = settings.getSearchFrameSplitLayout(Settings.SPLITPANE_RUN);
-        if (JSplitPane.HORIZONTAL_SPLIT == currentlayout) {
-            currentlayout = JSplitPane.VERTICAL_SPLIT;
-        }
-        else {
-            currentlayout = JSplitPane.HORIZONTAL_SPLIT;
-        }
-        settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_RUN);
-        jSplitPaneRun.setOrientation(currentlayout);
     }
     @Action
     public void switchBothPosition() {
@@ -1552,6 +1249,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void selectUserScripts() {
+        jComboBoxRunScripts.showPopup();
         jComboBoxRunScripts.requestFocusInWindow();
     }
     @Action
@@ -1716,10 +1414,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             editorPanes.insertString(bytetable);
         }
         insertSinusTableDlg = null;
-    }
-    @Action
-    public void crunchWithExomizer() {
-        
     }
     /**
      * 
@@ -2126,15 +1820,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
-        jSplitPaneRun = new javax.swing.JSplitPane();
-        jPanel8 = new javax.swing.JPanel();
-        jComboBoxEmulator = new javax.swing.JComboBox();
-        jComboBoxCompilers = new javax.swing.JComboBox();
-        jComboBoxParam = new javax.swing.JComboBox();
-        jButtonRun = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jComboBoxRunScripts = new javax.swing.JComboBox();
         jButtonRunScript = new javax.swing.JButton();
+        jComboBoxCompilers = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jTabbedPaneLogs = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
@@ -2157,6 +1848,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         recent6MenuItem = new javax.swing.JMenuItem();
         recent7MenuItem = new javax.swing.JMenuItem();
         recent8MenuItem = new javax.swing.JMenuItem();
+        recent9MenuItem = new javax.swing.JMenuItem();
+        recentAMenuItem = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
@@ -2201,13 +1894,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         gotoNextErrorMenuItem = new javax.swing.JMenuItem();
         gotoPrevErrorMenuItem = new javax.swing.JMenuItem();
         sourceMenu = new javax.swing.JMenu();
-        runDefaultMenuItem = new javax.swing.JMenuItem();
-        compileMenuItem = new javax.swing.JMenuItem();
-        jSeparator17 = new javax.swing.JPopupMenu.Separator();
         runScriptMenuItem = new javax.swing.JMenuItem();
-        jSeparator16 = new javax.swing.JPopupMenu.Separator();
-        jMenuCruncher = new javax.swing.JMenu();
-        crunchExoMenuItem = new javax.swing.JMenuItem();
+        focusScriptMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
@@ -2215,16 +1903,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertBasicStartMenuItem = new javax.swing.JMenuItem();
         insertBytesFromFileMenuItem = new javax.swing.JMenuItem();
         insertSinusMenuItem = new javax.swing.JMenuItem();
-        viewMenu = new javax.swing.JMenu();
+        jSeparator16 = new javax.swing.JPopupMenu.Separator();
         viewMainTabMenuItem = new javax.swing.JMenuItem();
-        jSeparator14 = new javax.swing.JPopupMenu.Separator();
-        focusScriptMenuItem = new javax.swing.JMenuItem();
-        jSeparator18 = new javax.swing.JPopupMenu.Separator();
+        viewMenu = new javax.swing.JMenu();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         viewLog2MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
         switchBothMenuItem = new javax.swing.JMenuItem();
-        switchRunPosMenuItem = new javax.swing.JMenuItem();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
@@ -2366,54 +2051,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanel3.setName("jPanel3"); // NOI18N
 
-        jSplitPaneRun.setName("jSplitPaneRun"); // NOI18N
-        jSplitPaneRun.setOneTouchExpandable(true);
-
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jPanel8.border.title"))); // NOI18N
-        jPanel8.setName("jPanel8"); // NOI18N
-
-        jComboBoxEmulator.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.EMU_NAMES));
-        jComboBoxEmulator.setName("jComboBoxEmulator"); // NOI18N
-
-        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
-        jComboBoxCompilers.setName("jComboBoxCompilers"); // NOI18N
-
-        jComboBoxParam.setEditable(true);
-        jComboBoxParam.setToolTipText(resourceMap.getString("jComboBoxParam.toolTipText")); // NOI18N
-        jComboBoxParam.setName("jComboBoxParam"); // NOI18N
-
-        jButtonRun.setAction(actionMap.get("runFile")); // NOI18N
-        jButtonRun.setName("jButtonRun"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jComboBoxParam, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel8Layout.createSequentialGroup()
-                        .add(jComboBoxEmulator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(jButtonRun)))
-                .addContainerGap())
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8Layout.createSequentialGroup()
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBoxEmulator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButtonRun))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBoxParam, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jSplitPaneRun.setTopComponent(jPanel8);
-
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jPanel9.border.title"))); // NOI18N
         jPanel9.setName("jPanel9"); // NOI18N
 
@@ -2422,35 +2059,55 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
         jButtonRunScript.setName("jButtonRunScript"); // NOI18N
 
+        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
+        jComboBoxCompilers.setName("jComboBoxCompilers"); // NOI18N
+
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel2)
+                    .add(jLabel1))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 161, Short.MAX_VALUE)
                 .add(jButtonRunScript)
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(jButtonRunScript))
+            .add(jPanel9Layout.createSequentialGroup()
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonRunScript)
+                    .add(jLabel2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel1))
+                .addContainerGap())
         );
-
-        jSplitPaneRun.setRightComponent(jPanel9);
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPaneRun)
+            .add(jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneRun)
+            .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
         jSplitPane2.setTopComponent(jPanel3);
@@ -2478,9 +2135,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 470, Short.MAX_VALUE)
+            .add(0, 469, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
@@ -2501,7 +2158,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
@@ -2587,6 +2244,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         recent8MenuItem.setName("recent8MenuItem"); // NOI18N
         recentDocsSubmenu.add(recent8MenuItem);
+
+        recent9MenuItem.setName("recent9MenuItem"); // NOI18N
+        recentDocsSubmenu.add(recent9MenuItem);
+
+        recentAMenuItem.setName("recentAMenuItem"); // NOI18N
+        recentDocsSubmenu.add(recentAMenuItem);
 
         fileMenu.add(recentDocsSubmenu);
 
@@ -2759,34 +2422,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         sourceMenu.setText(resourceMap.getString("sourceMenu.text")); // NOI18N
         sourceMenu.setName("sourceMenu"); // NOI18N
 
-        runDefaultMenuItem.setAction(actionMap.get("runFile")); // NOI18N
-        runDefaultMenuItem.setName("runDefaultMenuItem"); // NOI18N
-        sourceMenu.add(runDefaultMenuItem);
-
-        compileMenuItem.setAction(actionMap.get("compileFile")); // NOI18N
-        compileMenuItem.setName("compileMenuItem"); // NOI18N
-        sourceMenu.add(compileMenuItem);
-
-        jSeparator17.setName("jSeparator17"); // NOI18N
-        sourceMenu.add(jSeparator17);
-
         runScriptMenuItem.setAction(actionMap.get("runScript")); // NOI18N
         runScriptMenuItem.setText(resourceMap.getString("runScriptMenuItem.text")); // NOI18N
         runScriptMenuItem.setToolTipText(resourceMap.getString("runScriptMenuItem.toolTipText")); // NOI18N
         runScriptMenuItem.setName("runScriptMenuItem"); // NOI18N
         sourceMenu.add(runScriptMenuItem);
 
-        jSeparator16.setName("jSeparator16"); // NOI18N
-        sourceMenu.add(jSeparator16);
-
-        jMenuCruncher.setText(resourceMap.getString("jMenuCruncher.text")); // NOI18N
-        jMenuCruncher.setName("jMenuCruncher"); // NOI18N
-
-        crunchExoMenuItem.setAction(actionMap.get("crunchWithExomizer")); // NOI18N
-        crunchExoMenuItem.setName("crunchExoMenuItem"); // NOI18N
-        jMenuCruncher.add(crunchExoMenuItem);
-
-        sourceMenu.add(jMenuCruncher);
+        focusScriptMenuItem.setAction(actionMap.get("selectUserScripts")); // NOI18N
+        focusScriptMenuItem.setName("focusScriptMenuItem"); // NOI18N
+        sourceMenu.add(focusScriptMenuItem);
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         sourceMenu.add(jSeparator8);
@@ -2814,24 +2458,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertSinusMenuItem.setName("insertSinusMenuItem"); // NOI18N
         sourceMenu.add(insertSinusMenuItem);
 
+        jSeparator16.setName("jSeparator16"); // NOI18N
+        sourceMenu.add(jSeparator16);
+
+        viewMainTabMenuItem.setAction(actionMap.get("setFocusToSource")); // NOI18N
+        viewMainTabMenuItem.setName("viewMainTabMenuItem"); // NOI18N
+        sourceMenu.add(viewMainTabMenuItem);
+
         menuBar.add(sourceMenu);
 
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
-
-        viewMainTabMenuItem.setAction(actionMap.get("setFocusToTabbedPane")); // NOI18N
-        viewMainTabMenuItem.setName("viewMainTabMenuItem"); // NOI18N
-        viewMenu.add(viewMainTabMenuItem);
-
-        jSeparator14.setName("jSeparator14"); // NOI18N
-        viewMenu.add(jSeparator14);
-
-        focusScriptMenuItem.setAction(actionMap.get("selectUserScripts")); // NOI18N
-        focusScriptMenuItem.setName("focusScriptMenuItem"); // NOI18N
-        viewMenu.add(focusScriptMenuItem);
-
-        jSeparator18.setName("jSeparator18"); // NOI18N
-        viewMenu.add(jSeparator18);
 
         viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
@@ -2847,10 +2484,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         switchBothMenuItem.setAction(actionMap.get("switchBothPosition")); // NOI18N
         switchBothMenuItem.setName("switchBothMenuItem"); // NOI18N
         viewMenu.add(switchBothMenuItem);
-
-        switchRunPosMenuItem.setAction(actionMap.get("switchRunPosition")); // NOI18N
-        switchRunPosMenuItem.setName("switchRunPosMenuItem"); // NOI18N
-        viewMenu.add(switchRunPosMenuItem);
 
         switchLogPosMenuItem.setAction(actionMap.get("switchLogPosition")); // NOI18N
         switchLogPosMenuItem.setName("switchLogPosMenuItem"); // NOI18N
@@ -2958,9 +2591,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem addTabMenuItem;
     private javax.swing.JMenuItem closeAllMenuItem;
     private javax.swing.JMenuItem closeFileMenuItem;
-    private javax.swing.JMenuItem compileMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem crunchExoMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu findMenu;
@@ -2988,28 +2619,25 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
     private javax.swing.JButton jButtonReplace;
-    private javax.swing.JButton jButtonRun;
     private javax.swing.JButton jButtonRunScript;
     private javax.swing.JComboBox jComboBoxCompilers;
-    private javax.swing.JComboBox jComboBoxEmulator;
     private javax.swing.JComboBox jComboBoxGoto;
-    private javax.swing.JComboBox jComboBoxParam;
     private javax.swing.JComboBox jComboBoxRunScripts;
     private javax.swing.JEditorPane jEditorPaneMain;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenuCruncher;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
@@ -3021,11 +2649,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
-    private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
-    private javax.swing.JPopupMenu.Separator jSeparator17;
-    private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
@@ -3038,7 +2663,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
-    private javax.swing.JSplitPane jSplitPaneRun;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPaneLogs;
     private javax.swing.JTextArea jTextAreaCompilerOutput;
@@ -3062,11 +2686,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem recent6MenuItem;
     private javax.swing.JMenuItem recent7MenuItem;
     private javax.swing.JMenuItem recent8MenuItem;
+    private javax.swing.JMenuItem recent9MenuItem;
+    private javax.swing.JMenuItem recentAMenuItem;
     private javax.swing.JMenu recentDocsSubmenu;
     private javax.swing.JMenuItem redoMenuItem;
     private javax.swing.JMenuItem replaceAllMenuItem;
     private javax.swing.JMenuItem replaceMenuItem;
-    private javax.swing.JMenuItem runDefaultMenuItem;
     private javax.swing.JMenuItem runScriptMenuItem;
     private javax.swing.JMenuItem saveAllMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
@@ -3077,7 +2702,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel statusPanel;
     private javax.swing.JMenuItem switchBothMenuItem;
     private javax.swing.JMenuItem switchLogPosMenuItem;
-    private javax.swing.JMenuItem switchRunPosMenuItem;
     private javax.swing.JMenuItem undoMenuItem;
     private javax.swing.JMenuItem viewLog1MenuItem;
     private javax.swing.JMenuItem viewLog2MenuItem;

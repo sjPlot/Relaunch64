@@ -58,30 +58,16 @@ public class Settings {
     /**
      * Amount of stored recent documents
      */
-    private static final int recentDocCount = 8;
+    private static final int recentDocCount = 10;
     
     private static final String SETTING_RECENT_DOC = "recentDoc";
     private static final String SETTING_LAST_USED_PATH = "lastusedpath";
-    private static final String SETTING_PATH_KICKASSEMBLER = "pathKickAssembler";
-    private static final String SETTING_PATH_EXOMIZER = "pathExomizer";
-    private static final String SETTING_PATH_64TASS = "path64tass";
-    private static final String SETTING_PATH_ACME = "pathAcme";
-    private static final String SETTING_PATH_EMU = "pathEmulator";
     private static final String SETTING_PREF_COMP = "preferredCompiler";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
-    private static final String SETTING_PREF_EMU = "preferredEmulator";
-    private static final String SETTING_PATH_EMU_VICE = "pathEmulatorVice";
-    private static final String SETTING_PATH_EMU_CCS64 = "pathEmulatorCCS64";
-    private static final String SETTING_PATH_EMU_FRODO = "pathEmulatorFrodo";
-    private static final String SETTING_PATH_EMU_EMU64 = "pathEmulatorEmu64";
-    private static final String SETTING_PARAM_KICKASSEMBLER = "paramKickAssembler";
-    private static final String SETTING_PARAM_EXOMIZER = "paramExomizer";
-    private static final String SETTING_PARAM_64TASS = "param64tass";
-    private static final String SETTING_PARAM_ACME = "paramAcme";
     private static final String REC_DOC_COMPILER = "compiler";
+    private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
-    private static final String SETTING_RUNSPLITLAYOUT = "runsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABCHAR = "tabchar";
     
@@ -279,111 +265,6 @@ public class Settings {
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_RUNSPLITLAYOUT)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_RUNSPLITLAYOUT);
-            el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PREF_EMU)) {
-            // create element
-            Element el = new Element(SETTING_PREF_EMU);
-            el.setText(String.valueOf(ConstantsR64.EMU_VICE));
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_64TASS)) {
-            // create element
-            Element el = new Element(SETTING_PATH_64TASS);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER)) {
-            // create element
-            Element el = new Element(SETTING_PATH_KICKASSEMBLER);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EXOMIZER)) {
-            // create element
-            Element el = new Element(SETTING_PATH_EXOMIZER);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_ACME)) {
-            // create element
-            Element el = new Element(SETTING_PATH_ACME);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU)) {
-            // create element
-            Element el = new Element(SETTING_PATH_EMU);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE)) {
-            // create element
-            Element el = new Element(SETTING_PATH_EMU_VICE);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_EMU64)) {
-            // create element
-            Element el = new Element(SETTING_PATH_EMU_EMU64);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_CCS64)) {
-            // create element
-            Element el = new Element(SETTING_PATH_EMU_CCS64);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO)) {
-            // create element
-            Element el = new Element(SETTING_PATH_EMU_FRODO);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_64TASS)) {
-            // create element
-            Element el = new Element(SETTING_PARAM_64TASS);
-            el.setText(ConstantsR64.DEFAULT_64TASS_PARAM);
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER)) {
-            // create element
-            Element el = new Element(SETTING_PARAM_KICKASSEMBLER);
-            el.setText("");
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_ACME)) {
-            // create element
-            Element el = new Element(SETTING_PARAM_ACME);
-            el.setText(ConstantsR64.DEFAULT_ACME_PARAM);
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PARAM_EXOMIZER)) {
-            // create element
-            Element el = new Element(SETTING_PARAM_EXOMIZER);
-            el.setText(ConstantsR64.DEFAULT_EXOMIZER_PARAM);
-            // and add it to the document
-            settingsFile.getRootElement().addContent(el);
-        }
     }
     /**
      * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent document
@@ -437,6 +318,33 @@ public class Settings {
     }
     /**
      * 
+     * @param nr
+     * @return 
+     */
+    public int getRecentDocScript(int nr) {
+        // checl for valid parameter
+        if (nr<0) return 0;
+        // retrieve element
+        Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        // if we have any valid document
+        if (el!=null) {
+            // retrieve compiler attribute
+            Attribute comp = el.getAttribute(REC_DOC_SCRIPT);
+            // if we have any valid attribute
+            if (comp!=null) {
+                try {
+                    return Integer.parseInt(comp.getValue());
+                }
+                catch (NumberFormatException ex) {
+                    return 0;
+                }
+            }
+        }
+        // else return null
+        return 0;
+    }
+    /**
+     * 
      * @param doc
      * @return 
      */
@@ -469,8 +377,9 @@ public class Settings {
      * documents and rotates that list, if necessary.
      * @param fp the filepath to the document that should be added to the list of recent documents
      * @param compiler
+     * @param userScript
      */
-    public void addToRecentDocs(String fp, int compiler) {
+    public void addToRecentDocs(String fp, int compiler, int userScript) {
         // check for valid parameter
         if (null==fp || fp.isEmpty()) {
             return;
@@ -484,14 +393,18 @@ public class Settings {
         LinkedList<String> recdocs = new LinkedList<>();
         // linked list for compilers
         LinkedList<Integer> reccomps = new LinkedList<>();
+        // linked list for scripts
+        LinkedList<Integer> recscripts = new LinkedList<>();
         // add new filepath to linked list
         recdocs.add(fp);
         reccomps.add(compiler);
+        recscripts.add(userScript);
         // iterate all current recent documents
         for (int cnt=1; cnt<=recentDocCount; cnt++) {
             // retrieve recent document
             String recentDoc = getRecentDocAsString(cnt);
             int comp = getRecentDocCompiler(cnt);
+            int script = getRecentDocScript(cnt);
             // check whether the linked list already contains such a document
             if (recentDoc!=null && !recentDoc.isEmpty()) {
                 // check for existing file
@@ -499,6 +412,7 @@ public class Settings {
                 // if not, add it to the list
                 if (dummy.exists() && !recdocs.contains(recentDoc)) {
                     reccomps.add(comp);
+                    recscripts.add(script);
                     recdocs.add(recentDoc);
                 }
             }
@@ -508,11 +422,11 @@ public class Settings {
             // check for valid bounds of linked list
             if (recdocs.size()>=cnt) {
                 // and set recent document
-                setRecentDoc(cnt, recdocs.get(cnt-1), reccomps.get(cnt-1));
+                setRecentDoc(cnt, recdocs.get(cnt-1), reccomps.get(cnt-1), recscripts.get(cnt-1));
             }
             // else fill remaining recent documents with empty strings
             else {
-                setRecentDoc(cnt, "", -1);
+                setRecentDoc(cnt, "", -1, -1);
             }
         }
     }
@@ -521,158 +435,25 @@ public class Settings {
      * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
      * @param fp the filepath to the recently used document as string
      * @param compiler
+     * @param userScript
      */
-    public void setRecentDoc(int nr, String fp, int compiler) {
+    public void setRecentDoc(int nr, String fp, int compiler, int userScript) {
         // check for valid parameter
         if (null==fp || -1==nr) {
             return;
         }
         // retrieve element
         Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
-        // if element exists...
-        if (el!=null) {
-            // add filepath
-            el.setText(fp);
-            el.setAttribute(REC_DOC_COMPILER, String.valueOf(compiler));
-        }
-        else {
-            // create a filepath-element
+        // if element does not exist, create new...
+        if (null==el) {
             el = new Element(SETTING_RECENT_DOC+String.valueOf(nr));
-            // add filepath
-            el.setText(fp);
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
-    }
-    public String getCruncherParameter(int cruncher) {
-        Element el;
-        switch (cruncher) {
-            case ConstantsR64.CRUNCHER_EXOMIZER:
-                el = settingsFile.getRootElement().getChild(SETTING_PARAM_EXOMIZER);
-                break;
-            default:
-                el = settingsFile.getRootElement().getChild(SETTING_PARAM_EXOMIZER);
-                break;
-        }
-        String value = "";
-        if (el!=null) {
-            value = el.getText();
-        }
-        return value;
-    }
-    public void setCruncherParameter(int cruncher, String param) {
-        if (param!=null) {
-            String crunchParam = "";
-            switch (cruncher) {
-                case ConstantsR64.CRUNCHER_EXOMIZER:
-                    crunchParam = SETTING_PARAM_EXOMIZER;
-                    break;
-            }
-            Element el = settingsFile.getRootElement().getChild(crunchParam);
-            if (null==el) {
-                el = new Element(crunchParam);
-                settingsFile.getRootElement().addContent(el);
-            }
-            el.setText(param);
-        }
-    }
-    
-    /**
-     * 
-     * @param compiler
-     * @return 
-     */
-    public String getCompilerParameter(int compiler) {
-        Element el;
-        switch (compiler) {
-            case ConstantsR64.COMPILER_ACME:
-                el = settingsFile.getRootElement().getChild(SETTING_PARAM_ACME);
-                break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-                el = settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER);
-                break;
-            case ConstantsR64.COMPILER_64TASS:
-                el = settingsFile.getRootElement().getChild(SETTING_PARAM_64TASS);
-                break;
-            default:
-                el = settingsFile.getRootElement().getChild(SETTING_PARAM_KICKASSEMBLER);
-                break;
-        }
-        String value = "";
-        if (el!=null) {
-            value = el.getText();
-        }
-        return value;
-    }
-    /**
-     * 
-     * @param compiler
-     * @param param 
-     */
-    public void setCompilerParameter(int compiler, String param) {
-        if (param!=null) {
-            String compParam = "";
-            switch (compiler) {
-                case ConstantsR64.COMPILER_ACME:
-                    compParam = SETTING_PARAM_ACME;
-                    break;
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    compParam = SETTING_PARAM_KICKASSEMBLER;
-                    break;
-                case ConstantsR64.COMPILER_64TASS:
-                    compParam = SETTING_PARAM_64TASS;
-                    break;
-            }
-            Element el = settingsFile.getRootElement().getChild(compParam);
-            if (null==el) {
-                el = new Element(compParam);
-                settingsFile.getRootElement().addContent(el);
-            }
-            el.setText(param);
-        }
-    }
-    /**
-     * 
-     * @param compiler
-     * @return 
-     */
-    public File getCompilerPath(int compiler) {
-        Element el;
-        switch (compiler) {
-            case ConstantsR64.COMPILER_ACME:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_ACME);
-                break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER);
-                break;
-            case ConstantsR64.COMPILER_64TASS:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_64TASS);
-                break;
-            default:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_KICKASSEMBLER);
-                break;
-        }
-        File value = null;
-        if (el!=null) {
-            value = new File(el.getText());
-        }
-        return value;
-    }
-    public File getCruncherPath(int cruncher) {
-        Element el;
-        switch (cruncher) {
-            case ConstantsR64.CRUNCHER_EXOMIZER:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EXOMIZER);
-                break;
-            default:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EXOMIZER);
-                break;
-        }
-        File value = null;
-        if (el!=null) {
-            value = new File(el.getText());
-        }
-        return value;
+        // add filepath
+        el.setText(fp);
+        el.setAttribute(REC_DOC_COMPILER, String.valueOf(compiler));
+        el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
     }
     public File getLastUsedPath() {
         Element el = settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH);
@@ -689,118 +470,6 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(f.getAbsolutePath());
-    }
-    /**
-     * 
-     * @param compiler
-     * @param path 
-     */
-    public void setCompilerPath(int compiler, File path) {
-        if (path!=null) {
-            String compPath = "";
-            switch (compiler) {
-                case ConstantsR64.COMPILER_ACME:
-                    compPath = SETTING_PATH_ACME;
-                    break;
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    compPath = SETTING_PATH_KICKASSEMBLER;
-                    break;
-                case ConstantsR64.COMPILER_64TASS:
-                    compPath = SETTING_PATH_64TASS;
-            }
-            Element el = settingsFile.getRootElement().getChild(compPath);
-            if (null==el) {
-                el = new Element(compPath);
-                settingsFile.getRootElement().addContent(el);
-            }
-            el.setText(path.toString());
-        }
-    }
-    public void setCruncherPath(int cruncher, File path) {
-        if (path!=null) {
-            String crunchPath = "";
-            switch (cruncher) {
-                case ConstantsR64.CRUNCHER_EXOMIZER:
-                    crunchPath = SETTING_PATH_EXOMIZER;
-                    break;
-            }
-            Element el = settingsFile.getRootElement().getChild(crunchPath);
-            if (null==el) {
-                el = new Element(crunchPath);
-                settingsFile.getRootElement().addContent(el);
-            }
-            el.setText(path.toString());
-        }
-    }
-    /**
-     * 
-     * @param emulator
-     * @return 
-     */
-    public File getEmulatorPath(int emulator) {
-        Element el = null;
-        switch (emulator) {
-            case ConstantsR64.EMU_VICE:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE);
-                break;
-            case ConstantsR64.EMU_CCS64:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_CCS64);
-                break;
-            case ConstantsR64.EMU_FRODO:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO);
-                break;
-            case ConstantsR64.EMU_EMU64:
-                el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_EMU64);
-                break;
-        }
-        File value = null;
-        if (el!=null) {
-            value = new File(el.getText());
-        }
-        return value;
-    }
-    /**
-     * 
-     * @param emulator
-     * @param path 
-     */
-    public void setEmulatorPath(int emulator, File path) {
-        if (path!=null) {
-            Element el = null;
-            switch (emulator) {
-                case ConstantsR64.EMU_VICE:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_VICE);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_EMU_VICE);
-                        settingsFile.getRootElement().addContent(el);
-                    }
-                    break;
-                case ConstantsR64.EMU_CCS64:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_CCS64);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_EMU_CCS64);
-                        settingsFile.getRootElement().addContent(el);
-                    }
-                    break;
-                case ConstantsR64.EMU_FRODO:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_FRODO);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_EMU_FRODO);
-                        settingsFile.getRootElement().addContent(el);
-                    }
-                    break;
-                case ConstantsR64.EMU_EMU64:
-                    el = settingsFile.getRootElement().getChild(SETTING_PATH_EMU_EMU64);
-                    if (null==el) {
-                        el = new Element(SETTING_PATH_EMU_EMU64);
-                        settingsFile.getRootElement().addContent(el);
-                    }
-                    break;
-            }
-            if (el!=null) {
-                el.setText(path.toString());
-            }
-        }
     }
     public int getPreferredCompiler() {
         Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
@@ -865,24 +534,6 @@ public class Settings {
         }
         el.setText(String.valueOf(index));
     }
-    public int getPreferredEmulator() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_EMU);
-        try {
-            if (el!=null) return Integer.parseInt(el.getText());
-        }
-        catch (NumberFormatException ex) {
-        }
-        return ConstantsR64.EMU_VICE;
-    }
-    public void setPreferredEmulator(int emulator) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_EMU);
-        if (null==el) {
-            el = new Element(SETTING_PREF_EMU);
-            settingsFile.getRootElement().addContent(el);
-        }
-        el.setText(String.valueOf(emulator));
-    }
-    
     /**
      * Retrieves settings for the mainfont (the font used for the main-entry-textfield).
      * @param what (indicates, which font-characteristic we want to have. use following constants:<br>
@@ -922,29 +573,11 @@ public class Settings {
         el.setText(f.getName());
         el.setAttribute("size", String.valueOf(f.getSize()));
     }
-    /**
-     * 
-     * @param compiler
-     * @return 
-     */
-    public String getDefaultCompilerParam(int compiler) {
-        switch(compiler) {
-            case ConstantsR64.COMPILER_ACME:
-                return ConstantsR64.DEFAULT_ACME_PARAM;
-            case ConstantsR64.COMPILER_64TASS:
-                return ConstantsR64.DEFAULT_64TASS_PARAM;
-            default:
-                return "";
-        }
-    }
     public int getSearchFrameSplitLayout(int splitpane) {
         String splitname = SETTING_LOGSPLITLAYOUT;
         switch (splitpane) {
             case SPLITPANE_LOG:
                 splitname = SETTING_LOGSPLITLAYOUT;
-                break;
-            case SPLITPANE_RUN:
-                splitname = SETTING_RUNSPLITLAYOUT;
                 break;
             case SPLITPANE_BOTHLOGRUN:
                 splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;
@@ -969,9 +602,6 @@ public class Settings {
         switch (splitpane) {
             case SPLITPANE_LOG:
                 splitname = SETTING_LOGSPLITLAYOUT;
-                break;
-            case SPLITPANE_RUN:
-                splitname = SETTING_RUNSPLITLAYOUT;
                 break;
             case SPLITPANE_BOTHLOGRUN:
                 splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;

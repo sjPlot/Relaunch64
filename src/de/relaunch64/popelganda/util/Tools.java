@@ -26,7 +26,6 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
 
 /**
  *
@@ -169,25 +168,6 @@ public class Tools {
         }
         return null;
     }
-    public static boolean isToolInEnvironment(String toolName) {
-        // get all environment vars
-        Map<String, String> env = System.getenv();
-        // check if tool is in path
-        String path = env.get("Path");
-        if (path!=null) {
-            if (path.toLowerCase().contains(toolName.toLowerCase())) return true;
-        }
-        // check if tool is in path
-        path = env.get("PATH");
-        if (path!=null) {
-            if (path.toLowerCase().contains(toolName.toLowerCase())) return true;
-        }
-        // finally, check if tool itself is a key
-        for (String envName : env.keySet()) {
-            if (envName.toLowerCase().contains(toolName.toLowerCase()) || toolName.toLowerCase().contains(envName.toLowerCase())) return true;
-        }
-        return false;
-    }
     public static void convertTabsToSpace(Settings settings, EditorPanes ep, int index) {
         String source = ep.getSourceCode(index);
         source = source.replace("\t", settings.getTabChar());
@@ -259,5 +239,9 @@ public class Tools {
             }
         }
         return -1;
+    }
+    public static String getCruncherStart(String source) {
+        // TODO cruncher start auslesen
+        return null;
     }
 }

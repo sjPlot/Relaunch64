@@ -48,7 +48,6 @@ public class EditorPaneProperties {
     private boolean modified;
     private File filePath;
     private int compiler;
-    private String param;
     private final Settings settings;
     private MyUndoManager undomanager;
     
@@ -62,7 +61,6 @@ public class EditorPaneProperties {
         modified = false;
         filePath = null;
         compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
-        param = settings.getCompilerParameter(compiler);
     }
     public JEditorPane getEditorPane() {
         return editorPane;
@@ -99,14 +97,5 @@ public class EditorPaneProperties {
     }
     public void setCompiler(int c) {
         compiler = c;
-    }
-    public String getParam() {
-        return param;
-    }
-    public void setParam(String p) {
-        param = p;
-    }
-    public String getDefaultParam(int c) {
-        return settings.getCompilerParameter(c);
     }
 }

@@ -337,8 +337,6 @@ public class EditorPanes {
         editorPaneProperties.setFilePath(fp);
         // set compiler
         editorPaneProperties.setCompiler(c);
-        // set default parameter
-        editorPaneProperties.setParam(editorPaneProperties.getDefaultParam(c));
         // set modified false
         editorPaneProperties.setModified(false);
         // add editorpane to list
@@ -490,6 +488,8 @@ public class EditorPanes {
                         int caret = e.getStartOffset();
                         // set new caret position
                         ep.setCaretPosition(caret);
+                        // scroll rect to visible
+                        ep.scrollRectToVisible(ep.modelToView(caret));
                         // scroll some lines back, if possible
                         e = ep.getDocument().getDefaultRootElement().getElement(line-10);
                         if (e!=null) caret = e.getStartOffset();
@@ -505,7 +505,7 @@ public class EditorPanes {
                         return true;
                     }
                 }
-                catch(BadLocationException | IllegalArgumentException ex) {
+                catch(BadLocationException | IllegalArgumentException | IndexOutOfBoundsException ex) {
                 }
             }
         }
@@ -708,8 +708,9 @@ public class EditorPanes {
     /**
      * 
      * @param compiler 
+     * @param script
      */
-    public void changeSyntaxScheme(int compiler) {
+    public void changeSyntaxScheme(int compiler, int script) {
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         if (selectedTab != -1) {
@@ -718,7 +719,7 @@ public class EditorPanes {
             // change syntax scheme for recent docs
             if(getActiveFilePath()!=null) {
                 int rd = settings.findRecentDoc(getActiveFilePath().getPath());
-                settings.setRecentDoc(rd, getActiveFilePath().getPath(), compiler);
+                settings.setRecentDoc(rd, getActiveFilePath().getPath(), compiler, script);
             }
             // disable undo/redo events
             // ep.getUndoManager().enableRegisterUndoEvents(false);
