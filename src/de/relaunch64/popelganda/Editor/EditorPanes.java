@@ -206,7 +206,7 @@ public class EditorPanes {
                         // create string builder for new insert string
                         StringBuilder sb = new StringBuilder("");
                         // add tab infront of each line
-                        for (String l : lines) sb.append(settings.getTabChar()).append(l).append("\n");
+                        for (String l : lines) sb.append("\t").append(l).append("\n");
                         // insert string
                         ep.replaceSelection(sb.toString());
                         // re-select text
@@ -215,25 +215,8 @@ public class EditorPanes {
                     }
                     else {
                         try {
-                            // retrieve tab char
-                            String tabchar = settings.getTabChar();
-                            // if we have spaces, fill up to next "space tab"
-                            if (!tabchar.equals("\t")) {
-                                // retrieve number of spaces
-                                int tablength = tabchar.length();
-                                // calculate how many spaces from caret left to next "space tab"
-                                int remainingSpaces = tablength - (getColumn(ep) % tablength);
-                                StringBuilder sb = new StringBuilder("");
-                                // fill stringbuilder with remaining spaces
-                                while (remainingSpaces>0) {
-                                    remainingSpaces--;
-                                    sb.append(" ");
-                                }
-                                // and use remaining spaces as tab
-                                tabchar = sb.toString();
-                            }
                             // insert tab
-                            ep.getDocument().insertString(ep.getCaretPosition(), tabchar, null);
+                            ep.getDocument().insertString(ep.getCaretPosition(), "\t", null);
                         }
                         catch (BadLocationException ex) {
                         }
@@ -253,17 +236,10 @@ public class EditorPanes {
                         String[] lines = selString.split("\n");
                         // create string builder for new insert string
                         StringBuilder sb = new StringBuilder("");
-                        // remove counter
-                        int tabsRemoved = 0;
                         // add tab infront of each line
                         for (String l : lines) {
-                            // get original length of line
-                            int len = l.length();
                             // remove first tab
-                            l = l.replaceFirst(settings.getTabChar(), "");
-                            // calculate new length and determine if
-                            // a tab has been removed
-                            tabsRemoved = tabsRemoved+(len-l.length());
+                            l = l.replaceFirst("\t", "");
                             // append fixex line
                             sb.append(l).append("\n");
                         }
@@ -629,7 +605,8 @@ public class EditorPanes {
                                               SyntaxScheme.getCommentString(compiler),
                                               SyntaxScheme.getDelimiterList(compiler),
                                               SyntaxScheme.getStyleAttributes(),
-                                              compiler);
+                                              compiler,
+                                              settings.getTabWidth());
             }
         };
         // link editorkit to editorpane

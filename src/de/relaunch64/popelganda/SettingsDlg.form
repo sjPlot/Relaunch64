@@ -200,35 +200,26 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabelFont" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButtonFont" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jRadioButtonTab" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jRadioButtonSpaces" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTextFieldSpaces" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace min="0" pref="308" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabelFont" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButtonFont" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jTextFieldTabWidth" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="481" max="32767" attributes="0"/>
+                      <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -244,19 +235,14 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jRadioButtonTab" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jRadioButtonSpaces" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldSpaces" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldTabWidth" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxPrefComp" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="126" max="32767" attributes="0"/>
+                      <EmptySpace pref="155" max="32767" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -289,29 +275,11 @@
                 <Property name="name" type="java.lang.String" value="jLabel11" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JRadioButton" name="jRadioButtonTab">
-              <Properties>
-                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup1"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jRadioButtonTab.text"/>
-                <Property name="name" type="java.lang.String" value="jRadioButtonTab" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JRadioButton" name="jRadioButtonSpaces">
-              <Properties>
-                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup1"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jRadioButtonSpaces.text"/>
-                <Property name="name" type="java.lang.String" value="jRadioButtonSpaces" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextFieldSpaces">
+            <Component class="javax.swing.JTextField" name="jTextFieldTabWidth">
               <Properties>
                 <Property name="columns" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" resourceKey="jTextFieldSpaces.text"/>
-                <Property name="name" type="java.lang.String" value="jTextFieldSpaces" noResource="true"/>
+                <Property name="text" type="java.lang.String" resourceKey="jTextFieldTabWidth.text"/>
+                <Property name="name" type="java.lang.String" value="jTextFieldTabWidth" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="jComboBoxPrefComp">

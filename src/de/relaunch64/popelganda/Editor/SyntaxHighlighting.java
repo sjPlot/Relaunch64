@@ -86,7 +86,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
                               final HashMap<String, MutableAttributeSet> compilerKeywords,
                               String fname, int fsize, String slc, String dll,
                               final HashMap<String, MutableAttributeSet> attributes,
-                              int comp) {
+                              int comp, int tabWidth) {
 
         normal = attributes.get(ConstantsR64.STRING_NORMAL);
         comment = attributes.get(ConstantsR64.STRING_COMMENT);
@@ -109,6 +109,8 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
         this.keywords = keywords;
         this.compilerKeywords = compilerKeywords;
+        
+        setTabs(tabWidth);
     }
     @SuppressWarnings("PublicInnerClass")
     public enum ATTR_TYPE {
@@ -249,7 +251,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      * sets the number of characters per tab
      * @param charactersPerTab
      */
-    public void setTabs(int charactersPerTab) {
+    private void setTabs(int charactersPerTab) {
         Font f = new Font(fontName, Font.PLAIN, fontSize);
         FontMetrics fm = java.awt.Toolkit.getDefaultToolkit().getFontMetrics(f);
         int charWidth = fm.charWidth('w');

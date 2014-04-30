@@ -169,16 +169,6 @@ public class Tools {
         }
         return null;
     }
-    public static void convertTabsToSpace(Settings settings, EditorPanes ep, int index) {
-        String source = ep.getSourceCode(index);
-        source = source.replace("\t", settings.getTabChar());
-        ep.setSourceCode(index, source);
-    }
-    public static void convertSpaceToTabs(Settings settings, EditorPanes ep, int index) {
-        String source = ep.getSourceCode(index);
-        source = source.replace(settings.getTabChar(), "\t");
-        ep.setSourceCode(index, source);
-    }
     public static ArrayList<Integer> getErrorLines(String log) {
         // return value with lines of errors
         ArrayList<Integer> errorLines = new ArrayList<>();

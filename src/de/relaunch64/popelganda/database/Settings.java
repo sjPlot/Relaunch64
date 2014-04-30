@@ -69,7 +69,7 @@ public class Settings {
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
-    private static final String SETTING_TABCHAR = "tabchar";
+    private static final String SETTING_TABWIDTH = "tabwidth";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -258,10 +258,10 @@ public class Settings {
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_TABCHAR)) {
+        if (null==settingsFile.getRootElement().getChild(SETTING_TABWIDTH)) {
             // create a filepath-element
-            Element el = new Element(SETTING_TABCHAR);
-            el.setText("0");
+            Element el = new Element(SETTING_TABWIDTH);
+            el.setText("4");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -488,34 +488,25 @@ public class Settings {
         }
         el.setText(String.valueOf(compiler));
     }
-    public String getTabChar() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_TABCHAR);
+    public int getTabWidth() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_TABWIDTH);
         if (el!=null) {
-            String t = el.getText();
-            if (t.isEmpty() || t.equals("0")) {
-                return "\t";
+            try {
+                return Integer.parseInt(el.getText());
             }
-            else {
-                try {
-                    StringBuilder sb = new StringBuilder("");
-                    int numbers = Integer.parseInt(t);
-                    for (int i=0; i<numbers; i++) sb.append(" ");
-                    return sb.toString();
-                }
-                catch (NumberFormatException ex) {
-                    return "    ";
-                }
+            catch (NumberFormatException ex) {
+                return 4;
             }
         }
-        return "\t";
+        return 4;
     }
-    public void setTabChar(String tabchar) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_TABCHAR);
+    public void setTabWidth(int tabwidth) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_TABWIDTH);
         if (null==el) {
-            el = new Element(SETTING_TABCHAR);
+            el = new Element(SETTING_TABWIDTH);
             settingsFile.getRootElement().addContent(el);
         }
-        el.setText(tabchar);
+        el.setText(String.valueOf(tabwidth));
     }
     public int getLastUserScript() {
         Element el = settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT);

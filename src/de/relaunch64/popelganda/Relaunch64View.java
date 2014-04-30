@@ -114,6 +114,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
+    // TODO breakpoints (KickAss)
     
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
@@ -716,15 +717,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
     }
     private void specialFunctions() {
-        String text = jTextFieldGotoLine.getText();
-        switch (text) {
-            case "t2s":
-                Tools.convertTabsToSpace(settings, editorPanes, jTabbedPane1.getSelectedIndex());
-                break;
-            case "s2t":
-                Tools.convertSpaceToTabs(settings, editorPanes, jTabbedPane1.getSelectedIndex());
-                break;
-        }
+        // String text = jTextFieldGotoLine.getText();
         jTextFieldGotoLine.setText("");
     }
     /**
