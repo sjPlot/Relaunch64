@@ -82,7 +82,7 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
             // check for valid bounds 
             if (min>=0 && min<max && bpl>0 && count>0) {
                 for (int i=min; i<count; i++) {
-                    int b = (int)(Math.sin(i*2*Math.PI/count)*(max/2) + (max/2));
+                    int b = (int)(Math.round(Math.sin(i*2*Math.PI/count)*(max/2) + (max/2)));
                     // check if we have a new line
                     if (startNewLine) {
                         sb.append(byteToken).append(" ");

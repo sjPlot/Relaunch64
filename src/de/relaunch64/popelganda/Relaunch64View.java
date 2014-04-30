@@ -33,7 +33,6 @@
 
 package de.relaunch64.popelganda;
 
-import com.sun.javafx.scene.control.skin.KeyCodeUtils;
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
@@ -77,7 +76,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import javafx.scene.input.KeyCode;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -1199,13 +1197,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             p.destroy();
                             // retrieve potential error lines from log
                             errorLines.addAll(Tools.getErrorLines(compilerLog.toString()));
+                            // break loop if we have any errors
+                            if (!errorLines.isEmpty()) break;
                         }
                         catch (IOException | InterruptedException | SecurityException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
                             // check if permission denied
                             if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
                                 ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
-                            }                        }
+                            }
+                        }
                     }
                 }
                 // select error log if we have errors
@@ -1343,61 +1344,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void insertBasicStart() {
-        int dezaddress = 0;
-        // open inpu  dialog
-        String startaddress = (String)JOptionPane.showInputDialog(getFrame(), "Enter start address:");
-        // check for return
-        if (startaddress!=null && !startaddress.trim().isEmpty()) {
-            startaddress = startaddress.trim();
-            if (!startaddress.startsWith("$")) {
-                try {
-                    dezaddress = Integer.parseInt(startaddress);
-                }
-                catch (NumberFormatException ex) {
-                    try {
-                        dezaddress = Integer.parseInt(startaddress, 16);
-                    }
-                    catch (NumberFormatException ex2) {
-                    }
-                }
-            }
-            else {
-                try {
-                    dezaddress = Integer.parseInt(startaddress, 16);
-                }
-                catch (NumberFormatException ex2) {
-                }
-            }
-        }
-        if (dezaddress!=0) {
-            // convcert to string, so we can access each single digit
-            startaddress = String.valueOf(dezaddress);
-            StringBuilder output = new StringBuilder("$00,$0c,$08,$0a,$00,$9e");
-            // copy all digits
-            for (int i=0; i<startaddress.length(); i++) {
-                output.append(",$3").append(startaddress.charAt(i));
-            }
-            output.append(System.getProperty("line.separator"));
-            switch (editorPanes.getActiveCompiler()) {
-                case ConstantsR64.COMPILER_ACME:
-                    output.insert(0, "!byte ");
-                    break;
-                case ConstantsR64.COMPILER_64TASS:
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    output.insert(0, ".byte ");
-                    break;
-            }
-            switch (editorPanes.getActiveCompiler()) {
-                case ConstantsR64.COMPILER_ACME:
-                case ConstantsR64.COMPILER_64TASS:
-                    output.insert(0, "*= $0800"+System.getProperty("line.separator"));
-                    break;
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    output.insert(0, ".pc = $0800"+System.getProperty("line.separator"));
-                    break;
-            }
-            editorPanes.insertString(output.toString());
-        }
+        Tools.insertBasicStart(editorPanes);
     }
     @Action
     public void insertSinusTable() {
@@ -2147,6 +2094,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         jTextAreaCompilerOutput.setEditable(false);
+        jTextAreaCompilerOutput.setFont(resourceMap.getFont("jTextAreaCompilerOutput.font")); // NOI18N
         jTextAreaCompilerOutput.setName("jTextAreaCompilerOutput"); // NOI18N
         jScrollPane3.setViewportView(jTextAreaCompilerOutput);
 

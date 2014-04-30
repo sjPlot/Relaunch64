@@ -26,6 +26,7 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -243,5 +244,62 @@ public class Tools {
     public static String getCruncherStart(String source) {
         // TODO cruncher start auslesen
         return null;
+    }
+    public static void insertBasicStart(EditorPanes editorPanes) {
+        int dezaddress = 0;
+        // open inpu  dialog
+        String startaddress = (String)JOptionPane.showInputDialog(null, "Enter start address:");
+        // check for return
+        if (startaddress!=null && !startaddress.trim().isEmpty()) {
+            startaddress = startaddress.trim();
+            if (!startaddress.startsWith("$")) {
+                try {
+                    dezaddress = Integer.parseInt(startaddress);
+                }
+                catch (NumberFormatException ex) {
+                    try {
+                        dezaddress = Integer.parseInt(startaddress, 16);
+                    }
+                    catch (NumberFormatException ex2) {
+                    }
+                }
+            }
+            else {
+                try {
+                    dezaddress = Integer.parseInt(startaddress.substring(1), 16);
+                }
+                catch (NumberFormatException ex2) {
+                }
+            }
+        }
+        if (dezaddress!=0) {
+            // convcert to string, so we can access each single digit
+            startaddress = String.valueOf(dezaddress);
+            StringBuilder output = new StringBuilder("$0c,$08,$0a,$00,$9e");
+            // copy all digits
+            for (int i=0; i<startaddress.length(); i++) {
+                output.append(",$3").append(startaddress.charAt(i));
+            }
+            output.append(",$00,$00,$00").append(System.getProperty("line.separator"));
+            switch (editorPanes.getActiveCompiler()) {
+                case ConstantsR64.COMPILER_ACME:
+                    output.insert(0, "!byte ");
+                    break;
+                case ConstantsR64.COMPILER_64TASS:
+                case ConstantsR64.COMPILER_KICKASSEMBLER:
+                    output.insert(0, ".byte ");
+                    break;
+            }
+            switch (editorPanes.getActiveCompiler()) {
+                case ConstantsR64.COMPILER_ACME:
+                case ConstantsR64.COMPILER_64TASS:
+                    output.insert(0, "*= $0801"+System.getProperty("line.separator"));
+                    break;
+                case ConstantsR64.COMPILER_KICKASSEMBLER:
+                    output.insert(0, ".pc = $0801"+System.getProperty("line.separator"));
+                    break;
+            }
+            editorPanes.insertString(output.toString());
+        }
     }
 }
