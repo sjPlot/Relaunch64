@@ -111,6 +111,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         this.compilerKeywords = compilerKeywords;
         
         setTabs(tabWidth);
+        setFontSize(fontSize);
     }
     @SuppressWarnings("PublicInnerClass")
     public enum ATTR_TYPE {
@@ -779,7 +780,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      * sets the current font size (affects all built-in styles)
      * @param fontSize
      */
-    public void setFontSize(int fontSize) {
+    private void setFontSize(int fontSize) {
         this.fontSize = fontSize;
         StyleConstants.setFontSize(normal, fontSize);
         StyleConstants.setFontSize(quote, fontSize);
