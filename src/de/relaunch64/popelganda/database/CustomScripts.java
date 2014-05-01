@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.logging.Level;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.IllegalAddException;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
@@ -173,6 +174,15 @@ public class CustomScripts {
             return null;
         }
     }
+    /**
+     * Finds the script with the name {@code name} and returns its
+     * data base index number.
+     * 
+     * @param name The name of the script that should be found.
+     * @return The index number of the found script in the XML data base,
+     * or -1 if no such script with the name {@code name} exists (or {@code name}
+     * was {@code null} or empty).
+     */
     public int findScript(String name) {
         if (null==name || name.trim().isEmpty()) return -1;
         // trim spaces
@@ -203,5 +213,26 @@ public class CustomScripts {
     }
     public int getCount() {
         return scriptFile.getRootElement().getContentSize();
+    }
+    public boolean removeScript(String name) {
+        int index = findScript(name);
+        return removeScript(index);
+    }
+    public boolean removeScript(int index) {
+        List<Element> children = scriptFile.getRootElement().getChildren();
+        try{
+            Element el = children.remove(index);
+            if (el!=null) {
+                // reset document
+                scriptFile = new Document(new Element(ROOT_NAME));
+                // iterate and add remaining elements
+                for (Element e : children) addScript(e.getAttributeValue(ATTR_NAME), e.getText());
+                return true;
+            }
+        }
+        catch (UnsupportedOperationException | IndexOutOfBoundsException | IllegalAddException ex) {
+            return false;
+        }
+        return false;
     }
 }

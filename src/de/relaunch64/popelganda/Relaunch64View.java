@@ -115,7 +115,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
     // TODO breakpoints (KickAss)
-    
+    // TODO Remove scripts
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());
@@ -1247,6 +1247,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxRunScripts.requestFocusInWindow();
     }
     @Action
+    public void selectSyntax() {
+        jComboBoxCompilers.showPopup();
+        jComboBoxCompilers.requestFocusInWindow();
+    }
+    @Action
     public void selectLog1() {
         jTabbedPaneLogs.setSelectedIndex(0);
     }
@@ -1836,6 +1841,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         sourceMenu = new javax.swing.JMenu();
         runScriptMenuItem = new javax.swing.JMenuItem();
         focusScriptMenuItem = new javax.swing.JMenuItem();
+        focusSyntaxMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
@@ -2145,6 +2151,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.setName("menuBar"); // NOI18N
 
+        fileMenu.setMnemonic('F');
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
@@ -2229,6 +2236,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.add(fileMenu);
 
+        editMenu.setMnemonic('E');
         editMenu.setText(resourceMap.getString("editMenu.text")); // NOI18N
         editMenu.setName("editMenu"); // NOI18N
 
@@ -2264,6 +2272,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.add(editMenu);
 
+        findMenu.setMnemonic('D');
         findMenu.setText(resourceMap.getString("findMenu.text")); // NOI18N
         findMenu.setName("findMenu"); // NOI18N
 
@@ -2295,6 +2304,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.add(findMenu);
 
+        gotoMenu.setMnemonic('N');
         gotoMenu.setText(resourceMap.getString("gotoMenu.text")); // NOI18N
         gotoMenu.setName("gotoMenu"); // NOI18N
 
@@ -2360,6 +2370,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.add(gotoMenu);
 
+        sourceMenu.setMnemonic('S');
         sourceMenu.setText(resourceMap.getString("sourceMenu.text")); // NOI18N
         sourceMenu.setName("sourceMenu"); // NOI18N
 
@@ -2372,6 +2383,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         focusScriptMenuItem.setAction(actionMap.get("selectUserScripts")); // NOI18N
         focusScriptMenuItem.setName("focusScriptMenuItem"); // NOI18N
         sourceMenu.add(focusScriptMenuItem);
+
+        focusSyntaxMenuItem.setAction(actionMap.get("selectSyntax")); // NOI18N
+        focusSyntaxMenuItem.setName("focusSyntaxMenuItem"); // NOI18N
+        sourceMenu.add(focusSyntaxMenuItem);
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         sourceMenu.add(jSeparator8);
@@ -2388,14 +2403,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         sourceMenu.add(jSeparator15);
 
         insertBasicStartMenuItem.setAction(actionMap.get("insertBasicStart")); // NOI18N
+        insertBasicStartMenuItem.setMnemonic('B');
         insertBasicStartMenuItem.setName("insertBasicStartMenuItem"); // NOI18N
         sourceMenu.add(insertBasicStartMenuItem);
 
         insertBytesFromFileMenuItem.setAction(actionMap.get("insertBytesFromFile")); // NOI18N
+        insertBytesFromFileMenuItem.setMnemonic('F');
         insertBytesFromFileMenuItem.setName("insertBytesFromFileMenuItem"); // NOI18N
         sourceMenu.add(insertBytesFromFileMenuItem);
 
         insertSinusMenuItem.setAction(actionMap.get("insertSinusTable")); // NOI18N
+        insertSinusMenuItem.setMnemonic('S');
         insertSinusMenuItem.setName("insertSinusMenuItem"); // NOI18N
         sourceMenu.add(insertSinusMenuItem);
 
@@ -2408,14 +2426,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.add(sourceMenu);
 
+        viewMenu.setMnemonic('V');
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
 
         viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
+        viewLog1MenuItem.setMnemonic('R');
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
         viewMenu.add(viewLog1MenuItem);
 
         viewLog2MenuItem.setAction(actionMap.get("selectLog2")); // NOI18N
+        viewLog2MenuItem.setMnemonic('C');
         viewLog2MenuItem.setName("viewLog2MenuItem"); // NOI18N
         viewMenu.add(viewLog2MenuItem);
 
@@ -2432,10 +2453,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         menuBar.add(viewMenu);
 
+        helpMenu.setMnemonic('O');
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
 
         settingsMenuItem.setAction(actionMap.get("settingsWindow")); // NOI18N
+        settingsMenuItem.setMnemonic('P');
         settingsMenuItem.setName("settingsMenuItem"); // NOI18N
         helpMenu.add(settingsMenuItem);
 
@@ -2540,6 +2563,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem findPrevMenuItem;
     private javax.swing.JMenuItem findStartMenuItem;
     private javax.swing.JMenuItem focusScriptMenuItem;
+    private javax.swing.JMenuItem focusSyntaxMenuItem;
     private javax.swing.JMenuItem gotoFunctionMenuItem;
     private javax.swing.JMenuItem gotoLabelMenuItem;
     private javax.swing.JMenuItem gotoLineMenuItem;

@@ -76,6 +76,8 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="jButtonScriptHelp" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButtonRemoveScript" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButtonApplyScript" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane1" pref="525" max="32767" attributes="0"/>
@@ -90,7 +92,7 @@
                                       <Component id="jComboBoxCustomScripts" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="jTextFieldScriptName" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldScriptName" pref="504" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -117,6 +119,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonApplyScript" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonScriptHelp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonRemoveScript" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -126,6 +129,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jComboBoxCustomScripts"/>
+                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="jLabel8.text"/>
                 <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
               </Properties>
@@ -137,6 +143,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jTextFieldScriptName"/>
+                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="jLabel9.text"/>
                 <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
               </Properties>
@@ -178,6 +187,14 @@
                   <action class="de.relaunch64.popelganda.SettingsDlg" id="showScriptHelp" methodName="showScriptHelp"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jButtonScriptHelp" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButtonRemoveScript">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.SettingsDlg" id="removeScript" methodName="removeScript"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jButtonRemoveScript" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

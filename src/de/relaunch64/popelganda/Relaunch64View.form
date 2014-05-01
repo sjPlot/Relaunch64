@@ -514,6 +514,7 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="fileMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="70"/>
             <Property name="text" type="java.lang.String" resourceKey="fileMenu.text"/>
             <Property name="name" type="java.lang.String" value="fileMenu" noResource="true"/>
           </Properties>
@@ -672,6 +673,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="editMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="69"/>
             <Property name="text" type="java.lang.String" resourceKey="editMenu.text"/>
             <Property name="name" type="java.lang.String" value="editMenu" noResource="true"/>
           </Properties>
@@ -738,6 +740,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="findMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="68"/>
             <Property name="text" type="java.lang.String" resourceKey="findMenu.text"/>
             <Property name="name" type="java.lang.String" value="findMenu" noResource="true"/>
           </Properties>
@@ -796,6 +799,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="gotoMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="78"/>
             <Property name="text" type="java.lang.String" resourceKey="gotoMenu.text"/>
             <Property name="name" type="java.lang.String" value="gotoMenu" noResource="true"/>
           </Properties>
@@ -920,6 +924,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="sourceMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="83"/>
             <Property name="text" type="java.lang.String" resourceKey="sourceMenu.text"/>
             <Property name="name" type="java.lang.String" value="sourceMenu" noResource="true"/>
           </Properties>
@@ -940,6 +945,14 @@
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="selectUserScripts" methodName="selectUserScripts"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="focusScriptMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="focusSyntaxMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectSyntax" methodName="selectSyntax"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="focusSyntaxMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator8">
@@ -973,6 +986,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="insertBasicStart" methodName="insertBasicStart"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="66"/>
                 <Property name="name" type="java.lang.String" value="insertBasicStartMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -981,6 +995,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="insertBytesFromFile" methodName="insertBytesFromFile"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="70"/>
                 <Property name="name" type="java.lang.String" value="insertBytesFromFileMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -989,6 +1004,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="insertSinusTable" methodName="insertSinusTable"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="83"/>
                 <Property name="name" type="java.lang.String" value="insertSinusMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -1009,6 +1025,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="viewMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="86"/>
             <Property name="text" type="java.lang.String" resourceKey="viewMenu.text"/>
             <Property name="name" type="java.lang.String" value="viewMenu" noResource="true"/>
           </Properties>
@@ -1018,6 +1035,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog1" methodName="selectLog1"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="82"/>
                 <Property name="name" type="java.lang.String" value="viewLog1MenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -1026,6 +1044,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog2" methodName="selectLog2"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="67"/>
                 <Property name="name" type="java.lang.String" value="viewLog2MenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -1054,6 +1073,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="helpMenu">
           <Properties>
+            <Property name="mnemonic" type="int" value="79"/>
             <Property name="text" type="java.lang.String" resourceKey="helpMenu.text"/>
             <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
           </Properties>
@@ -1067,6 +1087,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="settingsWindow" methodName="settingsWindow"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="80"/>
                 <Property name="name" type="java.lang.String" value="settingsMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>

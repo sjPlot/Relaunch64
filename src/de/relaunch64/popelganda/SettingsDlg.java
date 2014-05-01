@@ -16,6 +16,7 @@ import java.util.Arrays;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.jdesktop.application.Action;
@@ -50,6 +51,12 @@ public class SettingsDlg extends javax.swing.JDialog {
         jTextFieldTabWidth.setText(String.valueOf(settings.getTabWidth()));
         // set application icon
         setIconImage(ConstantsR64.r64icon.getImage());
+        // set Mnemonic keys
+        jLabel8.setDisplayedMnemonic('s');
+        jLabel9.setDisplayedMnemonic('n');
+        jButtonApplyScript.setDisplayedMnemonicIndex(0);
+        jButtonRemoveScript.setDisplayedMnemonicIndex(0);
+        // disable apply buttons
         setModifiedTabScript(false);
         setModifiedTabFont(false);
     }
@@ -70,11 +77,15 @@ public class SettingsDlg extends javax.swing.JDialog {
             // add item to cb
             for (String sn : scriptNames) jComboBoxCustomScripts.addItem(sn);
         }
+        else {
+            jTextFieldScriptName.setText("");
+            jTextAreaUserScript.setText("");
+        }
         jComboBoxCustomScripts.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 // get selected script
-                String scriptname = scripts.getScriptName(jComboBoxCustomScripts.getSelectedIndex());
+                String scriptname = jComboBoxCustomScripts.getSelectedItem().toString();
                 // check if valid
                 if (scriptname!=null && !scriptname.isEmpty()) {
                     // set script name to textfield
@@ -154,9 +165,9 @@ public class SettingsDlg extends javax.swing.JDialog {
             }
         });
         jTextAreaUserScript.getDocument().addDocumentListener(new DocumentListener() {
-            @Override public void changedUpdate(DocumentEvent e) { setModifiedTabScript(true); }
-            @Override public void insertUpdate(DocumentEvent e) { setModifiedTabScript(true); }
-            @Override public void removeUpdate(DocumentEvent e) { setModifiedTabScript(true); }
+            @Override public void changedUpdate(DocumentEvent e) { switchButtonLabel(); }
+            @Override public void insertUpdate(DocumentEvent e) { switchButtonLabel(); }
+            @Override public void removeUpdate(DocumentEvent e) { switchButtonLabel(); }
         });
         jTextFieldScriptName.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void changedUpdate(DocumentEvent e) { switchButtonLabel(); }
@@ -171,8 +182,10 @@ public class SettingsDlg extends javax.swing.JDialog {
     }
     private void switchButtonLabel() {
         String name = jTextFieldScriptName.getText();
+        String content = jTextAreaUserScript.getText();
         if (name!=null) jButtonApplyScript.setText((scripts.findScript(name)!=-1) ? "Update script" : "Add script");
-        setModifiedTabScript(true);
+        jButtonApplyScript.setDisplayedMnemonicIndex(0);
+        setModifiedTabScript(name!=null && !name.isEmpty() && !content.isEmpty());
     }
     @Action
     public void showScriptHelp() {
@@ -231,6 +244,20 @@ public class SettingsDlg extends javax.swing.JDialog {
         }
         setModifiedTabScript(false);
     }
+    @Action
+    public void removeScript() {
+        if (jComboBoxCustomScripts.getSelectedIndex()<0) return;
+        String name = jComboBoxCustomScripts.getSelectedItem().toString();
+        if (scripts.removeScript(name)) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    initScripts();
+                    setModifiedTabScript(false);
+                }
+            });
+        }
+    }
     /**
      * 
      */
@@ -271,6 +298,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jTextAreaUserScript = new javax.swing.JTextArea();
         jButtonApplyScript = new javax.swing.JButton();
         jButtonScriptHelp = new javax.swing.JButton();
+        jButtonRemoveScript = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabelFont = new javax.swing.JLabel();
@@ -291,11 +319,13 @@ public class SettingsDlg extends javax.swing.JDialog {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
+        jLabel8.setLabelFor(jComboBoxCustomScripts);
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
         jComboBoxCustomScripts.setName("jComboBoxCustomScripts"); // NOI18N
 
+        jLabel9.setLabelFor(jTextFieldScriptName);
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
 
@@ -314,6 +344,9 @@ public class SettingsDlg extends javax.swing.JDialog {
         jButtonScriptHelp.setAction(actionMap.get("showScriptHelp")); // NOI18N
         jButtonScriptHelp.setName("jButtonScriptHelp"); // NOI18N
 
+        jButtonRemoveScript.setAction(actionMap.get("removeScript")); // NOI18N
+        jButtonRemoveScript.setName("jButtonRemoveScript"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -324,6 +357,8 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                         .add(jButtonScriptHelp)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jButtonRemoveScript)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonApplyScript))
                     .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
                     .add(jPanel3Layout.createSequentialGroup()
@@ -335,7 +370,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                             .add(jPanel3Layout.createSequentialGroup()
                                 .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(0, 0, Short.MAX_VALUE))
-                            .add(jTextFieldScriptName))))
+                            .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -354,7 +389,8 @@ public class SettingsDlg extends javax.swing.JDialog {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyScript)
-                    .add(jButtonScriptHelp))
+                    .add(jButtonScriptHelp)
+                    .add(jButtonRemoveScript))
                 .addContainerGap())
         );
 
@@ -458,6 +494,7 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JButton jButtonApplyScript;
     private javax.swing.JButton jButtonApplyTabAndFont;
     private javax.swing.JButton jButtonFont;
+    private javax.swing.JButton jButtonRemoveScript;
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxPrefComp;

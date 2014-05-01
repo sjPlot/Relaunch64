@@ -2,7 +2,8 @@
 <head>
   <style>
     body { color:#333333; margin:5px; font-size:10px; font-family:Verdana,Arial,Helvetica,sans-serif; line-height:1.1em; }
-    h1 { font-size:12px; font-weight: normal; color:#660000; margin-top:12px; margin-bottom:0px; padding:0;}
+    h1 { font-size:13px; font-weight: normal; color:#660000; margin-top:13px; margin-bottom:0px; padding:0;}
+    h2 { font-size:12px; font-weight: normal; color:#660000; ; margin-top:12px; margin-bottom:0px; padding:0;}
     h2 { font-size:11px; font-weight: normal; color:#660000; ; margin-top:11px; margin-bottom:0px; padding:0;}
     ul { margin-left:10px; padding:0px; }
     li { margin-bottom:5px; }
@@ -23,6 +24,24 @@
 	<p>
 		You can define several actions that should be executed. Use <em>multiple lines</em>
 		in your script to define multiple actions.
+	</p>
+
+<h1>Adding new scripts</h1>
+
+	<p>
+		To add a new script, simply change the <em>script name</em> (in the related
+		text field). Once you changed the script name, the apply-button's text will
+		change to <em>Add script</em>. Edit the script in the text area below and
+		add the script by clicking on the button.
+	</p>
+	
+<h1>Updating existing scripts</h1>
+
+	<p>
+		To change or update an existing script, simply select the script from the dropdown list,
+		but <strong>do not</strong> change the <em>script name</em> (in the related
+		text field). Edit the script in the text area below and save the changes by
+		clicking on the button <em>Update script</em>.
 	</p>
 	
 <h1>Placeholders</h1>
@@ -51,16 +70,28 @@
 
 <h2>Examples</h2>
 
-<p><div class="pcode">java -jar /&lt;path to kickass&gt;/KickAss.jar SOURCEFILE<br>
-open /Applications/Vice/x64.app OUTFILE</div></p>
+<h3>Using KickAss and Vice on OS X</h3>
+<div class="pcode">java -jar /&lt;path to kickass&gt;/KickAss.jar SOURCEFILE<br>
+open /Applications/Vice/x64.app OUTFILE</div>
 
-<p><div class="pcode">acme -v4 SOURCEFILE<br>
-x64 OUTFILE</div></p>
+<h3>ACME and Vice, when ACME- and VICE-Path are in PATH-Environment</h3>
+<div class="pcode">acme -v4 SOURCEFILE<br>
+x64 OUTFILE</div>
 
-<p><div class="pcode">acme --outfile &quot;OUTFILE&quot; --format cbm &quot;SOURCEFILE&quot;<br>
-C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe OUTFILE</div></p>
+<h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
+<div class="pcode">acme --outfile &quot;OUTFILE&quot; --format cbm &quot;SOURCEFILE&quot;<br>
+C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe &quot;OUTFILE&quot;</div>
 
-<p></p>
+<h3>Using KickAss and Vice on Windows</h3>
+<div class="pcode">java -jar C:\Users\Luedeke\Documents\C64\KickAss\KickAss.jar &quot;SOURCEFILE&quot;
+C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe &quot;OUTFILE&quot;</div>
+
+<h3>Using ACME, Exomizer and Vice</h3>
+<div class="pcode">C:\Users\Luedeke\Documents\C64\acme\acme.exe --outfile &quot;OUTFILE&quot; --format cbm &quot;SOURCEFILE&quot;<br>
+C:\Users\Luedeke\Documents\C64\Exomizer\exomizer.exe sfx basic &quot;UNCOMPFILE&quot; -o &quot;COMPFILE&quot;<btr>
+C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe &quot;COMPFILE&quot;</div>
+
+<p><br></p>
 
 </body>
 </html>
