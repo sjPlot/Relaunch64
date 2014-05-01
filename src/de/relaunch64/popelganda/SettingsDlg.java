@@ -76,10 +76,12 @@ public class SettingsDlg extends javax.swing.JDialog {
             Arrays.sort(scriptNames);
             // add item to cb
             for (String sn : scriptNames) jComboBoxCustomScripts.addItem(sn);
+            setRemovePossible(true);
         }
         else {
             jTextFieldScriptName.setText("");
             jTextAreaUserScript.setText("");
+            setRemovePossible(false);
         }
         jComboBoxCustomScripts.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -244,7 +246,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         }
         setModifiedTabScript(false);
     }
-    @Action
+    @Action(enabledProperty = "removePossible")
     public void removeScript() {
         if (jComboBoxCustomScripts.getSelectedIndex()<0) return;
         String name = jComboBoxCustomScripts.getSelectedItem().toString();
@@ -278,6 +280,15 @@ public class SettingsDlg extends javax.swing.JDialog {
         boolean old = isModifiedTabFont();
         this.modifiedTabFont = b;
         firePropertyChange("modifiedTabFont", old, isModifiedTabFont());
+    }
+    private boolean removePossible = false;
+    public boolean isRemovePossible() {
+        return removePossible;
+    }
+    public final void setRemovePossible(boolean b) {
+        boolean old = isRemovePossible();
+        this.removePossible = b;
+        firePropertyChange("removePossible", old, isRemovePossible());
     }
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT

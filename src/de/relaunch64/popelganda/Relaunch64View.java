@@ -1206,28 +1206,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (!errorLines.isEmpty()) selectLog2();
             }
         }
+        else {
+            JOptionPane.showMessageDialog(getFrame(), "Please open preferences and add a 'compile and run' script first!");
+        }
     }
     @Action
     public void switchLogPosition() {
         int currentlayout = settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG);
-        if (JSplitPane.HORIZONTAL_SPLIT == currentlayout) {
-            currentlayout = JSplitPane.VERTICAL_SPLIT;
-        }
-        else {
-            currentlayout = JSplitPane.HORIZONTAL_SPLIT;
-        }
+        currentlayout = (JSplitPane.HORIZONTAL_SPLIT == currentlayout) ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT;
         settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_LOG);
         jSplitPane1.setOrientation(currentlayout);
     }
     @Action
     public void switchBothPosition() {
         int currentlayout = settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN);
-        if (JSplitPane.HORIZONTAL_SPLIT == currentlayout) {
-            currentlayout = JSplitPane.VERTICAL_SPLIT;
-        }
-        else {
-            currentlayout = JSplitPane.HORIZONTAL_SPLIT;
-        }
+        currentlayout = (JSplitPane.HORIZONTAL_SPLIT == currentlayout) ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT;
         settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_BOTHLOGRUN);
         jSplitPane2.setOrientation(currentlayout);
     }
