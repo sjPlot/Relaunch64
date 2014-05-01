@@ -1260,6 +1260,28 @@ public class EditorPanes {
             catch (BadLocationException ex) {}
         }
     }
+    public void insertBreakPoint(int compiler) {
+        // get current editor
+        JEditorPane ep = getActiveEditorPane();
+        // retrieve element and check whether line is inside bounds
+        Element e = ep.getDocument().getDefaultRootElement().getElement(getCurrentLineNumber()-1);
+        if (e!=null) {
+            try {
+                String insertString = "";
+                switch (compiler) {
+                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                        insertString = ":break()" + System.getProperty("line.separator");
+                        break;
+                }
+                // insert section
+                ep.getDocument().insertString(e.getStartOffset(), insertString, null);
+            }
+            catch (BadLocationException ex) {}
+        }
+    }
+    public void insertBreakPoint() {
+        insertBreakPoint(getActiveCompiler());
+    }
 
     
     public void preventAutoInsertTab() {
@@ -1481,9 +1503,12 @@ public class EditorPanes {
         return false;
     }
     public void insertString(String text) {
+        insertString(text, getActiveEditorPane().getCaretPosition());
+    }
+    public void insertString(String text, int position) {
         JEditorPane ep = getActiveEditorPane();
         try {
-            ep.getDocument().insertString(ep.getCaretPosition(), text, null);
+            ep.getDocument().insertString(position, text, null);
             ep.requestFocusInWindow();
         }
         catch (BadLocationException ex) {

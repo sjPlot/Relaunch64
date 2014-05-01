@@ -18,7 +18,6 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
-import de.relaunch64.popelganda.database.Settings;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -291,5 +290,12 @@ public class Tools {
             }
             editorPanes.insertString(output.toString());
         }
+    }
+    public static boolean sourceHasBreakpointMacro(String source, int compiler) {
+        switch (compiler) {
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+                return (source!=null && source.contains(".macro break()"));
+        }
+        return false;
     }
 }

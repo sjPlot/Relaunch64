@@ -107,4 +107,23 @@ public class ConstantsR64 {
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};
+    
+    public static final String breakPointMacro = 
+            "\n//----------------------------------------------------------\n" +
+            "// Breakpoint Macro\n" +
+            "//----------------------------------------------------------\n" +
+            ".var _createDebugFiles = debug && cmdLineVars.get(\"afo\") == \"true\"\n" +
+            ".print \"File creation \" + [_createDebugFiles\n" +
+            "    ? \"enabled (creating breakpoint file)\"\n" +
+            "    : \"disabled (no breakpoint file created)\"]\n" +
+            ".var brkFile\n" +
+            ".if(_createDebugFiles) {\n" +
+            "    .eval brkFile = createFile(\"breakpoints.txt\")\n" +
+            "    }\n" +
+            ".macro break() {\n" +
+            ".if(_createDebugFiles) {\n" +
+            "    .eval brkFile.writeln(\"break \" + toHexString(*))\n" +
+            "    }\n" +
+            "}\n" +
+            "//------------------------------------------------------\n";
 }

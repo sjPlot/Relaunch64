@@ -114,8 +114,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
-    // TODO breakpoints (KickAss)
-    // TODO Remove scripts
+    // TODO Linenumber Left-Alignment
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());
@@ -1338,6 +1337,31 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         Tools.insertBasicStart(editorPanes);
     }
     @Action
+    public void insertBreakPoint() {
+        // check for KickAss
+        if (editorPanes.getActiveCompiler()!=ConstantsR64.COMPILER_KICKASSEMBLER) {
+            JOptionPane.showMessageDialog(getFrame(), "Breakpoints are currently only supported under KickAssembler!");
+            return;
+        }
+        boolean addMacro = false;
+        // check if source already has a breakpoint macro
+        if (!Tools.sourceHasBreakpointMacro(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler())) {
+            // ask if macro should be added
+            int option = JOptionPane.showConfirmDialog(getFrame(), "The breakpoint function requires a macro to be added to the source.\nWithout this macro, breakpoints won't work.\n\nDo you want to add this macro now to the end of the source?", "Insert Breakpoint", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            // check if user cancelled
+            if (option==JOptionPane.CANCEL_OPTION) return;
+            // check if macro should be added
+            if (option==JOptionPane.YES_OPTION) addMacro = true;
+        }
+        // insert breakpoint
+        editorPanes.insertBreakPoint();
+        // add macro if necessary
+        if (addMacro) {
+            int endpos = editorPanes.getActiveEditorPane().getDocument().getLength();
+            editorPanes.insertString(ConstantsR64.breakPointMacro, endpos);
+        }
+    }
+    @Action
     public void insertSinusTable() {
         // open dialog
         if (null==insertSinusTableDlg) {
@@ -1838,6 +1862,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
+        jSeparator14 = new javax.swing.JPopupMenu.Separator();
+        insertBreakPointMenuItem = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
         insertBasicStartMenuItem = new javax.swing.JMenuItem();
         insertBytesFromFileMenuItem = new javax.swing.JMenuItem();
@@ -2392,6 +2418,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertSeparatorMenuItem.setName("insertSeparatorMenuItem"); // NOI18N
         sourceMenu.add(insertSeparatorMenuItem);
 
+        jSeparator14.setName("jSeparator14"); // NOI18N
+        sourceMenu.add(jSeparator14);
+
+        insertBreakPointMenuItem.setAction(actionMap.get("insertBreakPoint")); // NOI18N
+        insertBreakPointMenuItem.setName("insertBreakPointMenuItem"); // NOI18N
+        sourceMenu.add(insertBreakPointMenuItem);
+
         jSeparator15.setName("jSeparator15"); // NOI18N
         sourceMenu.add(jSeparator15);
 
@@ -2570,6 +2603,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem gotoSectionMenuItem;
     private javax.swing.JMenuItem insertBasicStartMenuItem;
+    private javax.swing.JMenuItem insertBreakPointMenuItem;
     private javax.swing.JMenuItem insertBytesFromFileMenuItem;
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
@@ -2607,6 +2641,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
+    private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator19;
