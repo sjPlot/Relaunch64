@@ -18,6 +18,7 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
+import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -230,8 +231,21 @@ public class Tools {
         }
         return -1;
     }
-    public static String getCruncherStart(String source) {
-        // TODO cruncher start auslesen
+    public static String getCruncherStart(String source, int compiler) {
+        String cs = SyntaxScheme.getCommentString(compiler) + " start=";
+        // find start token
+        int position = source.toLowerCase().indexOf(cs);
+        // found?
+        if (position!=-1) {
+            // end of line?
+            int eol = source.indexOf("\n", position+cs.length());
+            // retrieve line
+            String start = source.substring(position+cs.length(), eol);
+            // remove white spaces
+            start = start.replace("\r", "").trim();
+            // return result
+            return start;
+        }
         return null;
     }
     public static void insertBasicStart(EditorPanes editorPanes) {
@@ -290,12 +304,5 @@ public class Tools {
             }
             editorPanes.insertString(output.toString());
         }
-    }
-    public static boolean sourceHasBreakpointMacro(String source, int compiler) {
-        switch (compiler) {
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-                return (source!=null && source.contains(".macro break()"));
-        }
-        return false;
     }
 }

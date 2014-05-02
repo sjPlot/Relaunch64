@@ -46,11 +46,11 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0.0 (Build 20140501)";
+    public static final String BUILD_VERSION = "3.0.0 (Build 20140502)";
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (beta 14)";
+    public static final String APPLICATION_TITLE = "Relaunch64 (Release Candidate 1)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
@@ -82,6 +82,7 @@ public class ConstantsR64 {
 
     public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
     public static final String STRING_MACRO_KICKASSEMBLER = ".macro";
+    public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()";
     
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
     public static final int DEFAULT_FONT_SIZE = 13;
@@ -108,22 +109,4 @@ public class ConstantsR64 {
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};
     
-    public static final String breakPointMacro = 
-            "\n//----------------------------------------------------------\n" +
-            "// Breakpoint Macro\n" +
-            "//----------------------------------------------------------\n" +
-            ".var _createDebugFiles = debug && cmdLineVars.get(\"afo\") == \"true\"\n" +
-            ".print \"File creation \" + [_createDebugFiles\n" +
-            "    ? \"enabled (creating breakpoint file)\"\n" +
-            "    : \"disabled (no breakpoint file created)\"]\n" +
-            ".var brkFile\n" +
-            ".if(_createDebugFiles) {\n" +
-            "    .eval brkFile = createFile(\"breakpoints.txt\")\n" +
-            "    }\n" +
-            ".macro break() {\n" +
-            ".if(_createDebugFiles) {\n" +
-            "    .eval brkFile.writeln(\"break \" + toHexString(*))\n" +
-            "    }\n" +
-            "}\n" +
-            "//------------------------------------------------------\n";
 }

@@ -129,7 +129,7 @@ public final class EditorPaneLineNumbers extends JPanel
         setBorderGap(3);
         setBackground(bgColor);
         setCurrentLineForeground(foregroundColor);
-        setDigitAlignment(RIGHT);
+        setDigitAlignment(settings.getLineNumerAlignment());
         setMinimumDisplayDigits(minimumDisplayDigits);
 
         component.getDocument().addDocumentListener(this);

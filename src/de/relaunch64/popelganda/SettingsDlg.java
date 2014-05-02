@@ -4,6 +4,7 @@
  */
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
@@ -45,6 +46,9 @@ public class SettingsDlg extends javax.swing.JDialog {
         jLabelFont.setText(mainfont.getFontName());
         jLabelFont.setFont(mainfont);
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
+        if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.RIGHT) jComboBoxLineNumberAlign.setSelectedIndex(0);
+        else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.CENTER) jComboBoxLineNumberAlign.setSelectedIndex(1);
+        else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.LEFT) jComboBoxLineNumberAlign.setSelectedIndex(2);
         initScripts();
         initListeners();
         // get tab char
@@ -55,6 +59,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jLabel8.setDisplayedMnemonic('s');
         jLabel9.setDisplayedMnemonic('n');
         jButtonApplyScript.setDisplayedMnemonicIndex(0);
+        jButtonApplyTabAndFont.setDisplayedMnemonicIndex(0);
         jButtonRemoveScript.setDisplayedMnemonicIndex(0);
         // disable apply buttons
         setModifiedTabScript(false);
@@ -150,6 +155,12 @@ public class SettingsDlg extends javax.swing.JDialog {
                 setModifiedTabFont(true);
             }
         });
+        jComboBoxLineNumberAlign.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+            }
+        });
         jTextAreaUserScript.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
@@ -227,6 +238,9 @@ public class SettingsDlg extends javax.swing.JDialog {
         catch (NumberFormatException ex) {
         }
         settings.setPreferredCompiler(jComboBoxPrefComp.getSelectedIndex());
+        if (jComboBoxLineNumberAlign.getSelectedIndex() == 0) settings.setLineNumerAlignment(EditorPaneLineNumbers.RIGHT);
+        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 1) settings.setLineNumerAlignment(EditorPaneLineNumbers.CENTER);
+        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(EditorPaneLineNumbers.LEFT);
         setModifiedTabFont(false);
     }
     @Action(enabledProperty = "modifiedTabScript")
@@ -319,6 +333,8 @@ public class SettingsDlg extends javax.swing.JDialog {
         jComboBoxPrefComp = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jButtonApplyTabAndFont = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxLineNumberAlign = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -409,6 +425,8 @@ public class SettingsDlg extends javax.swing.JDialog {
 
         jPanel5.setName("jPanel5"); // NOI18N
 
+        jLabel10.setDisplayedMnemonic('f');
+        jLabel10.setLabelFor(jButtonFont);
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
 
@@ -417,6 +435,8 @@ public class SettingsDlg extends javax.swing.JDialog {
         jButtonFont.setAction(actionMap.get("changeEditorFont")); // NOI18N
         jButtonFont.setName("jButtonFont"); // NOI18N
 
+        jLabel11.setDisplayedMnemonic('t');
+        jLabel11.setLabelFor(jTextFieldTabWidth);
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
 
@@ -427,24 +447,40 @@ public class SettingsDlg extends javax.swing.JDialog {
         jComboBoxPrefComp.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
         jComboBoxPrefComp.setName("jComboBoxPrefComp"); // NOI18N
 
+        jLabel6.setDisplayedMnemonic('c');
+        jLabel6.setLabelFor(jComboBoxPrefComp);
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
         jButtonApplyTabAndFont.setAction(actionMap.get("applyFontTab")); // NOI18N
         jButtonApplyTabAndFont.setName("jButtonApplyTabAndFont"); // NOI18N
 
+        jLabel1.setDisplayedMnemonic('l');
+        jLabel1.setLabelFor(jComboBoxLineNumberAlign);
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        jComboBoxLineNumberAlign.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Right", "Center", "Left" }));
+        jComboBoxLineNumberAlign.setName("jComboBoxLineNumberAlign"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(481, Short.MAX_VALUE)
+                .add(jButtonApplyTabAndFont)
+                .add(6, 6, 6))
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel6)
                     .add(jLabel10)
-                    .add(jLabel11))
+                    .add(jLabel11)
+                    .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel5Layout.createSequentialGroup()
                         .add(jLabelFont)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -452,10 +488,6 @@ public class SettingsDlg extends javax.swing.JDialog {
                     .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(481, Short.MAX_VALUE)
-                .add(jButtonApplyTabAndFont)
-                .add(6, 6, 6))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -473,7 +505,11 @@ public class SettingsDlg extends javax.swing.JDialog {
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel6)
                     .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 155, Short.MAX_VALUE)
+                .add(18, 18, 18)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 117, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -508,7 +544,9 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JButton jButtonRemoveScript;
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JComboBox jComboBoxCustomScripts;
+    private javax.swing.JComboBox jComboBoxLineNumberAlign;
     private javax.swing.JComboBox jComboBoxPrefComp;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel6;

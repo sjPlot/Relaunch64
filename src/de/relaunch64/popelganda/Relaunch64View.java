@@ -33,6 +33,7 @@
 
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
@@ -114,7 +115,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
-    // TODO Linenumber Left-Alignment
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());
@@ -1150,8 +1150,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outFile.toString());
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, outFile.toString());
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, compressedFile.toString());
-                        // TODO find start address token, for cruncher
-                        String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode());
+                        // check if we have a cruncher-starttoken
+                        String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+                        if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
                         try {
                             // log process
                             log = "Converted script-line: "+cmd;
@@ -1338,28 +1339,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void insertBreakPoint() {
-        // check for KickAss
-        if (editorPanes.getActiveCompiler()!=ConstantsR64.COMPILER_KICKASSEMBLER) {
-            JOptionPane.showMessageDialog(getFrame(), "Breakpoints are currently only supported under KickAssembler!");
-            return;
-        }
-        boolean addMacro = false;
-        // check if source already has a breakpoint macro
-        if (!Tools.sourceHasBreakpointMacro(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler())) {
-            // ask if macro should be added
-            int option = JOptionPane.showConfirmDialog(getFrame(), "The breakpoint function requires a macro to be added to the source.\nWithout this macro, breakpoints won't work.\n\nDo you want to add this macro now to the end of the source?", "Insert Breakpoint", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            // check if user cancelled
-            if (option==JOptionPane.CANCEL_OPTION) return;
-            // check if macro should be added
-            if (option==JOptionPane.YES_OPTION) addMacro = true;
-        }
-        // insert breakpoint
-        editorPanes.insertBreakPoint();
-        // add macro if necessary
-        if (addMacro) {
-            int endpos = editorPanes.getActiveEditorPane().getDocument().getLength();
-            editorPanes.insertString(ConstantsR64.breakPointMacro, endpos);
-        }
+        InsertBreakPoint.insertBreakPoint(editorPanes);
+    }
+    @Action
+    public void removeAllBreakPoints() {
+        InsertBreakPoint.removeBreakPoints(editorPanes);
     }
     @Action
     public void insertSinusTable() {
@@ -1864,6 +1848,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JPopupMenu.Separator();
         insertBreakPointMenuItem = new javax.swing.JMenuItem();
+        removeBreakpointMenuItem = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
         insertBasicStartMenuItem = new javax.swing.JMenuItem();
         insertBytesFromFileMenuItem = new javax.swing.JMenuItem();
@@ -1926,6 +1911,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonFindNext.setText(resourceMap.getString("jButtonFindNext.text")); // NOI18N
         jButtonFindNext.setName("jButtonFindNext"); // NOI18N
 
+        jLabel5.setDisplayedMnemonic('i');
+        jLabel5.setLabelFor(jTextFieldFind);
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
@@ -1955,6 +1942,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanelReplace.setName("jPanelReplace"); // NOI18N
 
+        jLabel4.setDisplayedMnemonic('R');
+        jLabel4.setLabelFor(jTextFieldReplace);
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
@@ -2425,6 +2414,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         insertBreakPointMenuItem.setName("insertBreakPointMenuItem"); // NOI18N
         sourceMenu.add(insertBreakPointMenuItem);
 
+        removeBreakpointMenuItem.setAction(actionMap.get("removeAllBreakPoints")); // NOI18N
+        removeBreakpointMenuItem.setMnemonic('R');
+        removeBreakpointMenuItem.setName("removeBreakpointMenuItem"); // NOI18N
+        sourceMenu.add(removeBreakpointMenuItem);
+
         jSeparator15.setName("jSeparator15"); // NOI18N
         sourceMenu.add(jSeparator15);
 
@@ -2519,6 +2513,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldConvBin.setColumns(8);
         jTextFieldConvBin.setName("jTextFieldConvBin"); // NOI18N
 
+        jLabel9.setDisplayedMnemonic('g');
+        jLabel9.setLabelFor(jTextFieldGotoLine);
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
 
@@ -2683,6 +2679,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem recentAMenuItem;
     private javax.swing.JMenu recentDocsSubmenu;
     private javax.swing.JMenuItem redoMenuItem;
+    private javax.swing.JMenuItem removeBreakpointMenuItem;
     private javax.swing.JMenuItem replaceAllMenuItem;
     private javax.swing.JMenuItem replaceMenuItem;
     private javax.swing.JMenuItem runScriptMenuItem;

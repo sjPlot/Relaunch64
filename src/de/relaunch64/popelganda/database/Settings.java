@@ -32,6 +32,7 @@
  */
 package de.relaunch64.popelganda.database;
 
+import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.awt.Font;
@@ -70,6 +71,7 @@ public class Settings {
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
+    private static final String SETTING_LINE_NUMBER_ALIGNMENT = "linenumberalignment";
     
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -262,6 +264,13 @@ public class Settings {
             // create a filepath-element
             Element el = new Element(SETTING_TABWIDTH);
             el.setText("4");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
+            el.setText(String.valueOf(EditorPaneLineNumbers.RIGHT));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -603,5 +612,25 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(String.valueOf(val));
+    }
+    public float getLineNumerAlignment() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT);
+        if (el!=null) {
+            try {
+                return Float.parseFloat(el.getText());
+            }
+            catch (NumberFormatException ex) {
+                return EditorPaneLineNumbers.RIGHT;
+            }
+        }
+        return EditorPaneLineNumbers.RIGHT;
+    }
+    public void setLineNumerAlignment(float align) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT);
+        if (null==el) {
+            el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(align));
     }
 }

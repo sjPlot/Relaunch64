@@ -798,6 +798,9 @@ public class EditorPanes {
             ep.setText(source);
         }
     }
+    public void setSourceCode(String source) {
+        setSourceCode(tabbedPane.getSelectedIndex(), source);
+    }
     /**
      * 
      * @return 
@@ -1270,7 +1273,7 @@ public class EditorPanes {
                 String insertString = "";
                 switch (compiler) {
                     case ConstantsR64.COMPILER_KICKASSEMBLER:
-                        insertString = ":break()" + System.getProperty("line.separator");
+                        insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER + System.getProperty("line.separator");
                         break;
                 }
                 // insert section

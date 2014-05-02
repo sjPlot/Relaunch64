@@ -132,7 +132,6 @@ public class Relaunch64AboutBox extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jEditorPane1HyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_jEditorPane1HyperlinkUpdate
-        // TODO add your handling code here:
         // retrieve the event type, e.g. if a link was clicked by the user
         HyperlinkEvent.EventType typ = evt.getEventType();
         // get the description, to check whether we have a file or a hyperlink to a website
