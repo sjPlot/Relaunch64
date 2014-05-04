@@ -183,24 +183,24 @@ public class Tools {
             try {
                 int err = -1;
                 while ((line = lineReader.readLine())!=null) {
-                    // check if line contains error-token
-                    if (line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) {
-                        // check if we have line number
-                        if (line.toLowerCase().contains("line")) {
+                    // check if line contains error-tokenand line number
+                    // ACME-Syntax
+                    if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && line.toLowerCase().contains("line")) {
+                        err = getErrorLineFromLine(line, "line ");
+                    }
+                    // check if we have error, but not line
+                    // kick ass syntax
+                    else if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && !line.toLowerCase().contains("line")) {
+                        // read line
+                        line = lineReader.readLine();
+                        if (line!=null) {
                             err = getErrorLineFromLine(line, "line ");
                         }
-                        // check if we have no "line", but colon (tass syntax)
-                        else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
-                            err = getErrorLineFromLine(line, ":");
-                        }
-                        // else read next line (kick ass syntax)
-                        else {
-                            // read line
-                            line = lineReader.readLine();
-                            if (line!=null) {
-                                err = getErrorLineFromLine(line, "line ");
-                            }
-                        }
+                    }
+                    // check if we have no "line", but colon
+                    // tass syntax
+                    else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
+                        err = getErrorLineFromLine(line, ":");
                     }
                     // check if we found error line
                     if (err!=-1 && !errorLines.contains(err)) {
