@@ -93,8 +93,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.PopupMenuEvent;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskMonitor;
+import org.jdesktop.application.TaskService;
 
 /**
  * The application's main frame.
@@ -168,6 +172,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                checkForUpdates();
                 jEditorPaneMain.requestFocusInWindow();
             }
         });
@@ -1145,11 +1150,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         // log process
                         String log = "Processing script-line: "+cmd;
                         ConstantsR64.r64logger.log(Level.INFO, log);
+                        // surround pathes with quotes
+                        String sf = sourceFile.toString();
+                        if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) sf = "\""+sf+"\"";
+                        String of = outFile.toString();
+                        if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\""+of+"\"";
+                        String cf = compressedFile.toString();
+                        if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
                         // replace input and output file
-                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, sourceFile.toString());
-                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, outFile.toString());
-                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, outFile.toString());
-                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, compressedFile.toString());
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, sf);
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, of);
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, of);
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
                         // check if we have a cruncher-starttoken
                         String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
                         if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
@@ -1191,7 +1203,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             // retrieve potential error lines from log
                             errorLines.addAll(Tools.getErrorLines(compilerLog.toString()));
                             // break loop if we have any errors
-                            if (!errorLines.isEmpty()) break;
+                            if (!errorLines.isEmpty() || compilerLog.toString().toLowerCase().contains("error")) break;
                         }
                         catch (IOException | InterruptedException | SecurityException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
@@ -1722,6 +1734,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         public void close() throws SecurityException {
             throw new UnsupportedOperationException("Not supported yet.");
         }
+    }
+    public void checkForUpdates() {
+        // check if check should be checked
+        if (!settings.getCheckForUpdates()) return;
+        Task cfuT = checkForUpdate();
+        // get the application's context...
+        ApplicationContext appC = Application.getInstance().getContext();
+        // ...to get the TaskMonitor and TaskService
+        TaskMonitor tM = appC.getTaskMonitor();
+        TaskService tS = appC.getTaskService();
+        // with these we can execute the task and bring it to the foreground
+        // i.e. making the animated progressbar and busy icon visible
+        tS.execute(cfuT);
+        tM.setForegroundTask(cfuT);
+    }
+    public final Task checkForUpdate() {
+        return new CheckForUpdates(org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class));
     }
     private class ComboBoxRenderer implements ListCellRenderer {
         protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();

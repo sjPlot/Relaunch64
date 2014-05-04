@@ -18,6 +18,7 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,21 +26,25 @@ import javax.swing.JOptionPane;
  * @author Luedeke
  */
 public class InsertBreakPoint {
+    private static final String lb = System.getProperty("line.separator");
     public static final String breakPointMacro = 
-            "\n//----------------------------------------------------------\n" + 
-            "// Breakpoint Macro\n" + "//----------------------------------------------------------\n" + 
-            ".var _createDebugFiles = debug && cmdLineVars.get(\"afo\") == \"true\"\n" + 
-            ".print \"File creation \" + [_createDebugFiles\n" + 
-            "    ? \"enabled (creating breakpoint file)\"\n" + 
-            "    : \"disabled (no breakpoint file created)\"]\n" + 
-            ".var brkFile\n" + ".if(_createDebugFiles) {\n" + 
-            "    .eval brkFile = createFile(\"breakpoints.txt\")\n" + 
-            "    }\n" + ".macro break() {\n" + 
-            ".if(_createDebugFiles) {\n" + 
-            "    .eval brkFile.writeln(\"break \" + toHexString(*))\n" + 
-            "    }\n" + 
-            "}\n" + 
-            "//------------------------------------------------------\n";
+            lb+"//----------------------------------------------------------"+lb+ 
+            "// Breakpoint Macro"+lb+ 
+            "//----------------------------------------------------------"+lb+ 
+            ".var _createDebugFiles = debug && cmdLineVars.get(\"afo\") == \"true\""+lb+ 
+            ".print \"File creation \" + [_createDebugFiles"+lb+ 
+            "    ? \"enabled (creating breakpoint file)\""+lb+ 
+            "    : \"disabled (no breakpoint file created)\"]"+lb+ 
+            ".var brkFile"+lb+ 
+            ".if(_createDebugFiles) {"+lb+ 
+            "    .eval brkFile = createFile(\"breakpoints.txt\")"+lb+ 
+            "    }"+lb+ 
+            ".macro break() {"+lb+ 
+            ".if(_createDebugFiles) {"+lb+ 
+            "    .eval brkFile.writeln(\"break \" + toHexString(*))"+lb+ 
+            "    }"+lb+ 
+            "}"+lb+ 
+            "//------------------------------------------------------"+lb;
     
     public static void insertBreakPoint(EditorPanes editorPane) {
         // check for valid value
@@ -82,10 +87,10 @@ public class InsertBreakPoint {
         // create replace string
         String bpm1 = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER+"\n";
         String bpm2 = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER+"\r\n";
+        // remove macro
+        source = source.replaceAll(Pattern.quote(breakPointMacro), "");
         // remove all breakpoints
         source = source.replace(bpm1, "").replace(bpm2, "");
-        // remove macro
-        source = source.replace(breakPointMacro, "");
         // update source
         editorPane.setSourceCode(source);
     }

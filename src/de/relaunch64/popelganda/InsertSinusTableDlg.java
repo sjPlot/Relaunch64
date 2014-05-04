@@ -61,6 +61,13 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
             int max = Integer.parseInt(jTextFieldMax.getText());
             int count = Integer.parseInt(jTextFieldCount.getText());
             int bpl = Integer.parseInt(jTextFieldBytesPerLine.getText());
+            int anzahlKurven = Integer.parseInt(jTextFieldCurves.getText());
+            int phase = (max+1-min)/2;
+            double step = (double) anzahlKurven*2*Math.PI;
+            // calculation fix
+            step = step / count;
+            int dummy = (int)(step*10000)+1;
+            step = (double) dummy/10000;
             // get compiler byte-token
             String byteToken;
             switch (compiler) {
@@ -80,29 +87,59 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
             boolean startNewLine = true;
             int bytesPerLine = 0;
             // check for valid bounds 
-            if (min>=0 && min<max && bpl>0 && count>0) {
-                for (int i=min; i<count; i++) {
-                    int b = (int)(Math.round(Math.sin(i*2*Math.PI/count)*(max/2) + (max/2)));
-                    // check if we have a new line
-                    if (startNewLine) {
-                        sb.append(byteToken).append(" ");
-                        startNewLine = false;
+            if (min>=0 && min<max && bpl>0 && count>0 && anzahlKurven>0) {
+                while (anzahlKurven>0) {
+                    for (double i=-Math.PI/2; i<Math.PI/2; i=i+step) {
+                        // check if we have a new line
+                        if (startNewLine) {
+                            sb.append(byteToken).append(" ");
+                            startNewLine = false;
+                        }
+                        int value = (int)((Math.sin(i)*phase)+(phase+min));
+                        if (value>max) value=max;
+                        if (value<min) value=min;
+                        // append byte
+                        sb.append("$").append(String.format("%02x", value));
+                        // increase counter for bytes per line
+                        bytesPerLine++;
+                        // check if we reached end of line
+                        if (bytesPerLine>=bpl) {
+                            sb.append(System.getProperty("line.separator"));
+                            // start new line
+                            startNewLine = true;
+                            // reset bytes per line counter
+                            bytesPerLine = 0;
+                        }
+                        else {
+                            sb.append(", ");
+                        }
                     }
-                    // append byte
-                    sb.append("$").append(String.format("%02x", b));
-                    // increase counter for bytes per line
-                    bytesPerLine++;
-                    // check if we reached end of line
-                    if (bytesPerLine>=bpl || i==(count-1)) {
-                        sb.append(System.getProperty("line.separator"));
-                        // start new line
-                        startNewLine = true;
-                        // reset bytes per line counter
-                        bytesPerLine = 0;
+                    for (double i=Math.PI/2; i>-Math.PI/2; i=i-step) {
+                        // check if we have a new line
+                        if (startNewLine) {
+                            sb.append(byteToken).append(" ");
+                            startNewLine = false;
+                        }
+                        int value = (int)((Math.sin(i)*phase)+(phase+min));
+                        if (value>max) value=max;
+                        if (value<min) value=min;
+                        // append byte
+                        sb.append("$").append(String.format("%02x", value));
+                        // increase counter for bytes per line
+                        bytesPerLine++;
+                        // check if we reached end of line
+                        if (bytesPerLine>=bpl || i<=-Math.PI/2) {
+                            sb.append(System.getProperty("line.separator"));
+                            // start new line
+                            startNewLine = true;
+                            // reset bytes per line counter
+                            bytesPerLine = 0;
+                        }
+                        else {
+                            sb.append(", ");
+                        }
                     }
-                    else {
-                        sb.append(", ");
-                    }
+                    anzahlKurven--;
                 }
                 bytetable = sb.toString();
                 setVisible(false);
@@ -145,6 +182,8 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
         jTextFieldBytesPerLine = new javax.swing.JTextField();
         jButtonApply = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldCurves = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(InsertSinusTableDlg.class);
@@ -152,6 +191,8 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
         setModal(true);
         setName("InsertSinusTableDlg"); // NOI18N
 
+        jLabel1.setDisplayedMnemonic('i');
+        jLabel1.setLabelFor(jTextFieldMin);
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -159,6 +200,8 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
         jTextFieldMin.setText(resourceMap.getString("jTextFieldMin.text")); // NOI18N
         jTextFieldMin.setName("jTextFieldMin"); // NOI18N
 
+        jLabel2.setDisplayedMnemonic('x');
+        jLabel2.setLabelFor(jTextFieldMax);
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
@@ -166,6 +209,8 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
         jTextFieldMax.setText(resourceMap.getString("jTextFieldMax.text")); // NOI18N
         jTextFieldMax.setName("jTextFieldMax"); // NOI18N
 
+        jLabel3.setDisplayedMnemonic('v');
+        jLabel3.setLabelFor(jTextFieldCount);
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -173,6 +218,8 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
         jTextFieldCount.setText(resourceMap.getString("jTextFieldCount.text")); // NOI18N
         jTextFieldCount.setName("jTextFieldCount"); // NOI18N
 
+        jLabel4.setDisplayedMnemonic('l');
+        jLabel4.setLabelFor(jTextFieldBytesPerLine);
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
 
@@ -182,10 +229,20 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getActionMap(InsertSinusTableDlg.class, this);
         jButtonApply.setAction(actionMap.get("apply")); // NOI18N
+        jButtonApply.setMnemonic('A');
         jButtonApply.setName("jButtonApply"); // NOI18N
 
         jButtonCancel.setAction(actionMap.get("cancel")); // NOI18N
         jButtonCancel.setName("jButtonCancel"); // NOI18N
+
+        jLabel5.setDisplayedMnemonic('c');
+        jLabel5.setLabelFor(jTextFieldCurves);
+        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+
+        jTextFieldCurves.setColumns(8);
+        jTextFieldCurves.setText(resourceMap.getString("jTextFieldCurves.text")); // NOI18N
+        jTextFieldCurves.setName("jTextFieldCurves"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,23 +251,30 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldBytesPerLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonCancel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonApply)
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldBytesPerLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonApply)
+                        .addGap(10, 10, 10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldCurves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,13 +293,17 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
                     .addComponent(jTextFieldCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextFieldCurves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextFieldBytesPerLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonApply)
                     .addComponent(jButtonCancel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -249,8 +317,10 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextFieldBytesPerLine;
     private javax.swing.JTextField jTextFieldCount;
+    private javax.swing.JTextField jTextFieldCurves;
     private javax.swing.JTextField jTextFieldMax;
     private javax.swing.JTextField jTextFieldMin;
     // End of variables declaration//GEN-END:variables

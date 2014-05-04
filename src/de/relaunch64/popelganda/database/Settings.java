@@ -68,6 +68,7 @@ public class Settings {
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
+    private static final String SETTING_CHECKUPDATES = "checkupdates";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
@@ -229,6 +230,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_LAST_USED_PATH);
             el.setText("");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES)) {
+            // create element
+            Element el = new Element(SETTING_CHECKUPDATES);
+            el.setText("1");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -496,6 +504,19 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(String.valueOf(compiler));
+    }
+    public boolean getCheckForUpdates() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setCheckForUpdates(boolean val)  {
+        Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);
+        if (null==el) {
+            el = new Element(SETTING_CHECKUPDATES);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public int getTabWidth() {
         Element el = settingsFile.getRootElement().getChild(SETTING_TABWIDTH);
