@@ -51,6 +51,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.CENTER) jComboBoxLineNumberAlign.setSelectedIndex(1);
         else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.LEFT) jComboBoxLineNumberAlign.setSelectedIndex(2);
         jCheckBoxCheckUpdates.setSelected(settings.getCheckForUpdates());
+        jCheckBoxSaveOnCompile.setSelected(settings.getSaveOnCompile());
         initScripts();
         initListeners();
         // get tab char
@@ -155,6 +156,12 @@ public class SettingsDlg extends javax.swing.JDialog {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settings.setCheckForUpdates(jCheckBoxCheckUpdates.isSelected());
+            }
+        });
+        jCheckBoxSaveOnCompile.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settings.setSaveOnCompile(jCheckBoxSaveOnCompile.isSelected());
             }
         });
         jComboBoxPrefComp.addActionListener(new java.awt.event.ActionListener() {
@@ -323,7 +330,6 @@ public class SettingsDlg extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -349,6 +355,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jLabelRestart = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxCheckUpdates = new javax.swing.JCheckBox();
+        jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -543,13 +550,18 @@ public class SettingsDlg extends javax.swing.JDialog {
         jCheckBoxCheckUpdates.setText(resourceMap.getString("jCheckBoxCheckUpdates.text")); // NOI18N
         jCheckBoxCheckUpdates.setName("jCheckBoxCheckUpdates"); // NOI18N
 
+        jCheckBoxSaveOnCompile.setText(resourceMap.getString("jCheckBoxSaveOnCompile.text")); // NOI18N
+        jCheckBoxSaveOnCompile.setName("jCheckBoxSaveOnCompile"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jCheckBoxCheckUpdates)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jCheckBoxCheckUpdates)
+                    .add(jCheckBoxSaveOnCompile))
                 .addContainerGap(415, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -557,7 +569,9 @@ public class SettingsDlg extends javax.swing.JDialog {
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jCheckBoxCheckUpdates)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(jCheckBoxSaveOnCompile)
+                .addContainerGap(253, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -583,13 +597,13 @@ public class SettingsDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonApplyScript;
     private javax.swing.JButton jButtonApplyTabAndFont;
     private javax.swing.JButton jButtonFont;
     private javax.swing.JButton jButtonRemoveScript;
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
+    private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;
     private javax.swing.JComboBox jComboBoxPrefComp;

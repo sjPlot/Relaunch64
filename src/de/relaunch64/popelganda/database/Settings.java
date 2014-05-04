@@ -69,6 +69,7 @@ public class Settings {
     private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_CHECKUPDATES = "checkupdates";
+    private static final String SETTING_SAVEONCOMPILE = "saveoncompile";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
@@ -236,6 +237,13 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES)) {
             // create element
             Element el = new Element(SETTING_CHECKUPDATES);
+            el.setText("1");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE)) {
+            // create element
+            Element el = new Element(SETTING_SAVEONCOMPILE);
             el.setText("1");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
@@ -514,6 +522,19 @@ public class Settings {
         Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);
         if (null==el) {
             el = new Element(SETTING_CHECKUPDATES);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getSaveOnCompile() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setSaveOnCompile(boolean val)  {
+        Element el = settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE);
+        if (null==el) {
+            el = new Element(SETTING_SAVEONCOMPILE);
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

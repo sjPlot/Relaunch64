@@ -54,7 +54,7 @@
 	<ul>
 		<li><strong>SOURCEFILE</strong> - The input file, typically the <strong>asm-file</strong>.</li>
 		<li><strong>OUTPUT</strong> - The ouput file that will be compiled, typically the <strong>prg-file</strong>.</li>
-		<li><strong>START</strong> - The start address of the source code. This placeholder is needed for <strong>cruncher and packer</strong>.</li>
+		<li><strong>START</strong> - The start address of the source code. This placeholder can be used for <strong>cruncher and packer</strong>.</li>
 		<li><strong>UNCOMPFILE</strong> - The uncompressed file, used as input file for cruncher or packer. Mostly identical to OUTFILE.</li>
 		<li><strong>COMPFILE</strong> - The compressed output file, used for cruncher or packer.</li>
 	</ul>
@@ -67,6 +67,13 @@
 	<strong>Note 2:</strong> If you specify full pathes to your compiler or emulator and the path contains whitechars (spaces),
 	you need to set the path in quotes (see examples below). Placeholders like SOURCEFILE or OUTFILE, however, 
 	will be automatically quoted if necessary. You don't need to quote the placeholders.
+</p>
+
+<p>
+	<strong>Note 3:</strong> To make use of the START placeholder, you have to specify the start address in
+	a comment line with following syntax: &lt;comment sign&gt; start=&lt;start address&gt;, for instance:
+	<div class="pcode">// start=$c000 (for Kick Assembler)<br>
+	; start=12288 (for ACME)</div>
 </p>
 
 <h2>Examples</h2>

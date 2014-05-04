@@ -1136,8 +1136,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 script = script.replaceAll("\r", "");
                 // retrieve script lines
                 String[] lines = script.split("\n");
+                // check if source file needs to be saved and auto save is active
+                if (settings.getSaveOnCompile() && editorPanes.isModified()) editorPanes.saveFile();
                 // retrieve ASM-Source file
                 File sourceFile = editorPanes.getActiveFilePath();
+                // retrieve parent file. needed to construct output file paths
                 String parentFile = (null==sourceFile.getParentFile()) ? sourceFile.toString() : sourceFile.getParentFile().toString();
                 // create Output file
                 File outFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+".prg");
