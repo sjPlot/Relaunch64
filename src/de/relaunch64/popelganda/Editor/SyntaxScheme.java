@@ -67,6 +67,7 @@ public class SyntaxScheme {
     public static final SimpleAttributeSet DEFAULT_JUMP;
     public static final SimpleAttributeSet DEFAULT_KEYWORD;
     public static final SimpleAttributeSet DEFAULT_COMPILER_KEYWORD;
+    public static final SimpleAttributeSet DEFAULT_ILLEGAL_OPCODE;
     public static final String DEF_FONT_NAME;
     public static final int DEF_FONT_SIZE;
     public static final Color DEF_BACK_COLOR;
@@ -90,6 +91,7 @@ public class SyntaxScheme {
         Color cLohi = new java.awt.Color(128, 128, 0); // olive
         Color cKeywords = new java.awt.Color(0, 0, 200); // dark blue
         Color cCompilerKeywords = new java.awt.Color(70, 130, 180); // dark cyan
+        Color cIllegalOpcodes = new java.awt.Color(255, 69, 0); // orange red
         // fonts & backgrund
         String fontFamily = ConstantsR64.DEFAULT_FONT;
         int fontSize = ConstantsR64.DEFAULT_FONT_SIZE;
@@ -270,6 +272,20 @@ public class SyntaxScheme {
             // ******************************************
             // comp. keywords color
             // ******************************************
+            e = syntaxFile.getRootElement().getChild("cIllegalOpcodes");
+            if (null==e) {
+                e = new Element("cIllegalOpcodes");
+                e.setAttribute("r", String.valueOf(cCompilerKeywords.getRed()));
+                e.setAttribute("g", String.valueOf(cCompilerKeywords.getGreen()));
+                e.setAttribute("b", String.valueOf(cCompilerKeywords.getBlue()));
+                syntaxFile.getRootElement().addContent(e);
+            }
+            else cIllegalOpcodes = new Color(Integer.parseInt(e.getAttributeValue("r")),
+                                             Integer.parseInt(e.getAttributeValue("g")),
+                                             Integer.parseInt(e.getAttributeValue("b")));
+            // ******************************************
+            // comp. keywords color
+            // ******************************************
             e = syntaxFile.getRootElement().getChild("backgroundColor");
             if (null==e) {
                 e = new Element("backgroundColor");
@@ -374,6 +390,13 @@ public class SyntaxScheme {
         StyleConstants.setFontFamily(DEFAULT_COMPILER_KEYWORD, fontFamily);
         StyleConstants.setFontSize(DEFAULT_COMPILER_KEYWORD, fontSize);
         
+        //default style for new keyword types
+        DEFAULT_ILLEGAL_OPCODE = new SimpleAttributeSet();
+        StyleConstants.setForeground(DEFAULT_ILLEGAL_OPCODE, cIllegalOpcodes);
+        // StyleConstants.setBold(DEFAULT_KEYWORD, true);
+        StyleConstants.setFontFamily(DEFAULT_ILLEGAL_OPCODE, fontFamily);
+        StyleConstants.setFontSize(DEFAULT_ILLEGAL_OPCODE, fontSize);
+        
         // ******************************************
         // save syntax scheme
         // ******************************************
@@ -458,6 +481,7 @@ public class SyntaxScheme {
         sasArray.put(ConstantsR64.STRING_MACRO, DEFAULT_MACRO);
         sasArray.put(ConstantsR64.STRING_KEYWORD, DEFAULT_KEYWORD);
         sasArray.put(ConstantsR64.STRING_COMPILER_KEYWORD, DEFAULT_COMPILER_KEYWORD);
+        sasArray.put(ConstantsR64.STRING_ILLEGAL_OPCODE, DEFAULT_ILLEGAL_OPCODE);
         return sasArray;
     }
     public static String getFontName() {
@@ -529,10 +553,9 @@ public class SyntaxScheme {
     }
     /**
      * 
-     * @param compiler
      * @return 
      */
-    public static HashMap<String, MutableAttributeSet> getKeywordHashMap(int compiler) {
+    public static HashMap<String, MutableAttributeSet> getKeywordHashMap() {
         final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<>();
         asmKeywords.put("LDA", DEFAULT_KEYWORD);
         asmKeywords.put("STA", DEFAULT_KEYWORD);
@@ -590,6 +613,29 @@ public class SyntaxScheme {
         asmKeywords.put("PLP", DEFAULT_KEYWORD);
         asmKeywords.put("NOP", DEFAULT_KEYWORD);
         asmKeywords.put("BRK", DEFAULT_KEYWORD);
+        return asmKeywords;
+    }    
+    public static HashMap<String, MutableAttributeSet> getIllegalOpcodeHashMap() {
+        final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<>();
+        asmKeywords.put("AAR", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("AHX", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("ALR", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("ANC", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("AXS", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("DCP", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("ISC", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("LAS", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("LAX", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("RLA", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("RRA", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("SAX", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("SBC", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("SHX", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("SHY", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("SLO", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("SRE", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("TAS", DEFAULT_ILLEGAL_OPCODE);
+        asmKeywords.put("XAA", DEFAULT_ILLEGAL_OPCODE);
         return asmKeywords;
     }    
     /**

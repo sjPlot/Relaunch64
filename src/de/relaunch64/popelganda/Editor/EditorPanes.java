@@ -591,15 +591,17 @@ public class EditorPanes {
         // declare compiler var as final
         final int compiler = c;
         // get hash map with keywords
-        final HashMap<String, MutableAttributeSet> kw = SyntaxScheme.getKeywordHashMap(compiler);
+        final HashMap<String, MutableAttributeSet> kw = SyntaxScheme.getKeywordHashMap();
         // get hash map with compiler specific keywords
         final HashMap<String, MutableAttributeSet> ckw = SyntaxScheme.getCompilerKeywordHashMap(compiler);
+        // get hash map with illegal opcodes
+        final HashMap<String, MutableAttributeSet> io = SyntaxScheme.getIllegalOpcodeHashMap();
         // create new editor kit
         EditorKit editorKit = new StyledEditorKit() {
             // and set highlight scheme
             @Override
             public Document createDefaultDocument() {
-                return new SyntaxHighlighting(kw, ckw,
+                return new SyntaxHighlighting(kw, ckw, io,
                                               SyntaxScheme.getFontName(),
                                               SyntaxScheme.getFontSize(),
                                               SyntaxScheme.getCommentString(compiler),

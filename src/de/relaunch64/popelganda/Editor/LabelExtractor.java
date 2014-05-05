@@ -70,7 +70,7 @@ public class LabelExtractor {
             // in case of kickassembler, we need to remove colon from auto-suggestion
             if (keyword.endsWith(":") && removeLastColon) keyword = keyword.substring(0, keyword.length()-1);
             // check if a) keyword is not null and not empty, b) is longer than 2 chars and 3) is not an ASM keyword
-            if (keyword!=null && !keyword.isEmpty() && keyword.length()>2 && !SyntaxScheme.getKeywordHashMap(compiler).containsKey(keyword.toUpperCase())) return keyword;
+            if (keyword!=null && !keyword.isEmpty() && keyword.length()>2 && !SyntaxScheme.getKeywordHashMap().containsKey(keyword.toUpperCase())) return keyword;
         }
         return null;
     }

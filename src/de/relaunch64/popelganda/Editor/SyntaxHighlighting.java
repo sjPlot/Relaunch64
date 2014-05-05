@@ -75,6 +75,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     private final MutableAttributeSet number;
     private final HashMap<String, MutableAttributeSet> keywords;
     private final HashMap<String, MutableAttributeSet> compilerKeywords;
+    private final HashMap<String, MutableAttributeSet> illegalOpcodes;
     private int fontSize;
     private String fontName;
     private final String singleLineComment;
@@ -84,6 +85,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     @SuppressWarnings("LeakingThisInConstructor")
     public SyntaxHighlighting(final HashMap<String, MutableAttributeSet> keywords,
                               final HashMap<String, MutableAttributeSet> compilerKeywords,
+                              final HashMap<String, MutableAttributeSet> illegalOpcodes,
                               String fname, int fsize, String slc, String dll,
                               final HashMap<String, MutableAttributeSet> attributes,
                               int comp, int tabWidth) {
@@ -109,6 +111,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
         this.keywords = keywords;
         this.compilerKeywords = compilerKeywords;
+        this.illegalOpcodes = illegalOpcodes;
         
         setTabs(tabWidth);
         setFontSize(fontSize);
@@ -213,6 +216,15 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     }
  
     /**
+     * Associates a keyword with a particular formatting style
+     * @param keyword  the token or word to format
+     * @param attr     how to format keyword
+     */
+    public void addIllegalOpcode(String keyword, MutableAttributeSet attr) {
+        illegalOpcodes.put(keyword, attr);
+    }
+    
+    /**
      * Gets the formatting for a keyword
      *
      * @param keyword  the token or word to stop formatting
@@ -233,6 +245,16 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     }
  
     /**
+     * Gets the formatting for a keyword
+     *
+     * @param keyword  the token or word to stop formatting
+     * @return how keyword is formatted, or null if no formatting is applied to it
+     */
+    public MutableAttributeSet getIllegalOpcodeFormatting(String keyword) {
+        return illegalOpcodes.get(keyword);
+    }
+ 
+    /**
      * Removes an association between a keyword with a particular formatting style
      * @param keyword  the token or word to stop formatting
      */
@@ -246,6 +268,14 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     public void removeCompilerKeyword(String compilerKeyword) {
         compilerKeywords.remove(compilerKeyword);
+    }
+ 
+    /**
+     * Removes an association between a keyword with a particular formatting style
+     * @param keyword  the token or word to stop formatting
+     */
+    public void removeIllegalOpcode(String keyword) {
+        illegalOpcodes.remove(keyword);
     }
  
     /**
@@ -584,9 +614,15 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
         }
         else {
-            attr = compilerKeywords.get(token.toUpperCase());
+            attr = illegalOpcodes.get(token.toUpperCase());
             if (attr != null) {
                 doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
+            }
+            else {
+                attr = compilerKeywords.get(token.toUpperCase());
+                if (attr != null) {
+                    doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
+                }
             }
         }
         return endOfToken + 1;

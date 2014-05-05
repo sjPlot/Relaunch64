@@ -78,6 +78,7 @@ public class ConstantsR64 {
     public static final String STRING_NUMBER = "number";
     public static final String STRING_KEYWORD = "keyword";
     public static final String STRING_COMPILER_KEYWORD = "compilerkeyword";
+    public static final String STRING_ILLEGAL_OPCODE = "illegalopcode";
     public static final String STRING_HEXA = "hexa";
     public static final String STRING_LOHI = "lohi";
     public static final String STRING_BIN = "binary";
