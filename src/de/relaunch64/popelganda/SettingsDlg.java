@@ -5,6 +5,7 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
+import de.relaunch64.popelganda.Editor.HighlightSchemes;
 import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
@@ -71,6 +72,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         // init other settings
         jCheckBoxCheckUpdates.setSelected(settings.getCheckForUpdates());
         jCheckBoxSaveOnCompile.setSelected(settings.getSaveOnCompile());
+        // init schemes
+        initSchemes();
         // init user scripts, including combo box setting etc
         initScripts();
         // init listeners afterwards, because script-init fires events
@@ -86,6 +89,15 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         // disable apply buttons
         setModifiedTabScript(false);
         setModifiedTabFont(false);
+    }
+    private void initSchemes() {
+        jComboBoxSyntaxScheme.removeAllItems();
+        for (String sn : HighlightSchemes.SCHEME_NAMES) jComboBoxSyntaxScheme.addItem(sn);
+        try {
+            jComboBoxSyntaxScheme.setSelectedIndex(settings.getSyntaxScheme());
+        }
+        catch (IllegalArgumentException ex) {
+        }
     }
     private void initScripts() {
         // get all action listeners from the combo box
@@ -188,6 +200,13 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 setModifiedTabFont(true);
             }
         });
+        jComboBoxSyntaxScheme.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+                jLabelRestart.setVisible(true);
+            }
+        });
         jComboBoxLineNumberAlign.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -283,6 +302,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         Document doc = SyntaxScheme.loadSyntax();
         SyntaxScheme.setFont(doc, mainfont.getFamily());
         SyntaxScheme.setFontSize(doc, mainfont.getSize());
+        SyntaxScheme.changeScheme(jComboBoxSyntaxScheme.getSelectedIndex(), doc);
         SyntaxScheme.saveSyntax(doc);
         // get tab width
         try {
@@ -291,6 +311,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         catch (NumberFormatException ex) {
         }
         settings.setPreferredCompiler(jComboBoxPrefComp.getSelectedIndex());
+        settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         if (jComboBoxLineNumberAlign.getSelectedIndex() == 0) settings.setLineNumerAlignment(EditorPaneLineNumbers.RIGHT);
         else if (jComboBoxLineNumberAlign.getSelectedIndex() == 1) settings.setLineNumerAlignment(EditorPaneLineNumbers.CENTER);
         else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(EditorPaneLineNumbers.LEFT);
@@ -402,6 +423,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabel1 = new javax.swing.JLabel();
         jComboBoxLineNumberAlign = new javax.swing.JComboBox();
         jLabelRestart = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBoxSyntaxScheme = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxCheckUpdates = new javax.swing.JCheckBox();
         jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
@@ -546,12 +569,19 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart.setText(resourceMap.getString("jLabelRestart.text")); // NOI18N
         jLabelRestart.setName("jLabelRestart"); // NOI18N
 
+        jLabel2.setDisplayedMnemonic('y');
+        jLabel2.setLabelFor(jComboBoxSyntaxScheme);
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        jComboBoxSyntaxScheme.setName("jComboBoxSyntaxScheme"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(282, Short.MAX_VALUE)
                 .add(jLabelRestart)
                 .add(18, 18, 18)
                 .add(jButtonApplyTabAndFont)
@@ -562,9 +592,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jLabel6)
                     .add(jLabel10)
                     .add(jLabel11)
-                    .add(jLabel1))
+                    .add(jLabel1)
+                    .add(jLabel2))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel5Layout.createSequentialGroup()
                         .add(jLabelFont)
@@ -572,7 +604,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .add(jButtonFont))
                     .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(409, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -594,7 +626,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 117, Short.MAX_VALUE)
+                .add(18, 18, 18)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 83, Short.MAX_VALUE)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyTabAndFont)
                     .add(jLabelRestart))
@@ -666,9 +702,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;
     private javax.swing.JComboBox jComboBoxPrefComp;
+    private javax.swing.JComboBox jComboBoxSyntaxScheme;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

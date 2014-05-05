@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.database;
 
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
+import de.relaunch64.popelganda.Editor.HighlightSchemes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.awt.Font;
@@ -64,6 +65,7 @@ public class Settings {
     private static final String SETTING_RECENT_DOC = "recentDoc";
     private static final String SETTING_LAST_USED_PATH = "lastusedpath";
     private static final String SETTING_PREF_COMP = "preferredCompiler";
+    private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
@@ -252,6 +254,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_PREF_COMP);
             el.setText(String.valueOf(ConstantsR64.COMPILER_KICKASSEMBLER));
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME)) {
+            // create element
+            Element el = new Element(SETTING_SYNTAX_SCHEME);
+            el.setText(String.valueOf(HighlightSchemes.SCHEME_DEFAULT));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -512,6 +521,23 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(String.valueOf(compiler));
+    }
+    public int getSyntaxScheme() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
+        try {
+            if (el!=null) return Integer.parseInt(el.getText());
+        }
+        catch (NumberFormatException ex) {
+        }
+        return HighlightSchemes.SCHEME_DEFAULT;
+    }
+    public void setSyntaxScheme(int scheme) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
+        if (null==el) {
+            el = new Element(SETTING_SYNTAX_SCHEME);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(scheme));
     }
     public boolean getCheckForUpdates() {
         Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);

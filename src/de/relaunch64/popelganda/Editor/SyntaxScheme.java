@@ -80,18 +80,19 @@ public class SyntaxScheme {
         // ******************************************
         // Set default colors
         // ******************************************
-        Color cNormal = Color.BLACK;
-        Color cComment = new java.awt.Color(150, 150, 150); // grey
-        Color cString = new java.awt.Color(220, 0, 220); //dark pink
-        Color cNumber = new java.awt.Color(160, 0, 0); // red
-        Color cHexa = new java.awt.Color(0, 120, 0); // green
-        Color cBin = new java.awt.Color(0, 120, 120); // cyan
-        Color cJump = new java.awt.Color(206, 103, 0); // brown
-        Color cMacro = new java.awt.Color(206, 103, 0); // brown
-        Color cLohi = new java.awt.Color(128, 128, 0); // olive
-        Color cKeywords = new java.awt.Color(0, 0, 200); // dark blue
-        Color cCompilerKeywords = new java.awt.Color(70, 130, 180); // dark cyan
-        Color cIllegalOpcodes = new java.awt.Color(255, 69, 0); // orange red
+        int scheme = HighlightSchemes.SCHEME_DEFAULT;
+        Color cNormal = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NORMAL);
+        Color cComment = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMMENT);
+        Color cString = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_STRING);
+        Color cNumber = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NUMBER);
+        Color cHexa = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_HEX);
+        Color cBin = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_BIN);
+        Color cJump = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_JUMP);
+        Color cMacro = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_MACRO);
+        Color cLohi = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_LOHI);
+        Color cKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_KEYWORD);
+        Color cCompilerKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMPILERKEYWORD);
+        Color cIllegalOpcodes = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_ILLEGALOPCODE);
         // fonts & backgrund
         String fontFamily = ConstantsR64.DEFAULT_FONT;
         int fontSize = ConstantsR64.DEFAULT_FONT_SIZE;
@@ -275,9 +276,9 @@ public class SyntaxScheme {
             e = syntaxFile.getRootElement().getChild("cIllegalOpcodes");
             if (null==e) {
                 e = new Element("cIllegalOpcodes");
-                e.setAttribute("r", String.valueOf(cCompilerKeywords.getRed()));
-                e.setAttribute("g", String.valueOf(cCompilerKeywords.getGreen()));
-                e.setAttribute("b", String.valueOf(cCompilerKeywords.getBlue()));
+                e.setAttribute("r", String.valueOf(cIllegalOpcodes.getRed()));
+                e.setAttribute("g", String.valueOf(cIllegalOpcodes.getGreen()));
+                e.setAttribute("b", String.valueOf(cIllegalOpcodes.getBlue()));
                 syntaxFile.getRootElement().addContent(e);
             }
             else cIllegalOpcodes = new Color(Integer.parseInt(e.getAttributeValue("r")),
@@ -406,6 +407,134 @@ public class SyntaxScheme {
     
     public SyntaxScheme() {
     }
+    public static void changeScheme(int scheme) {
+        // ******************************************
+        // read syntax scheme
+        // ******************************************
+        Document syntaxFile = loadSyntax();
+        changeScheme(scheme, syntaxFile);
+        // ******************************************
+        // save syntax scheme
+        // ******************************************
+        saveSyntax(syntaxFile);
+    }
+    public static void changeScheme(int scheme, Document syntaxFile) {
+        // ******************************************
+        // Set default colors
+        // ******************************************
+        Color cNormal = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NORMAL);
+        Color cComment = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMMENT);
+        Color cString = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_STRING);
+        Color cNumber = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NUMBER);
+        Color cHexa = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_HEX);
+        Color cBin = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_BIN);
+        Color cJump = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_JUMP);
+        Color cMacro = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_MACRO);
+        Color cLohi = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_LOHI);
+        Color cKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_KEYWORD);
+        Color cCompilerKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMPILERKEYWORD);
+        Color cIllegalOpcodes = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_ILLEGALOPCODE);
+        // ******************************************
+        // set user colors or init xml-file
+        // ******************************************
+        try {
+            Element e;
+            // ******************************************
+            // normal color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cNormal");
+            e.setAttribute("r", String.valueOf(cNormal.getRed()));
+            e.setAttribute("g", String.valueOf(cNormal.getGreen()));
+            e.setAttribute("b", String.valueOf(cNormal.getBlue()));
+            // ******************************************
+            // comment color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cComment");
+            e.setAttribute("r", String.valueOf(cComment.getRed()));
+            e.setAttribute("g", String.valueOf(cComment.getGreen()));
+            e.setAttribute("b", String.valueOf(cComment.getBlue()));
+            // ******************************************
+            // string color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cString");
+            e.setAttribute("r", String.valueOf(cString.getRed()));
+            e.setAttribute("g", String.valueOf(cString.getGreen()));
+            e.setAttribute("b", String.valueOf(cString.getBlue()));
+            // ******************************************
+            // number color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cNumber");
+            e.setAttribute("r", String.valueOf(cNumber.getRed()));
+            e.setAttribute("g", String.valueOf(cNumber.getGreen()));
+            e.setAttribute("b", String.valueOf(cNumber.getBlue()));
+            // ******************************************
+            // hex color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cHexa");
+            e.setAttribute("r", String.valueOf(cHexa.getRed()));
+            e.setAttribute("g", String.valueOf(cHexa.getGreen()));
+            e.setAttribute("b", String.valueOf(cHexa.getBlue()));
+            // ******************************************
+            // binary color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cBin");
+            e.setAttribute("r", String.valueOf(cBin.getRed()));
+            e.setAttribute("g", String.valueOf(cBin.getGreen()));
+            e.setAttribute("b", String.valueOf(cBin.getBlue()));
+            // ******************************************
+            // string color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cString");
+            e.setAttribute("r", String.valueOf(cString.getRed()));
+            e.setAttribute("g", String.valueOf(cString.getGreen()));
+            e.setAttribute("b", String.valueOf(cString.getBlue()));
+            // ******************************************
+            // jump color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cJump");
+            e.setAttribute("r", String.valueOf(cJump.getRed()));
+            e.setAttribute("g", String.valueOf(cJump.getGreen()));
+            e.setAttribute("b", String.valueOf(cJump.getBlue()));
+            // ******************************************
+            // macro color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cMacro");
+            e.setAttribute("r", String.valueOf(cMacro.getRed()));
+            e.setAttribute("g", String.valueOf(cMacro.getGreen()));
+            e.setAttribute("b", String.valueOf(cMacro.getBlue()));
+            // ******************************************
+            // lohi color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cLohi");
+            e.setAttribute("r", String.valueOf(cLohi.getRed()));
+            e.setAttribute("g", String.valueOf(cLohi.getGreen()));
+            e.setAttribute("b", String.valueOf(cLohi.getBlue()));
+            // ******************************************
+            // keywords color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cKeywords");
+            e.setAttribute("r", String.valueOf(cKeywords.getRed()));
+            e.setAttribute("g", String.valueOf(cKeywords.getGreen()));
+            e.setAttribute("b", String.valueOf(cKeywords.getBlue()));
+            // ******************************************
+            // comp. keywords color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cCompilerKeywords");
+            e.setAttribute("r", String.valueOf(cCompilerKeywords.getRed()));
+            e.setAttribute("g", String.valueOf(cCompilerKeywords.getGreen()));
+            e.setAttribute("b", String.valueOf(cCompilerKeywords.getBlue()));
+            // ******************************************
+            // comp. keywords color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("cIllegalOpcodes");
+            e.setAttribute("r", String.valueOf(cIllegalOpcodes.getRed()));
+            e.setAttribute("g", String.valueOf(cIllegalOpcodes.getGreen()));
+            e.setAttribute("b", String.valueOf(cIllegalOpcodes.getBlue()));
+        }
+        catch (NumberFormatException ex) {
+        }
+    }
+    
     protected static File getFile() {
         return FileTools.createFilePath("relaunch64-syntaxscheme.xml");
     }

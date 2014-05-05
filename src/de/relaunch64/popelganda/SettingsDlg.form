@@ -225,7 +225,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="282" max="32767" attributes="0"/>
                       <Component id="jLabelRestart" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
@@ -238,9 +238,11 @@
                           <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jComboBoxSyntaxScheme" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxLineNumberAlign" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabelFont" min="-2" max="-2" attributes="0"/>
@@ -250,7 +252,7 @@
                           <Component id="jTextFieldTabWidth" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="409" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -278,7 +280,12 @@
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxLineNumberAlign" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="117" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxSyntaxScheme" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="83" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonApplyTabAndFont" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelRestart" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -382,6 +389,21 @@
                 <Property name="foreground" type="java.awt.Color" resourceKey="jLabelRestart.foreground"/>
                 <Property name="text" type="java.lang.String" resourceKey="jLabelRestart.text"/>
                 <Property name="name" type="java.lang.String" value="jLabelRestart" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="displayedMnemonic" type="int" value="121"/>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jComboBoxSyntaxScheme"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+                <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBoxSyntaxScheme">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jComboBoxSyntaxScheme" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>
