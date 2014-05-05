@@ -33,11 +33,11 @@
   </splash>
   <versionInfo>
     <fileVersion>3.0.0.0</fileVersion>
-    <txtFileVersion>Relaunch64 RC1</txtFileVersion>
+    <txtFileVersion>Relaunch64 RC3</txtFileVersion>
     <fileDescription>A C64-crossdevelopment editor</fileDescription>
     <copyright>2003-2014 by Payday</copyright>
     <productVersion>3.0.0.0</productVersion>
-    <txtProductVersion>Relaunch64 RC1</txtProductVersion>
+    <txtProductVersion>Relaunch64 RC3</txtProductVersion>
     <productName>Relaunch64</productName>
     <companyName>Payday</companyName>
     <internalName>R64</internalName>

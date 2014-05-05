@@ -9,11 +9,24 @@ import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
@@ -27,10 +40,11 @@ import org.jdom2.Document;
  *
  * @author danielludecke
  */
-public class SettingsDlg extends javax.swing.JDialog {
+public class SettingsDlg extends javax.swing.JDialog implements DropTargetListener {
     private final Settings settings;
     private final CustomScripts scripts;
     private Font mainfont;
+    private static final String quickHelpText = "Enter command lines here or drag & drop executable files\n(first compiler, then cruncher (optional), finally emulator)\nfrom explorer window to automatically generate a script.\n\nPress help-button for more details and examples.";
     /**
      * Creates new form SettingsDlg
      * @param parent
@@ -42,25 +56,30 @@ public class SettingsDlg extends javax.swing.JDialog {
         settings = s;
         scripts = scr;
         initComponents();
+        // set font-preview for change-font-label
         mainfont = settings.getMainFont();
         jLabelFont.setText(mainfont.getFontName());
         jLabelFont.setFont(mainfont);
+        // restart-to-apply-text hidden
         jLabelRestart.setVisible(false);
+        // set preferred compiler settings
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
+        // init line number alignment
         if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.RIGHT) jComboBoxLineNumberAlign.setSelectedIndex(0);
         else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.CENTER) jComboBoxLineNumberAlign.setSelectedIndex(1);
         else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.LEFT) jComboBoxLineNumberAlign.setSelectedIndex(2);
+        // init other settings
         jCheckBoxCheckUpdates.setSelected(settings.getCheckForUpdates());
         jCheckBoxSaveOnCompile.setSelected(settings.getSaveOnCompile());
+        // init user scripts, including combo box setting etc
         initScripts();
+        // init listeners afterwards, because script-init fires events
         initListeners();
         // get tab char
         jTextFieldTabWidth.setText(String.valueOf(settings.getTabWidth()));
         // set application icon
         setIconImage(ConstantsR64.r64icon.getImage());
         // set Mnemonic keys
-        jLabel8.setDisplayedMnemonic('s');
-        jLabel9.setDisplayedMnemonic('n');
         jButtonApplyScript.setDisplayedMnemonicIndex(0);
         jButtonApplyTabAndFont.setDisplayedMnemonicIndex(0);
         jButtonRemoveScript.setDisplayedMnemonicIndex(0);
@@ -87,9 +106,7 @@ public class SettingsDlg extends javax.swing.JDialog {
             setRemovePossible(true);
         }
         else {
-            jTextFieldScriptName.setText("");
-            jTextAreaUserScript.setText("");
-            setRemovePossible(false);
+            resetScriptFields();
         }
         jComboBoxCustomScripts.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -101,6 +118,7 @@ public class SettingsDlg extends javax.swing.JDialog {
                     // set script name to textfield
                     jTextFieldScriptName.setText(scriptname);
                     // set content to text area
+                    jTextAreaUserScript.setForeground(Color.black);
                     jTextAreaUserScript.setText(scripts.getScript(scriptname));
                     // change button text to update
                     jButtonApplyScript.setText("Update script");
@@ -208,13 +226,31 @@ public class SettingsDlg extends javax.swing.JDialog {
             @Override public void insertUpdate(DocumentEvent e) { setModifiedTabFont(true); }
             @Override public void removeUpdate(DocumentEvent e) { setModifiedTabFont(true); }
         });
+        jTextAreaUserScript.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override public void focusGained(java.awt.event.FocusEvent evt) {
+                String content = jTextAreaUserScript.getText();
+                if (content.equalsIgnoreCase(quickHelpText)) {
+                    jTextAreaUserScript.setText("");
+                    jTextAreaUserScript.setForeground(Color.black);
+                }
+            }
+            @Override public void focusLost(java.awt.event.FocusEvent evt) {
+                String content = jTextAreaUserScript.getText();
+                if (content.isEmpty()) {
+                    jTextAreaUserScript.setText(quickHelpText);
+                    jTextAreaUserScript.setForeground(Color.lightGray);
+                }
+            }
+        });
+        jTextAreaUserScript.setDragEnabled(true);
+        DropTarget dropTarget = new DropTarget(jTextAreaUserScript, this);   
     }
     private void switchButtonLabel() {
         String name = jTextFieldScriptName.getText();
         String content = jTextAreaUserScript.getText();
         if (name!=null) jButtonApplyScript.setText((scripts.findScript(name)!=-1) ? "Update script" : "Add script");
         jButtonApplyScript.setDisplayedMnemonicIndex(0);
-        setModifiedTabScript(name!=null && !name.isEmpty() && !content.isEmpty());
+        setModifiedTabScript(name!=null && !name.isEmpty() && !content.isEmpty() && !content.equals(quickHelpText));
     }
     @Action
     public void showScriptHelp() {
@@ -260,6 +296,18 @@ public class SettingsDlg extends javax.swing.JDialog {
         else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(EditorPaneLineNumbers.LEFT);
         setModifiedTabFont(false);
         jLabelRestart.setVisible(false);
+    }
+    @Action
+    public void addNewScript() {
+        resetScriptFields();
+        jTextFieldScriptName.requestFocusInWindow();
+    }
+    private void resetScriptFields() {
+        jTextFieldScriptName.setText("");
+        // if we have no scripts, set default quick help text
+        jTextAreaUserScript.setText(quickHelpText);
+        jTextAreaUserScript.setForeground(Color.lightGray);
+        setRemovePossible(false);
     }
     @Action(enabledProperty = "modifiedTabScript")
     public void applyScript() {
@@ -341,6 +389,7 @@ public class SettingsDlg extends javax.swing.JDialog {
         jButtonApplyScript = new javax.swing.JButton();
         jButtonScriptHelp = new javax.swing.JButton();
         jButtonRemoveScript = new javax.swing.JButton();
+        jButtonNewScript = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabelFont = new javax.swing.JLabel();
@@ -367,12 +416,14 @@ public class SettingsDlg extends javax.swing.JDialog {
 
         jPanel3.setName("jPanel3"); // NOI18N
 
+        jLabel8.setDisplayedMnemonic('s');
         jLabel8.setLabelFor(jComboBoxCustomScripts);
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
         jComboBoxCustomScripts.setName("jComboBoxCustomScripts"); // NOI18N
 
+        jLabel9.setDisplayedMnemonic('m');
         jLabel9.setLabelFor(jTextFieldScriptName);
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
@@ -394,6 +445,10 @@ public class SettingsDlg extends javax.swing.JDialog {
 
         jButtonRemoveScript.setAction(actionMap.get("removeScript")); // NOI18N
         jButtonRemoveScript.setName("jButtonRemoveScript"); // NOI18N
+
+        jButtonNewScript.setAction(actionMap.get("addNewScript")); // NOI18N
+        jButtonNewScript.setMnemonic('n');
+        jButtonNewScript.setName("jButtonNewScript"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -417,6 +472,8 @@ public class SettingsDlg extends javax.swing.JDialog {
                         .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel3Layout.createSequentialGroup()
                                 .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jButtonNewScript)
                                 .add(0, 0, Short.MAX_VALUE))
                             .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))))
                 .addContainerGap())
@@ -427,13 +484,14 @@ public class SettingsDlg extends javax.swing.JDialog {
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel8)
-                    .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxCustomScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonNewScript))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel9)
                     .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyScript)
@@ -600,6 +658,7 @@ public class SettingsDlg extends javax.swing.JDialog {
     private javax.swing.JButton jButtonApplyScript;
     private javax.swing.JButton jButtonApplyTabAndFont;
     private javax.swing.JButton jButtonFont;
+    private javax.swing.JButton jButtonNewScript;
     private javax.swing.JButton jButtonRemoveScript;
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
@@ -626,4 +685,94 @@ public class SettingsDlg extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private JDialog helpBox;
     private FontChooser fontDlg;
+
+    @Override
+    public void dragEnter(DropTargetDragEvent dtde) {
+    }
+    @Override
+    public void dragOver(DropTargetDragEvent dtde) {
+    }
+    @Override
+    public void dropActionChanged(DropTargetDragEvent dtde) {
+    }
+    @Override
+    public void dragExit(DropTargetEvent dte) {
+    }
+    @Override
+    public void drop(DropTargetDropEvent dtde) {
+        // get transferable
+        Transferable tr = dtde.getTransferable();
+        try {
+            // check whether we have files dropped into textarea
+            if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                // drag&drop was link action
+                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                // retrieve list of dropped files
+                List files = (java.util.List)tr.getTransferData(DataFlavor.javaFileListFlavor);
+                // check for valid values
+                if (files!=null && files.size()>0) {
+                    // dummy
+                    File file;
+                    for (Object file1 : files) {
+                        // get each single object from droplist
+                        file = (File) file1;
+                        // check whether it is a file
+                        if (file.isFile()) {
+                            // retrieve complete path as string
+                            String fp = file.getAbsolutePath();
+                            // check if we have white spaces- if yes, enquote
+                            if (fp.contains(" ")) fp = "\""+fp+"\"";
+                            // retrieve current content
+                            String text = jTextAreaUserScript.getText();
+                            // define output file. if we have a cruncher with "compressed file" placeholder,
+                            // we assume that output file will be compressed.
+                            String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : ConstantsR64.ASSEMBLER_OUPUT_FILE;
+                            String insert = "";
+                            if (fp.toLowerCase().contains("acme")) {
+                                insert = fp+" "+ConstantsR64.DEFAULT_ACME_PARAM;
+                            }
+                            else if (fp.toLowerCase().contains("kickass")) {
+                                insert = "java -jar "+fp+" "+ConstantsR64.ASSEMBLER_INPUT_FILE;
+                            }
+                            else if (fp.toLowerCase().contains("64tass")) {
+                                insert = fp+" "+ConstantsR64.DEFAULT_64TASS_PARAM;
+                            }
+                            else if (fp.toLowerCase().contains("exomizer")) {
+                                insert = fp+" "+ConstantsR64.DEFAULT_EXOMIZER_PARAM;
+                            }
+                            else if (fp.toLowerCase().contains("x64")) {
+                                insert = fp+" "+outputfile;
+                            }
+                            else if (fp.toLowerCase().contains("emu64")) {
+                                insert = fp+" "+outputfile;
+                            }
+                            else if (fp.toLowerCase().contains("ccs64")) {
+                                insert = fp+" "+outputfile;
+                            }
+                            // on OS X, check for Applications folder
+                            if (settings.isOSX() && fp.toLowerCase().contains("/Applications/") && !insert.startsWith("java")) insert = "open "+insert;
+                            // black color
+                            jTextAreaUserScript.setForeground(Color.black);
+                            // if text field is not empty and is not the default
+                            // quick help text, insert new line
+                            if (!text.isEmpty() && !text.equalsIgnoreCase(quickHelpText)) {
+                                jTextAreaUserScript.append(System.getProperty("line.separator"));
+                            }
+                            else {
+                                jTextAreaUserScript.setText("");
+                            }
+                            // insert string in textfield
+                            jTextAreaUserScript.append(insert);
+                        }
+                    }
+                }
+                dtde.getDropTargetContext().dropComplete(true);
+            } else {
+                dtde.rejectDrop();
+            }
+        }
+        catch (IOException | UnsupportedFlavorException ex) {
+            dtde.rejectDrop();
+        }
+    }
 }

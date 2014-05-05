@@ -86,6 +86,8 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jComboBoxCustomScripts" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButtonNewScript" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="jTextFieldScriptName" pref="504" max="32767" attributes="0"/>
@@ -103,6 +105,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxCustomScripts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonNewScript" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -110,7 +113,7 @@
                           <Component id="jTextFieldScriptName" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="185" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="218" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonApplyScript" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -125,6 +128,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
+                <Property name="displayedMnemonic" type="int" value="115"/>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jComboBoxCustomScripts"/>
                 </Property>
@@ -139,6 +143,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
+                <Property name="displayedMnemonic" type="int" value="109"/>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jTextFieldScriptName"/>
                 </Property>
@@ -191,6 +196,15 @@
                   <action class="de.relaunch64.popelganda.SettingsDlg" id="removeScript" methodName="removeScript"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jButtonRemoveScript" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButtonNewScript">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.SettingsDlg" id="addNewScript" methodName="addNewScript"/>
+                </Property>
+                <Property name="mnemonic" type="int" value="110"/>
+                <Property name="name" type="java.lang.String" value="jButtonNewScript" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

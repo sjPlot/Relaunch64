@@ -851,6 +851,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     @Action
     public void settingsWindow() {
+        // retrieve last selected script name
+        Object o = jComboBoxRunScripts.getSelectedItem();
+        String selectedScriptName = (o!=null) ? o.toString() : null;
+        // open settings window
         if (null == settingsDlg) {
             settingsDlg = new SettingsDlg(getFrame(), settings, customScripts);
             settingsDlg.setLocationRelativeTo(getFrame());
@@ -858,8 +862,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         Relaunch64App.getApplication().show(settingsDlg);
         // update custom scripta
         initScripts();
+        // select previous script
+        if (customScripts.findScript(selectedScriptName)!=-1) jComboBoxRunScripts.setSelectedItem(selectedScriptName);
         // save the settings
         saveSettings();
+    }
+    @Action
+    public void commentLine() {
+        editorPanes.commentLine();
     }
     @Action
     public void undoAction() {
@@ -1875,6 +1885,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         runScriptMenuItem = new javax.swing.JMenuItem();
         focusScriptMenuItem = new javax.swing.JMenuItem();
         focusSyntaxMenuItem = new javax.swing.JMenuItem();
+        jSeparator17 = new javax.swing.JPopupMenu.Separator();
+        commentLineMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
@@ -2428,6 +2440,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         focusSyntaxMenuItem.setName("focusSyntaxMenuItem"); // NOI18N
         sourceMenu.add(focusSyntaxMenuItem);
 
+        jSeparator17.setName("jSeparator17"); // NOI18N
+        sourceMenu.add(jSeparator17);
+
+        commentLineMenuItem.setAction(actionMap.get("commentLine")); // NOI18N
+        commentLineMenuItem.setName("commentLineMenuItem"); // NOI18N
+        sourceMenu.add(commentLineMenuItem);
+
         jSeparator8.setName("jSeparator8"); // NOI18N
         sourceMenu.add(jSeparator8);
 
@@ -2609,6 +2628,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem addTabMenuItem;
     private javax.swing.JMenuItem closeAllMenuItem;
     private javax.swing.JMenuItem closeFileMenuItem;
+    private javax.swing.JMenuItem commentLineMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenu editMenu;
@@ -2672,6 +2692,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
+    private javax.swing.JPopupMenu.Separator jSeparator17;
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;

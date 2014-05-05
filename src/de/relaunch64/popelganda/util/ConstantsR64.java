@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0 (Build 20140504)";
+    public static final String BUILD_VERSION = "3.0.0 (Build 20140505)";
     /**
      * This variable stores the application title that appears in the main window
      */
@@ -54,7 +54,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (Release Candidate 2)";
+    public static final String APPLICATION_TITLE = "Relaunch64";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
@@ -98,6 +98,10 @@ public class ConstantsR64 {
     public static final String ASSEMBLER_START_ADDRESS = "START";
     public static final String ASSEMBLER_UNCOMPRESSED_FILE = "UNCOMPFILE";
     public static final String ASSEMBLER_COMPRESSED_FILE = "COMPFILE";
+    
+    public static final String DEFAULT_ACME_PARAM = "--outfile "+ConstantsR64.ASSEMBLER_OUPUT_FILE+" --format cbm "+ConstantsR64.ASSEMBLER_INPUT_FILE;
+    public static final String DEFAULT_64TASS_PARAM = "-C -a -i "+ConstantsR64.ASSEMBLER_INPUT_FILE+" -o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
+    public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ConstantsR64.ASSEMBLER_START_ADDRESS+" "+ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ConstantsR64.ASSEMBLER_COMPRESSED_FILE;    
     
     public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";

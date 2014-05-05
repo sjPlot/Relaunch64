@@ -199,7 +199,7 @@ public class Tools {
                     }
                     // check if we have no "line", but colon
                     // tass syntax
-                    else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
+                   else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
                         err = getErrorLineFromLine(line, ":");
                     }
                     // check if we found error line
@@ -221,11 +221,11 @@ public class Tools {
             int start = line.toLowerCase().indexOf(token, 0);
             if (start!=-1) {
                 int end = start+token.length();
-                while (!isDelimiter(line.charAt(end), "")) end++;
                 try {
+                    while (!isDelimiter(line.charAt(end), "")) end++;
                     return Integer.parseInt(line.substring(start+token.length(), end));
                 }
-                catch (NumberFormatException ex) {
+                catch (NumberFormatException | IndexOutOfBoundsException ex) {
                     return -1;
                 }
             }
@@ -305,5 +305,15 @@ public class Tools {
             }
             editorPanes.insertString(output.toString());
         }
+    }
+    public static int countMatches(final CharSequence str, final char sub) {
+        if (null==str || str.length()==0) return 0;
+        int counter = 0;
+        for (int i=0; i<str.length(); i++ ) {
+            if (str.charAt(i) == sub ) {
+                counter++;
+            } 
+        }
+        return counter;
     }
 }

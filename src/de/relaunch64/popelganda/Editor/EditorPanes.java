@@ -59,6 +59,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -1517,6 +1518,56 @@ public class EditorPanes {
             ep.requestFocusInWindow();
         }
         catch (BadLocationException ex) {
+        }
+    }
+    public void commentLine() {
+        commentLine(getActiveEditorPane(), getActiveCompiler());
+    }
+
+    public void commentLine(JEditorPane ep, int compiler) {
+        // retrieve comment string
+        String commentString = SyntaxScheme.getCommentString(compiler);
+        // check for text selection
+        String selString = ep.getSelectedText();
+        // if we have selection, add tab to each selected line
+        if (selString!=null && !selString.isEmpty()) {
+            // remember selection range
+            int selstart = ep.getSelectionStart();
+            int selend = ep.getSelectionEnd();
+            // retrieve lines
+            String[] lines = selString.split("\n");
+            // count new lines
+            int countNewLines = Tools.countMatches(selString, '\n');
+            // create string builder for new insert string
+            StringBuilder sb = new StringBuilder("");
+            // store difference in length of selection
+            // after adding / removing comment strings
+            int chardiff = 0;
+            // add tab infront of each line
+            for (String l : lines) {
+                // if first char (after possible whitespace) is comment char, 
+                // remove it
+                if (l.trim().startsWith(commentString)) {
+                    // remove comment char
+                    l = l.replaceFirst(Pattern.quote(commentString), "");
+                    chardiff = chardiff-commentString.length();
+                }
+                else {
+                    // else add comment string
+                    l = commentString+l;
+                    chardiff = chardiff+commentString.length();
+                }
+                // append fixed line
+                sb.append(l);
+                // append new line, if needed
+                if (countNewLines>0) sb.append("\n");
+                countNewLines--;
+            }
+            // insert string
+            ep.replaceSelection(sb.toString());
+            // re-select text
+            ep.setSelectionStart(selstart);
+            ep.setSelectionEnd(selend+chardiff);
         }
     }
 }
