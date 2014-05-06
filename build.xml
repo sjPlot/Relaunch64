@@ -71,6 +71,38 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="appbundler-1.0.jar" />
+
+    <target name="Bundle OS X .app">
+        <bundleapp outputdirectory="store"
+            name="Relaunch64"
+            icon="r64.icns"
+            displayname="Relaunch64"
+            copyright="(c) 2003-2014 by Payday"
+            identifier="de.relaunch64.popelganda.Relaunch64App"
+            mainclassname="de.relaunch64.popelganda.Relaunch64App">
+            
+            <classpath file="store/Relaunch64.jar" />
+        </bundleapp>
+    </target>
+        
+<!--        
+    <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpath="jarbundler-2.3.0.jar" />
+
+    <target name="Bundle OS X .app">
+
+        <jarbundler dir="store"
+                name="Relaunch64"
+                mainclass="de.relaunch64.popelganda.Relaunch64App" 
+                jar="store/Relaunch64.jar"
+                icon="r64.icns"
+                jvmversion="1.6+"
+                version="3.0.0"
+                allowMixedLocalizations="true"
+                copyright="(c) 2003-2014 by Payday" />
+
+    </target>
+-->
     
     <target name="package-for-store" depends="jar">
 

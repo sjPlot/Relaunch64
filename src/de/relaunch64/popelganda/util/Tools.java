@@ -222,7 +222,7 @@ public class Tools {
             if (start!=-1) {
                 int end = start+token.length();
                 try {
-                    while (!isDelimiter(line.charAt(end), "")) end++;
+                    while (!isDelimiter(line.charAt(end), ":")) end++;
                     return Integer.parseInt(line.substring(start+token.length(), end));
                 }
                 catch (NumberFormatException | IndexOutOfBoundsException ex) {

@@ -996,13 +996,13 @@ public class EditorPanes {
      * @return 
      */
     private boolean saveFile(File filepath) {
-        return saveFile(tabbedPane.getSelectedIndex(), filepath);
+        return saveFile(tabbedPane.getSelectedIndex(), filepath, false);
     }
-    private boolean saveFile(int selectedTab, File filepath) {
+    private boolean saveFile(int selectedTab, File filepath, boolean ignoreModified) {
         // check whether we have any tab selected
         if (selectedTab!=-1) {
             // check for modifications
-            if (!editorPaneArray.get(selectedTab).isModified()) {
+            if (!ignoreModified && !editorPaneArray.get(selectedTab).isModified()) {
                 return true;
             }
             // check for valid value
@@ -1020,7 +1020,7 @@ public class EditorPanes {
                     return false;
                 }
                 finally {
-                    if (fw != null) {
+                    if (fw!=null) {
                         try {
                             fw.close();
                             setModified(false);
@@ -1066,7 +1066,7 @@ public class EditorPanes {
             File fp = editorPaneArray.get(i).getFilePath();
             // check for valid value
             if (fp!=null && fp.exists()) {
-                if (!saveFile(i,fp)) allOk = false;
+                if (!saveFile(i,fp, false)) allOk = false;
             }
             else {
                 if(!saveFileAs(i)) allOk = false;
@@ -1114,7 +1114,7 @@ public class EditorPanes {
                             // we don't need auto inser tab...
                             eatReaturn = true;
                             // save file
-                            return saveFile(selectedTab, fileToSave);
+                            return saveFile(selectedTab, fileToSave, true);
                         }
                         else {
                             return false;
@@ -1132,7 +1132,7 @@ public class EditorPanes {
                         return false;
                     }
                     else {
-                        return saveFile(selectedTab, fileToSave);
+                        return saveFile(selectedTab, fileToSave, true);
                     }
                 }
             }

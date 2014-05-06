@@ -1430,7 +1430,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
         if (settings.isOSX()) {
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Relaunch64");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
         }
         System.setProperty("awt.useSystemAAFontSettings", "on");
     }
