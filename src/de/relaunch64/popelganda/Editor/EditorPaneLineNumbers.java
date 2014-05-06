@@ -77,14 +77,9 @@ import javax.swing.text.Utilities;
 public final class EditorPaneLineNumbers extends JPanel
         implements CaretListener, DocumentListener, PropertyChangeListener {
 
-    public final static Color bgColor = new Color(248, 248, 248);
-    public final static Color borderColor = new Color(240, 240, 240);
-    public final static Color foregroundColor = new Color(220, 20, 60);
-
     public final static float LEFT = 0.0f;
     public final static float CENTER = 0.5f;
     public final static float RIGHT = 1.0f;
-    private final static Border OUTER = new MatteBorder(0, 0, 0, 2, borderColor);
     private final static int RHEIGHT = Integer.MAX_VALUE - 1000000;
     //  Text component this TextTextLineNumber component is in sync with
     private JTextComponent component;
@@ -126,9 +121,10 @@ public final class EditorPaneLineNumbers extends JPanel
 
         setFont(new Font(SyntaxScheme.getFontName(), Font.PLAIN, SyntaxScheme.getFontSize()));
 
-        setBorderGap(3);
-        setBackground(bgColor);
-        setCurrentLineForeground(foregroundColor);
+        setBorderGap(3, HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_BORDER));
+        setForeground(HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_COLOR));
+        setBackground(HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_BACKGROUND));
+        setCurrentLineForeground(HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_HIGHLIGHT));
         setDigitAlignment(settings.getLineNumerAlignment());
         setMinimumDisplayDigits(minimumDisplayDigits);
 
@@ -171,11 +167,12 @@ public final class EditorPaneLineNumbers extends JPanel
      * is 5.
      *
      * @param borderGap the gap in pixels
+     * @param borderColor
      */
-    public void setBorderGap(int borderGap) {
+    public void setBorderGap(int borderGap, Color borderColor) {
         this.borderGap = borderGap;
         Border inner = new EmptyBorder(0, borderGap, 0, borderGap);
-        setBorder(new CompoundBorder(OUTER, inner));
+        setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 2, borderColor), inner));
         lastDigits = 0;
         setPreferredWidth();
     }

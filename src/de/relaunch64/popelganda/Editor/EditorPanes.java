@@ -69,6 +69,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -153,9 +154,14 @@ public class EditorPanes {
      */
     public int addEditorPane(JEditorPane editorPane, File fp, String content, int c) {
         // set syntax scheme
-       setSyntaxScheme(editorPane, c);
+        setSyntaxScheme(editorPane, c);
         // set backcolor
-       // TODO warum klappt bg-color nicht?
+        // we need this hack for Nimbus LaF,
+        // see http://stackoverflow.com/questions/22674575/jtextpane-background-color
+        UIDefaults defaults = new UIDefaults();
+        defaults.put("EditorPane[Enabled].backgroundPainter", SyntaxScheme.getBackgroundColor());
+        editorPane.putClientProperty("Nimbus.Overrides", defaults);
+        editorPane.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
         editorPane.setBackground(SyntaxScheme.getBackgroundColor());
         // set content, if available
         if (content!= null && !content.isEmpty()) {

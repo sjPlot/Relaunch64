@@ -68,7 +68,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     private final MutableAttributeSet comment;
     private final MutableAttributeSet quote;
     private final MutableAttributeSet hexa;
-    private final MutableAttributeSet macro;
     private final MutableAttributeSet binary;
     private final MutableAttributeSet lohi;
     private final MutableAttributeSet jump;
@@ -97,7 +96,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         hexa = attributes.get(ConstantsR64.STRING_HEXA);
         jump = attributes.get(ConstantsR64.STRING_JUMP);
         binary = attributes.get(ConstantsR64.STRING_BIN);
-        macro = attributes.get(ConstantsR64.STRING_MACRO);
         lohi = attributes.get(ConstantsR64.STRING_LOHI);
 
         singleLineComment = slc;
@@ -118,7 +116,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     }
     @SuppressWarnings("PublicInnerClass")
     public enum ATTR_TYPE {
-         Normal, Comment, Quote, Number, Hexa, LoHi, Binary, Jump, Macro;
+         Normal, Comment, Quote, Number, Hexa, LoHi, Binary, Jump;
     }
  
     /**
@@ -142,8 +140,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             setAttributeFont(binary, f);
         } else if (attr == ATTR_TYPE.Jump) {
             setAttributeFont(jump, f);
-        } else if (attr == ATTR_TYPE.Macro) {
-            setAttributeFont(macro, f);
         } else {
             setAttributeFont(normal, f);
         }
@@ -181,8 +177,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             setAttributeColor(binary, c);
         } else if (attr == ATTR_TYPE.Jump) {
             setAttributeColor(jump, c);
-        } else if (attr == ATTR_TYPE.Macro) {
-            setAttributeColor(macro, c);
         } else {
             setAttributeColor(normal, c);
         }
@@ -487,9 +481,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
                 }
                 else if (isHexAddressDelimiter(content.substring(startOffset, startOffset + 1))) {
                     startOffset = getHexAddressToken(content, startOffset, endOffset);
-//                }
-//                else if (compiler==ConstantsR64.COMPILER_KICKASSEMBLER && isMacroDelimiter(content.substring(startOffset, startOffset + 1))) {
-//                    startOffset = getMacroToken(content, startOffset, endOffset);
                 } 
                 else if (isBinCharDelimiter(content.substring(startOffset, startOffset + 1))) {
                     startOffset = getBinCharToken(content, startOffset, endOffset, 1);
@@ -587,19 +578,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         doc.setCharacterAttributes(startOffset, endOfToken - startOffset, hexa, false);
         return endOfToken + 1;
     }
- 
-    private int getMacroToken(String content, int startOffset, int endOffset) {
-        int endOfToken = startOffset + 1;
-        while (endOfToken <= endOffset) {
-            if (isDelimiter(content.substring(endOfToken, endOfToken + 1), "")) {
-                break;
-            }
-            endOfToken++;
-        }
-        doc.setCharacterAttributes(startOffset, endOfToken - startOffset, macro, false);
-        return endOfToken + 1;
-    }
- 
     private int getOtherToken(String content, int startOffset, int endOffset) {
         int endOfToken = startOffset + 1;
         while (endOfToken <= endOffset) {
@@ -825,7 +803,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         StyleConstants.setFontSize(lohi, fontSize);
         StyleConstants.setFontSize(binary, fontSize);
         StyleConstants.setFontSize(jump, fontSize);
-        StyleConstants.setFontSize(macro, fontSize);
         StyleConstants.setFontSize(comment, fontSize);
     }
  
@@ -850,7 +827,6 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         StyleConstants.setFontFamily(lohi, fontName);
         StyleConstants.setFontFamily(binary, fontName);
         StyleConstants.setFontFamily(jump, fontName);
-        StyleConstants.setFontFamily(macro, fontName);
         StyleConstants.setFontFamily(comment, fontName);
     }
 }

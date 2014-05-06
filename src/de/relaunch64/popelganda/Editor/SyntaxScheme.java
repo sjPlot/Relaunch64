@@ -62,7 +62,6 @@ public class SyntaxScheme {
     public static final SimpleAttributeSet DEFAULT_STRING;
     public static final SimpleAttributeSet DEFAULT_HEXA;
     public static final SimpleAttributeSet DEFAULT_BIN;
-    public static final SimpleAttributeSet DEFAULT_MACRO;
     public static final SimpleAttributeSet DEFAULT_LOHI;
     public static final SimpleAttributeSet DEFAULT_JUMP;
     public static final SimpleAttributeSet DEFAULT_KEYWORD;
@@ -71,6 +70,10 @@ public class SyntaxScheme {
     public static final String DEF_FONT_NAME;
     public static final int DEF_FONT_SIZE;
     public static final Color DEF_BACK_COLOR;
+    public static final Color DEF_LINE_BACK_COLOR;
+    public static final Color DEF_LINE_COLOR;
+    public static final Color DEF_LINE_BORDER_COLOR;
+    public static final Color DEF_LINE_HIGHLIGHT_COLOR;
     
     static {
         // ******************************************
@@ -88,15 +91,18 @@ public class SyntaxScheme {
         Color cHexa = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_HEX);
         Color cBin = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_BIN);
         Color cJump = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_JUMP);
-        Color cMacro = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_MACRO);
         Color cLohi = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_LOHI);
         Color cKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_KEYWORD);
         Color cCompilerKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMPILERKEYWORD);
         Color cIllegalOpcodes = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_ILLEGALOPCODE);
+        Color backgroundColor = HighlightSchemes.getColor(scheme, HighlightSchemes.BACKGROUND);
+        Color lineBackground = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BACKGROUND);
+        Color lineBorder = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BORDER);
+        Color lineColor = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_COLOR);
+        Color lineHighlight = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_HIGHLIGHT);
         // fonts & backgrund
         String fontFamily = ConstantsR64.DEFAULT_FONT;
         int fontSize = ConstantsR64.DEFAULT_FONT_SIZE;
-        Color backgroundColor = ConstantsR64.DEFAULT_BACKGROUND_COLOR;
         // ******************************************
         // set user colors or init xml-file
         // ******************************************
@@ -215,20 +221,6 @@ public class SyntaxScheme {
                                    Integer.parseInt(e.getAttributeValue("g")),
                                    Integer.parseInt(e.getAttributeValue("b")));
             // ******************************************
-            // macro color
-            // ******************************************
-            e = syntaxFile.getRootElement().getChild("cMacro");
-            if (null==e) {
-                e = new Element("cMacro");
-                e.setAttribute("r", String.valueOf(cMacro.getRed()));
-                e.setAttribute("g", String.valueOf(cMacro.getGreen()));
-                e.setAttribute("b", String.valueOf(cMacro.getBlue()));
-                syntaxFile.getRootElement().addContent(e);
-            }
-            else cMacro = new Color(Integer.parseInt(e.getAttributeValue("r")),
-                                    Integer.parseInt(e.getAttributeValue("g")),
-                                    Integer.parseInt(e.getAttributeValue("b")));
-            // ******************************************
             // lohi color
             // ******************************************
             e = syntaxFile.getRootElement().getChild("cLohi");
@@ -285,7 +277,7 @@ public class SyntaxScheme {
                                              Integer.parseInt(e.getAttributeValue("g")),
                                              Integer.parseInt(e.getAttributeValue("b")));
             // ******************************************
-            // comp. keywords color
+            // background color
             // ******************************************
             e = syntaxFile.getRootElement().getChild("backgroundColor");
             if (null==e) {
@@ -296,6 +288,62 @@ public class SyntaxScheme {
                 syntaxFile.getRootElement().addContent(e);
             }
             else backgroundColor = new Color(Integer.parseInt(e.getAttributeValue("r")),
+                                             Integer.parseInt(e.getAttributeValue("g")),
+                                             Integer.parseInt(e.getAttributeValue("b")));
+            // ******************************************
+            // line numbers background color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineBackground");
+            if (null==e) {
+                e = new Element("lineBackground");
+                e.setAttribute("r", String.valueOf(lineBackground.getRed()));
+                e.setAttribute("g", String.valueOf(lineBackground.getGreen()));
+                e.setAttribute("b", String.valueOf(lineBackground.getBlue()));
+                syntaxFile.getRootElement().addContent(e);
+            }
+            else lineBackground = new Color(Integer.parseInt(e.getAttributeValue("r")),
+                                             Integer.parseInt(e.getAttributeValue("g")),
+                                             Integer.parseInt(e.getAttributeValue("b")));
+            // ******************************************
+            // line numbers border color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineBorder");
+            if (null==e) {
+                e = new Element("lineBorder");
+                e.setAttribute("r", String.valueOf(lineBorder.getRed()));
+                e.setAttribute("g", String.valueOf(lineBorder.getGreen()));
+                e.setAttribute("b", String.valueOf(lineBorder.getBlue()));
+                syntaxFile.getRootElement().addContent(e);
+            }
+            else lineBorder = new Color(Integer.parseInt(e.getAttributeValue("r")),
+                                             Integer.parseInt(e.getAttributeValue("g")),
+                                             Integer.parseInt(e.getAttributeValue("b")));
+            // ******************************************
+            // line numbers foreground color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineColor");
+            if (null==e) {
+                e = new Element("lineColor");
+                e.setAttribute("r", String.valueOf(lineColor.getRed()));
+                e.setAttribute("g", String.valueOf(lineColor.getGreen()));
+                e.setAttribute("b", String.valueOf(lineColor.getBlue()));
+                syntaxFile.getRootElement().addContent(e);
+            }
+            else lineColor = new Color(Integer.parseInt(e.getAttributeValue("r")),
+                                             Integer.parseInt(e.getAttributeValue("g")),
+                                             Integer.parseInt(e.getAttributeValue("b")));
+            // ******************************************
+            // line numbers highlight color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineHighlight");
+            if (null==e) {
+                e = new Element("lineHighlight");
+                e.setAttribute("r", String.valueOf(lineHighlight.getRed()));
+                e.setAttribute("g", String.valueOf(lineHighlight.getGreen()));
+                e.setAttribute("b", String.valueOf(lineHighlight.getBlue()));
+                syntaxFile.getRootElement().addContent(e);
+            }
+            else lineHighlight = new Color(Integer.parseInt(e.getAttributeValue("r")),
                                              Integer.parseInt(e.getAttributeValue("g")),
                                              Integer.parseInt(e.getAttributeValue("b")));
             // ******************************************
@@ -329,6 +377,10 @@ public class SyntaxScheme {
         DEF_FONT_NAME = fontFamily;
         DEF_FONT_SIZE = fontSize;
         DEF_BACK_COLOR = backgroundColor;
+        DEF_LINE_BACK_COLOR = lineBackground;
+        DEF_LINE_BORDER_COLOR = lineBorder;
+        DEF_LINE_COLOR = lineColor;
+        DEF_LINE_HIGHLIGHT_COLOR = lineHighlight;
         // ******************************************
         // set attribute sets
         // ******************************************
@@ -366,11 +418,6 @@ public class SyntaxScheme {
         StyleConstants.setForeground(DEFAULT_JUMP, cJump);
         StyleConstants.setFontFamily(DEFAULT_JUMP, fontFamily);
         StyleConstants.setFontSize(DEFAULT_JUMP, fontSize);
-        
-        DEFAULT_MACRO = new SimpleAttributeSet();
-        StyleConstants.setForeground(DEFAULT_MACRO, cMacro);
-        StyleConstants.setFontFamily(DEFAULT_MACRO, fontFamily);
-        StyleConstants.setFontSize(DEFAULT_MACRO, fontSize);
         
         DEFAULT_LOHI = new SimpleAttributeSet();
         StyleConstants.setForeground(DEFAULT_LOHI, cLohi);
@@ -429,11 +476,15 @@ public class SyntaxScheme {
         Color cHexa = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_HEX);
         Color cBin = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_BIN);
         Color cJump = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_JUMP);
-        Color cMacro = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_MACRO);
         Color cLohi = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_LOHI);
         Color cKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_KEYWORD);
         Color cCompilerKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMPILERKEYWORD);
         Color cIllegalOpcodes = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_ILLEGALOPCODE);
+        Color backgroundColor = HighlightSchemes.getColor(scheme, HighlightSchemes.BACKGROUND);
+        Color lineBackground = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BACKGROUND);
+        Color lineBorder = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BORDER);
+        Color lineColor = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_COLOR);
+        Color lineHighlight = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_HIGHLIGHT);
         // ******************************************
         // set user colors or init xml-file
         // ******************************************
@@ -496,13 +547,6 @@ public class SyntaxScheme {
             e.setAttribute("g", String.valueOf(cJump.getGreen()));
             e.setAttribute("b", String.valueOf(cJump.getBlue()));
             // ******************************************
-            // macro color
-            // ******************************************
-            e = syntaxFile.getRootElement().getChild("cMacro");
-            e.setAttribute("r", String.valueOf(cMacro.getRed()));
-            e.setAttribute("g", String.valueOf(cMacro.getGreen()));
-            e.setAttribute("b", String.valueOf(cMacro.getBlue()));
-            // ******************************************
             // lohi color
             // ******************************************
             e = syntaxFile.getRootElement().getChild("cLohi");
@@ -530,6 +574,41 @@ public class SyntaxScheme {
             e.setAttribute("r", String.valueOf(cIllegalOpcodes.getRed()));
             e.setAttribute("g", String.valueOf(cIllegalOpcodes.getGreen()));
             e.setAttribute("b", String.valueOf(cIllegalOpcodes.getBlue()));
+            // ******************************************
+            // background color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("backgroundColor");
+            e.setAttribute("r", String.valueOf(backgroundColor.getRed()));
+            e.setAttribute("g", String.valueOf(backgroundColor.getGreen()));
+            e.setAttribute("b", String.valueOf(backgroundColor.getBlue()));
+            // ******************************************
+            // line numbers background color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineBackground");
+            e.setAttribute("r", String.valueOf(lineBackground.getRed()));
+            e.setAttribute("g", String.valueOf(lineBackground.getGreen()));
+            e.setAttribute("b", String.valueOf(lineBackground.getBlue()));
+            // ******************************************
+            // line numbers border color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineBorder");
+            e.setAttribute("r", String.valueOf(lineBorder.getRed()));
+            e.setAttribute("g", String.valueOf(lineBorder.getGreen()));
+            e.setAttribute("b", String.valueOf(lineBorder.getBlue()));
+            // ******************************************
+            // line numbers foreground color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineColor");
+            e.setAttribute("r", String.valueOf(lineColor.getRed()));
+            e.setAttribute("g", String.valueOf(lineColor.getGreen()));
+            e.setAttribute("b", String.valueOf(lineColor.getBlue()));
+            // ******************************************
+            // line numbers highlight color
+            // ******************************************
+            e = syntaxFile.getRootElement().getChild("lineHighlight");
+            e.setAttribute("r", String.valueOf(lineHighlight.getRed()));
+            e.setAttribute("g", String.valueOf(lineHighlight.getGreen()));
+            e.setAttribute("b", String.valueOf(lineHighlight.getBlue()));
         }
         catch (NumberFormatException ex) {
         }
@@ -607,7 +686,6 @@ public class SyntaxScheme {
         sasArray.put(ConstantsR64.STRING_LOHI, DEFAULT_LOHI);
         sasArray.put(ConstantsR64.STRING_BIN, DEFAULT_BIN);
         sasArray.put(ConstantsR64.STRING_JUMP, DEFAULT_JUMP);
-        sasArray.put(ConstantsR64.STRING_MACRO, DEFAULT_MACRO);
         sasArray.put(ConstantsR64.STRING_KEYWORD, DEFAULT_KEYWORD);
         sasArray.put(ConstantsR64.STRING_COMPILER_KEYWORD, DEFAULT_COMPILER_KEYWORD);
         sasArray.put(ConstantsR64.STRING_ILLEGAL_OPCODE, DEFAULT_ILLEGAL_OPCODE);
@@ -621,6 +699,18 @@ public class SyntaxScheme {
     }
     public static Color getBackgroundColor() {
         return DEF_BACK_COLOR;
+    }
+    public static Color getLineBackgroundColor() {
+        return DEF_LINE_BACK_COLOR;
+    }
+    public static Color getLineForegroundColor() {
+        return DEF_LINE_COLOR;
+    }
+    public static Color getLineBorderColor() {
+        return DEF_LINE_BORDER_COLOR;
+    }
+    public static Color getLineHighlightColor() {
+        return DEF_LINE_HIGHLIGHT_COLOR;
     }
     /**
      * Specified the list of delimiter strings that separate words/token for recodgnizing
