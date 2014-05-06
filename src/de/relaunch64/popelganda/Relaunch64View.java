@@ -1439,6 +1439,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private void saveSettings() {
         settings.setLastUserScript(jComboBoxRunScripts.getSelectedIndex());
+        // save currently opened tabs, in case they should be restored on next startup
+        settings.setReopenFiles(editorPanes);
         settings.saveSettings();
         customScripts.saveScripts();
     }
@@ -1677,8 +1679,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         public boolean canExit(EventObject e) {
             // save the settings
             saveSettings();
-            // save currently opened tabs, in case they should be restored on next startup
-            settings.setReopenFiles(editorPanes);
             // return true to say "yes, we can", or false if exiting should be cancelled
             return askForSaveChanges();
         }
