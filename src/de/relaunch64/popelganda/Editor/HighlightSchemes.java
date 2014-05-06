@@ -160,7 +160,7 @@ public class HighlightSchemes {
                 case COLOR_ILLEGALOPCODE: return new Color(255,192,203);
                 case BACKGROUND: return new Color(55,55,55);
                 case LINE_BACKGROUND: return new Color(55,55,55);
-                case LINE_BORDER: return new Color(44,44,44);
+                case LINE_BORDER: return new Color(48,48,48);
                 case LINE_COLOR: return new Color(128,128,128);
                 case LINE_HIGHLIGHT: return new Color(211,211,211);
             }

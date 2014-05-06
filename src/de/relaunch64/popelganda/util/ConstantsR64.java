@@ -46,23 +46,23 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0 (Build 20140506)";
+    public static final String BUILD_VERSION = "3.0.0 (Build 20140507)";
+    /**
+     * This variable stores the application title that appears in the menu bar or log
+     */
+    public static final String APPLICATION_SHORT_TITLE = "Relaunch64";
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_SHORT_TITLE = "Relaunch64 (Release Candidate 4)";
-    /**
-     * This variable stores the application title that appears in the main window
-     */
-    public static final String APPLICATION_TITLE = "Relaunch64";
+    public static final String APPLICATION_TITLE = "Relaunch64 (Release Candidate 5)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
-    public static final String UPDATE_URI = "http://www.popelganda.de/download/";
+    public static final String UPDATE_URI = "http://sourceforge.net/projects/relaunch64/files/";
     /**
      * This constants stores the address of the file that contains update information for the current app version
      */
-    public static final String UPDATE_INFO_URI = "http://www.popelganda.de/download/update.txt";
+    public static final String UPDATE_INFO_URI = "http://www.popelganda.de/update.txt";
     /**
      * 
      */

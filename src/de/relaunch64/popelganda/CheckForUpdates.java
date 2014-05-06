@@ -72,8 +72,6 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         updateBuildNr = accessUpdateFile(new URL(ConstantsR64.UPDATE_INFO_URI));
         // check for valid access
         if (null==updateBuildNr || updateBuildNr.isEmpty()) return null;
-        // log latest available build
-        ConstantsR64.r64logger.log(Level.INFO, ("Latest available Relaunch64-build: "+updateBuildNr));
         // retrieve start-index of the build-number within the version-string.
         int substringindex = ConstantsR64.BUILD_VERSION.indexOf("(Build")+7;
         // only copy buildinfo into string, other information of version-info are not needed
@@ -91,7 +89,11 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
     protected void finished() {
         if (updateavailable) {
             //log info
-            ConstantsR64.r64logger.log(Level.INFO,"A new version of Relaunch64 is available!");
+            ConstantsR64.r64logger.log(Level.INFO,("A new version of Relaunch64 is available!"+System.getProperty("line.separator")+"Download from "+ConstantsR64.UPDATE_URI));
+        }
+        else {
+            // log latest available build
+            ConstantsR64.r64logger.log(Level.INFO, ("Latest available Relaunch64-build: "+updateBuildNr));
         }
     }
 }
