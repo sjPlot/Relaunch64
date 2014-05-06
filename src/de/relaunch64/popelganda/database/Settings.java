@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.database;
 
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
+import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.HighlightSchemes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
@@ -41,7 +42,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JSplitPane;
 import org.jdom2.Attribute;
@@ -76,7 +79,12 @@ public class Settings {
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
     private static final String SETTING_LINE_NUMBER_ALIGNMENT = "linenumberalignment";
-    
+    private static final String SETTING_REOPEN_FILES_ON_STARTUP = "rofstartup";
+    private static final String SETTING_REOPEN_FILES = "reopenfiles";
+    private static final String SETTING_REOPEN_FILES_CHILD = "rof";
+
+    private static final String ATTR_COMPILER = "compiler";
+
     private final File filepath;
     private final boolean IS_WINDOWS;
     private final boolean IS_WINDOWS7;
@@ -222,6 +230,11 @@ public class Settings {
                 settingsFile.getRootElement().addContent(el);
             }
         }
+        if (null==settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES)) {
+            // create element for font
+            Element el = new Element(SETTING_REOPEN_FILES);
+            settingsFile.getRootElement().addContent(el);
+        }
         if (null==settingsFile.getRootElement().getChild(SETTING_MAINFONT)) {
             // create element for font
             Element el = new Element(SETTING_MAINFONT);
@@ -239,6 +252,13 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES)) {
             // create element
             Element el = new Element(SETTING_CHECKUPDATES);
+            el.setText("1");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES_ON_STARTUP)) {
+            // create element
+            Element el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
             el.setText("1");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
@@ -565,6 +585,19 @@ public class Settings {
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
     }
+    public boolean getReopenOnStartup() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES_ON_STARTUP);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setReopenOnStartup(boolean val)  {
+        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES_ON_STARTUP);
+        if (null==el) {
+            el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
     public int getTabWidth() {
         Element el = settingsFile.getRootElement().getChild(SETTING_TABWIDTH);
         if (el!=null) {
@@ -700,5 +733,60 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(String.valueOf(align));
+    }
+    public ArrayList<Object[]> getReopenFiles() {
+        // get reopen files
+        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES);
+        // check if we have any
+        if (null==el) return null;
+        // create return value
+        ArrayList<Object[]> rofiles = new ArrayList<>();
+        // retrieve all children, each element representing one
+        // file that should be re-opened
+        List<Element> children = el.getChildren();
+        // iterate all children
+        for (Element e : children) {
+            // get file path
+            File f = new File(e.getText());
+            // check if exists
+            if (f.exists()) {
+                // get compiler value
+                String a = e.getAttributeValue(ATTR_COMPILER);
+                int compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+                // check if we have compiler value
+                if (a!=null) {
+                    try {
+                        compiler = Integer.parseInt(a);
+                    }
+                    catch (NumberFormatException ex) {
+                        compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+                    }
+                }
+                // add compiler and filepath to return value
+                rofiles.add(new Object[]{f,compiler});
+            }
+        }
+        return rofiles;
+    }
+    public void setReopenFiles(EditorPanes ep) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES);
+        if (null==el) {
+            el = new Element(SETTING_REOPEN_FILES);
+            settingsFile.getRootElement().addContent(el);
+        }
+        // remove existing content
+        el.removeContent();
+        // iterate all editorpanes and store file pathes
+        for (int i=0; i<ep.getCount(); i++) {
+            // get file path and compiler settings of each file
+            File fp = ep.getFilePath(i);
+            int c = ep.getCompiler(i);
+            // save if exists
+            if (fp!=null && fp.exists()) {
+                Element child = new Element(SETTING_REOPEN_FILES_CHILD);
+                child.setText(fp.getAbsolutePath());
+                child.setAttribute(ATTR_COMPILER, String.valueOf(c));
+            }
+        }
     }
 }

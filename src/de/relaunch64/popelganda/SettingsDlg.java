@@ -72,6 +72,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         // init other settings
         jCheckBoxCheckUpdates.setSelected(settings.getCheckForUpdates());
         jCheckBoxSaveOnCompile.setSelected(settings.getSaveOnCompile());
+        jCheckBoxReopenFiles.setSelected(settings.getReopenOnStartup());
         // init schemes
         initSchemes();
         // init user scripts, including combo box setting etc
@@ -192,6 +193,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settings.setSaveOnCompile(jCheckBoxSaveOnCompile.isSelected());
+            }
+        });
+        jCheckBoxReopenFiles.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settings.setReopenOnStartup(jCheckBoxReopenFiles.isSelected());
             }
         });
         jComboBoxPrefComp.addActionListener(new java.awt.event.ActionListener() {
@@ -428,6 +435,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxCheckUpdates = new javax.swing.JCheckBox();
         jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
+        jCheckBoxReopenFiles = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -647,6 +655,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxSaveOnCompile.setText(resourceMap.getString("jCheckBoxSaveOnCompile.text")); // NOI18N
         jCheckBoxSaveOnCompile.setName("jCheckBoxSaveOnCompile"); // NOI18N
 
+        jCheckBoxReopenFiles.setText(resourceMap.getString("jCheckBoxReopenFiles.text")); // NOI18N
+        jCheckBoxReopenFiles.setToolTipText(resourceMap.getString("jCheckBoxReopenFiles.toolTipText")); // NOI18N
+        jCheckBoxReopenFiles.setName("jCheckBoxReopenFiles"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -655,8 +667,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jCheckBoxCheckUpdates)
-                    .add(jCheckBoxSaveOnCompile))
-                .addContainerGap(415, Short.MAX_VALUE))
+                    .add(jCheckBoxSaveOnCompile)
+                    .add(jCheckBoxReopenFiles))
+                .addContainerGap(417, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -665,7 +678,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jCheckBoxCheckUpdates)
                 .add(18, 18, 18)
                 .add(jCheckBoxSaveOnCompile)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(jCheckBoxReopenFiles)
+                .addContainerGap(212, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -698,6 +713,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JButton jButtonRemoveScript;
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
+    private javax.swing.JCheckBox jCheckBoxReopenFiles;
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;

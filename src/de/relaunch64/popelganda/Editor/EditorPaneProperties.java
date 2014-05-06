@@ -33,7 +33,6 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.database.Settings;
 import java.io.File;
 import javax.swing.JEditorPane;
 import javax.swing.event.DocumentListener;
@@ -48,11 +47,9 @@ public class EditorPaneProperties {
     private boolean modified;
     private File filePath;
     private int compiler;
-    private final Settings settings;
     private MyUndoManager undomanager;
     
-    public EditorPaneProperties(Settings set) {
-        settings = set;
+    public EditorPaneProperties() {
         resetEditorPanesProperties();
     }
     public final void resetEditorPanesProperties() {

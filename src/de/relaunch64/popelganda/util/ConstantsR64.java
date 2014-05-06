@@ -46,11 +46,11 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0 (Build 20140505)";
+    public static final String BUILD_VERSION = "3.0.0 (Build 20140506)";
     /**
      * This variable stores the application title that appears in the main window
      */
-    public static final String APPLICATION_SHORT_TITLE = "Relaunch64";
+    public static final String APPLICATION_SHORT_TITLE = "Relaunch64 (Release Candidate 4)";
     /**
      * This variable stores the application title that appears in the main window
      */

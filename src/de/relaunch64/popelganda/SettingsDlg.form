@@ -428,8 +428,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jCheckBoxCheckUpdates" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBoxSaveOnCompile" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxReopenFiles" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="415" max="32767" attributes="0"/>
+                      <EmptySpace pref="417" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -440,7 +441,9 @@
                       <Component id="jCheckBoxCheckUpdates" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jCheckBoxSaveOnCompile" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="253" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxReopenFiles" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="212" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -456,6 +459,13 @@
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxSaveOnCompile.text"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxSaveOnCompile" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxReopenFiles">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxReopenFiles.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxReopenFiles.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxReopenFiles" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

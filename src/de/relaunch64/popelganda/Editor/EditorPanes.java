@@ -303,7 +303,7 @@ public class EditorPanes {
             }
         });
         // configure propeties of editor pane
-        EditorPaneProperties editorPaneProperties = new EditorPaneProperties(settings);
+        EditorPaneProperties editorPaneProperties = new EditorPaneProperties();
         // set editor pane
         editorPaneProperties.setEditorPane(editorPane);
         // set document listener
@@ -829,10 +829,13 @@ public class EditorPanes {
      */
     public File getActiveFilePath() {
         // get selected tab
-        int selectedTab = tabbedPane.getSelectedIndex();
-        if (selectedTab != -1) {
+        return getFilePath(tabbedPane.getSelectedIndex());
+    }
+    public File getFilePath(int index) {
+        // get selected tab
+        if (index != -1) {
             // get editor pane
-            EditorPaneProperties ep = editorPaneArray.get(selectedTab);
+            EditorPaneProperties ep = editorPaneArray.get(index);
             // get editor pane
             return ep.getFilePath();
         }
@@ -909,6 +912,13 @@ public class EditorPanes {
      * @return  
      */
     public boolean loadFile(File filepath, int compiler) {
+        // check if file is already opened
+        int opened = getOpenedFileTab(filepath);
+        if (opened!=-1) {
+            // if yes, select opened tab and do not open it twice
+            tabbedPane.setSelectedIndex(opened);
+            return false;
+        }
         // retrieve current tab
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether we have any tab selected
@@ -943,6 +953,13 @@ public class EditorPanes {
             }
         }
         return false;
+    }
+    public int getOpenedFileTab(File fp) {
+        for (int i=0; i<tabbedPane.getTabCount(); i++) {
+            File opened = editorPaneArray.get(i).getFilePath();
+            if (opened!=null && opened.equals(fp)) return i;
+        }
+        return -1;
     }
     private boolean closeInitialTab() {
         // check if inital tab is empty and unused, and then remove it

@@ -33,10 +33,10 @@
 
 package de.relaunch64.popelganda;
 
-import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
+import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
 import de.relaunch64.popelganda.database.CustomScripts;
@@ -161,6 +161,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
         }
+        // restore last opened files
+        if (settings.getReopenOnStartup()) reopenFiles();
         // set input focus
         /**
          * JDK 8 Lamda
@@ -1071,6 +1073,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         } 
     }
+    private void reopenFiles() {
+        // get reopen files
+        ArrayList<Object[]> files = settings.getReopenFiles();
+        // check if we have any
+        if (files!=null && !files.isEmpty()) {
+            // retrieve set
+            for (Object[] o : files) {
+                // retrieve data
+                File fp = new File(o[0].toString());
+                int compiler = Integer.parseInt(o[1].toString());
+                // open file
+                openFile(fp, compiler);
+            }
+        }
+    }
     @Action
     public void saveFile() {
         if (editorPanes.saveFile()) {
@@ -1660,6 +1677,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         public boolean canExit(EventObject e) {
             // save the settings
             saveSettings();
+            // save currently opened tabs, in case they should be restored on next startup
+            settings.setReopenFiles(editorPanes);
             // return true to say "yes, we can", or false if exiting should be cancelled
             return askForSaveChanges();
         }
