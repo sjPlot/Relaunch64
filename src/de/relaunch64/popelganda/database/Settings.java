@@ -783,9 +783,13 @@ public class Settings {
             int c = ep.getCompiler(i);
             // save if exists
             if (fp!=null && fp.exists()) {
+                // create new child element
                 Element child = new Element(SETTING_REOPEN_FILES_CHILD);
+                // add path and compiler
                 child.setText(fp.getAbsolutePath());
                 child.setAttribute(ATTR_COMPILER, String.valueOf(c));
+                // add to database
+                el.addContent(child);
             }
         }
     }
