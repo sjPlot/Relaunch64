@@ -44,7 +44,10 @@ public class HighlightSchemes {
     public static final int SCHEME_C64 = 2;
     public static final int SCHEME_HELLO_KITTY = 3;
     public static final int SCHEME_DARK = 4;
-    public static final String[] SCHEME_NAMES = new String[] {"Default", "Paired", "C64 Colors", "Hello Kitty", "Dark"};
+    public static final int SCHEME_BLUES = 5;
+    public static final int SCHEME_SOLAR_LIGHT = 6;
+    public static final int SCHEME_SOLAR_DARK = 7;
+    public static final String[] SCHEME_NAMES = new String[] {"Default", "Paired", "C64", "Hello Kitty", "Dark", "Blues", "Solarized (light)", "Solarized (dark)"};
     
     public static final int COLOR_NORMAL = 0;
     public static final int COLOR_COMMENT = 1;
@@ -163,6 +166,66 @@ public class HighlightSchemes {
                 case LINE_BORDER: return new Color(48,48,48);
                 case LINE_COLOR: return new Color(128,128,128);
                 case LINE_HIGHLIGHT: return new Color(211,211,211);
+            }
+        }
+        else if (SCHEME_BLUES==scheme) {
+            switch (tokentype) {
+                case COLOR_NORMAL: return new Color(112,128,144);
+                case COLOR_COMMENT: return new Color(176,196,222);
+                case COLOR_STRING: return new Color(65,105,225);
+                case COLOR_NUMBER: return new Color(0,139,139);
+                case COLOR_HEX: return new Color(218,112,214);
+                case COLOR_BIN: return new Color(100,149,237);
+                case COLOR_JUMP: return new Color(0,191,255); 
+                case COLOR_LOHI: return new Color(95,158,160);
+                case COLOR_KEYWORD: return new Color(70,130,180);
+                case COLOR_COMPILERKEYWORD: return new Color(72,61,139);
+                case COLOR_ILLEGALOPCODE: return new Color(0,0,205);
+                case BACKGROUND: return new Color(248,248,255);
+                case LINE_BACKGROUND: return new Color(240,248,255);
+                case LINE_BORDER: return new Color(70,130,180);
+                case LINE_COLOR: return new Color(0,0,139);
+                case LINE_HIGHLIGHT: return new Color(199,21,133);
+            }
+        }
+        else if (SCHEME_SOLAR_LIGHT==scheme) {
+            switch (tokentype) {
+                case COLOR_NORMAL: return new Color(90,111,117);
+                case COLOR_COMMENT: return new Color(148,162,162);
+                case COLOR_STRING: return new Color(53,162,152);
+                case COLOR_NUMBER: return new Color(134,152,23);
+                case COLOR_HEX: return new Color(180,136,24);
+                case COLOR_BIN: return new Color(109,116,195);
+                case COLOR_JUMP: return new Color(217,47,52); 
+                case COLOR_LOHI: return new Color(200,73,31);
+                case COLOR_KEYWORD: return new Color(49,142,209);
+                case COLOR_COMPILERKEYWORD: return new Color(11,55,66);
+                case COLOR_ILLEGALOPCODE: return new Color(208,54,130);
+                case BACKGROUND: return new Color(253,246,229);
+                case LINE_BACKGROUND: return new Color(253,246,229);
+                case LINE_BORDER: return new Color(238,233,214);
+                case LINE_COLOR: return new Color(148,162,162);
+                case LINE_HIGHLIGHT: return new Color(11,55,66);
+            }
+        }
+        else if (SCHEME_SOLAR_DARK==scheme) {
+            switch (tokentype) {
+                case COLOR_NORMAL: return new Color(148,162,162); 
+                case COLOR_COMMENT: return new Color(90,111,117);
+                case COLOR_STRING: return new Color(53,162,152);
+                case COLOR_NUMBER: return new Color(134,152,23);
+                case COLOR_HEX: return new Color(49,142,209);
+                case COLOR_BIN: return new Color(109,116,195);
+                case COLOR_JUMP: return new Color(180,136,24); 
+                case COLOR_LOHI: return new Color(200,73,31);
+                case COLOR_KEYWORD: return new Color(238,233,214);
+                case COLOR_COMPILERKEYWORD: return new Color(217,47,52);
+                case COLOR_ILLEGALOPCODE: return new Color(208,54,130);
+                case BACKGROUND: return new Color(11,55,66);
+                case LINE_BACKGROUND: return new Color(11,55,66);
+                case LINE_BORDER: return new Color(3,44,54);
+                case LINE_COLOR: return new Color(132,139,151);
+                case LINE_HIGHLIGHT: return new Color(253,246,229);
             }
         }
         return Color.BLACK;

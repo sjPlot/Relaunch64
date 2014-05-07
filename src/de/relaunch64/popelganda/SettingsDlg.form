@@ -452,12 +452,14 @@
             <Component class="javax.swing.JCheckBox" name="jCheckBoxCheckUpdates">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxCheckUpdates.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxCheckUpdates.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxCheckUpdates" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBoxSaveOnCompile">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxSaveOnCompile.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxSaveOnCompile.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxSaveOnCompile" noResource="true"/>
               </Properties>
             </Component>

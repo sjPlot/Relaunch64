@@ -650,9 +650,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jPanel1.setName("jPanel1"); // NOI18N
 
         jCheckBoxCheckUpdates.setText(resourceMap.getString("jCheckBoxCheckUpdates.text")); // NOI18N
+        jCheckBoxCheckUpdates.setToolTipText(resourceMap.getString("jCheckBoxCheckUpdates.toolTipText")); // NOI18N
         jCheckBoxCheckUpdates.setName("jCheckBoxCheckUpdates"); // NOI18N
 
         jCheckBoxSaveOnCompile.setText(resourceMap.getString("jCheckBoxSaveOnCompile.text")); // NOI18N
+        jCheckBoxSaveOnCompile.setToolTipText(resourceMap.getString("jCheckBoxSaveOnCompile.toolTipText")); // NOI18N
         jCheckBoxSaveOnCompile.setName("jCheckBoxSaveOnCompile"); // NOI18N
 
         jCheckBoxReopenFiles.setText(resourceMap.getString("jCheckBoxReopenFiles.text")); // NOI18N

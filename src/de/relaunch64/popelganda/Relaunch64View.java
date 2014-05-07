@@ -1233,7 +1233,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             // retrieve potential error lines from log
                             errorLines.addAll(Tools.getErrorLines(compilerLog.toString()));
                             // break loop if we have any errors
-                            if (!errorLines.isEmpty() || compilerLog.toString().toLowerCase().contains("error")) break;
+                            if (!errorLines.isEmpty() || p.exitValue()!=0) break;
                         }
                         catch (IOException | InterruptedException | SecurityException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());

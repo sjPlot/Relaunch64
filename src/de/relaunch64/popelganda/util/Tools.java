@@ -181,8 +181,9 @@ public class Tools {
         if (log!=null && !log.isEmpty()) {
             // read line by line
             try {
-                int err = -1;
+                int err;
                 while ((line = lineReader.readLine())!=null) {
+                    err = -1;
                     // check if line contains error-tokenand line number
                     // ACME-Syntax
                     if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && line.toLowerCase().contains("line")) {

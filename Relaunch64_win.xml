@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/store/Relaunch64.jar</jar>
-  <outfile>/Users/danielludecke/Desktop/Relaunch64_win.exe</outfile>
+  <outfile>/Users/danielludecke/Desktop/Relaunch64.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
