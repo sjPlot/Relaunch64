@@ -150,13 +150,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // init editorpane-dataclass
-        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, this, settings);
+        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jComboBoxRunScripts, this, settings);
         // init line numbers
         // init line numbers
         EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain, settings);
         jScrollPaneMainEditorPane.setRowHeaderView(epln);
         // init syntax highlighting for editor pane
-        editorPanes.addEditorPane(jEditorPaneMain, null, null, settings.getPreferredCompiler());
+        editorPanes.addEditorPane(jEditorPaneMain, null, null, settings.getPreferredCompiler(), settings.getLastUserScript());
         // check if we have any parmater
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
@@ -306,6 +306,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (editorPanes.checkIfSyntaxChangeRequired()) {
                     editorPanes.changeSyntaxScheme(jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
                 }
+                // update recent doc
+                updateRecentDoc();
+            }
+        });
+        jComboBoxRunScripts.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex()).setScript(jComboBoxRunScripts.getSelectedIndex());
+                // update recent doc
+                updateRecentDoc();
             }
         });
         jComboBoxGoto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1042,7 +1052,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     @Action
     public void addNewTab() {
-        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler());
+        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler(), jComboBoxRunScripts.getSelectedIndex());
     }
     @Action
     public void openFile() {
@@ -1057,7 +1067,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     private void openFile(File fileToOpen, int compiler, int script) {
         // check if file could be opened
-        if (editorPanes.loadFile(fileToOpen, compiler)) {
+        if (editorPanes.loadFile(fileToOpen, compiler, script)) {
             // add file path to recent documents history
             settings.addToRecentDocs(fileToOpen.toString(), compiler, script);
             // and update menus
@@ -1073,6 +1083,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         } 
     }
+    private void updateRecentDoc() {
+        // find current file
+        File cf = editorPanes.getActiveFilePath();
+        // find doc associated with current document
+        int rd = settings.findRecentDoc(cf);
+        // if we have valid values, update recent doc
+        if (rd!=-1 && cf!=null) {
+            settings.setRecentDoc(rd, cf.toString(), jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
+        }
+    }
     private void reopenFiles() {
         // get reopen files
         ArrayList<Object[]> files = settings.getReopenFiles();
@@ -1083,8 +1103,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // retrieve data
                 File fp = new File(o[0].toString());
                 int compiler = Integer.parseInt(o[1].toString());
+                int script = Integer.parseInt(o[2].toString());
                 // open file
-                openFile(fp, compiler);
+                openFile(fp, compiler, script);
             }
         }
     }
@@ -1118,9 +1139,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
             if (jTabbedPane1.getTabCount()<1) {
                 // init editorpane-dataclass
-                editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, this, settings);
+                editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jComboBoxRunScripts, this, settings);
                 // init syntax highlighting for editor pane
-                editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler());
+                editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler(), jComboBoxRunScripts.getSelectedIndex());
                 // set input focus
                 jEditorPaneMain.requestFocusInWindow();
             }

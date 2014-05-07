@@ -121,10 +121,10 @@ public final class EditorPaneLineNumbers extends JPanel
 
         setFont(new Font(SyntaxScheme.getFontName(), Font.PLAIN, SyntaxScheme.getFontSize()));
 
-        setBorderGap(3, HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_BORDER));
-        setForeground(HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_COLOR));
-        setBackground(HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_BACKGROUND));
-        setCurrentLineForeground(HighlightSchemes.getColor(settings.getSyntaxScheme(), HighlightSchemes.LINE_HIGHLIGHT));
+        setBorderGap(3, ColorSchemes.getColor(settings.getSyntaxScheme(), ColorSchemes.LINE_BORDER));
+        setForeground(ColorSchemes.getColor(settings.getSyntaxScheme(), ColorSchemes.LINE_COLOR));
+        setBackground(ColorSchemes.getColor(settings.getSyntaxScheme(), ColorSchemes.LINE_BACKGROUND));
+        setCurrentLineForeground(ColorSchemes.getColor(settings.getSyntaxScheme(), ColorSchemes.LINE_HIGHLIGHT));
         setDigitAlignment(settings.getLineNumerAlignment());
         setMinimumDisplayDigits(minimumDisplayDigits);
 

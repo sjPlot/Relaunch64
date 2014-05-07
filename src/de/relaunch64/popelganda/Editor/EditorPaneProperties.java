@@ -47,6 +47,7 @@ public class EditorPaneProperties {
     private boolean modified;
     private File filePath;
     private int compiler;
+    private int script;
     private MyUndoManager undomanager;
     
     public EditorPaneProperties() {
@@ -58,6 +59,7 @@ public class EditorPaneProperties {
         modified = false;
         filePath = null;
         compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+        script = 0;
     }
     public JEditorPane getEditorPane() {
         return editorPane;
@@ -94,5 +96,11 @@ public class EditorPaneProperties {
     }
     public void setCompiler(int c) {
         compiler = c;
+    }
+    public int getScript() {
+        return script;
+    }
+    public void setScript(int s) {
+        script = s;
     }
 }

@@ -34,7 +34,7 @@ package de.relaunch64.popelganda.database;
 
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
-import de.relaunch64.popelganda.Editor.HighlightSchemes;
+import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.awt.Font;
@@ -84,6 +84,7 @@ public class Settings {
     private static final String SETTING_REOPEN_FILES_CHILD = "rof";
 
     private static final String ATTR_COMPILER = "compiler";
+    private static final String ATTR_SCRIPT = "script";
 
     private final File filepath;
     private final boolean IS_WINDOWS;
@@ -280,7 +281,7 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME)) {
             // create element
             Element el = new Element(SETTING_SYNTAX_SCHEME);
-            el.setText(String.valueOf(HighlightSchemes.SCHEME_DEFAULT));
+            el.setText(String.valueOf(ColorSchemes.SCHEME_DEFAULT));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -342,6 +343,14 @@ public class Settings {
         }
         // else return null
         return null;
+    }
+    public int findRecentDoc(File f) {
+        if (null==f) return -1;
+        for (int i=0; i<recentDocCount; i++) {
+            File rf = getRecentDoc(i);
+            if (rf!=null && f.equals(rf)) return i;
+        }
+        return -1;
     }
     /**
      * 
@@ -549,7 +558,7 @@ public class Settings {
         }
         catch (NumberFormatException ex) {
         }
-        return HighlightSchemes.SCHEME_DEFAULT;
+        return ColorSchemes.SCHEME_DEFAULT;
     }
     public void setSyntaxScheme(int scheme) {
         Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
@@ -751,19 +760,22 @@ public class Settings {
             // check if exists
             if (f.exists()) {
                 // get compiler value
-                String a = e.getAttributeValue(ATTR_COMPILER);
+                String attr_c = e.getAttributeValue(ATTR_COMPILER);
+                String attr_s = e.getAttributeValue(ATTR_SCRIPT);
+                // init defaults
                 int compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+                int script = -1;
                 // check if we have compiler value
-                if (a!=null) {
-                    try {
-                        compiler = Integer.parseInt(a);
-                    }
-                    catch (NumberFormatException ex) {
-                        compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
-                    }
+                try {
+                    if (attr_c!=null) compiler = Integer.parseInt(attr_c);
+                    if (attr_s!=null) script = Integer.parseInt(attr_s);
+                }
+                catch (NumberFormatException ex) {
+                    compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+                    script = -1;
                 }
                 // add compiler and filepath to return value
-                rofiles.add(new Object[]{f,compiler});
+                rofiles.add(new Object[]{f,compiler,script});
             }
         }
         return rofiles;
@@ -781,6 +793,7 @@ public class Settings {
             // get file path and compiler settings of each file
             File fp = ep.getFilePath(i);
             int c = ep.getCompiler(i);
+            int s = ep.getScript(i);
             // save if exists
             if (fp!=null && fp.exists()) {
                 // create new child element
@@ -788,6 +801,7 @@ public class Settings {
                 // add path and compiler
                 child.setText(fp.getAbsolutePath());
                 child.setAttribute(ATTR_COMPILER, String.valueOf(c));
+                child.setAttribute(ATTR_SCRIPT, String.valueOf(s));
                 // add to database
                 el.addContent(child);
             }

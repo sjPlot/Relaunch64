@@ -83,23 +83,23 @@ public class SyntaxScheme {
         // ******************************************
         // Set default colors
         // ******************************************
-        int scheme = HighlightSchemes.SCHEME_DEFAULT;
-        Color cNormal = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NORMAL);
-        Color cComment = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMMENT);
-        Color cString = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_STRING);
-        Color cNumber = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NUMBER);
-        Color cHexa = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_HEX);
-        Color cBin = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_BIN);
-        Color cJump = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_JUMP);
-        Color cLohi = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_LOHI);
-        Color cKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_KEYWORD);
-        Color cCompilerKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMPILERKEYWORD);
-        Color cIllegalOpcodes = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_ILLEGALOPCODE);
-        Color backgroundColor = HighlightSchemes.getColor(scheme, HighlightSchemes.BACKGROUND);
-        Color lineBackground = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BACKGROUND);
-        Color lineBorder = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BORDER);
-        Color lineColor = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_COLOR);
-        Color lineHighlight = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_HIGHLIGHT);
+        int scheme = ColorSchemes.SCHEME_DEFAULT;
+        Color cNormal = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL);
+        Color cComment = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT);
+        Color cString = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING);
+        Color cNumber = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NUMBER);
+        Color cHexa = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX);
+        Color cBin = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_BIN);
+        Color cJump = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP);
+        Color cLohi = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_LOHI);
+        Color cKeywords = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD);
+        Color cCompilerKeywords = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD);
+        Color cIllegalOpcodes = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_ILLEGALOPCODE);
+        Color backgroundColor = ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND);
+        Color lineBackground = ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND);
+        Color lineBorder = ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER);
+        Color lineColor = ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR);
+        Color lineHighlight = ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT);
         // fonts & backgrund
         String fontFamily = ConstantsR64.DEFAULT_FONT;
         int fontSize = ConstantsR64.DEFAULT_FONT_SIZE;
@@ -469,22 +469,22 @@ public class SyntaxScheme {
         // ******************************************
         // Set default colors
         // ******************************************
-        Color cNormal = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NORMAL);
-        Color cComment = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMMENT);
-        Color cString = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_STRING);
-        Color cNumber = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_NUMBER);
-        Color cHexa = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_HEX);
-        Color cBin = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_BIN);
-        Color cJump = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_JUMP);
-        Color cLohi = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_LOHI);
-        Color cKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_KEYWORD);
-        Color cCompilerKeywords = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_COMPILERKEYWORD);
-        Color cIllegalOpcodes = HighlightSchemes.getColor(scheme, HighlightSchemes.COLOR_ILLEGALOPCODE);
-        Color backgroundColor = HighlightSchemes.getColor(scheme, HighlightSchemes.BACKGROUND);
-        Color lineBackground = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BACKGROUND);
-        Color lineBorder = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_BORDER);
-        Color lineColor = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_COLOR);
-        Color lineHighlight = HighlightSchemes.getColor(scheme, HighlightSchemes.LINE_HIGHLIGHT);
+        Color cNormal = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL);
+        Color cComment = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT);
+        Color cString = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING);
+        Color cNumber = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NUMBER);
+        Color cHexa = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX);
+        Color cBin = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_BIN);
+        Color cJump = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP);
+        Color cLohi = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_LOHI);
+        Color cKeywords = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD);
+        Color cCompilerKeywords = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD);
+        Color cIllegalOpcodes = ColorSchemes.getColor(scheme, ColorSchemes.COLOR_ILLEGALOPCODE);
+        Color backgroundColor = ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND);
+        Color lineBackground = ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND);
+        Color lineBorder = ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER);
+        Color lineColor = ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR);
+        Color lineHighlight = ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT);
         // ******************************************
         // set user colors or init xml-file
         // ******************************************

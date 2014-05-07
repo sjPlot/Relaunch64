@@ -87,7 +87,8 @@ import javax.swing.text.Utilities;
 public class EditorPanes {
     private final List<EditorPaneProperties> editorPaneArray = new ArrayList<>();
     private JTabbedPane tabbedPane = null;
-    private JComboBox comboBox = null;
+    private JComboBox jComboBoxCompiler = null;
+    private JComboBox jComboBoxScripts = null;
     private final Relaunch64View mainFrame;
     private final Settings settings;
     private boolean eatReaturn = false;
@@ -128,17 +129,19 @@ public class EditorPanes {
     /**
      * 
      * @param tp
-     * @param cb
+     * @param cbc
+     * @param cbs
      * @param frame
      * @param set 
      */
-    public EditorPanes(JTabbedPane tp, JComboBox cb, Relaunch64View frame, Settings set) {
+    public EditorPanes(JTabbedPane tp, JComboBox cbc, JComboBox cbs, Relaunch64View frame, Settings set) {
         // reset editor list
         mainFrame = frame;
         settings = set;
         editorPaneArray.clear();
         tabbedPane = tp;
-        comboBox = cb;
+        jComboBoxCompiler = cbc;
+        jComboBoxScripts = cbs;
     }
     /**
      * Adds a new editor pane to a new created tab of the tabbed pane. Usually only called from 
@@ -150,9 +153,10 @@ public class EditorPanes {
      * @param content the content (e.g. the content of the loaded file) that should be set as default
      * text in the editor pane
      * @param c the default compiler for this editor pane, so the correct syntax highlighting is applied
+     * @param script
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addEditorPane(JEditorPane editorPane, File fp, String content, int c) {
+    public int addEditorPane(JEditorPane editorPane, File fp, String content, int c, int script) {
         // set syntax scheme
         setSyntaxScheme(editorPane, c);
         // set backcolor
@@ -320,6 +324,8 @@ public class EditorPanes {
         editorPaneProperties.setFilePath(fp);
         // set compiler
         editorPaneProperties.setCompiler(c);
+        // set script
+        editorPaneProperties.setScript(script);
         // set modified false
         editorPaneProperties.setModified(false);
         // add editorpane to list
@@ -684,7 +690,7 @@ public class EditorPanes {
      */
     public boolean checkIfSyntaxChangeRequired() {
         // get selected compiler
-        int selectedComp = comboBox.getSelectedIndex();
+        int selectedComp = jComboBoxCompiler.getSelectedIndex();
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether combo-box selection indicates a different compiler
@@ -737,9 +743,10 @@ public class EditorPanes {
      * @param content
      * @param title
      * @param compiler
+     * @param script
      * @return 
      */
-    public int addNewTab(File fp, String content, String title, int compiler) {
+    public int addNewTab(File fp, String content, String title, int compiler, int script) {
         // create new scroll pane
         javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane();
         // and new editor pane
@@ -760,7 +767,7 @@ public class EditorPanes {
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
         }
         // enable syntax highlightinh
-        return addEditorPane(editorPane, fp, content, compiler);
+        return addEditorPane(editorPane, fp, content, compiler, script);
     }
     /**
      * 
@@ -827,6 +834,17 @@ public class EditorPanes {
         }
         catch (IndexOutOfBoundsException ex) {
             return ConstantsR64.COMPILER_KICKASSEMBLER;
+        }
+    }
+    public int getScript(int index) {
+        try {
+            // get editor pane
+            EditorPaneProperties ep = editorPaneArray.get(index);
+            // get editor pane
+            return ep.getScript();
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return -1;
         }
     }
     /**
@@ -915,9 +933,10 @@ public class EditorPanes {
      * 
      * @param filepath 
      * @param compiler 
+     * @param script 
      * @return  
      */
-    public boolean loadFile(File filepath, int compiler) {
+    public boolean loadFile(File filepath, int compiler, int script) {
         // check if file is already opened
         int opened = getOpenedFileTab(filepath);
         if (opened!=-1) {
@@ -944,7 +963,7 @@ public class EditorPanes {
                     finally {
                         boolean updateTabPane = closeInitialTab();
                         // if yes, add new tab
-                        selectedTab = addNewTab(filepath, new String(buffer), getFileName(filepath), compiler)-1;
+                        selectedTab = addNewTab(filepath, new String(buffer), getFileName(filepath), compiler, script)-1;
                         // check whether compiler combobox needs update
                         if (updateTabPane) updateTabbedPane();
                         // set cursor
@@ -1167,8 +1186,14 @@ public class EditorPanes {
         int selectedTab = tabbedPane.getSelectedIndex();
         // check for valid value
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
-            // select compiler, so we update the highlight, if necessary
-            comboBox.setSelectedIndex(editorPaneArray.get(selectedTab).getCompiler());
+            try {
+                // select compiler, so we update the highlight, if necessary
+                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getCompiler());
+                // select user script
+                jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
+            }
+            catch (IllegalArgumentException ex) {
+            }
         }
     }
     /**

@@ -5,7 +5,7 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
-import de.relaunch64.popelganda.Editor.HighlightSchemes;
+import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
@@ -63,6 +63,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelFont.setFont(mainfont);
         // restart-to-apply-text hidden
         jLabelRestart.setVisible(false);
+        jLabelRestart2.setVisible(false);
         // set preferred compiler settings
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         // init line number alignment
@@ -86,19 +87,26 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         // set Mnemonic keys
         jButtonApplyScript.setDisplayedMnemonicIndex(0);
         jButtonApplyTabAndFont.setDisplayedMnemonicIndex(0);
+        jButtonApplyScheme.setDisplayedMnemonicIndex(0);
         jButtonRemoveScript.setDisplayedMnemonicIndex(0);
         // disable apply buttons
         setModifiedTabScript(false);
         setModifiedTabFont(false);
+        setModifiedTabScheme(false);
     }
     private void initSchemes() {
         jComboBoxSyntaxScheme.removeAllItems();
-        for (String sn : HighlightSchemes.SCHEME_NAMES) jComboBoxSyntaxScheme.addItem(sn);
+        for (String sn : ColorSchemes.SCHEME_NAMES) jComboBoxSyntaxScheme.addItem(sn);
+        jComboBoxSyntaxScheme.setMaximumRowCount(jComboBoxSyntaxScheme.getItemCount());
         try {
             jComboBoxSyntaxScheme.setSelectedIndex(settings.getSyntaxScheme());
         }
         catch (IllegalArgumentException ex) {
         }
+        updateSchemePreview();
+    }
+    private void updateSchemePreview() {
+        jLabelSchemePreview.setIcon(ConstantsR64.colorpreviews[jComboBoxSyntaxScheme.getSelectedIndex()]);
     }
     private void initScripts() {
         // get all action listeners from the combo box
@@ -210,8 +218,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jComboBoxSyntaxScheme.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setModifiedTabFont(true);
-                jLabelRestart.setVisible(true);
+                setModifiedTabScheme(true);
+                jLabelRestart2.setVisible(true);
+                updateSchemePreview();
             }
         });
         jComboBoxLineNumberAlign.addActionListener(new java.awt.event.ActionListener() {
@@ -325,6 +334,16 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         setModifiedTabFont(false);
         jLabelRestart.setVisible(false);
     }
+    @Action(enabledProperty = "modifiedTabScheme")
+    public void applyColorScheme() {
+        // update syntax scheme
+        Document doc = SyntaxScheme.loadSyntax();
+        SyntaxScheme.changeScheme(jComboBoxSyntaxScheme.getSelectedIndex(), doc);
+        SyntaxScheme.saveSyntax(doc);
+        settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
+        setModifiedTabScheme(false);
+        jLabelRestart2.setVisible(false);
+    }
     @Action
     public void addNewScript() {
         resetScriptFields();
@@ -389,6 +408,15 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         this.modifiedTabFont = b;
         firePropertyChange("modifiedTabFont", old, isModifiedTabFont());
     }
+    private boolean modifiedTabScheme = false;
+    public boolean isModifiedTabScheme() {
+        return modifiedTabScheme;
+    }
+    public final void setModifiedTabScheme(boolean b) {
+        boolean old = isModifiedTabScheme();
+        this.modifiedTabScheme = b;
+        firePropertyChange("modifiedTabScheme", old, isModifiedTabScheme());
+    }
     private boolean removePossible = false;
     public boolean isRemovePossible() {
         return removePossible;
@@ -430,8 +458,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabel1 = new javax.swing.JLabel();
         jComboBoxLineNumberAlign = new javax.swing.JComboBox();
         jLabelRestart = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
+        jLabelRestart2 = new javax.swing.JLabel();
+        jButtonApplyScheme = new javax.swing.JButton();
+        jLabelSchemePreview = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxCheckUpdates = new javax.swing.JCheckBox();
         jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
@@ -577,34 +609,19 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart.setText(resourceMap.getString("jLabelRestart.text")); // NOI18N
         jLabelRestart.setName("jLabelRestart"); // NOI18N
 
-        jLabel2.setDisplayedMnemonic('y');
-        jLabel2.setLabelFor(jComboBoxSyntaxScheme);
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
-        jComboBoxSyntaxScheme.setName("jComboBoxSyntaxScheme"); // NOI18N
-
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(282, Short.MAX_VALUE)
-                .add(jLabelRestart)
-                .add(18, 18, 18)
-                .add(jButtonApplyTabAndFont)
-                .add(6, 6, 6))
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel6)
                     .add(jLabel10)
                     .add(jLabel11)
-                    .add(jLabel1)
-                    .add(jLabel2))
+                    .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel5Layout.createSequentialGroup()
                         .add(jLabelFont)
@@ -612,7 +629,13 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .add(jButtonFont))
                     .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(409, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jLabelRestart)
+                .add(18, 18, 18)
+                .add(jButtonApplyTabAndFont)
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -634,11 +657,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel2)
-                    .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 83, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 142, Short.MAX_VALUE)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyTabAndFont)
                     .add(jLabelRestart))
@@ -646,6 +665,64 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
+
+        jPanel2.setName("jPanel2"); // NOI18N
+
+        jLabel2.setDisplayedMnemonic('s');
+        jLabel2.setLabelFor(jComboBoxSyntaxScheme);
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        jComboBoxSyntaxScheme.setName("jComboBoxSyntaxScheme"); // NOI18N
+
+        jLabelRestart2.setForeground(resourceMap.getColor("jLabelRestart2.foreground")); // NOI18N
+        jLabelRestart2.setText(resourceMap.getString("jLabelRestart2.text")); // NOI18N
+        jLabelRestart2.setName("jLabelRestart2"); // NOI18N
+
+        jButtonApplyScheme.setAction(actionMap.get("applyColorScheme")); // NOI18N
+        jButtonApplyScheme.setName("jButtonApplyScheme"); // NOI18N
+
+        jLabelSchemePreview.setName("jLabelSchemePreview"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .add(0, 294, Short.MAX_VALUE)
+                        .add(jLabelRestart2)
+                        .add(18, 18, 18)
+                        .add(jButtonApplyScheme))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .add(jLabel2)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(jLabelSchemePreview))
+                        .add(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabelSchemePreview)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 253, Short.MAX_VALUE)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButtonApplyScheme)
+                    .add(jLabelRestart2))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
         jPanel1.setName("jPanel1"); // NOI18N
 
@@ -708,6 +785,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonApplyScheme;
     private javax.swing.JButton jButtonApplyScript;
     private javax.swing.JButton jButtonApplyTabAndFont;
     private javax.swing.JButton jButtonFont;
@@ -730,7 +808,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelFont;
     private javax.swing.JLabel jLabelRestart;
+    private javax.swing.JLabel jLabelRestart2;
+    private javax.swing.JLabel jLabelSchemePreview;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
