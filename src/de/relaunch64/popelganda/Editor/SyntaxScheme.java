@@ -933,6 +933,7 @@ public class SyntaxScheme {
                 asmKeywords.put(".PC", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".PRINT", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".PSEUDOPC", DEFAULT_COMPILER_KEYWORD);
+                asmKeywords.put(".RETURN", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".VAR", DEFAULT_COMPILER_KEYWORD);
                 asmKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);

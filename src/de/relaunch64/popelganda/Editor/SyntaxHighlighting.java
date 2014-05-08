@@ -72,6 +72,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     private final MutableAttributeSet lohi;
     private final MutableAttributeSet jump;
     private final MutableAttributeSet number;
+    private final MutableAttributeSet keyword;
     private final HashMap<String, MutableAttributeSet> keywords;
     private final HashMap<String, MutableAttributeSet> compilerKeywords;
     private final HashMap<String, MutableAttributeSet> illegalOpcodes;
@@ -97,6 +98,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         jump = attributes.get(ConstantsR64.STRING_JUMP);
         binary = attributes.get(ConstantsR64.STRING_BIN);
         lohi = attributes.get(ConstantsR64.STRING_LOHI);
+        keyword = attributes.get(ConstantsR64.STRING_KEYWORD);
 
         singleLineComment = slc;
         delimiterList = dll;
@@ -457,6 +459,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             try {
                 //  skip the delimiters to find the start of a new token
                 while (isDelimiter(content.substring(startOffset, startOffset + 1), ""/*, startOffset*/)) {
+                    // doc.setCharacterAttributes(startOffset, startOffset+1, keyword, false);
                     if (startOffset < endOffset) {
                         startOffset++;
                     } else {

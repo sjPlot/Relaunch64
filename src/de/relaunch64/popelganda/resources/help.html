@@ -1,7 +1,7 @@
 <html>
 <head>
   <style>
-    body { color:#333333; margin:5px; font-size:11px; font-family:sans-serif; line-height:1.1em; }
+    body { color:#333333; margin:10px; font-size:11px; font-family:sans-serif; line-height:1.1em; }
     h1 { font-size:14px; font-weight: normal; color:#660000; margin-top:14px; margin-bottom:0px; padding:0;}
     h2 { font-size:13px; font-weight: normal; color:#660000; ; margin-top:13px; margin-bottom:0px; padding:0;}
     h2 { font-size:12px; font-weight: normal; color:#660000; ; margin-top:12px; margin-bottom:0px; padding:0;}
@@ -18,7 +18,8 @@
 <h1>Relaunch64 help</h1>
 
 	<p>
-		This is a small help page with an overview of selected functions.
+		This is a small help page with an overview of selected functions. Choose from the index
+                below to jump to a help topic.
 	</p>
 
 	<h2>General</h2>
@@ -96,6 +97,7 @@
     automatically when opening a recent document.
 </p>
 
+<br>
 <h1><a name="editmenu">Edit menu</a></h1>
 
 <p>
@@ -103,6 +105,7 @@
     and redo.
 </p>
 
+<br>
 <h1><a name="findmenu">Find menu</a></h1>
 
 <p>
@@ -120,14 +123,98 @@
     the next or previous occurence of a searchterm.
 </p>
 
+<br>
 <h1><a name="navigatemenu">Navigate menu</a></h1>
 
+<h2>The Goto-commands</h2>
 <p>
-    
+    Except for the <em>Goto line</em> command, each of the <em>goto</em> commands opens the
+    drop down list at the bottom of the window. The content of this list depends on the context,
+    i.e. the command that opened this list. The <em>Goto label</em> command, for instance,
+    extracts <strong>all labels</strong> from <strong>all currently opened</strong> files
+    and lists them in the drop down list. A red heading with the related file name indicates
+    to which file the labels from this list belong. Selecting an item will choose the related
+    file and scrolls the caret to the line containing the label.
 </p>
 
+<p>
+    The <em>Goto function</em> or <em>Goto macro</em> command work in a similar way, just that
+    the drop down list contains all functions or macros found in all opened files.
+</p>
+
+<p>
+    The <em>Goto section</em> command lets you choose any section to jump. Section are
+    specific comments on the source code, which can be used to structure your source. See 
+    <a href="#sourcemnu">Source menu</a> for more details.
+</p>
+
+<p>
+    The <em>Goto line</em> command sets the input focus into the text field at the bottom left part,
+    where you can enter any line number. Then the content will scroll to this line.
+</p>
+
+<br>
+
+<h2>The Jump-commands</h2>
+<p>
+    Unlike the <em>Goto</em> commands, which scroll to <em>a specific label, function, macro...</em> etc., 
+    the <em>Jump</em> commands scroll to the next, respectively to the previous occurence of a label, 
+    section or error. <em>Next</em> and <em>previous</em> relate to the current caret position.
+</p>
+
+<p>
+    While the <em>Jump to next/prev label</em> and <em>Jump to next/prev section</em> commands only work when you have
+    labels or sections defined in your source, the <em>Jump to next/prev error</em> command only works after
+    you have compiled a source file that contains errors. In case the assembler stops parsing your
+    source code due to errors, the <em>Compiler log</em> is shown and you can cycle through all
+    errors with the <em>Jump to next/prev error</em> command.
+</p>
+
+<p>
+    The <em>Jump to label</em> command only works when the caret (cursor) is positioned over a label inside
+    your source code. The command will then scroll to the line where this label is defined.
+</p>
+
+<br>
 <h1><a name="sourcemenu">Source menu</a></h1>
 
+<h2>Running and selecting scripts</h2>
+
+<p>
+    Running and selecting scripts are menu commands that execute the same as clicking the <em>Run</em>
+    button or selecting an item from the drop down list of the <em>Compile and Run</em> area
+    in the main window.
+</p>
+<p>
+    The <em>Run script</em> command runs the currently selected user script. User script are commands that
+    you would typically type into the console or terminal in order to run compilers, crunchers or emulators.
+    With these scripts you can execute your compiler, cruncher and emulator in order to compile your source
+    code and watch the compiled file in an emulator.
+</p>
+<p>
+    You can set up as much different scripts as you want in order to get various compile and run options.
+    Please refere to the preferences, select the <em>Compile &amp; Run</em> tab and click on the help 
+    button for details on user scripts.
+</p>
+
+<p>
+    With the <em>Select script</em> command the input focus is set to the drop down list with all
+    user scripts. This is a convenience command for quickly switching between scripts using the
+    keyboard.
+</p>
+
+<p>
+    <em>Select syntax scheme</em> lets you switch between different compiler syntax schemes (e.g.
+    the KickAss syntax differs from ACME and 64tass) in order to correctly highlight keywords,
+    comments, compiler directives etc.
+</p>
+
+<br>
+<h2>Toggle and insert commands</h2>
+
+
+
+<br>
 <h1><a name="viewmenu">View menu</a></h1>
 
 <p><br></p>

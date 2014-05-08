@@ -944,14 +944,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         String dest = null;
+        // check if we found anything
+        boolean labelFound = false;
         // iterate all line numbers
         for (int i=0; i<ln.size(); i++) {
             // if we found a line number greater than current
             // line, we found the next section from caret position
             if (ln.get(i)>currentLine) {
                 dest = names.get(i);
+                labelFound = true;
                 break;
             }
+        }
+        try {
+            // found anything?
+            // if not, start from beginning
+            if (!labelFound) dest = names.get(0);
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
         // goto next section
         editorPanes.gotoSection(dest);
@@ -964,20 +974,32 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         String dest = null;
+        // check if we found anything
+        boolean labelFound = false;
         // iterate all line numbers
         for (int i=ln.size()-1; i>=0; i--) {
             // if we found a line number smaller than current
             // line, we found the previous section from caret position
             if (ln.get(i)<currentLine) {
                 dest = names.get(i);
+                labelFound = true;
                 break;
             }
+        }
+        try {
+            // found anything?
+            // if not, start from beginning
+            if (!labelFound) dest = names.get(names.size()-1);
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
         // goto previous section
         editorPanes.gotoSection(dest);
     }
     @Action
     public void gotoNextError() {
+        // check if we found anything
+        boolean labelFound = false;
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         for (Integer errorLine : errorLines) {
@@ -985,12 +1007,22 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // line, we found the next label from caret position
             if (errorLine > currentLine) {
                 editorPanes.gotoLine(errorLine);
+                labelFound = true;
                 break;
             }
+        }
+        try {
+            // found anything?
+            // if not, start from beginning
+            if (!labelFound) editorPanes.gotoLine(errorLines.get(0));
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
     }
     @Action
     public void gotoPrevError() {
+        // check if we found anything
+        boolean labelFound = false;
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         // iterate all line numbers
@@ -999,8 +1031,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // line, we found the next label from caret position
             if (errorLines.get(i)<currentLine) {
                 editorPanes.gotoLine(errorLines.get(i));
+                labelFound = true;
                 break;
             }
+        }
+        try {
+            // found anything?
+            // if not, start from beginning
+            if (!labelFound) editorPanes.gotoLine(errorLines.get(errorLines.size()-1));
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
     }
     @Action
@@ -1011,14 +1051,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         String dest = null;
+        // check if we found anything
+        boolean labelFound = false;
         // iterate all line numbers
         for (int i=0; i<ln.size(); i++) {
             // if we found a line number greater than current
             // line, we found the next label from caret position
             if (ln.get(i)>currentLine) {
                 dest = names.get(i);
+                labelFound = true;
                 break;
             }
+        }
+        try {
+            // found anything?
+            // if not, start from beginning
+            if (!labelFound) dest = names.get(0);
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
         // goto next label
         editorPanes.gotoLabel(dest);
@@ -1031,14 +1081,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         String dest = null;
+        // check if we found anything
+        boolean labelFound = false;
         // iterate all line numbers
         for (int i=ln.size()-1; i>=0; i--) {
             // if we found a line number smaller than current
             // line, we found the previous label from caret position
             if (ln.get(i)<currentLine) {
                 dest = names.get(i);
+                labelFound = true;
                 break;
             }
+        }
+        try {
+            // found anything?
+            // if not, start from beginning
+            if (!labelFound) dest = names.get(names.size()-1);
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
         // goto previous label
         editorPanes.gotoLabel(dest);
