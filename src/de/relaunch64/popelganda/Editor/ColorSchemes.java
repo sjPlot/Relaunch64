@@ -274,16 +274,16 @@ public class ColorSchemes {
         else if (SCHEME_POPELGANDA==scheme) {
             switch (tokentype) {
                 case COLOR_NORMAL: return new Color(185,185,180); 
-                case COLOR_COMMENT: return new Color(38,38,38);
-                case COLOR_STRING: return new Color(178,71,76);
+                case COLOR_COMMENT: return new Color(35,35,35);
+                case COLOR_STRING: return new Color(199,80,86);
                 case COLOR_NUMBER: return new Color(255,255,255);
                 case COLOR_HEX: return new Color(139,207,234);
                 case COLOR_BIN: return new Color(139,207,234);
                 case COLOR_JUMP: return new Color(89,138,199); 
-                case COLOR_LOHI: return new Color(124,142,134);
+                case COLOR_LOHI: return new Color(133,153,144);
                 case COLOR_KEYWORD: return new Color(175,217,229);
-                case COLOR_COMPILERKEYWORD: return new Color(89,138,199);
-                case COLOR_ILLEGALOPCODE: return new Color(236,2,30);
+                case COLOR_COMPILERKEYWORD: return new Color(98,150,217);
+                case COLOR_ILLEGALOPCODE: return new Color(217,2,28);
                 case BACKGROUND: return new Color(77,77,77);
                 case LINE_BACKGROUND: return new Color(63,63,63); // 11,55,66
                 case LINE_BORDER: return new Color(63,63,63);

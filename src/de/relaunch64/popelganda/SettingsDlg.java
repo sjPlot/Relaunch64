@@ -86,8 +86,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         setIconImage(ConstantsR64.r64icon.getImage());
         // set Mnemonic keys
         jButtonApplyScript.setDisplayedMnemonicIndex(0);
-        jButtonApplyTabAndFont.setDisplayedMnemonicIndex(0);
-        jButtonApplyScheme.setDisplayedMnemonicIndex(0);
         jButtonRemoveScript.setDisplayedMnemonicIndex(0);
         // disable apply buttons
         setModifiedTabScript(false);

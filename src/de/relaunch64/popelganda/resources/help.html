@@ -9,8 +9,8 @@
     li { margin-bottom:5px; }
     a { color:#000099; text-decoration:none; }
     a:hover { text-decoration:underline; }
-    .pcode {font-family:monospace; background-color:#f2f2f2; padding:3px } 
-    code { font-family:monospace; color:#444444; background-color:#eeeeee; }
+    .pcode {font-family:monospace; background-color:#f2f2f2; padding:3px; font-size:1em; } 
+    code { font-family:monospace; color:#444444; background-color:#eeeeee; font-size:1em; }
   </style> 
 </head>
 <body>
@@ -48,16 +48,83 @@
 
 <h2>Drag &amp; drop</h2>
 <p>
-	
+	You can drag &amp; drop files from the file explorer (or finder, nautilus, etc.) into
+        the editor area to either open them or include them into your source. The drop operation
+        depends on which modifier keys (<code>shift</code> and <code>control</code>) you hold
+        down while dropping the selected file(s).
 </p>
+<ul>
+    <li>
+        Without pressing and holding <code>shift</code> and <code>control</code> keys
+        <ul>
+            <li>Assembler files (with file extension <code>.a</code> or <code>.asm</code>) will be opened.</li>
+            <li>
+                Binary or files files (with file extension <code>.bin</code>, <code>.c64</code> or <code>.txt</code>) will be included via 
+                <code>!bin</code>, <code>.import</code> or <code>.binary</code> directive (depending on the assembler).
+            </li>
+        </ul>
+    </li>
+    <li>
+        Pressing and holding the <code>control</code> key
+        <ul>
+            <li>
+                Assembler files (with file extension <code>.a</code> or <code>.asm</code>) will be included via
+                <code>!src</code>, <code>.import</code> or <code>.binclude</code> directive (depending on the assembler).
+            </li>
+            <li>
+                Binary or files files (with file extension <code>.bin</code>, <code>.c64</code> or <code>.txt</code>) will be included as
+                byte table (see function <em>Insert bytes from file</em> in Source menu).
+            </li>
+        </ul>
+    </li>
+    <li>
+        Pressing and holding both <code>shift</code> and <code>control</code> keys
+        <ul>
+            <li>
+                The file path in quotes will be inserted at the caret position.
+            </li>
+        </ul>
+    </li>
+</ul>
 
 <h1><a name="filemenu">File menu</a></h1>
 
+<p>
+    This menu includes typical file operations like opening, saving and closing files.
+    Note that the latest ten recent files can be opened quickly via the <em>Recent files</em>
+    submenu, and that the associated compiler and user script settings will be restored
+    automatically when opening a recent document.
+</p>
+
 <h1><a name="editmenu">Edit menu</a></h1>
+
+<p>
+    This menu contains the default edit operations like cut, copy, paste, but also undo
+    and redo.
+</p>
 
 <h1><a name="findmenu">Find menu</a></h1>
 
+<p>
+    Contains all find and replace operation for current active documents. Both the
+    <em>Find searchterm</em> and the <em>Replace</em> command will open an edit
+    field below the source code window where find and replace terms can be edited.
+</p>
+
+<p>
+    The <em>Find searchterm</em> function also accepts <em>regular expressions</em>.
+</p>
+
+<p>
+    Use buttons beside the text fields or menu shortcuts / hotkeys to jump to
+    the next or previous occurence of a searchterm.
+</p>
+
 <h1><a name="navigatemenu">Navigate menu</a></h1>
+
+<p>
+    
+</p>
 
 <h1><a name="sourcemenu">Source menu</a></h1>
 
