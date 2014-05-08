@@ -1365,7 +1365,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // make it visible
             jPanelReplace.setVisible(true);
             // and set input focus in it
-            jTextFieldReplace.requestFocusInWindow();
+            if (jTextFieldFind.getText().isEmpty()) {
+                jTextFieldFind.requestFocusInWindow();
+            }
+            else {
+                jTextFieldReplace.requestFocusInWindow();
+            }
         }
         // if textfield is already visible, replace term
         else {
@@ -1465,6 +1470,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         settings.saveSettings();
         customScripts.saveScripts();
     }
+    @Action
+    public void showHelp() {
+        if (aboutBox == null) {
+            JFrame mainFrame = Relaunch64App.getApplication().getMainFrame();
+            aboutBox = new Relaunch64AboutBox(mainFrame, org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResource("/de/relaunch64/popelganda/resources/help.html"));
+            aboutBox.setLocationRelativeTo(mainFrame);
+        }
+        Relaunch64App.getApplication().show(aboutBox);
+        aboutBox.dispose();
+        aboutBox = null;
+    }
     /**
      * 
      */
@@ -1476,6 +1492,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         Relaunch64App.getApplication().show(aboutBox);
+        aboutBox.dispose();
+        aboutBox = null;
     }
 
     @Override
@@ -1948,6 +1966,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
+        helpMenuItem = new javax.swing.JMenuItem();
+        jSeparator18 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
         javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
@@ -2576,6 +2596,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator9.setName("jSeparator9"); // NOI18N
         helpMenu.add(jSeparator9);
 
+        helpMenuItem.setAction(actionMap.get("showHelp")); // NOI18N
+        helpMenuItem.setName("helpMenuItem"); // NOI18N
+        helpMenu.add(helpMenuItem);
+
+        jSeparator18.setName("jSeparator18"); // NOI18N
+        helpMenu.add(jSeparator18);
+
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
         helpMenu.add(aboutMenuItem);
@@ -2690,6 +2717,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem gotoPrevLabel;
     private javax.swing.JMenuItem gotoPrevSectionMenuItem;
     private javax.swing.JMenuItem gotoSectionMenuItem;
+    private javax.swing.JMenuItem helpMenuItem;
     private javax.swing.JMenuItem insertBasicStartMenuItem;
     private javax.swing.JMenuItem insertBreakPointMenuItem;
     private javax.swing.JMenuItem insertBytesFromFileMenuItem;
@@ -2733,6 +2761,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator17;
+    private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;

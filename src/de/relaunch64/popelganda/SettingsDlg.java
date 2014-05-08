@@ -294,6 +294,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             helpBox.setLocationRelativeTo(this);
         }
         Relaunch64App.getApplication().show(helpBox);
+        helpBox.dispose();
+        helpBox = null;
     }
     @Action
     public void changeEditorFont() {

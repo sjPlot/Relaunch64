@@ -30,7 +30,7 @@ import java.util.logging.Level;
 public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void> {
     // indicates whether the zettelkasten has updates or not.
     boolean updateavailable = false;
-    String updateBuildNr = "0";
+    String updateBuildNr = null;
 
     CheckForUpdates(org.jdesktop.application.Application app) {
         // Runs on the EDT.  Copy GUI state that
@@ -93,7 +93,7 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         }
         else {
             // log latest available build
-            ConstantsR64.r64logger.log(Level.INFO, ("Latest available Relaunch64-build: "+updateBuildNr));
+            if (updateBuildNr!=null) ConstantsR64.r64logger.log(Level.INFO, ("Latest available Relaunch64-build: "+updateBuildNr));
         }
     }
 }
