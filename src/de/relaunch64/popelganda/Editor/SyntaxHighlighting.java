@@ -75,6 +75,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     private final MutableAttributeSet keyword;
     private final HashMap<String, MutableAttributeSet> keywords;
     private final HashMap<String, MutableAttributeSet> compilerKeywords;
+    private final HashMap<String, MutableAttributeSet> scriptKeywords;
     private final HashMap<String, MutableAttributeSet> illegalOpcodes;
     private int fontSize;
     private String fontName;
@@ -85,6 +86,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     @SuppressWarnings("LeakingThisInConstructor")
     public SyntaxHighlighting(final HashMap<String, MutableAttributeSet> keywords,
                               final HashMap<String, MutableAttributeSet> compilerKeywords,
+                              final HashMap<String, MutableAttributeSet> scriptKeywords,
                               final HashMap<String, MutableAttributeSet> illegalOpcodes,
                               String fname, int fsize, String slc, String dll,
                               final HashMap<String, MutableAttributeSet> attributes,
@@ -112,13 +114,14 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
         this.keywords = keywords;
         this.compilerKeywords = compilerKeywords;
         this.illegalOpcodes = illegalOpcodes;
+        this.scriptKeywords = scriptKeywords;
         
         setTabs(tabWidth);
         setFontSize(fontSize);
     }
     @SuppressWarnings("PublicInnerClass")
     public enum ATTR_TYPE {
-         Normal, Comment, Quote, Number, Hexa, LoHi, Binary, Jump;
+         Normal, Comment, Quote, Number, Hexa, LoHi, Binary, Jump, Keyword;
     }
  
     /**
@@ -142,6 +145,8 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             setAttributeFont(binary, f);
         } else if (attr == ATTR_TYPE.Jump) {
             setAttributeFont(jump, f);
+        } else if (attr == ATTR_TYPE.Keyword) {
+            setAttributeFont(keyword, f);
         } else {
             setAttributeFont(normal, f);
         }
@@ -179,6 +184,8 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             setAttributeColor(binary, c);
         } else if (attr == ATTR_TYPE.Jump) {
             setAttributeColor(jump, c);
+        } else if (attr == ATTR_TYPE.Keyword) {
+            setAttributeColor(keyword, c);
         } else {
             setAttributeColor(normal, c);
         }
@@ -210,6 +217,9 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     public void addCompilerKeyword(String compilerKeyword, MutableAttributeSet attr) {
         compilerKeywords.put(compilerKeyword, attr);
     }
+    public void addScriptKeyword(String scriptKeyword, MutableAttributeSet attr) {
+        scriptKeywords.put(scriptKeyword, attr);
+    }
  
     /**
      * Associates a keyword with a particular formatting style
@@ -239,6 +249,9 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
     public MutableAttributeSet getCompilerKeywordFormatting(String compilerKeyword) {
         return compilerKeywords.get(compilerKeyword);
     }
+    public MutableAttributeSet getScriptKeywordFormatting(String scriptKeyword) {
+        return scriptKeywords.get(scriptKeyword);
+    }
  
     /**
      * Gets the formatting for a keyword
@@ -264,6 +277,9 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
      */
     public void removeCompilerKeyword(String compilerKeyword) {
         compilerKeywords.remove(compilerKeyword);
+    }
+    public void removeScriptKeyword(String scriptKeyword) {
+        scriptKeywords.remove(scriptKeyword);
     }
  
     /**
@@ -603,6 +619,12 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
                 attr = compilerKeywords.get(token.toUpperCase());
                 if (attr != null) {
                     doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
+                }
+                else {
+                    attr = scriptKeywords.get(token.toUpperCase());
+                    if (attr != null) {
+                        doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
+                    }
                 }
             }
         }

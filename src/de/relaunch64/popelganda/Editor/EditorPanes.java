@@ -98,6 +98,13 @@ public class EditorPanes {
     private static final String sugListContainerName="sugListContainerName";
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
+    
+    private static final int SUGGESTION_LABEL = 1;
+    private static final int SUGGESTION_FUNCTION = 2;
+    private static final int SUGGESTION_MACRO = 3;
+    private static final int SUGGESTION_FUNCTION_MACRO = 4;
+    private static final int SUGGESTION_FUNCTION_MACRO_SCRIPT = 5;
+
     /**
      * @author Guillaume Polet
      * 
@@ -269,8 +276,11 @@ public class EditorPanes {
                 // if enter-key should not auto-insert tab, do nothing
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
                 // ctrl+space opens label-auto-completion
-                else if (evt.getKeyCode() == KeyEvent.VK_SPACE && evt.isControlDown()) {
-                    showSuggestion();
+                else if (evt.getKeyCode() == KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown()) {
+                    showSuggestion(SUGGESTION_LABEL);
+                }
+                else if (evt.getKeyCode() == KeyEvent.VK_SPACE && ((evt.isControlDown() && evt.isShiftDown()) || evt.isAltGraphDown())) {
+                    showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
                 }
                 else if (Character.isWhitespace(evt.getKeyChar())) {
                     hideSuggestion();
@@ -607,6 +617,8 @@ public class EditorPanes {
         final HashMap<String, MutableAttributeSet> kw = SyntaxScheme.getKeywordHashMap();
         // get hash map with compiler specific keywords
         final HashMap<String, MutableAttributeSet> ckw = SyntaxScheme.getCompilerKeywordHashMap(compiler);
+        // get hash map with script specific keywords
+        final HashMap<String, MutableAttributeSet> skw = SyntaxScheme.getScriptKeywordHashMap(compiler);
         // get hash map with illegal opcodes
         final HashMap<String, MutableAttributeSet> io = SyntaxScheme.getIllegalOpcodeHashMap();
         // create new editor kit
@@ -614,7 +626,7 @@ public class EditorPanes {
             // and set highlight scheme
             @Override
             public Document createDefaultDocument() {
-                return new SyntaxHighlighting(kw, ckw, io,
+                return new SyntaxHighlighting(kw, ckw, skw, io,
                                               SyntaxScheme.getFontName(),
                                               SyntaxScheme.getFontSize(),
                                               SyntaxScheme.getCommentString(compiler),
@@ -1348,21 +1360,44 @@ public class EditorPanes {
      * This example was taken from
      * http://stackoverflow.com/a/10883946/2094622
      * and modified for own purposes.
+     * @param type
      */
-    protected void showSuggestion() {
+    protected void showSuggestion(int type) {
         // hide old popup
         hideSuggestion();
         try {
             // retrieve chars that have already been typed
-            suggestionSubWord = getCaretString(false);
+            suggestionSubWord = getCaretString(false, (SUGGESTION_FUNCTION_MACRO_SCRIPT==type) ? "." : "");
             // check for valid value
             if (null==suggestionSubWord) return;
     //        if (suggestionSubWord.length() < 2) {
     //            return;
     //        }
             JEditorPane ep = getActiveEditorPane();
-            // retrieve label list, remove last colon
-            Object[] labels = LabelExtractor.getLabelNames(suggestionSubWord.trim(), true, getActiveSourceCode(), getActiveCompiler());
+            // init variable
+            Object[] labels = null;
+            switch(type) {
+                case SUGGESTION_FUNCTION:
+                    // retrieve label list, remove last colon
+                    labels = FunctionExtractor.getFunctionNames(suggestionSubWord.trim(), getActiveSourceCode(), getActiveCompiler());
+                    break;
+                case SUGGESTION_MACRO:
+                    // retrieve label list, remove last colon
+                    labels = FunctionExtractor.getMacroNames(suggestionSubWord.trim(), getActiveSourceCode(), getActiveCompiler());
+                    break;
+                case SUGGESTION_LABEL:
+                    // retrieve label list, remove last colon
+                    labels = LabelExtractor.getLabelNames(suggestionSubWord.trim(), true, getActiveSourceCode(), getActiveCompiler());
+                    break;
+                case SUGGESTION_FUNCTION_MACRO:
+                    // retrieve label list, remove last colon
+                    labels = FunctionExtractor.getFunctionAndMacroNames(suggestionSubWord.trim(), getActiveSourceCode(), getActiveCompiler());
+                    break;
+                case SUGGESTION_FUNCTION_MACRO_SCRIPT:
+                    // retrieve label list, remove last colon
+                    labels = FunctionExtractor.getFunctionMacroScripts(suggestionSubWord.trim(), getActiveSourceCode(), getActiveCompiler());
+                    break;
+            }
             // check if we have any labels
             if (labels!=null && labels.length>0) {
                 Point location;
@@ -1469,9 +1504,10 @@ public class EditorPanes {
     /**
      * 
      * @param wholeWord
+     * @param specialDelimiter
      * @return 
      */
-    public String getCaretString(boolean wholeWord) {
+    public String getCaretString(boolean wholeWord, String specialDelimiter) {
         JEditorPane ep = getActiveEditorPane();
         final int position = ep.getCaretPosition();
         String text;
@@ -1497,9 +1533,19 @@ public class EditorPanes {
                 addDelim = "\n\r";
                 break;
         }
+        // get position start
         int start = Math.max(0, position - 1);
+        boolean isSpecialDelimiter = false;
+        // if we have specific delimiters, add these to the delimiter list.
+        // e.g. KickAss script-directives need a "." as special delimiter
+        if (specialDelimiter!=null && !specialDelimiter.isEmpty()) addDelim = addDelim + specialDelimiter;
         while (start > 0) {
-            if (!Character.isWhitespace(text.charAt(start)) && !Tools.isDelimiter(text.substring(start, start+1), addDelim)) {
+            // check if we have a delimiter
+            boolean isDelim = Tools.isDelimiter(text.substring(start, start+1), addDelim);
+            // check if delimiter was special delimiter.
+            if (isDelim && text.substring(start, start+1).equals(specialDelimiter)) isSpecialDelimiter = true;
+            // check if we have any delimiter
+            if (!Character.isWhitespace(text.charAt(start)) && !isDelim) {
                 start--;
             } else {
                 start++;
@@ -1513,10 +1559,22 @@ public class EditorPanes {
         if (wholeWord) {
             int end = start;
             while (end<text.length() && !Character.isWhitespace(text.charAt(end)) && !Tools.isDelimiter(text.substring(end, end+1), addDelim)) end++;
-            return text.substring(start, end);
+            // if we found a special delimiter at beginning, add it to return string
+            if (isSpecialDelimiter) {
+                return (specialDelimiter+text.substring(start, end));
+            }
+            else {
+                return text.substring(start, end);
+            }
         }
         // retrieve chars that have already been typed
-        return text.substring(start, position);
+        if (isSpecialDelimiter) {
+            // if we found a special delimiter at beginning, add it to return string
+            return (specialDelimiter+text.substring(start, position));
+        }
+        else {
+            return text.substring(start, position);
+        }
     }
     /**
      * Generic goto-line-function. Goes to a line of a specific macro, function or label

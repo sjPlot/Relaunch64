@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.0 (Build 20140508)";
+    public static final String BUILD_VERSION = "3.0.1 (Build 20140509)";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -93,6 +93,7 @@ public class ConstantsR64 {
     public static final String STRING_NUMBER = "number";
     public static final String STRING_KEYWORD = "keyword";
     public static final String STRING_COMPILER_KEYWORD = "compilerkeyword";
+    public static final String STRING_SCRIPT_KEYWORD = "scriptkeyword";
     public static final String STRING_ILLEGAL_OPCODE = "illegalopcode";
     public static final String STRING_HEXA = "hexa";
     public static final String STRING_LOHI = "lohi";
@@ -133,4 +134,15 @@ public class ConstantsR64 {
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};
     
+    public static final String[] SCRIPT_KEYWORDS_KICKASS = new String[] {
+        ".add", ".asNumber", ".asBoolean", ".charAt", ".get", ".getData", ".getPixel",
+        ".getMulticolorByte", ".getSinglecolorByte", ".size", ".substring", ".string",
+        ".toBinaryString", ".toHexString", ".toIntString", ".toOctalString",
+        "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
+        "exp", "expm1", "floor", "hypot", "List", "log", "log10", "log1p",
+        "LoadPicture", "LoadSid", "Matrix", "max", "min", "mod", "MoveMatrix",
+        "PerspectiveMatrix", "round", "ScaleMatrix", "sin", "sinh", "sort",
+        "signum", "tan", "tanh", "toDegree", "toRadians", "Vector"   
+    };
+            
 }

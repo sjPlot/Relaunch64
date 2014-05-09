@@ -921,7 +921,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void jumpToLabel() {
-        editorPanes.gotoLabel(editorPanes.getCaretString(true));
+        // get word under caret
+        String label = editorPanes.getCaretString(true, "");
+        // if we have kick ass, add colon
+        if (label!=null && ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler()) label = label+":";
+        editorPanes.gotoLabel(label);
     }
     @Action
     public void insertSection() {

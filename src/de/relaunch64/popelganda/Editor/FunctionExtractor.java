@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -36,6 +38,179 @@ public class FunctionExtractor {
 
     public static ArrayList getFunctionNames(String source, int compiler) {
         return getFunctionOrMacroNames(getFunctionString(compiler), source, compiler);
+    }
+    /**
+     * Retrieves a list of all functions from the current activated source code
+     * (see {@link #getActiveSourceCode()}) that start with the currently
+     * typed characters at the caret position (usually passed as parameter
+     * {@code subWord}.
+     * 
+     * @param subWord A string which filters the list of labels. Only labels that start with
+     * {@code subWord} will be returned in this list.
+     * @param source
+     * @param compiler
+     * 
+     * @return An object array of sorted functions, where only those functions are returned 
+     * that start with {@code subWord}.
+     */
+    public static Object[] getFunctionNames(String subWord, String source, int compiler) {
+        // get labels here
+        ArrayList<String> functions = getFunctionNames(source, compiler);
+        // check for valid values
+        if (null==functions || functions.isEmpty()) return null;
+        // remove all labels that do not start with already typed chars
+        if (!subWord.isEmpty()) {
+            for (int i=functions.size()-1; i>=0; i--) {
+                if (!functions.get(i).startsWith(subWord)) functions.remove(i);
+            }
+        }
+        // sort list
+        Collections.sort(functions);
+        // return as object array
+        return functions.toArray();
+    }
+    /**
+     * Retrieves a list of all macros from the current activated source code
+     * (see {@link #getActiveSourceCode()}) that start with the currently
+     * typed characters at the caret position (usually passed as parameter
+     * {@code subWord}.
+     * 
+     * @param subWord A string which filters the list of labels. Only labels that start with
+     * {@code subWord} will be returned in this list.
+     * @param source
+     * @param compiler
+     * 
+     * @return An object array of sorted functions, where only those macros are returned 
+     * that start with {@code subWord}.
+     */
+    public static Object[] getMacroNames(String subWord, String source, int compiler) {
+        // get labels here
+        ArrayList<String> macros = getMacroNames(source, compiler);
+        // check for valid values
+        if (null==macros || macros.isEmpty()) return null;
+        // remove all labels that do not start with already typed chars
+        if (!subWord.isEmpty()) {
+            for (int i=macros.size()-1; i>=0; i--) {
+                if (!macros.get(i).startsWith(subWord)) macros.remove(i);
+            }
+        }
+        // sort list
+        Collections.sort(macros);
+        // return as object array
+        return macros.toArray();
+    }
+    /**
+     * Retrieves a list of all functions and macros from the current activated source code
+     * (see {@link #getActiveSourceCode()}) that start with the currently
+     * typed characters at the caret position (usually passed as parameter
+     * {@code subWord}.
+     * 
+     * @param subWord A string which filters the list of labels. Only labels that start with
+     * {@code subWord} will be returned in this list.
+     * @param source
+     * @param compiler
+     * 
+     * @return An object array of sorted functions and macros, where only those functions and macros
+     * are returned that start with {@code subWord}.
+     */
+    public static Object[] getFunctionAndMacroNames(String subWord, String source, int compiler) {
+        // get labels here
+        ArrayList<String> functions = getFunctionNames(source, compiler);
+        // check for valid values
+        if (functions!=null && !functions.isEmpty()) {
+            // remove all labels that do not start with already typed chars
+            if (!subWord.isEmpty()) {
+                for (int i=functions.size()-1; i>=0; i--) {
+                    if (!functions.get(i).startsWith(subWord)) functions.remove(i);
+                }
+            }
+        }
+        // get labels here
+        ArrayList<String> macros = getMacroNames(source, compiler);
+        // check for valid values
+        if (macros!=null && !macros.isEmpty()) {
+            // remove all labels that do not start with already typed chars
+            if (!subWord.isEmpty()) {
+                for (int i=macros.size()-1; i>=0; i--) {
+                    if (!macros.get(i).startsWith(subWord)) macros.remove(i);
+                }
+            }
+        }
+        ArrayList<String> retval = new ArrayList<>();
+        if (functions!=null && !functions.isEmpty()) retval.addAll(functions);
+        if (macros!=null && !macros.isEmpty()) retval.addAll(macros);
+        if (!retval.isEmpty()) {
+            // sort list
+            Collections.sort(retval);
+            // return as object array
+            return retval.toArray();
+        }
+        return null;
+    }
+    /**
+     * Retrieves a list of all functions and macros from the current activated source code
+     * (see {@link #getActiveSourceCode()}) that start with the currently
+     * typed characters at the caret position (usually passed as parameter
+     * {@code subWord}.
+     * 
+     * @param subWord A string which filters the list of labels. Only labels that start with
+     * {@code subWord} will be returned in this list.
+     * @param source
+     * @param compiler
+     * 
+     * @return An object array of sorted functions and macros, where only those functions and macros
+     * are returned that start with {@code subWord}.
+     */
+    public static Object[] getFunctionMacroScripts(String subWord, String source, int compiler) {
+        // get labels here
+        ArrayList<String> functions = getFunctionNames(source, compiler);
+        // check for valid values
+        if (functions!=null && !functions.isEmpty()) {
+            // remove all labels that do not start with already typed chars
+            if (!subWord.isEmpty()) {
+                for (int i=functions.size()-1; i>=0; i--) {
+                    if (!functions.get(i).startsWith(subWord)) functions.remove(i);
+                }
+            }
+        }
+        // get labels here
+        ArrayList<String> macros = getMacroNames(source, compiler);
+        // check for valid values
+        if (macros!=null && !macros.isEmpty()) {
+            // remove all labels that do not start with already typed chars
+            if (!subWord.isEmpty()) {
+                for (int i=macros.size()-1; i>=0; i--) {
+                    if (!macros.get(i).startsWith(subWord)) macros.remove(i);
+                }
+            }
+        }
+        // get scripts  here
+        ArrayList<String> scripts = new ArrayList<>();
+        switch(compiler) {
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+                scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_KICKASS));
+                break;
+        }
+        // check for valid values
+        if (!scripts.isEmpty()) {
+            // remove all labels that do not start with already typed chars
+            if (!subWord.isEmpty()) {
+                for (int i=scripts.size()-1; i>=0; i--) {
+                    if (!scripts.get(i).startsWith(subWord)) scripts.remove(i);
+                }
+            }
+        }
+        ArrayList<String> retval = new ArrayList<>();
+        if (functions!=null && !functions.isEmpty()) retval.addAll(functions);
+        if (macros!=null && !macros.isEmpty()) retval.addAll(macros);
+        if (!scripts.isEmpty()) retval.addAll(scripts);
+        if (!retval.isEmpty()) {
+            // sort list
+            Collections.sort(retval);
+            // return as object array
+            return retval.toArray();
+        }
+        return null;
     }
 
     /**
@@ -76,7 +251,7 @@ public class FunctionExtractor {
             } catch (IndexOutOfBoundsException ex) {
                 keyword = line.substring(0, line.length());
             }
-            if (keyword != null && !keyword.isEmpty() && keyword.length() > 2) {
+            if (keyword!=null && !keyword.isEmpty() && keyword.length() > 2) {
                 return keyword;
             }
         }
@@ -117,7 +292,7 @@ public class FunctionExtractor {
                 while ((line = lineReader.readLine()) != null) {
                     lineNumber++;
                     String keyword = getFunctionOrMacroFromLine(line, compiler, funmacString);
-                    if (keyword != null && !functions.containsValue(keyword)) {
+                    if (keyword!=null && !functions.containsValue(keyword)) {
                         functions.put(lineNumber, keyword);
                     }
                 }

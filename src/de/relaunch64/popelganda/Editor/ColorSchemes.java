@@ -63,6 +63,7 @@ public class ColorSchemes {
     public static final int COLOR_LOHI = 8;
     public static final int COLOR_KEYWORD = 9;
     public static final int COLOR_COMPILERKEYWORD = 10;
+    public static final int COLOR_SCRIPTKEYWORD = 11;
     
     public static final int BACKGROUND = 99;
     public static final int LINE_BACKGROUND = 98;
@@ -83,6 +84,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(128, 128, 0); // olive
                 case COLOR_KEYWORD: return new Color(0, 0, 200); // dark blue
                 case COLOR_COMPILERKEYWORD: return new Color(70, 130, 180); // dark cyan
+                case COLOR_SCRIPTKEYWORD: return new Color(128, 128, 0); // olive
                 case COLOR_ILLEGALOPCODE: return new Color(255, 69, 0); // orange red
                 case BACKGROUND: return new Color(255, 255, 255); // white
                 case LINE_BACKGROUND: return new Color(248, 248, 248); // light gray
@@ -103,6 +105,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(0,128,128);
                 case COLOR_KEYWORD: return new Color(51,160,44);
                 case COLOR_COMPILERKEYWORD: return new Color(31,120,180);
+                case COLOR_SCRIPTKEYWORD: return new Color(0,128,128);
                 case COLOR_ILLEGALOPCODE: return new Color(106,61,154);
                 case BACKGROUND: return new Color(252,252,252); // white
                 case LINE_BACKGROUND: return new Color(248, 248, 248); // light gray
@@ -123,6 +126,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(96,255,255);
                 case COLOR_KEYWORD: return new Color(160,160,255);
                 case COLOR_COMPILERKEYWORD: return new Color(224,64,64);
+                case COLOR_SCRIPTKEYWORD: return new Color(96,255,255);
                 case COLOR_ILLEGALOPCODE: return new Color(255,255,255);
                 case BACKGROUND: return new Color(64,64,224);
                 case LINE_BACKGROUND: return new Color(160,160,255);
@@ -143,6 +147,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(221,160,221);
                 case COLOR_KEYWORD: return new Color(219,112,147);
                 case COLOR_COMPILERKEYWORD: return new Color(205,92,92);
+                case COLOR_SCRIPTKEYWORD: return new Color(221,160,221);
                 case COLOR_ILLEGALOPCODE: return new Color(255,99,71);
                 case BACKGROUND: return new Color(255,250,250);
                 case LINE_BACKGROUND: return new Color(255,240,245);
@@ -163,6 +168,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(143,188,143);
                 case COLOR_KEYWORD: return new Color(173,216,230);
                 case COLOR_COMPILERKEYWORD: return new Color(221,160,221);
+                case COLOR_SCRIPTKEYWORD: return new Color(143,188,143);
                 case COLOR_ILLEGALOPCODE: return new Color(255,192,203);
                 case BACKGROUND: return new Color(55,55,55);
                 case LINE_BACKGROUND: return new Color(48,48,48);
@@ -183,6 +189,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(95,158,160);
                 case COLOR_KEYWORD: return new Color(70,130,180);
                 case COLOR_COMPILERKEYWORD: return new Color(72,61,139);
+                case COLOR_SCRIPTKEYWORD: return new Color(95,158,160);
                 case COLOR_ILLEGALOPCODE: return new Color(0,0,205);
                 case BACKGROUND: return new Color(248,248,255);
                 case LINE_BACKGROUND: return new Color(240,248,255);
@@ -203,6 +210,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(200,73,31);
                 case COLOR_KEYWORD: return new Color(49,142,209);
                 case COLOR_COMPILERKEYWORD: return new Color(11,55,66);
+                case COLOR_SCRIPTKEYWORD: return new Color(200,73,31);
                 case COLOR_ILLEGALOPCODE: return new Color(208,54,130);
                 case BACKGROUND: return new Color(253,246,229);
                 case LINE_BACKGROUND: return new Color(238,233,214); // 253,246,229
@@ -223,6 +231,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(200,73,31);
                 case COLOR_KEYWORD: return new Color(238,233,214);
                 case COLOR_COMPILERKEYWORD: return new Color(217,47,52);
+                case COLOR_SCRIPTKEYWORD: return new Color(200,73,31);
                 case COLOR_ILLEGALOPCODE: return new Color(208,54,130);
                 case BACKGROUND: return new Color(11,55,66);
                 case LINE_BACKGROUND: return new Color(3,44,54); // 11,55,66
@@ -243,6 +252,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(199,116,68);
                 case COLOR_KEYWORD: return new Color(128,180,192);
                 case COLOR_COMPILERKEYWORD: return new Color(157,162,101);
+                case COLOR_SCRIPTKEYWORD: return new Color(199,116,68);
                 case COLOR_ILLEGALOPCODE: return new Color(4,136,174);
                 case BACKGROUND: return new Color(15,17,18);
                 case LINE_BACKGROUND: return new Color(10,11,12); // 11,55,66
@@ -263,6 +273,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(231,93,67);
                 case COLOR_KEYWORD: return new Color(0,134,179);
                 case COLOR_COMPILERKEYWORD: return new Color(165,42,42);
+                case COLOR_SCRIPTKEYWORD: return new Color(231,93,67);
                 case COLOR_ILLEGALOPCODE: return new Color(216,23,69);
                 case BACKGROUND: return new Color(248,248,255);
                 case LINE_BACKGROUND: return new Color(236,236,236); // 11,55,66
@@ -283,6 +294,7 @@ public class ColorSchemes {
                 case COLOR_LOHI: return new Color(133,153,144);
                 case COLOR_KEYWORD: return new Color(175,217,229);
                 case COLOR_COMPILERKEYWORD: return new Color(98,150,217);
+                case COLOR_SCRIPTKEYWORD: return new Color(133,153,144);
                 case COLOR_ILLEGALOPCODE: return new Color(217,2,28);
                 case BACKGROUND: return new Color(77,77,77);
                 case LINE_BACKGROUND: return new Color(63,63,63); // 11,55,66
