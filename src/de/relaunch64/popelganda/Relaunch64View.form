@@ -1112,6 +1112,20 @@
                 <Property name="name" type="java.lang.String" value="switchLogPosMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator21">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator21" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="quickRefMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="showQuickReference" methodName="showQuickReference"/>
+                </Property>
+                <Property name="mnemonic" type="int" value="81"/>
+                <Property name="name" type="java.lang.String" value="quickRefMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="helpMenu">

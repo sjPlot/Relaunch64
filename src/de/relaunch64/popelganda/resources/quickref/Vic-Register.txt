@@ -1,0 +1,104 @@
+Vic-Register ($d000)
+
+$00	x-koordinate für sprite 0
+$01	y-koordinate für sprite 0
+$02	x-koordinate für sprite 1
+$03	y-koordinate für sprite 1
+$04	x-koordinate für sprite 2
+$05	y-koordinate für sprite 2
+...
+$0e	x-koordinate für sprite 7
+$0f	y-koordinate für sprite 7
+
+$10	bei x-koordinaten über 255 muss das jeweilige bit des sprites gesetzt sein
+
+$11	bit 0-2: up-/downscrolling
+	bit 3: 24/25 zeilen
+	bit 4: screen aus/ein (d.h. screen erhält border-farbe)
+	bit 5: hi-res screen
+	bit 6: extended-color-mode ein/aus (siehe textflashing in noter)
+	bit 7: übertrag aus $d012
+
+$12	aktuelle rastezeile (übertrag in bit 7 $d011)
+
+$13	lightpen x-koordinate
+$14	lightpen y-koordinate
+$15	sprites an/aus (je nachdem, welche bits gesetzt sind)
+
+$16	bit 0-2: left-/rightscrolling
+	bit 3: 38/40 spalten
+	bit 4: multicolor an/aus
+	bit 5-7: unbenutzt (bit 5 muss immer 0 sein!)
+
+$17	sprite-expand y-richtung
+
+$18	vic-speicherbereiche (gibt an, ab welcher adresse sich der char und screen befindet)
+	bits 0-3:	bereich des chars (wobei bit 0 die lower-/uppercase einstellung des chars setzt)
+			$0000-$0fff	01
+			$1000-$1fff	05
+			$2000-$2fff	09
+			$3000-$3fff	0d
+
+	bits 4-7:	bereich des video-rams
+			$0000-$03e7	00
+			$0400-$07e7	01
+			$0800-$0be7	02
+			$0c00-$0fe7	03
+			$1000-$13e7	04
+			$1400-$17e7	05
+			$1800-$1be7	06
+			$1c00-$1fe7	07
+			$2000-$23e7	08
+			$2400-$27e7	09
+			$2800-$2be7	0a
+			$2c00-$2fe7	0b
+			$3000-$33e7	0c
+			$3400-$37e7	0d
+			$3800-$3be7	0e
+			$3c00-$3fe7	0f
+
+$19	interrupt request register (irr): hier steht, was irq auslöste
+	bit 0: raster-irq
+	bit 1: sprite-screen-kollosion
+	bit 2: sprite-sprite-kollosion
+	bit 3: lightpen-impuls
+	bit 4-6: unbenutzt
+	bit 7: ist mit einem der bits 1-3 gesetzt
+
+$1a	interrupt mask register: festlegung, wodurch irq zugelassen wird. belegung entspricht irr
+
+$1b	sprite-hintergrund-priotität
+	die bits entsprechen den sprites 0-7.
+	bit = 0/1 heißt sprite vor/hinter screen bzw. text.
+
+$1c	multicolor-sprites an/aus
+$1d	sprite-expand x-richtung
+$1e	sprite-sprite-kollosuin
+$1f	sprite-hintergrund-kollosion
+
+$20	rahmenfarbe
+$21	hintergrundfarbe
+$22	extended-farbe 1 (siehe bit 6 $d011)
+$23	extended-farbe 2
+$24	extended-farbe 3
+
+$25	sprite-farbe 1 (multicolor)
+$26	sprite-farbe 2 (multicolor)
+
+$27	sprite-farbe sprite 0
+$28	sprite-farbe sprite 1
+$29	sprite-farbe sprite 2
+$2a	sprite-farbe sprite 3
+$2b	sprite-farbe sprite 4
+$2c	sprite-farbe sprite 5
+$2d	sprite-farbe sprite 6
+$2e	sprite-farbe sprite 7
+
+
+
+Vic-Basisadresse ($dd00):
+
+$0000-$3fff	03
+$4000-$7fff	02
+$8000-$bfff	01
+$c000-$ffff	00

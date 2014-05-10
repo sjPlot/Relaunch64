@@ -74,7 +74,12 @@ public class FindReplace {
         replaceText = rt;
         activeTab = at;
         editorPane = ep;
+        // save old content
+        String oldContent = content;
+        // update content
         updateContent();
+        // if user has done many changes, reset matcher
+        if (oldContent!=null && content!=null && (Math.abs(oldContent.length()-content.length())>1)) forceInit = true;
         if (newFindTerm || forceInit) initmatcher();
     }
     /**
@@ -145,25 +150,29 @@ public class FindReplace {
         }
         // check whether we have any found at all
         if (findselections.size()>0) {
-            // increase our find-counter
-            findpos++;
-            // as long as we haven't reached the last match...
-            if (findpos<findselections.size()) {
-                // when we have a negative index (might be possible, when
-                // using the "findPrev"-method and the first match was found.
-                // in this case, findpos was zero and by "findpos--" it was decreased to -1
-                if (findpos<0) {
-                    findpos=0;
+            try {
+                // increase our find-counter
+                findpos++;
+                // as long as we haven't reached the last match...
+                if (findpos<findselections.size()) {
+                    // when we have a negative index (might be possible, when
+                    // using the "findPrev"-method and the first match was found.
+                    // in this case, findpos was zero and by "findpos--" it was decreased to -1
+                    if (findpos<0) {
+                        findpos=0;
+                    }
+                    // select next occurence of find term
+                    editorPane.setSelectionStart(findselections.get(findpos)[0]);
+                    editorPane.moveCaretPosition(findselections.get(findpos)[1]);
                 }
-                // select next occurence of find term
-                editorPane.setSelectionStart(findselections.get(findpos)[0]);
-                editorPane.moveCaretPosition(findselections.get(findpos)[1]);
+                else {
+                    findpos=0;
+                    // select next occurence of find term
+                    editorPane.setSelectionStart(findselections.get(findpos)[0]);
+                    editorPane.moveCaretPosition(findselections.get(findpos)[1]);
+                }
             }
-            else {
-                findpos=0;
-                // select next occurence of find term
-                editorPane.setSelectionStart(findselections.get(findpos)[0]);
-                editorPane.moveCaretPosition(findselections.get(findpos)[1]);
+            catch (IllegalArgumentException ex) {
             }
             editorPane.requestFocusInWindow();
         }

@@ -1,0 +1,118 @@
+Soundchip
+
+
+D400-D7FF	54272-55295	MOS 6581 SOUND INTERFACE DEVICE (SID)
+
+D400	54272			Voice 1: Frequency Control - Low-Byte
+D401	54273			Voice 1: Frequency Control - High-Byte
+D402	54274			Voice 1: Pulse Waveform	Width - Low-Byte
+D403	54275		7-4	Unused
+			3-0	Voice 1: Pulse Waveform Width - High-Nybble
+D404	54276			Voice 1: Control Register
+			7	Select Random Noise Waveform, 1 = On
+			6	Select Pulse Waveform, 1 = On
+			5	Select Sawtooth Waveform, 1 = On
+			4	Select Triangle Waveform, 1 = On
+			3	Test Bit: 1 = Disable Oscillator 1
+			2	Ring Modulate Osc. 1 with Osc. 3 Output,
+				1 = On
+			1	Synchronize Osc. 1 with Osc. 3 Frequency,
+				1 = On
+			0	Gate Bit: 1 = Start Att/Dec/Sus,
+				0 = Start Release
+
+D405	54277			Envelope Generator 1: Attack / Decay Cycle
+				Control
+                        7-4     Select Attack Cycle Duration: 0-15
+			3-0	Select Decay Cycle Duration: 0-15
+
+D406	54278			Envelope Generator 1: Sustain / Release Cycle
+				Control
+                        7-4     Select Sustain Cycle Duration: 0-15
+                        3-0     Select Release Cycle Duration: 0-15
+
+D407	54279			Voice 2: Frequency Control - Low-Byte
+D408	54280			Voice 2: Frequency Control - High-Byte
+D409	54281			Voice 2: Pulse Waveform Width - Low-Byte
+
+D40A	54282		7-4	Unused
+			3-0	Voice 2: Pulse Waveform Width - High-Nybble
+
+D40B	54283			Voice 2: Control Register
+			7	Select Random Noise Waveform, 1 = On
+			6	Select Pulse Waveform, 1 = On
+			5	Select Sawtooth Waveform, 1 = On
+			4	Select Triangle Waveform, 1 = On
+			3	Test Bit: 1 = Disable Oscillator 1
+			2	Ring Modulate Osc. 2 with Osc. 1 Output,
+				1 = On
+			1	Synchronize Osc. 2 with Osc. 1 Frequency,
+				1 = On
+			0	Gate Bit: 1 = Start Att/Dec/Sus,
+				0 = Start Release
+
+D40C	54284			Envelope Generator 2: Attack / Decay Cycle
+				Control
+			7-4	Select Attack Cycle Duration: O-15
+			3-0	Select Decay Cycle Duration: 0-15
+
+D40D	54285			Envelope Generator 2: Sustain / Release Cycle
+				Control
+			7-4	Select Sustain Cycle Duration: O-15
+			3-0	Select Release Cycle Duration: O-15
+
+D40E	54286			Voice 3: Frequency Control - Low-Byte
+D40F	54287			Voice 3: Frequency Control - High-Byte
+D410	54288			Voice 3: Pulse Waveform Width - Low-Byte
+D411	54289		7-4	Unused
+			3-0	Voice 3: Pulse Waveform Width - High-Nybble
+D412	54290			Voice 3: Control Register
+			7	Select Random Noise Waveform, 1 = On
+			6	Select Pulse Waveform, 1 = On
+			5	Select Sawtooth Waveform, 1 = On
+			4	Select Triangle Waveform, 1 = On
+			3	Test Bit: 1 = Disable Oscillator 1
+			2	Ring Modulate Osc. 3 with Osc. 2 Output,
+				1 = On
+			1	Synchronize Osc. 3 with Osc. 2 Frequency,
+				1 = On
+			0	Gate Bit: 1 = Start Att/Dec/Sus,
+				0 = Start Release
+
+D413	54291		Envelope Generator 3: Attac/Decay Cycle Control
+			7-4	Select Attack Cycle Duration: 0-15
+			3-0	Select Decay Cycle Duration: 0-15
+
+D414	54285			Envelope Generator 3: Sustain / Release Cycle
+				Control
+			7-4	Select Sustain Cycle Duration: 0-15
+			3-0	Select Release Cycle Duration: 0-15
+
+
+D415	54293			Filter Cutoff Frequency: Low-Nybble
+				(Bits 2-0)
+D416	54294			Filter Cutoff Frequency: High-Byte
+D417	54295			Filter Resonance Control / Voice Input
+				Control
+			7-4	Select Filter Resonance: 0-15
+			3	Filter External Input: 1 = Yes, 0 = No
+			2	Filter Voice 3 Output: 1 = Yes, 0 = No
+				Filter Voice 2 Output: 1 = Yes, 0 = No
+			0	Filter Voice 1 Output: 1 = Yes, 0 = No
+
+D418	54296			Select Filter Mode and Volume
+			7	Cut-Off Voice 3 Output: 1 = Off, 0 = On
+
+			6	Select Filter High-Pass Mode: 1 = On
+			5	Select Filter Band-Pass Mode: 1 = On
+			4	Select Filter Low-Pass Mode: 1 = On
+			3-0	Select Output Volume: 0-15
+
+D419	54297			Analog/Digital Converter: Game Paddle 1
+				(0-255)
+D41A	54298			Analog/Digital Converter Game Paddle 2
+				(0-255)
+D41B	54299			Oscillator 3 Random Number Generator
+D41C	54230			Envelope Generator 3 Output
+
+D500-D7FF	54528-55295	SID IMAGES

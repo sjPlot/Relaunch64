@@ -1003,7 +1003,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void gotoNextError() {
         // check if we found anything
-        boolean labelFound = false;
+        boolean errorFound = false;
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         for (Integer errorLine : errorLines) {
@@ -1011,14 +1011,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // line, we found the next label from caret position
             if (errorLine > currentLine) {
                 editorPanes.gotoLine(errorLine);
-                labelFound = true;
+                errorFound = true;
                 break;
             }
         }
         try {
             // found anything?
             // if not, start from beginning
-            if (!labelFound) editorPanes.gotoLine(errorLines.get(0));
+            if (!errorFound) editorPanes.gotoLine(errorLines.get(0));
         }
         catch (IndexOutOfBoundsException ex) {
         }
@@ -1026,7 +1026,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void gotoPrevError() {
         // check if we found anything
-        boolean labelFound = false;
+        boolean errorFound = false;
         // get current line of caret
         int currentLine = editorPanes.getCurrentLineNumber();
         // iterate all line numbers
@@ -1035,14 +1035,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // line, we found the next label from caret position
             if (errorLines.get(i)<currentLine) {
                 editorPanes.gotoLine(errorLines.get(i));
-                labelFound = true;
+                errorFound = true;
                 break;
             }
         }
         try {
             // found anything?
             // if not, start from beginning
-            if (!labelFound) editorPanes.gotoLine(errorLines.get(errorLines.size()-1));
+            if (!errorFound) editorPanes.gotoLine(errorLines.get(errorLines.size()-1));
         }
         catch (IndexOutOfBoundsException ex) {
         }
@@ -1330,7 +1330,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     }
                 }
                 // select error log if we have errors
-                if (!errorLines.isEmpty()) selectLog2();
+                if (!errorLines.isEmpty()) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            selectLog2();
+                            // and kump to first error
+                            editorPanes.gotoLine(errorLines.get(0));
+                        }
+                    });
+                }
             }
         }
         else {
@@ -1544,6 +1553,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         Relaunch64App.getApplication().show(aboutBox);
         aboutBox.dispose();
         aboutBox = null;
+    }
+    @Action
+    public void showQuickReference() {
+        if (quickReferenceDlg == null) {
+            JFrame mainFrame = Relaunch64App.getApplication().getMainFrame();
+            quickReferenceDlg = new QuickReferences(mainFrame);
+            quickReferenceDlg.setLocationRelativeTo(mainFrame);
+        }
+        Relaunch64App.getApplication().show(quickReferenceDlg);
     }
     /**
      * 
@@ -2027,6 +2045,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
         switchBothMenuItem = new javax.swing.JMenuItem();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
+        jSeparator21 = new javax.swing.JPopupMenu.Separator();
+        quickRefMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
@@ -2646,6 +2666,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         switchLogPosMenuItem.setName("switchLogPosMenuItem"); // NOI18N
         viewMenu.add(switchLogPosMenuItem);
 
+        jSeparator21.setName("jSeparator21"); // NOI18N
+        viewMenu.add(jSeparator21);
+
+        quickRefMenuItem.setAction(actionMap.get("showQuickReference")); // NOI18N
+        quickRefMenuItem.setMnemonic('Q');
+        quickRefMenuItem.setName("quickRefMenuItem"); // NOI18N
+        viewMenu.add(quickRefMenuItem);
+
         menuBar.add(viewMenu);
 
         helpMenu.setMnemonic('O');
@@ -2829,6 +2857,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
+    private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
@@ -2853,6 +2882,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFileMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
+    private javax.swing.JMenuItem quickRefMenuItem;
     private javax.swing.JMenuItem recent1MenuItem;
     private javax.swing.JMenuItem recent2MenuItem;
     private javax.swing.JMenuItem recent3MenuItem;
@@ -2886,6 +2916,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     // End of variables declaration//GEN-END:variables
 
     private JDialog aboutBox;
+    private QuickReferences quickReferenceDlg;
     private InsertByteFromFileDlg insertByteFromFileDlg;
     private InsertSinusTableDlg insertSinusTableDlg;
     private SettingsDlg settingsDlg;

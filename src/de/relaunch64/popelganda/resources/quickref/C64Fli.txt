@@ -1,0 +1,45 @@
+FLI picture
+
+$4000-$4400 = 1. raster line of cursor rows
+$4400-$4800 = 2. raster line of cursor rows
+$4800-$4c00 = 3. raster line of cursor rows
+$4c00-$5000 = 4. raster line of cursor rows
+$5000-$5400 = 5. raster line of cursor rows
+$5400-$5800 = 6. raster line of cursor rows
+$5800-$5c00 = 7. raster line of cursor rows
+$5c00-$6000 = 8. raster line of cursor rows
+
+
+$6000-$6008 = set bits of 1. char from 1. row
+$6008-$6010 = set bits of 2. char from 1. row
+$6010-$6018 = set bits of 3. char from 1. row
+$6018-$6020 = set bits of 4. char from 1. row
+...
+$6140-$6148 = set bits of 1. char from 2. row
+$6148-$6150 = set bits of 2. char from 2. row
+$6150-$6158 = set bits of 3. char from 2. row
+$6158-$6160 = set bits of 4. char from 2. row
+...
+
+
+$4000-$6000 = Farben des Bildes aus $d018
+$6000-$8c00 = Bitkombinationen des Bildes, also: welche der 4 Pixel welche Farbe aus $d018 haben soll
+
+
+
+Werte aus $d018:
+
+%0000 	0000
+hi-byte	lo-byte
+1. Farbe	2. Farbe
+
+
+
+Bitkombinationen $6000-$8000
+
+%00 00 00 00
+4 Pixelfarben (Multicolor = 4 Pixel)
+00 = $d021
+01 = hi-byte $d018
+10 = lo-byte $d018
+11 = $d800
