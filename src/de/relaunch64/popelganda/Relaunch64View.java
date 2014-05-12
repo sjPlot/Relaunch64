@@ -42,6 +42,7 @@ import de.relaunch64.popelganda.Editor.SectionExtractor;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.util.ErrorHandler;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
@@ -105,6 +106,7 @@ import org.jdesktop.application.TaskService;
  */
 public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
     private EditorPanes editorPanes;
+    private final ErrorHandler errorHandler;
     private final FindReplace findReplace;
     private final List<Integer> comboBoxHeadings = new ArrayList<>();
     private final List<Integer> comboBoxHeadingsEditorPaneIndex = new ArrayList<>();
@@ -115,7 +117,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private int comboBoxGotoIndex = -1;
     private final Settings settings;
     private final CustomScripts customScripts;
-    private final ArrayList<Integer> errorLines = new ArrayList<>();
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
@@ -128,6 +129,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         settings = set;
         findReplace = new FindReplace();
         customScripts = new CustomScripts();
+        errorHandler = new ErrorHandler();
         // load custom scripts
         customScripts.loadScripts();
         // init default laf
@@ -1002,50 +1004,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void gotoNextError() {
-        // check if we found anything
-        boolean errorFound = false;
-        // get current line of caret
-        int currentLine = editorPanes.getCurrentLineNumber();
-        for (Integer errorLine : errorLines) {
-            // if we found a line number greater than current
-            // line, we found the next label from caret position
-            if (errorLine > currentLine) {
-                editorPanes.gotoLine(errorLine);
-                errorFound = true;
-                break;
-            }
-        }
-        try {
-            // found anything?
-            // if not, start from beginning
-            if (!errorFound) editorPanes.gotoLine(errorLines.get(0));
-        }
-        catch (IndexOutOfBoundsException ex) {
-        }
+        errorHandler.gotoNextError(editorPanes);
     }
     @Action
     public void gotoPrevError() {
-        // check if we found anything
-        boolean errorFound = false;
-        // get current line of caret
-        int currentLine = editorPanes.getCurrentLineNumber();
-        // iterate all line numbers
-        for (int i=errorLines.size()-1; i>=0; i--) {
-            // if we found a line number greater than current
-            // line, we found the next label from caret position
-            if (errorLines.get(i)<currentLine) {
-                editorPanes.gotoLine(errorLines.get(i));
-                errorFound = true;
-                break;
-            }
-        }
-        try {
-            // found anything?
-            // if not, start from beginning
-            if (!errorFound) editorPanes.gotoLine(errorLines.get(errorLines.size()-1));
-        }
-        catch (IndexOutOfBoundsException ex) {
-        }
+        errorHandler.gotoPrevError(editorPanes);
     }
     @Action
     public void gotoNextLabel() {
@@ -1243,7 +1206,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 clearLog1();
                 clearLog2();
                 // clesr error lines
-                errorLines.clear();
+                errorHandler.clearErrors();
                 // remove \r
                 script = script.replaceAll("\r", "");
                 // retrieve script lines
@@ -1315,10 +1278,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             // wait for other process to be finished
                             p.waitFor();
                             p.destroy();
-                            // retrieve potential error lines from log
-                            errorLines.addAll(Tools.getErrorLines(compilerLog.toString()));
+                            // read and extract errors from log
+                            errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveCompiler());
                             // break loop if we have any errors
-                            if (!errorLines.isEmpty() || p.exitValue()!=0) break;
+                            if (errorHandler.hasErrors() || p.exitValue()!=0) break;
                         }
                         catch (IOException | InterruptedException | SecurityException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
@@ -1330,13 +1293,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     }
                 }
                 // select error log if we have errors
-                if (!errorLines.isEmpty()) {
+                if (errorHandler.hasErrors()) {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
+                            // show error log
                             selectLog2();
-                            // and kump to first error
-                            editorPanes.gotoLine(errorLines.get(0));
+                            // get and open error file
+                            openFile(errorHandler.getErrorFile(), editorPanes.getActiveCompiler());
+                            // goto error line
+                            errorHandler.gotoFirstError(editorPanes);
+                            // set focus in edior pane
+                            editorPanes.setFocus();
                         }
                     });
                 }

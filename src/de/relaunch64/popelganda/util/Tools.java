@@ -19,13 +19,7 @@ package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.SyntaxScheme;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collections;
 import javax.swing.JOptionPane;
 
 /**
@@ -169,69 +163,6 @@ public class Tools {
             }
         }
         return null;
-    }
-    public static ArrayList<Integer> getErrorLines(String log) {
-        // return value with lines of errors
-        ArrayList<Integer> errorLines = new ArrayList<>();
-        // create buffered reader, needed for line number reader
-        BufferedReader br = new BufferedReader(new StringReader(log));
-        LineNumberReader lineReader = new LineNumberReader(br);
-        String line;
-        // check for valid values
-        if (log!=null && !log.isEmpty()) {
-            // read line by line
-            try {
-                int err;
-                while ((line = lineReader.readLine())!=null) {
-                    err = -1;
-                    // check if line contains error-tokenand line number
-                    // ACME-Syntax
-                    if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && line.toLowerCase().contains("line")) {
-                        err = getErrorLineFromLine(line, "line ");
-                    }
-                    // check if we have error, but not line
-                    // kick ass syntax
-                    else if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && !line.toLowerCase().contains("line")) {
-                        // read line
-                        line = lineReader.readLine();
-                        if (line!=null) {
-                            err = getErrorLineFromLine(line, "line ");
-                        }
-                    }
-                    // check if we have no "line", but colon
-                    // tass syntax
-                   else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
-                        err = getErrorLineFromLine(line, ":");
-                    }
-                    // check if we found error line
-                    if (err!=-1 && !errorLines.contains(err)) {
-                        errorLines.add(err);
-                    }
-                }
-                // sort list
-                Collections.sort(errorLines);
-            }
-            catch (IOException ex) {
-            }
-            return errorLines;
-        }
-        return null;
-   }
-    protected static int getErrorLineFromLine(String line, String token) {
-        if (line!=null && !line.isEmpty()) {
-            int start = line.toLowerCase().indexOf(token, 0);
-            if (start!=-1) {
-                int end = start+token.length();
-                try {
-                    while (!isDelimiter(line.charAt(end), ":")) end++;
-                    return Integer.parseInt(line.substring(start+token.length(), end));
-                }
-                catch (NumberFormatException | IndexOutOfBoundsException ex) {
-                    return -1;
-                }
-            }
-        }
-        return -1;
     }
     public static String getCruncherStart(String source, int compiler) {
         String cs = SyntaxScheme.getCommentString(compiler) + " start=";
