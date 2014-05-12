@@ -1294,13 +1294,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
                 // select error log if we have errors
                 if (errorHandler.hasErrors()) {
+                    // show error log
+                    selectLog2();
+                    // get and open error file
+                    openFile(errorHandler.getErrorFile(), editorPanes.getActiveCompiler());
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            // show error log
-                            selectLog2();
-                            // get and open error file
-                            openFile(errorHandler.getErrorFile(), editorPanes.getActiveCompiler());
                             // goto error line
                             errorHandler.gotoFirstError(editorPanes);
                             // set focus in edior pane
