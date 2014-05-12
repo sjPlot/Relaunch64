@@ -161,14 +161,18 @@ public class FileTools {
         return ext;
     }
     /**
+     * Retrieves the file path of the file {@code f}, without file name.
+     * Only the path to the file is returned. If {@code f} is already a directory,
+     * {@code f} is returned.
      * 
-     * @param f
-     * @return 
+     * @param f A file including complete file path.
+     * @return The file path to {@code f}, without file name.
      */
     public static String getFilePath(File f) {
         if (f!=null && f.exists()) {
-            String path = f.getAbsolutePath();
-            return path.substring(0,path.lastIndexOf(File.separator));
+            return f.isFile() ? f.getParent() : f.getAbsolutePath();
+//            String path = f.getAbsolutePath();
+//            return path.substring(0,path.lastIndexOf(File.separator));
         }
         return null;
     }
@@ -237,7 +241,7 @@ public class FileTools {
      * This method returns the file name of a given file-path which is passed as parameter.
      * 
      * @param f the filepath of the file which file name should be retrieved
-     * @return the name of the given file, excluding extension, or {@code null} if an error occured.
+     * @return the name of the given file, <b>excluding extension</b>, or {@code null} if an error occured.
      */
     public static String getFileName(File f) {
         // check if we have any file
@@ -313,7 +317,31 @@ public class FileTools {
             }
         }
         return null;
-    }    
+    }
+    /**
+     * This method returns the absolute path from a relative file path given
+     * in {@code relativePath} in relation to the source / base directory given
+     * in {@code sourcepath}.
+     * @param sourcePath An absolute file path or directory path.
+     * @param relativePath The relative path, which is relative to {@code sourcePathh}
+     * @return <ul><li>The absolute path of {@code relativePath}, with relation to {@code sourcePath}</li>
+     * <li>or {@code relativePath}, if it's already an absolute path</li>
+     * <li>or {@code null} if no absolute path could be created.</li></ul>
+     */
+    public static File getAbsolutePath(File sourcePath, File relativePath) {
+        try {
+            if (relativePath!=null && !relativePath.exists() && sourcePath!=null) {
+                java.nio.file.Path newPath = Paths.get(getFilePath(sourcePath)).resolve(relativePath.toString());
+                return newPath.normalize().toFile();
+            }
+            else if (relativePath!=null && relativePath.exists()) {
+                return relativePath;
+            }
+        }
+        catch (IllegalArgumentException | SecurityException | FileSystemNotFoundException ex) {
+        }
+        return null;
+    }
     /**
      * Reads a binary file and returns its content as byte array.
      * 

@@ -276,10 +276,10 @@ public class EditorPanes {
                 // if enter-key should not auto-insert tab, do nothing
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
                 // ctrl+space opens label-auto-completion
-                else if (evt.getKeyCode() == KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown()) {
+                else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                     showSuggestion(SUGGESTION_LABEL);
                 }
-                else if (evt.getKeyCode() == KeyEvent.VK_SPACE && ((evt.isControlDown() && evt.isShiftDown()) || evt.isAltGraphDown())) {
+                else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown()) {
                     showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
                 }
                 else if (Character.isWhitespace(evt.getKeyChar())) {
@@ -991,6 +991,13 @@ public class EditorPanes {
         }
         return false;
     }
+    /**
+     * Returns the index of the tab with the file {@code fp}.
+     * @param fp The file path of a file which should be found in all
+     * opened tabs.
+     * @return The index of the tab with the file {@code fp}, or
+     * -1 if {@code fp} is not opened in a tab yet.
+     */
     public int getOpenedFileTab(File fp) {
         for (int i=0; i<tabbedPane.getTabCount(); i++) {
             File opened = editorPaneArray.get(i).getFilePath();
@@ -1674,6 +1681,16 @@ public class EditorPanes {
             // re-select text
             ep.setSelectionStart(selstart);
             ep.setSelectionEnd(selend+chardiff);
+        }
+    }
+    public int getSelectedTab() {
+        return tabbedPane.getSelectedIndex();
+    }
+    public void setSelectedTab(int tab) {
+        try {
+            tabbedPane.setSelectedIndex(tab);
+        }
+        catch (IndexOutOfBoundsException ex) {
         }
     }
 }

@@ -64,10 +64,10 @@ public class FindReplace {
     FindReplace() {
         resetValues();
     }
-    public void initValues(String ft, String rt, int at, JEditorPane ep) {
-        initValues(ft, rt, at, ep, false);
+    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx) {
+        initValues(ft, rt, at, ep, isRegEx, false);
     }
-    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean forceInit) {
+    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx, boolean forceInit) {
         boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
                                (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
         findText = ft;
@@ -80,7 +80,7 @@ public class FindReplace {
         updateContent();
         // if user has done many changes, reset matcher
         if (oldContent!=null && content!=null && (Math.abs(oldContent.length()-content.length())>1)) forceInit = true;
-        if (newFindTerm || forceInit) initmatcher();
+        if (newFindTerm || forceInit) initmatcher(isRegEx);
     }
     /**
      * 
@@ -94,7 +94,7 @@ public class FindReplace {
      * 
      * @return 
      */
-    private boolean initmatcher() {
+    private boolean initmatcher(boolean isRegEx) {
         Matcher findmatcher;
         // retrieve findtext
         String text = findText;
@@ -113,13 +113,22 @@ public class FindReplace {
         lastActiveTab = activeTab;
         // create find pattern
         Pattern p;
-        try {
-            // create a pattern from the first search term. try to compile
-            // it, thus considering as a regular expression term
-            p = Pattern.compile(text);
+        // check if we have regular expression or not
+        if (isRegEx) {
+            try {
+                // create a pattern from the first search term. try to compile
+                // it, thus considering as a regular expression term
+                p = Pattern.compile(text);
+            }
+            catch (PatternSyntaxException e) {
+                // if compiling failed, consider it as usual (non reg ex)
+                // search term and re-compile pattern.
+                text = Pattern.quote(text);
+                p = Pattern.compile(text);
+            }
         }
-        catch (PatternSyntaxException e) {
-            // if compiling failed, consider it as usual (non reg ex)
+        else {
+            // consider search term as usual (non reg ex)
             // search term and re-compile pattern.
             text = Pattern.quote(text);
             p = Pattern.compile(text);
@@ -141,12 +150,13 @@ public class FindReplace {
     }
     /**
      * 
+     * @param isRegEx
      * @return 
      */
-    public boolean findNext() {
+    public boolean findNext(boolean isRegEx) {
         // when we have no founds or when the user changed the tab, init matcher
         if (findselections.isEmpty() || lastActiveTab!=activeTab) {
-            initmatcher();
+            initmatcher(isRegEx);
         }
         // check whether we have any found at all
         if (findselections.size()>0) {
@@ -217,13 +227,13 @@ public class FindReplace {
         }
         return true;
     }
-    public boolean replace() {
+    public boolean replace(boolean isRegEx) {
         if (editorPane.getText()!=null) {
             if (editorPane.getSelectedText()!=null) {
                 editorPane.replaceSelection(replaceText);
             }
-            if (initmatcher()) {
-                findNext();
+            if (initmatcher(isRegEx)) {
+                findNext(isRegEx);
             }
             else {
                 resetValues();
@@ -236,8 +246,8 @@ public class FindReplace {
         }
         return true;
     }
-    public void replaceAll() {
-        if (initmatcher()) {
+    public void replaceAll(boolean isRegEx) {
+        if (initmatcher(isRegEx)) {
             for (int cnt=findselections.size()-1;cnt>=0; cnt--) {
                 editorPane.setSelectionStart(findselections.get(cnt)[0]);
                 editorPane.moveCaretPosition(findselections.get(cnt)[1]);

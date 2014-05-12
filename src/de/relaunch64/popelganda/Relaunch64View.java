@@ -1004,11 +1004,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void gotoNextError() {
-        errorHandler.gotoNextError(editorPanes);
+        errorHandler.gotoNextError(editorPanes, jTextAreaCompilerOutput);
     }
     @Action
     public void gotoPrevError() {
-        errorHandler.gotoPrevError(editorPanes);
+        errorHandler.gotoPrevError(editorPanes, jTextAreaCompilerOutput);
     }
     @Action
     public void gotoNextLabel() {
@@ -1215,6 +1215,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (settings.getSaveOnCompile() && editorPanes.isModified()) editorPanes.saveFile();
                 // retrieve ASM-Source file
                 File sourceFile = editorPanes.getActiveFilePath();
+                // set base path for relative paths
+                errorHandler.setBasePath(FileTools.getFilePath(sourceFile));
                 // retrieve parent file. needed to construct output file paths
                 String parentFile = (null==sourceFile.getParentFile()) ? sourceFile.toString() : sourceFile.getParentFile().toString();
                 // create Output file
@@ -1296,17 +1298,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (errorHandler.hasErrors()) {
                     // show error log
                     selectLog2();
-                    // get and open error file
-                    openFile(errorHandler.getErrorFile(), editorPanes.getActiveCompiler());
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            // goto error line
-                            errorHandler.gotoFirstError(editorPanes);
-                            // set focus in edior pane
-                            editorPanes.setFocus();
-                        }
-                    });
+                    // show first error
+                    errorHandler.gotoFirstError(editorPanes, jTextAreaCompilerOutput);
                 }
             }
         }
@@ -1371,12 +1364,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void findNext() {
-        findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane());
-        jTextFieldFind.setForeground(findReplace.findNext() ? Color.black : Color.red);
+        findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane(), jCheckBoxRegEx.isSelected());
+        jTextFieldFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected()) ? Color.black : Color.red);
     }
     @Action
     public void findPrev() {
-        findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane());
+        findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane(), jCheckBoxRegEx.isSelected());
         jTextFieldFind.setForeground(findReplace.findPrev() ? Color.black : Color.red);
     }
     private void findCancel() {
@@ -1394,7 +1387,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void replaceAll() {
         findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane(), true);
         int findCounter = 0;
-        while (findReplace.replace()) findCounter++;
+        while (findReplace.replace(jCheckBoxRegEx.isSelected())) findCounter++;
         JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter)+" occurences were replaced.");
     }
     @Action
@@ -1415,8 +1408,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         // if textfield is already visible, replace term
         else {
-            findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane());
-            jTextFieldReplace.setForeground(findReplace.replace() ? Color.black : Color.red);
+            findReplace.initValues(jTextFieldFind.getText(), jTextFieldReplace.getText(), jTabbedPane1.getSelectedIndex(), editorPanes.getActiveEditorPane(), jCheckBoxRegEx.isSelected());
+            jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected()) ? Color.black : Color.red);
         }
     }
     private void replaceCancel() {
@@ -1629,7 +1622,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // if so, include files
                     if (linkedfiles.size()>0) {
                         for (File f : linkedfiles) {
-                            editorPanes.insertString("\""+f.toString()+"\""+System.getProperty("line.separator"));
+                            String rf = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                            editorPanes.insertString("\""+rf+"\""+System.getProperty("line.separator"));
                         }
                     }
                     // check if we have any valid values,
@@ -1909,6 +1903,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jCheckBoxRegEx = new javax.swing.JCheckBox();
         jPanelReplace = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldReplace = new javax.swing.JTextField();
@@ -2072,6 +2067,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
+        jCheckBoxRegEx.setMnemonic('g');
+        jCheckBoxRegEx.setText(resourceMap.getString("jCheckBoxRegEx.text")); // NOI18N
+        jCheckBoxRegEx.setToolTipText(resourceMap.getString("jCheckBoxRegEx.toolTipText")); // NOI18N
+        jCheckBoxRegEx.setName("jCheckBoxRegEx"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanelFindLayout = new org.jdesktop.layout.GroupLayout(jPanelFind);
         jPanelFind.setLayout(jPanelFindLayout);
         jPanelFindLayout.setHorizontalGroup(
@@ -2081,6 +2081,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jLabel5)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldFind)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxRegEx)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonFindPrev)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -2093,7 +2095,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jLabel5)
                 .add(jTextFieldFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(jButtonFindPrev)
-                .add(jButtonFindNext))
+                .add(jButtonFindNext)
+                .add(jCheckBoxRegEx))
         );
 
         jPanelReplace.setName("jPanelReplace"); // NOI18N
@@ -2788,6 +2791,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JButton jButtonFindPrev;
     private javax.swing.JButton jButtonReplace;
     private javax.swing.JButton jButtonRunScript;
+    private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JComboBox jComboBoxCompilers;
     private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;

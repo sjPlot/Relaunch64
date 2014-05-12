@@ -1074,6 +1074,7 @@ public class SyntaxScheme {
             case ConstantsR64.COMPILER_ACME:
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.COMPILER_64TASS:
 //                scriptKeywords.put(".ADD", DEFAULT_SCRIPT_KEYWORD);
 //                scriptKeywords.put(".ASNUMBER", DEFAULT_SCRIPT_KEYWORD);
 //                scriptKeywords.put(".ASBOOLEAN", DEFAULT_SCRIPT_KEYWORD);
@@ -1099,9 +1100,11 @@ public class SyntaxScheme {
                 scriptKeywords.put("CEIL", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("COS", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("COSH", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("DEG", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("EXP", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("EXPM1", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("FLOOR", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("FRAC", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("HYPOT", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("LIST", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("LOG", DEFAULT_SCRIPT_KEYWORD);
@@ -1116,10 +1119,12 @@ public class SyntaxScheme {
                 scriptKeywords.put("MOVEMATRIX", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("PERSPECTIVEMATRIX", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("POW", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("RAD", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("RANDOM", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("ROTATIONMATRIX", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("ROUND", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("SCALEMATRIX", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("SIGN", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("SIN", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("SINH", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("SQRT", DEFAULT_SCRIPT_KEYWORD);
@@ -1130,8 +1135,17 @@ public class SyntaxScheme {
                 scriptKeywords.put("TORADIANS", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("VECTOR", DEFAULT_SCRIPT_KEYWORD);
                 break;
-            case ConstantsR64.COMPILER_64TASS:
-                break;
+        }
+        if (ConstantsR64.COMPILER_64TASS==compiler) {
+            scriptKeywords.put("ALL", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("ANY", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("BOOL", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("FORMAT", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("INT", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("LEN", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("RANGE", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("REPR", DEFAULT_SCRIPT_KEYWORD);
+            scriptKeywords.put("STR", DEFAULT_SCRIPT_KEYWORD);
         }
         return scriptKeywords;
     }    
