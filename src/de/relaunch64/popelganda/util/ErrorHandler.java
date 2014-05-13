@@ -79,29 +79,27 @@ public class ErrorHandler {
                 File errf;
                 while ((line = lineReader.readLine())!=null) {
                     err = -1;
-                    errf = null;
                     // check if line contains error-tokenand line number
                     // ACME-Syntax
-                    if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && line.toLowerCase().contains("line")) {
-                        err = getErrorLineFromLine(line, "line ");
-                        errf = getErrorFileFromLine(line, compiler);
-                    }
-                    // check if we have error, but not line
-                    // kick ass syntax
-                    else if ((line.toLowerCase().contains("error") || line.toLowerCase().contains("warning")) && !line.toLowerCase().contains("line")) {
-                        // read line
-                        line = lineReader.readLine();
-                        if (line!=null) {
+                    switch (compiler) {
+                        case ConstantsR64.COMPILER_ACME:
                             err = getErrorLineFromLine(line, "line ");
-                            errf = getErrorFileFromLine(line, compiler);
-                        }
+                            break;
+                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                            // read line
+                            line = lineReader.readLine();
+                            if (line!=null) {
+                                err = getErrorLineFromLine(line, "line ");
+                            }
+                            break;
+                        case ConstantsR64.COMPILER_64TASS:
+                            err = getErrorLineFromLine(line, ":");
+                            break;
+                        case ConstantsR64.COMPILER_CA65:
+                            err = getErrorLineFromLine(line, "(");
+                            break;
                     }
-                    // check if we have no "line", but colon
-                    // tass syntax
-                   else if (line.toLowerCase().contains(":") && !line.toLowerCase().contains("error") && !line.toLowerCase().contains("warning")) {
-                        err = getErrorLineFromLine(line, ":");
-                        errf = getErrorFileFromLine(line, compiler);
-                    }
+                    errf = getErrorFileFromLine(line, compiler);
                     // check if we found error line
                     if (err!=-1 && !errorLines.contains(err)) {
                         errorLines.add(err);
@@ -134,7 +132,6 @@ public class ErrorHandler {
         }
         return -1;
     }
-    // TODO CA65 fehlermeldungen?
     protected File getErrorFileFromLine(String line, int compiler) {
         String file = null;
         try {
@@ -156,6 +153,12 @@ public class ErrorHandler {
                     break;
                 case ConstantsR64.COMPILER_64TASS:
                     start = line.indexOf(":");
+                    if (start!=-1) {
+                        file = line.substring(0,start);
+                    }
+                    break;
+                case ConstantsR64.COMPILER_CA65:
+                    start = line.indexOf("(");
                     if (start!=-1) {
                         file = line.substring(0,start);
                     }

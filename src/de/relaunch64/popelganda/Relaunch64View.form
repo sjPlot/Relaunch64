@@ -394,12 +394,14 @@
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES)" type="code"/>
                                 </Property>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxCompilers.toolTipText"/>
                                 <Property name="name" type="java.lang.String" value="jComboBoxCompilers" noResource="true"/>
                               </Properties>
                             </Component>
                             <Component class="javax.swing.JLabel" name="jLabel1">
                               <Properties>
                                 <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jLabel1.toolTipText"/>
                                 <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
                               </Properties>
                             </Component>
