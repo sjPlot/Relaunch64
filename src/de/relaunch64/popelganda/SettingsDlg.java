@@ -869,10 +869,13 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 insert = fp+" "+ConstantsR64.DEFAULT_ACME_PARAM;
                             }
                             else if (fp.toLowerCase().contains("kickass")) {
-                                insert = "java -jar "+fp+" "+ConstantsR64.ASSEMBLER_INPUT_FILE;
+                                insert = "java -jar "+fp+" "+ConstantsR64.DEFAULT_KICKASS_PARAM;
                             }
                             else if (fp.toLowerCase().contains("64tass")) {
                                 insert = fp+" "+ConstantsR64.DEFAULT_64TASS_PARAM;
+                            }
+                            else if (fp.toLowerCase().contains("ca65")) {
+                                insert = fp+" "+ConstantsR64.DEFAULT_CA65_PARAM;
                             }
                             else if (fp.toLowerCase().contains("exomizer")) {
                                 insert = fp+" "+ConstantsR64.DEFAULT_EXOMIZER_PARAM;

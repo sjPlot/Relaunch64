@@ -926,7 +926,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get word under caret
         String label = editorPanes.getCaretString(true, "");
         // if we have kick ass, add colon
-        if (label!=null && ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler()) label = label+":";
+        boolean isColonAssembler = (ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler() || ConstantsR64.COMPILER_CA65==editorPanes.getActiveCompiler());
+        if (label!=null && isColonAssembler) label = label+":";
         editorPanes.gotoLabel(label);
     }
     @Action
@@ -1648,6 +1649,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                         case ConstantsR64.COMPILER_KICKASSEMBLER:
                                             insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".INCBIN \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
@@ -1661,6 +1665,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                         case ConstantsR64.COMPILER_KICKASSEMBLER:
                                             insert = ".import text \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".INCBIN \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
@@ -1673,6 +1680,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                             break;
                                         case ConstantsR64.COMPILER_KICKASSEMBLER:
                                             insert = ".import c64 \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".INCBIN \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
@@ -1698,6 +1708,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                         break;
                                     case ConstantsR64.COMPILER_KICKASSEMBLER:
                                         insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_CA65:
+                                        insert = ".INCLUDE \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
                                     case ConstantsR64.COMPILER_64TASS:
                                         insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");

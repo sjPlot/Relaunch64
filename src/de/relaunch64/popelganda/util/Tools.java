@@ -109,9 +109,8 @@ public class Tools {
                     byteToken = "!byte";
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    byteToken = ".byte";
-                    break;
                 case ConstantsR64.COMPILER_64TASS:
+                case ConstantsR64.COMPILER_CA65:
                     byteToken = ".byte";
                     break;
                 default:
@@ -222,10 +221,12 @@ public class Tools {
                     output.insert(0, "!byte ");
                     break;
                 case ConstantsR64.COMPILER_64TASS:
+                case ConstantsR64.COMPILER_CA65:
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                     output.insert(0, ".byte ");
                     break;
             }
+            // TODO CA65 startadresse?
             switch (editorPanes.getActiveCompiler()) {
                 case ConstantsR64.COMPILER_ACME:
                 case ConstantsR64.COMPILER_64TASS:

@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.1 (Build 20140512)";
+    public static final String BUILD_VERSION = "3.0.1 (Build 20140513)";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -117,7 +117,9 @@ public class ConstantsR64 {
     
     public static final String DEFAULT_ACME_PARAM = "--outfile "+ConstantsR64.ASSEMBLER_OUPUT_FILE+" --format cbm "+ConstantsR64.ASSEMBLER_INPUT_FILE;
     public static final String DEFAULT_64TASS_PARAM = "-C -a -i "+ConstantsR64.ASSEMBLER_INPUT_FILE+" -o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
+    public static final String DEFAULT_CA65_PARAM = "-o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
     public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ConstantsR64.ASSEMBLER_START_ADDRESS+" "+ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ConstantsR64.ASSEMBLER_COMPRESSED_FILE;    
+    public static final String DEFAULT_KICKASS_PARAM = ConstantsR64.ASSEMBLER_INPUT_FILE;
     
     public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";

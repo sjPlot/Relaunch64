@@ -1063,6 +1063,38 @@ public class SyntaxScheme {
                 compilerKeywords.put(".XL", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".XS", DEFAULT_COMPILER_KEYWORD);
                 break;
+            // TODO ergänzen
+            case ConstantsR64.COMPILER_CA65:
+                compilerKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ASSERT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".CASE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".CHARMAP", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DATA", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DSTRUCTOR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DWORD", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ELSE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ELSIF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".END", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDENUM", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDIF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDMAC", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDMACRO", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDPROC", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDSCOPE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENDSTRUCT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ENUM", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ERROR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".IF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".INCLUDE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".MACRO", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".PROC", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".REPATT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".SEGMENT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".STRUCT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".WARNING", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
+                break;
         }
         return compilerKeywords;
     }    
