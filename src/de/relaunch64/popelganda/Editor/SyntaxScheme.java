@@ -760,6 +760,7 @@ public class SyntaxScheme {
                 str = ",;:{}()[]+-/<=>&|^~*";
                 break;
             case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
                 str = ",:{}()[]+-/<=>&|^~*";
                 break;
         }
@@ -775,6 +776,7 @@ public class SyntaxScheme {
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
             case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
                 str = ";";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -796,6 +798,7 @@ public class SyntaxScheme {
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
             case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
                 str = ".";
                 break;
         }

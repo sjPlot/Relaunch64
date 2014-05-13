@@ -190,6 +190,9 @@ public class FunctionExtractor {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
                 scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_KICKASS));
                 break;
+            case ConstantsR64.COMPILER_64TASS:
+                scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_64TASS));
+                break;
         }
         // check for valid values
         if (!scripts.isEmpty()) {
@@ -310,6 +313,7 @@ public class FunctionExtractor {
         switch (compiler) {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
             case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
             default:
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
         }

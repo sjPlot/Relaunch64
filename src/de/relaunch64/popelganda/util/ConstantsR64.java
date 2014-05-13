@@ -128,8 +128,9 @@ public class ConstantsR64 {
     public static final int COMPILER_KICKASSEMBLER = 0;
     public static final int COMPILER_ACME = 1;
     public static final int COMPILER_64TASS = 2;
+    public static final int COMPILER_CA65 = 3;
     // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE
-    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass" };
+    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65" };
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};
@@ -145,4 +146,11 @@ public class ConstantsR64 {
         "signum", "tan", "tanh", "toDegree", "toRadians", "Vector"   
     };
             
+    public static final String[] SCRIPT_KEYWORDS_64TASS = new String[] {
+        "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
+        "deg", "exp", "floor", "frac", "hypot", "log", "log10",
+        "max", "min", "mod", "rad", "round", "sign", "sin", "sinh", "sort",
+        "signum", "tan", "tanh", "trunc", "bool", "len", "all", "any", "str",
+        "repr", "format", "range"
+    };
 }
