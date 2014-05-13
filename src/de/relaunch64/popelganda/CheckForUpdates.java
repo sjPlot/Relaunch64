@@ -93,7 +93,7 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         }
         else {
             // log latest available build
-            if (updateBuildNr!=null) ConstantsR64.r64logger.log(Level.INFO, ("Latest available Relaunch64-build: "+updateBuildNr));
+            if (updateBuildNr!=null) ConstantsR64.r64logger.log(Level.INFO, ("Latest stable Relaunch64-build: "+updateBuildNr));
         }
     }
 }

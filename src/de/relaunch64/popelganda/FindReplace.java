@@ -64,10 +64,10 @@ public class FindReplace {
     FindReplace() {
         resetValues();
     }
-    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx) {
-        initValues(ft, rt, at, ep, isRegEx, false);
+    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx, boolean wholeWord, boolean matchCase) {
+        initValues(ft, rt, at, ep, isRegEx, wholeWord, matchCase, false);
     }
-    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx, boolean forceInit) {
+    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx, boolean wholeWord, boolean matchCase, boolean forceInit) {
         boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
                                (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
         findText = ft;
@@ -80,7 +80,7 @@ public class FindReplace {
         updateContent();
         // if user has done many changes, reset matcher
         if (oldContent!=null && content!=null && (Math.abs(oldContent.length()-content.length())>1)) forceInit = true;
-        if (newFindTerm || forceInit) initmatcher(isRegEx);
+        if (newFindTerm || forceInit) initmatcher(isRegEx, wholeWord, matchCase);
     }
     /**
      * 
@@ -94,7 +94,7 @@ public class FindReplace {
      * 
      * @return 
      */
-    private boolean initmatcher(boolean isRegEx) {
+    private boolean initmatcher(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         Matcher findmatcher;
         // retrieve findtext
         String text = findText;
@@ -113,22 +113,29 @@ public class FindReplace {
         lastActiveTab = activeTab;
         // create find pattern
         Pattern p;
-        // check if we have regular expression or not
-        if (isRegEx) {
-            try {
-                // create a pattern from the first search term. try to compile
-                // it, thus considering as a regular expression term
-                p = Pattern.compile(text);
-            }
-            catch (PatternSyntaxException e) {
-                // if compiling failed, consider it as usual (non reg ex)
-                // search term and re-compile pattern.
-                text = Pattern.quote(text);
-                p = Pattern.compile(text);
-            }
+        // check whether the user wants to find a regular expression or not
+        // if not, prepare findterm and surround it with the regular expressions
+        // for whole word and matchcase.
+        if (!isRegEx) {
+            // if the findterm contains meta-chars of a regular expression, although no regular
+            // expression search is requested, escape all these meta-chars...
+            text = Pattern.quote(text);
+            // when we have a whole-word-find&replace, surround findterm with
+            // the regular expression that indicates word beginning and ending (i.e. whole word)
+            if (wholeWord) text = "\\b"+text+"\\b";
+            // when the find & replace is *not* case-sensitive, set regular expression
+            // to ignore the case...
+            if (!matchCase) text = "(?i)"+text;
+            // the final findterm now might look like this:
+            // "(?i)\\b<findterm>\\b", in case we ignore case and have whole word search
         }
-        else {
-            // consider search term as usual (non reg ex)
+        try {
+            // create a pattern from the first search term. try to compile
+            // it, thus considering as a regular expression term
+            p = Pattern.compile(text);
+        }
+        catch (PatternSyntaxException e) {
+            // if compiling failed, consider it as usual (non reg ex)
             // search term and re-compile pattern.
             text = Pattern.quote(text);
             p = Pattern.compile(text);
@@ -151,12 +158,14 @@ public class FindReplace {
     /**
      * 
      * @param isRegEx
+     * @param wholeWord
+     * @param matchCase
      * @return 
      */
-    public boolean findNext(boolean isRegEx) {
+    public boolean findNext(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         // when we have no founds or when the user changed the tab, init matcher
         if (findselections.isEmpty() || lastActiveTab!=activeTab) {
-            initmatcher(isRegEx);
+            initmatcher(isRegEx, wholeWord, matchCase);
         }
         // check whether we have any found at all
         if (findselections.size()>0) {
@@ -227,13 +236,13 @@ public class FindReplace {
         }
         return true;
     }
-    public boolean replace(boolean isRegEx) {
+    public boolean replace(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         if (editorPane.getText()!=null) {
             if (editorPane.getSelectedText()!=null) {
                 editorPane.replaceSelection(replaceText);
             }
-            if (initmatcher(isRegEx)) {
-                findNext(isRegEx);
+            if (initmatcher(isRegEx, wholeWord, matchCase)) {
+                findNext(isRegEx, wholeWord, matchCase);
             }
             else {
                 resetValues();
@@ -246,8 +255,8 @@ public class FindReplace {
         }
         return true;
     }
-    public void replaceAll(boolean isRegEx) {
-        if (initmatcher(isRegEx)) {
+    public void replaceAll(boolean isRegEx, boolean wholeWord, boolean matchCase) {
+        if (initmatcher(isRegEx, wholeWord, matchCase)) {
             for (int cnt=findselections.size()-1;cnt>=0; cnt--) {
                 editorPane.setSelectionStart(findselections.get(cnt)[0]);
                 editorPane.moveCaretPosition(findselections.get(cnt)[1]);

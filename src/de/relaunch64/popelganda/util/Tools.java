@@ -19,7 +19,17 @@ package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.SyntaxScheme;
+import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 /**
@@ -248,5 +258,192 @@ public class Tools {
             } 
         }
         return counter;
+    }
+    public static List<File> drop(DropTargetDropEvent dtde, EditorPanes editorPanes) {
+        List<File> openRemainingFiles = new ArrayList<>();
+        // 
+        boolean validDropLocation = false;
+        // get transferable
+        Transferable tr = dtde.getTransferable();
+        try {
+            // check whether we have files dropped into textarea
+            if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                // drag&drop was link action
+                dtde.acceptDrop(DnDConstants.ACTION_LINK | DnDConstants.ACTION_COPY_OR_MOVE);
+                // retrieve drop component
+                Component c = dtde.getDropTargetContext().getDropTarget().getComponent();
+                // check for valid value
+                if (c!=null) {
+                    // retrieve component's name
+                    String name = c.getName();
+                    // check for valid value
+                    if (name!=null && !name.isEmpty()) {
+                        // check if files were dropped in entry field
+                        // in this case, image files will we inserted into
+                        // the entry, not attached as attachments
+                        if (name.equalsIgnoreCase("jEditorPaneMain")) {
+                            validDropLocation = true;
+                        }
+                        else {
+                            ConstantsR64.r64logger.log(Level.WARNING,"No valid drop location, drop rejected");
+                            dtde.rejectDrop();
+                        }
+                    }
+                }
+                // retrieve list of dropped files
+                java.util.List files = (java.util.List)tr.getTransferData(DataFlavor.javaFileListFlavor);
+                // check for valid values
+                if (files!=null && files.size()>0) {
+                    // create list with final image files
+                    List<File> anyfiles = new ArrayList<>();
+                    List<File> includefiles = new ArrayList<>();
+                    List<File> linkedfiles = new ArrayList<>();
+                    // dummy
+                    File file;
+                    for (Object file1 : files) {
+                        // get each single object from droplist
+                        file = (File) file1;
+                        // check whether it is a file
+                        if (file.isFile()) {
+                            // if we have link action, only insert paths
+                            if (dtde.getDropAction()==DnDConstants.ACTION_LINK && validDropLocation) {
+                                linkedfiles.add(file);
+                            }
+                            // if it's an asm, add it to asm file list
+                            else if (FileTools.hasValidFileExtension(file) && validDropLocation) {
+                                // if so, add it to list
+                                anyfiles.add(file);
+                            }
+                            // if it's an include file, add it to include file list
+                            else if (FileTools.hasValidIncludeFileExtension(file) && validDropLocation) {
+                                // if so, add it to list
+                                includefiles.add(file);
+                            }
+                        }
+                    }
+                    // check if we have any valid values,
+                    // i.e. any files have been dragged and dropped
+                    // if so, include files
+                    if (linkedfiles.size()>0) {
+                        for (File f : linkedfiles) {
+                            String rf = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                            editorPanes.insertString("\""+rf+"\""+System.getProperty("line.separator"));
+                        }
+                    }
+                    // check if we have any valid values,
+                    // i.e. any files have been dragged and dropped
+                    // if so, include files
+                    if (includefiles.size()>0) {
+                        for (File f : includefiles) {
+                            String insert = "";
+                            // if user hold down ctrl-key, import bytes from file
+                            if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
+                                insert = Tools.getByteTableFromFile(f, editorPanes.getActiveCompiler());
+                            }
+                            // else use include-directive
+                            else {
+                                // retrieve relative path of iimport file
+                                String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                                if (FileTools.getFileExtension(f).equalsIgnoreCase("bin")) {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".INCBIN \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                    }
+                                }
+                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import text \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".INCBIN \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                    }
+                                }
+                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64")) {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\",,2"+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import c64 \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".INCBIN \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            break;
+                                    }
+                                }
+                            }
+                            editorPanes.insertString(insert);
+                        }
+                    }
+                    // check if we have any valid values,
+                    // i.e. any files have been dragged and dropped
+                    // if so, open asm files
+                    if (anyfiles.size()>0) {
+                        for (File f : anyfiles) {
+                            // if user hold down ctrl-key, use import-directive for asm-files
+                            if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
+                                String insert = "";
+                                String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                                switch (editorPanes.getActiveCompiler()) {
+                                    case ConstantsR64.COMPILER_ACME:
+                                        insert = "!src \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_CA65:
+                                        insert = ".INCLUDE \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_64TASS:
+                                        insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                }
+                                editorPanes.insertString(insert);
+                            }
+                            else {
+                                // else open files
+                                openRemainingFiles.add(f);
+                            }
+                        }
+                        /**
+                         * JDK 8 Lamda
+                         */
+//                        anyfiles.stream().forEach((f) -> {
+//                            openFile(f);
+//                        });
+                    }
+                }
+                dtde.getDropTargetContext().dropComplete(true);
+            } else {
+                ConstantsR64.r64logger.log(Level.WARNING,"DataFlavor.javaFileListFlavor is not supported, drop rejected");
+                dtde.rejectDrop();
+            }
+        }
+        catch (IOException | UnsupportedFlavorException ex) {
+            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+            dtde.rejectDrop();
+        }
+        return openRemainingFiles;
     }
 }

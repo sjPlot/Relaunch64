@@ -53,13 +53,11 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -73,12 +71,7 @@ import javax.swing.UIDefaults;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
 import javax.swing.text.Element;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.StyledEditorKit;
-import javax.swing.text.Utilities;
 
 /**
  *
@@ -104,6 +97,9 @@ public class EditorPanes {
     private static final int SUGGESTION_MACRO = 3;
     private static final int SUGGESTION_FUNCTION_MACRO = 4;
     private static final int SUGGESTION_FUNCTION_MACRO_SCRIPT = 5;
+    
+    public static final int DIRECTION_NEXT = 0;
+    public static final int DIRECTION_PREV = 1;
 
     /**
      * @author Guillaume Polet
@@ -165,7 +161,7 @@ public class EditorPanes {
      */
     public int addEditorPane(JEditorPane editorPane, File fp, String content, int c, int script) {
         // set syntax scheme
-        setSyntaxScheme(editorPane, c);
+        editorPane = EditorPaneTools.setSyntaxScheme(editorPane, settings, c);
         // set backcolor
         // we need this hack for Nimbus LaF,
         // see http://stackoverflow.com/questions/22674575/jtextpane-background-color
@@ -272,7 +268,7 @@ public class EditorPanes {
             }
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 // after enter-key, insert tabs automatically to match text start to column of previous line
-                if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) autoInsertTab();
+                if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) EditorPaneTools.autoInsertTab(getActiveEditorPane());
                 // if enter-key should not auto-insert tab, do nothing
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
                 // ctrl+space opens label-auto-completion
@@ -348,40 +344,6 @@ public class EditorPanes {
         return editorPaneArray.size();
     }
     /**
-     * This method automatically inserts tab or spaces after the user pressed enter key.
-     * Automatic indention of caret position.
-     */
-    private void autoInsertTab() {
-        JEditorPane ep = getActiveEditorPane();
-        try {
-            int caret = ep.getCaretPosition();
-            // get start offset of current row
-            int rowstart = Utilities.getRowStart(ep, caret);
-            // get start offset of previous row
-            int prevrow = Utilities.getRowStart(ep, rowstart-1);
-            // if we have a valid value, go on
-            if (prevrow>=0) {
-                int offlen = rowstart-prevrow;
-                // get line string
-                String line = ep.getText(prevrow, offlen);
-                StringBuilder tabs = new StringBuilder("");
-                // iterate line string and read amount of leading spaces / tabs
-                for (int i=0; i<offlen; i++) {
-                    // get each char
-                    char c = line.charAt(i);
-                    if (' '==c || '\t'==c) {
-                        tabs.append(c);
-                    }
-                    else {
-                        break;
-                    }
-                }
-                ep.getDocument().insertString(caret, tabs.toString(), null);
-            }
-        } catch (BadLocationException ex) {
-        }
-    }
-    /**
      * Get the current row from caret position in acitvated editor pane (source code).
      * @return The row number of the caret from the current source code.
      */
@@ -454,7 +416,7 @@ public class EditorPanes {
      */
     public void gotoLineFromCaret(int caretpos) {
         JEditorPane ep = getActiveEditorPane();
-        gotoLine(ep, getRow(ep, caretpos));
+        EditorPaneTools.gotoLine(ep, getRow(ep, caretpos));
     }
     /**
      * Scrolls the currently active source code to the line {@code line}.
@@ -463,52 +425,7 @@ public class EditorPanes {
      * @return {@code true} if the goto was successful.
      */
     public boolean gotoLine(int line) {
-        return gotoLine(getActiveEditorPane(), line);
-    }
-    /**
-     * Scrolls the source code of the editor pane {@code ep} to the line {@code line}.
-     * This functions tries to show at least 10 lines before and after the destination
-     * line where to go, thus scrolling the goto-line to somewhat the middle of the screen.
-     * 
-     * @param ep A JEdiorPane with the source, typically retrieved via
-     * {@link #getActiveEditorPane()} or {@link #getEditorPaneProperties(selectedTab).getEditorPane()}
-     * @param line The line where the to scroll within the source code.
-     * @return {@code true} if the goto was successful.
-     */
-    public boolean gotoLine(JEditorPane ep, int line) {
-        if (line>0) {
-            line--;
-            if (ep!=null) {
-                try {
-                    // retrieve element and check whether line is inside bounds
-                    Element e = ep.getDocument().getDefaultRootElement().getElement(line);
-                    if (e!=null) {
-                        // retrieve caret of requested line
-                        int caret = e.getStartOffset();
-                        // set new caret position
-                        ep.setCaretPosition(caret);
-                        // scroll rect to visible
-                        ep.scrollRectToVisible(ep.modelToView(caret));
-                        // scroll some lines back, if possible
-                        e = ep.getDocument().getDefaultRootElement().getElement(line-10);
-                        if (e!=null) caret = e.getStartOffset();
-                        // scroll rect to visible
-                        ep.scrollRectToVisible(ep.modelToView(caret));
-                        // scroll some lines further, if possible
-                        e = ep.getDocument().getDefaultRootElement().getElement(line+10);
-                        if (e!=null) caret = e.getStartOffset();
-                        // scroll rect to visible
-                        ep.scrollRectToVisible(ep.modelToView(caret));
-                        // request focus
-                        ep.requestFocusInWindow();
-                        return true;
-                    }
-                }
-                catch(BadLocationException | IllegalArgumentException | IndexOutOfBoundsException ex) {
-                }
-            }
-        }
-        return false;
+        return EditorPaneTools.gotoLine(getActiveEditorPane(), line);
     }
     /**
      * Undoes the last edit action.
@@ -605,42 +522,6 @@ public class EditorPanes {
             editorPaneProp.setUndoManager(null);
         }
     }
-    /**
-     * 
-     * @param editorPane
-     * @param c 
-     */
-    private JEditorPane setSyntaxScheme(JEditorPane editorPane, int c) {
-        // declare compiler var as final
-        final int compiler = c;
-        // get hash map with keywords
-        final HashMap<String, MutableAttributeSet> kw = SyntaxScheme.getKeywordHashMap();
-        // get hash map with compiler specific keywords
-        final HashMap<String, MutableAttributeSet> ckw = SyntaxScheme.getCompilerKeywordHashMap(compiler);
-        // get hash map with script specific keywords
-        final HashMap<String, MutableAttributeSet> skw = SyntaxScheme.getScriptKeywordHashMap(compiler);
-        // get hash map with illegal opcodes
-        final HashMap<String, MutableAttributeSet> io = SyntaxScheme.getIllegalOpcodeHashMap();
-        // create new editor kit
-        EditorKit editorKit = new StyledEditorKit() {
-            // and set highlight scheme
-            @Override
-            public Document createDefaultDocument() {
-                return new SyntaxHighlighting(kw, ckw, skw, io,
-                                              SyntaxScheme.getFontName(),
-                                              SyntaxScheme.getFontSize(),
-                                              SyntaxScheme.getCommentString(compiler),
-                                              SyntaxScheme.getDelimiterList(compiler),
-                                              SyntaxScheme.getStyleAttributes(),
-                                              compiler,
-                                              settings.getTabWidth());
-            }
-        };
-        // link editorkit to editorpane
-        editorPane.setEditorKitForContentType("text/plain", editorKit);
-        editorPane.setContentType("text/plain");
-        return editorPane;
-    }
 
     public String getCompilerCommentString() {
         return getCompilerCommentString(getActiveCompiler());
@@ -735,7 +616,7 @@ public class EditorPanes {
             // save content, may be deleted due to syntax highlighting
             String text = editorpane.getText();
             // change syntax scheme
-            setSyntaxScheme(editorpane, compiler);
+            editorpane = EditorPaneTools.setSyntaxScheme(editorpane, settings, compiler);
             // set text back
             editorpane.setText(text);
             // add document listener again
@@ -1634,54 +1515,7 @@ public class EditorPanes {
         }
     }
     public void commentLine() {
-        commentLine(getActiveEditorPane(), getActiveCompiler());
-    }
-
-    public void commentLine(JEditorPane ep, int compiler) {
-        // retrieve comment string
-        String commentString = SyntaxScheme.getCommentString(compiler);
-        // check for text selection
-        String selString = ep.getSelectedText();
-        // if we have selection, add tab to each selected line
-        if (selString!=null && !selString.isEmpty()) {
-            // remember selection range
-            int selstart = ep.getSelectionStart();
-            int selend = ep.getSelectionEnd();
-            // retrieve lines
-            String[] lines = selString.split("\n");
-            // count new lines
-            int countNewLines = Tools.countMatches(selString, '\n');
-            // create string builder for new insert string
-            StringBuilder sb = new StringBuilder("");
-            // store difference in length of selection
-            // after adding / removing comment strings
-            int chardiff = 0;
-            // add tab infront of each line
-            for (String l : lines) {
-                // if first char (after possible whitespace) is comment char, 
-                // remove it
-                if (l.trim().startsWith(commentString)) {
-                    // remove comment char
-                    l = l.replaceFirst(Pattern.quote(commentString), "");
-                    chardiff = chardiff-commentString.length();
-                }
-                else {
-                    // else add comment string
-                    l = commentString+l;
-                    chardiff = chardiff+commentString.length();
-                }
-                // append fixed line
-                sb.append(l);
-                // append new line, if needed
-                if (countNewLines>0) sb.append("\n");
-                countNewLines--;
-            }
-            // insert string
-            ep.replaceSelection(sb.toString());
-            // re-select text
-            ep.setSelectionStart(selstart);
-            ep.setSelectionEnd(selend+chardiff);
-        }
+        EditorPaneTools.commentLine(getActiveEditorPane(), getActiveCompiler());
     }
     public int getSelectedTab() {
         return tabbedPane.getSelectedIndex();
@@ -1692,5 +1526,30 @@ public class EditorPanes {
         }
         catch (IndexOutOfBoundsException ex) {
         }
+    }
+    public void gotoNextLabel() {
+        // goto next label
+        gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
+                                                getCurrentLineNumber(),
+                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
+                                                LabelExtractor.getLabelNames(false, false, getActiveSourceCode(), getActiveCompiler())));
+    }
+    public void gotoPrevLabel() {
+        gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_PREV,
+                                                getCurrentLineNumber(),
+                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
+                                                LabelExtractor.getLabelNames(false, false, getActiveSourceCode(), getActiveCompiler())));
+    }
+    public void gotoNextSection() {
+        gotoSection(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
+                                                  getCurrentLineNumber(),
+                                                  SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString()),
+                                                  SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
+    }
+    public void gotoPrevSection() {
+        gotoSection(EditorPaneTools.findJumpToken(DIRECTION_PREV,
+                                                  getCurrentLineNumber(),
+                                                  SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString()),
+                                                  SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
     }
 }

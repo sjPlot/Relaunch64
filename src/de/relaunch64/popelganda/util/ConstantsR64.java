@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.1 (Build 20140513)";
+    public static final String BUILD_VERSION = "3.0.1 (Build 20140514)";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -84,7 +84,10 @@ public class ConstantsR64 {
         new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_08.png")),
         new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_09.png")),
         new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_10.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_11.png"))
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_11.png")),
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_12.png")),
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_13.png")),
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_14.png"))
     };
     
     public static final String STRING_NORMAL = "normal";

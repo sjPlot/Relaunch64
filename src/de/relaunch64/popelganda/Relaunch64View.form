@@ -50,7 +50,7 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTabbedPane1" pref="546" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane1" pref="511" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jPanelFind" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -106,25 +106,43 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextFieldFind" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jCheckBoxRegEx" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButtonFindPrev" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButtonFindNext" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="jCheckBoxRegEx" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jCheckBoxWholeWord" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jCheckBoxMatchCase" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jTextFieldFind" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButtonFindPrev" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButtonFindNext" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="2" attributes="0">
-                              <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldFind" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButtonFindPrev" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButtonFindNext" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxRegEx" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="2" attributes="0">
+                                  <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldFind" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButtonFindPrev" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButtonFindNext" alignment="2" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jCheckBoxRegEx" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxWholeWord" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxMatchCase" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -168,10 +186,26 @@
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="jCheckBoxRegEx">
                       <Properties>
-                        <Property name="mnemonic" type="int" value="103"/>
+                        <Property name="mnemonic" type="int" value="120"/>
                         <Property name="text" type="java.lang.String" resourceKey="jCheckBoxRegEx.text"/>
                         <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxRegEx.toolTipText"/>
                         <Property name="name" type="java.lang.String" value="jCheckBoxRegEx" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxWholeWord">
+                      <Properties>
+                        <Property name="mnemonic" type="int" value="119"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jCheckBoxWholeWord.text"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxWholeWord.toolTipText"/>
+                        <Property name="name" type="java.lang.String" value="jCheckBoxWholeWord" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxMatchCase">
+                      <Properties>
+                        <Property name="mnemonic" type="int" value="99"/>
+                        <Property name="text" type="java.lang.String" resourceKey="jCheckBoxMatchCase.text"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxMatchCase.toolTipText"/>
+                        <Property name="name" type="java.lang.String" value="jCheckBoxMatchCase" noResource="true"/>
                       </Properties>
                     </Component>
                   </SubComponents>
