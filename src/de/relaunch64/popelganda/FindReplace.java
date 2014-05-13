@@ -89,6 +89,9 @@ public class FindReplace {
         // init list where we store the start/end-positions of the found terms
         findselections.clear();
         findpos = -1;
+        content = "";
+        findText = "";
+        replaceText = "";
     }
     /**
      * 

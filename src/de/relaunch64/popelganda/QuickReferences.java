@@ -63,8 +63,8 @@ public class QuickReferences extends javax.swing.JDialog {
         getRootPane().registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
         // init content
         InputStream is = null;
-        javax.swing.JTextArea[] ta = new javax.swing.JTextArea[] {jTextArea1, jTextArea2, jTextArea3, jTextArea4, jTextArea5};
-        String[] refs = new String[] {"Vic-Register.txt", "Soundchip-Belegung.txt", "Rasterzeilen-Angaben.txt", "C64Fli.txt", "C64MemMap.txt"};
+        javax.swing.JTextArea[] ta = new javax.swing.JTextArea[] {jTextArea1, jTextArea2, jTextArea3, jTextArea4, jTextArea5, jTextArea6};
+        String[] refs = new String[] {"Vic-Register.txt", "Soundchip-Belegung.txt", "Rasterzeilen-Angaben.txt", "C64Fli.txt", "C64MemMap.txt", "C64ColorRam.txt"};
         try { 
             for (int cnt=0; cnt<refs.length; cnt++) {
                 is = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResourceAsStream("/de/relaunch64/popelganda/resources/quickref/"+refs[cnt]);
@@ -120,6 +120,9 @@ public class QuickReferences extends javax.swing.JDialog {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextArea5 = new javax.swing.JTextArea();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTextArea6 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(QuickReferences.class);
@@ -233,6 +236,27 @@ public class QuickReferences extends javax.swing.JDialog {
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
 
+        jPanel6.setName("jPanel6"); // NOI18N
+
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
+
+        jTextArea6.setWrapStyleWord(true);
+        jTextArea6.setName("jTextArea6"); // NOI18N
+        jScrollPane6.setViewportView(jTextArea6);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -253,16 +277,19 @@ public class QuickReferences extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
     private javax.swing.JTextArea jTextArea5;
+    private javax.swing.JTextArea jTextArea6;
     // End of variables declaration//GEN-END:variables
 }

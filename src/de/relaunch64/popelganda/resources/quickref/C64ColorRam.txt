@@ -1,4 +1,4 @@
-Color-Ram und CIA
+Color-Ram and CIA
 
 
 D800-DBFF	55296-56319	Color RAM (Nybbles)

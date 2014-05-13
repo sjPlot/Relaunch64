@@ -1330,7 +1330,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                    jCheckBoxRegEx.isSelected(),
                                    jCheckBoxWholeWord.isSelected(),
                                    jCheckBoxMatchCase.isSelected());
-            jTextFieldReplace.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+            jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
         }
     }
     private void replaceCancel() {
