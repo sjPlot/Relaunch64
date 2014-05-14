@@ -109,6 +109,7 @@ public class ConstantsR64 {
     public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
     public static final String STRING_MACRO_KICKASSEMBLER = ".macro";
     public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()";
+    public static final String STRING_STRUCT_CA65 = ".struct";
     
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
     public static final int DEFAULT_FONT_SIZE = 13;
