@@ -602,9 +602,9 @@ public class EditorPanes {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(selectedTab);
             // change syntax scheme for recent docs
-            if(getActiveFilePath()!=null) {
-                int rd = settings.findRecentDoc(getActiveFilePath().getPath());
-                settings.setRecentDoc(rd, getActiveFilePath().getPath(), compiler, script);
+            if(getFilePath(selectedTab)!=null) {
+                int rd = settings.findRecentDoc(getFilePath(selectedTab).getPath());
+                settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), compiler, script);
             }
             // disable undo/redo events
             // ep.getUndoManager().enableRegisterUndoEvents(false);

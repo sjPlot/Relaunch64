@@ -15,6 +15,7 @@ Relaunch64 3.0.1
 * added checkboxes for whole-word and match-case search
 * added syntax highlighting for scripting commands (Kick Assembler, 64tass)
 * added new syntax highlighting color schemes
+* slight modification of C64 scheme
 
 ### Bug fixes
 * bug fix with "Jump to label" function with Kick Assembler

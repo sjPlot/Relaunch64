@@ -87,7 +87,9 @@ public class ConstantsR64 {
         new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_11.png")),
         new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_12.png")),
         new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_13.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_14.png"))
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_14.png")),
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_15.png")),
+        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_16.png"))
     };
     
     public static final String STRING_NORMAL = "normal";

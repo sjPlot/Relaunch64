@@ -1,4 +1,5 @@
 FLI picture
+===========
 
 $4000-$4400 = 1. raster line of cursor rows
 $4400-$4800 = 2. raster line of cursor rows
@@ -22,24 +23,52 @@ $6158-$6160 = set bits of 4. char from 2. row
 ...
 
 
-$4000-$6000 = Farben des Bildes aus $d018
-$6000-$8c00 = Bitkombinationen des Bildes, also: welche der 4 Pixel welche Farbe aus $d018 haben soll
+$4000-$6000 = Colors of picture from $d018
+$6000-$8c00 = bit-combination of picture, i.e.: which of the 4 pixels should have which color from $d018
 
 
-
-Werte aus $d018:
-
-%0000 	0000
-hi-byte	lo-byte
-1. Farbe	2. Farbe
+Values from $d018:
+%0000 		0000
+hi-byte		lo-byte
+1. Color 	2. Color
 
 
-
-Bitkombinationen $6000-$8000
-
+bit-combinations $6000-$8000
 %00 00 00 00
-4 Pixelfarben (Multicolor = 4 Pixel)
+4 pixel colors (multicolor = 4 pixel)
 00 = $d021
 01 = hi-byte $d018
 10 = lo-byte $d018
 11 = $d800
+
+
+FULL-SCREEN-FLI TIMING
+======================
+(Screens: 2. cursor row. Matrix at: $6140-$6280)
+
+from raster line $32
+8 cycles
+lda $d012
+and #7
+ora #16
+sta $d011
+57 cycles
+(then Fli-Route)
+
+Example:
+	#$32 in $d012
+
+	inc $d019
+	nop
+	lda $d012
+	and #7
+	ora #$10
+	sta $d011
+	lda #2
+	sta $dd00
+	ldy #10
+-loop	dey
+	bne loop
+	lda #$3c
+	sta $d011
+	...
