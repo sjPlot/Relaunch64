@@ -108,6 +108,7 @@ public class ConstantsR64 {
 
     public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
     public static final String STRING_MACRO_KICKASSEMBLER = ".macro";
+    public static final String STRING_MACRO_DREAMASS = "#macro";
     public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()";
     public static final String STRING_STRUCT_CA65 = ".struct";
     
@@ -116,16 +117,19 @@ public class ConstantsR64 {
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
     
     public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
+    public static final String ASSEMBLER_SOURCE_DIR = "SOURCEDIR";
     public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";
     public static final String ASSEMBLER_START_ADDRESS = "START";
     public static final String ASSEMBLER_UNCOMPRESSED_FILE = "UNCOMPFILE";
     public static final String ASSEMBLER_COMPRESSED_FILE = "COMPFILE";
     
-    public static final String DEFAULT_ACME_PARAM = "--outfile "+ConstantsR64.ASSEMBLER_OUPUT_FILE+" --format cbm "+ConstantsR64.ASSEMBLER_INPUT_FILE;
-    public static final String DEFAULT_64TASS_PARAM = "-C -a -i "+ConstantsR64.ASSEMBLER_INPUT_FILE+" -o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
-    public static final String DEFAULT_CA65_PARAM = "-o "+ConstantsR64.ASSEMBLER_OUPUT_FILE;
-    public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ConstantsR64.ASSEMBLER_START_ADDRESS+" "+ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ConstantsR64.ASSEMBLER_COMPRESSED_FILE;    
-    public static final String DEFAULT_KICKASS_PARAM = ConstantsR64.ASSEMBLER_INPUT_FILE;
+    public static final String DEFAULT_ACME_PARAM = "--outfile "+ASSEMBLER_OUPUT_FILE+" --format cbm "+ASSEMBLER_INPUT_FILE;
+    public static final String DEFAULT_DREAMASS_PARAM = "-I"+ASSEMBLER_SOURCE_DIR+" -o "+ASSEMBLER_OUPUT_FILE+" "+ASSEMBLER_INPUT_FILE;
+    public static final String DEFAULT_64TASS_PARAM = "-C -a -i "+ASSEMBLER_INPUT_FILE+" -o "+ASSEMBLER_OUPUT_FILE;
+    public static final String DEFAULT_CA65_PARAM = "-o "+ASSEMBLER_OUPUT_FILE;
+    public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ASSEMBLER_START_ADDRESS+" "+ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ASSEMBLER_COMPRESSED_FILE;    
+    public static final String DEFAULT_PUCRUNCH_PARAM = ASSEMBLER_UNCOMPRESSED_FILE+" "+ASSEMBLER_COMPRESSED_FILE+" -x"+ASSEMBLER_START_ADDRESS;
+    public static final String DEFAULT_KICKASS_PARAM = ASSEMBLER_INPUT_FILE;
     
     public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";
@@ -137,11 +141,12 @@ public class ConstantsR64 {
     public static final int COMPILER_ACME = 1;
     public static final int COMPILER_64TASS = 2;
     public static final int COMPILER_CA65 = 3;
+    public static final int COMPILER_DREAMASS = 4;
     // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE
-    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65" };
+    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65", "DreamAss" };
     
-    public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm"};
-    public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt"};
+    public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".src", ".s"};
+    public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff"};
     
     public static final String[] SCRIPT_KEYWORDS_KICKASS = new String[] {
         ".add", ".asNumber", ".asBoolean", ".charAt", ".get", ".getData", ".getPixel",

@@ -754,14 +754,13 @@ public class SyntaxScheme {
         String str = ",;:{}()[]+-/%<=>&!|^~*";
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.COMPILER_DREAMASS:
                 str = ",:{}()[]+-/<=>&|^~*";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
                 str = ",;:{}()[]+-/<=>&|^~*";
-                break;
-            case ConstantsR64.COMPILER_64TASS:
-            case ConstantsR64.COMPILER_CA65:
-                str = ",:{}()[]+-/<=>&|^~*";
                 break;
         }
         return str;
@@ -777,6 +776,7 @@ public class SyntaxScheme {
             case ConstantsR64.COMPILER_ACME:
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.COMPILER_DREAMASS:
                 str = ";";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -800,6 +800,9 @@ public class SyntaxScheme {
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
                 str = ".";
+                break;
+            case ConstantsR64.COMPILER_DREAMASS:
+                str = "#";
                 break;
         }
         return str;
@@ -1063,7 +1066,6 @@ public class SyntaxScheme {
                 compilerKeywords.put(".XL", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".XS", DEFAULT_COMPILER_KEYWORD);
                 break;
-            // TODO ergänzen
             case ConstantsR64.COMPILER_CA65:
                 compilerKeywords.put(".A16", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".A8", DEFAULT_COMPILER_KEYWORD);
@@ -1167,6 +1169,48 @@ public class SyntaxScheme {
                 compilerKeywords.put(".WARNING", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".ZEROPAGE", DEFAULT_COMPILER_KEYWORD);
+                break;
+            case ConstantsR64.COMPILER_DREAMASS:
+                compilerKeywords.put(".BINCLUDE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DB", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DW", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".PET", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DP", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".SCR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DS", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".SEGMENT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".SETPET", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".SETSCR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".DSB", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".(", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".)", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".PSEUDOPC", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put(".REALPC", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ERROR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#IF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#IFDEF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#IFFILE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#IFNDEF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#IFNFILE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ELSIF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ELSIFDEF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ELSIFFILE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ELSIFNDEF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ELSIFNFILE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ELSE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#ENDIF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#INCLUDE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#MACRO", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#OUTFILE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#PRINT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#SEGDEF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("#WARNING", DEFAULT_COMPILER_KEYWORD);
                 break;
         }
         return compilerKeywords;

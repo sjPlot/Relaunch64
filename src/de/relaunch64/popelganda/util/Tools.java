@@ -120,6 +120,7 @@ public class Tools {
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                 case ConstantsR64.COMPILER_64TASS:
+                case ConstantsR64.COMPILER_DREAMASS:
                 case ConstantsR64.COMPILER_CA65:
                     byteToken = ".byte";
                     break;
@@ -233,6 +234,7 @@ public class Tools {
                 case ConstantsR64.COMPILER_64TASS:
                 case ConstantsR64.COMPILER_CA65:
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
+                case ConstantsR64.COMPILER_DREAMASS:
                     output.insert(0, ".byte ");
                     break;
             }
@@ -240,7 +242,9 @@ public class Tools {
             switch (editorPanes.getActiveCompiler()) {
                 case ConstantsR64.COMPILER_ACME:
                 case ConstantsR64.COMPILER_64TASS:
-                    output.insert(0, "*= $0801"+System.getProperty("line.separator"));
+                case ConstantsR64.COMPILER_CA65:
+                case ConstantsR64.COMPILER_DREAMASS:
+                    output.insert(0, "*=$0801"+System.getProperty("line.separator"));
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                     output.insert(0, ".pc = $0801"+System.getProperty("line.separator"));
@@ -344,23 +348,7 @@ public class Tools {
                             else {
                                 // retrieve relative path of iimport file
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
-                                if (FileTools.getFileExtension(f).equalsIgnoreCase("bin")) {
-                                    switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.COMPILER_ACME:
-                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
-                                            break;
-                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
-                                            insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
-                                            break;
-                                        case ConstantsR64.COMPILER_CA65:
-                                            insert = ".INCBIN \""+relpath+"\""+System.getProperty("line.separator");
-                                            break;
-                                        case ConstantsR64.COMPILER_64TASS:
-                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
-                                            break;
-                                    }
-                                }
-                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
+                                if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.COMPILER_ACME:
                                             insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
@@ -369,14 +357,17 @@ public class Tools {
                                             insert = ".import text \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                         case ConstantsR64.COMPILER_CA65:
-                                            insert = ".INCBIN \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_DREAMASS:
+                                            insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                     }
                                 }
-                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64")) {
+                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64") || FileTools.getFileExtension(f).equalsIgnoreCase("prg")) {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.COMPILER_ACME:
                                             insert = "!bin \""+relpath+"\",,2"+System.getProperty("line.separator");
@@ -385,13 +376,36 @@ public class Tools {
                                             insert = ".import c64 \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                         case ConstantsR64.COMPILER_CA65:
-                                            insert = ".INCBIN \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            insert = ".incbin \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_DREAMASS:
+                                            insert = ".binclude \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
                                     }
                                 }
+                                else {
+                                    switch (editorPanes.getActiveCompiler()) {
+                                        case ConstantsR64.COMPILER_ACME:
+                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                            insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_CA65:
+                                            insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_DREAMASS:
+                                            insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_64TASS:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                    }
+                                }
+                                
                             }
                             editorPanes.insertString(insert);
                         }
@@ -413,10 +427,13 @@ public class Tools {
                                         insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
                                     case ConstantsR64.COMPILER_CA65:
-                                        insert = ".INCLUDE \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = ".include \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
                                     case ConstantsR64.COMPILER_64TASS:
                                         insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_DREAMASS:
+                                        insert = "#include \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
                                 }
                                 editorPanes.insertString(insert);

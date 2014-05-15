@@ -197,7 +197,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     if (method.getName().equals("handleQuit")) {
                         // call the general exit-handler from the desktop-application-api
                         // here we do all the stuff we need when exiting the application
-                        Relaunch64App.getApplication().exit();
+                        // Relaunch64App.getApplication().exit();
                     }
                     if (method.getName().equals("handlePreferences")) {
                         // show settings window
@@ -921,8 +921,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void jumpToLabel() {
         // get word under caret
         String label = editorPanes.getCaretString(true, "");
-        // if we have kick ass, add colon
-        boolean isColonAssembler = (ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler() || ConstantsR64.COMPILER_CA65==editorPanes.getActiveCompiler());
+        // check whether we have an assembler that uses colons at the end of labels
+        boolean isColonAssembler = (ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler() || 
+                                    ConstantsR64.COMPILER_DREAMASS==editorPanes.getActiveCompiler() || 
+                                    ConstantsR64.COMPILER_CA65==editorPanes.getActiveCompiler());
         if (label!=null && isColonAssembler) label = label+":";
         editorPanes.gotoLabel(label);
     }
@@ -1139,6 +1141,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, of);
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, of);
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_SOURCE_DIR, parentFile);
                         // check if we have a cruncher-starttoken
                         String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
                         if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);

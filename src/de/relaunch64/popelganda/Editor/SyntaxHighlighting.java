@@ -729,6 +729,7 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
                 break;
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.COMPILER_DREAMASS:
                 return false;
         }
         return quoteDelimiters.contains(character);

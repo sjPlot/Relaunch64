@@ -79,8 +79,8 @@ public class ErrorHandler {
                 File errf;
                 while ((line = lineReader.readLine())!=null) {
                     err = -1;
-                    // check if line contains error-tokenand line number
-                    // ACME-Syntax
+                    // read out error line
+                    // TODO DreamAss ergänzen
                     switch (compiler) {
                         case ConstantsR64.COMPILER_ACME:
                             err = getErrorLineFromLine(line, "line ");
@@ -135,6 +135,7 @@ public class ErrorHandler {
     protected File getErrorFileFromLine(String line, int compiler) {
         String file = null;
         try {
+            // TODO DreamAss ergänzen
             switch (compiler) {
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                     int start = line.indexOf(" in ");
