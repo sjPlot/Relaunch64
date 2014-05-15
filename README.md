@@ -11,6 +11,7 @@ Relaunch64 3.0.1
 * goto error now scrolls the log to the related line with error description
 * auto-completion for functions, macros and scripting commands (Kick Assembler, 64tass, DreamAss) (press ctrl+shift+space while typing)
 * automatic goto error line when compiling errors occur
+* last 15 recently used find terms will be stored per session
 * added quick references (menu view)
 * added regular expression checkbox to find-command, to explicitly en-/disable search for regular expressions
 * added checkboxes for whole-word and match-case search

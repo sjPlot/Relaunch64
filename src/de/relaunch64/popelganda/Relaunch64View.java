@@ -40,6 +40,7 @@ import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
 import de.relaunch64.popelganda.database.CustomScripts;
+import de.relaunch64.popelganda.database.FindTerms;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.ErrorHandler;
@@ -112,6 +113,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final static int GOTO_MACRO = 4;
     private int comboBoxGotoIndex = -1;
     private final Settings settings;
+    private final FindTerms findTerms;
     private final CustomScripts customScripts;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
@@ -124,6 +126,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init database variables
         settings = set;
         findReplace = new FindReplace();
+        findTerms = new FindTerms();
         customScripts = new CustomScripts();
         errorHandler = new ErrorHandler();
         // load custom scripts
@@ -492,7 +495,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //            // find-index-values are no longer valid
 //            findReplace.resetValues();
 //        });
-        jTextFieldFind.addKeyListener(new java.awt.event.KeyAdapter() {
+        jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
                 if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
@@ -501,6 +504,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
                     findNext();
                 }
+            }
+        });
+        jComboBoxFind.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                jComboBoxFind.removeAllItems();
+                ArrayList<String> ft = findTerms.getFindTerms();
+                if (ft!=null && !ft.isEmpty()) {
+                    for (String i : ft) jComboBoxFind.addItem(i);
+                }
+            }
+            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+            @Override public void popupMenuCanceled(PopupMenuEvent e) {
             }
         });
         jTextFieldReplace.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1260,36 +1276,46 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // make it visible
             jPanelFind.setVisible(true);
         }
-        jTextFieldFind.requestFocusInWindow();
+        jComboBoxFind.requestFocusInWindow();
     }
     @Action
     public void findNext() {
-        findReplace.initValues(jTextFieldFind.getText(), 
-                               jTextFieldReplace.getText(), 
-                               jTabbedPane1.getSelectedIndex(), 
-                               editorPanes.getActiveEditorPane(), 
-                               jCheckBoxRegEx.isSelected(), 
-                               jCheckBoxWholeWord.isSelected(),
-                               jCheckBoxMatchCase.isSelected());
-        jTextFieldFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+        Object ft = jComboBoxFind.getSelectedItem();
+        if (ft!=null) {
+            String findTerm = ft.toString();
+            findTerms.addFindTerm(findTerm, jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected());
+            findReplace.initValues(findTerm, 
+                                   jTextFieldReplace.getText(), 
+                                   jTabbedPane1.getSelectedIndex(), 
+                                   editorPanes.getActiveEditorPane(), 
+                                   jCheckBoxRegEx.isSelected(), 
+                                   jCheckBoxWholeWord.isSelected(),
+                                   jCheckBoxMatchCase.isSelected());
+            jComboBoxFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+        }
     }
     @Action
     public void findPrev() {
-        findReplace.initValues(jTextFieldFind.getText(), 
-                               jTextFieldReplace.getText(), 
-                               jTabbedPane1.getSelectedIndex(), 
-                               editorPanes.getActiveEditorPane(), 
-                               jCheckBoxRegEx.isSelected(),
-                               jCheckBoxWholeWord.isSelected(),
-                               jCheckBoxMatchCase.isSelected());
-        jTextFieldFind.setForeground(findReplace.findPrev() ? Color.black : Color.red);
+        Object ft = jComboBoxFind.getSelectedItem();
+        if (ft!=null) {
+            String findTerm = ft.toString();
+            findTerms.addFindTerm(findTerm, jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected());
+            findReplace.initValues(findTerm, 
+                                   jTextFieldReplace.getText(), 
+                                   jTabbedPane1.getSelectedIndex(), 
+                                   editorPanes.getActiveEditorPane(), 
+                                   jCheckBoxRegEx.isSelected(),
+                                   jCheckBoxWholeWord.isSelected(),
+                                   jCheckBoxMatchCase.isSelected());
+            jComboBoxFind.setForeground(findReplace.findPrev() ? Color.black : Color.red);
+        }
     }
     private void findCancel() {
         // cancel replace
         replaceCancel();
         // reset values
         findReplace.resetValues();
-        jTextFieldFind.setForeground(Color.black);
+        jComboBoxFind.setForeground(Color.black);
         // make it visible
         jPanelFind.setVisible(false);
         // set input focus in main textfield
@@ -1297,7 +1323,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void replaceAll() {
-        findReplace.initValues(jTextFieldFind.getText(), 
+        findReplace.initValues(jComboBoxFind.getSelectedItem().toString(), 
                                jTextFieldReplace.getText(), 
                                jTabbedPane1.getSelectedIndex(), 
                                editorPanes.getActiveEditorPane(),
@@ -1317,8 +1343,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // make it visible
             jPanelReplace.setVisible(true);
             // and set input focus in it
-            if (jTextFieldFind.getText().isEmpty()) {
-                jTextFieldFind.requestFocusInWindow();
+            if (jComboBoxFind.getSelectedItem().toString().isEmpty()) {
+                jComboBoxFind.requestFocusInWindow();
             }
             else {
                 jTextFieldReplace.requestFocusInWindow();
@@ -1326,7 +1352,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         // if textfield is already visible, replace term
         else {
-            findReplace.initValues(jTextFieldFind.getText(), 
+            findReplace.initValues(jComboBoxFind.getSelectedItem().toString(), 
                                    jTextFieldReplace.getText(), 
                                    jTabbedPane1.getSelectedIndex(), 
                                    editorPanes.getActiveEditorPane(),
@@ -1656,13 +1682,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jScrollPaneMainEditorPane = new javax.swing.JScrollPane();
         jEditorPaneMain = new javax.swing.JEditorPane();
         jPanelFind = new javax.swing.JPanel();
-        jTextFieldFind = new javax.swing.JTextField();
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jCheckBoxRegEx = new javax.swing.JCheckBox();
         jCheckBoxWholeWord = new javax.swing.JCheckBox();
         jCheckBoxMatchCase = new javax.swing.JCheckBox();
+        jComboBoxFind = new javax.swing.JComboBox();
         jPanelReplace = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldReplace = new javax.swing.JTextField();
@@ -1807,9 +1833,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanelFind.setName("jPanelFind"); // NOI18N
 
-        jTextFieldFind.setToolTipText(resourceMap.getString("jTextFieldFind.toolTipText")); // NOI18N
-        jTextFieldFind.setName("jTextFieldFind"); // NOI18N
-
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getActionMap(Relaunch64View.class, this);
         jButtonFindPrev.setAction(actionMap.get("findPrev")); // NOI18N
         jButtonFindPrev.setIcon(resourceMap.getIcon("jButtonFindPrev.icon")); // NOI18N
@@ -1822,7 +1845,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonFindNext.setName("jButtonFindNext"); // NOI18N
 
         jLabel5.setDisplayedMnemonic('i');
-        jLabel5.setLabelFor(jTextFieldFind);
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
@@ -1841,6 +1863,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jCheckBoxMatchCase.setToolTipText(resourceMap.getString("jCheckBoxMatchCase.toolTipText")); // NOI18N
         jCheckBoxMatchCase.setName("jCheckBoxMatchCase"); // NOI18N
 
+        jComboBoxFind.setEditable(true);
+        jComboBoxFind.setToolTipText(resourceMap.getString("jComboBoxFind.toolTipText")); // NOI18N
+        jComboBoxFind.setName("jComboBoxFind"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanelFindLayout = new org.jdesktop.layout.GroupLayout(jPanelFind);
         jPanelFind.setLayout(jPanelFindLayout);
         jPanelFindLayout.setHorizontalGroup(
@@ -1856,9 +1882,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         .add(jCheckBoxWholeWord)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jCheckBoxMatchCase)
-                        .add(0, 0, Short.MAX_VALUE))
+                        .add(0, 58, Short.MAX_VALUE))
                     .add(jPanelFindLayout.createSequentialGroup()
-                        .add(jTextFieldFind)
+                        .add(jComboBoxFind, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonFindPrev)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -1870,9 +1896,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             .add(jPanelFindLayout.createSequentialGroup()
                 .add(jPanelFindLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
                     .add(jLabel5)
-                    .add(jTextFieldFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButtonFindPrev)
-                    .add(jButtonFindNext))
+                    .add(jButtonFindNext)
+                    .add(jComboBoxFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanelFindLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jCheckBoxRegEx)
@@ -2579,6 +2605,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JCheckBox jCheckBoxWholeWord;
     private javax.swing.JComboBox jComboBoxCompilers;
+    private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;
     private javax.swing.JEditorPane jEditorPaneMain;
@@ -2632,7 +2659,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JTextField jTextFieldConvBin;
     private javax.swing.JTextField jTextFieldConvDez;
     private javax.swing.JTextField jTextFieldConvHex;
-    private javax.swing.JTextField jTextFieldFind;
     private javax.swing.JTextField jTextFieldGotoLine;
     private javax.swing.JTextField jTextFieldReplace;
     private javax.swing.JMenuItem jumpToLabelMenuItem;

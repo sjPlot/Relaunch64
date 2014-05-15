@@ -113,10 +113,10 @@
                                       <Component id="jCheckBoxWholeWord" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jCheckBoxMatchCase" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="58" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="jTextFieldFind" max="32767" attributes="0"/>
+                                      <Component id="jComboBoxFind" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButtonFindPrev" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -132,9 +132,9 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="2" attributes="0">
                                   <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldFind" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButtonFindPrev" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButtonFindNext" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxFind" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -148,12 +148,6 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JTextField" name="jTextFieldFind">
-                      <Properties>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="jTextFieldFind.toolTipText"/>
-                        <Property name="name" type="java.lang.String" value="jTextFieldFind" noResource="true"/>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JButton" name="jButtonFindPrev">
                       <Properties>
                         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -178,7 +172,7 @@
                       <Properties>
                         <Property name="displayedMnemonic" type="int" value="105"/>
                         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="jTextFieldFind"/>
+                          <ComponentRef name="default"/>
                         </Property>
                         <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
                         <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
@@ -206,6 +200,13 @@
                         <Property name="text" type="java.lang.String" resourceKey="jCheckBoxMatchCase.text"/>
                         <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxMatchCase.toolTipText"/>
                         <Property name="name" type="java.lang.String" value="jCheckBoxMatchCase" noResource="true"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JComboBox" name="jComboBoxFind">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="true"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxFind.toolTipText"/>
+                        <Property name="name" type="java.lang.String" value="jComboBoxFind" noResource="true"/>
                       </Properties>
                     </Component>
                   </SubComponents>
