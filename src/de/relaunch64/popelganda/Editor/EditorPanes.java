@@ -1255,7 +1255,23 @@ public class EditorPanes {
         hideSuggestion();
         try {
             // retrieve chars that have already been typed
-            suggestionSubWord = getCaretString(false, (SUGGESTION_FUNCTION_MACRO_SCRIPT==type) ? "." : "");
+            String macroPrefix = "";
+            if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
+                switch (getActiveCompiler()) {
+                    case ConstantsR64.COMPILER_KICKASSEMBLER:
+                    case ConstantsR64.COMPILER_64TASS:
+                    case ConstantsR64.COMPILER_CA65:
+                        macroPrefix = ".";
+                        break;
+                    case ConstantsR64.COMPILER_ACME:
+                        macroPrefix = "!";
+                        break;
+                    case ConstantsR64.COMPILER_DREAMASS:
+                        macroPrefix = "#";
+                        break;
+                }
+            }
+            suggestionSubWord = getCaretString(false, macroPrefix);
             // check for valid value
             if (null==suggestionSubWord) return;
     //        if (suggestionSubWord.length() < 2) {
@@ -1413,8 +1429,10 @@ public class EditorPanes {
         }
         String addDelim;
         switch (getActiveCompiler()) {
+            // use colon as additional delimiter for following assemblers
             case ConstantsR64.COMPILER_ACME:
             case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_DREAMASS:
                 addDelim = "\n\r:";
                 break;
             default:

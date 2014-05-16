@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.0.1 (Build 20140515)";
+    public static final String BUILD_VERSION = "3.0.1 (Build 20140516)";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -108,6 +108,7 @@ public class ConstantsR64 {
 
     public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
     public static final String STRING_MACRO_KICKASSEMBLER = ".macro";
+    public static final String STRING_MACRO_ACME = "!macro";
     public static final String STRING_MACRO_DREAMASS = "#macro";
     public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()";
     public static final String STRING_STRUCT_CA65 = ".struct";

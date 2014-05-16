@@ -281,10 +281,6 @@ public class FunctionExtractor {
 
     public static LinkedHashMap getFunctionsOrMacros(String funmacString, String source, int compiler) {
         LinkedHashMap<Integer, String> functions = new LinkedHashMap<>();
-        // TODO anpassen, wenn function bekannt
-        if (compiler == ConstantsR64.COMPILER_ACME) {
-            return null;
-        }
         // init vars
         int lineNumber = 0;
         String line;
@@ -302,6 +298,9 @@ public class FunctionExtractor {
                         }
                         if (ConstantsR64.COMPILER_KICKASSEMBLER==compiler && funmacString.equals(getMacroString(compiler))) {
                             keyword = ":"+keyword;
+                        }
+                        if (ConstantsR64.COMPILER_ACME==compiler && funmacString.equals(getMacroString(compiler))) {
+                            keyword = "+"+keyword;
                         }
                         if (!functions.containsValue(keyword)) {
                             functions.put(lineNumber, keyword);
@@ -326,6 +325,8 @@ public class FunctionExtractor {
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
             case ConstantsR64.COMPILER_DREAMASS:
                 return ConstantsR64.STRING_MACRO_DREAMASS;
+            case ConstantsR64.COMPILER_ACME:
+                return ConstantsR64.STRING_MACRO_ACME;
             default:
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
         }

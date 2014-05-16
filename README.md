@@ -7,6 +7,7 @@ Relaunch64 3.0.1
 ### New features
 * added support for CA65
 * added support for DreamAss
+* added ACME macro and math function support
 * goto prev/next error also searches inside included files (even not opened files, which will be opened then)
 * goto error now scrolls the log to the related line with error description
 * auto-completion for functions, macros and scripting commands (Kick Assembler, 64tass, DreamAss) (press ctrl+shift+space while typing)
