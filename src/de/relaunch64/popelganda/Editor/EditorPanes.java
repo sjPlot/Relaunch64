@@ -217,10 +217,17 @@ public class EditorPanes {
                         int selend = ep.getSelectionEnd();
                         // retrieve lines
                         String[] lines = selString.split("\n");
+                        // check if selstring ends with return
+                        boolean clearNewLine = !selString.endsWith("\n");
                         // create string builder for new insert string
                         StringBuilder sb = new StringBuilder("");
                         // add tab infront of each line
-                        for (String l : lines) sb.append("\t").append(l).append("\n");
+                        for (String l : lines) {
+                            // check if we have specific line length
+                            if (!l.isEmpty()) sb.append("\t").append(l).append("\n");
+                        }
+                        // need to remove \n?
+                        if (clearNewLine) sb = sb.deleteCharAt(sb.length()-1);
                         // insert string
                         ep.replaceSelection(sb.toString());
                         // re-select text
@@ -248,15 +255,22 @@ public class EditorPanes {
                         int selend = ep.getSelectionEnd();
                         // retrieve lines
                         String[] lines = selString.split("\n");
+                        // check if selstring ends with return
+                        boolean clearNewLine = !selString.endsWith("\n");
                         // create string builder for new insert string
                         StringBuilder sb = new StringBuilder("");
                         // add tab infront of each line
                         for (String l : lines) {
-                            // remove first tab
-                            l = l.replaceFirst("\t", "");
-                            // append fixex line
-                            sb.append(l).append("\n");
+                            // check if we have any line length
+                            if (!l.isEmpty()) {
+                                // remove first tab
+                                l = l.replaceFirst("\t", "");
+                                // append fixex line
+                                sb.append(l).append("\n");
+                            }
                         }
+                        // need to remove \n?
+                        if (clearNewLine) sb = sb.deleteCharAt(sb.length()-1);
                         // insert string
                         ep.replaceSelection(sb.toString());
                         // re-select text

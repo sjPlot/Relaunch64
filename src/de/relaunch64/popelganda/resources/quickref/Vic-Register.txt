@@ -1,104 +1,123 @@
 Vic-Register ($d000)
-
-$00	x-koordinate für sprite 0
-$01	y-koordinate für sprite 0
-$02	x-koordinate für sprite 1
-$03	y-koordinate für sprite 1
-$04	x-koordinate für sprite 2
-$05	y-koordinate für sprite 2
+--------------------
+$00	x-coordinates for sprite 0
+$01	y-coordinates for sprite 0
+$02	x-coordinates for sprite 1
+$03	y-coordinates for sprite 1
+$04	x-coordinates for sprite 2
+$05	y-coordinates for sprite 2
 ...
-$0e	x-koordinate für sprite 7
-$0f	y-koordinate für sprite 7
+$0e	x-coordinates for sprite 7
+$0f	y-coordinates for sprite 7
 
-$10	bei x-koordinaten über 255 muss das jeweilige bit des sprites gesetzt sein
+$10	x-coordinates larger than 255 must
+        set bits for the related sprites
+        (i.e. bit 1 for first sprite, bit 2 for second etc.)
 
 $11	bit 0-2: up-/downscrolling
-	bit 3: 24/25 zeilen
-	bit 4: screen aus/ein (d.h. screen erhält border-farbe)
+	bit 3: 24/25 rows
+	bit 4: screen off/on (turned off screen gets border color)
 	bit 5: hi-res screen
-	bit 6: extended-color-mode ein/aus (siehe textflashing in noter)
-	bit 7: übertrag aus $d012
+	bit 6: extended-color-mode on/off
+	bit 7: carry bit from $d012
+               (rasterlines large rthan 255)
 
-$12	aktuelle rastezeile (übertrag in bit 7 $d011)
+$12	current raster line (carry bit in bit 7 of $d011)
 
-$13	lightpen x-koordinate
-$14	lightpen y-koordinate
-$15	sprites an/aus (je nachdem, welche bits gesetzt sind)
+$13	lightpen x-coordinates
+$14	lightpen y-coordinates
+$15	sprites on/off (one bit per sprite)
 
 $16	bit 0-2: left-/rightscrolling
-	bit 3: 38/40 spalten
-	bit 4: multicolor an/aus
-	bit 5-7: unbenutzt (bit 5 muss immer 0 sein!)
+	bit 3: 38/40 columns
+	bit 4: multicolor on/off
+	bit 5-7: not used (bit 5 always has to be 0!)
 
-$17	sprite-expand y-richtung
+$17	sprite-expand y-direction
 
-$18	vic-speicherbereiche (gibt an, ab welcher adresse sich der char und screen befindet)
-	bits 0-3:	bereich des chars (wobei bit 0 die lower-/uppercase einstellung des chars setzt)
-			$0000-$0fff	01
-			$1000-$1fff	05
-			$2000-$2fff	09
-			$3000-$3fff	0d
+$18	VIC-bank (indicates start address of char and screen)
+	bits 0-3:	character memory (bit 0 sets lower-/uppercase of char)
+			$0000-$07ff	%000x
+			$0800-$0fff	%001x
+			$1000-$17ff	%010x
+			$1800-$1fff	%011x
+			$2000-$27ff	%100x
+			$2800-$2fff	%101x
+			$3000-$37ff	%110x
+			$3800-$3fff	%111x
 
-	bits 4-7:	bereich des video-rams
-			$0000-$03e7	00
-			$0400-$07e7	01
-			$0800-$0be7	02
-			$0c00-$0fe7	03
-			$1000-$13e7	04
-			$1400-$17e7	05
-			$1800-$1be7	06
-			$1c00-$1fe7	07
-			$2000-$23e7	08
-			$2400-$27e7	09
-			$2800-$2be7	0a
-			$2c00-$2fe7	0b
-			$3000-$33e7	0c
-			$3400-$37e7	0d
-			$3800-$3be7	0e
-			$3c00-$3fe7	0f
+        bit 3:          bitmap-mode base address
+                        $0000           %0000
+                        $2000           %1000
 
-$19	interrupt request register (irr): hier steht, was irq auslöste
+	bits 4-7:	video ram (screen memory)
+			$0000-$03e7	00 / %0000
+			$0400-$07e7	01 / %0001
+			$0800-$0be7	02 / %0010
+			$0c00-$0fe7	03 / %0011
+			$1000-$13e7	04 / %0100
+			$1400-$17e7	05 / %0101
+			$1800-$1be7	06 / %0110
+			$1c00-$1fe7	07 / %0111
+			$2000-$23e7	08 / %1000
+			$2400-$27e7	09 / %1001
+			$2800-$2be7	0a / %1010
+			$2c00-$2fe7	0b / %1011
+			$3000-$33e7	0c / %1100
+			$3400-$37e7	0d / %1101
+			$3800-$3be7	0e / %1110
+			$3c00-$3fe7	0f / %1111
+
+$19	interrupt request register (irr): what/who triggered IRQ?
 	bit 0: raster-irq
-	bit 1: sprite-screen-kollosion
-	bit 2: sprite-sprite-kollosion
-	bit 3: lightpen-impuls
-	bit 4-6: unbenutzt
-	bit 7: ist mit einem der bits 1-3 gesetzt
+	bit 1: sprite-screen-collision
+	bit 2: sprite-sprite-collision
+	bit 3: lightpen-impulse
+	bit 4-6: not used
+	bit 7: is set together with one of the bits 1-3
 
-$1a	interrupt mask register: festlegung, wodurch irq zugelassen wird. belegung entspricht irr
+$1a	interrupt mask register: who can trigger IRQ?
+        assignments conforms to irr
 
-$1b	sprite-hintergrund-priotität
-	die bits entsprechen den sprites 0-7.
-	bit = 0/1 heißt sprite vor/hinter screen bzw. text.
+$1b	sprite-background-priority
+	bits relate to sprites 0-7.
+	bit = 0/1 (clear/set) means: sprite in front/behind screen or text
 
-$1c	multicolor-sprites an/aus
-$1d	sprite-expand x-richtung
-$1e	sprite-sprite-kollosuin
-$1f	sprite-hintergrund-kollosion
+$1c	multicolor-sprites on/off
+$1d	sprite-expand x-direction
+$1e	sprite-sprite-collision
+$1f	sprite-background-collision
 
-$20	rahmenfarbe
-$21	hintergrundfarbe
-$22	extended-farbe 1 (siehe bit 6 $d011)
-$23	extended-farbe 2
-$24	extended-farbe 3
+$20	border color
+$21	background color
+$22	extended-color 1 (see bit 6 $d011)
+$23	extended-color 2
+$24	extended-color 3
 
-$25	sprite-farbe 1 (multicolor)
-$26	sprite-farbe 2 (multicolor)
+$25	sprite-color 1 (multicolor)
+$26	sprite-color 2 (multicolor)
 
-$27	sprite-farbe sprite 0
-$28	sprite-farbe sprite 1
-$29	sprite-farbe sprite 2
-$2a	sprite-farbe sprite 3
-$2b	sprite-farbe sprite 4
-$2c	sprite-farbe sprite 5
-$2d	sprite-farbe sprite 6
-$2e	sprite-farbe sprite 7
+$27	sprite-color sprite 0
+$28	sprite-color sprite 1
+$29	sprite-color sprite 2
+$2a	sprite-color sprite 3
+$2b	sprite-color sprite 4
+$2c	sprite-color sprite 5
+$2d	sprite-color sprite 6
+$2e	sprite-color sprite 7
 
 
-
-Vic-Basisadresse ($dd00):
-
+VIC base address (Videobank) ($dd00):
+-------------------------------------
 $0000-$3fff	03
 $4000-$7fff	02
 $8000-$bfff	01
 $c000-$ffff	00
+
+
+Changing VIC bank
+-------------------------------------
+lda $DD00
+and #%11111100
+ora #%000000xx ;<- your desired VIC bank value, see above
+sta $DD00

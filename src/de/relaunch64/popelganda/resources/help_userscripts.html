@@ -102,16 +102,20 @@ x64 OUTFILE</div>
 
 <h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
 <div class="pcode">acme --outfile OUTFILE --format cbm SOURCEFILE<br>
-&quot;C:\Users\Luedeke\Documents\C64\WinVICE 2.4\x64.exe&quot; OUTFILE</div>
+&quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; OUTFILE</div>
 
 <h3>Using KickAss and Vice on Windows</h3>
 <div class="pcode">java -jar C:\Users\Luedeke\Documents\C64\KickAss\KickAss.jar SOURCEFILE<br>
-C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe OUTFILE</div>
+C:\Users\&lt;username&gt;\Documents\C64\WinVICE-2.4\x64.exe OUTFILE</div>
 
 <h3>Using ACME, Exomizer and Vice, with white space in path</h3>
-<div class="pcode">&quot;C:\Users\Luedeke\Documents\C64\sontige tools\acme 0.9\acme.exe&quot; --outfile OUTFILE --format cbm SOURCEFILE<br>
-C:\Users\Luedeke\Documents\C64\Exomizer\exomizer.exe sfx basic UNCOMPFILE -o COMPFILE<br>
-C:\Users\Luedeke\Documents\C64\WinVICE-2.4\x64.exe COMPFILE</div>
+<div class="pcode">&quot;C:\Users\&lt;username&gt;\Documents\C64\sontige tools\acme 0.9\acme.exe&quot; --outfile OUTFILE --format cbm SOURCEFILE<br>
+C:\Users\&lt;username&gt;\Documents\C64\Exomizer\exomizer.exe sfx basic UNCOMPFILE -o COMPFILE<br>
+C:\Users\&lt;username&gt;\Documents\C64\WinVICE-2.4\x64.exe COMPFILE</div>
+
+<h3>Using ACME and VICE on OS X</h3>
+<div class="pcode">/usr/local/bin/acme --outfile OUTFILE --format cbm SOURCEFILE
+open /Applications/Vice64/x64.app OUTFILE</div>
 
 <p><br></p>
 

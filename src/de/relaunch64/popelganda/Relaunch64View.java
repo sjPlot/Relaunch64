@@ -1323,27 +1323,33 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void replaceAll() {
-        findReplace.initValues(jComboBoxFind.getSelectedItem().toString(), 
-                               jTextFieldReplace.getText(), 
-                               jTabbedPane1.getSelectedIndex(), 
-                               editorPanes.getActiveEditorPane(),
-                               jCheckBoxRegEx.isSelected(),
-                               jCheckBoxWholeWord.isSelected(),
-                               jCheckBoxMatchCase.isSelected());
-        int findCounter = 0;
-        while (findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected())) findCounter++;
-        JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter)+" occurences were replaced.");
+        // check if we have selection
+        Object sel = jComboBoxFind.getSelectedItem();
+        if (sel!=null) {
+            findReplace.initValues(jComboBoxFind.getSelectedItem().toString(),
+                                   jTextFieldReplace.getText(), 
+                                   jTabbedPane1.getSelectedIndex(), 
+                                   editorPanes.getActiveEditorPane(),
+                                   jCheckBoxRegEx.isSelected(),
+                                   jCheckBoxWholeWord.isSelected(),
+                                   jCheckBoxMatchCase.isSelected());
+            int findCounter = 0;
+            while (findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected())) findCounter++;
+            JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter)+" occurences were replaced.");
+        }
     }
     @Action
     public void replaceTerm() {
         // make it visible
         jPanelFind.setVisible(true);
+        // check if we have selection
+        Object sel = jComboBoxFind.getSelectedItem();
         // check whether textfield is visible
         if (!jPanelReplace.isVisible()) {
             // make it visible
             jPanelReplace.setVisible(true);
             // and set input focus in it
-            if (jComboBoxFind.getSelectedItem().toString().isEmpty()) {
+            if (sel!=null && sel.toString().isEmpty()) {
                 jComboBoxFind.requestFocusInWindow();
             }
             else {
@@ -1352,14 +1358,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         // if textfield is already visible, replace term
         else {
-            findReplace.initValues(jComboBoxFind.getSelectedItem().toString(), 
-                                   jTextFieldReplace.getText(), 
-                                   jTabbedPane1.getSelectedIndex(), 
-                                   editorPanes.getActiveEditorPane(),
-                                   jCheckBoxRegEx.isSelected(),
-                                   jCheckBoxWholeWord.isSelected(),
-                                   jCheckBoxMatchCase.isSelected());
-            jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+            if (sel!=null) {
+                findReplace.initValues(jComboBoxFind.getSelectedItem().toString(), 
+                                       jTextFieldReplace.getText(), 
+                                       jTabbedPane1.getSelectedIndex(), 
+                                       editorPanes.getActiveEditorPane(),
+                                       jCheckBoxRegEx.isSelected(),
+                                       jCheckBoxWholeWord.isSelected(),
+                                       jCheckBoxMatchCase.isSelected());
+                jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+            }
         }
     }
     private void replaceCancel() {

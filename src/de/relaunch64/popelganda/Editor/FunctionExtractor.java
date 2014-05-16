@@ -261,10 +261,6 @@ public class FunctionExtractor {
         return null;
     }
 
-    public static String getFunctionFromLine(String line, int compiler) {
-        return getFunctionOrMacroFromLine(line, compiler, getFunctionString(compiler));
-    }
-
     public static ArrayList getFunctionOrMacroNames(String funmacString, String source, int compiler) {
         ArrayList<String> retval = new ArrayList<>();
         LinkedHashMap<Integer, String> map = getFunctionsOrMacros(funmacString, source, compiler);
@@ -292,16 +288,10 @@ public class FunctionExtractor {
                     lineNumber++;
                     String keyword = getFunctionOrMacroFromLine(line, compiler, funmacString);
                     if (keyword!=null) {
-                        // for dream ass, add "."
-                        if (ConstantsR64.COMPILER_DREAMASS==compiler) {
-                            keyword = "."+keyword;
-                        }
-                        if (ConstantsR64.COMPILER_KICKASSEMBLER==compiler && funmacString.equals(getMacroString(compiler))) {
-                            keyword = ":"+keyword;
-                        }
-                        if (ConstantsR64.COMPILER_ACME==compiler && funmacString.equals(getMacroString(compiler))) {
-                            keyword = "+"+keyword;
-                        }
+                        // in some cases, we need to add a specific macro token,
+                        // like colon for kickass or plus-sign for ACME
+                        keyword = addMacroToken(keyword, funmacString, compiler);
+                        // if keyword does not already exist, add it to results list
                         if (!functions.containsValue(keyword)) {
                             functions.put(lineNumber, keyword);
                         }
@@ -313,6 +303,20 @@ public class FunctionExtractor {
         return functions;
     }
 
+    protected static String addMacroToken(String keyword, String funmacString, int compiler) {
+        // for dream ass, add "."
+        if (ConstantsR64.COMPILER_DREAMASS==compiler) {
+            keyword = "."+keyword;
+        }
+        if (ConstantsR64.COMPILER_KICKASSEMBLER==compiler && funmacString.equals(getMacroString(compiler))) {
+            keyword = ":"+keyword;
+        }
+        if (ConstantsR64.COMPILER_ACME==compiler && funmacString.equals(getMacroString(compiler))) {
+            keyword = "+"+keyword;
+        }
+        return keyword;
+    }
+    
     public static LinkedHashMap getMacros(String source, int compiler) {
         return getFunctionsOrMacros(getMacroString(compiler), source, compiler);
     }
@@ -332,10 +336,6 @@ public class FunctionExtractor {
         }
     }
 
-    public static boolean isValidFunction(String keyword, int compiler) {
-        return isValidFunctionOrMacro(keyword, getFunctionString(compiler));
-    }
-
     public static ArrayList getMacroNames(String source, int compiler) {
         return getFunctionOrMacroNames(getMacroString(compiler), source, compiler);
     }
@@ -343,12 +343,5 @@ public class FunctionExtractor {
     public static boolean isValidFunctionOrMacro(String keyword, String funmacString) {
         keyword = keyword.trim();
         return keyword.startsWith(funmacString);
-    }
-
-    public static String getMacroFromLine(String line, int compiler) {
-        return getFunctionOrMacroFromLine(line, compiler, getMacroString(compiler));
-    }
-    public static boolean isValidMacro(String keyword, int compiler) {
-        return isValidFunctionOrMacro(keyword, getMacroString(compiler));
     }
 }

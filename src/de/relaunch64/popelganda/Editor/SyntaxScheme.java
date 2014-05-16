@@ -1224,24 +1224,24 @@ public class SyntaxScheme {
         final HashMap<String, MutableAttributeSet> scriptKeywords = new HashMap<>();
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
-                scriptKeywords.put("SIN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("COS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("TAN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ARCSIN", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("AND", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("ARCCOS", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("ARCSIN", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("ARCTAN", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("ASL", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("ASR", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("COS", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("DIV", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("FLOAT", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("INT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("NOT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("AND", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("OR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("XOR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MOD", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("DIV", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("LSL", DEFAULT_SCRIPT_KEYWORD);
                 scriptKeywords.put("LSR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LOWBYTEOF", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("HIGHBYTEOF", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("BANKBYTEOF", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("MOD", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("NOT", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("OR", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("SIN", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("TAN", DEFAULT_SCRIPT_KEYWORD);
+                scriptKeywords.put("XOR", DEFAULT_SCRIPT_KEYWORD);
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
             case ConstantsR64.COMPILER_64TASS:
