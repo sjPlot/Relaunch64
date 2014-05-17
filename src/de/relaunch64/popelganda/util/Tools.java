@@ -191,6 +191,23 @@ public class Tools {
         }
         return null;
     }
+    public static String getCustomScriptName(String source, int compiler) {
+        String cs = SyntaxScheme.getCommentString(compiler) + " script=";
+        // find start token
+        int position = source.toLowerCase().indexOf(cs);
+        // found?
+        if (position!=-1) {
+            // end of line?
+            int eol = source.indexOf("\n", position+cs.length());
+            // retrieve line
+            String start = source.substring(position+cs.length(), eol);
+            // remove white spaces
+            start = start.replace("\r", "").trim();
+            // return result
+            return start;
+        }
+        return null;
+    }
     public static void insertBasicStart(EditorPanes editorPanes) {
         int dezaddress = 0;
         // open inpu  dialog

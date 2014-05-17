@@ -26,6 +26,8 @@
 	<h2>General</h2>
 	<ul>
 		<li><a href="#syntax">Syntax settings</a></li>
+		<li><a href="#comments">Comment commands</a></li>
+		<li><a href="#userscripts">User scripts</a></li>
 		<li><a href="#editor">Editor</a></li>
 	</ul>
 
@@ -50,6 +52,145 @@
 	<li>Selecting the correct syntax will ensure that the syntax highlighting is applied correctly.</li>
 	<li>The <em>Goto error</em> commands (see <a href="#navigatemenu">Navigate menu</a>) only work proper if the correct syntax is selected.</li>
 </ol>
+
+<h1><a name="comments">Comment commands</a></h1>
+
+<p>
+    There are following placeholders that can be used as commented line for additional settings when
+    compiling the source:
+</p>
+
+<ul>
+    <li>
+        The <strong>START</strong> placeholder lets you specify the start address that will be taken as parameter when
+        a cruncher or packer is called during the compile and run script call (see <a href="#userscripts_examples">user script examples</a>).
+        The comment line needs following syntax: &lt;comment sign&gt; start=&lt;start address&gt;, for instance:<br>
+        <ul>
+            <li>Kick Assembler:<br><code>// start=$c000</code></li>
+            <li>Acme:<br><code>; start=12288</code></li>
+        </ul>
+    </li>
+    <li>
+        The <strong>script</strong> placeholder lets you specify a script that will always be used on
+        compile and run script, independent from which script is chosen in the combo selection box
+        in the <em>Compile and Run</em> area.
+        The comment line needs following syntax: &lt;comment sign&gt; script=&lt;script name&gt;, for instance:<br>
+        <ul>
+            <li>Kick Assembler:<br><code>// script=Kickass, Vice</code><br>(will run the script named &quot;Kickass, Vice&quot;)</li>
+            <li>Acme: <br><code>// script=Acme with PuCrunch</code><br>(will run the script named &quot;Acme with PuCrunch&quot;)</li>
+        </ul>
+    </li>
+</ul>
+
+<h1><a name="userscripts">User scripts</a></h1>
+
+	<p>
+		User scripts will be executed similar to bash or console commands. You
+		can run any compiler and / or emulator in the same way you would do when
+		calling these tools from the console or a batch file.
+	</p>
+	<p>
+		You can define several actions that should be executed. Use <em>multiple lines</em>
+		in your script to define multiple actions.
+	</p>
+
+<h2>Adding new scripts</h2>
+
+	<p>
+		To add a new script, simply change the <em>script name</em> (in the related
+		text field). Once you changed the script name, the apply-button's text will
+		change to <em>Add script</em>. Edit the script in the text area below and
+		add the script by clicking on the button.
+	</p>
+        
+        <p>
+            If you press the <em>New Script</em> button, all fields will be cleared and you
+            can enter script name and script lines.
+        </p>
+	
+<h2>Updating existing scripts</h2>
+
+	<p>
+		To change or update an existing script, simply select the script from the dropdown list,
+		but <strong>do not</strong> change the <em>script name</em> (in the related
+		text field). Edit the script in the text area below and save the changes by
+		clicking on the button <em>Update script</em>.
+	</p>
+	
+<h2>Placeholders</h2>
+
+	<p>
+		To specifiy directories or input and output files, there are following
+		constants that should be used:
+	</p>
+	
+	<ul>
+		<li><strong>SOURCEFILE</strong> - The input file, typically the <strong>asm-file</strong>.</li>
+		<li><strong>SOURCEDIR</strong> - The parent directory of the input file, i.e. the directory where the source <strong>asm-file</strong> is located.</li>
+		<li><strong>OUTPUT</strong> - The ouput file that will be compiled, typically the <strong>prg-file</strong>.</li>
+		<li><strong>START</strong> - The start address of the source code. This placeholder can be used for <strong>cruncher and packer</strong>.</li>
+		<li><strong>UNCOMPFILE</strong> - The uncompressed file, used as input file for cruncher or packer. Mostly identical to OUTFILE.</li>
+		<li><strong>COMPFILE</strong> - The compressed output file, used for cruncher or packer.</li>
+	</ul>
+
+<p>
+	<strong>Note 1:</strong> In some cases you may have to add the &quot;open&quot; command to the command line (e.g., on 
+	OS X, starting Vice will throw an access denied error without the open-parameter). See examples below.
+</p>
+<p>
+	<strong>Note 2:</strong> If you specify full pathes to your compiler or emulator and the path contains whitechars (spaces),
+	you need to set the path in quotes (see examples below). Placeholders like SOURCEFILE or OUTFILE, however, 
+	will be automatically quoted if necessary. You don't need to quote the placeholders.
+</p>
+
+<p>
+	<strong>Note 3:</strong> To make use of the START placeholder, you have to specify the start address in
+        a comment line with following syntax:<br>&lt;comment sign&gt; start=&lt;start address&gt;, for instance:
+        <br><span class="pcode">// start=$c000 (for Kick Assembler)<br>
+	; start=12288 (for ACME)</span>
+</p>
+
+<h2>Drag &amp; Drop</h2>
+
+<p>
+    You can drag &amp; drop executables from compilers, crunchers and emulators from the explorer (or file browser) window
+    onto the script text field. Relaunch64 will then automatically generate a proper scriptline, including recommended
+    parameter settings (in case the compiler, cruncher or emulator is recognized and supported).
+</p>
+
+<h2><a name="userscripts_examples">User scripts examples</a></h2>
+
+<h3>Using KickAss and Vice on OS X</h3>
+<div class="pcode">java -jar /&lt;path to kickass&gt;/KickAss.jar SOURCEFILE<br>
+open /Applications/Vice/x64.app OUTFILE</div>
+
+<h3>ACME and Vice, when ACME- and VICE-Path are in PATH-Environment</h3>
+<div class="pcode">acme -v4 SOURCEFILE<br>
+x64 OUTFILE</div>
+
+<h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
+<div class="pcode">acme --outfile OUTFILE --format cbm SOURCEFILE<br>
+&quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; OUTFILE</div>
+
+<h3>Using KickAss and Vice on Windows</h3>
+<div class="pcode">java -jar C:\Users\Luedeke\Documents\C64\KickAss\KickAss.jar SOURCEFILE<br>
+C:\Users\&lt;username&gt;\Documents\C64\WinVICE-2.4\x64.exe OUTFILE</div>
+
+<h3>Using ACME, PuCrunch and Vice on OS X</h3>
+<div class="pcode">/usr/local/bin/acme --outfile OUTFILE --format cbm SOURCEFILE<br>
+/usr/local/bin/pucrunch UNCOMPFILE COMPFILE -xSTART<br>
+open /Applications/Vice64/x64.app COMPFILE</div>
+
+<h3>Using ACME, Exomizer and Vice, with white space in path</h3>
+<div class="pcode">&quot;C:\Users\&lt;username&gt;\Documents\C64\sontige tools\acme 0.9\acme.exe&quot; --outfile OUTFILE --format cbm SOURCEFILE<br>
+C:\Users\&lt;username&gt;\Documents\C64\Exomizer\exomizer.exe sfx basic UNCOMPFILE -o COMPFILE<br>
+C:\Users\&lt;username&gt;\Documents\C64\WinVICE-2.4\x64.exe COMPFILE</div>
+
+<h3>Using ACME and VICE on OS X</h3>
+<div class="pcode">/usr/local/bin/acme --outfile OUTFILE --format cbm SOURCEFILE
+open /Applications/Vice64/x64.app OUTFILE</div>
+
+<br>
 
 <h1><a name="editor">Editor</a></h1>
 
