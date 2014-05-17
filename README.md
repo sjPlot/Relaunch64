@@ -13,11 +13,13 @@ Relaunch64 3.0.1
 * auto-completion for functions, macros and scripting commands (ACME, Kick Assembler, 64tass, DreamAss) (press ctrl+shift+space while typing)
 * automatic goto error line when compiling errors occur
 * last 15 recently used find terms will be stored per session
+* improved tab/shift+tab behaviour with selected text
 * added quick references (menu view)
 * added regular expression checkbox to find-command, to explicitly en-/disable search for regular expressions
 * added checkboxes for whole-word and match-case search
 * added syntax highlighting for scripting commands (Kick Assembler, 64tass)
 * added SOURCEDIR as additional place holder in user scripts
+* added "script" comment-command (see help-file)
 * added new syntax highlighting color schemes
 * more file extensions are now accepted on drag'n'drop
 * slight modification of C64 scheme

@@ -208,6 +208,9 @@ public class Tools {
         }
         return null;
     }
+    public static boolean startsWithOpcodeToken(String s) {
+        return s.startsWith(".") || s.startsWith("+") || s.startsWith(":") || s.startsWith("-") || s.startsWith("!") || s.startsWith("#");
+    }
     public static void insertBasicStart(EditorPanes editorPanes) {
         int dezaddress = 0;
         // open inpu  dialog

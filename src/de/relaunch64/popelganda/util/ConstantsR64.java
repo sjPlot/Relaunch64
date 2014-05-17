@@ -147,7 +147,7 @@ public class ConstantsR64 {
     public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65", "DreamAss" };
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".src", ".s"};
-    public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff"};
+    public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff", ".fli", ".afli", ".ifli"};
     
     public static final String[] SCRIPT_KEYWORDS_KICKASS = new String[] {
         ".add", ".asNumber", ".asBoolean", ".charAt", ".get", ".getData", ".getPixel",

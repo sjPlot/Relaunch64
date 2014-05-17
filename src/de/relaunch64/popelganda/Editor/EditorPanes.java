@@ -224,15 +224,44 @@ public class EditorPanes {
                         // add tab infront of each line
                         for (String l : lines) {
                             // check if we have specific line length
-                            if (!l.isEmpty()) sb.append("\t").append(l).append("\n");
+                            if (!l.isEmpty()) {
+                                // check if first char is opcode token
+                                int firstWhiteCharPos = -1;
+                                if (Tools.startsWithOpcodeToken(l)) {
+                                    // if yes, find offset of first whitespace
+                                    // we insert tab at that position then
+                                    for (int i=0; i<l.length(); i++) {
+                                        if (Character.isWhitespace(l.charAt(i))) {
+                                            firstWhiteCharPos = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                // insert tab "in between", when we have labels or
+                                // opcodes at line start
+                                if (firstWhiteCharPos!=-1) {
+                                    try {
+                                        sb.append(l.substring(0, firstWhiteCharPos)).append("\t").append(l.substring(firstWhiteCharPos)).append("\n");
+                                    }
+                                    catch (IndexOutOfBoundsException ex) {
+                                        sb.append("\t").append(l).append("\n");
+                                    }
+                                }
+                                // insert tab at line start
+                                else {
+                                    sb.append("\t").append(l).append("\n");
+                                }
+                            }
                         }
                         // need to remove \n?
                         if (clearNewLine) sb = sb.deleteCharAt(sb.length()-1);
+                        // copy replace text to string
+                        String replacement = sb.toString();
                         // insert string
-                        ep.replaceSelection(sb.toString());
+                        ep.replaceSelection(replacement);
                         // re-select text
                         ep.setSelectionStart(selstart);
-                        ep.setSelectionEnd(selend+lines.length);
+                        ep.setSelectionEnd(selend+(replacement.length()-selString.length()));
                     }
                     else {
                         try {
@@ -263,19 +292,43 @@ public class EditorPanes {
                         for (String l : lines) {
                             // check if we have any line length
                             if (!l.isEmpty()) {
-                                // remove first tab
-                                l = l.replaceFirst("\t", "");
+                                // is first char tab?
+                                if (!l.startsWith("\t")) {
+                                    // if not, find position of first tab
+                                    int lastTab = l.lastIndexOf("\t");
+                                    // do we have any tabs?
+                                    if (lastTab!=-1) {
+                                        try {
+                                            // if yes, check if we have white char before tab
+                                            if (Character.isWhitespace(l.charAt(lastTab-1))) {
+                                                // if yes, we can remove first tab
+                                                // without sticking together separated words
+                                                l = l.replaceFirst("\t", "");
+                                            }
+                                        }
+                                        catch (IndexOutOfBoundsException ex) {
+                                            // remove first tab
+                                            l = l.replaceFirst("\t", "");
+                                        }
+                                    }
+                                }
+                                else {
+                                    // remove first tab
+                                    l = l.replaceFirst("\t", "");
+                                }
                                 // append fixex line
                                 sb.append(l).append("\n");
                             }
                         }
                         // need to remove \n?
                         if (clearNewLine) sb = sb.deleteCharAt(sb.length()-1);
+                        // copy replace text to string
+                        String replacement = sb.toString();
                         // insert string
-                        ep.replaceSelection(sb.toString());
+                        ep.replaceSelection(replacement);
                         // re-select text
                         ep.setSelectionStart(selstart);
-                        ep.setSelectionEnd(selend-lines.length);
+                        ep.setSelectionEnd(selend-(selString.length()-replacement.length()));
                     }
                     evt.consume();
                 }
