@@ -84,37 +84,37 @@ public class ErrorHandler {
         LineNumberReader lineReader = new LineNumberReader(br);
         String line, pattern;
         Pattern p;
-        int FilenameGroup, LineGroup, ColumnGroup;
+        int filenameGroup, lineGroup, columnGroup;
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME: // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
                 pattern = "^(Error|Warning|Serious error) - File ([^,]*), line (\\d+) .*";
-                FilenameGroup = 2;
-                LineGroup = 3;
-                ColumnGroup = 0;
+                filenameGroup = 2;
+                lineGroup = 3;
+                columnGroup = 0;
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER: // at line 2, column 1 in /tmp/j.asm
                 pattern = "^at line (\\d+), column (\\d+) in (.*)";
-                FilenameGroup = 3;
-                LineGroup = 1;
-                ColumnGroup = 2;
+                filenameGroup = 3;
+                lineGroup = 1;
+                columnGroup = 2;
                 break;
             case ConstantsR64.COMPILER_64TASS: // j.asm:4:5: error: not defined 'i'
                 pattern = "^([^:]*):(\\d+):(\\d+): (error|warning):.*";
-                FilenameGroup = 1;
-                LineGroup = 2;
-                ColumnGroup = 3;
+                filenameGroup = 1;
+                lineGroup = 2;
+                columnGroup = 3;
                 break;
             case ConstantsR64.COMPILER_CA65: // j.asm(4): Error: Symbol `i' is undefined
                 pattern = "^([^(]*)\\((\\d+)\\): (Error|Warning):.*";
-                FilenameGroup = 1;
-                LineGroup = 2;
-                ColumnGroup = 0;
+                filenameGroup = 1;
+                lineGroup = 2;
+                columnGroup = 0;
                 break;
             case ConstantsR64.COMPILER_DREAMASS: // j.asm:4: error:variable undefined: i
                 pattern = "^([^:]*):(\\d+): (error|warning):.*";
-                FilenameGroup = 1;
-                LineGroup = 2;
-                ColumnGroup = 0;
+                filenameGroup = 1;
+                lineGroup = 2;
+                columnGroup = 0;
                 break;
             default:
                 return; // Unsupported
@@ -130,8 +130,8 @@ public class ErrorHandler {
                     // check if we found error line
                     if (m.matches()) {
                        int column = 1;
-                       if (ColumnGroup != 0) column = Integer.parseInt(m.group(ColumnGroup));
-                       ErrorInfo e = new ErrorInfo(Integer.parseInt(m.group(LineGroup)), column, linenumber, new File(m.group(FilenameGroup)));
+                       if (columnGroup != 0) column = Integer.parseInt(m.group(columnGroup));
+                       ErrorInfo e = new ErrorInfo(Integer.parseInt(m.group(lineGroup)), column, linenumber, new File(m.group(filenameGroup)));
                        errors.add(e);
                     }
                     linenumber++;
