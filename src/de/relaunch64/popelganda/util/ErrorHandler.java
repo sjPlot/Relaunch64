@@ -95,6 +95,9 @@ public class ErrorHandler {
                         case ConstantsR64.COMPILER_64TASS:
                             err = getErrorLineFromLine(line, ":");
                             break;
+                        case ConstantsR64.COMPILER_DREAMASS:
+                            err = getErrorLineFromLine(line, ":");
+                            break;
                         case ConstantsR64.COMPILER_CA65:
                             err = getErrorLineFromLine(line, "(");
                             break;
@@ -153,6 +156,12 @@ public class ErrorHandler {
                     }
                     break;
                 case ConstantsR64.COMPILER_64TASS:
+                    start = line.indexOf(":");
+                    if (start!=-1) {
+                        file = line.substring(0,start);
+                    }
+                    break;
+                case ConstantsR64.COMPILER_DREAMASS:
                     start = line.indexOf(":");
                     if (start!=-1) {
                         file = line.substring(0,start);

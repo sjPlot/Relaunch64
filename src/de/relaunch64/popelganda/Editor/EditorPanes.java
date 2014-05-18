@@ -295,12 +295,12 @@ public class EditorPanes {
                                 // is first char tab?
                                 if (!l.startsWith("\t")) {
                                     // if not, find position of first tab
-                                    int lastTab = l.lastIndexOf("\t");
+                                    int firstTab = l.indexOf("\t");
                                     // do we have any tabs?
-                                    if (lastTab!=-1) {
+                                    if (firstTab!=-1) {
                                         try {
-                                            // if yes, check if we have white char before tab
-                                            if (Character.isWhitespace(l.charAt(lastTab-1))) {
+                                            // if yes, check if we have white char before or behind tab
+                                            if (Character.isWhitespace(l.charAt(firstTab-1)) || Character.isWhitespace(l.charAt(firstTab+1))) {
                                                 // if yes, we can remove first tab
                                                 // without sticking together separated words
                                                 l = l.replaceFirst("\t", "");
