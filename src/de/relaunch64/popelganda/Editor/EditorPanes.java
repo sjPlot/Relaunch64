@@ -491,10 +491,14 @@ public class EditorPanes {
      * Scrolls the currently active source code to the line {@code line}.
      * 
      * @param line The line where the to scroll within the source code.
+     * @param column The column where the caret is placed (optional).
      * @return {@code true} if the goto was successful.
      */
+    public boolean gotoLine(int line, int column) {
+        return EditorPaneTools.gotoLine(getActiveEditorPane(), line, column);
+    }
     public boolean gotoLine(int line) {
-        return EditorPaneTools.gotoLine(getActiveEditorPane(), line);
+        return gotoLine(line, 1);
     }
     /**
      * Undoes the last edit action.

@@ -148,10 +148,11 @@ public class EditorPaneTools {
      * @param ep A JEdiorPane with the source, typically retrieved via
      * {@link #getActiveEditorPane()} or {@link #getEditorPaneProperties(selectedTab).getEditorPane()}
      * @param line The line where the to scroll within the source code.
+     * @param column The column where the caret is placed (optional).
      * @return {@code true} if the goto was successful.
      */
-    public static boolean gotoLine(JEditorPane ep, int line) {
-        if (line>0) {
+    public static boolean gotoLine(JEditorPane ep, int line, int column) {
+        if (line>0 && column>0) {
             line--;
             if (ep!=null) {
                 try {
@@ -159,7 +160,7 @@ public class EditorPaneTools {
                     Element e = ep.getDocument().getDefaultRootElement().getElement(line);
                     if (e!=null) {
                         // retrieve caret of requested line
-                        int caret = e.getStartOffset();
+                        int caret = e.getStartOffset()+column-1;
                         // set new caret position
                         ep.setCaretPosition(caret);
                         // scroll rect to visible
@@ -184,6 +185,10 @@ public class EditorPaneTools {
             }
         }
         return false;
+    }
+
+    public static boolean gotoLine(JEditorPane ep, int line) {
+        return gotoLine(ep, line, 1);
     }
     /**
      * This method automatically inserts tab or spaces after the user pressed enter key.

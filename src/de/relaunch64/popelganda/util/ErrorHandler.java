@@ -168,8 +168,9 @@ public class ErrorHandler {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                ErrorInfo ei = errors.get(errorIndex);
                 // goto error line
-                editorPanes.gotoLine(errors.get(errorIndex).line);
+                editorPanes.gotoLine(ei.line, ei.column);
                 // set focus in edior pane
                 editorPanes.setFocus();
             }
