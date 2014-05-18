@@ -605,28 +605,19 @@ public class SyntaxHighlighting extends DefaultStyledDocument {
             }
             endOfToken++;
         }
-        String token = content.substring(startOffset, endOfToken);
-        MutableAttributeSet attr = keywords.get(token.toUpperCase());
+        String token = content.substring(startOffset, endOfToken).toUpperCase();
+        MutableAttributeSet attr = keywords.get(token);
+        if (attr == null) {
+            attr = illegalOpcodes.get(token);
+        }
+        if (attr == null) {
+            attr = compilerKeywords.get(token);
+        }
+        if (attr == null) {
+            attr = scriptKeywords.get(token);
+        }
         if (attr != null) {
             doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
-        }
-        else {
-            attr = illegalOpcodes.get(token.toUpperCase());
-            if (attr != null) {
-                doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
-            }
-            else {
-                attr = compilerKeywords.get(token.toUpperCase());
-                if (attr != null) {
-                    doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
-                }
-                else {
-                    attr = scriptKeywords.get(token.toUpperCase());
-                    if (attr != null) {
-                        doc.setCharacterAttributes(startOffset, endOfToken - startOffset, attr, false);
-                    }
-                }
-            }
         }
         return endOfToken + 1;
     }
