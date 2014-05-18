@@ -818,85 +818,32 @@ public class SyntaxScheme {
      */
     public static HashMap<String, MutableAttributeSet> getKeywordHashMap() {
         final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<>();
-        asmKeywords.put("LDA", DEFAULT_KEYWORD);
-        asmKeywords.put("STA", DEFAULT_KEYWORD);
-        asmKeywords.put("INC", DEFAULT_KEYWORD);
-        asmKeywords.put("DEC", DEFAULT_KEYWORD);
-        asmKeywords.put("LDX", DEFAULT_KEYWORD);
-        asmKeywords.put("STX", DEFAULT_KEYWORD);
-        asmKeywords.put("INX", DEFAULT_KEYWORD);
-        asmKeywords.put("DEX", DEFAULT_KEYWORD);
-        asmKeywords.put("LDY", DEFAULT_KEYWORD);
-        asmKeywords.put("STY", DEFAULT_KEYWORD);
-        asmKeywords.put("INY", DEFAULT_KEYWORD);
-        asmKeywords.put("DEY", DEFAULT_KEYWORD);
-        asmKeywords.put("CMP", DEFAULT_KEYWORD);
-        asmKeywords.put("CPX", DEFAULT_KEYWORD);
-        asmKeywords.put("CPY", DEFAULT_KEYWORD);
-        asmKeywords.put("TAX", DEFAULT_KEYWORD);
-        asmKeywords.put("TAY", DEFAULT_KEYWORD);
-        asmKeywords.put("TXA", DEFAULT_KEYWORD);
-        asmKeywords.put("TYA", DEFAULT_KEYWORD);
-        asmKeywords.put("TSX", DEFAULT_KEYWORD);
-        asmKeywords.put("TXS", DEFAULT_KEYWORD);
-        asmKeywords.put("AND", DEFAULT_KEYWORD);
-        asmKeywords.put("ORA", DEFAULT_KEYWORD);
-        asmKeywords.put("EOR", DEFAULT_KEYWORD);
-        asmKeywords.put("ADC", DEFAULT_KEYWORD);
-        asmKeywords.put("SBC", DEFAULT_KEYWORD);
-        asmKeywords.put("SEC", DEFAULT_KEYWORD);
-        asmKeywords.put("CLC", DEFAULT_KEYWORD);
-        asmKeywords.put("ASL", DEFAULT_KEYWORD);
-        asmKeywords.put("LSR", DEFAULT_KEYWORD);
-        asmKeywords.put("ROL", DEFAULT_KEYWORD);
-        asmKeywords.put("ROR", DEFAULT_KEYWORD);
-        asmKeywords.put("BIT", DEFAULT_KEYWORD);
-        asmKeywords.put("JMP", DEFAULT_KEYWORD);
-        asmKeywords.put("JSR", DEFAULT_KEYWORD);
-        asmKeywords.put("RTS", DEFAULT_KEYWORD);
-        asmKeywords.put("RTI", DEFAULT_KEYWORD);
-        asmKeywords.put("BCC", DEFAULT_KEYWORD);
-        asmKeywords.put("BCS", DEFAULT_KEYWORD);
-        asmKeywords.put("BEQ", DEFAULT_KEYWORD);
-        asmKeywords.put("BNE", DEFAULT_KEYWORD);
-        asmKeywords.put("BPL", DEFAULT_KEYWORD);
-        asmKeywords.put("BMI", DEFAULT_KEYWORD);
-        asmKeywords.put("BVC", DEFAULT_KEYWORD);
-        asmKeywords.put("BVS", DEFAULT_KEYWORD);
-        asmKeywords.put("SEI", DEFAULT_KEYWORD);
-        asmKeywords.put("CLI", DEFAULT_KEYWORD);
-        asmKeywords.put("SED", DEFAULT_KEYWORD);
-        asmKeywords.put("CLD", DEFAULT_KEYWORD);
-        asmKeywords.put("CLV", DEFAULT_KEYWORD);
-        asmKeywords.put("PHA", DEFAULT_KEYWORD);
-        asmKeywords.put("PLA", DEFAULT_KEYWORD);
-        asmKeywords.put("PHP", DEFAULT_KEYWORD);
-        asmKeywords.put("PLP", DEFAULT_KEYWORD);
-        asmKeywords.put("NOP", DEFAULT_KEYWORD);
-        asmKeywords.put("BRK", DEFAULT_KEYWORD);
+        final String opcodes[] = {
+            "LDA", "STA", "INC", "DEC", "LDX", "STX", "INX", "DEX", "LDY",
+            "STY", "INY", "DEY", "CMP", "CPX", "CPY", "TAX", "TAY", "TXA",
+            "TYA", "TSX", "TXS", "AND", "ORA", "EOR", "ADC", "SBC", "SEC",
+            "CLC", "ASL", "LSR", "ROL", "ROR", "BIT", "JMP", "JSR", "RTS",
+            "RTI", "BCC", "BCS", "BEQ", "BNE", "BPL", "BMI", "BVC", "BVS",
+            "SEI", "CLI", "SED", "CLD", "CLV", "PHA", "PLA", "PHP", "PLP",
+            "NOP", "BRK"
+        };
+
+        for (String item : opcodes) {
+            asmKeywords.put(item, DEFAULT_KEYWORD);
+        }
         return asmKeywords;
     }    
     public static HashMap<String, MutableAttributeSet> getIllegalOpcodeHashMap() {
         final HashMap<String, MutableAttributeSet> asmKeywords = new HashMap<>();
-        asmKeywords.put("AAR", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("AHX", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("ALR", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("ANC", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("AXS", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("DCP", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("ISC", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("LAS", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("LAX", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("RLA", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("RRA", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("SAX", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("SBC", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("SHX", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("SHY", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("SLO", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("SRE", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("TAS", DEFAULT_ILLEGAL_OPCODE);
-        asmKeywords.put("XAA", DEFAULT_ILLEGAL_OPCODE);
+        final String opcodes[] = {
+            "AAR", "AHX", "ALR", "ANC", "AXS", "DCP", "ISC", "LAS", "LAX",
+            "RLA", "RRA", "SAX", "SBC", "SHX", "SHY", "SLO", "SRE", "TAS",
+            "XAA"
+        };
+
+        for (String item : opcodes) {
+            asmKeywords.put(item, DEFAULT_ILLEGAL_OPCODE);
+        }
         return asmKeywords;
     }    
     /**
@@ -906,362 +853,101 @@ public class SyntaxScheme {
      */
     public static HashMap<String, MutableAttributeSet> getCompilerKeywordHashMap(int compiler) {
         final HashMap<String, MutableAttributeSet> compilerKeywords = new HashMap<>();
+        final String keywords[];
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
-                compilerKeywords.put("!08", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!8", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!16", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!24", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!32", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!ALIGN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!AL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!AS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!BIN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!BINARY", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!BY", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!BYTE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!CONVTAB", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!CT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!DO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!EOF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!ENDOFFILE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!ERROR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!IF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!IFDEF", DEFAULT_COMPILER_KEYWORD);                
-                compilerKeywords.put("!INITMEN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!FI", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!FILL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!FOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!MACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!PET", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!PSEUDOPC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!RAW", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!RL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!RS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!SCR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!SCRXOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!SET", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!SL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!SRC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!SOURCE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!TEXT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!TO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!TX", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!WARN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!WO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!WORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!ZN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("!ZONE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("UNTIL", DEFAULT_COMPILER_KEYWORD);
+                keywords = new String[] {
+                    "!08", "!8", "!16", "!24", "!32", "!ALIGN", "!AL", "!AS",
+                    "!BIN", "!BINARY", "!BY", "!BYTE", "!CONVTAB", "!CT",
+                    "!DO", "!EOF", "!ENDOFFILE", "!ERROR", "!IF", "!IFDEF",
+                    "!INITMEN", "!FI", "!FILL", "!FOR", "!MACRO", "!PET",
+                    "!PSEUDOPC", "!RAW", "!RL", "!RS", "!SCR", "!SCRXOR",
+                    "!SET", "!SL", "!SRC", "!SOURCE", "!TEXT", "!TO", "!TX",
+                    "!WARN", "!WO", "!WORD", "!ZN", "!ZONE", "UNTIL"
+                };
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
-                compilerKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ASSERT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CONST", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DEFINE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DWORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENUM", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EVAL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FILL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FUNCTION", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IMPORT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IMPORTONCE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LABEL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".MACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PRINT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PSEUDOPC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".RETURN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".VAR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
+                keywords = new String[] {
+                    ".ALIGN", ".ASSERT", ".BYTE", ".CONST", ".DEFINE",
+                    ".DWORD", ".ENUM", ".EVAL", ".FILL", ".FOR",
+                    ".FUNCTION", ".IF", ".IMPORT", ".IMPORTONCE", ".LABEL",
+                    ".MACRO", ".PC", ".PRINT", ".PSEUDOPC", ".RETURN",
+                    ".TEXT", ".VAR", ".WORD"
+                };
                 break;
             case ConstantsR64.COMPILER_DASM:
-                compilerKeywords.put("INCLUDE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("INCBIN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("INCDIR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("SEG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("SEG.U", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DC.B", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DC.W", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DC.L", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DS.B", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DS.W", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DS.L", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DV.B", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DV.W", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DV.L", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("BYTE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("WORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("LONG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("HEX", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ERR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ORG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("RORG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("PROCESSOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ECHO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("REND", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ALIGN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("SUBROUTINE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("EQU", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("EQM", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("SET", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("MAC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ENDM", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("MEXIT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("IFCONST", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("IFNCONST", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("IF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ELSE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("ENDIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("EIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("REPEAT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("REPEND", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("DAD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("LIST ON", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("LIST OFF", DEFAULT_COMPILER_KEYWORD);
+                keywords = new String[] {
+                    "INCLUDE", "INCBIN", "INCDIR", "SEG", "SEG.U", "DC.B",
+                    "DC.W", "DC.L", "DS.B", "DS.W", "DS.L", "DV.B", "DV.W",
+                    "DV.L", "BYTE", "WORD", "LONG", "HEX", "ERR", "ORG",
+                    "RORG", "PROCESSOR", "ECHO", "REND", "ALIGN",
+                    "SUBROUTINE", "EQU", "EQM", "SET", "MAC", "ENDM",
+                    "MEXIT", "IFCONST", "IFNCONST", "IF", "ELSE", "ENDIF",
+                    "EIF", "REPEAT", "REPEND", "DAD", "LIST ON", "LIST OFF"
+                };
                 break;
             case ConstantsR64.COMPILER_64TASS:
-                compilerKeywords.put(".AL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".AS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ASSERT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BEND", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BINARY", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BINCLUDE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BLOCK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BREAK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CASE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CERROR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CHAR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CHECK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".COMMENT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CONTINUE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CPU", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CWARN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DATABANK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DEFAULT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DINT", DEFAULT_COMPILER_KEYWORD);                
-                compilerKeywords.put(".DPAGE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DSECTION", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DSTRUCT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DUNION", DEFAULT_COMPILER_KEYWORD);                
-                compilerKeywords.put(".DWORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ELSE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ELSIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".END", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDM", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDSWITCH", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDU", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDWEAK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ERROR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FI", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FILL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FUNCTION", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".GOTO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".HERE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".HIDEMAC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFEQ", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFMI", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFNE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFPL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".INCLUDE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".INT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LBL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LINT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LOGICAL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LONG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".MACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".NEXT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".NULL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".OFFS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".OPTION", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PAGE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PEND", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PROC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PROFF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PRON", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PRTEXT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".REPT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".RTA", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SECTION", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SEGMENT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SEND", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SHIFT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SHIFTL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SHOWMAC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".STRUCT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SWITCH", DEFAULT_COMPILER_KEYWORD);                
-                compilerKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".UNION", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".VAR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WARN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WEAK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".XL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".XS", DEFAULT_COMPILER_KEYWORD);
+                keywords = new String[] {
+                    ".AL", ".ALIGN", ".AS", ".ASSERT", ".BEND", ".BINARY",
+                    ".BINCLUDE", ".BLOCK", ".BREAK", ".BYTE", ".CASE", ".CDEF",
+                    ".CERROR", ".CHAR", ".CHECK", ".COMMENT", ".CONTINUE",
+                    ".CPU", ".CWARN", ".DATABANK", ".DEFAULT", ".DINT",
+                    ".DPAGE", ".DSECTION", ".DSTRUCT", ".DUNION", ".DWORD",
+                    ".EDEF", ".ELSE", ".ELSIF", ".ENC", ".END", ".ENDC",
+                    ".ENDF", ".ENDIF", ".ENDM", ".ENDP", ".ENDS", ".ENDSWITCH",
+                    ".ENDU", ".ENDWEAK", ".EOR", ".ERROR", ".FI", ".FILL",
+                    ".FOR", ".FUNCTION", ".GOTO", ".HERE", ".HIDEMAC", ".IF",
+                    ".IFEQ", ".IFMI", ".IFNE", ".IFPL", ".INCLUDE", ".INT",
+                    ".LBL", ".LINT", ".LOGICAL", ".LONG", ".MACRO", ".NEXT",
+                    ".NULL", ".OFFS", ".OPTION", ".PAGE", ".PEND", ".PROC",
+                    ".PROFF", ".PRON", ".PRTEXT", ".REPT", ".RTA", ".SECTION",
+                    ".SEGMENT", ".SEND", ".SHIFT", ".SHIFTL", ".SHOWMAC",
+                    ".STRUCT", ".SWITCH", ".TEXT", ".UNION", ".VAR", ".WARN",
+                    ".WEAK", ".WORD", ".XL", ".XS"
+                };
                 break;
             case ConstantsR64.COMPILER_CA65:
-                compilerKeywords.put(".A16", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".A8", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ADDR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ASCIIZ", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ASSERT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".AUTOIMPORT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BANKBYTES", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BSS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BYT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CASE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CHARMAP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CODE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CONDES", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".CONSTRUCTOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DATA", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DBYT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DEBUGINFO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DEFINED", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DESTRUCTOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DWORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ELSE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ELSIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".END", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDENUM", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDMAC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDMACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDPROC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDREP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDREPEAT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDSCOPE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENDSTRUCT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ENUM", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ERROR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EXITMAC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EXITMACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EXPORT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".EXPORTZP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FARADDR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FEATURE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FILEOPT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FOPT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".FORCEIMPORT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".GLOBAL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".GLOBALZP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".HIBYTES", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".I16", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".I8", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFBLANK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFCONST", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFNBLANK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFNDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFNREF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFP02", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFP816", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFPC02", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFPSC02", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IFREF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IMPORT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".IMPORTZP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".INCBIN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".INCLUDE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".INTERRUPTOR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LINECONT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LIST", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LISTBYTES", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LOBYTES", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LOCAL", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".LOCALCHAR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".MACPACK", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".MAC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".MACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ORG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".OUT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".P02", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".P816", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PAGELEN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PAGELENGTH", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PC02", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".POPSEG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PROC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PSC02", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PUSHSEG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".RELOG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".REPEAT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".RES", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".RODATA", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SCOPE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SEGMENT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SETCPU", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SMART", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".STRUCT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SUNPLUS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".TAG", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WARNING", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ZEROPAGE", DEFAULT_COMPILER_KEYWORD);
+                keywords = new String[] {
+                    ".A16", ".A8", ".ADDR", ".ALIGN", ".ASCIIZ", ".ASSERT",
+                    ".AUTOIMPORT", ".BANKBYTES", ".BSS", ".BYT", ".BYTE",
+                    ".CASE", ".CHARMAP", ".CODE", ".CONDES", ".CONSTRUCTOR",
+                    ".DATA", ".DBYT", ".DEBUGINFO", ".DEF", ".DEFINED",
+                    ".DESTRUCTOR", ".DWORD", ".ELSE", ".ELSIF", ".END",
+                    ".ENDENUM", ".ENDIF", ".ENDMAC", ".ENDMACRO", ".ENDPROC",
+                    ".ENDREP", ".ENDREPEAT", ".ENDSCOPE", ".ENDSTRUCT",
+                    ".ENUM", ".ERROR", ".EXITMAC", ".EXITMACRO", ".EXPORT",
+                    ".EXPORTZP", ".FARADDR", ".FEATURE", ".FILEOPT", ".FOPT",
+                    ".FORCEIMPORT", ".GLOBAL", ".GLOBALZP", ".HIBYTES", ".I16",
+                    ".I8", ".IF", ".IFBLANK", ".IFCONST", ".IFDEF",
+                    ".IFNBLANK", ".IFNDEF", ".IFNREF", ".IFP02", ".IFP816",
+                    ".IFPC02", ".IFPSC02", ".IFREF", ".IMPORT", ".IMPORTZP",
+                    ".INCBIN", ".INCLUDE", ".INTERRUPTOR", ".LINECONT",
+                    ".LIST", ".LISTBYTES", ".LOBYTES", ".LOCAL", ".LOCALCHAR",
+                    ".MACPACK", ".MAC", ".MACRO", ".ORG", ".OUT", ".P02",
+                    ".P816", ".PAGELEN", ".PAGELENGTH", ".PC02", ".POPSEG",
+                    ".PROC", ".PSC02", ".PUSHSEG", ".RELOG", ".REPEAT", ".RES",
+                    ".RODATA", ".SCOPE", ".SEGMENT", ".SETCPU", ".SMART",
+                    ".STRUCT", ".SUNPLUS", ".TAG", ".WARNING", ".WORD",
+                    ".ZEROPAGE"
+                };
                 break;
             case ConstantsR64.COMPILER_DREAMASS:
-                compilerKeywords.put(".BINCLUDE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".BYTE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DB", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DW", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PET", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DP", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SCR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DS", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SEGMENT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SETPET", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".SETSCR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".DSB", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".ALIGN", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".(", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".)", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".PSEUDOPC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put(".REALPC", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ERROR", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#IF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#IFDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#IFFILE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#IFNDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#IFNFILE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ELSIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ELSIFDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ELSIFFILE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ELSIFNDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ELSIFNFILE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ELSE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#ENDIF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#INCLUDE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#MACRO", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#OUTFILE", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#PRINT", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#SEGDEF", DEFAULT_COMPILER_KEYWORD);
-                compilerKeywords.put("#WARNING", DEFAULT_COMPILER_KEYWORD);
+                keywords = new String[] {
+                    ".BINCLUDE", ".BYTE", ".DB", ".DW", ".DT", ".TEXT", ".PET",
+                    ".DP", ".SCR", ".DS", ".SEGMENT", ".SETPET", ".SETSCR",
+                    ".WORD", ".DSB", ".ALIGN", ".(", ".)", ".", ".PSEUDOPC",
+                    ".REALPC", "#ERROR", "#IF", "#IFDEF", "#IFFILE", "#IFNDEF",
+                    "#IFNFILE", "#ELSIF", "#ELSIFDEF", "#ELSIFFILE",
+                    "#ELSIFNDEF", "#ELSIFNFILE", "#ELSE", "#ENDIF", "#INCLUDE",
+                    "#MACRO", "#OUTFILE", "#PRINT", "#SEGDEF", "#WARNING"
+                };
                 break;
+            default:
+                return compilerKeywords; // unsupported
+        }
+
+        for (String item : keywords) {
+            compilerKeywords.put(item, DEFAULT_COMPILER_KEYWORD);
         }
         return compilerKeywords;
     }    
@@ -1272,123 +958,55 @@ public class SyntaxScheme {
      */
     public static HashMap<String, MutableAttributeSet> getScriptKeywordHashMap(int compiler) {
         final HashMap<String, MutableAttributeSet> scriptKeywords = new HashMap<>();
+        final String keywords[];
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
-                scriptKeywords.put("AND", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ARCCOS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ARCSIN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ARCTAN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ASL", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ASR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("COS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("DIV", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("FLOAT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("INT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LSL", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LSR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MOD", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("NOT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("OR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SIN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("TAN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("XOR", DEFAULT_SCRIPT_KEYWORD);
+                keywords = new String[] {
+                    "AND", "ARCCOS", "ARCSIN", "ARCTAN", "ASL", "ASR", "COS",
+                    "DIV", "FLOAT", "INT", "LSL", "LSR", "MOD", "NOT", "OR",
+                    "SIN", "TAN", "XOR"
+                };
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
+                keywords = new String[] {
+//                    ".ADD", ".ASNUMBER", ".ASBOOLEAN", ".CHARAT", ".GET",
+//                    ".GETDATA", ".GETPIXEL", ".GETMULTICOLORBYTE",
+//                    ".GETSINGLECOLORBYTE", ".SIZE", ".SUBSTRING", ".STRING",
+//                    ".TOBINARYSTRING", ".TOHEXSTRING", ".TOINTSTRING",
+//                    ".TOOCTALSTRING",
+                    "ABS", "ACOS", "ASIN", "ATAN", "ATAN2", "CBRT", "CEIL", "COS",
+                    "COSH", "DEG", "EXP", "EXPM1", "FLOOR", "FRAC", "HYPOT",
+                    "LIST", "LOG", "LOG10", "LOG1P", "LOADPICTURE", "LOADSID",
+                    "MATRIX", "MAX", "MIN", "MOD", "MOVEMATRIX",
+                    "PERSPECTIVEMATRIX", "POW", "RAD", "RANDOM",
+                    "ROTATIONMATRIX", "ROUND", "SCALEMATRIX", "SIGN", "SIN",
+                    "SINH", "SQRT", "SIGNUM", "TAN", "TANH", "TODEGREE",
+                    "TORADIANS", "VECTOR"
+                };
+                break;
             case ConstantsR64.COMPILER_64TASS:
-//                scriptKeywords.put(".ADD", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".ASNUMBER", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".ASBOOLEAN", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".CHARAT", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".GET", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".GETDATA", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".GETPIXEL", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".GETMULTICOLORBYTE", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".GETSINGLECOLORBYTE", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".SIZE", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".SUBSTRING", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".STRING", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".TOBINARYSTRING", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".TOHEXSTRING", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".TOINTSTRING", DEFAULT_SCRIPT_KEYWORD);
-//                scriptKeywords.put(".TOOCTALSTRING", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ABS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ACOS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ASIN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ATAN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ATAN2", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("CBRT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("CEIL", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("COS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("COSH", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("DEG", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("EXP", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("EXPM1", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("FLOOR", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("FRAC", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("HYPOT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LIST", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LOG", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LOG10", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LOG1P", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LOADPICTURE", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("LOADSID", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MATRIX", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MAX", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MIN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MOD", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("MOVEMATRIX", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("PERSPECTIVEMATRIX", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("POW", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("RAD", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("RANDOM", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ROTATIONMATRIX", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("ROUND", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SCALEMATRIX", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SIGN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SIN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SINH", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SQRT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("SIGNUM", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("TAN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("TANH", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("TODEGREE", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("TORADIANS", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put("VECTOR", DEFAULT_SCRIPT_KEYWORD);
+                keywords = new String[] {
+                    "ABS", "ACOS", "ALL", "ANY", "ASIN", "ATAN", "ATAN2", "BOOL",
+                    "CBRT", "CEIL", "COS", "COSH", "DEG", "EXP", "FLOAT",
+                    "FLOOR", "FORMAT", "FRAC", "HYPOT", "INT", "LEN", "LOG",
+                    "LOG10", "POW", "RAD", "RANGE", "REPR", "ROUND", "SIGN",
+                    "SIN", "SINH", "SIZE", "SQRT", "STR", "TAN", "TANH",
+                    "TRUNC"
+                };
                 break;
             case ConstantsR64.COMPILER_CA65:
-                scriptKeywords.put(".BANKBYTE", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".BLANK", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".CONCAT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".CONST", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".HIBYTE", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".HIWORD", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".IDENT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".LEFT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".LOBYTE", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".MATCH", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".MID", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".REF", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".REFERENCED", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".RIGHT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".SIZEOF", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".STRAT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".SPRINTF", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".STRING", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".STRLEN", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".TCOUNT", DEFAULT_SCRIPT_KEYWORD);
-                scriptKeywords.put(".XMATCH", DEFAULT_SCRIPT_KEYWORD);
+                keywords = new String[] {
+                    ".BANKBYTE", ".BLANK", ".CONCAT", ".CONST", ".HIBYTE",
+                    ".HIWORD", ".IDENT", ".LEFT", ".LOBYTE", ".MATCH", ".MID",
+                    ".REF", ".REFERENCED", ".RIGHT", ".SIZEOF", ".STRAT",
+                    ".SPRINTF", ".STRING", ".STRLEN", ".TCOUNT", ".XMATCH"
+                };
                 break;
+            default:
+                return scriptKeywords; // unsupported
         }
-        if (ConstantsR64.COMPILER_64TASS==compiler) {
-            scriptKeywords.put("ALL", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("ANY", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("BOOL", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("FORMAT", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("INT", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("LEN", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("RANGE", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("REPR", DEFAULT_SCRIPT_KEYWORD);
-            scriptKeywords.put("STR", DEFAULT_SCRIPT_KEYWORD);
+        for (String item : keywords) {
+            scriptKeywords.put(item, DEFAULT_SCRIPT_KEYWORD);
         }
         return scriptKeywords;
     }    
