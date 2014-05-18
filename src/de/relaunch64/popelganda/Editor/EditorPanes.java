@@ -162,6 +162,8 @@ public class EditorPanes {
     public int addEditorPane(JEditorPane editorPane, File fp, String content, int c, int script) {
         // set syntax scheme
         editorPane = EditorPaneTools.setSyntaxScheme(editorPane, settings, c);
+        // set default font
+        editorPane.setFont(settings.getMainFont());
         // set backcolor
         // we need this hack for Nimbus LaF,
         // see http://stackoverflow.com/questions/22674575/jtextpane-background-color

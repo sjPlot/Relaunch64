@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
@@ -49,12 +51,23 @@ import javax.swing.text.Element;
  * @author Daniel Luedecke
  */
 public class ErrorHandler {
-    private final ArrayList<Integer> errorLines = new ArrayList<>();
-    private final ArrayList<Integer> errorLinesInLog = new ArrayList<>();
-    private final ArrayList<File> errorFiles = new ArrayList<>();
     private int errorIndex = -1;
     private String basePath;
     
+   private class ErrorInfo {
+        public final int line;
+        public final int column;
+        public final int logline;
+        public final File file;
+        public ErrorInfo(int line, int column, int logline, File file) {
+            this.line = line;
+            this.column = column;
+            this.logline = logline;
+            this.file = file;
+        }
+   }
+   private final ArrayList<ErrorInfo> errors = new ArrayList<>();
+
     public ErrorHandler() {
         clearErrors();
     }
@@ -69,47 +82,57 @@ public class ErrorHandler {
         // create buffered reader, needed for line number reader
         BufferedReader br = new BufferedReader(new StringReader(log));
         LineNumberReader lineReader = new LineNumberReader(br);
-        String line;
+        String line, pattern;
+        Pattern p;
+        int FilenameGroup, LineGroup, ColumnGroup;
+        switch (compiler) {
+            case ConstantsR64.COMPILER_ACME: // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
+                pattern = "^(Error|Warning|Serious error) - File ([^,]*), line (\\d+) .*";
+                FilenameGroup = 2;
+                LineGroup = 3;
+                ColumnGroup = 0;
+                break;
+            case ConstantsR64.COMPILER_KICKASSEMBLER: // at line 2, column 1 in /tmp/j.asm
+                pattern = "^at line (\\d+), column (\\d+) in (.*)";
+                FilenameGroup = 3;
+                LineGroup = 1;
+                ColumnGroup = 2;
+                break;
+            case ConstantsR64.COMPILER_64TASS: // j.asm:4:5: error: not defined 'i'
+                pattern = "^([^:]*):(\\d+):(\\d+): (error|warning):.*";
+                FilenameGroup = 1;
+                LineGroup = 2;
+                ColumnGroup = 3;
+                break;
+            case ConstantsR64.COMPILER_CA65: // j.asm(4): Error: Symbol `i' is undefined
+                pattern = "^([^(]*)\\((\\d+)\\): (Error|Warning):.*";
+                FilenameGroup = 1;
+                LineGroup = 2;
+                ColumnGroup = 0;
+                break;
+            case ConstantsR64.COMPILER_DREAMASS: // j.asm:4: error:variable undefined: i
+                pattern = "^([^:]*):(\\d+): (error|warning):.*";
+                FilenameGroup = 1;
+                LineGroup = 2;
+                ColumnGroup = 0;
+                break;
+            default:
+                return; // Unsupported
+        }
+        p = Pattern.compile(pattern);
         // check for valid values
         if (log!=null && !log.isEmpty()) {
             // read line by line
             try {
                 int linenumber=1;
-                int err;
-                File errf;
                 while ((line = lineReader.readLine())!=null) {
-                    err = -1;
-                    // read out error line
-                    switch (compiler) {
-                        case ConstantsR64.COMPILER_ACME:
-                            err = getErrorLineFromLine(line, "line ");
-                            break;
-                        case ConstantsR64.COMPILER_KICKASSEMBLER:
-                            // read line
-                            line = lineReader.readLine();
-                            if (line!=null) {
-                                err = getErrorLineFromLine(line, "line ");
-                            }
-                            break;
-                        case ConstantsR64.COMPILER_64TASS:
-                            err = getErrorLineFromLine(line, ":");
-                            break;
-                        case ConstantsR64.COMPILER_DREAMASS:
-                            err = getErrorLineFromLine(line, ":");
-                            break;
-                        case ConstantsR64.COMPILER_CA65:
-                            err = getErrorLineFromLine(line, "(");
-                            break;
-                    }
-                    errf = getErrorFileFromLine(line, compiler);
+                    Matcher m = p.matcher(line);
                     // check if we found error line
-                    if (err!=-1 && !errorLines.contains(err)) {
-                        errorLines.add(err);
-                        errorLinesInLog.add(linenumber);
-                    }
-                    // check if we found error line
-                    if (errf!=null && !errorFiles.contains(errf)) {
-                        errorFiles.add(errf);
+                    if (m.matches()) {
+                       int column = 1;
+                       if (ColumnGroup != 0) column = Integer.parseInt(m.group(ColumnGroup));
+                       ErrorInfo e = new ErrorInfo(Integer.parseInt(m.group(LineGroup)), column, linenumber, new File(m.group(FilenameGroup)));
+                       errors.add(e);
                     }
                     linenumber++;
                 }
@@ -117,77 +140,12 @@ public class ErrorHandler {
             catch (IOException ex) {
             }
         }
-   }
-    protected int getErrorLineFromLine(String line, String token) {
-        if (line!=null && !line.isEmpty()) {
-            int start = line.toLowerCase().indexOf(token, 0);
-            if (start!=-1) {
-                int end = start+token.length();
-                try {
-                    while (!Tools.isDelimiter(line.charAt(end), ":")) end++;
-                    return Integer.parseInt(line.substring(start+token.length(), end));
-                }
-                catch (NumberFormatException | IndexOutOfBoundsException ex) {
-                    return -1;
-                }
-            }
-        }
-        return -1;
     }
-    protected File getErrorFileFromLine(String line, int compiler) {
-        String file = null;
-        try {
-            switch (compiler) {
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    int start = line.indexOf(" in ");
-                    if (start!=-1) {
-                        file = line.substring(start+4);
-                    }
-                    break;
-                case ConstantsR64.COMPILER_ACME:
-                    start = line.toLowerCase().indexOf(" - file ");
-                    if (start!=-1) {
-                        int end = line.indexOf(", ", start+8);
-                        if (end!=-1) {
-                            file = line.substring(start+8, end);
-                        }
-                    }
-                    break;
-                case ConstantsR64.COMPILER_64TASS:
-                    start = line.indexOf(":");
-                    if (start!=-1) {
-                        file = line.substring(0,start);
-                    }
-                    break;
-                case ConstantsR64.COMPILER_DREAMASS:
-                    start = line.indexOf(":");
-                    if (start!=-1) {
-                        file = line.substring(0,start);
-                    }
-                    break;
-                case ConstantsR64.COMPILER_CA65:
-                    start = line.indexOf("(");
-                    if (start!=-1) {
-                        file = line.substring(0,start);
-                    }
-                    break;
-            }
-        }
-        catch (IndexOutOfBoundsException ex) {
-            return null;
-        }
-        // create file
-        File fp = (file!=null) ? new File(file) : null;
-        // check if exists
-        return fp;
-    }
-    public void gotoNextError(EditorPanes editorPanes, JTextArea log) {
-        // check array
-        if (!errorLines.isEmpty()) {
-            // incease index
-            errorIndex++;
-            // check index
-            if (errorIndex<0 || errorIndex>=errorLines.size()) errorIndex = 0;
+    protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
+        if (hasErrors()) {
+            // index
+            errorIndex = index % errors.size();
+            if (errorIndex < 0) errorIndex += errors.size();
             // scroll log
             scrollToErrorInLog(log);
             // open error tab
@@ -197,19 +155,13 @@ public class ErrorHandler {
         }
     }
     public void gotoPrevError(EditorPanes editorPanes, JTextArea log) {
-        // check array
-        if (!errorLines.isEmpty()) {
-            // incease index
-            errorIndex--;
-            // check index
-            if (errorIndex<0 || errorIndex>=errorLines.size()) errorIndex = errorLines.size()-1;
-            // scroll log
-            scrollToErrorInLog(log);
-            // open error tab
-            openErrorTab(editorPanes);
-            // goto error line
-            gotoErrorLine(editorPanes);
-        }
+        gotoError(editorPanes, log, errorIndex-1);
+    }
+    public void gotoNextError(EditorPanes editorPanes, JTextArea log) {
+        gotoError(editorPanes, log, errorIndex+1);
+    }
+    public void gotoFirstError(EditorPanes editorPanes, JTextArea log) {
+        gotoError(editorPanes, log, 0);
     }
     protected void gotoErrorLine(final EditorPanes editorPanes) {
         // goto error line
@@ -217,7 +169,7 @@ public class ErrorHandler {
             @Override
             public void run() {
                 // goto error line
-                editorPanes.gotoLine(errorLines.get(errorIndex));
+                editorPanes.gotoLine(errors.get(errorIndex).line);
                 // set focus in edior pane
                 editorPanes.setFocus();
             }
@@ -245,40 +197,26 @@ public class ErrorHandler {
     }
     protected File getAbsoluteErrorFilePath(int fileindex) {
         // check index bounds
-        if (fileindex<0 || fileindex>=errorFiles.size()) fileindex = 0;
+        if (fileindex<0 || fileindex>=errors.size()) fileindex = 0;
         // does path exist, or is it relative?
-        return FileTools.getAbsolutePath(new File(basePath), errorFiles.get(fileindex));
+        return FileTools.getAbsolutePath(new File(basePath), errors.get(fileindex).file);
     }
     public final void clearErrors() {
-        errorLines.clear();
-        errorFiles.clear();
-        errorLinesInLog.clear();
+        errors.clear();
         errorIndex = -1;
         basePath = "";
     }
     public boolean hasErrors() {
-        return (errorLines!=null && !errorLines.isEmpty());
-    }
-    public void gotoFirstError(EditorPanes ep, JTextArea log) {
-        // check array
-        if (!errorLines.isEmpty()) {
-            errorIndex = 0;
-            // scroll log
-            scrollToErrorInLog(log);
-            // open error tab
-            openErrorTab(ep);
-            // goto error line
-            gotoErrorLine(ep);
-        }
+        return (errors!=null && !errors.isEmpty());
     }
     public File getErrorFile() {
-        if (!errorFiles.isEmpty()) {
+        if (hasErrors()) {
             return getAbsoluteErrorFilePath();
         }
         return null;
     }
     public void scrollToErrorInLog(JTextArea ta) {
-        int line = errorLinesInLog.get(errorIndex);
+        int line = errors.get(errorIndex).logline;
         try {
             // retrieve element and check whether line is inside bounds
             Element e = ta.getDocument().getDefaultRootElement().getElement(line);
