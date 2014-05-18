@@ -36,6 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.jdesktop.application.Action;
 import org.jdom2.Document;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -104,7 +105,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         updateSchemePreview();
     }
     private void updateSchemePreview() {
-        jLabelSchemePreview.setIcon(ConstantsR64.colorpreviews[jComboBoxSyntaxScheme.getSelectedIndex()]);
+        String imagepath = ConstantsR64.colorpreviews[jComboBoxSyntaxScheme.getSelectedIndex()];
+        jLabelSchemePreview.setIcon(new ImageIcon(ConstantsR64.class.getResource(imagepath)));
     }
     private void initScripts() {
         // get all action listeners from the combo box

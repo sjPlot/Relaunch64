@@ -73,23 +73,23 @@ public class ConstantsR64 {
      */
     public static final ImageIcon r64icon = new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/icons/r64_16x16.png"));
 
-    public static final ImageIcon[] colorpreviews = new ImageIcon[] {
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_01.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_02.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_03.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_04.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_05.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_06.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_07.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_08.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_09.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_10.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_11.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_12.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_13.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_14.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_15.png")),
-        new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/scheme_16.png"))
+    public static final String[] colorpreviews = new String[] {
+        "/de/relaunch64/popelganda/resources/img/scheme_01.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_02.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_03.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_04.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_05.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_06.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_07.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_08.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_09.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_10.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_11.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_12.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_13.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_14.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_15.png",
+        "/de/relaunch64/popelganda/resources/img/scheme_16.png"
     };
     
     public static final String STRING_NORMAL = "normal";
