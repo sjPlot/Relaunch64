@@ -116,6 +116,12 @@ public class ErrorHandler {
                 lineGroup = 2;
                 columnGroup = 0;
                 break;
+            case ConstantsR64.COMPILER_DASM: // a.asm (5): error: Syntax Error 'o o'.
+                pattern = "^(.*?) (\\d+): (error|warning|fatal): .*";
+                filenameGroup = 1;
+                lineGroup = 2;
+                columnGroup = 0;
+                break;
             default:
                 return; // Unsupported
         }
