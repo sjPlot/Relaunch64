@@ -87,7 +87,7 @@ public class ErrorHandler {
         int filenameGroup, lineGroup, columnGroup;
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME: // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
-                pattern = "^(Error|Warning|Serious error) - File ([^,]*), line (\\d+) .*";
+                pattern = "^(Error|Warning|Serious error) - File (.*?), line (\\d+) .*";
                 filenameGroup = 2;
                 lineGroup = 3;
                 columnGroup = 0;
@@ -99,25 +99,25 @@ public class ErrorHandler {
                 columnGroup = 2;
                 break;
             case ConstantsR64.COMPILER_64TASS: // j.asm:4:5: error: not defined 'i'
-                pattern = "^([^:]*):(\\d+):(\\d+): (error|warning):.*";
+                pattern = "^(.*?):(\\d+):(\\d+): (error|warning):.*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 3;
                 break;
             case ConstantsR64.COMPILER_CA65: // j.asm(4): Error: Symbol `i' is undefined
-                pattern = "^([^(]*)\\((\\d+)\\): (Error|Warning):.*";
+                pattern = "^(.*?)\\((\\d+)\\): (Error|Warning):.*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 0;
                 break;
             case ConstantsR64.COMPILER_DREAMASS: // j.asm:4: error:variable undefined: i
-                pattern = "^([^:]*):(\\d+): (error|warning):.*";
+                pattern = "^(.*?):(\\d+): (error|warning):.*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 0;
                 break;
             case ConstantsR64.COMPILER_DASM: // a.asm (5): error: Syntax Error 'o o'.
-                pattern = "^(.*?) (\\d+): (error|warning|fatal): .*";
+                pattern = "^(.*?) \\((\\d+)\\): (error|warning|fatal): .*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 0;
