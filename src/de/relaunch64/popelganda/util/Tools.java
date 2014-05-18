@@ -161,6 +161,16 @@ public class Tools {
         }
         return null;
     }
+    /**
+     * This methods checks if an ACME source code contains the {@code !to} directive,
+     * and returns the file name if it was found. The file name can then be used as
+     * parameter when calling ACME.
+     * 
+     * <b>Note:</b> This method is currently not used!
+     * 
+     * @param source The (current) source code which should be examined for {@code !to} directive.
+     * @return The file indicated by the {@code !to} directive, or {@code null} if not found. 
+     */
     public static String getAcmeToFile(String source) {
         if (source!=null && source.contains("!to")) {
             // retrieve !to macro
@@ -177,6 +187,16 @@ public class Tools {
         }
         return null;
     }
+    /**
+     * This method searches the source code {@code source} for a start label
+     * that defines the start address of the compiled source. Can be used together
+     * with placeholder {@code START} as parameter for cruncher and packer.
+     * 
+     * @param source The (current) source code which should be examined for start label.
+     * @param compiler The compiler, which indicates the syntax used by {@code source}.
+     * @return the start-address indicated by the start label, or {@code null} if no
+     * start address was found.
+     */
     public static String getCruncherStart(String source, int compiler) {
         String cs = SyntaxScheme.getCommentString(compiler) + " start=";
         // find start token
@@ -194,6 +214,15 @@ public class Tools {
         }
         return null;
     }
+    /**
+     * This method searches the source code {@code source} for a script label
+     * that defines a custom compiler script that should be used when compiling this sourc.
+     * 
+     * @param source The (current) source code which should be examined for script label.
+     * @param compiler The compiler, which indicates the syntax used by {@code source}.
+     * @return the script name indicated by the script label, or {@code null} if no
+     * script name was found.
+     */
     public static String getCustomScriptName(String source, int compiler) {
         String cs = SyntaxScheme.getCommentString(compiler) + " script=";
         // find start token
@@ -211,6 +240,15 @@ public class Tools {
         }
         return null;
     }
+    /**
+     * Checks if a string starts with a specific opcode or compiler directive char. This may
+     * indicate that the following word is a specific opcode or compiler directive, and no
+     * asm keyword. Used for the tab/shift-tab behaviour if text is selected.
+     * 
+     * @param s The string that should be examined for the specific token or char.
+     * @return {@code true} if a specific opcode or compiler directive char was found,
+     * false otherwise.
+     */
     public static boolean startsWithOpcodeToken(String s) {
         return s.startsWith(".") || s.startsWith("+") || s.startsWith(":") || s.startsWith("-") || s.startsWith("!") || s.startsWith("#");
     }
