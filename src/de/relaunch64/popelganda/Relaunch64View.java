@@ -940,6 +940,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // check whether we have an assembler that uses colons at the end of labels
         boolean isColonAssembler = (ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler() || 
                                     ConstantsR64.COMPILER_DREAMASS==editorPanes.getActiveCompiler() || 
+                                    ConstantsR64.COMPILER_DASM==editorPanes.getActiveCompiler() || 
                                     ConstantsR64.COMPILER_CA65==editorPanes.getActiveCompiler());
         if (label!=null && isColonAssembler) label = label+":";
         editorPanes.gotoLabel(label);

@@ -757,6 +757,7 @@ public class SyntaxScheme {
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
             case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.COMPILER_DASM:
                 str = ",:{}()[]+-/<=>&|^~*";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -777,6 +778,7 @@ public class SyntaxScheme {
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
             case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.COMPILER_DASM:
                 str = ";";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -795,6 +797,9 @@ public class SyntaxScheme {
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
                 str = "!";
+                break;
+            case ConstantsR64.COMPILER_DASM:
+                str = "";
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
             case ConstantsR64.COMPILER_64TASS:
@@ -973,6 +978,51 @@ public class SyntaxScheme {
                 compilerKeywords.put(".TEXT", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".VAR", DEFAULT_COMPILER_KEYWORD);
                 compilerKeywords.put(".WORD", DEFAULT_COMPILER_KEYWORD);
+                break;
+            case ConstantsR64.COMPILER_DASM:
+                compilerKeywords.put("INCLUDE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("INCBIN", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("INCDIR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("SEG", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("SEG.U", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DC.B", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DC.W", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DC.L", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DS.B", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DS.W", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DS.L", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DV.B", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DV.W", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DV.L", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("BYTE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("WORD", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("LONG", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("HEX", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ERR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ORG", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("RORG", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("PROCESSOR", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ECHO", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("REND", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ALIGN", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("SUBROUTINE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("EQU", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("EQM", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("SET", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("MAC", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ENDM", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("MEXIT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("IFCONST", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("IFNCONST", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("IF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ELSE", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("ENDIF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("EIF", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("REPEAT", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("REPEND", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("DAD", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("LIST ON", DEFAULT_COMPILER_KEYWORD);
+                compilerKeywords.put("LIST OFF", DEFAULT_COMPILER_KEYWORD);
                 break;
             case ConstantsR64.COMPILER_64TASS:
                 compilerKeywords.put(".AL", DEFAULT_COMPILER_KEYWORD);

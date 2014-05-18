@@ -1342,6 +1342,8 @@ public class EditorPanes {
                     case ConstantsR64.COMPILER_DREAMASS:
                         macroPrefix = "#";
                         break;
+                    case ConstantsR64.COMPILER_DASM:
+                        break;
                 }
             }
             suggestionSubWord = getCaretString(false, macroPrefix);

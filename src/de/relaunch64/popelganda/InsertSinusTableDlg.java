@@ -74,6 +74,9 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
                 case ConstantsR64.COMPILER_ACME:
                     byteToken = "!byte";
                     break;
+                case ConstantsR64.COMPILER_DASM:
+                    byteToken = "dc.b";
+                    break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                 case ConstantsR64.COMPILER_DREAMASS:
                 case ConstantsR64.COMPILER_64TASS:

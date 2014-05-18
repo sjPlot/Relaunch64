@@ -55,6 +55,7 @@ public class LabelExtractor {
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                 case ConstantsR64.COMPILER_CA65:
                 case ConstantsR64.COMPILER_DREAMASS:
+                case ConstantsR64.COMPILER_DASM:
                     addDelim="";
                     break;
                 default:

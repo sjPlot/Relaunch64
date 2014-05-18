@@ -118,6 +118,9 @@ public class Tools {
                 case ConstantsR64.COMPILER_ACME:
                     byteToken = "!byte";
                     break;
+                case ConstantsR64.COMPILER_DASM:
+                    byteToken = "dc.b";
+                    break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                 case ConstantsR64.COMPILER_64TASS:
                 case ConstantsR64.COMPILER_DREAMASS:
@@ -251,6 +254,9 @@ public class Tools {
                 case ConstantsR64.COMPILER_ACME:
                     output.insert(0, "!byte ");
                     break;
+                case ConstantsR64.COMPILER_DASM:
+                    output.insert(0, "dc.b ");
+                    break;
                 case ConstantsR64.COMPILER_64TASS:
                 case ConstantsR64.COMPILER_CA65:
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -267,6 +273,9 @@ public class Tools {
                     break;
                 case ConstantsR64.COMPILER_KICKASSEMBLER:
                     output.insert(0, ".pc = $0801"+System.getProperty("line.separator"));
+                    break;
+                case ConstantsR64.COMPILER_DASM:
+                    output.insert(0, "org $0801"+System.getProperty("line.separator"));
                     break;
             }
             editorPanes.insertString(output.toString());
@@ -381,6 +390,9 @@ public class Tools {
                                         case ConstantsR64.COMPILER_DREAMASS:
                                             insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
+                                        case ConstantsR64.COMPILER_DASM:
+                                            insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
@@ -400,6 +412,9 @@ public class Tools {
                                         case ConstantsR64.COMPILER_DREAMASS:
                                             insert = ".binclude \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
+                                        case ConstantsR64.COMPILER_DASM:
+                                            insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
                                         case ConstantsR64.COMPILER_64TASS:
                                             insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
@@ -415,6 +430,9 @@ public class Tools {
                                             break;
                                         case ConstantsR64.COMPILER_CA65:
                                             insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.COMPILER_DASM:
+                                            insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                         case ConstantsR64.COMPILER_DREAMASS:
                                             insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
@@ -441,6 +459,9 @@ public class Tools {
                                 switch (editorPanes.getActiveCompiler()) {
                                     case ConstantsR64.COMPILER_ACME:
                                         insert = "!src \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.COMPILER_DASM:
+                                        insert = "include \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
                                     case ConstantsR64.COMPILER_KICKASSEMBLER:
                                         insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");

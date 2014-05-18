@@ -331,6 +331,8 @@ public class FunctionExtractor {
                 return ConstantsR64.STRING_MACRO_DREAMASS;
             case ConstantsR64.COMPILER_ACME:
                 return ConstantsR64.STRING_MACRO_ACME;
+            case ConstantsR64.COMPILER_DASM:
+                return ConstantsR64.STRING_MACRO_DASM;
             default:
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
         }
