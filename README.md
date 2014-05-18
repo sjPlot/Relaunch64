@@ -1,6 +1,16 @@
 Changelog
 ================
 
+Relaunch64 3.0.2
+----------------
+
+### New features
+* added DASM support
+* improvements with goto error functions
+
+### Bug fixes
+
+
 Relaunch64 3.0.1
 ----------------
 
