@@ -258,7 +258,6 @@ public class Tools {
                     output.insert(0, ".byte ");
                     break;
             }
-            // TODO CA65 startadresse?
             switch (editorPanes.getActiveCompiler()) {
                 case ConstantsR64.COMPILER_ACME:
                 case ConstantsR64.COMPILER_64TASS:

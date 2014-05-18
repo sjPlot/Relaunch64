@@ -55,7 +55,7 @@ public class ConstantsR64 {
      * This variable stores the application title that appears in the main window
      * Add "Release Candidate" or "Beta" to this title
      */
-    public static final String APPLICATION_TITLE = "Relaunch64 (devel-build)";
+    public static final String APPLICATION_TITLE = "Relaunch64";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
