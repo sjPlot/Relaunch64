@@ -65,6 +65,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
@@ -166,6 +167,7 @@ public class EditorPanes {
         // set default font
         editorPane.setFont(settings.getMainFont());
         Gutter g = editorPane.getGutter();
+        JEditBuffer buffer = editorPane.getBuffer();
         g.setBackground(SyntaxScheme.getLineBackgroundColor());
         // set backcolor
         // we need this hack for Nimbus LaF,
@@ -253,6 +255,28 @@ public class EditorPanes {
                 }
             }
         });
+        
+        buffer.addBufferListener(new BufferListener() {
+            @Override public void foldLevelChanged(JEditBuffer jeb, int i, int i1) {
+            }
+            @Override public void contentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+                setModified(true);
+            }
+            @Override public void contentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+                setModified(true);
+            }
+            @Override public void preContentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+            }
+            @Override public void preContentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+            }
+            @Override public void transactionComplete(JEditBuffer jeb) {
+            }
+            @Override public void foldHandlerChanged(JEditBuffer jeb) {
+            }
+            @Override public void bufferLoaded(JEditBuffer jeb) {
+            }
+        });
+        
         // add focus listener
         editorPane.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override public void focusGained(java.awt.event.FocusEvent evt) {
