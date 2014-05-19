@@ -336,8 +336,11 @@ public class EditorPanes {
         return ep.getLineOfOffset(caretPosition);
     }
     public void gotoLine(int line, int column) {
+        // get text area
         StandaloneTextArea ep = getActiveEditorPane();
-        ep.scrollTo(line, column, false);
+        // set caret position
+        ep.setCaretPosition(ep.getLineStartOffset(line-1)+column-1);
+        // scroll and center caret position
         ep.scrollAndCenterCaret();
     }
     /**
@@ -1334,8 +1337,7 @@ public class EditorPanes {
 //        StandaloneTextArea ep = getActiveEditorPane();
 //        ep.setCaretPosition(position);
 //        ep.setSelectedText(text);
-        StandaloneTextArea ep = getActiveEditorPane();
-        JEditBuffer buffer = ep.getBuffer();
+        JEditBuffer buffer = getActiveEditorPane().getBuffer();
         buffer.insert(position, text);
     }
     public void commentLine() {
