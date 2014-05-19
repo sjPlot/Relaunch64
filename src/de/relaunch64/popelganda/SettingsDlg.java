@@ -4,7 +4,6 @@
  */
 package de.relaunch64.popelganda;
 
-import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
@@ -28,15 +27,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
 import org.jdom2.Document;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -68,9 +68,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         // set preferred compiler settings
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         // init line number alignment
-        if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.RIGHT) jComboBoxLineNumberAlign.setSelectedIndex(0);
-        else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.CENTER) jComboBoxLineNumberAlign.setSelectedIndex(1);
-        else if (settings.getLineNumerAlignment() == EditorPaneLineNumbers.LEFT) jComboBoxLineNumberAlign.setSelectedIndex(2);
+        if (settings.getLineNumerAlignment() == Gutter.RIGHT) jComboBoxLineNumberAlign.setSelectedIndex(0);
+        else if (settings.getLineNumerAlignment() == Gutter.CENTER) jComboBoxLineNumberAlign.setSelectedIndex(1);
+        else if (settings.getLineNumerAlignment() == Gutter.LEFT) jComboBoxLineNumberAlign.setSelectedIndex(2);
         // init other settings
         jCheckBoxCheckUpdates.setSelected(settings.getCheckForUpdates());
         jCheckBoxSaveOnCompile.setSelected(settings.getSaveOnCompile());
@@ -330,9 +330,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         settings.setPreferredCompiler(jComboBoxPrefComp.getSelectedIndex());
         settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
-        if (jComboBoxLineNumberAlign.getSelectedIndex() == 0) settings.setLineNumerAlignment(EditorPaneLineNumbers.RIGHT);
-        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 1) settings.setLineNumerAlignment(EditorPaneLineNumbers.CENTER);
-        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(EditorPaneLineNumbers.LEFT);
+        if (jComboBoxLineNumberAlign.getSelectedIndex() == 0) settings.setLineNumerAlignment(Gutter.RIGHT);
+        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 1) settings.setLineNumerAlignment(Gutter.CENTER);
+        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(Gutter.LEFT);
         setModifiedTabFont(false);
         jLabelRestart.setVisible(false);
     }

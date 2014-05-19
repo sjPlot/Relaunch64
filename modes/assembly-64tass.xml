@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!--
+	64tass Assembly mode for jedit by Soci/Singular (soci at c64.rulez.org)
+
+        Add the following to the catalog file:
+        <MODE NAME="64tass" FILE="jedit-assembly-64tass.xml" FILE_NAME_GLOB="*.asm" />
+-->
+
+<MODE>
+
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE=";" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
+                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/?^&amp;*" />
+	</PROPS>
+
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
+
+		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+
+                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR" AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+
+		<KEYWORDS>
+                        <KEYWORD1>.al</KEYWORD1>
+                        <KEYWORD1>.align</KEYWORD1>
+                        <KEYWORD1>.as</KEYWORD1>
+                        <KEYWORD1>.assert</KEYWORD1>
+                        <KEYWORD1>.bend</KEYWORD1>
+                        <KEYWORD1>.binclude</KEYWORD1>
+                        <KEYWORD1>.block</KEYWORD1>
+                        <KEYWORD1>.break</KEYWORD1>
+                        <KEYWORD1>.case</KEYWORD1>
+                        <KEYWORD1>.cdef</KEYWORD1>
+                        <KEYWORD1>.cerror</KEYWORD1>
+                        <KEYWORD1>.check</KEYWORD1>
+                        <KEYWORD1>.comment</KEYWORD1>
+                        <KEYWORD1>.continue</KEYWORD1>
+                        <KEYWORD1>.cpu</KEYWORD1>
+                        <KEYWORD1>.cwarn</KEYWORD1>
+                        <KEYWORD1>.databank</KEYWORD1>
+                        <KEYWORD1>.default</KEYWORD1>
+                        <KEYWORD1>.dpage</KEYWORD1>
+                        <KEYWORD1>.dsection</KEYWORD1>
+                        <KEYWORD1>.edef</KEYWORD1>
+                        <KEYWORD1>.else</KEYWORD1>
+                        <KEYWORD1>.elsif</KEYWORD1>
+                        <KEYWORD1>.enc</KEYWORD1>
+                        <KEYWORD1>.end</KEYWORD1>
+                        <KEYWORD1>.endc</KEYWORD1>
+                        <KEYWORD1>.endf</KEYWORD1>
+                        <KEYWORD1>.endif</KEYWORD1>
+                        <KEYWORD1>.endm</KEYWORD1>
+                        <KEYWORD1>.endp</KEYWORD1>
+                        <KEYWORD1>.ends</KEYWORD1>
+                        <KEYWORD1>.endswitch</KEYWORD1>
+                        <KEYWORD1>.endu</KEYWORD1>
+                        <KEYWORD1>.endweak</KEYWORD1>
+                        <KEYWORD1>.eor</KEYWORD1>
+                        <KEYWORD1>.error</KEYWORD1>
+                        <KEYWORD1>.fi</KEYWORD1>
+                        <KEYWORD1>.for</KEYWORD1>
+                        <KEYWORD1>.function</KEYWORD1>
+                        <KEYWORD1>.goto</KEYWORD1>
+                        <KEYWORD1>.here</KEYWORD1>
+                        <KEYWORD1>.hidemac</KEYWORD1>
+                        <KEYWORD1>.if</KEYWORD1>
+                        <KEYWORD1>.ifeq</KEYWORD1>
+                        <KEYWORD1>.ifmi</KEYWORD1>
+                        <KEYWORD1>.ifne</KEYWORD1>
+                        <KEYWORD1>.ifpl</KEYWORD1>
+                        <KEYWORD1>.include</KEYWORD1>
+                        <KEYWORD1>.lbl</KEYWORD1>
+                        <KEYWORD1>.lint</KEYWORD1>
+                        <KEYWORD1>.logical</KEYWORD1>
+                        <KEYWORD1>.macro</KEYWORD1>
+                        <KEYWORD1>.next</KEYWORD1>
+                        <KEYWORD1>.offs</KEYWORD1>
+                        <KEYWORD1>.option</KEYWORD1>
+                        <KEYWORD1>.page</KEYWORD1>
+                        <KEYWORD1>.pend</KEYWORD1>
+                        <KEYWORD1>.proc</KEYWORD1>
+                        <KEYWORD1>.proff</KEYWORD1>
+                        <KEYWORD1>.pron</KEYWORD1>
+                        <KEYWORD1>.rept</KEYWORD1>
+                        <KEYWORD1>.section</KEYWORD1>
+                        <KEYWORD1>.segment</KEYWORD1>
+                        <KEYWORD1>.send</KEYWORD1>
+                        <KEYWORD1>.showmac</KEYWORD1>
+                        <KEYWORD1>.struct</KEYWORD1>
+                        <KEYWORD1>.switch</KEYWORD1>
+                        <KEYWORD1>.union</KEYWORD1>
+                        <KEYWORD1>.var</KEYWORD1>
+                        <KEYWORD1>.warn</KEYWORD1>
+                        <KEYWORD1>.weak</KEYWORD1>
+                        <KEYWORD1>.xl</KEYWORD1>
+                        <KEYWORD1>.xs</KEYWORD1>
+
+                        <KEYWORD2>.binary</KEYWORD2>
+                        <KEYWORD2>.byte</KEYWORD2>
+                        <KEYWORD2>.char</KEYWORD2>
+                        <KEYWORD2>.dint</KEYWORD2>
+                        <KEYWORD2>.dstruct</KEYWORD2>
+                        <KEYWORD2>.dunion</KEYWORD2>
+                        <KEYWORD2>.dword</KEYWORD2>
+                        <KEYWORD2>.fill</KEYWORD2>
+                        <KEYWORD2>.int</KEYWORD2>
+                        <KEYWORD2>.long</KEYWORD2>
+                        <KEYWORD2>.null</KEYWORD2>
+                        <KEYWORD2>.ptext</KEYWORD2>
+                        <KEYWORD2>.rta</KEYWORD2>
+                        <KEYWORD2>.shift</KEYWORD2>
+                        <KEYWORD2>.shiftl</KEYWORD2>
+                        <KEYWORD2>.text</KEYWORD2>
+                        <KEYWORD2>.word</KEYWORD2>
+
+			<!-- Registers -->
+			<KEYWORD3>a</KEYWORD3>
+
+			<!-- Instructions: standard -->
+                        <FUNCTION>adc</FUNCTION>
+                        <FUNCTION>and</FUNCTION>
+                        <FUNCTION>asl</FUNCTION>
+                        <FUNCTION>bcc</FUNCTION>
+                        <FUNCTION>bcs</FUNCTION>
+                        <FUNCTION>beq</FUNCTION>
+                        <FUNCTION>bit</FUNCTION>
+                        <FUNCTION>bmi</FUNCTION>
+                        <FUNCTION>bne</FUNCTION>
+                        <FUNCTION>bpl</FUNCTION>
+                        <FUNCTION>brk</FUNCTION>
+                        <FUNCTION>bvc</FUNCTION>
+                        <FUNCTION>bvs</FUNCTION>
+                        <FUNCTION>clc</FUNCTION>
+                        <FUNCTION>cld</FUNCTION>
+                        <FUNCTION>cli</FUNCTION>
+                        <FUNCTION>clv</FUNCTION>
+                        <FUNCTION>cmp</FUNCTION>
+                        <FUNCTION>cpx</FUNCTION>
+                        <FUNCTION>cpy</FUNCTION>
+                        <FUNCTION>dec</FUNCTION>
+                        <FUNCTION>dex</FUNCTION>
+                        <FUNCTION>dey</FUNCTION>
+                        <FUNCTION>eor</FUNCTION>
+                        <FUNCTION>inc</FUNCTION>
+                        <FUNCTION>inx</FUNCTION>
+                        <FUNCTION>iny</FUNCTION>
+                        <FUNCTION>jmp</FUNCTION>
+                        <FUNCTION>jsr</FUNCTION>
+                        <FUNCTION>lda</FUNCTION>
+                        <FUNCTION>ldx</FUNCTION>
+                        <FUNCTION>ldy</FUNCTION>
+                        <FUNCTION>lsr</FUNCTION>
+                        <FUNCTION>nop</FUNCTION>
+                        <FUNCTION>ora</FUNCTION>
+                        <FUNCTION>pha</FUNCTION>
+                        <FUNCTION>php</FUNCTION>
+                        <FUNCTION>pla</FUNCTION>
+                        <FUNCTION>plp</FUNCTION>
+                        <FUNCTION>rol</FUNCTION>
+                        <FUNCTION>ror</FUNCTION>
+                        <FUNCTION>rti</FUNCTION>
+                        <FUNCTION>rts</FUNCTION>
+                        <FUNCTION>sbc</FUNCTION>
+                        <FUNCTION>sec</FUNCTION>
+                        <FUNCTION>sed</FUNCTION>
+                        <FUNCTION>sei</FUNCTION>
+                        <FUNCTION>sta</FUNCTION>
+                        <FUNCTION>stx</FUNCTION>
+                        <FUNCTION>sty</FUNCTION>
+                        <FUNCTION>tax</FUNCTION>
+                        <FUNCTION>tay</FUNCTION>
+                        <FUNCTION>tsx</FUNCTION>
+                        <FUNCTION>txa</FUNCTION>
+                        <FUNCTION>txs</FUNCTION>
+                        <FUNCTION>tya</FUNCTION>
+
+			<!-- Instructions: Alias -->
+                        <FUNCTION>bge</FUNCTION>
+                        <FUNCTION>blt</FUNCTION>
+                        <FUNCTION>shl</FUNCTION>
+                        <FUNCTION>shr</FUNCTION>
+
+			<!-- Instructions: Pseudo -->
+                        <FUNCTION>gcc</FUNCTION>
+                        <FUNCTION>gcs</FUNCTION>
+                        <FUNCTION>geq</FUNCTION>
+                        <FUNCTION>gge</FUNCTION>
+                        <FUNCTION>glt</FUNCTION>
+                        <FUNCTION>gmi</FUNCTION>
+                        <FUNCTION>gne</FUNCTION>
+                        <FUNCTION>gpl</FUNCTION>
+                        <FUNCTION>gvc</FUNCTION>
+                        <FUNCTION>gvs</FUNCTION>
+
+			<!-- Instructions: Illegal -->
+                        <FUNCTION>anc</FUNCTION>
+                        <FUNCTION>ane</FUNCTION>
+                        <FUNCTION>arr</FUNCTION>
+                        <FUNCTION>asr</FUNCTION>
+                        <FUNCTION>dcp</FUNCTION>
+                        <FUNCTION>isb</FUNCTION>
+                        <FUNCTION>jam</FUNCTION>
+                        <FUNCTION>lax</FUNCTION>
+                        <FUNCTION>lds</FUNCTION>
+                        <FUNCTION>rla</FUNCTION>
+                        <FUNCTION>rra</FUNCTION>
+                        <FUNCTION>sax</FUNCTION>
+                        <FUNCTION>sbx</FUNCTION>
+                        <FUNCTION>sha</FUNCTION>
+                        <FUNCTION>shs</FUNCTION>
+                        <FUNCTION>shx</FUNCTION>
+                        <FUNCTION>shy</FUNCTION>
+                        <FUNCTION>slo</FUNCTION>
+                        <FUNCTION>sre</FUNCTION>
+		</KEYWORDS>
+
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+                <!--<SEQ TYPE="OPERATOR">%</SEQ>-->
+
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+
+                <SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z][A-Za-z0-9_]*</SEQ_REGEXP>
+	</RULES>
+</MODE>

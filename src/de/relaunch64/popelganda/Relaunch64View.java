@@ -33,7 +33,6 @@
 
 package de.relaunch64.popelganda;
 
-import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
@@ -152,10 +151,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // init editorpane-dataclass
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jComboBoxRunScripts, this, settings);
-        // init line numbers
-        // init line numbers
-        EditorPaneLineNumbers epln = new EditorPaneLineNumbers(jEditorPaneMain, settings);
-        jScrollPaneMainEditorPane.setRowHeaderView(epln);
         // init syntax highlighting for editor pane
         editorPanes.addEditorPane(jEditorPaneMain, null, null, settings.getPreferredCompiler(), settings.getLastUserScript());
         // check if we have any parmater
@@ -535,7 +530,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
                     try {
                         int line = Integer.parseInt(jTextFieldGotoLine.getText());
-                        editorPanes.gotoLine(line);
+                        editorPanes.gotoLine(line, 1);
                     }
                     catch (NumberFormatException ex) {
                         specialFunctions();
@@ -1714,7 +1709,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPaneMainEditorPane = new javax.swing.JScrollPane();
-        jEditorPaneMain = new javax.swing.JEditorPane();
+        jEditorPaneMain = org.gjt.sp.jedit.textarea.StandaloneTextArea.createTextArea();
         jPanelFind = new javax.swing.JPanel();
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();
@@ -2642,7 +2637,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;
-    private javax.swing.JEditorPane jEditorPaneMain;
+    private org.gjt.sp.jedit.textarea.StandaloneTextArea jEditorPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

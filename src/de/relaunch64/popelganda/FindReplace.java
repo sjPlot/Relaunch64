@@ -36,8 +36,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.swing.JEditorPane;
-import javax.swing.text.BadLocationException;
+import org.gjt.sp.jedit.textarea.Selection;
+import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 
 /**
  *
@@ -51,7 +51,7 @@ public class FindReplace {
     private String content;
     private int activeTab = -1;
     private int lastActiveTab = -1;
-    private JEditorPane editorPane = null;
+    private StandaloneTextArea editorPane = null;
     
     /**
      * 
@@ -64,10 +64,10 @@ public class FindReplace {
     FindReplace() {
         resetValues();
     }
-    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx, boolean wholeWord, boolean matchCase) {
+    public void initValues(String ft, String rt, int at, StandaloneTextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase) {
         initValues(ft, rt, at, ep, isRegEx, wholeWord, matchCase, false);
     }
-    public void initValues(String ft, String rt, int at, JEditorPane ep, boolean isRegEx, boolean wholeWord, boolean matchCase, boolean forceInit) {
+    public void initValues(String ft, String rt, int at, StandaloneTextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase, boolean forceInit) {
         boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
                                (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
         findText = ft;
@@ -183,16 +183,12 @@ public class FindReplace {
                     if (findpos<0) {
                         findpos=0;
                     }
-                    // select next occurence of find term
-                    editorPane.setSelectionStart(findselections.get(findpos)[0]);
-                    editorPane.moveCaretPosition(findselections.get(findpos)[1]);
                 }
                 else {
                     findpos=0;
-                    // select next occurence of find term
-                    editorPane.setSelectionStart(findselections.get(findpos)[0]);
-                    editorPane.moveCaretPosition(findselections.get(findpos)[1]);
                 }
+                // select next occurence of find term
+                editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
             }
             catch (IllegalArgumentException ex) {
             }
@@ -220,17 +216,13 @@ public class FindReplace {
                 if (findpos>=findselections.size()) {
                     findpos=findselections.size()-1;
                 }
-                // select next occurence of find term
-                editorPane.setSelectionStart(findselections.get(findpos)[0]);
-                editorPane.moveCaretPosition(findselections.get(findpos)[1]);
             }
             // when we reached the first match, start from end again
             else {
                 findpos = findselections.size()-1;
-                // select next occurence of find term
-                editorPane.setSelectionStart(findselections.get(findpos)[0]);
-                editorPane.moveCaretPosition(findselections.get(findpos)[1]);
             }
+            // select next occurence of find term
+            editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
             editorPane.requestFocusInWindow();
         }
         else {
@@ -261,8 +253,8 @@ public class FindReplace {
     public void replaceAll(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         if (initmatcher(isRegEx, wholeWord, matchCase)) {
             for (int cnt=findselections.size()-1;cnt>=0; cnt--) {
-                editorPane.setSelectionStart(findselections.get(cnt)[0]);
-                editorPane.moveCaretPosition(findselections.get(cnt)[1]);
+                // select next occurence of find term
+                editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
                 if (editorPane.getSelectedText()!=null) {
                     editorPane.replaceSelection(replaceText);
                 }
@@ -276,13 +268,8 @@ public class FindReplace {
     }
     private void updateContent() {
         // check for values
-        if (editorPane.getDocument().getLength()>0) {
-            try {
-                content = (editorPane!=null) ? editorPane.getDocument().getText(0, editorPane.getDocument().getLength()) : "";
-            }
-            catch (BadLocationException ex) {
-                content = editorPane.getText();
-            }
+        if (editorPane.getText().length()>0) {
+            content = editorPane.getText();
         }
     }
 }

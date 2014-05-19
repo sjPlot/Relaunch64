@@ -32,9 +32,8 @@
  */
 package de.relaunch64.popelganda.database;
 
-import de.relaunch64.popelganda.Editor.EditorPaneLineNumbers;
-import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.ColorSchemes;
+import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.awt.Font;
@@ -47,6 +46,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JSplitPane;
+import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -316,7 +316,7 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
             // create a filepath-element
             Element el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
-            el.setText(String.valueOf(EditorPaneLineNumbers.RIGHT));
+            el.setText(String.valueOf(Gutter.RIGHT));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -723,19 +723,19 @@ public class Settings {
         }
         el.setText(String.valueOf(val));
     }
-    public float getLineNumerAlignment() {
+    public int getLineNumerAlignment() {
         Element el = settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT);
         if (el!=null) {
             try {
-                return Float.parseFloat(el.getText());
+                return Integer.parseInt(el.getText());
             }
             catch (NumberFormatException ex) {
-                return EditorPaneLineNumbers.RIGHT;
+                return Gutter.RIGHT;
             }
         }
-        return EditorPaneLineNumbers.RIGHT;
+        return Gutter.RIGHT;
     }
-    public void setLineNumerAlignment(float align) {
+    public void setLineNumerAlignment(int align) {
         Element el = settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT);
         if (null==el) {
             el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);

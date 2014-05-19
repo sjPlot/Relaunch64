@@ -20,6 +20,7 @@ package de.relaunch64.popelganda.Editor;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 
 /**
  *
@@ -68,7 +69,8 @@ public class InsertBreakPoint {
         editorPane.insertBreakPoint();
         // add macro if necessary
         if (addMacro) {
-            int endpos = editorPane.getActiveEditorPane().getDocument().getLength();
+            StandaloneTextArea ep = editorPane.getActiveEditorPane();
+            int endpos = ep.getLineEndOffset(ep.getLastPhysicalLine());
             editorPane.insertString(breakPointMacro, endpos);
         }
     }

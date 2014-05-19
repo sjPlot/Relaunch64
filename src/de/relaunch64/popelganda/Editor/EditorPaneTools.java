@@ -38,20 +38,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import javax.swing.JEditorPane;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
-import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyledEditorKit;
-import javax.swing.text.Utilities;
+import org.gjt.sp.jedit.textarea.Selection;
+import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 
 /**
  *
  * @author Daniel Luedecke
  */
 public class EditorPaneTools {
-    public static void commentLine(JEditorPane ep, int compiler) {
+    public static void commentLine(StandaloneTextArea ep, int compiler) {
         // retrieve comment string
         String commentString = SyntaxScheme.getCommentString(compiler);
         // check for text selection
@@ -59,8 +58,13 @@ public class EditorPaneTools {
         // if we have selection, add tab to each selected line
         if (selString!=null && !selString.isEmpty()) {
             // remember selection range
-            int selstart = ep.getSelectionStart();
-            int selend = ep.getSelectionEnd();
+            
+            // TODO selection setzne
+            
+//            int selstart = ep.getSelectionStart();
+//            int selend = ep.getSelectionEnd();
+            int selstart = 1;
+            int selend = 2;
             // retrieve lines
             String[] lines = selString.split("\n");
             // count new lines
@@ -93,8 +97,7 @@ public class EditorPaneTools {
             // insert string
             ep.replaceSelection(sb.toString());
             // re-select text
-            ep.setSelectionStart(selstart);
-            ep.setSelectionEnd(selend+chardiff);
+            ep.setSelection(new Selection.Range(selstart, selend+chardiff));
         }
     }
     public static String findJumpToken(int direction, int currentLine, ArrayList<Integer> ln, ArrayList<String> names) {
@@ -139,90 +142,6 @@ public class EditorPaneTools {
         catch (IndexOutOfBoundsException ex) {
         }
         return dest;
-    }
-    /**
-     * Scrolls the source code of the editor pane {@code ep} to the line {@code line}.
-     * This functions tries to show at least 10 lines before and after the destination
-     * line where to go, thus scrolling the goto-line to somewhat the middle of the screen.
-     * 
-     * @param ep A JEdiorPane with the source, typically retrieved via
-     * {@link #getActiveEditorPane()} or {@link #getEditorPaneProperties(selectedTab).getEditorPane()}
-     * @param line The line where the to scroll within the source code.
-     * @param column The column where the caret is placed (optional).
-     * @return {@code true} if the goto was successful.
-     */
-    public static boolean gotoLine(JEditorPane ep, int line, int column) {
-        if (line>0 && column>0) {
-            line--;
-            if (ep!=null) {
-                try {
-                    // retrieve element and check whether line is inside bounds
-                    Element e = ep.getDocument().getDefaultRootElement().getElement(line);
-                    if (e!=null) {
-                        // retrieve caret of requested line
-                        int caret = e.getStartOffset()+column-1;
-                        // set new caret position
-                        ep.setCaretPosition(caret);
-                        // scroll rect to visible
-                        ep.scrollRectToVisible(ep.modelToView(caret));
-                        // scroll some lines back, if possible
-                        e = ep.getDocument().getDefaultRootElement().getElement(line-10);
-                        if (e!=null) caret = e.getStartOffset();
-                        // scroll rect to visible
-                        ep.scrollRectToVisible(ep.modelToView(caret));
-                        // scroll some lines further, if possible
-                        e = ep.getDocument().getDefaultRootElement().getElement(line+10);
-                        if (e!=null) caret = e.getStartOffset();
-                        // scroll rect to visible
-                        ep.scrollRectToVisible(ep.modelToView(caret));
-                        // request focus
-                        ep.requestFocusInWindow();
-                        return true;
-                    }
-                }
-                catch(BadLocationException | IllegalArgumentException | IndexOutOfBoundsException ex) {
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean gotoLine(JEditorPane ep, int line) {
-        return gotoLine(ep, line, 1);
-    }
-    /**
-     * This method automatically inserts tab or spaces after the user pressed enter key.
-     * Automatic indention of caret position.
-     * @param ep
-     */
-    public static void autoInsertTab(JEditorPane ep) {
-        try {
-            int caret = ep.getCaretPosition();
-            // get start offset of current row
-            int rowstart = Utilities.getRowStart(ep, caret);
-            // get start offset of previous row
-            int prevrow = Utilities.getRowStart(ep, rowstart-1);
-            // if we have a valid value, go on
-            if (prevrow>=0) {
-                int offlen = rowstart-prevrow;
-                // get line string
-                String line = ep.getText(prevrow, offlen);
-                StringBuilder tabs = new StringBuilder("");
-                // iterate line string and read amount of leading spaces / tabs
-                for (int i=0; i<offlen; i++) {
-                    // get each char
-                    char c = line.charAt(i);
-                    if (' '==c || '\t'==c) {
-                        tabs.append(c);
-                    }
-                    else {
-                        break;
-                    }
-                }
-                ep.getDocument().insertString(caret, tabs.toString(), null);
-            }
-        } catch (BadLocationException ex) {
-        }
     }
     /**
      * 

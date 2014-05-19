@@ -85,7 +85,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JEditorPane" name="jEditorPaneMain">
+                        <Component class="org.gjt.sp.jedit.textarea.StandaloneTextArea" name="jEditorPaneMain">
                           <Properties>
                             <Property name="name" type="java.lang.String" value="jEditorPaneMain" noResource="true"/>
                           </Properties>

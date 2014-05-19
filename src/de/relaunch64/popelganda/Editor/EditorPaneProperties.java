@@ -34,50 +34,34 @@ package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
 import java.io.File;
-import javax.swing.JEditorPane;
-import javax.swing.event.DocumentListener;
+import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 
 /**
  *
  * @author Daniel Luedecke
  */
 public class EditorPaneProperties {
-    private JEditorPane editorPane;
-    private DocumentListener documentListener;
+    private org.gjt.sp.jedit.textarea.StandaloneTextArea editorPane;
     private boolean modified;
     private File filePath;
     private int compiler;
     private int script;
-    private MyUndoManager undomanager;
     
     public EditorPaneProperties() {
         resetEditorPanesProperties();
     }
     public final void resetEditorPanesProperties() {
         editorPane = null;
-        documentListener = null;
         modified = false;
         filePath = null;
         compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
         script = 0;
     }
-    public JEditorPane getEditorPane() {
+    public StandaloneTextArea getEditorPane() {
         return editorPane;
     }
-    public void setEditorPane(JEditorPane ep) {
+    public void setEditorPane(StandaloneTextArea ep) {
         editorPane = ep;
-    }
-    public DocumentListener getDocListener() {
-        return documentListener;
-    }
-    public void setDocListener(DocumentListener dl) {
-        documentListener = dl;
-    }
-    public MyUndoManager getUndoManager() {
-        return undomanager;
-    }
-    public void setUndoManager(MyUndoManager um) {
-        undomanager = um;
     }
     public boolean isModified() {
         return modified;
