@@ -136,6 +136,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (settings.isOSX()) setupMacOSXApplicationListener();
         // init swing components
         initComponents();
+        // remove borders on OS X
+        if (settings.isOSX()) {
+            jButtonRunScript.setVisible(false);
+            jTabbedPane1.setBorder(null);
+            jTabbedPaneLogs.setBorder(null);
+            jSplitPane1.setBorder(null);
+            jSplitPane2.setBorder(null);
+            jScrollPane2.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
+            jScrollPane3.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
+            jPanel9.setBorder(new javax.swing.border.MatteBorder(15, 5, 5, 5, new Color(238,238,238)));
+        }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
@@ -1450,26 +1461,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         UIManager.LookAndFeelInfo[] installed_laf = UIManager.getInstalledLookAndFeels();
         // init found-variables
         String classname = "";
+        String aquaclassname = "";
         // in case we find "nimbus" LAF, set this as default on non-mac-os
         // because it simply looks the best.
         for (UIManager.LookAndFeelInfo laf : installed_laf) {
             // check whether laf is nimbus
+            if (laf.getClassName().toLowerCase().contains("aqua")) {
+                aquaclassname = laf.getClassName();
+            }
             if (laf.getClassName().toLowerCase().contains("nimbus")) {
                 classname = laf.getClassName();
-                break;
             }
         }
-        // check which laf was found and set appropriate default value 
-        if (!classname.isEmpty()) {
-            try {
+        try {
+            // check which laf was found and set appropriate default value 
+            if (!aquaclassname.isEmpty()) {
+                // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel(aquaclassname);
+            }
+            // check which laf was found and set appropriate default value 
+            else if (!classname.isEmpty()) {
                 // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                 UIManager.setLookAndFeel(classname);
-            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             }
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
         }
         if (settings.isOSX()) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            // Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
         }
         System.setProperty("awt.useSystemAAFontSettings", "on");
     }
