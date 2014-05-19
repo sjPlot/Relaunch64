@@ -252,17 +252,30 @@ public class Tools {
     public static boolean startsWithOpcodeToken(String s) {
         return s.startsWith(".") || s.startsWith("+") || s.startsWith(":") || s.startsWith("-") || s.startsWith("!") || s.startsWith("#");
     }
+    /**
+     * This method inserts a Basic upstart code snippet into the currently active source code,
+     * so the source will be executed after compiling and running in an emulator. This is needed,
+     * if the source file will not be crunched with a packer.
+     * 
+     * @param editorPanes A reference to the EditorPanes class, so the current source code
+     * and compiler / syntax settings can be examined.
+     */
     public static void insertBasicStart(EditorPanes editorPanes) {
         int dezaddress = 0;
-        // open inpu  dialog
+        // open input  dialog
         String startaddress = (String)JOptionPane.showInputDialog(null, "Enter start address:");
-        // check for return
+        // check for return value / valid input
         if (startaddress!=null && !startaddress.trim().isEmpty()) {
+            // remove whitespace
             startaddress = startaddress.trim();
+            // check if user entered decimal address
             if (!startaddress.startsWith("$")) {
                 try {
+                    // parse integer
                     dezaddress = Integer.parseInt(startaddress);
                 }
+                // if pasring fails, we assume that user 
+                // entered hex-address without "$"
                 catch (NumberFormatException ex) {
                     try {
                         dezaddress = Integer.parseInt(startaddress, 16);
@@ -273,6 +286,7 @@ public class Tools {
             }
             else {
                 try {
+                    // we have a "$", so parse hex-string without leading "$"
                     dezaddress = Integer.parseInt(startaddress.substring(1), 16);
                 }
                 catch (NumberFormatException ex2) {
@@ -280,7 +294,7 @@ public class Tools {
             }
         }
         if (dezaddress!=0) {
-            // convcert to string, so we can access each single digit
+            // convert to string, so we can access each single digit
             startaddress = String.valueOf(dezaddress);
             StringBuilder output = new StringBuilder("$0c,$08,$0a,$00,$9e");
             // copy all digits
@@ -319,6 +333,14 @@ public class Tools {
             editorPanes.insertString(output.toString());
         }
     }
+    /**
+     * Counts the amount of {@code sub} occurences in {@code str}.
+     * 
+     * @param str the source string that should be examined.
+     * @param sub the char which should be searched for and counted.
+     * @return the count of how many times {@code sub} occurs in {@code str},
+     * or 0 if no match found or {@code str} is {@code null}.
+     */
     public static int countMatches(final CharSequence str, final char sub) {
         if (null==str || str.length()==0) return 0;
         int counter = 0;
@@ -329,9 +351,19 @@ public class Tools {
         }
         return counter;
     }
+    /**
+     * Handles the drop actions when user drags and drops files on the editor component.
+     * Depending on the drop action, file names or file pathes are included via
+     * compiler opcodes or directives. All files that should not be included in the
+     * source, but opened in a new tab, will be returned as {@code List<File>}.
+     * 
+     * @param dtde the {@code DropTargetDropEvent}, fired by the drop-event-handler.
+     * @param editorPanes a reference to the EditorPanes class.
+     * @return a {@code List} of type {@code File} with all files that should not be included in the
+     * source, but opened in a new tab. Returns an empty list if no files should be opened.
+     */
     public static List<File> drop(DropTargetDropEvent dtde, EditorPanes editorPanes) {
         List<File> openRemainingFiles = new ArrayList<>();
-        // 
         boolean validDropLocation = false;
         // get transferable
         Transferable tr = dtde.getTransferable();
@@ -365,7 +397,7 @@ public class Tools {
                 // check for valid values
                 if (files!=null && files.size()>0) {
                     // create list with final image files
-                    List<File> anyfiles = new ArrayList<>();
+                    List<File> sourcefiles = new ArrayList<>();
                     List<File> includefiles = new ArrayList<>();
                     List<File> linkedfiles = new ArrayList<>();
                     // dummy
@@ -382,7 +414,7 @@ public class Tools {
                             // if it's an asm, add it to asm file list
                             else if (FileTools.hasValidFileExtension(file) && validDropLocation) {
                                 // if so, add it to list
-                                anyfiles.add(file);
+                                sourcefiles.add(file);
                             }
                             // if it's an include file, add it to include file list
                             else if (FileTools.hasValidIncludeFileExtension(file) && validDropLocation) {
@@ -393,7 +425,8 @@ public class Tools {
                     }
                     // check if we have any valid values,
                     // i.e. any files have been dragged and dropped
-                    // if so, include files
+                    // here we handle linked files, where only the file path should
+                    // be added to the source
                     if (linkedfiles.size()>0) {
                         for (File f : linkedfiles) {
                             String rf = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
@@ -414,6 +447,9 @@ public class Tools {
                             else {
                                 // retrieve relative path of iimport file
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
+                                // *************************
+                                // here we handle text files
+                                // *************************
                                 if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.COMPILER_ACME:
@@ -436,6 +472,9 @@ public class Tools {
                                             break;
                                     }
                                 }
+                                // *************************
+                                // here we handle c64 or prg files
+                                // *************************
                                 else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64") || FileTools.getFileExtension(f).equalsIgnoreCase("prg")) {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.COMPILER_ACME:
@@ -458,6 +497,11 @@ public class Tools {
                                             break;
                                     }
                                 }
+                                // *************************
+                                // here we handle any other valid binary files
+                                // like koa, fli, bin etc. See ConstantsR64.FILE_EXTENSIONS_INCLUDES
+                                // and FileTools.hasValidIncludeFileExtension for further info
+                                // *************************
                                 else {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.COMPILER_ACME:
@@ -487,9 +531,9 @@ public class Tools {
                     }
                     // check if we have any valid values,
                     // i.e. any files have been dragged and dropped
-                    // if so, open asm files
-                    if (anyfiles.size()>0) {
-                        for (File f : anyfiles) {
+                    // if so, include asm files via opcode / directive
+                    if (sourcefiles.size()>0) {
+                        for (File f : sourcefiles) {
                             // if user hold down ctrl-key, use import-directive for asm-files
                             if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
                                 String insert = "";
@@ -539,6 +583,7 @@ public class Tools {
             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
             dtde.rejectDrop();
         }
+        // return remaining files that should be opened in a new tab
         return openRemainingFiles;
     }
 }

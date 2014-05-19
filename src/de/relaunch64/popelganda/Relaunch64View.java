@@ -1090,6 +1090,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+    /**
+     * Closes all opened tabs
+     */
     @Action
     public void closeAll() {
         // get current amount of tabes
@@ -1099,6 +1102,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             closeFile();
         }
     }
+    /**
+     * Saves a file under a new file name / path.
+     */
     @Action
     public void saveFileAs() {
         if (editorPanes.saveFileAs()) {
@@ -1108,6 +1114,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             setRecentDocuments();
         }
     }
+    /**
+     * Runs the currently selected user script and - depending on the script - compiles the source code
+     * and start the compiled source in an emulator. If errors occur during the compile process,
+     * the error log is shown and the caret jumps to the related position in the source.
+     */
     @Action
     public void runScript() {
         // check if user defined custom script
@@ -1159,14 +1170,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // log process
                     String log = "Processing script-line: "+cmd;
                     ConstantsR64.r64logger.log(Level.INFO, log);
-                    // surround pathes with quotes
+                    // surround pathes with quotes, if necessary
                     String sf = sourceFile.toString();
                     if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) sf = "\""+sf+"\"";
                     String of = outFile.toString();
                     if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\""+of+"\"";
                     String cf = compressedFile.toString();
                     if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
-                    // replace input and output file
+                    // replace placeholders
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, sf);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, of);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, of);
@@ -1174,31 +1185,33 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_SOURCE_DIR, parentFile);
                     // check if we have a cruncher-starttoken
                     String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+                    // if we found cruncher-starttoken, replace placeholder 
                     if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
                     try {
                         // log process
                         log = "Converted script-line: "+cmd;
                         ConstantsR64.r64logger.log(Level.INFO, log);
-                        // write output to text area
+                        // write output to string builder. we need output both for printing
+                        // it to the text area log, and to examine the string for possible errors.
                         StringBuilder compilerLog = new StringBuilder("");
                         ProcessBuilder pb;
                         Process p;
                         // Start ProcessBuilder
                         pb = new ProcessBuilder(cmd.split(" "));
+                        // set parent directory to sourcecode fie
                         pb = pb.directory(sourceFile.getParentFile());
                         pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
                         // start process
                         p = pb.start();
-                        // write output to text area
                         // create scanner to receive compiler messages
                         try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
-                            // write output to text area
+                            // write output to string builder
                             while (sc.hasNextLine()) {
                                 compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
                             }
                         }
                         try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
-                            // write output to text area
+                            // write output to string builder
                             while (sc.hasNextLine()) {
                                 compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
                             }

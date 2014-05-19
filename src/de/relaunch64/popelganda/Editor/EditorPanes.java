@@ -102,6 +102,10 @@ public class EditorPanes {
     public static final int DIRECTION_PREV = 1;
 
     /**
+     * A key-listener for the suggestion/auto-completion popup that appears
+     * when the user presses ctrl+space. The key-listener handles the
+     * navigation through the list-component.
+     * 
      * @author Guillaume Polet
      * 
      * This example was taken from
@@ -186,7 +190,12 @@ public class EditorPanes {
         // add document listener ro recognize changes
         DocumentListener docListen = addDocumentListenerToEditorPane(editorPane);
         MyUndoManager undoman = addUndoManagerToEditorPane(editorPane);
+        // ***********************************
         // add key listener
+        // handles specific behavior when pressing tab/shift+tab
+        // while text is selected. Furthermore, auto-indention and
+        // showing the auto-completion popup is handled here.
+        // ***********************************
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyPressed(java.awt.event.KeyEvent evt) {
                 JEditorPane ep = (JEditorPane)evt.getSource();
@@ -233,6 +242,10 @@ public class EditorPanes {
                                     // if yes, find offset of first whitespace
                                     // we insert tab at that position then
                                     for (int i=0; i<l.length(); i++) {
+                                        // when we clearly have a label, macro etc.
+                                        // at the line start, we don't want to indent the whole line,
+                                        // but only the text after label, macro etc. This is because users
+                                        // typicall want the label, macro etc. to remain at the start of a line
                                         if (Character.isWhitespace(l.charAt(i))) {
                                             firstWhiteCharPos = i;
                                             break;
@@ -303,8 +316,9 @@ public class EditorPanes {
                                         try {
                                             // if yes, check if we have white char before or behind tab
                                             if (Character.isWhitespace(l.charAt(firstTab-1)) || Character.isWhitespace(l.charAt(firstTab+1))) {
-                                                // if yes, we can remove first tab
-                                                // without sticking together separated words
+                                                // if yes, we can remove first tab without sticking together separated words
+                                                // i.e. text after a label, macro etc. will always be separated from the label etc.
+                                                // from at least one whitespace char
                                                 l = l.replaceFirst("\t", "");
                                             }
                                         }
@@ -480,8 +494,12 @@ public class EditorPanes {
         return getCurrentRow()+1;
     }
     /**
+     * This method retrieves the line number depending on the {@code caretpos}
+     * and jumps to that line.
      * 
-     * @param caretpos 
+     * <b>Note:</b> Currently not used.
+     * 
+     * @param caretpos the caret posision, from which the line number should be retrieved.
      */
     public void gotoLineFromCaret(int caretpos) {
         JEditorPane ep = getActiveEditorPane();
@@ -525,7 +543,7 @@ public class EditorPanes {
         }
     }
     /**
-     * Sets the input focus the the editor pane
+     * Sets the input focus to the editor pane
      * 
      * @param editorPane 
      */
@@ -595,13 +613,33 @@ public class EditorPanes {
             editorPaneProp.setUndoManager(null);
         }
     }
-
+    /**
+     * The returns the comment char from the compiler syntax that is set
+     * for the current source code.
+     * 
+     * @return The comment string of the compiler that is set for the currently
+     * activated source code.
+     */
     public String getCompilerCommentString() {
         return getCompilerCommentString(getActiveCompiler());
     }
+    /**
+     * The returns the comment char from the compiler syntax for
+     * the compiler {@code compiler}.
+     * 
+     * @param compiler one of the compiler constans that indicate the 
+     * compiler syntax.
+     * @return The comment string of the compiler given in {@code compiler}.
+     */
     public String getCompilerCommentString(int compiler) {
         return SyntaxScheme.getCommentString(compiler);
     }
+    /**
+     * Inserts a (commented) section line into the source code. Sections are specific commented
+     * line which may be used for source code navigation.
+     * 
+     * @param name the name of the section, used for navigating through the source.
+     */
     public void insertSection(String name) {
         eatReaturn = true;
         // retrieve section names
@@ -626,29 +664,35 @@ public class EditorPanes {
             ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");            
         }
     }
+    /**
+     * In the currently opened tab / activated source, jumps to the line (scrolls the editor pane 
+     * to the related line and sets the caret to that line), which containts the section named {@code name}.
+     * 
+     * @param name the name of the section where to go.
+     */
     public void gotoSection(String name) {
         gotoLine(SectionExtractor.getSections(getActiveSourceCode(), getCompilerCommentString()), name);
     }
-    public void gotoSection(String name, int index) {
-        gotoLine(SectionExtractor.getSections(getSourceCode(index), getCompilerCommentString()), name);
+    public void gotoSection(String name, int selectedTab) {
+        gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), getCompilerCommentString()), name);
     }
     public void gotoLabel(String name) {
         gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveCompiler()), name);
     }
-    public void gotoLabel(String name, int index) {
-        gotoLine(LabelExtractor.getLabels(getSourceCode(index), getActiveCompiler()), name);
+    public void gotoLabel(String name, int selectedTab) {
+        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveCompiler()), name);
     }
     public void gotoFunction(String name) {
         gotoLine(FunctionExtractor.getFunctions(getActiveSourceCode(), getActiveCompiler()), name);
     }
-    public void gotoFunction(String name, int index) {
-        gotoLine(FunctionExtractor.getFunctions(getSourceCode(index), getActiveCompiler()), name);
+    public void gotoFunction(String name, int selectedTab) {
+        gotoLine(FunctionExtractor.getFunctions(getSourceCode(selectedTab), getActiveCompiler()), name);
     }
     public void gotoMacro(String name) {
         gotoLine(FunctionExtractor.getMacros(getActiveSourceCode(), getActiveCompiler()), name);
     }
-    public void gotoMacro(String name, int index) {
-        gotoLine(FunctionExtractor.getMacros(getSourceCode(index), getActiveCompiler()), name);
+    public void gotoMacro(String name, int selectedTab) {
+        gotoLine(FunctionExtractor.getMacros(getSourceCode(selectedTab), getActiveCompiler()), name);
     }
     /**
      * 
