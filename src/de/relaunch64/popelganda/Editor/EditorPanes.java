@@ -1356,25 +1356,25 @@ public class EditorPanes {
     public void gotoNextLabel() {
         // goto next label
         gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
-                                                getActiveEditorPane().getCaretLine(),
+                                                getActiveEditorPane().getCaretLine()+1,
                                                 LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
                                                 LabelExtractor.getLabelNames(false, false, getActiveSourceCode(), getActiveCompiler())));
     }
     public void gotoPrevLabel() {
         gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_PREV,
-                                                getActiveEditorPane().getCaretLine(),
+                                                getActiveEditorPane().getCaretLine()+1,
                                                 LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
                                                 LabelExtractor.getLabelNames(false, false, getActiveSourceCode(), getActiveCompiler())));
     }
     public void gotoNextSection() {
         gotoSection(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
-                                                  getActiveEditorPane().getCaretLine(),
+                                                  getActiveEditorPane().getCaretLine()+1,
                                                   SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString()),
                                                   SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
     }
     public void gotoPrevSection() {
         gotoSection(EditorPaneTools.findJumpToken(DIRECTION_PREV,
-                                                  getActiveEditorPane().getCaretLine(),
+                                                  getActiveEditorPane().getCaretLine()+1,
                                                   SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString()),
                                                   SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
     }
