@@ -69,6 +69,7 @@ import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
+import org.gjt.sp.jedit.textarea.TextAreaPainter;
 
 /**
  *
@@ -165,7 +166,8 @@ public class EditorPanes {
         // TODO syntax scheme
 //        editorPane = EditorPaneTools.setSyntaxScheme(editorPane, settings, c);
         // set default font
-        editorPane.setFont(settings.getMainFont());
+        TextAreaPainter painter = editorPane.getPainter();
+        painter.setFont(settings.getMainFont());
         Gutter g = editorPane.getGutter();
         JEditBuffer buffer = editorPane.getBuffer();
         g.setBackground(SyntaxScheme.getLineBackgroundColor());
@@ -255,7 +257,6 @@ public class EditorPanes {
                 }
             }
         });
-        
         buffer.addBufferListener(new BufferListener() {
             @Override public void foldLevelChanged(JEditBuffer jeb, int i, int i1) {
             }
@@ -276,7 +277,6 @@ public class EditorPanes {
             @Override public void bufferLoaded(JEditBuffer jeb) {
             }
         });
-        
         // add focus listener
         editorPane.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override public void focusGained(java.awt.event.FocusEvent evt) {
