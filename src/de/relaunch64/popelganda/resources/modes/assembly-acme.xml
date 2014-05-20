@@ -25,7 +25,7 @@
 			<END>'</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
@@ -120,6 +120,9 @@
 <!--                    <OPERATOR>asl</OPERATOR>
                         <OPERATOR>arr</OPERATOR>
                         <OPERATOR>lsr</OPERATOR>-->
+
+			<!-- Predefined constants -->
+                        <LITERAL3>a</LITERAL3>
 
 			<!-- Instructions: functions -->
                         <FUNCTION>sin</FUNCTION>
