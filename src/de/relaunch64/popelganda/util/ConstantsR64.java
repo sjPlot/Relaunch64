@@ -145,6 +145,18 @@ public class ConstantsR64 {
     public static final int COMPILER_CA65 = 3;
     public static final int COMPILER_DREAMASS = 4;
     public static final int COMPILER_DASM = 5;
+    public static final int COMPILER_TMPX = 6;
+    
+    public static final String[] assemblymodes = new String[] {
+        "/de/relaunch64/popelganda/resources/modes/assembly-kickass.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-acme.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-64tass.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-ca65.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-dreamass.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-dasm.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-tmpx.xml"
+    };
+    
     // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE
     public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65", "DreamAss", "DASM" };
     
