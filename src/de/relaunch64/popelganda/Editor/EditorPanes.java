@@ -65,8 +65,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
@@ -492,6 +494,12 @@ public class EditorPanes {
         javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane();
         // and new editor pane
         StandaloneTextArea editorPane = org.gjt.sp.jedit.textarea.StandaloneTextArea.createTextArea();
+        // set syntax scheme
+        Mode mode = new Mode("asm");
+        mode.setProperty("file","modes/assembly-64tass.xml");
+        ModeProvider.instance.addMode(mode);
+        // add mode to buffer
+        editorPane.getBuffer().setMode(mode);
         editorPane.setName("jEditorPaneMain");
         // enable drag&drop
         editorPane.setDragEnabled(true);
