@@ -18,7 +18,12 @@
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$%&amp;0" AT_WORD_START="TRUE" TYPE="DIGIT">(\$|0x)[0-9a-fA-F]+|%[01.#]+|&amp;[0-7]+</SEQ_REGEXP>
+                <!-- Literal4 are ram-addresses -->
+                <SEQ_REGEXP HASH_CHARS="$%&amp;0" AT_WORD_START="TRUE" TYPE="LITERAL4">(\$|0x)[0-9a-fA-F]+|%[01.#]+|&amp;[0-7]+</SEQ_REGEXP>
+                <!-- digit are numbers -->
+                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">(#\$|#0x|#)[0-9a-fA-F]+|#%[01.#]+|&amp;[0-7]+</SEQ_REGEXP>
+                <!-- keyword4 are jump labels-->
+                <SEQ_REGEXP HASH_CHARS="." AT_WORD_START="TRUE" TYPE="KEYWORD4">(\.){1}[0-9a-zA-Z]+</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>'</BEGIN>
@@ -30,8 +35,7 @@
 			<END>"</END>
 		</SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD4">!(08|16|24|32|8|binary|bin|byte|by|cbm|fill|pet|raw|scrxor|scr|text|tx|word|wo)\b</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(08|16|24|32|8|binary|bin|byte|by|cbm|fill|pet|raw|scrxor|scr|text|tx|word|wo|align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
 
 		<KEYWORDS>
 			<!-- Instructions: standard -->

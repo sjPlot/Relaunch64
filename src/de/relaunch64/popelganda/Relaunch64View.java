@@ -996,6 +996,22 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void setFocusToSource() {
         editorPanes.setFocus();
     }
+    @Action
+    public void selectNextTab() {
+        int selected = jTabbedPane1.getSelectedIndex()+1;
+        if (selected>=jTabbedPane1.getTabCount()) selected = 0;
+        // select new tab
+        jTabbedPane1.setSelectedIndex(selected);
+        editorPanes.updateTabbedPane();
+    }
+    @Action
+    public void selectPrevTab() {
+        int selected = jTabbedPane1.getSelectedIndex()-1;
+        if (selected<0) selected = jTabbedPane1.getTabCount()-1;
+        // select new tab
+        jTabbedPane1.setSelectedIndex(selected);
+        editorPanes.updateTabbedPane();
+    }
     /**
      * 
      */
@@ -1729,7 +1745,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jEditorPaneMain = new de.relaunch64.popelganda.Editor.RL64TextArea(settings);
+        jEditorPaneMain = new de.relaunch64.popelganda.Editor.RL64TextArea();
         jPanelFind = new javax.swing.JPanel();
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();
@@ -1837,12 +1853,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
         viewMainTabMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
+        jMenuItemPrevTab = new javax.swing.JMenuItem();
+        jMenuItemNextTab = new javax.swing.JMenuItem();
+        jSeparator21 = new javax.swing.JPopupMenu.Separator();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         viewLog2MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
         switchBothMenuItem = new javax.swing.JMenuItem();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
-        jSeparator21 = new javax.swing.JPopupMenu.Separator();
+        jSeparator22 = new javax.swing.JPopupMenu.Separator();
         quickRefMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
@@ -2474,6 +2493,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
 
+        jMenuItemPrevTab.setAction(actionMap.get("selectNextTab")); // NOI18N
+        jMenuItemPrevTab.setName("jMenuItemPrevTab"); // NOI18N
+        viewMenu.add(jMenuItemPrevTab);
+
+        jMenuItemNextTab.setAction(actionMap.get("selectPrevTab")); // NOI18N
+        jMenuItemNextTab.setName("jMenuItemNextTab"); // NOI18N
+        viewMenu.add(jMenuItemNextTab);
+
+        jSeparator21.setName("jSeparator21"); // NOI18N
+        viewMenu.add(jSeparator21);
+
         viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
         viewLog1MenuItem.setMnemonic('R');
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
@@ -2495,8 +2525,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         switchLogPosMenuItem.setName("switchLogPosMenuItem"); // NOI18N
         viewMenu.add(switchLogPosMenuItem);
 
-        jSeparator21.setName("jSeparator21"); // NOI18N
-        viewMenu.add(jSeparator21);
+        jSeparator22.setName("jSeparator22"); // NOI18N
+        viewMenu.add(jSeparator22);
 
         quickRefMenuItem.setAction(actionMap.get("showQuickReference")); // NOI18N
         quickRefMenuItem.setMnemonic('Q');
@@ -2665,6 +2695,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItemNextTab;
+    private javax.swing.JMenuItem jMenuItemPrevTab;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2690,6 +2722,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
     private javax.swing.JPopupMenu.Separator jSeparator21;
+    private javax.swing.JPopupMenu.Separator jSeparator22;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;

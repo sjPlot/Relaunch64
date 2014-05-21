@@ -1,42 +1,42 @@
 #{{{ Function keys
-help.shortcut=F1
-show-context-menu.shortcut=CONTEXT_MENU
+help.shortcut=
+show-context-menu.shortcut=
 #}}}
 
 #{{{ C+X
-select-all.shortcut=C+a
-complete-word.shortcut=C+b
-copy.shortcut=C+c
-delete-line.shortcut=C+d
+select-all.shortcut=
+complete-word.shortcut=
+copy.shortcut=
+delete-line.shortcut=
 # C+e is a prefix
-find.shortcut=C+f
-find-next.shortcut=F3
+find.shortcut=
+find-next.shortcut=
 # C+h is not usable on MacOS X
-indent-lines.shortcut=C+i
-join-lines.shortcut=C+j
-swap-marker.shortcut=C+k
-goto-line.shortcut=C+g
+indent-lines.shortcut=
+join-lines.shortcut=
+swap-marker.shortcut=
+goto-line.shortcut=
 # C+m is a prefix
-new-file.shortcut=C+n
-new-file-in-mode.shortcut=CS+n
-open-file.shortcut=C+o
-reload.shortcut=F5
-print.shortcut=C+p
-exit.shortcut=C+q
+new-file.shortcut=
+new-file-in-mode.shortcut=
+open-file.shortcut=
+reload.shortcut=
+print.shortcut=
+exit.shortcut=
 # C+r is a prefix
-save.shortcut=C+s
-add-marker-shortcut.shortcut=C+t
-select-marker.shortcut=C+u
-paste.shortcut=C+v
-close-buffer.shortcut=C+w
-cut.shortcut=C+x
-goto-marker.shortcut=C+y
-undo.shortcut=C+z
-unsplit-current.shortcut=C+0
-unsplit.shortcut=C+1
-split-horizontal.shortcut=C+2
-split-vertical.shortcut=C+3
-resplit.shortcut=C+4
+save.shortcut=
+add-marker-shortcut.shortcut=
+select-marker.shortcut=
+paste.shortcut=
+close-buffer.shortcut=
+cut.shortcut=
+goto-marker.shortcut=
+undo.shortcut=
+unsplit-current.shortcut=
+unsplit.shortcut=
+split-horizontal.shortcut=
+split-vertical.shortcut=
+resplit.shortcut=
 #}}}
 
 #{{{ C+non-alpha
@@ -61,111 +61,111 @@ prev-buffer.shortcut=C+PAGE_UP
 next-buffer.shortcut=C+PAGE_DOWN
 last-action.shortcut=C+SPACE
 
-recent-buffer.shortcut=C+BACK_QUOTE
-select-block.shortcut=C+OPEN_BRACKET
-match-bracket.shortcut=C+CLOSE_BRACKET
-expand-abbrev.shortcut=C+SEMICOLON
-quick-search.shortcut=C+COMMA
-hypersearch.shortcut=C+PERIOD
+recent-buffer.shortcut=
+select-block.shortcut=
+match-bracket.shortcut=
+expand-abbrev.shortcut=
+quick-search.shortcut=
+hypersearch.shortcut=
 scroll-up-line.shortcut=C+QUOTE
 scroll-down-line.shortcut=C+SLASH
-toggle-multi-select.shortcut=C+BACK_SLASH
+toggle-multi-select.shortcut=
 #}}}
 
 #{{{ C+e C+X
 # Unused: f, h, q, y
-copy-append.shortcut=C+e C+a
-search-in-open-buffers.shortcut=C+e C+b
-range-comment.shortcut=C+e C+c
-search-in-directory.shortcut=C+e C+d
-replace-and-find-next.shortcut=C+e C+g
-ignore-case.shortcut=C+e C+i
-scroll-to-current-line.shortcut=C+e C+j
-line-comment.shortcut=C+e C+k
-select-line-range.shortcut=C+e C+l
-add-marker.shortcut=C+e C+m
-center-caret.shortcut=C+e C+n
-scroll-and-center.shortcut=C+l
-open-path.shortcut=C+e C+o
-vertical-paste.shortcut=C+e C+p
-replace-in-selection.shortcut=C+e C+r
-save-all.shortcut=C+e C+s
-toggle-line-numbers.shortcut=C+e C+t
-cut-append.shortcut=C+e C+u
-paste-previous.shortcut=C+e C+v
-close-all.shortcut=C+e C+w
-regexp.shortcut=C+e C+x
-paste-deleted.shortcut=C+e C+y
-redo.shortcut=C+e C+z
+copy-append.shortcut=
+search-in-open-buffers.shortcut=
+range-comment.shortcut=
+search-in-directory.shortcut=
+replace-and-find-next.shortcut=
+ignore-case.shortcut=
+scroll-to-current-line.shortcut=
+line-comment.shortcut=
+select-line-range.shortcut=
+add-marker.shortcut=
+center-caret.shortcut=
+scroll-and-center.shortcut=
+open-path.shortcut=
+vertical-paste.shortcut=
+replace-in-selection.shortcut=
+save-all.shortcut=
+toggle-line-numbers.shortcut=
+cut-append.shortcut=
+paste-previous.shortcut=
+close-all.shortcut=
+regexp.shortcut=
+paste-deleted.shortcut=
+redo.shortcut=
 #}}}
 
 #{{{ C+e C+non-alpha
-left-docking-area.shortcut=C+e C+LEFT
-top-docking-area.shortcut=C+e C+UP
-right-docking-area.shortcut=C+e C+RIGHT
-bottom-docking-area.shortcut=C+e C+DOWN
-toggle-full-screen.shortcut=F11
-toggle-dock-areas.shortcut=F12
-combined-options.shortcut=C+F12
-prev-marker.shortcut=C+e C+COMMA
-next-marker.shortcut=C+e C+PERIOD
-prev-bracket.shortcut=C+e C+OPEN_BRACKET
-next-bracket.shortcut=C+e C+CLOSE_BRACKET
-close-docking-area.shortcut=C+e C+BACK_QUOTE
+left-docking-area.shortcut=
+top-docking-area.shortcut=
+right-docking-area.shortcut=
+bottom-docking-area.shortcut=
+toggle-full-screen.shortcut=
+toggle-dock-areas.shortcut=
+combined-options.shortcut=
+prev-marker.shortcut=
+next-marker.shortcut=
+prev-bracket.shortcut=
+next-bracket.shortcut=
+close-docking-area.shortcut=
 #}}}
 
 #{{{ C+e X
 # Unused: b e g h j k m o q t y z
-add-explicit-fold.shortcut=C+e a
-collapse-all-folds.shortcut=C+e c
-delete-paragraph.shortcut=C+e d
-format-paragraph.shortcut=C+e f
-find-previous.shortcut=C+e g
-invert-selection.shortcut=C+e i
-select-line.shortcut=C+e l
-narrow-to-fold.shortcut=C+e n n
-narrow-to-selection.shortcut=C+e n s
-select-paragraph.shortcut=C+e p
-remove-trailing-ws.shortcut=C+e r
-select-fold.shortcut=C+e s
-insert-literal.shortcut=C+e v
-select-word.shortcut=C+e w
-parent-fold.shortcut=C+e u
-expand-all-folds.shortcut=C+e x
+add-explicit-fold.shortcut=
+collapse-all-folds.shortcut=CSA+f
+delete-paragraph.shortcut=
+format-paragraph.shortcut=
+find-previous.shortcut=
+invert-selection.shortcut=CS+i
+select-line.shortcut=
+narrow-to-fold.shortcut=
+narrow-to-selection.shortcut=
+select-paragraph.shortcut=
+remove-trailing-ws.shortcut=
+select-fold.shortcut=
+insert-literal.shortcut=
+select-word.shortcut=
+parent-fold.shortcut=
+expand-all-folds.shortcut=CS+f
 #}}}
 
 #{{{ C+e non-alpha
-expand-folds.shortcut=C+e ENTER
+expand-folds.shortcut=
 #}}}
 
 #{{{ C+m C+X
-record-temp-macro.shortcut=C+m C+m
-run-temp-macro.shortcut=C+m C+p
-record-macro.shortcut=C+m C+r
-stop-recording.shortcut=C+m C+s
-last-macro.shortcut=C+m C+l
+record-temp-macro.shortcut=
+run-temp-macro.shortcut=
+record-macro.shortcut=
+stop-recording.shortcut=
+last-macro.shortcut=
 #}}}
 
 #{{{ C+r C+X
-copy-append-string-register.shortcut=C+r C+a
-copy-string-register.shortcut=C+r C+c
-clear-register.shortcut=C+r C+l
-vertical-paste-string-register.shortcut=C+r C+p
-cut-append-string-register.shortcut=C+r C+u
-paste-string-register.shortcut=C+r C+v
-cut-string-register.shortcut=C+r C+x
+copy-append-string-register.shortcut=
+copy-string-register.shortcut=
+clear-register.shortcut=
+vertical-paste-string-register.shortcut=
+cut-append-string-register.shortcut=
+paste-string-register.shortcut=
+cut-string-register.shortcut=
 #}}}
 
 #{{{ A+non-alpha
 prev-fold.shortcut=A+UP
 next-fold.shortcut=A+DOWN
-shift-left.shortcut=A+LEFT
-shift-right.shortcut=A+RIGHT
+shift-left.shortcut=
+shift-right.shortcut=
 collapse-fold.shortcut=A+BACK_SPACE
-expand-fold.shortcut=AS+ENTER
-expand-one-level.shortcut=A+ENTER
-quick-search-word.shortcut=A+COMMA
-hypersearch-word.shortcut=A+PERIOD
+expand-fold.shortcut=AS+BACK_SPACE
+expand-one-level.shortcut=
+quick-search-word.shortcut=
+hypersearch-word.shortcut=
 scroll-up-page.shortcut=A+QUOTE
 scroll-down-page.shortcut=A+SLASH
 prev-textarea.shortcut=A+PAGE_UP
@@ -216,15 +216,15 @@ cut.shortcut2=S+DELETE
 #}}}
 
 #{{{ VFS browser
-vfs.browser.delete.shortcut=DELETE
-vfs.browser.home.shortcut=~
-vfs.browser.new-directory.shortcut=INSERT
-vfs.browser.new-file.shortcut=C+n
-vfs.browser.reload.shortcut=F5
-vfs.browser.rename.shortcut=F2
-vfs.browser.roots.shortcut=/
-vfs.browser.synchronize.shortcut=-
-vfs.browser.up.shortcut=A+Up
-vfs.browser.previous.shortcut=A+Left
-vfs.browser.next.shortcut=A+Right
+vfs.browser.delete.shortcut=
+vfs.browser.home.shortcut=
+vfs.browser.new-directory.shortcut=
+vfs.browser.new-file.shortcut=
+vfs.browser.reload.shortcut=
+vfs.browser.rename.shortcut=
+vfs.browser.roots.shortcut=
+vfs.browser.synchronize.shortcut=
+vfs.browser.up.shortcut=
+vfs.browser.previous.shortcut=
+vfs.browser.next.shortcut=
 #}}}

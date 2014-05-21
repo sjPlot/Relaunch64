@@ -18,9 +18,14 @@
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+                <!-- Literal4 are ram-addresses -->
+                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="LITERAL4">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+                <!-- digit are numbers -->
+                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">(#\$|#0x|#)[0-9a-fA-F]+|#%[01.#]+</SEQ_REGEXP>
+                
+                <!-- keyword4 are jump labels-->
 
-		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
@@ -107,23 +112,23 @@
                         <KEYWORD3>.xl</KEYWORD3>
                         <KEYWORD3>.xs</KEYWORD3>
 
-                        <KEYWORD4>.binary</KEYWORD4>
-                        <KEYWORD4>.byte</KEYWORD4>
-                        <KEYWORD4>.char</KEYWORD4>
-                        <KEYWORD4>.dint</KEYWORD4>
-                        <KEYWORD4>.dstruct</KEYWORD4>
-                        <KEYWORD4>.dunion</KEYWORD4>
-                        <KEYWORD4>.dword</KEYWORD4>
-                        <KEYWORD4>.fill</KEYWORD4>
-                        <KEYWORD4>.int</KEYWORD4>
-                        <KEYWORD4>.long</KEYWORD4>
-                        <KEYWORD4>.null</KEYWORD4>
-                        <KEYWORD4>.ptext</KEYWORD4>
-                        <KEYWORD4>.rta</KEYWORD4>
-                        <KEYWORD4>.shift</KEYWORD4>
-                        <KEYWORD4>.shiftl</KEYWORD4>
-                        <KEYWORD4>.text</KEYWORD4>
-                        <KEYWORD4>.word</KEYWORD4>
+                        <KEYWORD3>.binary</KEYWORD3>
+                        <KEYWORD3>.byte</KEYWORD3>
+                        <KEYWORD3>.char</KEYWORD3>
+                        <KEYWORD3>.dint</KEYWORD3>
+                        <KEYWORD3>.dstruct</KEYWORD3>
+                        <KEYWORD3>.dunion</KEYWORD3>
+                        <KEYWORD3>.dword</KEYWORD3>
+                        <KEYWORD3>.fill</KEYWORD3>
+                        <KEYWORD3>.int</KEYWORD3>
+                        <KEYWORD3>.long</KEYWORD3>
+                        <KEYWORD3>.null</KEYWORD3>
+                        <KEYWORD3>.ptext</KEYWORD3>
+                        <KEYWORD3>.rta</KEYWORD3>
+                        <KEYWORD3>.shift</KEYWORD3>
+                        <KEYWORD3>.shiftl</KEYWORD3>
+                        <KEYWORD3>.text</KEYWORD3>
+                        <KEYWORD3>.word</KEYWORD3>
 
 			<!-- Instructions: standard -->
                         <KEYWORD1>adc</KEYWORD1>

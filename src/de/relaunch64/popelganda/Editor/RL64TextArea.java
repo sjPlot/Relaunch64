@@ -82,8 +82,9 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
         // set antialias
-        setProperty("view.antiAlias", "true");
-        getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
+//        setProperty("view.antiAlias", "true");
+//        getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
+        getPainter().setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
     }
     
     public final void setTabs(Settings settings) {
@@ -112,16 +113,16 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.style.comment3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
         setProperty("view.style.comment4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
         setProperty("view.style.digit", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NUMBER));
+        setProperty("view.style.literal4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX));
         setProperty("view.style.function", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SCRIPTKEYWORD));
         setProperty("view.style.keyword1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD));
         setProperty("view.style.keyword2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_ILLEGALOPCODE));
         setProperty("view.style.keyword3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD));
-        setProperty("view.style.keyword4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD));
         setProperty("view.style.literal1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
         setProperty("view.style.literal2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
         setProperty("view.style.literal3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
-        setProperty("view.style.literal4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
         setProperty("view.style.label", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP));
+        setProperty("view.style.keyword4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP));
         setProperty("view.style.operator", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_OPERATOR));
 
         setProperty("view.gutter.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND));
@@ -149,6 +150,9 @@ public class RL64TextArea extends StandaloneTextArea {
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
     
+    public RL64TextArea() {
+        super(propertyManager);
+    }
     public RL64TextArea(Settings settings) {
         super(propertyManager);
         // set default font

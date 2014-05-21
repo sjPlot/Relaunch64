@@ -158,6 +158,14 @@ public class FindReplace {
         }
         return (findselections.size()>0);
     }
+    protected void selectFindTerm() {
+        // set caret
+        editorPane.setCaretPosition(findselections.get(findpos)[0]);
+        editorPane.scrollAndCenterCaret();
+        // select next occurence of find term
+        editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
+        editorPane.requestFocusInWindow();
+    }
     /**
      * 
      * @param isRegEx
@@ -188,11 +196,10 @@ public class FindReplace {
                     findpos=0;
                 }
                 // select next occurence of find term
-                editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
+                selectFindTerm();
             }
             catch (IllegalArgumentException ex) {
             }
-            editorPane.requestFocusInWindow();
         }
         else {
             // reset find values
@@ -222,8 +229,7 @@ public class FindReplace {
                 findpos = findselections.size()-1;
             }
             // select next occurence of find term
-            editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
-            editorPane.requestFocusInWindow();
+            selectFindTerm();
         }
         else {
             resetValues();

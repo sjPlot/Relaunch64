@@ -170,7 +170,6 @@ public class EditorPanes {
         else {
             editorPane.setText("");
         }
-        // TODO add document change listener for modified text
         // add key listener
         // TODO keylistener does not work
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
