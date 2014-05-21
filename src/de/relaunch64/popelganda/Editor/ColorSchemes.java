@@ -106,34 +106,34 @@ public class ColorSchemes {
             switch (tokentype) {
                 case COLOR_NORMAL: return "#000000";
                 case COLOR_COMMENT: return "#bdb76b";
-                case COLOR_STRING: return "#25,25,112";
-                case COLOR_NUMBER: return "#d2,105,30";
-                case COLOR_HEX: return "#e3,26,28";
-                case COLOR_BIN: return "#fd,bf,111";
+                case COLOR_STRING: return "#191970";
+                case COLOR_NUMBER: return "#d2691e";
+                case COLOR_HEX: return "#e31a1c";
+                case COLOR_BIN: return "#fdbf6f";
                 case COLOR_JUMP: return "#c7,21,133";
-                case COLOR_OPERATOR: return "#0,128,128";
+                case COLOR_OPERATOR: return "#008080";
                 case COLOR_KEYWORD: return "#51,a0,44";
                 case COLOR_COMPILERKEYWORD: return "#31,120,b4";
-                case COLOR_SCRIPTKEYWORD: return "#0,128,128";
-                case COLOR_ILLEGALOPCODE: return "#106,61,154";
-                case BACKGROUND: return "#fc,fc,fc"; // white
-                case LINE_BACKGROUND: return "#f8, f8, f8"; // light gray
-                case LINE_BORDER: return "#f4, f4, f4"; // light gray
-                case LINE_COLOR: return "#0,0,0"; // black
+                case COLOR_SCRIPTKEYWORD: return "#008080";
+                case COLOR_ILLEGALOPCODE: return "#106,61,9a";
+                case BACKGROUND: return "#fcfcfc"; // white
+                case LINE_BACKGROUND: return "#f8f8f8"; // light gray
+                case LINE_BORDER: return "#f4f4f4"; // light gray
+                case LINE_COLOR: return "#000000"; // black
                 case LINE_HIGHLIGHT: return "#dc, 20, 3c"; // red
             }
             break;
         case SCHEME_C64:
             switch (tokentype) {
                 case COLOR_NORMAL: return "#ffffff";
-                case COLOR_COMMENT: return "#136,136,136";
-                case COLOR_STRING: return "#64,e0,64";
-                case COLOR_NUMBER: return "#ff,a0,a0";
-                case COLOR_HEX: return "#e0,a0,64";
-                case COLOR_BIN: return "#c0,c0,c0";
+                case COLOR_COMMENT: return "#888888";
+                case COLOR_STRING: return "#40e040";
+                case COLOR_NUMBER: return "#ffa0a0";
+                case COLOR_HEX: return "#e0a040";
+                case COLOR_BIN: return "#c0c0c0";
                 case COLOR_JUMP: return "#e0,96,e0"; 
                 case COLOR_OPERATOR: return "#96,ff,ff";
-                case COLOR_KEYWORD: return "#a0,a0,ff";
+                case COLOR_KEYWORD: return "#a0a0ff";
                 case COLOR_COMPILERKEYWORD: return "#ffff64";
                 case COLOR_SCRIPTKEYWORD: return "#96,ff,ff";
                 case COLOR_ILLEGALOPCODE: return "#e0,64,64";
@@ -149,7 +149,7 @@ public class ColorSchemes {
                 case COLOR_NORMAL: return "#dc,20,3c";
                 case COLOR_COMMENT: return "#119,136,153";
                 case COLOR_STRING: return "#8b,0,8b";
-                case COLOR_NUMBER: return "#218,112,214";
+                case COLOR_NUMBER: return "#218,112,d6";
                 case COLOR_HEX: return "#c7,21,133";
                 case COLOR_BIN: return "#d8,bf,d8";
                 case COLOR_JUMP: return "#f0,128,128"; 
@@ -171,8 +171,8 @@ public class ColorSchemes {
                 case COLOR_COMMENT: return "#c0,c0,c0";
                 case COLOR_STRING: return "#f0,e6,140";
                 case COLOR_NUMBER: return "#100,149,237";
-                case COLOR_HEX: return "#176,196,222";
-                case COLOR_BIN: return "#af,238,238";
+                case COLOR_HEX: return "#176,c4,222";
+                case COLOR_BIN: return "#af,ee,ee";
                 case COLOR_JUMP: return "#219,112,147"; 
                 case COLOR_OPERATOR: return "#8f,bc,8f";
                 case COLOR_KEYWORD: return "#173,d8,e6";
@@ -189,16 +189,16 @@ public class ColorSchemes {
         case SCHEME_BLUES:
             switch (tokentype) {
                 case COLOR_NORMAL: return "#112,128,144";
-                case COLOR_COMMENT: return "#176,196,222";
+                case COLOR_COMMENT: return "#176,c4,222";
                 case COLOR_STRING: return "#65,105,225";
                 case COLOR_NUMBER: return "#0,8b,8b";
-                case COLOR_HEX: return "#218,112,214";
+                case COLOR_HEX: return "#218,112,d6";
                 case COLOR_BIN: return "#100,149,237";
                 case COLOR_JUMP: return "#0,bf,ff"; 
-                case COLOR_OPERATOR: return "#95,158,a0";
+                case COLOR_OPERATOR: return "#5f,158,a0";
                 case COLOR_KEYWORD: return "#70,130,b4";
                 case COLOR_COMPILERKEYWORD: return "#72,61,8b";
-                case COLOR_SCRIPTKEYWORD: return "#95,158,a0";
+                case COLOR_SCRIPTKEYWORD: return "#5f,158,a0";
                 case COLOR_ILLEGALOPCODE: return "#0,0,205";
                 case BACKGROUND: return "#f8,f8,ff";
                 case LINE_BACKGROUND: return "#f0,f8,ff";
@@ -209,39 +209,39 @@ public class ColorSchemes {
             break;
         case SCHEME_SOLAR_LIGHT:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#90,111,117";
-                case COLOR_COMMENT: return "#148,162,162";
-                case COLOR_STRING: return "#53,162,152";
+                case COLOR_NORMAL: return "#90,6f,117";
+                case COLOR_COMMENT: return "#148,a2,a2";
+                case COLOR_STRING: return "#53,a2,152";
                 case COLOR_NUMBER: return "#134,152,23";
                 case COLOR_HEX: return "#b4,136,24";
-                case COLOR_BIN: return "#109,116,195";
+                case COLOR_BIN: return "#109,116,c3";
                 case COLOR_JUMP: return "#d9,47,52"; 
                 case COLOR_OPERATOR: return "#c8,73,31";
                 case COLOR_KEYWORD: return "#49,142,209";
                 case COLOR_COMPILERKEYWORD: return "#11,55,66";
                 case COLOR_SCRIPTKEYWORD: return "#c8,73,31";
-                case COLOR_ILLEGALOPCODE: return "#208,54,130";
+                case COLOR_ILLEGALOPCODE: return "#d0,54,130";
                 case BACKGROUND: return "#fd,246,e5";
-                case LINE_BACKGROUND: return "#238,233,214"; // fd,246,e5
-                case LINE_BORDER: return "#238,233,214";
-                case LINE_COLOR: return "#148,162,162";
+                case LINE_BACKGROUND: return "#ee,e9,d6"; // fd,246,e5
+                case LINE_BORDER: return "#ee,e9,d6";
+                case LINE_COLOR: return "#148,a2,a2";
                 case LINE_HIGHLIGHT: return "#11,55,66";
             }
             break;
         case SCHEME_SOLAR_DARK:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#148,162,162"; 
-                case COLOR_COMMENT: return "#90,111,117";
-                case COLOR_STRING: return "#53,162,152";
+                case COLOR_NORMAL: return "#148,a2,a2"; 
+                case COLOR_COMMENT: return "#90,6f,117";
+                case COLOR_STRING: return "#53,a2,152";
                 case COLOR_NUMBER: return "#134,152,23";
                 case COLOR_HEX: return "#49,142,209";
-                case COLOR_BIN: return "#109,116,195";
+                case COLOR_BIN: return "#109,116,c3";
                 case COLOR_JUMP: return "#b4,136,24"; 
                 case COLOR_OPERATOR: return "#c8,73,31";
-                case COLOR_KEYWORD: return "#238,233,214";
+                case COLOR_KEYWORD: return "#ee,e9,d6";
                 case COLOR_COMPILERKEYWORD: return "#d9,47,52";
                 case COLOR_SCRIPTKEYWORD: return "#c8,73,31";
-                case COLOR_ILLEGALOPCODE: return "#208,54,130";
+                case COLOR_ILLEGALOPCODE: return "#d0,54,130";
                 case BACKGROUND: return "#11,55,66";
                 case LINE_BACKGROUND: return "#3,44,54"; // 11,55,66
                 case LINE_BORDER: return "#3,44,54";
@@ -253,14 +253,14 @@ public class ColorSchemes {
             switch (tokentype) {
                 case COLOR_NORMAL: return "#128,137,8b"; 
                 case COLOR_COMMENT: return "#64,69,70";
-                case COLOR_STRING: return "#233,170,145";
+                case COLOR_STRING: return "#e9,170,145";
                 case COLOR_NUMBER: return "#228,101,184";
                 case COLOR_HEX: return "#97,172,123";
                 case COLOR_BIN: return "#97,172,123";
                 case COLOR_JUMP: return "#72,209,204"; 
                 case COLOR_OPERATOR: return "#c7,116,68";
                 case COLOR_KEYWORD: return "#128,b4,c0";
-                case COLOR_COMPILERKEYWORD: return "#157,162,101";
+                case COLOR_COMPILERKEYWORD: return "#157,a2,101";
                 case COLOR_SCRIPTKEYWORD: return "#c7,116,68";
                 case COLOR_ILLEGALOPCODE: return "#4,136,174";
                 case BACKGROUND: return "#15,17,18";
@@ -387,9 +387,9 @@ public class ColorSchemes {
                 case COLOR_KEYWORD:
                 case COLOR_SCRIPTKEYWORD:
                 case COLOR_ILLEGALOPCODE: 
-                    return "#a0,a0,ff";
-                case COLOR_COMMENT: return "#c0,c0,c0";
-                case COLOR_STRING: return "#a0,ff,a0";
+                    return "#a0a0ff";
+                case COLOR_COMMENT: return "#c0c0c0";
+                case COLOR_STRING: return "#a0ffa0";
                 case COLOR_NUMBER:
                 case COLOR_HEX: 
                 case COLOR_BIN:
@@ -397,18 +397,18 @@ public class ColorSchemes {
                 case COLOR_JUMP: 
                 case COLOR_OPERATOR: 
                 case COLOR_COMPILERKEYWORD: 
-                    return "#ff,ff,64";
+                    return "#ffff40";
                 case BACKGROUND: return "#64,64,e0";
-                case LINE_BACKGROUND: return "#a0,a0,ff";
-                case LINE_BORDER: return "#a0,a0,ff";
+                case LINE_BACKGROUND: return "#a0a0ff";
+                case LINE_BORDER: return "#a0a0ff";
                 case LINE_COLOR: return "#64,64,e0"; 
-                case LINE_HIGHLIGHT: return "#ff,ff,ff";
+                case LINE_HIGHLIGHT: return "#ffffff";
             }
             break;
         case SCHEME_GRAY:
             switch (tokentype) {
                 case COLOR_NORMAL: return "#47,79,79"; 
-                case COLOR_COMMENT: return "#bd,bd,bd";
+                case COLOR_COMMENT: return "#bdbdbd";
                 case COLOR_STRING: return "#136,b3,136";
                 case COLOR_NUMBER: return "#149,149,149";
                 case COLOR_HEX: return "#109,130,145";
