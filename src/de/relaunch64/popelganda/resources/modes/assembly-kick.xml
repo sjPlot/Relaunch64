@@ -14,7 +14,7 @@
                 <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 
-	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
 
             <EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
 
