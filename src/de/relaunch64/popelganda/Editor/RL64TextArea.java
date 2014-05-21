@@ -16,9 +16,11 @@
  */
 package de.relaunch64.popelganda.Editor;
 
+import de.relaunch64.popelganda.util.ConstantsR64;
 import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.util.IOUtilities;
@@ -32,6 +34,7 @@ public class RL64TextArea extends StandaloneTextArea {
         props.putAll(loadProperties("/de/relaunch64/popelganda/resources/jedit_keys.props"));
         props.putAll(loadProperties("/de/relaunch64/popelganda/resources/jedit.props"));
         propertyManager = new IPropertyManager() {
+            @Override
             public String getProperty(String name) {
                 return props.getProperty(name);
             }
@@ -53,8 +56,7 @@ public class RL64TextArea extends StandaloneTextArea {
             loadedProps.load(in);
         }
         catch (IOException e) {
-            //TODO: log error message
-            System.out.println("property load error");
+            ConstantsR64.r64logger.log(Level.WARNING,e.getLocalizedMessage());
         }
         finally {
             IOUtilities.closeQuietly(in);

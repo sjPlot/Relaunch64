@@ -66,14 +66,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.syntax.ModeProvider;
-import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.textarea.Gutter;
-import de.relaunch64.popelganda.Editor.RL64TextArea;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
 import org.gjt.sp.util.SyntaxUtilities;
 
@@ -176,31 +172,16 @@ public class EditorPanes {
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         editorPane.getBuffer().setMode(mode);
-        editorPane.propertiesFromFile("default_colors.props");
-        //this would work as well, but it's easier to handle colors style sets in separate files:
-        //editorPane.setProperty("view.style.comment1", "color:#3366ff");
-
-
-//        editorPane = EditorPaneTools.setSyntaxScheme(editorPane, settings, c);
+        // editorPane.propertiesFromFile("default_colors.props");
         // set default font
         TextAreaPainter painter = editorPane.getPainter();
-        painter.setStyles(SyntaxUtilities.loadStyles(Font.MONOSPACED, 14));
-        IPropertyManager propertyManager;
-//        SyntaxUtilities.propertyManager = propertyManager;
-//        SyntaxStyle style = new SyntaxStyle(java.awt.Color.CYAN, java.awt.Color.WHITE, settings.getMainFont());
-//        SyntaxUtilities.parseColor("view.style.keyword1", java.awt.Color.ORANGE);
-//        painter.setStyles(new SyntaxStyle[] {style});
-//        Gutter g = editorPane.getGutter();
+        Font mf = settings.getMainFont();
+        // load color scheme
+        painter.setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+        // set font
+        editorPane.setProperty("view.font", mf.getFontName());
+        editorPane.setProperty("view.fontsize", String.valueOf(mf.getSize()));
         JEditBuffer buffer = editorPane.getBuffer();
-//        g.setBackground(SyntaxScheme.getLineBackgroundColor());
-        // set backcolor
-        // we need this hack for Nimbus LaF,
-        // see http://stackoverflow.com/questions/22674575/jtextpane-background-color
-//        UIDefaults defaults = new UIDefaults();
-//        defaults.put("EditorPane[Enabled].backgroundPainter", SyntaxScheme.getBackgroundColor());
-//        editorPane.putClientProperty("Nimbus.Overrides", defaults);
-//        editorPane.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
-        editorPane.setBackground(SyntaxScheme.getBackgroundColor());
         // set content, if available
         if (content!= null && !content.isEmpty()) {
             editorPane.setText(content);
