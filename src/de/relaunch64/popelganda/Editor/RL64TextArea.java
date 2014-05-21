@@ -16,14 +16,20 @@
  */
 package de.relaunch64.popelganda.Editor;
 
+import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
-import java.util.Properties;
-import java.io.InputStream;
+import java.awt.Font;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Level;
-import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.jedit.IPropertyManager;
+import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.syntax.ModeProvider;
+import org.gjt.sp.jedit.textarea.AntiAlias;
+import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.SyntaxUtilities;
 
 public class RL64TextArea extends StandaloneTextArea {
     final static Properties props;
@@ -64,7 +70,161 @@ public class RL64TextArea extends StandaloneTextArea {
         return loadedProps;
     }
 
-    public RL64TextArea() {
+    public final void setFonts(Settings settings) {
+        // set default font
+        Font mf = settings.getMainFont();
+        // set text font
+        setProperty("view.font", mf.getFontName());
+        setProperty("view.fontsize", String.valueOf(mf.getSize()));
+        setProperty("view.fontstyle", "0");
+        // set line numbers font
+        setProperty("view.gutter.font", mf.getFontName());
+        setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
+        setProperty("view.gutter.fontstyle", "0");
+        // set antialias
+        setProperty("view.antiAlias", "true");
+        getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
+    }
+    
+    public final void setTabs(Settings settings) {
+        setProperty("buffer.tabSize", String.valueOf(settings.getTabWidth()));
+        setProperty("buffer.folding", "indent");
+    }
+    
+    public final void setCompilerSyntax(int compiler) {
+        // set syntax style
+        Mode mode = new Mode("asm");
+        mode.setProperty("file", ConstantsR64.assemblymodes[compiler]);
+        ModeProvider.instance.addMode(mode);
+        // add mode to buffer
+        getBuffer().setMode(mode);
+    }
+    
+    public final void setSyntaxScheme(Settings settings, int scheme) {
+//                case COLOR_NORMAL: return "color:#000000";
+//                case COLOR_HEX: return "color:#007800"; // green
+//                case COLOR_BIN: return "color:#007878"; // cyan
+//                case BACKGROUND: return "color:#ffffff"; // white        
+        setProperty("view.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
+        setProperty("view.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND));
+        setProperty("view.style.comment1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
+        setProperty("view.style.comment2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
+        setProperty("view.style.comment3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
+        setProperty("view.style.comment4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
+        setProperty("view.style.digit", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NUMBER));
+        setProperty("view.style.function", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SCRIPTKEYWORD));
+        setProperty("view.style.keyword1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD));
+        setProperty("view.style.keyword2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_ILLEGALOPCODE));
+        setProperty("view.style.keyword3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD));
+        setProperty("view.style.keyword4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD));
+        setProperty("view.style.literal1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
+        setProperty("view.style.literal2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
+        setProperty("view.style.literal3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
+        setProperty("view.style.literal4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
+        setProperty("view.style.label", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP));
+        setProperty("view.style.operator", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_OPERATOR));
+
+        setProperty("view.gutter.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND));
+        setProperty("view.gutter.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR));
+        setProperty("view.gutter.highlightColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR));
+        setProperty("view.gutter.currentLineColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
+        setProperty("view.gutter.focusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
+        setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
+        
+        // TODO hex address and binary values as separate token?
+//        setProperty("view.style.", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX));
+//        setProperty("view.style.", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_BIN));
+        
+//        setProperty("view.style.foldLine.0=color:#000000 bgColor:#dafeda style:b
+//        setProperty("view.style.foldLine.1=color:#000000 bgColor:#fff0cc style:b
+//        setProperty("view.style.foldLine.2=color:#000000 bgColor:#e7e7ff style:b
+//        setProperty("view.style.foldLine.3=color:#000000 bgColor:#ffe0f0 style:b
+//        setProperty("view.style.invalid=color:#ff0066 bgColor:#ffffcc
+//        setProperty("view.style.keyword3=color:#0099ff style:b
+//        setProperty("view.style.keyword4=color:#66ccff style:b
+//        setProperty("view.style.markup=color:#0000ff
+        
+        // load color scheme
+        Font mf = settings.getMainFont();
+        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+    }
+    
+    public RL64TextArea(Settings settings) {
         super(propertyManager);
+        // set default font
+        setFonts(settings);
+        // set syntaxscheme
+        setSyntaxScheme(settings, ColorSchemes.SCHEME_DEFAULT);
+        // set tab width
+        setTabs(settings);
+    }
+    /**
+     * Specified the list of delimiter strings that separate words/token for recodgnizing
+     * the syntax highlighting.
+     * @param compiler A constants indicating which ASM compiler is used. Refer to ConstantsR64
+     * to retrieve the list of constants used.
+     * @return A String with all delimiters for the highlight tokens.
+     */
+    public static String getDelimiterList(int compiler) {
+        String str = ",;:{}()[]+-/%<=>&!|^~*";
+        switch (compiler) {
+            case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.COMPILER_DASM:
+                str = ",:{}()[]+-/<=>&|^~*";
+                break;
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+                str = ",;:{}()[]+-/<=>&|^~*";
+                break;
+        }
+        return str;
+    }
+    /**
+     * 
+     * @param compiler
+     * @return 
+     */
+    public static String getCommentString(int compiler) {
+        String str = "//";
+        switch (compiler) {
+            case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.COMPILER_DASM:
+                str = ";";
+                break;
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+                str = "//";
+                break;
+        }
+        return str;
+    }
+    /**
+     * 
+     * @param compiler
+     * @return 
+     */
+    public static String getMacroString(int compiler) {
+        String str = ".";
+        switch (compiler) {
+            case ConstantsR64.COMPILER_ACME:
+                str = "!";
+                break;
+            case ConstantsR64.COMPILER_DASM:
+                str = "";
+                break;
+            case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_CA65:
+                str = ".";
+                break;
+            case ConstantsR64.COMPILER_DREAMASS:
+                str = "#";
+                break;
+        }
+        return str;
     }
 }

@@ -18,7 +18,7 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
-import de.relaunch64.popelganda.Editor.SyntaxScheme;
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -198,7 +198,7 @@ public class Tools {
      * start address was found.
      */
     public static String getCruncherStart(String source, int compiler) {
-        String cs = SyntaxScheme.getCommentString(compiler) + " start=";
+        String cs = RL64TextArea.getCommentString(compiler) + " start=";
         // find start token
         int position = source.toLowerCase().indexOf(cs);
         // found?
@@ -224,7 +224,7 @@ public class Tools {
      * script name was found.
      */
     public static String getCustomScriptName(String source, int compiler) {
-        String cs = SyntaxScheme.getCommentString(compiler) + " script=";
+        String cs = RL64TextArea.getCommentString(compiler) + " script=";
         // find start token
         int position = source.toLowerCase().indexOf(cs);
         // found?

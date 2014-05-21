@@ -37,7 +37,7 @@ public class LabelExtractor {
     public static boolean isValidLabel(String keyword, int compiler) {
         // check for valid chars
         keyword = keyword.trim();
-        return !keyword.startsWith(SyntaxScheme.getMacroString(compiler)) && !keyword.startsWith(SyntaxScheme.getCommentString(compiler)) && !keyword.startsWith("$") && !keyword.startsWith("#");
+        return !keyword.startsWith(RL64TextArea.getMacroString(compiler)) && !keyword.startsWith(RL64TextArea.getCommentString(compiler)) && !keyword.startsWith("$") && !keyword.startsWith("#");
     }
     public static String getLabelFromLine(String line, int compiler, boolean removeLastColon) {
         // check for valid chars
@@ -73,7 +73,7 @@ public class LabelExtractor {
             // in case of kickassembler, we need to remove colon from auto-suggestion
             if (keyword.endsWith(":") && removeLastColon) keyword = keyword.substring(0, keyword.length()-1);
             // check if a) keyword is not null and not empty, b) is longer than 2 chars and 3) is not an ASM keyword
-            if (keyword!=null && !keyword.isEmpty() && !SyntaxScheme.getKeywordHashMap().containsKey(keyword.toUpperCase())) return keyword;
+            if (keyword!=null && !keyword.isEmpty() && !ColorSchemes.getKeywordList().contains(keyword.toUpperCase())) return keyword;
         }
         return null;
     }

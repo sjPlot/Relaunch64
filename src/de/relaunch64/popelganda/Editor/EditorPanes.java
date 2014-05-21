@@ -38,7 +38,6 @@ import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
@@ -66,12 +65,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.syntax.ModeProvider;
-import org.gjt.sp.jedit.textarea.TextAreaPainter;
-import org.gjt.sp.util.SyntaxUtilities;
 
 /**
  *
@@ -164,23 +159,9 @@ public class EditorPanes {
      * @return the new total amount of existing tabs after this tab has been added.
      */
     public int addEditorPane(RL64TextArea editorPane, File fp, String content, int c, int script) {
-        // set syntax scheme
-        // TODO syntax scheme
-        // set syntax scheme
-        Mode mode = new Mode("asm");
-        mode.setProperty("file", ConstantsR64.assemblymodes[ConstantsR64.COMPILER_ACME]);
-        ModeProvider.instance.addMode(mode);
+        // set syntax style
+        editorPane.setCompilerSyntax(c);
         // add mode to buffer
-        editorPane.getBuffer().setMode(mode);
-        // editorPane.propertiesFromFile("default_colors.props");
-        // set default font
-        TextAreaPainter painter = editorPane.getPainter();
-        Font mf = settings.getMainFont();
-        // load color scheme
-        painter.setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
-        // set font
-        editorPane.setProperty("view.font", mf.getFontName());
-        editorPane.setProperty("view.fontsize", String.valueOf(mf.getSize()));
         JEditBuffer buffer = editorPane.getBuffer();
         // set content, if available
         if (content!= null && !content.isEmpty()) {
@@ -381,7 +362,7 @@ public class EditorPanes {
      * @return The comment string of the compiler given in {@code compiler}.
      */
     public String getCompilerCommentString(int compiler) {
-        return SyntaxScheme.getCommentString(compiler);
+        return RL64TextArea.getCommentString(compiler);
     }
     /**
      * Inserts a (commented) section line into the source code. Sections are specific commented
@@ -454,7 +435,7 @@ public class EditorPanes {
      * @param compiler 
      * @param script
      */
-    public void changeSyntaxScheme(int compiler, int script) {
+    public void changeCompilerSyntax(int compiler, int script) {
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         if (selectedTab != -1) {
@@ -465,22 +446,12 @@ public class EditorPanes {
                 int rd = settings.findRecentDoc(getFilePath(selectedTab).getPath());
                 settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), compiler, script);
             }
-            // disable undo/redo events
-            // ep.getUndoManager().enableRegisterUndoEvents(false);
             // get editor pane
             RL64TextArea editorpane = ep.getEditorPane();
-            // save content, may be deleted due to syntax highlighting
-            String text = editorpane.getText();
-            // change syntax scheme
-            // TODO syntax scheme
-//            editorpane = EditorPaneTools.setSyntaxScheme(editorpane, settings, compiler);
-            // set text back
-            editorpane.setText(text);
-            // ep.getUndoManager().enableRegisterUndoEvents(true);
+            // change compiler syntax
+            editorpane.setCompilerSyntax(compiler);
             // set new compiler scheme
             ep.setCompiler(compiler);
-            // set cursor
-            setCursor(editorpane);
         }
     }
     /**
@@ -493,18 +464,14 @@ public class EditorPanes {
      * @return 
      */
     public int addNewTab(File fp, String content, String title, int compiler, int script) {
-        // create new scroll pane
-        javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane();
-        // and new editor pane
-        RL64TextArea editorPane = new RL64TextArea();
+        // create new editor pane
+        RL64TextArea editorPane = new RL64TextArea(settings);
         editorPane.setName("jEditorPaneMain");
         // enable drag&drop
         editorPane.setDragEnabled(true);
         DropTarget dropTarget = new DropTarget(editorPane, mainFrame);   
-        // set editorpane as viewport of scrollpane
-        scrollPane.setViewportView(editorPane);
         // get default tab title and add new tab to tabbed pane
-        tabbedPane.addTab(title, scrollPane);
+        tabbedPane.addTab(title, editorPane);
         // check for file path and set it as tool tip
         if (fp!=null && fp.exists()) {
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());

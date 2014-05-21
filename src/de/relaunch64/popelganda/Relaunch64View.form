@@ -10,7 +10,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jSplitPane1" alignment="0" max="32767" attributes="0"/>
+              <Component id="jSplitPane1" alignment="0" pref="853" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -42,20 +42,20 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jTabbedPane1" alignment="0" pref="478" max="32767" attributes="0"/>
                       <Component id="jPanelFind" alignment="0" max="32767" attributes="0"/>
                       <Component id="jPanelReplace" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jTabbedPane1" alignment="0" pref="479" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTabbedPane1" pref="511" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane1" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jPanelFind" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jPanelReplace" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -63,35 +63,29 @@
               <SubComponents>
                 <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
                   <Properties>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[100, 100]"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="jTabbedPane1" noResource="true"/>
                   </Properties>
+                  <AccessibilityProperties>
+                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" resourceKey="jTabbedPane1.AccessibleContext.accessibleName"/>
+                  </AccessibilityProperties>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                   <SubComponents>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPaneMainEditorPane">
+                    <Component class="de.relaunch64.popelganda.Editor.RL64TextArea" name="jEditorPaneMain">
                       <Properties>
-                        <Property name="name" type="java.lang.String" value="jScrollPaneMainEditorPane" noResource="true"/>
+                        <Property name="name" type="java.lang.String" value="jEditorPaneMain" noResource="true"/>
                       </Properties>
-                      <AuxValues>
-                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                      </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                           <JTabbedPaneConstraints tabName="untitled">
-                            <Property name="tabTitle" type="java.lang.String" resourceKey="jScrollPaneMainEditorPane.TabConstraints.tabTitle"/>
+                            <Property name="tabTitle" type="java.lang.String" resourceKey="jEditorPaneMain.TabConstraints.tabTitle"/>
                           </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Component class="de.relaunch64.popelganda.Editor.RL64TextArea" name="jEditorPaneMain">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="jEditorPaneMain" noResource="true"/>
-                          </Properties>
-                        </Component>
-                      </SubComponents>
-                    </Container>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanelFind">
@@ -113,7 +107,7 @@
                                       <Component id="jCheckBoxWholeWord" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jCheckBoxMatchCase" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="58" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="jComboBoxFind" max="32767" attributes="0"/>
@@ -171,9 +165,6 @@
                     <Component class="javax.swing.JLabel" name="jLabel5">
                       <Properties>
                         <Property name="displayedMnemonic" type="int" value="105"/>
-                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="default"/>
-                        </Property>
                         <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
                         <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
                       </Properties>
@@ -284,7 +275,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="1" max="32767" attributes="0"/>
+                      <Component id="jSplitPane2" alignment="1" pref="367" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -352,7 +343,7 @@
                                           <Component id="jComboBoxRunScripts" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jComboBoxCompilers" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace pref="161" max="32767" attributes="0"/>
+                                      <EmptySpace pref="181" max="32767" attributes="0"/>
                                       <Component id="jButtonRunScript" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
@@ -429,7 +420,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTabbedPaneLogs" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jTabbedPaneLogs" alignment="0" pref="365" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -464,9 +455,9 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="384" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="360" max="32767" attributes="0"/>
                                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane2" alignment="0" pref="384" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane2" alignment="0" pref="360" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -516,7 +507,7 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" alignment="0" pref="384" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane3" alignment="0" pref="360" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
@@ -1261,7 +1252,7 @@
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldConvBin" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="193" max="32767" attributes="0"/>
+                  <EmptySpace pref="281" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -1376,6 +1367,6 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-88,0,0,3,-124"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,124,0,0,3,85"/>
   </AuxValues>
 </Form>

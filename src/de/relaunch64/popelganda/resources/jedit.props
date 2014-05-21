@@ -281,8 +281,8 @@ view.middleMousePaste=false
 view.ctrlForRectangularSelection=true
 
 # Minimal view size that is considered "valid" when loading perspective
-view.minStartupWidth=200
-view.minStartupHeight=200
+view.minStartupWidth=100
+view.minStartupHeight=100
 
 Combined\ Options.width=1024
 Combined\ Options.height=768
@@ -397,8 +397,8 @@ view.style.operator=color:#000000 style:b
 #}}}
 
 # Fancy Java2D stuff
-view.antiAlias=false
-view.fracFontMetrics=false
+view.antiAlias=true
+view.fracFontMetrics=true
 
 # Docking and tool bar positioning
 view.docking.alternateLayout=false

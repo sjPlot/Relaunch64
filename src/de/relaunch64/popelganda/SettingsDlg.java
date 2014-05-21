@@ -5,7 +5,6 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.Editor.ColorSchemes;
-import de.relaunch64.popelganda.Editor.SyntaxScheme;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
@@ -316,12 +315,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     @Action(enabledProperty = "modifiedTabFont")
     public void applyFontTab() {
         settings.setMainfont(mainfont);
-        // update syntax scheme
-        Document doc = SyntaxScheme.loadSyntax();
-        SyntaxScheme.setFont(doc, mainfont.getFamily());
-        SyntaxScheme.setFontSize(doc, mainfont.getSize());
-        SyntaxScheme.changeScheme(jComboBoxSyntaxScheme.getSelectedIndex(), doc);
-        SyntaxScheme.saveSyntax(doc);
         // get tab width
         try {
             settings.setTabWidth(Integer.parseInt(jTextFieldTabWidth.getText()));
@@ -338,10 +331,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     }
     @Action(enabledProperty = "modifiedTabScheme")
     public void applyColorScheme() {
-        // update syntax scheme
-        Document doc = SyntaxScheme.loadSyntax();
-        SyntaxScheme.changeScheme(jComboBoxSyntaxScheme.getSelectedIndex(), doc);
-        SyntaxScheme.saveSyntax(doc);
         settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         setModifiedTabScheme(false);
         jLabelRestart2.setVisible(false);

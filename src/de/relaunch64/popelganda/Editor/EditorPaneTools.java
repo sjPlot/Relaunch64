@@ -32,18 +32,10 @@
  */
 package de.relaunch64.popelganda.Editor;
 
-import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.Tools;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Pattern;
-import javax.swing.JEditorPane;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.StyledEditorKit;
 import org.gjt.sp.jedit.textarea.Selection;
-import de.relaunch64.popelganda.Editor.RL64TextArea;
 
 /**
  *
@@ -52,14 +44,14 @@ import de.relaunch64.popelganda.Editor.RL64TextArea;
 public class EditorPaneTools {
     public static void commentLine(RL64TextArea ep, int compiler) {
         // retrieve comment string
-        String commentString = SyntaxScheme.getCommentString(compiler);
+        String commentString = RL64TextArea.getCommentString(compiler);
         // check for text selection
         String selString = ep.getSelectedText();
         // if we have selection, add tab to each selected line
         if (selString!=null && !selString.isEmpty()) {
             // remember selection range
             
-            // TODO selection setzne
+            // TODO re-set selection
             
 //            int selstart = ep.getSelectionStart();
 //            int selend = ep.getSelectionEnd();
@@ -142,43 +134,5 @@ public class EditorPaneTools {
         catch (IndexOutOfBoundsException ex) {
         }
         return dest;
-    }
-    /**
-     * 
-     * @param editorPane
-     * @param settings
-     * @param c 
-     * @return  
-     */
-    public static JEditorPane setSyntaxScheme(JEditorPane editorPane, final Settings settings, int c) {
-        // declare compiler var as final
-        final int compiler = c;
-        // get hash map with keywords
-        final HashMap<String, MutableAttributeSet> kw = SyntaxScheme.getKeywordHashMap();
-        // get hash map with compiler specific keywords
-        final HashMap<String, MutableAttributeSet> ckw = SyntaxScheme.getCompilerKeywordHashMap(compiler);
-        // get hash map with script specific keywords
-        final HashMap<String, MutableAttributeSet> skw = SyntaxScheme.getScriptKeywordHashMap(compiler);
-        // get hash map with illegal opcodes
-        final HashMap<String, MutableAttributeSet> io = SyntaxScheme.getIllegalOpcodeHashMap();
-        // create new editor kit
-        EditorKit editorKit = new StyledEditorKit() {
-            // and set highlight scheme
-            @Override
-            public Document createDefaultDocument() {
-                return new SyntaxHighlighting(kw, ckw, skw, io,
-                                              SyntaxScheme.getFontName(),
-                                              SyntaxScheme.getFontSize(),
-                                              SyntaxScheme.getCommentString(compiler),
-                                              SyntaxScheme.getDelimiterList(compiler),
-                                              SyntaxScheme.getStyleAttributes(),
-                                              compiler,
-                                              settings.getTabWidth());
-            }
-        };
-        // link editorkit to editorpane
-        editorPane.setEditorKitForContentType("text/plain", editorKit);
-        editorPane.setContentType("text/plain");
-        return editorPane;
     }
 }
