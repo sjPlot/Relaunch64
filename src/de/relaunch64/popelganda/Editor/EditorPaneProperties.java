@@ -34,14 +34,14 @@ package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
 import java.io.File;
-import org.gjt.sp.jedit.textarea.StandaloneTextArea;
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 
 /**
  *
  * @author Daniel Luedecke
  */
 public class EditorPaneProperties {
-    private org.gjt.sp.jedit.textarea.StandaloneTextArea editorPane;
+    private RL64TextArea editorPane;
     private boolean modified;
     private File filePath;
     private int compiler;
@@ -57,10 +57,10 @@ public class EditorPaneProperties {
         compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
         script = 0;
     }
-    public StandaloneTextArea getEditorPane() {
+    public RL64TextArea getEditorPane() {
         return editorPane;
     }
-    public void setEditorPane(StandaloneTextArea ep) {
+    public void setEditorPane(RL64TextArea ep) {
         editorPane = ep;
     }
     public boolean isModified() {

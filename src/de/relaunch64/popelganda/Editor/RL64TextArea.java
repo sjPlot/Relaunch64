@@ -42,6 +42,10 @@ public class RL64TextArea extends StandaloneTextArea {
         props.setProperty(name, val);
     }
 
+    public void propertiesFromFile(String fileName) {
+        props.putAll(loadProperties("/de/relaunch64/popelganda/resources/" + fileName));
+    }
+
     private static Properties loadProperties(String fileName) {
         Properties loadedProps = new Properties();
         InputStream in = StandaloneTextArea.class.getResourceAsStream(fileName);

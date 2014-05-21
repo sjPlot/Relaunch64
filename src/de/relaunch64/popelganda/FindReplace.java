@@ -37,7 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.textarea.Selection;
-import org.gjt.sp.jedit.textarea.StandaloneTextArea;
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 
 /**
  *
@@ -51,7 +51,7 @@ public class FindReplace {
     private String content;
     private int activeTab = -1;
     private int lastActiveTab = -1;
-    private StandaloneTextArea editorPane = null;
+    private RL64TextArea editorPane = null;
     
     /**
      * 
@@ -64,10 +64,10 @@ public class FindReplace {
     FindReplace() {
         resetValues();
     }
-    public void initValues(String ft, String rt, int at, StandaloneTextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase) {
+    public void initValues(String ft, String rt, int at, RL64TextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase) {
         initValues(ft, rt, at, ep, isRegEx, wholeWord, matchCase, false);
     }
-    public void initValues(String ft, String rt, int at, StandaloneTextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase, boolean forceInit) {
+    public void initValues(String ft, String rt, int at, RL64TextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase, boolean forceInit) {
         boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
                                (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
         findText = ft;

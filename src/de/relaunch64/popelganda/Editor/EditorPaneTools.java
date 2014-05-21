@@ -43,14 +43,14 @@ import javax.swing.text.EditorKit;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyledEditorKit;
 import org.gjt.sp.jedit.textarea.Selection;
-import org.gjt.sp.jedit.textarea.StandaloneTextArea;
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 
 /**
  *
  * @author Daniel Luedecke
  */
 public class EditorPaneTools {
-    public static void commentLine(StandaloneTextArea ep, int compiler) {
+    public static void commentLine(RL64TextArea ep, int compiler) {
         // retrieve comment string
         String commentString = SyntaxScheme.getCommentString(compiler);
         // check for text selection

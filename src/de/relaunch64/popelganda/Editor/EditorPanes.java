@@ -73,7 +73,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.Gutter;
-import org.gjt.sp.jedit.textarea.StandaloneTextArea;
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
 import org.gjt.sp.util.SyntaxUtilities;
 
@@ -167,21 +167,20 @@ public class EditorPanes {
      * @param script
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addEditorPane(StandaloneTextArea editorPane, File fp, String content, int c, int script) {
+    public int addEditorPane(RL64TextArea editorPane, File fp, String content, int c, int script) {
         // set syntax scheme
         // TODO syntax scheme
         // set syntax scheme
         Mode mode = new Mode("asm");
         mode.setProperty("file", ConstantsR64.assemblymodes[ConstantsR64.COMPILER_ACME]);
         ModeProvider.instance.addMode(mode);
-        mode.setProperty("view.style.comment1", "color:#3366ff");
-        mode.setProperty("view.style.keyword1", "color:#3366ff");
-        mode.setProperty("view.style.keyword2", "color:#3366ff");
-        mode.setProperty("view.style.keyword3", "color:#3366ff");
-        mode.setProperty("view.style.keyword4", "color:#3366ff");
         // add mode to buffer
         editorPane.getBuffer().setMode(mode);
-        
+        editorPane.propertiesFromFile("default_colors.props");
+        //this would work as well, but it's easier to handle colors style sets in separate files:
+        //editorPane.setProperty("view.style.comment1", "color:#3366ff");
+
+
 //        editorPane = EditorPaneTools.setSyntaxScheme(editorPane, settings, c);
         // set default font
         TextAreaPainter painter = editorPane.getPainter();
@@ -215,7 +214,7 @@ public class EditorPanes {
         editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyPressed(java.awt.event.KeyEvent evt) {
                 // TODO entfernen
-                StandaloneTextArea ep = getActiveEditorPane();
+                RL64TextArea ep = getActiveEditorPane();
                 // cycle through open tabs
                 if (KeyEvent.VK_TAB==evt.getKeyCode() && evt.isControlDown()) {
                     // TODO entfernen
@@ -339,7 +338,7 @@ public class EditorPanes {
      * @param ep The editor pane with the source code where the column number should be retrieved
      * @return The column number of the caret from the source code (editor pane) {@code ep}.
      */
-    public int getColumn(StandaloneTextArea ep) {
+    public int getColumn(RL64TextArea ep) {
         // retrieve caret position
         int caretPosition = ep.getCaretPosition();
         // substract line start offset
@@ -348,19 +347,19 @@ public class EditorPanes {
     /**
      * Get the current line number from caret position {@code caretPosition} in 
      * the editor pane (source code) {@code ep}. This is an alias function
-     * which calls {@link #getRow(javax.swing.StandaloneTextArea, int)}.
+     * which calls {@link #getRow(javax.swing.RL64TextArea, int)}.
      * 
      * @param ep The editor pane with the source code where the row (line) number should be retrieved
      * @param caretPosition The position of the caret, to determine in which row (line) the
      * caret is currently positioned.
      * @return The row (line) number of the caret from the source code in {@code ep}.
      */
-    public int getLineNumber(StandaloneTextArea ep, int caretPosition) {
+    public int getLineNumber(RL64TextArea ep, int caretPosition) {
         return ep.getLineOfOffset(caretPosition);
     }
     public void gotoLine(int line, int column) {
         // get text area
-        StandaloneTextArea ep = getActiveEditorPane();
+        RL64TextArea ep = getActiveEditorPane();
         // set caret position
         ep.setCaretPosition(ep.getLineStartOffset(line-1)+column-1);
         // scroll and center caret position
@@ -371,7 +370,7 @@ public class EditorPanes {
      * 
      * @param editorPane 
      */
-    private void setCursor(StandaloneTextArea editorPane) {
+    private void setCursor(RL64TextArea editorPane) {
         // request input focus
         editorPane.requestFocusInWindow();
         try {
@@ -416,7 +415,7 @@ public class EditorPanes {
         // check whether we either have no sections or new name does not already exists
         if (null==names || names.isEmpty() || !names.contains(name)) {
             // get current editor
-            StandaloneTextArea ep = getActiveEditorPane();
+            RL64TextArea ep = getActiveEditorPane();
             // set up section name
             String insertString = getCompilerCommentString() + " ----- @" + name + "@ -----" + System.getProperty("line.separator");
             // insert string
@@ -488,7 +487,7 @@ public class EditorPanes {
             // disable undo/redo events
             // ep.getUndoManager().enableRegisterUndoEvents(false);
             // get editor pane
-            StandaloneTextArea editorpane = ep.getEditorPane();
+            RL64TextArea editorpane = ep.getEditorPane();
             // save content, may be deleted due to syntax highlighting
             String text = editorpane.getText();
             // change syntax scheme
@@ -516,7 +515,7 @@ public class EditorPanes {
         // create new scroll pane
         javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane();
         // and new editor pane
-        StandaloneTextArea editorPane = org.gjt.sp.jedit.textarea.StandaloneTextArea.createTextArea();
+        RL64TextArea editorPane = new RL64TextArea();
         editorPane.setName("jEditorPaneMain");
         // enable drag&drop
         editorPane.setDragEnabled(true);
@@ -536,11 +535,11 @@ public class EditorPanes {
      * 
      * @return 
      */
-    public StandaloneTextArea getActiveEditorPane() {
+    public RL64TextArea getActiveEditorPane() {
         // get selected tab
         return getEditorPane(tabbedPane.getSelectedIndex());
     }
-    public StandaloneTextArea getEditorPane(int index) {
+    public RL64TextArea getEditorPane(int index) {
         try {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(index);
@@ -559,20 +558,20 @@ public class EditorPanes {
         return getSourceCode(getActiveEditorPane());
     }
     public String getSourceCode(int index) {
-        StandaloneTextArea ep = getEditorPane(index);
+        RL64TextArea ep = getEditorPane(index);
         if (ep!=null) {
             return ep.getText();
         }
         return null;
     }
-    public String getSourceCode(StandaloneTextArea ep) {
+    public String getSourceCode(RL64TextArea ep) {
         if (ep!=null) {
             return ep.getText();
         }
         return null;
     }
     public void setSourceCode(int index, String source) {
-        StandaloneTextArea ep = getEditorPane(index);
+        RL64TextArea ep = getEditorPane(index);
         if (ep!=null) {
             ep.setText(source);
         }
@@ -657,7 +656,7 @@ public class EditorPanes {
      */
     public void setFocus() {
         // get active editor pane
-       StandaloneTextArea ep = getActiveEditorPane();
+       RL64TextArea ep = getActiveEditorPane();
        // check for valid value
        if (ep!=null) {
            // set input focus
@@ -1071,7 +1070,7 @@ public class EditorPanes {
     public void insertSeparatorLine() {
         eatReaturn = true;
         // get current editor
-        StandaloneTextArea ep = getActiveEditorPane();
+        RL64TextArea ep = getActiveEditorPane();
         // set up section name
         String insertString = getCompilerCommentString() + " ----------------------------------------" + System.getProperty("line.separator");
         // insert string
@@ -1079,7 +1078,7 @@ public class EditorPanes {
     }
     public void insertBreakPoint(int compiler) {
         // get current editor
-        StandaloneTextArea ep = getActiveEditorPane();
+        RL64TextArea ep = getActiveEditorPane();
         String insertString = "";
         switch (compiler) {
             case ConstantsR64.COMPILER_KICKASSEMBLER:
@@ -1135,7 +1134,7 @@ public class EditorPanes {
     //        if (suggestionSubWord.length() < 2) {
     //            return;
     //        }
-            StandaloneTextArea ep = getActiveEditorPane();
+            RL64TextArea ep = getActiveEditorPane();
             // init variable
             Object[] labels = null;
             switch(type) {
@@ -1233,7 +1232,7 @@ public class EditorPanes {
      */
     protected boolean insertSelection() {
         if (suggestionList.getSelectedValue() != null) {
-            StandaloneTextArea ep = getActiveEditorPane();
+            RL64TextArea ep = getActiveEditorPane();
             final String selectedSuggestion = ((String) suggestionList.getSelectedValue()).substring(suggestionSubWord.length());
             insertString(selectedSuggestion, ep.getCaretPosition());
             ep.requestFocusInWindow();
@@ -1260,7 +1259,7 @@ public class EditorPanes {
      * @return 
      */
     public String getCaretString(boolean wholeWord, String specialDelimiter) {
-        StandaloneTextArea ep = getActiveEditorPane();
+        RL64TextArea ep = getActiveEditorPane();
         final int position = ep.getCaretPosition();
         String text = ep.getLineText(ep.getCaretLine());
         String addDelim;
@@ -1359,7 +1358,7 @@ public class EditorPanes {
         // getActiveEditorPane().setSelectedText(text);
     }
     public void insertString(String text, int position) {
-//        StandaloneTextArea ep = getActiveEditorPane();
+//        RL64TextArea ep = getActiveEditorPane();
 //        ep.setCaretPosition(position);
 //        ep.setSelectedText(text);
         JEditBuffer buffer = getActiveEditorPane().getBuffer();
@@ -1404,14 +1403,14 @@ public class EditorPanes {
                                                   SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
     }
     public void undo() {
-        StandaloneTextArea ep = getActiveEditorPane();
+        RL64TextArea ep = getActiveEditorPane();
         JEditBuffer buffer = ep.getBuffer();
         if (buffer.canUndo()) {
             buffer.undo(ep);
         }
     }
     public void redo() {
-        StandaloneTextArea ep = getActiveEditorPane();
+        RL64TextArea ep = getActiveEditorPane();
         JEditBuffer buffer = ep.getBuffer();
         if (buffer.canRedo()) {
             buffer.redo(ep);

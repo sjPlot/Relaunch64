@@ -33,6 +33,7 @@
 
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
@@ -1730,7 +1731,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPaneMainEditorPane = new javax.swing.JScrollPane();
-        jEditorPaneMain = org.gjt.sp.jedit.textarea.StandaloneTextArea.createTextArea();
+        jEditorPaneMain = new RL64TextArea();
         jPanelFind = new javax.swing.JPanel();
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();
@@ -2658,7 +2659,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;
-    private org.gjt.sp.jedit.textarea.StandaloneTextArea jEditorPaneMain;
+    private RL64TextArea jEditorPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
