@@ -1732,6 +1732,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             return renderer;
         }
     }    
+    // TODO change constructor call from RL64TextArea, pass "settings". Currently not used, because
+    // else Matisse GUI Builder doesn't work then.
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

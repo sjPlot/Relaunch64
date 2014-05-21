@@ -82,6 +82,7 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
         // set antialias
+        // TODO antialias does not work
         setProperty("view.antiAlias", "true");
         getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
         // getPainter().setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));

@@ -148,7 +148,7 @@ public class ConstantsR64 {
     public static final int COMPILER_TMPX = 6;
     
     public static final String[] assemblymodes = new String[] {
-        "/de/relaunch64/popelganda/resources/modes/assembly-kickass.xml",
+        "/de/relaunch64/popelganda/resources/modes/assembly-kick.xml",
         "/de/relaunch64/popelganda/resources/modes/assembly-acme.xml",
         "/de/relaunch64/popelganda/resources/modes/assembly-64tass.xml",
         "/de/relaunch64/popelganda/resources/modes/assembly-ca65.xml",
