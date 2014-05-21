@@ -9,9 +9,11 @@
 <MODE>
 
 	<PROPS>
-		<PROPERTY NAME="lineComment" VALUE=";" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
-                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/?^&amp;*" />
+                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/^&amp;*" />
 	</PROPS>
 
 	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
@@ -35,7 +37,7 @@
 			<END>"</END>
 		</SPAN>
 
-		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR" AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR" AT_WHITESPACE_END="TRUE">:</MARK_PREVIOUS>
 
 		<KEYWORDS>
                         <KEYWORD3>.align</KEYWORD3>
@@ -244,10 +246,11 @@
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;</SEQ>
-		<SEQ TYPE="OPERATOR">!</SEQ>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+
+                <SEQ_REGEXP HASH_CHARS="!" AT_WHITESPACE_END="TRUE" TYPE="LABEL">![A-Za-z_][A-Za-z0-9_]*(?=:)</SEQ_REGEXP>
 	</RULES>
 </MODE>
