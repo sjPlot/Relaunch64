@@ -18,8 +18,10 @@
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
+                <!-- Literal3 are binary numbers -->
+                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="LITERAL3">%[01.#]+</SEQ_REGEXP>
                 <!-- Literal4 are ram-addresses -->
-                <SEQ_REGEXP HASH_CHARS="$%&amp;0" AT_WORD_START="TRUE" TYPE="LITERAL4">(\$|0x)[0-9a-fA-F]+|%[01.#]+|&amp;[0-7]+</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$&amp;0" AT_WORD_START="TRUE" TYPE="LITERAL4">(\$|0x)[0-9a-fA-F]+|&amp;[0-7]+</SEQ_REGEXP>
                 <!-- digit are numbers -->
                 <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">(#\$|#0x|#)[0-9a-fA-F]+|#%[01.#]+|&amp;[0-7]+</SEQ_REGEXP>
                 <!-- keyword4 are jump labels-->
@@ -124,9 +126,6 @@
 <!--                    <OPERATOR>asl</OPERATOR>
                         <OPERATOR>arr</OPERATOR>
                         <OPERATOR>lsr</OPERATOR>-->
-
-			<!-- Predefined constants -->
-                        <LITERAL3>a</LITERAL3>
 
 			<!-- Instructions: functions -->
                         <FUNCTION>sin</FUNCTION>

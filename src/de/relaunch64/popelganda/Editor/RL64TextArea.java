@@ -102,10 +102,8 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     
     public final void setSyntaxScheme(Settings settings, int scheme) {
-//                case COLOR_NORMAL: return "color:#000000";
-//                case COLOR_HEX: return "color:#007800"; // green
 //                case COLOR_BIN: return "color:#007878"; // cyan
-//                case BACKGROUND: return "color:#ffffff"; // white        
+        // syntax colors for editor
         setProperty("view.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
         setProperty("view.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND));
         setProperty("view.style.comment1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
@@ -113,6 +111,7 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.style.comment3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
         setProperty("view.style.comment4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
         setProperty("view.style.digit", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NUMBER));
+        setProperty("view.style.literal3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_BIN));
         setProperty("view.style.literal4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX));
         setProperty("view.style.function", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SCRIPTKEYWORD));
         setProperty("view.style.keyword1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD));
@@ -120,31 +119,16 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.style.keyword3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD));
         setProperty("view.style.literal1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
         setProperty("view.style.literal2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
-        setProperty("view.style.literal3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
         setProperty("view.style.label", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP));
         setProperty("view.style.keyword4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP));
         setProperty("view.style.operator", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_OPERATOR));
-
+        // syntax colors for line numbers
         setProperty("view.gutter.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND));
         setProperty("view.gutter.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR));
         setProperty("view.gutter.highlightColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR));
         setProperty("view.gutter.currentLineColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
         setProperty("view.gutter.focusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
         setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
-        
-        // TODO hex address and binary values as separate token?
-//        setProperty("view.style.", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX));
-//        setProperty("view.style.", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_BIN));
-        
-//        setProperty("view.style.foldLine.0=color:#000000 bgColor:#dafeda style:b
-//        setProperty("view.style.foldLine.1=color:#000000 bgColor:#fff0cc style:b
-//        setProperty("view.style.foldLine.2=color:#000000 bgColor:#e7e7ff style:b
-//        setProperty("view.style.foldLine.3=color:#000000 bgColor:#ffe0f0 style:b
-//        setProperty("view.style.invalid=color:#ff0066 bgColor:#ffffcc
-//        setProperty("view.style.keyword3=color:#0099ff style:b
-//        setProperty("view.style.keyword4=color:#66ccff style:b
-//        setProperty("view.style.markup=color:#0000ff
-        
         // load color scheme
         Font mf = settings.getMainFont();
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));

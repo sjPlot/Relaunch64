@@ -18,8 +18,10 @@
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
+                <!-- Literal3 are binary numbers -->
+                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="LITERAL3">%[01]*</SEQ_REGEXP>
                 <!-- Literal4 are ram-addresses -->
-                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="LITERAL4">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$" AT_WORD_START="TRUE" TYPE="LITERAL4">\$[0-9a-fA-F]*</SEQ_REGEXP>
                 <!-- digit are numbers -->
                 <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">(#\$|#0x|#)[0-9a-fA-F]+|#%[01.#]+</SEQ_REGEXP>
                 
@@ -227,11 +229,6 @@
                         <KEYWORD2>slo</KEYWORD2>
                         <KEYWORD2>sre</KEYWORD2>
 
-			<!-- Predefined constants -->
-                        <LITERAL3>a</LITERAL3>
-                        <LITERAL3>true</LITERAL3>
-                        <LITERAL3>false</LITERAL3>
-
 			<!-- Functions -->
                         <FUNCTION>abs</FUNCTION>
                         <FUNCTION>acos</FUNCTION>
@@ -276,6 +273,8 @@
 		<SEQ TYPE="OPERATOR">-</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">true</SEQ>
+		<SEQ TYPE="OPERATOR">false</SEQ>
                 <!--<SEQ TYPE="OPERATOR">%</SEQ>-->
 
 		<SEQ TYPE="OPERATOR">|</SEQ>
