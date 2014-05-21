@@ -82,9 +82,9 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
         // set antialias
-//        setProperty("view.antiAlias", "true");
-//        getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
-        getPainter().setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
+        setProperty("view.antiAlias", "true");
+        getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
+        // getPainter().setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
     }
     
     public final void setTabs(Settings settings) {
@@ -139,10 +139,10 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     public RL64TextArea(Settings settings) {
         super(propertyManager);
-        // set default font
-        setFonts(settings);
         // set syntaxscheme
         setSyntaxScheme(settings, ColorSchemes.SCHEME_DEFAULT);
+        // set default font
+        setFonts(settings);
         // set tab width
         setTabs(settings);
     }

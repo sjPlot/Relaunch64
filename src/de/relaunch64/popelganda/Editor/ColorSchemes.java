@@ -159,7 +159,7 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return "#221,a0,221";
                 case COLOR_ILLEGALOPCODE: return "#ff,99,71";
                 case BACKGROUND: return "#ff,250,250";
-                case LINE_BACKGROUND: return "#ff,f0,245";
+                case LINE_BACKGROUND: return "#ff,f0,f5";
                 case LINE_BORDER: return "#ff,182,193";
                 case LINE_COLOR: return "#ff,182,193";
                 case LINE_HIGHLIGHT: return "#dc,20,3c";
@@ -167,7 +167,7 @@ public class ColorSchemes {
             break;
         case SCHEME_DARK:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#245,245,245";
+                case COLOR_NORMAL: return "#f5,f5,f5";
                 case COLOR_COMMENT: return "#c0,c0,c0";
                 case COLOR_STRING: return "#f0,e6,140";
                 case COLOR_NUMBER: return "#100,149,237";
@@ -215,14 +215,14 @@ public class ColorSchemes {
                 case COLOR_NUMBER: return "#134,152,23";
                 case COLOR_HEX: return "#b4,136,24";
                 case COLOR_BIN: return "#109,116,195";
-                case COLOR_JUMP: return "#217,47,52"; 
+                case COLOR_JUMP: return "#d9,47,52"; 
                 case COLOR_OPERATOR: return "#c8,73,31";
                 case COLOR_KEYWORD: return "#49,142,209";
                 case COLOR_COMPILERKEYWORD: return "#11,55,66";
                 case COLOR_SCRIPTKEYWORD: return "#c8,73,31";
                 case COLOR_ILLEGALOPCODE: return "#208,54,130";
-                case BACKGROUND: return "#fd,246,229";
-                case LINE_BACKGROUND: return "#238,233,214"; // fd,246,229
+                case BACKGROUND: return "#fd,246,e5";
+                case LINE_BACKGROUND: return "#238,233,214"; // fd,246,e5
                 case LINE_BORDER: return "#238,233,214";
                 case LINE_COLOR: return "#148,162,162";
                 case LINE_HIGHLIGHT: return "#11,55,66";
@@ -239,14 +239,14 @@ public class ColorSchemes {
                 case COLOR_JUMP: return "#b4,136,24"; 
                 case COLOR_OPERATOR: return "#c8,73,31";
                 case COLOR_KEYWORD: return "#238,233,214";
-                case COLOR_COMPILERKEYWORD: return "#217,47,52";
+                case COLOR_COMPILERKEYWORD: return "#d9,47,52";
                 case COLOR_SCRIPTKEYWORD: return "#c8,73,31";
                 case COLOR_ILLEGALOPCODE: return "#208,54,130";
                 case BACKGROUND: return "#11,55,66";
                 case LINE_BACKGROUND: return "#3,44,54"; // 11,55,66
                 case LINE_BORDER: return "#3,44,54";
                 case LINE_COLOR: return "#132,8b,151";
-                case LINE_HIGHLIGHT: return "#fd,246,229";
+                case LINE_HIGHLIGHT: return "#fd,246,e5";
             }
             break;
         case SCHEME_DARK2:
@@ -280,7 +280,7 @@ public class ColorSchemes {
                 case COLOR_BIN: return "#68,85,136";
                 case COLOR_JUMP: return "#23,151,101"; 
                 case COLOR_OPERATOR: return "#e7,93,67";
-                case COLOR_KEYWORD: return "#0,134,179";
+                case COLOR_KEYWORD: return "#0,134,b3";
                 case COLOR_COMPILERKEYWORD: return "#a5,42,42";
                 case COLOR_SCRIPTKEYWORD: return "#e7,93,67";
                 case COLOR_ILLEGALOPCODE: return "#d8,23,69";
@@ -314,31 +314,31 @@ public class ColorSchemes {
             break;
         case SCHEME_POPELGANDA:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#185,185,b4"; 
+                case COLOR_NORMAL: return "#b9b9b4"; 
                 case COLOR_COMMENT: return "#35,35,35";
                 case COLOR_STRING: return "#c7,80,86";
-                case COLOR_NUMBER: return "#ff,ff,ff";
-                case COLOR_HEX: return "#8b,207,234";
-                case COLOR_BIN: return "#8b,207,234";
-                case COLOR_JUMP: return "#98,150,217"; 
+                case COLOR_NUMBER: return "#ffffff";
+                case COLOR_HEX: return "#8bcfea";
+                case COLOR_BIN: return "#8bcfea";
+                case COLOR_JUMP: return "#98,150,d9"; 
                 case COLOR_OPERATOR: return "#133,153,144";
-                case COLOR_KEYWORD: return "#af,217,229";
-                case COLOR_COMPILERKEYWORD: return "#136,179,136";
+                case COLOR_KEYWORD: return "#afd9e5";
+                case COLOR_COMPILERKEYWORD: return "#136,b3,136";
                 case COLOR_SCRIPTKEYWORD: return "#133,153,144";
-                case COLOR_ILLEGALOPCODE: return "#217,2,28";
+                case COLOR_ILLEGALOPCODE: return "#d9,2,28";
                 case BACKGROUND: return "#77,77,77";
                 case LINE_BACKGROUND: return "#63,63,63"; // 11,55,66
                 case LINE_BORDER: return "#63,63,63";
-                case LINE_COLOR: return "#185,185,b4";
-                case LINE_HIGHLIGHT: return "#ff,ff,ff";
+                case LINE_COLOR: return "#b9b9b4";
+                case LINE_HIGHLIGHT: return "#ffffff";
             }
             break;
         case SCHEME_DEFAULT_REDUCED:
             switch (tokentype) {
                 case COLOR_NORMAL: return "#000000";
                 case COLOR_COMMENT: return "#969696"; // grey
-                case COLOR_STRING: return "#dc, 0, dc"; //dark pink
-                case COLOR_NUMBER: return "#a0, 0, 0"; // red
+                case COLOR_STRING: return "#dc00dc"; //dark pink
+                case COLOR_NUMBER: return "#a00000"; // red
                 case COLOR_HEX: 
                 case COLOR_BIN:
                     return "#0, 120, 0"; // green
@@ -350,35 +350,35 @@ public class ColorSchemes {
                 case COLOR_ILLEGALOPCODE: 
                 case COLOR_SCRIPTKEYWORD:
                     return "#0, 0, c8"; // dark blue
-                case BACKGROUND: return "#ff, ff, ff"; // white
-                case LINE_BACKGROUND: return "#f8, f8, f8"; // light gray
-                case LINE_BORDER: return "#f0, f0, f0"; // light gray
-                case LINE_COLOR: return "#0,0,0"; // black
+                case BACKGROUND: return "#ffffff"; // white
+                case LINE_BACKGROUND: return "#f8f8f8"; // light gray
+                case LINE_BORDER: return "#f0f0f0"; // light gray
+                case LINE_COLOR: return "#000000"; // black
                 case LINE_HIGHLIGHT: return "#dc, 20, 3c"; // red
             }
             break;
         case SCHEME_POPELGANDA_REDUCED:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#185,185,b4"; 
+                case COLOR_NORMAL: return "#b9b9b4"; 
                 case COLOR_COMMENT: return "#35,35,35";
                 case COLOR_STRING: return "#133,153,144";
-                case COLOR_NUMBER: return "#ff,ff,ff";
+                case COLOR_NUMBER: return "#ffffff";
                 case COLOR_HEX:
                 case COLOR_BIN:
-                    return "#8b,207,234";
+                    return "#8bcfea";
                 case COLOR_JUMP:
                 case COLOR_OPERATOR:
                 case COLOR_COMPILERKEYWORD:
-                    return "#98,150,217"; 
+                    return "#98,150,d9"; 
                 case COLOR_KEYWORD: 
                 case COLOR_SCRIPTKEYWORD:
                 case COLOR_ILLEGALOPCODE:
-                    return "#af,217,229";
+                    return "#afd9e5";
                 case BACKGROUND: return "#77,77,77";
                 case LINE_BACKGROUND: return "#63,63,63"; // 11,55,66
                 case LINE_BORDER: return "#63,63,63";
-                case LINE_COLOR: return "#185,185,b4";
-                case LINE_HIGHLIGHT: return "#ff,ff,ff";
+                case LINE_COLOR: return "#b9b9b4";
+                case LINE_HIGHLIGHT: return "#ffffff";
             }
             break;
         case SCHEME_C64_REDUCED:
@@ -409,7 +409,7 @@ public class ColorSchemes {
             switch (tokentype) {
                 case COLOR_NORMAL: return "#47,79,79"; 
                 case COLOR_COMMENT: return "#bd,bd,bd";
-                case COLOR_STRING: return "#136,179,136";
+                case COLOR_STRING: return "#136,b3,136";
                 case COLOR_NUMBER: return "#149,149,149";
                 case COLOR_HEX: return "#109,130,145";
                 case COLOR_BIN: return "#109,130,145";
@@ -418,12 +418,12 @@ public class ColorSchemes {
                 case COLOR_KEYWORD: return "#108,113,128";
                 case COLOR_COMPILERKEYWORD: return "#99,99,99";
                 case COLOR_SCRIPTKEYWORD: return "#99,99,99";
-                case COLOR_ILLEGALOPCODE: return "#bf,164,128";
-                case BACKGROUND: return "#245,245,245";
-                case LINE_BACKGROUND: return "#e6,e6,e6"; // 11,55,66
-                case LINE_BORDER: return "#e6,e6,e6";
+                case COLOR_ILLEGALOPCODE: return "#bf,a4,128";
+                case BACKGROUND: return "#f5,f5,f5";
+                case LINE_BACKGROUND: return "#e6e6e6"; // 11,55,66
+                case LINE_BORDER: return "#e6e6e6";
                 case LINE_COLOR: return "#149,149,149";
-                case LINE_HIGHLIGHT: return "#0,0,0";
+                case LINE_HIGHLIGHT: return "#000000";
             }
             break;
         }
