@@ -1,5 +1,5 @@
 /*
- * Relaunch64 - A Java Crossassembler for C64 machine language coding.
+ * Relaunch64 - A Java cross-development IDE for C64 machine language coding.
  * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
@@ -40,7 +40,6 @@ import de.relaunch64.popelganda.util.Tools;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.dnd.DropTarget;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -79,7 +78,6 @@ public class EditorPanes {
     private JComboBox jComboBoxScripts = null;
     private final Relaunch64View mainFrame;
     private final Settings settings;
-    private boolean eatReaturn = false;
     private JPopupMenu suggestionPopup = null;
     private JList suggestionList;
     private String suggestionSubWord;
@@ -164,58 +162,24 @@ public class EditorPanes {
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
         // set content, if available
+        // TODO undo removes loaded text
         if (content!= null && !content.isEmpty()) {
             editorPane.setText(content);
         }
         else {
             editorPane.setText("");
         }
-        // add key listener
-        // TODO keylistener does not work
-        editorPane.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
-                // TODO entfernen
-                RL64TextArea ep = getActiveEditorPane();
-                // cycle through open tabs
-                if (KeyEvent.VK_TAB==evt.getKeyCode() && evt.isControlDown()) {
-                    // TODO entfernen
-                    System.out.println("hallo2");
-                    // get selected tab
-                    int selected = tabbedPane.getSelectedIndex();
-                    // cycle backwards?
-                    if (evt.isShiftDown()) {
-                        selected--;
-                        if (selected<0) selected = tabbedPane.getTabCount()-1;
-                    }
-                    else {
-                        // cycle forward
-                        selected++;
-                        if (selected>=tabbedPane.getTabCount()) selected = 0;
-                    }
-                    // select new tab
-                    tabbedPane.setSelectedIndex(selected);
-                    evt.consume();
-                }
-                // TODO add ctrl+tab for cycling through tabs
-            }
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
-                // after enter-key, insert tabs automatically to match text start to column of previous line
-                if (KeyEvent.VK_ENTER==evt.getKeyCode() && !evt.isShiftDown() && !eatReaturn) getActiveEditorPane().insertTabAndIndent();
-                // if enter-key should not auto-insert tab, do nothing
-                else if (KeyEvent.VK_ENTER==evt.getKeyCode() && eatReaturn) eatReaturn = false;
-                // ctrl+space opens label-auto-completion
-                // TODO auto-suggestion does not work
-                else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
-                    showSuggestion(SUGGESTION_LABEL);
-                }
-                else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown()) {
-                    showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
-                }
-                else if (Character.isWhitespace(evt.getKeyChar())) {
-                    hideSuggestion();
-                }
-            }
-        });
+        // TODO auto-suggestion does not work
+        // TODO ctrl+tab tab-switching does not work
+//                else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
+//                    showSuggestion(SUGGESTION_LABEL);
+//                }
+//                else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown()) {
+//                    showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
+//                }
+//                else if (Character.isWhitespace(evt.getKeyChar())) {
+//                    hideSuggestion();
+//                }
         // add caret listener
         /**
          * JDK 8 version of caret listener
@@ -370,7 +334,6 @@ public class EditorPanes {
      * @param name the name of the section, used for navigating through the source.
      */
     public void insertSection(String name) {
-        eatReaturn = true;
         // retrieve section names
         ArrayList<String> names = SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString());
         // check whether we either have no sections or new name does not already exists
@@ -506,10 +469,7 @@ public class EditorPanes {
     }
     public String getSourceCode(int index) {
         RL64TextArea ep = getEditorPane(index);
-        if (ep!=null) {
-            return ep.getText();
-        }
-        return null;
+        return getSourceCode(ep);
     }
     public String getSourceCode(RL64TextArea ep) {
         if (ep!=null) {
@@ -845,9 +805,6 @@ public class EditorPanes {
                     try {
                         // if not, create file
                         if (fileToSave.createNewFile()) {
-                            // if user confirms with enter key,
-                            // we don't need auto inser tab...
-                            eatReaturn = true;
                             // save file
                             return saveFile(selectedTab, fileToSave, true);
                         }
@@ -1015,7 +972,6 @@ public class EditorPanes {
      * the beginning of the caret's current line.
      */
     public void insertSeparatorLine() {
-        eatReaturn = true;
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         // set up section name
@@ -1038,12 +994,6 @@ public class EditorPanes {
     public void insertBreakPoint() {
         insertBreakPoint(getActiveCompiler());
     }
-
-    
-    public void preventAutoInsertTab() {
-        eatReaturn = true;
-    }
-    
     /**
      * @author Guillaume Polet
      * 
@@ -1302,12 +1252,8 @@ public class EditorPanes {
     }
     public void insertString(String text) {
         insertString(text, getActiveEditorPane().getCaretPosition());
-        // getActiveEditorPane().setSelectedText(text);
     }
     public void insertString(String text, int position) {
-//        RL64TextArea ep = getActiveEditorPane();
-//        ep.setCaretPosition(position);
-//        ep.setSelectedText(text);
         JEditBuffer buffer = getActiveEditorPane().getBuffer();
         buffer.insert(position, text);
     }

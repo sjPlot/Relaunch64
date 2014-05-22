@@ -1,5 +1,5 @@
 /*
- * Relaunch64 - A Java Crossassembler for C64 machine language coding.
+ * Relaunch64 - A Java cross-development IDE for C64 machine language coding.
  * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
@@ -323,11 +323,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex()).setScript(jComboBoxRunScripts.getSelectedIndex());
                 // update recent doc
                 updateRecentDoc();
-            }
-        });
-        jComboBoxGoto.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyPressed(java.awt.event.KeyEvent e) {
-                if (KeyEvent.VK_ENTER==e.getKeyCode()) editorPanes.preventAutoInsertTab();
             }
         });
         jComboBoxGoto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {

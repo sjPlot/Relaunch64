@@ -31,6 +31,10 @@ import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
 
+/**
+ * 
+ * @author Soci/Singular
+ */
 public class RL64TextArea extends StandaloneTextArea {
     final static Properties props;
     static IPropertyManager propertyManager;

@@ -1,6 +1,6 @@
 /*
- * Relaunch64 - A Java Crossassembler for C64 machine language coding.
- * Copyright (C) 2001-2013 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Relaunch64 - A Java cross-development IDE for C64 machine language coding.
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -35,7 +35,6 @@ package de.relaunch64.popelganda.Editor;
 import de.relaunch64.popelganda.util.Tools;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-import org.gjt.sp.jedit.textarea.Selection;
 
 /**
  *
@@ -49,14 +48,6 @@ public class EditorPaneTools {
         String selString = ep.getSelectedText();
         // if we have selection, add tab to each selected line
         if (selString!=null && !selString.isEmpty()) {
-            // remember selection range
-            
-            // TODO re-set selection
-            
-//            int selstart = ep.getSelectionStart();
-//            int selend = ep.getSelectionEnd();
-            int selstart = 1;
-            int selend = 2;
             // retrieve lines
             String[] lines = selString.split("\n");
             // count new lines
@@ -88,8 +79,7 @@ public class EditorPaneTools {
             }
             // insert string
             ep.replaceSelection(sb.toString());
-            // re-select text
-            ep.setSelection(new Selection.Range(selstart, selend+chardiff));
+            // TODO reselect replaced text
         }
     }
     public static String findJumpToken(int direction, int currentLine, ArrayList<Integer> ln, ArrayList<String> names) {

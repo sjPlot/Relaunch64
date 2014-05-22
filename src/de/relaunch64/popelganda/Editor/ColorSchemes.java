@@ -1,5 +1,5 @@
 /*
- * Relaunch64 - A Java Crossassembler for C64 machine language coding.
+ * Relaunch64 - A Java cross-development IDE for C64 machine language coding.
  * Copyright (C) c81-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
