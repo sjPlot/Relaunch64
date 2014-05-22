@@ -423,6 +423,20 @@ public class EditorPanes {
             editorpane.setSyntaxScheme(settings, settings.getSyntaxScheme());
         }
     }
+    public void updateLineNumberAlignment() {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setLineNumberAlignment(settings);
+        }
+    }
+    public void updateAntiAlias(String aliasstyle) {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setTextAntiAlias(aliasstyle, settings);
+        }
+    }
     public void updateFonts() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane

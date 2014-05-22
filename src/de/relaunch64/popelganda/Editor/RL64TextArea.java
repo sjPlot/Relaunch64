@@ -87,19 +87,34 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
         // set line number alignment
-        getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
+        setLineNumberAlignment(settings);
         // set fonts
         setFont(mf);
         getPainter().setFont(mf);
         getGutter().setFont(mf);
         // set antialias
+        setTextAntiAlias(AntiAlias.STANDARD, settings);
+        // getPainter().setTextAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
+        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+    }
+
+    public final void setLineNumberAlignment(Settings settings) {
+        // set line number alignment
+        getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
+    }
+    
+    public final void setTextAntiAlias(String aliasstyle, Settings settings) {
+        // set default font
+        Font mf = settings.getMainFont();
+        // set antialias
         setProperty("view.antiAlias", "true");
-        getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
-        // getPainter().setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
+        getPainter().setAntiAlias(new AntiAlias(aliasstyle));
+        // getPainter().setTextAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
     
     public final void setTabs(Settings settings) {
+        // TODO indent doesn't seem to work
         // set default font
         Font mf = settings.getMainFont();
         setProperty("buffer.tabSize", String.valueOf(settings.getTabWidth()));
@@ -117,7 +132,6 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     
     public final void setSyntaxScheme(Settings settings, int scheme) {
-//                case COLOR_BIN: return "color:#007878"; // cyan
         // syntax colors for editor
         setProperty("view.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
         setProperty("view.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND));

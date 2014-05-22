@@ -33,6 +33,7 @@
 
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
@@ -84,10 +85,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.PopupMenuEvent;
+import org.gjt.sp.jedit.textarea.AntiAlias;
+import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
@@ -748,7 +752,50 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
     }
     private void specialFunctions() {
-        // String text = jTextFieldGotoLine.getText();
+        String text = jTextFieldGotoLine.getText();
+        switch (text) {
+            case "aa":
+                editorPanes.updateAntiAlias(AntiAlias.STANDARD);
+                break;
+            case "aas":
+                editorPanes.updateAntiAlias(AntiAlias.SUBPIXEL);
+                break;
+            case "aan":
+                editorPanes.updateAntiAlias(AntiAlias.NONE);
+                break;
+            case "lal":
+                settings.setLineNumerAlignment(Gutter.LEFT);
+                editorPanes.updateLineNumberAlignment();
+                break;
+            case "lac":
+                settings.setLineNumerAlignment(Gutter.CENTER);
+                editorPanes.updateLineNumberAlignment();
+                break;
+            case "lar":
+                settings.setLineNumerAlignment(Gutter.RIGHT);
+                editorPanes.updateLineNumberAlignment();
+                break;
+        }
+        if (text.startsWith("cs")) {
+            try {
+                int nr = Integer.parseInt(text.substring(2));
+                if (nr>=1 && nr<=ColorSchemes.SCHEME_NAMES.length) {
+                    settings.setSyntaxScheme(nr-1);
+                    editorPanes.updateColorScheme();
+                }
+            }
+            catch(IndexOutOfBoundsException | NumberFormatException ex) {
+            }
+        }
+        else if (text.startsWith("fs")) {
+            try {
+                int size = Integer.parseInt(text.substring(2));
+                settings.setMainfont(new Font(settings.getMainfont(Settings.FONTNAME), Font.PLAIN, size));
+                editorPanes.updateFonts();
+            }
+            catch(IndexOutOfBoundsException | NumberFormatException ex) {
+            }
+        }
         jTextFieldGotoLine.setText("");
     }
     /**
