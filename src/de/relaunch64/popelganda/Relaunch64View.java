@@ -85,7 +85,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -920,6 +919,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+    @Action
+    public void expandFolds() {
+        editorPanes.getActiveEditorPane().expandFold(true);
+    }
+    @Action
+    public void collapseFolds() {
+        editorPanes.getActiveEditorPane().collapseFold();
+    }
     /**
      * 
      */
@@ -1037,22 +1044,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void setFocusToSource() {
         editorPanes.setFocus();
-    }
-    @Action
-    public void selectNextTab() {
-        int selected = jTabbedPane1.getSelectedIndex()+1;
-        if (selected>=jTabbedPane1.getTabCount()) selected = 0;
-        // select new tab
-        jTabbedPane1.setSelectedIndex(selected);
-        editorPanes.updateTabbedPane();
-    }
-    @Action
-    public void selectPrevTab() {
-        int selected = jTabbedPane1.getSelectedIndex()-1;
-        if (selected<0) selected = jTabbedPane1.getTabCount()-1;
-        // select new tab
-        jTabbedPane1.setSelectedIndex(selected);
-        editorPanes.updateTabbedPane();
     }
     /**
      * 
@@ -1886,6 +1877,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator17 = new javax.swing.JPopupMenu.Separator();
         commentLineMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemExpandFold = new javax.swing.JMenuItem();
+        jMenuItemCollapseFold = new javax.swing.JMenuItem();
+        jSeparator23 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JPopupMenu.Separator();
@@ -1898,9 +1892,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
         viewMainTabMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
-        jMenuItemPrevTab = new javax.swing.JMenuItem();
-        jMenuItemNextTab = new javax.swing.JMenuItem();
-        jSeparator21 = new javax.swing.JPopupMenu.Separator();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         viewLog2MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
@@ -2487,6 +2478,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator8.setName("jSeparator8"); // NOI18N
         sourceMenu.add(jSeparator8);
 
+        jMenuItemExpandFold.setAction(actionMap.get("expandFolds")); // NOI18N
+        jMenuItemExpandFold.setName("jMenuItemExpandFold"); // NOI18N
+        sourceMenu.add(jMenuItemExpandFold);
+
+        jMenuItemCollapseFold.setAction(actionMap.get("collapseFolds")); // NOI18N
+        jMenuItemCollapseFold.setName("jMenuItemCollapseFold"); // NOI18N
+        sourceMenu.add(jMenuItemCollapseFold);
+
+        jSeparator23.setName("jSeparator23"); // NOI18N
+        sourceMenu.add(jSeparator23);
+
         insertSectionMenuItem.setAction(actionMap.get("insertSection")); // NOI18N
         insertSectionMenuItem.setName("insertSectionMenuItem"); // NOI18N
         sourceMenu.add(insertSectionMenuItem);
@@ -2537,17 +2539,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMenu.setMnemonic('V');
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
-
-        jMenuItemPrevTab.setAction(actionMap.get("selectNextTab")); // NOI18N
-        jMenuItemPrevTab.setName("jMenuItemPrevTab"); // NOI18N
-        viewMenu.add(jMenuItemPrevTab);
-
-        jMenuItemNextTab.setAction(actionMap.get("selectPrevTab")); // NOI18N
-        jMenuItemNextTab.setName("jMenuItemNextTab"); // NOI18N
-        viewMenu.add(jMenuItemNextTab);
-
-        jSeparator21.setName("jSeparator21"); // NOI18N
-        viewMenu.add(jSeparator21);
 
         viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
         viewLog1MenuItem.setMnemonic('R');
@@ -2740,8 +2731,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenuItem jMenuItemNextTab;
-    private javax.swing.JMenuItem jMenuItemPrevTab;
+    private javax.swing.JMenuItem jMenuItemCollapseFold;
+    private javax.swing.JMenuItem jMenuItemExpandFold;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2766,8 +2757,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
-    private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator22;
+    private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
