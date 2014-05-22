@@ -174,17 +174,15 @@ public class RL64TextArea extends StandaloneTextArea {
         getGutter().setBorder(1, bc, bc, bc);
     }
     
-    public RL64TextArea() {
-        super(propertyManager);
-    }
+//    public RL64TextArea() {
+//        super(propertyManager);
+//    }
     public RL64TextArea(Settings settings) {
         super(propertyManager);
         // set syntaxscheme
         setSyntaxScheme(settings, ColorSchemes.SCHEME_DEFAULT);
         // set tab width
         setTabs(settings);
-        // set default font
-        setFonts(settings);
     }
     /**
      * Specified the list of delimiter strings that separate words/token for recodgnizing

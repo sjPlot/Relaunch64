@@ -1765,9 +1765,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             return renderer;
         }
     }    
-    // TODO change constructor call from RL64TextArea, pass "settings". Currently not used, because
-    // else Matisse GUI Builder doesn't work then.
-    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1781,7 +1778,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jEditorPaneMain = new de.relaunch64.popelganda.Editor.RL64TextArea();
+        jEditorPaneMain = new de.relaunch64.popelganda.Editor.RL64TextArea(settings);
         jPanelFind = new javax.swing.JPanel();
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();

@@ -1,12 +1,19 @@
 Changelog
 ================
 
-Relaunch64 3.0.2
+Relaunch64 3.1.0
 ----------------
 
 ### New features
+* completely new editor component with new features:
+  * increased performance
+  * much faster with syntax highlighting
+  * code-folding
+  * rectangular selection (ctrl+mouse)
 * added DASM support
+* added TMPx support
 * improvements with goto error functions
+* Aqua-look'n'feel on OS X by default
 
 ### Bug fixes
 

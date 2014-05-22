@@ -156,7 +156,7 @@ public class EditorPanes {
      * @param script
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addEditorPane(RL64TextArea editorPane, File fp, String content, int c, int script) {
+    public int addEditorPane(final RL64TextArea editorPane, File fp, String content, int c, int script) {
         // set syntax style
         editorPane.setCompilerSyntax(c);
         // add mode to buffer
@@ -253,6 +253,12 @@ public class EditorPanes {
         setCursor(editorPane);
         // select tab
         tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                editorPane.setFonts(settings);
+            }
+        });
         // return current count
         return editorPaneArray.size();
     }

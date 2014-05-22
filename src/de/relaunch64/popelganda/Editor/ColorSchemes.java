@@ -157,7 +157,7 @@ public class ColorSchemes {
                 case COLOR_KEYWORD: return "#db7093";
                 case COLOR_COMPILERKEYWORD: return "#cd5c5c";
                 case COLOR_SCRIPTKEYWORD: return "#dda0dd";
-                case COLOR_ILLEGALOPCODE: return "#ff6347";
+                case COLOR_ILLEGALOPCODE: return "#ff632f";
                 case BACKGROUND: return "#fffafa";
                 case LINE_BACKGROUND: return "#fff0f5";
                 case LINE_BORDER: return "#ffb6c1";
@@ -230,37 +230,37 @@ public class ColorSchemes {
             break;
         case SCHEME_SOLAR_DARK:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#148,a2,a2"; 
-                case COLOR_COMMENT: return "#5a,6f,117";
-                case COLOR_STRING: return "#53,a2,152";
-                case COLOR_NUMBER: return "#134,152,23";
-                case COLOR_HEX: return "#49,8e,d1";
-                case COLOR_BIN: return "#109,116,c3";
-                case COLOR_JUMP: return "#b4,136,24"; 
-                case COLOR_OPERATOR: return "#c8,73,1f";
-                case COLOR_KEYWORD: return "#ee,e9,d6";
-                case COLOR_COMPILERKEYWORD: return "#d9,47,52";
-                case COLOR_SCRIPTKEYWORD: return "#c8,73,1f";
-                case COLOR_ILLEGALOPCODE: return "#d0,54,130";
-                case BACKGROUND: return "#11,55,66";
-                case LINE_BACKGROUND: return "#3,44,54"; // 11,55,66
-                case LINE_BORDER: return "#3,44,54";
-                case LINE_COLOR: return "#132,8b,151";
-                case LINE_HIGHLIGHT: return "#fd,f6,e5";
+                case COLOR_NORMAL: return "#94a2a2"; 
+                case COLOR_COMMENT: return "#5a6f75";
+                case COLOR_STRING: return "#35a298";
+                case COLOR_NUMBER: return "#869817";
+                case COLOR_HEX: return "#318ed1";
+                case COLOR_BIN: return "#6d74c3";
+                case COLOR_JUMP: return "#b48818"; 
+                case COLOR_OPERATOR: return "#c8491f";
+                case COLOR_KEYWORD: return "#eee9d6";
+                case COLOR_COMPILERKEYWORD: return "#d92f34";
+                case COLOR_SCRIPTKEYWORD: return "#c8491f";
+                case COLOR_ILLEGALOPCODE: return "#d03682";
+                case BACKGROUND: return "#0b3742";
+                case LINE_BACKGROUND: return "#032c36"; // 11,55,66
+                case LINE_BORDER: return "#032c36";
+                case LINE_COLOR: return "#848b97";
+                case LINE_HIGHLIGHT: return "#fdf6e5";
             }
             break;
         case SCHEME_DARK2:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#128,137,8b"; 
+                case COLOR_NORMAL: return "#80898b"; 
                 case COLOR_COMMENT: return "#404546";
-                case COLOR_STRING: return "#e9,170,145";
-                case COLOR_NUMBER: return "#e4,101,b8";
-                case COLOR_HEX: return "#97,172,123";
-                case COLOR_BIN: return "#97,172,123";
-                case COLOR_JUMP: return "#72,d1,cc"; 
-                case COLOR_OPERATOR: return "#c7,116,68";
-                case COLOR_KEYWORD: return "#128,b4,c0";
-                case COLOR_COMPILERKEYWORD: return "#157,a2,101";
+                case COLOR_STRING: return "#e9aa91";
+                case COLOR_NUMBER: return "#e465b8";
+                case COLOR_HEX: return "#97ac7b";
+                case COLOR_BIN: return "#97ac7b";
+                case COLOR_JUMP: return "#48d1cc"; 
+                case COLOR_OPERATOR: return "#c77444";
+                case COLOR_KEYWORD: return "#80b4c0";
+                case COLOR_COMPILERKEYWORD: return "#9da265";
                 case COLOR_SCRIPTKEYWORD: return "#c7,116,68";
                 case COLOR_ILLEGALOPCODE: return "#4,136,174";
                 case BACKGROUND: return "#15,17,18";
@@ -276,7 +276,7 @@ public class ColorSchemes {
                 case COLOR_COMMENT: return "#a0a0a0";
                 case COLOR_STRING: return "#d8,23,69";
                 case COLOR_NUMBER: return "#68,85,136";
-                case COLOR_HEX: return "#bd,47,115";
+                case COLOR_HEX: return "#bd,2f,115";
                 case COLOR_BIN: return "#68,85,136";
                 case COLOR_JUMP: return "#23,151,101"; 
                 case COLOR_OPERATOR: return "#e7,93,67";
@@ -284,11 +284,11 @@ public class ColorSchemes {
                 case COLOR_COMPILERKEYWORD: return "#a5,42,42";
                 case COLOR_SCRIPTKEYWORD: return "#e7,93,67";
                 case COLOR_ILLEGALOPCODE: return "#d8,23,69";
-                case BACKGROUND: return "#f8,f8,ff";
+                case BACKGROUND: return "#f8f8ff";
                 case LINE_BACKGROUND: return "#ececec"; // 11,55,66
                 case LINE_BORDER: return "#ececec";
                 case LINE_COLOR: return "#a0a0a0";
-                case LINE_HIGHLIGHT: return "#10,10,10";
+                case LINE_HIGHLIGHT: return "#0a0a0a";
             }
             break;
         case SCHEME_GREENBERET:
@@ -302,14 +302,14 @@ public class ColorSchemes {
                 case COLOR_JUMP: return "#0,100,0"; 
                 case COLOR_OPERATOR: return "#0,128,128";
                 case COLOR_KEYWORD: return "#0,128,0";
-                case COLOR_COMPILERKEYWORD: return "#47,79,79";
-                case COLOR_SCRIPTKEYWORD: return "#47,79,79";
+                case COLOR_COMPILERKEYWORD: return "#2f,79,79";
+                case COLOR_SCRIPTKEYWORD: return "#2f,79,79";
                 case COLOR_ILLEGALOPCODE: return "#8fbc8e";
                 case BACKGROUND: return "#d8e6d8";
                 case LINE_BACKGROUND: return "#b4bfb4"; // 11,55,66
                 case LINE_BORDER: return "#b4bfb4";
                 case LINE_COLOR: return "#8b,69,19";
-                case LINE_HIGHLIGHT: return "#ad,ff,47";
+                case LINE_HIGHLIGHT: return "#ad,ff,2f";
             }
             break;
         case SCHEME_POPELGANDA:
@@ -407,19 +407,19 @@ public class ColorSchemes {
             break;
         case SCHEME_GRAY:
             switch (tokentype) {
-                case COLOR_NORMAL: return "#47,79,79"; 
+                case COLOR_NORMAL: return "#2f,79,79"; 
                 case COLOR_COMMENT: return "#bdbdbd";
                 case COLOR_STRING: return "#136,b3,136";
                 case COLOR_NUMBER: return "#149,149,149";
-                case COLOR_HEX: return "#109,130,145";
-                case COLOR_BIN: return "#109,130,145";
-                case COLOR_JUMP: return "#47,79,79"; 
-                case COLOR_OPERATOR: return "#47,79,79";
+                case COLOR_HEX: return "#6d,130,145";
+                case COLOR_BIN: return "#6d,130,145";
+                case COLOR_JUMP: return "#2f,79,79"; 
+                case COLOR_OPERATOR: return "#2f,79,79";
                 case COLOR_KEYWORD: return "#108,113,128";
                 case COLOR_COMPILERKEYWORD: return "#99,99,99";
                 case COLOR_SCRIPTKEYWORD: return "#99,99,99";
                 case COLOR_ILLEGALOPCODE: return "#bf,a4,128";
-                case BACKGROUND: return "#f5,f5,f5";
+                case BACKGROUND: return "#f5f5f5";
                 case LINE_BACKGROUND: return "#e6e6e6"; // 11,55,66
                 case LINE_BORDER: return "#e6e6e6";
                 case LINE_COLOR: return "#149,149,149";
