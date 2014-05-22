@@ -423,6 +423,14 @@ public class EditorPanes {
             editorpane.setSyntaxScheme(settings, settings.getSyntaxScheme());
         }
     }
+    public void updateFonts() {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setTabs(settings);
+            editorpane.setFonts(settings);
+        }
+    }
     /**
      * 
      * @param fp

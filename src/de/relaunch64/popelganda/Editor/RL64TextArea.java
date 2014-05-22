@@ -86,16 +86,25 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.font", mf.getFontName());
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
+        // set line number alignment
+        getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
+        // set fonts
+        setFont(mf);
+        getPainter().setFont(mf);
+        getGutter().setFont(mf);
         // set antialias
-        // TODO antialias does not work
         setProperty("view.antiAlias", "true");
         getPainter().setAntiAlias(new AntiAlias(AntiAlias.SUBPIXEL));
         // getPainter().setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
+        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
     
     public final void setTabs(Settings settings) {
+        // set default font
+        Font mf = settings.getMainFont();
         setProperty("buffer.tabSize", String.valueOf(settings.getTabWidth()));
         setProperty("buffer.folding", "indent");
+        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
     
     public final void setCompilerSyntax(int compiler) {

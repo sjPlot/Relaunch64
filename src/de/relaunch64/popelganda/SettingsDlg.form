@@ -243,12 +243,10 @@
                           <Component id="jTextFieldTabWidth" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="409" max="32767" attributes="0"/>
+                      <EmptySpace pref="427" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLabelRestart" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -279,10 +277,7 @@
                           <Component id="jComboBoxLineNumberAlign" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="142" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButtonApplyTabAndFont" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelRestart" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -375,13 +370,6 @@
                   </StringArray>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jComboBoxLineNumberAlign" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabelRestart">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" resourceKey="jLabelRestart.foreground"/>
-                <Property name="text" type="java.lang.String" resourceKey="jLabelRestart.text"/>
-                <Property name="name" type="java.lang.String" value="jLabelRestart" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

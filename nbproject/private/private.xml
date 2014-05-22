@@ -5,9 +5,13 @@
         <group>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/ConstantsR64.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/FindTerms.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/RelaunchClipboard.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/ColorSchemes.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/default_colors.props</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/CustomScripts.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPanes.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64AboutBox.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/FontChooser.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/FindReplace.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPaneTools.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/modes/assembly-64tass.xml</file>
@@ -24,6 +28,7 @@
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/ErrorHandler.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/modes/assembly-acme.xml</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertByteFromFileDlg.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/LabelExtractor.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/licence.html</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Tools.java</file>
@@ -33,6 +38,7 @@
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/RL64TextArea.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help.html</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/QuickReferences.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64App.java</file>
         </group>
     </open-files>
 </project-private>
