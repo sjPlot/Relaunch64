@@ -883,7 +883,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         String selectedScriptName = (o!=null) ? o.toString() : null;
         // open settings window
         if (null == settingsDlg) {
-            settingsDlg = new SettingsDlg(getFrame(), settings, customScripts);
+            settingsDlg = new SettingsDlg(getFrame(), settings, customScripts, editorPanes);
             settingsDlg.setLocationRelativeTo(getFrame());
         }
         Relaunch64App.getApplication().show(settingsDlg);

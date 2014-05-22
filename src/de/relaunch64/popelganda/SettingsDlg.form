@@ -405,9 +405,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="294" max="32767" attributes="0"/>
-                              <Component id="jLabelRestart2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="jButtonApplyScheme" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
@@ -419,7 +417,7 @@
                                   </Group>
                                   <Component id="jLabelSchemePreview" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="456" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -436,11 +434,8 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelSchemePreview" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="253" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButtonApplyScheme" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelRestart2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace pref="274" max="32767" attributes="0"/>
+                      <Component id="jButtonApplyScheme" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -460,13 +455,6 @@
             <Component class="javax.swing.JComboBox" name="jComboBoxSyntaxScheme">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jComboBoxSyntaxScheme" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabelRestart2">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" resourceKey="jLabelRestart2.foreground"/>
-                <Property name="text" type="java.lang.String" resourceKey="jLabelRestart2.text"/>
-                <Property name="name" type="java.lang.String" value="jLabelRestart2" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="jButtonApplyScheme">

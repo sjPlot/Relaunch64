@@ -416,6 +416,13 @@ public class EditorPanes {
             ep.setCompiler(compiler);
         }
     }
+    public void updateColorScheme() {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setSyntaxScheme(settings, settings.getSyntaxScheme());
+        }
+    }
     /**
      * 
      * @param fp

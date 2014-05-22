@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.Editor.ColorSchemes;
+import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
@@ -63,7 +64,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
-import org.jdom2.Document;
 
 /**
  *
@@ -72,6 +72,7 @@ import org.jdom2.Document;
 public class SettingsDlg extends javax.swing.JDialog implements DropTargetListener {
     private final Settings settings;
     private final CustomScripts scripts;
+    private final EditorPanes editorPanes;
     private Font mainfont;
     private static final String quickHelpText = "Enter command lines here or drag & drop executable files\n(first compiler, then cruncher (optional), finally emulator)\nfrom explorer window to automatically generate a script.\n\nPress help-button for more details and examples.";
     /**
@@ -79,11 +80,13 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
      * @param parent
      * @param s
      * @param scr
+     * @param ep
      */
-    public SettingsDlg(java.awt.Frame parent, Settings s, CustomScripts scr) {
+    public SettingsDlg(java.awt.Frame parent, Settings s, CustomScripts scr, EditorPanes ep) {
         super(parent);
         settings = s;
         scripts = scr;
+        editorPanes = ep;
         initComponents();
         // set font-preview for change-font-label
         mainfont = settings.getMainFont();
@@ -91,7 +94,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelFont.setFont(mainfont);
         // restart-to-apply-text hidden
         jLabelRestart.setVisible(false);
-        jLabelRestart2.setVisible(false);
         // set preferred compiler settings
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         // init line number alignment
@@ -246,7 +248,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabScheme(true);
-                jLabelRestart2.setVisible(true);
                 updateSchemePreview();
             }
         });
@@ -361,7 +362,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     public void applyColorScheme() {
         settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         setModifiedTabScheme(false);
-        jLabelRestart2.setVisible(false);
+        editorPanes.updateColorScheme();
     }
     @Action
     public void addNewScript() {
@@ -480,7 +481,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
-        jLabelRestart2 = new javax.swing.JLabel();
         jButtonApplyScheme = new javax.swing.JButton();
         jLabelSchemePreview = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -694,10 +694,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
 
         jComboBoxSyntaxScheme.setName("jComboBoxSyntaxScheme"); // NOI18N
 
-        jLabelRestart2.setForeground(resourceMap.getColor("jLabelRestart2.foreground")); // NOI18N
-        jLabelRestart2.setText(resourceMap.getString("jLabelRestart2.text")); // NOI18N
-        jLabelRestart2.setName("jLabelRestart2"); // NOI18N
-
         jButtonApplyScheme.setAction(actionMap.get("applyColorScheme")); // NOI18N
         jButtonApplyScheme.setName("jButtonApplyScheme"); // NOI18N
 
@@ -711,9 +707,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .add(0, 294, Short.MAX_VALUE)
-                        .add(jLabelRestart2)
-                        .add(18, 18, 18)
+                        .add(0, 0, Short.MAX_VALUE)
                         .add(jButtonApplyScheme))
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -722,7 +716,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(jLabelSchemePreview))
-                        .add(0, 0, Short.MAX_VALUE)))
+                        .add(0, 456, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -734,10 +728,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabelSchemePreview)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 253, Short.MAX_VALUE)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButtonApplyScheme)
-                    .add(jLabelRestart2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 274, Short.MAX_VALUE)
+                .add(jButtonApplyScheme)
                 .addContainerGap())
         );
 
@@ -827,7 +819,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelFont;
     private javax.swing.JLabel jLabelRestart;
-    private javax.swing.JLabel jLabelRestart2;
     private javax.swing.JLabel jLabelSchemePreview;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

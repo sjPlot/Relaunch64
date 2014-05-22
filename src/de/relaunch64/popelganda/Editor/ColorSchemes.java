@@ -1,6 +1,6 @@
 /*
  * Relaunch64 - A Java cross-development IDE for C64 machine language coding.
- * Copyright (C) c81-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
+ * Copyright (C) 2001-2014 by Daniel Lüdecke (http://www.danielluedecke.de)
  * 
  * Homepage: http://www.popelganda.de
  * 
@@ -304,10 +304,10 @@ public class ColorSchemes {
                 case COLOR_KEYWORD: return "#0,128,0";
                 case COLOR_COMPILERKEYWORD: return "#47,79,79";
                 case COLOR_SCRIPTKEYWORD: return "#47,79,79";
-                case COLOR_ILLEGALOPCODE: return "#8f,bc,8e";
-                case BACKGROUND: return "#d8,e6,d8";
-                case LINE_BACKGROUND: return "#b4,bf,b4"; // 11,55,66
-                case LINE_BORDER: return "#b4,bf,b4";
+                case COLOR_ILLEGALOPCODE: return "#8fbc8e";
+                case BACKGROUND: return "#d8e6d8";
+                case LINE_BACKGROUND: return "#b4bfb4"; // 11,55,66
+                case LINE_BORDER: return "#b4bfb4";
                 case LINE_COLOR: return "#8b,69,19";
                 case LINE_HIGHLIGHT: return "#ad,ff,47";
             }
