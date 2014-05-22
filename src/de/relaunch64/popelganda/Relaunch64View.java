@@ -1837,10 +1837,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         undoMenuItem = new javax.swing.JMenuItem();
         redoMenuItem = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         selectAllMenuItem = new javax.swing.JMenuItem();
         findMenu = new javax.swing.JMenu();
         findStartMenuItem = new javax.swing.JMenuItem();
@@ -2328,21 +2324,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator10.setName("jSeparator10"); // NOI18N
         editMenu.add(jSeparator10);
 
-        cutMenuItem.setAction(actionMap.get("cut"));
-        cutMenuItem.setName("cutMenuItem"); // NOI18N
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setAction(actionMap.get("copy"));
-        copyMenuItem.setName("copyMenuItem"); // NOI18N
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setAction(actionMap.get("paste"));
-        pasteMenuItem.setName("pasteMenuItem"); // NOI18N
-        editMenu.add(pasteMenuItem);
-
-        jSeparator5.setName("jSeparator5"); // NOI18N
-        editMenu.add(jSeparator5);
-
         selectAllMenuItem.setAction(actionMap.get("selectAllText")); // NOI18N
         selectAllMenuItem.setName("selectAllMenuItem"); // NOI18N
         editMenu.add(selectAllMenuItem);
@@ -2758,7 +2739,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
-    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
@@ -2778,7 +2758,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFileMenuItem;
-    private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem quickRefMenuItem;
     private javax.swing.JMenuItem recent1MenuItem;
     private javax.swing.JMenuItem recent2MenuItem;

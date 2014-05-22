@@ -6,7 +6,7 @@ show-context-menu.shortcut=
 #{{{ C+X
 select-all.shortcut=
 complete-word.shortcut=
-copy.shortcut=
+copy.shortcut=C+c
 delete-line.shortcut=
 # C+e is a prefix
 find.shortcut=
@@ -27,9 +27,9 @@ exit.shortcut=
 save.shortcut=
 add-marker-shortcut.shortcut=
 select-marker.shortcut=
-paste.shortcut=
+paste.shortcut=C+v
 close-buffer.shortcut=
-cut.shortcut=
+cut.shortcut=C+x
 goto-marker.shortcut=
 undo.shortcut=
 unsplit-current.shortcut=
