@@ -183,6 +183,8 @@ public class RL64TextArea extends StandaloneTextArea {
         setSyntaxScheme(settings, ColorSchemes.SCHEME_DEFAULT);
         // set tab width
         setTabs(settings);
+        // set fonts
+        setFonts(settings);
     }
     /**
      * Specified the list of delimiter strings that separate words/token for recodgnizing
