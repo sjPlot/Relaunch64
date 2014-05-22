@@ -141,6 +141,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // set for- and background color of text area
         getPainter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND), Color.black));
         getPainter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL), Color.black));
+        // TODO gutter linenumber background not shown correctly
         // set for- and background color of line numbers
         getGutter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND), Color.black));
         getGutter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR), Color.black));
