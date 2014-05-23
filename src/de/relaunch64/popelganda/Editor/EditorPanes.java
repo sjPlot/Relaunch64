@@ -249,14 +249,14 @@ public class EditorPanes {
         editorPaneProperties.setModified(false);
         // add editorpane to list
         editorPaneArray.add(editorPaneProperties);
-        // set cursor
-        setCursor(editorPane);
         // select tab
         tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                editorPane.setFonts(settings);
+                editorPane.setFonts();
+                // set cursor
+                setCursor(editorPane);
             }
         });
         // return current count
@@ -415,9 +415,18 @@ public class EditorPanes {
                 settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), compiler, script);
             }
             // get editor pane
-            RL64TextArea editorpane = ep.getEditorPane();
+            final RL64TextArea editorpane = ep.getEditorPane();
             // change compiler syntax
             editorpane.setCompilerSyntax(compiler);
+            // update syntax scheme
+            editorpane.setSyntaxScheme();
+            // set antialias
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    editorpane.setTextAntiAlias();
+                }
+            });
             // set new compiler scheme
             ep.setCompiler(compiler);
         }
@@ -425,30 +434,55 @@ public class EditorPanes {
     public void updateColorScheme() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
-            RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setSyntaxScheme(settings, settings.getSyntaxScheme());
+            final RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setSyntaxScheme();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    editorpane.setTextAntiAlias();
+                }
+            });
+        }
+    }
+    public void updateAssemblyMode() {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            final RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setCompilerSyntax(ea.getCompiler());
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    editorpane.setTextAntiAlias();
+                }
+            });
         }
     }
     public void updateLineNumberAlignment() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setLineNumberAlignment(settings);
+            editorpane.setLineNumberAlignment();
         }
     }
-    public void updateAntiAlias(String aliasstyle) {
+    public void updateAntiAlias() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setTextAntiAlias(aliasstyle, settings);
+            editorpane.setTextAntiAlias();
         }
     }
     public void updateFonts() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
-            RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setTabs(settings);
-            editorpane.setFonts(settings);
+            final RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setTabs();
+            editorpane.setFonts();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    editorpane.setTextAntiAlias();
+                }
+            });
         }
     }
     /**
@@ -1192,7 +1226,7 @@ public class EditorPanes {
      */
     public String getCaretString(boolean wholeWord, String specialDelimiter) {
         RL64TextArea ep = getActiveEditorPane();
-        final int position = ep.getCaretPosition();
+        final int position = ep.getCaretPosition()-ep.getLineStartOffset(ep.getCaretLine());
         String text = ep.getLineText(ep.getCaretLine());
         String addDelim;
         switch (getActiveCompiler()) {
@@ -1207,7 +1241,7 @@ public class EditorPanes {
                 break;
         }
         // get position start
-        int start = Math.max(0, position - 1);
+        int start = Math.max(0, position);
         boolean isSpecialDelimiter = false;
         // if we have specific delimiters, add these to the delimiter list.
         // e.g. KickAss script-directives need a "." as special delimiter

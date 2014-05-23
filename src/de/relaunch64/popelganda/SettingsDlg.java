@@ -62,7 +62,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
 
@@ -355,14 +354,14 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(Gutter.LEFT);
         setModifiedTabFont(false);
         editorPanes.updateFonts();
-        editorPanes.updateAntiAlias(AntiAlias.STANDARD);
+        editorPanes.updateAntiAlias();
     }
     @Action(enabledProperty = "modifiedTabScheme")
     public void applyColorScheme() {
         settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         setModifiedTabScheme(false);
         editorPanes.updateColorScheme();
-        editorPanes.updateAntiAlias(AntiAlias.STANDARD);
+        editorPanes.updateAntiAlias();
     }
     @Action
     public void addNewScript() {

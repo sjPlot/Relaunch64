@@ -195,10 +195,10 @@ buffer.noWordSep=_
 buffer.camelCasedWords=false
 
 # Fold mode (explicit, indent, or none)
-buffer.folding=none
+buffer.folding=explicit
 
 # Folds with a level equal to or higher than this will be collapsed
-buffer.collapseFolds=0
+buffer.collapseFolds=1
 #}}}
 
 #{{{ View settings

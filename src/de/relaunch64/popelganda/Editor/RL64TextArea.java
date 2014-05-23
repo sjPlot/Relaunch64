@@ -26,7 +26,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
-import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
@@ -40,6 +39,7 @@ import org.gjt.sp.util.SyntaxUtilities;
 public class RL64TextArea extends StandaloneTextArea {
     final static Properties props;
     static IPropertyManager propertyManager;
+    private final Settings settings;
 
     static {
         props = new Properties();
@@ -76,7 +76,7 @@ public class RL64TextArea extends StandaloneTextArea {
         return loadedProps;
     }
 
-    public final void setFonts(Settings settings) {
+    public final void setFonts() {
         // set default font
         Font mf = settings.getMainFont();
         // set text font
@@ -88,33 +88,30 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
         // set line number alignment
-        setLineNumberAlignment(settings);
+        setLineNumberAlignment();
         // set fonts
         setFont(mf);
         getPainter().setFont(mf);
         getGutter().setFont(mf);
         // set antialias
-        setTextAntiAlias(AntiAlias.STANDARD, settings);
-        // getPainter().setTextAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
-        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+        setTextAntiAlias();
     }
 
-    public final void setLineNumberAlignment(Settings settings) {
+    public final void setLineNumberAlignment() {
         // set line number alignment
         getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
     }
     
-    public final void setTextAntiAlias(String aliasstyle, Settings settings) {
+    public final void setTextAntiAlias() {
         // set default font
         Font mf = settings.getMainFont();
         // set antialias
         setProperty("view.antiAlias", "true");
-        getPainter().setAntiAlias(new AntiAlias(aliasstyle));
-        // getPainter().setTextAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
+        getPainter().setAntiAlias(new AntiAlias(settings.getAntiAlias()));
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
     
-    public final void setTabs(Settings settings) {
+    public final void setTabs() {
         // TODO indent doesn't seem to work
         // set default font
         Font mf = settings.getMainFont();
@@ -126,13 +123,15 @@ public class RL64TextArea extends StandaloneTextArea {
     public final void setCompilerSyntax(int compiler) {
         // set syntax style
         Mode mode = new Mode("asm");
-        mode.setProperty("file", ConstantsR64.assemblymodes[compiler]);
+        String pathToMode = (settings.getAlternativeAssemblyMode()) ? ConstantsR64.alternativeassemblymodes[compiler] : ConstantsR64.assemblymodes[compiler];
+        mode.setProperty("file", pathToMode);
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         getBuffer().setMode(mode);
     }
     
-    public final void setSyntaxScheme(Settings settings, int scheme) {
+    public final void setSyntaxScheme() {
+        int scheme = settings.getSyntaxScheme();
         // TODO alternative color schemes need other color values for literal3 and 4, and keyword 4
         // syntax colors for editor
         setProperty("view.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
@@ -162,13 +161,10 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
         // load color scheme
         Font mf = settings.getMainFont();
-        // TODO did not find out when it's best to call "setStyles" to make all stuff working
-        // or if there's a specific order?
-        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
         // set for- and background color of text area
         getPainter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND), Color.black));
         getPainter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL), Color.black));
-        // TODO gutter linenumber background not shown correctly
+        // TODO gutter linenumber background not shown correctly, on OS X!
         // set for- and background color of line numbers
         getGutter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND), Color.black));
         getGutter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR), Color.black));
@@ -176,6 +172,9 @@ public class RL64TextArea extends StandaloneTextArea {
         getGutter().setCurrentLineForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT), Color.black));
         Color bc = SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER), Color.black);
         getGutter().setBorder(1, bc, bc, bc);
+        // TODO did not find out when it's best to call "setStyles" to make all stuff working
+        // or if there's a specific order?
+        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
     
 //    public RL64TextArea() {
@@ -183,15 +182,14 @@ public class RL64TextArea extends StandaloneTextArea {
 //    }
     public RL64TextArea(Settings settings) {
         super(propertyManager);
+        // save settings
+        this.settings = settings;
         // set syntaxscheme
-        setSyntaxScheme(settings, ColorSchemes.SCHEME_DEFAULT);
+        setSyntaxScheme();
         // set tab width
-        setTabs(settings);
+        setTabs();
         // set fonts
-        setFonts(settings);
-        // TODO calling initInputHandler() throws nullpointerexception here
-        AbstractInputHandler<?> aih = getInputHandler();
-        System.out.println(aih.getKeyBinding("copy.shortcut"));
+        setFonts();
         // TODO perhaps we have to derive from http://www.jedit.org/api/org/gjt/sp/jedit/input/TextAreaInputHandler.html
     }
     /**

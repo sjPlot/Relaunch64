@@ -46,6 +46,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JSplitPane;
+import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -70,6 +71,8 @@ public class Settings {
     private static final String SETTING_PREF_COMP = "preferredCompiler";
     private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
+    private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
+    private static final String SETTING_ANTIALIAS = "antialias";
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
@@ -250,10 +253,24 @@ public class Settings {
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
+        if (null==settingsFile.getRootElement().getChild(SETTING_ANTIALIAS)) {
+            // create element
+            Element el = new Element(SETTING_ANTIALIAS);
+            el.setText(AntiAlias.SUBPIXEL);
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
         if (null==settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES)) {
             // create element
             Element el = new Element(SETTING_CHECKUPDATES);
             el.setText("1");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_ALT_ASM_MODE)) {
+            // create element
+            Element el = new Element(SETTING_ALT_ASM_MODE);
+            el.setText("0");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -534,6 +551,19 @@ public class Settings {
         }
         el.setText(f.getAbsolutePath());
     }
+    public String getAntiAlias() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_ANTIALIAS);
+        if (el!=null) return el.getText();
+        return AntiAlias.SUBPIXEL;
+    }
+    public void setAntiAlias(String aa) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_ANTIALIAS);
+        if (null==el) {
+            el = new Element(SETTING_ANTIALIAS);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(aa);
+    }
     public int getPreferredCompiler() {
         Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
         try {
@@ -577,6 +607,19 @@ public class Settings {
         Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);
         if (null==el) {
             el = new Element(SETTING_CHECKUPDATES);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getAlternativeAssemblyMode() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_ALT_ASM_MODE);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setAlternativeAssemblyMode(boolean val)  {
+        Element el = settingsFile.getRootElement().getChild(SETTING_ALT_ASM_MODE);
+        if (null==el) {
+            el = new Element(SETTING_ALT_ASM_MODE);
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

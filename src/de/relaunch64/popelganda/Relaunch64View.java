@@ -754,13 +754,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         String text = jTextFieldGotoLine.getText();
         switch (text) {
             case "aa":
-                editorPanes.updateAntiAlias(AntiAlias.STANDARD);
+                settings.setAntiAlias(AntiAlias.STANDARD);
+                editorPanes.updateAntiAlias();
                 break;
             case "aas":
-                editorPanes.updateAntiAlias(AntiAlias.SUBPIXEL);
+                settings.setAntiAlias(AntiAlias.SUBPIXEL);
+                editorPanes.updateAntiAlias();
                 break;
             case "aan":
-                editorPanes.updateAntiAlias(AntiAlias.NONE);
+                settings.setAntiAlias(AntiAlias.NONE);
+                editorPanes.updateAntiAlias();
+                break;
+            case "cs":
+                settings.setAlternativeAssemblyMode(false);
+                editorPanes.updateAssemblyMode();
+                break;
+            case "csa":
+                settings.setAlternativeAssemblyMode(true);
+                editorPanes.updateAssemblyMode();
                 break;
             case "lal":
                 settings.setLineNumerAlignment(Gutter.LEFT);

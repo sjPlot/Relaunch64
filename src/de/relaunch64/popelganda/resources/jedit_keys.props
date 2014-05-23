@@ -4,7 +4,7 @@ show-context-menu.shortcut=
 #}}}
 
 #{{{ C+X
-select-all.shortcut=
+select-all.shortcut=C+a
 complete-word.shortcut=
 copy.shortcut=C+c
 delete-line.shortcut=
@@ -59,7 +59,7 @@ select-next-word.shortcut=CS+RIGHT
 action-bar.shortcut=
 prev-buffer.shortcut=C+PAGE_UP
 next-buffer.shortcut=C+PAGE_DOWN
-last-action.shortcut=C+SPACE
+last-action.shortcut=
 
 recent-buffer.shortcut=
 select-block.shortcut=
