@@ -161,7 +161,7 @@ public class FindReplace {
     protected void selectFindTerm() {
         // set caret
         editorPane.setCaretPosition(findselections.get(findpos)[0]);
-        editorPane.scrollAndCenterCaret();
+        editorPane.scrollToCaret(true);
         // select next occurence of find term
         editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
         editorPane.requestFocusInWindow();

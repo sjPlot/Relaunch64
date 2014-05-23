@@ -89,6 +89,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.PopupMenuEvent;
+import org.gjt.sp.jedit.JEditActionSet;
+import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
@@ -785,6 +787,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setLineNumerAlignment(Gutter.RIGHT);
                 editorPanes.updateLineNumberAlignment();
                 break;
+            case "d":
+                for (String a : editorPanes.getActiveEditorPane().getActionContext().getActionNames()) System.out.println(a);
+                JEditActionSet<JEditBeanShellAction> jbs = editorPanes.getActiveEditorPane().getActionContext().getActionSetForAction("show-suggestion");
+                // jbs.addAction(new JEditBeanShellAction("show-suggestion", "RL64TextArea.showSuggestion();", "", true, true, true));
+                break;
         }
         if (text.startsWith("cs")) {
             try {
@@ -1002,7 +1009,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void jumpToLabel() {
         // get word under caret
-        String label = editorPanes.getCaretString(true, "");
+        String label = editorPanes.getActiveEditorPane().getCaretString(true, "");
         // check whether we have an assembler that uses colons at the end of labels
         boolean isColonAssembler = (ConstantsR64.COMPILER_KICKASSEMBLER==editorPanes.getActiveCompiler() || 
                                     ConstantsR64.COMPILER_DREAMASS==editorPanes.getActiveCompiler() || 
@@ -1367,6 +1374,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (!jPanelFind.isVisible()) {
             // make it visible
             jPanelFind.setVisible(true);
+            // for some reasons, making the hidden find pane visible
+            // removes anti alias setting. so we update anti alias here
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    editorPanes.updateAntiAlias();
+                }
+            });
         }
         jComboBoxFind.requestFocusInWindow();
     }
@@ -1410,6 +1425,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxFind.setForeground(Color.black);
         // make it visible
         jPanelFind.setVisible(false);
+        // for some reasons, hiding the find pane
+        // removes anti alias setting. so we update anti alias here
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                editorPanes.updateAntiAlias();
+            }
+        });
         // set input focus in main textfield
         editorPanes.setFocus();
     }
@@ -1447,6 +1470,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             else {
                 jTextFieldReplace.requestFocusInWindow();
             }
+            // for some reasons, making the hidden find pane visible
+            // removes anti alias setting. so we update anti alias here
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    editorPanes.updateAntiAlias();
+                }
+            });
         }
         // if textfield is already visible, replace term
         else {
@@ -1466,6 +1497,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldReplace.setForeground(Color.black);
         // hide replace textfield
         jPanelReplace.setVisible(false);
+        // for some reasons, hiding the  find pane 
+        // removes anti alias setting. so we update anti alias here
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                editorPanes.updateAntiAlias();
+            }
+        });
         // set input focus in main textfield
         editorPanes.setFocus();
     }

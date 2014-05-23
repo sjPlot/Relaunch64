@@ -199,6 +199,7 @@ next-line.shortcut=DOWN
 select-next-line.shortcut=S+DOWN
 insert-newline-indent.shortcut=ENTER
 insert-tab-indent.shortcut=TAB
+show-suggestion=C+SPACE
 #}}}
 
 #{{{ Alternative shortcuts for frequently-used commands
