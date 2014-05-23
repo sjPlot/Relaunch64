@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
@@ -132,6 +133,7 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     
     public final void setSyntaxScheme(Settings settings, int scheme) {
+        // TODO alternative color schemes need other color values for literal3 and 4, and keyword 4
         // syntax colors for editor
         setProperty("view.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
         setProperty("view.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND));
@@ -160,6 +162,8 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
         // load color scheme
         Font mf = settings.getMainFont();
+        // TODO did not find out when it's best to call "setStyles" to make all stuff working
+        // or if there's a specific order?
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
         // set for- and background color of text area
         getPainter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND), Color.black));
@@ -185,6 +189,10 @@ public class RL64TextArea extends StandaloneTextArea {
         setTabs(settings);
         // set fonts
         setFonts(settings);
+        // TODO calling initInputHandler() throws nullpointerexception here
+        AbstractInputHandler<?> aih = getInputHandler();
+        System.out.println(aih.getKeyBinding("copy.shortcut"));
+        // TODO perhaps we have to derive from http://www.jedit.org/api/org/gjt/sp/jedit/input/TextAreaInputHandler.html
     }
     /**
      * Specified the list of delimiter strings that separate words/token for recodgnizing
