@@ -66,7 +66,7 @@ public class RL64TextArea extends StandaloneTextArea {
     static {
         props = new Properties();
         if (System.getProperty("os.name").toLowerCase().startsWith("mac os")) {
-            props.putAll(loadProperties("/de/relaunch64/popelganda/resources/MAC_OS_X_keys.props"));
+            props.putAll(loadProperties("/de/relaunch64/popelganda/resources/Mac_OS_X_keys.props"));
         }
         else {
             props.putAll(loadProperties("/de/relaunch64/popelganda/resources/jEdit_keys.props"));

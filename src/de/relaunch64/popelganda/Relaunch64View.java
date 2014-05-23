@@ -1591,7 +1591,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             // Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
         }
-        System.setProperty("awt.useSystemAAFontSettings", "on");
+        // System.setProperty("awt.useSystemAAFontSettings", "on");
     }
     /**
      * 
