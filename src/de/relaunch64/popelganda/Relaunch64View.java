@@ -789,8 +789,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
             case "d":
                 for (String a : editorPanes.getActiveEditorPane().getActionContext().getActionNames()) System.out.println(a);
-                JEditActionSet<JEditBeanShellAction> jbs = editorPanes.getActiveEditorPane().getActionContext().getActionSetForAction("show-suggestion");
-                // jbs.addAction(new JEditBeanShellAction("show-suggestion", "RL64TextArea.showSuggestion();", "", true, true, true));
+                JEditActionSet<JEditBeanShellAction> jbs = editorPanes.getActiveEditorPane().getActionContext().getActionSetForAction("show-suggestion-label");
+                // jbs.addAction(new JEditBeanShellAction("show-suggestion", "textArea.showSuggestion(int type);", "", true, true, true));
                 break;
         }
         if (text.startsWith("cs")) {
