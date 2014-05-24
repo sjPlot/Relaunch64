@@ -27,7 +27,7 @@
                 <!-- keyword4 are jump labels-->
                 <SEQ_REGEXP HASH_CHARS="." AT_WORD_START="TRUE" TYPE="KEYWORD4">\.[0-9a-zA-Z]+</SEQ_REGEXP>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>

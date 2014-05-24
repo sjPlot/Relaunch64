@@ -77,11 +77,11 @@
                         <KEYWORD3>.struct</KEYWORD3>
                         <KEYWORD3>.var</KEYWORD3>
 
-                        <KEYWORD4>.byte</KEYWORD4>
-                        <KEYWORD4>.dword</KEYWORD4>
-                        <KEYWORD4>.fill</KEYWORD4>
-                        <KEYWORD4>.text</KEYWORD4>
-                        <KEYWORD4>.word</KEYWORD4>
+                        <KEYWORD3>.byte</KEYWORD3>
+                        <KEYWORD3>.dword</KEYWORD3>
+                        <KEYWORD3>.fill</KEYWORD3>
+                        <KEYWORD3>.text</KEYWORD3>
+                        <KEYWORD3>.word</KEYWORD3>
 
 			<!-- Instructions: standard -->
                         <KEYWORD1>adc</KEYWORD1>
