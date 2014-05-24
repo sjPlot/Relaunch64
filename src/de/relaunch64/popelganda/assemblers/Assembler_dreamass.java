@@ -58,10 +58,12 @@ public class Assembler_dreamass implements Assembler
         "TAY", "TSX", "TXA", "TXS", "TYA", "XAA"
     };
 
+    @Override
     public String name() {
         return "DreamAss";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
             "/de/relaunch64/popelganda/resources/modes/assembly-dreamass.xml",
@@ -69,6 +71,7 @@ public class Assembler_dreamass implements Assembler
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*");

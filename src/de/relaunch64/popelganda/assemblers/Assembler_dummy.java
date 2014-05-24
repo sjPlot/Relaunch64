@@ -41,15 +41,18 @@ import java.util.LinkedHashMap;
  */
 public class Assembler_dummy implements Assembler
 {
+    @Override
     public String name() {
         return "Dummy";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         return new LinkedHashMap<>();
     }

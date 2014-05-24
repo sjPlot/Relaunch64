@@ -56,10 +56,12 @@ public class Assembler_acme implements Assembler
         "TYA"
     };
 
+    @Override
     public String name() {
         return "ACME";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
             "/de/relaunch64/popelganda/resources/modes/assembly-acme.xml",
@@ -67,6 +69,7 @@ public class Assembler_acme implements Assembler
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*");

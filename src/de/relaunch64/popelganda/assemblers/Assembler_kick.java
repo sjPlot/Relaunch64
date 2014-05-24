@@ -44,10 +44,12 @@ import java.util.LinkedHashMap;
  */
 public class Assembler_kick implements Assembler
 {
+    @Override
     public String name() {
         return "Kick Assembler";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
             "/de/relaunch64/popelganda/resources/modes/assembly-kick.xml",
@@ -55,6 +57,7 @@ public class Assembler_kick implements Assembler
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*):.*");

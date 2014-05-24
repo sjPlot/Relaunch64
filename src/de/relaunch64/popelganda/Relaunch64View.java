@@ -120,6 +120,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
+    // TODO TMPx support
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());

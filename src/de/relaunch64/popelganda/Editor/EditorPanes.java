@@ -117,7 +117,6 @@ public class EditorPanes {
         else {
             editorPane.setText("");
         }
-        // TODO auto-suggestion does not work
         // add caret listener
         /**
          * JDK 8 version of caret listener

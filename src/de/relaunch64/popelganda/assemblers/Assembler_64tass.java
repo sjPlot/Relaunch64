@@ -58,10 +58,12 @@ public class Assembler_64tass implements Assembler {
         "STA", "STX", "STY", "TAX", "TAY", "TSX", "TXA", "TXS", "TYA"
     };
 
+    @Override
     public String name() {
         return "64tass";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
             "/de/relaunch64/popelganda/resources/modes/assembly-64tass.xml",
@@ -69,12 +71,13 @@ public class Assembler_64tass implements Assembler {
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         String line;
         Matcher m;
         Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
-        Deque<String> scopes = new LinkedList<String>();
+        Deque<String> scopes = new LinkedList<>();
 
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -111,11 +114,16 @@ public class Assembler_64tass implements Assembler {
                 String directive = m.group("directive"); // track scopes
                 if (directive != null) {
                     directive = directive.toLowerCase();
-                    if (directive.equals(".block") || directive.equals(".proc")) {
-                        if (label != null) scopes.add(label); // new scope
-                        else scopes.add("");
-                    } else if (directive.equals(".bend") || directive.equals(".pend")) {
-                        if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
+                    switch (directive) {
+                        case ".block":
+                        case ".proc":
+                            if (label != null) scopes.add(label); // new scope
+                            else scopes.add("");
+                            break;
+                        case ".bend":
+                        case ".pend":
+                            if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
+                            break;
                     }
                 }
             }

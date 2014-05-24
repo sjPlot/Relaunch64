@@ -56,10 +56,12 @@ public class Assembler_tmpx implements Assembler
         "TXA", "TXS", "TYA", "XAA"
     };
 
+    @Override
     public String name() {
         return "TMPx";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
             "/de/relaunch64/popelganda/resources/modes/assembly-tmpx.xml",
@@ -67,6 +69,7 @@ public class Assembler_tmpx implements Assembler
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z][a-zA-Z0-9_]*\\b).*");

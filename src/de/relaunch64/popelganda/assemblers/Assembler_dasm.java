@@ -44,10 +44,12 @@ import java.util.LinkedHashMap;
  */
 public class Assembler_dasm implements Assembler
 {
+    @Override
     public String name() {
         return "DASM";
     }
 
+    @Override
     public String[] syntaxFiles() {
         return new String[] {
             "/de/relaunch64/popelganda/resources/modes/assembly-dasm.xml",
@@ -55,6 +57,7 @@ public class Assembler_dasm implements Assembler
         };
     }
 
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*"); // always in first column
