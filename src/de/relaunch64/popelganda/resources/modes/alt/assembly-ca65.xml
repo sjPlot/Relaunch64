@@ -223,7 +223,7 @@
                         <LITERAL3>.cpu</LITERAL3>
                         <LITERAL3>.paramcount</LITERAL3>
                         <LITERAL3>.time</LITERAL3>
-                        <LITERAL3>.version </LITERAL3>
+                        <LITERAL3>.version</LITERAL3>
 
 			<!-- Functions -->
                         <FUNCTION>.bankbyte</FUNCTION>
@@ -250,7 +250,7 @@
                         <FUNCTION>.xmatch</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP HASH_CHARS="@ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z@][A-Za-z0-9_]*(?=:)</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="-~!^*/+&lt;&gt;=&amp;|" TYPE="OPERATOR">[-!^*/+&lt;&gt;=&amp;|]</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="@" AT_WHITESPACE_END="TRUE" TYPE="LABEL">@[A-Za-z0-9_]+(?=:)</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-~!^*/+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 </MODE>

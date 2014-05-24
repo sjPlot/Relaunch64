@@ -18,7 +18,7 @@
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$%?" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*|\?</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 			<BEGIN>'</BEGIN>
@@ -267,7 +267,7 @@
                         <FUNCTION>trunc</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ_+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z_][A-Za-z0-9_]*|[+-]</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="-`~!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">[-`~!^*/%+&lt;&gt;=&amp;|]</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ_+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z_][A-Za-z0-9_.]*|[+-]</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-`~!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 </MODE>
