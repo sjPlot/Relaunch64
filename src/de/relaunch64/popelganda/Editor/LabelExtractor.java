@@ -34,10 +34,8 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.util.Tools;
 import de.relaunch64.popelganda.assemblers.*;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -46,10 +44,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  *
@@ -74,9 +68,6 @@ public class LabelExtractor {
         ArrayList<String> labels = getLabelNames(false, source, compiler);
         // check for valid values
         if (null==labels || labels.isEmpty()) return null;
-//        labels.stream().forEach((label) -> {
-//            System.out.println(label);
-//        });
         // remove all labels that do not start with already typed chars
         if (!subWord.isEmpty()) {
             for (int i=labels.size()-1; i>=0; i--) {
