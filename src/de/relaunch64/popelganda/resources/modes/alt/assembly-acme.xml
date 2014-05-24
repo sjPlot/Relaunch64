@@ -11,14 +11,14 @@
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE=";" />
 		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
-                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/?^&amp;*" />
+                <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/|%^&amp;*" />
 	</PROPS>
 
 	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$%&amp;0" AT_WORD_START="TRUE" TYPE="DIGIT">(\$|0x)[0-9a-fA-F]+|%[01.#]+|&amp;[0-7]+</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 			<BEGIN>'</BEGIN>
@@ -30,101 +30,10 @@
 			<END>"</END>
 		</SPAN>
 
-		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR" AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD4">!(08|16|24|32|8|binary|bin|byte|by|cbm|fill|pet|raw|scrxor|scr|text|tx|word|wo)\b</SEQ_REGEXP>
 
 		<KEYWORDS>
-                        <KEYWORD3>.al</KEYWORD3>
-                        <KEYWORD3>.align</KEYWORD3>
-                        <KEYWORD3>.as</KEYWORD3>
-                        <KEYWORD3>.assert</KEYWORD3>
-                        <KEYWORD3>.bend</KEYWORD3>
-                        <KEYWORD3>.binclude</KEYWORD3>
-                        <KEYWORD3>.block</KEYWORD3>
-                        <KEYWORD3>.break</KEYWORD3>
-                        <KEYWORD3>.case</KEYWORD3>
-                        <KEYWORD3>.cdef</KEYWORD3>
-                        <KEYWORD3>.cerror</KEYWORD3>
-                        <KEYWORD3>.check</KEYWORD3>
-                        <KEYWORD3>.comment</KEYWORD3>
-                        <KEYWORD3>.continue</KEYWORD3>
-                        <KEYWORD3>.cpu</KEYWORD3>
-                        <KEYWORD3>.cwarn</KEYWORD3>
-                        <KEYWORD3>.databank</KEYWORD3>
-                        <KEYWORD3>.default</KEYWORD3>
-                        <KEYWORD3>.dpage</KEYWORD3>
-                        <KEYWORD3>.dsection</KEYWORD3>
-                        <KEYWORD3>.edef</KEYWORD3>
-                        <KEYWORD3>.else</KEYWORD3>
-                        <KEYWORD3>.elsif</KEYWORD3>
-                        <KEYWORD3>.enc</KEYWORD3>
-                        <KEYWORD3>.end</KEYWORD3>
-                        <KEYWORD3>.endc</KEYWORD3>
-                        <KEYWORD3>.endf</KEYWORD3>
-                        <KEYWORD3>.endif</KEYWORD3>
-                        <KEYWORD3>.endm</KEYWORD3>
-                        <KEYWORD3>.endp</KEYWORD3>
-                        <KEYWORD3>.ends</KEYWORD3>
-                        <KEYWORD3>.endswitch</KEYWORD3>
-                        <KEYWORD3>.endu</KEYWORD3>
-                        <KEYWORD3>.endweak</KEYWORD3>
-                        <KEYWORD3>.eor</KEYWORD3>
-                        <KEYWORD3>.error</KEYWORD3>
-                        <KEYWORD3>.fi</KEYWORD3>
-                        <KEYWORD3>.for</KEYWORD3>
-                        <KEYWORD3>.function</KEYWORD3>
-                        <KEYWORD3>.goto</KEYWORD3>
-                        <KEYWORD3>.here</KEYWORD3>
-                        <KEYWORD3>.hidemac</KEYWORD3>
-                        <KEYWORD3>.if</KEYWORD3>
-                        <KEYWORD3>.ifeq</KEYWORD3>
-                        <KEYWORD3>.ifmi</KEYWORD3>
-                        <KEYWORD3>.ifne</KEYWORD3>
-                        <KEYWORD3>.ifpl</KEYWORD3>
-                        <KEYWORD3>.include</KEYWORD3>
-                        <KEYWORD3>.lbl</KEYWORD3>
-                        <KEYWORD3>.lint</KEYWORD3>
-                        <KEYWORD3>.logical</KEYWORD3>
-                        <KEYWORD3>.macro</KEYWORD3>
-                        <KEYWORD3>.next</KEYWORD3>
-                        <KEYWORD3>.offs</KEYWORD3>
-                        <KEYWORD3>.option</KEYWORD3>
-                        <KEYWORD3>.page</KEYWORD3>
-                        <KEYWORD3>.pend</KEYWORD3>
-                        <KEYWORD3>.proc</KEYWORD3>
-                        <KEYWORD3>.proff</KEYWORD3>
-                        <KEYWORD3>.pron</KEYWORD3>
-                        <KEYWORD3>.rept</KEYWORD3>
-                        <KEYWORD3>.section</KEYWORD3>
-                        <KEYWORD3>.segment</KEYWORD3>
-                        <KEYWORD3>.send</KEYWORD3>
-                        <KEYWORD3>.showmac</KEYWORD3>
-                        <KEYWORD3>.struct</KEYWORD3>
-                        <KEYWORD3>.switch</KEYWORD3>
-                        <KEYWORD3>.union</KEYWORD3>
-                        <KEYWORD3>.var</KEYWORD3>
-                        <KEYWORD3>.warn</KEYWORD3>
-                        <KEYWORD3>.weak</KEYWORD3>
-                        <KEYWORD3>.xl</KEYWORD3>
-                        <KEYWORD3>.xs</KEYWORD3>
-
-                        <KEYWORD4>.binary</KEYWORD4>
-                        <KEYWORD4>.byte</KEYWORD4>
-                        <KEYWORD4>.char</KEYWORD4>
-                        <KEYWORD4>.dint</KEYWORD4>
-                        <KEYWORD4>.dstruct</KEYWORD4>
-                        <KEYWORD4>.dunion</KEYWORD4>
-                        <KEYWORD4>.dword</KEYWORD4>
-                        <KEYWORD4>.fill</KEYWORD4>
-                        <KEYWORD4>.int</KEYWORD4>
-                        <KEYWORD4>.long</KEYWORD4>
-                        <KEYWORD4>.null</KEYWORD4>
-                        <KEYWORD4>.ptext</KEYWORD4>
-                        <KEYWORD4>.rta</KEYWORD4>
-                        <KEYWORD4>.shift</KEYWORD4>
-                        <KEYWORD4>.shiftl</KEYWORD4>
-                        <KEYWORD4>.text</KEYWORD4>
-                        <KEYWORD4>.word</KEYWORD4>
-
 			<!-- Instructions: standard -->
                         <KEYWORD1>adc</KEYWORD1>
                         <KEYWORD1>and</KEYWORD1>
@@ -183,106 +92,51 @@
                         <KEYWORD1>txs</KEYWORD1>
                         <KEYWORD1>tya</KEYWORD1>
 
-			<!-- Instructions: Alias -->
-                        <KEYWORD1>bge</KEYWORD1>
-                        <KEYWORD1>blt</KEYWORD1>
-                        <KEYWORD1>shl</KEYWORD1>
-                        <KEYWORD1>shr</KEYWORD1>
-
-			<!-- Instructions: Pseudo -->
-                        <KEYWORD1>gcc</KEYWORD1>
-                        <KEYWORD1>gcs</KEYWORD1>
-                        <KEYWORD1>geq</KEYWORD1>
-                        <KEYWORD1>gge</KEYWORD1>
-                        <KEYWORD1>glt</KEYWORD1>
-                        <KEYWORD1>gmi</KEYWORD1>
-                        <KEYWORD1>gne</KEYWORD1>
-                        <KEYWORD1>gpl</KEYWORD1>
-                        <KEYWORD1>gvc</KEYWORD1>
-                        <KEYWORD1>gvs</KEYWORD1>
-
 			<!-- Instructions: Illegal -->
                         <KEYWORD2>anc</KEYWORD2>
-                        <KEYWORD2>ane</KEYWORD2>
                         <KEYWORD2>arr</KEYWORD2>
                         <KEYWORD2>asr</KEYWORD2>
                         <KEYWORD2>dcp</KEYWORD2>
-                        <KEYWORD2>isb</KEYWORD2>
+                        <KEYWORD2>dop</KEYWORD2>
+                        <KEYWORD2>isc</KEYWORD2>
                         <KEYWORD2>jam</KEYWORD2>
                         <KEYWORD2>lax</KEYWORD2>
-                        <KEYWORD2>lds</KEYWORD2>
                         <KEYWORD2>rla</KEYWORD2>
                         <KEYWORD2>rra</KEYWORD2>
                         <KEYWORD2>sax</KEYWORD2>
                         <KEYWORD2>sbx</KEYWORD2>
-                        <KEYWORD2>sha</KEYWORD2>
-                        <KEYWORD2>shs</KEYWORD2>
-                        <KEYWORD2>shx</KEYWORD2>
-                        <KEYWORD2>shy</KEYWORD2>
                         <KEYWORD2>slo</KEYWORD2>
                         <KEYWORD2>sre</KEYWORD2>
+                        <KEYWORD2>top</KEYWORD2>
+
+			<!-- Instructions: operators -->
+                        <OPERATOR>div</OPERATOR>
+                        <OPERATOR>lsl</OPERATOR>
+                        <OPERATOR>not</OPERATOR>
+                        <OPERATOR>mod</OPERATOR>
+                        <OPERATOR>and</OPERATOR>
+                        <OPERATOR>xor</OPERATOR>
+                        <OPERATOR>or</OPERATOR>
+<!--                    <OPERATOR>asl</OPERATOR>
+                        <OPERATOR>arr</OPERATOR>
+                        <OPERATOR>lsr</OPERATOR>-->
 
 			<!-- Predefined constants -->
                         <LITERAL3>a</LITERAL3>
-                        <LITERAL3>true</LITERAL3>
-                        <LITERAL3>false</LITERAL3>
 
-			<!-- Functions -->
-                        <FUNCTION>abs</FUNCTION>
-                        <FUNCTION>acos</FUNCTION>
-                        <FUNCTION>all</FUNCTION>
-                        <FUNCTION>any</FUNCTION>
-                        <FUNCTION>asin</FUNCTION>
-                        <FUNCTION>atan</FUNCTION>
-                        <FUNCTION>atan2</FUNCTION>
-                        <FUNCTION>bool</FUNCTION>
-                        <FUNCTION>cbrt</FUNCTION>
-                        <FUNCTION>ceil</FUNCTION>
-                        <FUNCTION>cos</FUNCTION>
-                        <FUNCTION>cosh</FUNCTION>
-                        <FUNCTION>deg</FUNCTION>
-                        <FUNCTION>exp</FUNCTION>
-                        <FUNCTION>float</FUNCTION>
-                        <FUNCTION>floor</FUNCTION>
-                        <FUNCTION>format</FUNCTION>
-                        <FUNCTION>frac</FUNCTION>
-                        <FUNCTION>hypot</FUNCTION>
-                        <FUNCTION>int</FUNCTION>
-                        <FUNCTION>len</FUNCTION>
-                        <FUNCTION>log</FUNCTION>
-                        <FUNCTION>log10</FUNCTION>
-                        <FUNCTION>pow</FUNCTION>
-                        <FUNCTION>rad</FUNCTION>
-                        <FUNCTION>range</FUNCTION>
-                        <FUNCTION>repr</FUNCTION>
-                        <FUNCTION>round</FUNCTION>
-                        <FUNCTION>sign</FUNCTION>
+			<!-- Instructions: functions -->
                         <FUNCTION>sin</FUNCTION>
-                        <FUNCTION>sinh</FUNCTION>
-                        <FUNCTION>size</FUNCTION>
-                        <FUNCTION>sqrt</FUNCTION>
-                        <FUNCTION>str</FUNCTION>
+                        <FUNCTION>cos</FUNCTION>
                         <FUNCTION>tan</FUNCTION>
-                        <FUNCTION>tanh</FUNCTION>
-                        <FUNCTION>trunc</FUNCTION>
+                        <FUNCTION>arcsin</FUNCTION>
+                        <FUNCTION>arccos</FUNCTION>
+                        <FUNCTION>arctan</FUNCTION>
+                        <FUNCTION>float</FUNCTION>
+                        <FUNCTION>int</FUNCTION>
 		</KEYWORDS>
 
-		<SEQ TYPE="OPERATOR">+</SEQ>
-		<SEQ TYPE="OPERATOR">-</SEQ>
-		<SEQ TYPE="OPERATOR">/</SEQ>
-		<SEQ TYPE="OPERATOR">*</SEQ>
-                <!--<SEQ TYPE="OPERATOR">%</SEQ>-->
+                <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z.][A-Za-z0-9_]*|[+-]</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="!-^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">[!-^*/%+&lt;&gt;=&amp;|]</SEQ_REGEXP>
 
-		<SEQ TYPE="OPERATOR">|</SEQ>
-		<SEQ TYPE="OPERATOR">^</SEQ>
-		<SEQ TYPE="OPERATOR">&amp;</SEQ>
-		<SEQ TYPE="OPERATOR">~</SEQ>
-		<SEQ TYPE="OPERATOR">!</SEQ>
-
-		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;</SEQ>
-
-                <SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ_+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z_][A-Za-z0-9_]*|[+-]</SEQ_REGEXP>
 	</RULES>
 </MODE>
