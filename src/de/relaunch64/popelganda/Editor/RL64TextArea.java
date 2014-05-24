@@ -26,6 +26,8 @@ import java.awt.Point;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -48,6 +50,7 @@ import org.gjt.sp.util.SyntaxUtilities;
 public class RL64TextArea extends StandaloneTextArea {
     private final static Properties props;
     private static final IPropertyManager propertyManager;
+    private final KeyListener keyListener;
     private final Settings settings;
     private int compiler;
     
@@ -112,6 +115,27 @@ public class RL64TextArea extends StandaloneTextArea {
             }
         }
         return loadedProps;
+    }
+
+    @Override
+    public void processKeyEvent(KeyEvent evt)
+    {
+        if (evt.getID() == KeyEvent.KEY_RELEASED) {
+            keyListener.keyReleased(evt);
+        }
+        if (!evt.isConsumed()) {
+            super.processKeyEvent(evt);
+        }
+    }
+
+    private class RL64KeyListener extends KeyAdapter {
+        @Override
+        public void keyReleased(KeyEvent evt) {
+            // ctrl+space opens label-auto-completion
+            if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
+                showSuggestion(SUGGESTION_LABEL);
+            }
+        }
     }
 
     public final void setFonts() {
@@ -244,6 +268,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // set fonts
         setFonts();
         // TODO perhaps we have to derive from http://www.jedit.org/api/org/gjt/sp/jedit/input/TextAreaInputHandler.html
+        keyListener = new RL64KeyListener();
     }
     /**
      * Specified the list of delimiter strings that separate words/token for recodgnizing
