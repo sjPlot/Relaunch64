@@ -39,7 +39,6 @@ import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
-import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
 
 /**
@@ -106,7 +105,11 @@ public class RL64TextArea extends StandaloneTextArea {
             ConstantsR64.r64logger.log(Level.WARNING,e.getLocalizedMessage());
         }
         finally {
-            IOUtilities.closeQuietly(in);
+            try {
+                if (in!=null) in.close();
+            }
+            catch (IOException ex) {
+            }
         }
         return loadedProps;
     }

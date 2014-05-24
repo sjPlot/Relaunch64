@@ -24,7 +24,7 @@ metal.secondary.fontsize=12
 metal.secondary.fontstyle=0
 #}}}
 
-# Decorate frames and dialogs using Swing L&F? (JDK 1.4 only)
+# Decorate frames and dialogs using Swing L&F?
 decorate.frames=false
 decorate.dialogs=false
 
@@ -64,10 +64,13 @@ persistentMarkers=true
 twoStageSave=true
 
 # Strip trailing EOL
-stripTrailingEOL=true
+stripTrailingEOL=false
 
 # Complete words from all open buffers
 completeFromAllBuffers=false
+
+# Insert a word completion when the corresponding digit is pressed
+insertCompletionWithDigit=true
 
 # Need this so that new files have a trailing EOL
 buffer.trailingEOL=true
@@ -195,10 +198,10 @@ buffer.noWordSep=_
 buffer.camelCasedWords=false
 
 # Fold mode (explicit, indent, or none)
-buffer.folding=explicit
+buffer.folding=none
 
 # Folds with a level equal to or higher than this will be collapsed
-buffer.collapseFolds=1
+buffer.collapseFolds=0
 #}}}
 
 #{{{ View settings
@@ -281,8 +284,8 @@ view.middleMousePaste=false
 view.ctrlForRectangularSelection=true
 
 # Minimal view size that is considered "valid" when loading perspective
-view.minStartupWidth=100
-view.minStartupHeight=100
+view.minStartupWidth=200
+view.minStartupHeight=200
 
 Combined\ Options.width=1024
 Combined\ Options.height=768
@@ -383,7 +386,7 @@ view.style.foldLine.2=color:#000000 bgColor:#e7e7ff style:b
 view.style.foldLine.3=color:#000000 bgColor:#ffe0f0 style:b
 view.style.function=color:#9966ff
 view.style.invalid=color:#ff0066 bgColor:#ffffcc
-view.style.keyword1=color:#ff6699 style:b
+view.style.keyword1=color:#006699 style:b
 view.style.keyword2=color:#009966 style:b
 view.style.keyword3=color:#0099ff style:b
 view.style.keyword4=color:#66ccff style:b
@@ -397,8 +400,8 @@ view.style.operator=color:#000000 style:b
 #}}}
 
 # Fancy Java2D stuff
-view.antiAlias=true
-view.fracFontMetrics=true
+view.antiAlias=false
+view.fracFontMetrics=false
 
 # Docking and tool bar positioning
 view.docking.alternateLayout=false
@@ -439,7 +442,7 @@ print.color=false
 # Print tab size
 print.tabSize=2
 
-# Force JDK 1.3 API even on 1.4
+# Use old (JDK 1.3) printing API
 print.force13=false
 
 # Force use of glyph vectors to work around spacing problems
