@@ -25,7 +25,7 @@
                 <!-- Literal4 are ram-addresses -->
                 <SEQ_REGEXP HASH_CHARS="$&amp;" AT_WORD_START="TRUE" TYPE="LITERAL4">\$[0-9a-fA-F]+|&amp;[0-7]+|[0-9]+</SEQ_REGEXP>
                 <!-- digit are numbers -->
-                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">#[&lt;&gt;]?(\$[0-9a-fA-F]+|%[01]*|&amp;[0-7]+|[0-9]+|[a-zA-Z_][a-zA-Z0-9_]*|'.*?')</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">#[&lt;&gt;]?(\$[0-9a-fA-F]+|%[01]+|&amp;[0-7]+|[0-9]+|[a-zA-Z_][a-zA-Z0-9_]*|'.*?')</SEQ_REGEXP>
                 <!-- keyword4 are jump labels-->
                 <SEQ_REGEXP HASH_CHARS="@" AT_WORD_START="TRUE" TYPE="KEYWORD4">@[0-9a-zA-Z]*</SEQ_REGEXP>
 

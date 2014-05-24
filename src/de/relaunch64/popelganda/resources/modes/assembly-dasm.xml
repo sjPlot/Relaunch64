@@ -3,7 +3,7 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!--
-	acme Assembly mode by Soci/Singular (soci at c64.rulez.org)
+	dasm Assembly mode for jedit by Soci/Singular (soci at c64.rulez.org)
 -->
 
 <MODE>
@@ -11,7 +11,7 @@
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE=";" />
 		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
-                <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/|%^&amp;*" />
+                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/^&amp;*" />
 	</PROPS>
 
 	<RULES HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="TRUE">
@@ -19,27 +19,68 @@
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
                 <!-- Literal3 are binary numbers -->
-                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="LITERAL3">%[01.#]+</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="LITERAL3">%[01]+</SEQ_REGEXP>
                 <!-- Literal4 are ram-addresses -->
-                <SEQ_REGEXP HASH_CHARS="$&amp;0123456789" AT_WORD_START="TRUE" TYPE="LITERAL4">(\$|0x)[0-9a-fA-F]+|&amp;[0-7]+|[0-9]+</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$0123456789" AT_WORD_START="TRUE" TYPE="LITERAL4">\$[0-9a-fA-F]+|[0-9]+</SEQ_REGEXP>
                 <!-- digit are numbers -->
-                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">#[&lt;&gt;^]?((\$|0x)[0-9a-fA-F]+|%[01]+|&amp;[0-7]+|[0-9]+|[a-zA-Z_][a-zA-Z0-9_]*|'.*?'|".*?")</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">#[&lt;&gt;]?(\$[0-9a-fA-F]+|%[01]+|[0-9]+|[a-zA-Z_.][a-zA-Z0-9_]*\$?|'.)</SEQ_REGEXP>
                 <!-- keyword4 are jump labels-->
-                <SEQ_REGEXP HASH_CHARS="." AT_WORD_START="TRUE" TYPE="KEYWORD4">\.[0-9a-zA-Z]+</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="." AT_WORD_START="TRUE" TYPE="KEYWORD4">\.[0-9a-zA-Z_]*</SEQ_REGEXP>
 
-		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
-			<BEGIN>'</BEGIN>
-			<END>'</END>
-		</SPAN>
+                <SEQ_REGEXP HASH_CHARS="'" AT_WORD_START="TRUE" TYPE="LITERAL1">'.</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(08|16|24|32|8|binary|bin|byte|by|cbm|fill|pet|raw|scrxor|scr|text|tx|word|wo|align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
-
 		<KEYWORDS>
+                        <KEYWORD3>include</KEYWORD3>
+                        <KEYWORD3>incbin</KEYWORD3>
+                        <KEYWORD3>incdir</KEYWORD3>
+                        <KEYWORD3>seg</KEYWORD3>
+                        <KEYWORD3>seg.u</KEYWORD3>
+                        <KEYWORD3>err</KEYWORD3>
+                        <KEYWORD3>org</KEYWORD3>
+                        <KEYWORD3>rorg</KEYWORD3>
+                        <KEYWORD3>processor</KEYWORD3>
+                        <KEYWORD3>echo</KEYWORD3>
+                        <KEYWORD3>rend</KEYWORD3>
+                        <KEYWORD3>align</KEYWORD3>
+                        <KEYWORD3>subroutine</KEYWORD3>
+                        <KEYWORD3>equ</KEYWORD3>
+                        <KEYWORD3>eqm</KEYWORD3>
+                        <KEYWORD3>set</KEYWORD3>
+                        <KEYWORD3>mac</KEYWORD3>
+                        <KEYWORD3>endm</KEYWORD3>
+                        <KEYWORD3>mexit</KEYWORD3>
+                        <KEYWORD3>ifconst</KEYWORD3>
+                        <KEYWORD3>ifnconst</KEYWORD3>
+                        <KEYWORD3>if</KEYWORD3>
+                        <KEYWORD3>else</KEYWORD3>
+                        <KEYWORD3>endif</KEYWORD3>
+                        <KEYWORD3>eif</KEYWORD3>
+                        <KEYWORD3>repeat</KEYWORD3>
+                        <KEYWORD3>repend</KEYWORD3>
+                        <KEYWORD3>list</KEYWORD3>
+
+                        <KEYWORD3>byte</KEYWORD3>
+                        <KEYWORD3>word</KEYWORD3>
+                        <KEYWORD3>long</KEYWORD3>
+                        <KEYWORD3>dc</KEYWORD3>
+                        <KEYWORD3>dc.b</KEYWORD3>
+                        <KEYWORD3>dc.w</KEYWORD3>
+                        <KEYWORD3>dc.l</KEYWORD3>
+                        <KEYWORD3>ds</KEYWORD3>
+                        <KEYWORD3>ds.b</KEYWORD3>
+                        <KEYWORD3>ds.w</KEYWORD3>
+                        <KEYWORD3>ds.l</KEYWORD3>
+                        <KEYWORD3>dv</KEYWORD3>
+                        <KEYWORD3>dv.b</KEYWORD3>
+                        <KEYWORD3>dv.w</KEYWORD3>
+                        <KEYWORD3>dv.l</KEYWORD3>
+                        <KEYWORD3>hex</KEYWORD3>
+
 			<!-- Instructions: standard -->
                         <KEYWORD1>adc</KEYWORD1>
                         <KEYWORD1>and</KEYWORD1>
@@ -97,48 +138,9 @@
                         <KEYWORD1>txa</KEYWORD1>
                         <KEYWORD1>txs</KEYWORD1>
                         <KEYWORD1>tya</KEYWORD1>
-
-			<!-- Instructions: Illegal -->
-                        <KEYWORD2>anc</KEYWORD2>
-                        <KEYWORD2>arr</KEYWORD2>
-                        <KEYWORD2>asr</KEYWORD2>
-                        <KEYWORD2>dcp</KEYWORD2>
-                        <KEYWORD2>dop</KEYWORD2>
-                        <KEYWORD2>isc</KEYWORD2>
-                        <KEYWORD2>jam</KEYWORD2>
-                        <KEYWORD2>lax</KEYWORD2>
-                        <KEYWORD2>rla</KEYWORD2>
-                        <KEYWORD2>rra</KEYWORD2>
-                        <KEYWORD2>sax</KEYWORD2>
-                        <KEYWORD2>sbx</KEYWORD2>
-                        <KEYWORD2>slo</KEYWORD2>
-                        <KEYWORD2>sre</KEYWORD2>
-                        <KEYWORD2>top</KEYWORD2>
-
-			<!-- Instructions: operators -->
-                        <OPERATOR>div</OPERATOR>
-                        <OPERATOR>lsl</OPERATOR>
-                        <OPERATOR>not</OPERATOR>
-                        <OPERATOR>mod</OPERATOR>
-                        <OPERATOR>and</OPERATOR>
-                        <OPERATOR>xor</OPERATOR>
-                        <OPERATOR>or</OPERATOR>
-<!--                    <OPERATOR>asl</OPERATOR>
-                        <OPERATOR>arr</OPERATOR>
-                        <OPERATOR>lsr</OPERATOR>-->
-
-			<!-- Instructions: functions -->
-                        <FUNCTION>sin</FUNCTION>
-                        <FUNCTION>cos</FUNCTION>
-                        <FUNCTION>tan</FUNCTION>
-                        <FUNCTION>arcsin</FUNCTION>
-                        <FUNCTION>arccos</FUNCTION>
-                        <FUNCTION>arctan</FUNCTION>
-                        <FUNCTION>float</FUNCTION>
-                        <FUNCTION>int</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z.][A-Za-z0-9_]*|[+-]</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="-!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_LINE_START="TRUE" TYPE="LABEL">[a-zA-Z.][A-Za-z0-9_]*\$?</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-~!^*/+&lt;&gt;=&amp;|?%" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 </MODE>

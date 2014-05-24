@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!--
+	dasm Assembly mode for jedit by Soci/Singular (soci at c64.rulez.org)
+-->
+
+<MODE>
+
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE=";" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
+                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/^&amp;*" />
+	</PROPS>
+
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
+
+		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+
+                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]+|%[01]+</SEQ_REGEXP>
+
+                <SEQ_REGEXP HASH_CHARS="'" AT_WORD_START="TRUE" TYPE="LITERAL1">'.</SEQ_REGEXP>
+
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<KEYWORDS>
+                        <KEYWORD3>include</KEYWORD3>
+                        <KEYWORD3>incbin</KEYWORD3>
+                        <KEYWORD3>incdir</KEYWORD3>
+                        <KEYWORD3>seg</KEYWORD3>
+                        <KEYWORD3>seg.u</KEYWORD3>
+                        <KEYWORD3>err</KEYWORD3>
+                        <KEYWORD3>org</KEYWORD3>
+                        <KEYWORD3>rorg</KEYWORD3>
+                        <KEYWORD3>processor</KEYWORD3>
+                        <KEYWORD3>echo</KEYWORD3>
+                        <KEYWORD3>rend</KEYWORD3>
+                        <KEYWORD3>align</KEYWORD3>
+                        <KEYWORD3>subroutine</KEYWORD3>
+                        <KEYWORD3>equ</KEYWORD3>
+                        <KEYWORD3>eqm</KEYWORD3>
+                        <KEYWORD3>set</KEYWORD3>
+                        <KEYWORD3>mac</KEYWORD3>
+                        <KEYWORD3>endm</KEYWORD3>
+                        <KEYWORD3>mexit</KEYWORD3>
+                        <KEYWORD3>ifconst</KEYWORD3>
+                        <KEYWORD3>ifnconst</KEYWORD3>
+                        <KEYWORD3>if</KEYWORD3>
+                        <KEYWORD3>else</KEYWORD3>
+                        <KEYWORD3>endif</KEYWORD3>
+                        <KEYWORD3>eif</KEYWORD3>
+                        <KEYWORD3>repeat</KEYWORD3>
+                        <KEYWORD3>repend</KEYWORD3>
+                        <KEYWORD3>list</KEYWORD3>
+
+                        <KEYWORD4>byte</KEYWORD4>
+                        <KEYWORD4>word</KEYWORD4>
+                        <KEYWORD4>long</KEYWORD4>
+                        <KEYWORD4>dc</KEYWORD4>
+                        <KEYWORD4>dc.b</KEYWORD4>
+                        <KEYWORD4>dc.w</KEYWORD4>
+                        <KEYWORD4>dc.l</KEYWORD4>
+                        <KEYWORD4>ds</KEYWORD4>
+                        <KEYWORD4>ds.b</KEYWORD4>
+                        <KEYWORD4>ds.w</KEYWORD4>
+                        <KEYWORD4>ds.l</KEYWORD4>
+                        <KEYWORD4>dv</KEYWORD4>
+                        <KEYWORD4>dv.b</KEYWORD4>
+                        <KEYWORD4>dv.w</KEYWORD4>
+                        <KEYWORD4>dv.l</KEYWORD4>
+                        <KEYWORD4>hex</KEYWORD4>
+
+			<!-- Instructions: standard -->
+                        <KEYWORD1>adc</KEYWORD1>
+                        <KEYWORD1>and</KEYWORD1>
+                        <KEYWORD1>asl</KEYWORD1>
+                        <KEYWORD1>bcc</KEYWORD1>
+                        <KEYWORD1>bcs</KEYWORD1>
+                        <KEYWORD1>beq</KEYWORD1>
+                        <KEYWORD1>bit</KEYWORD1>
+                        <KEYWORD1>bmi</KEYWORD1>
+                        <KEYWORD1>bne</KEYWORD1>
+                        <KEYWORD1>bpl</KEYWORD1>
+                        <KEYWORD1>brk</KEYWORD1>
+                        <KEYWORD1>bvc</KEYWORD1>
+                        <KEYWORD1>bvs</KEYWORD1>
+                        <KEYWORD1>clc</KEYWORD1>
+                        <KEYWORD1>cld</KEYWORD1>
+                        <KEYWORD1>cli</KEYWORD1>
+                        <KEYWORD1>clv</KEYWORD1>
+                        <KEYWORD1>cmp</KEYWORD1>
+                        <KEYWORD1>cpx</KEYWORD1>
+                        <KEYWORD1>cpy</KEYWORD1>
+                        <KEYWORD1>dec</KEYWORD1>
+                        <KEYWORD1>dex</KEYWORD1>
+                        <KEYWORD1>dey</KEYWORD1>
+                        <KEYWORD1>eor</KEYWORD1>
+                        <KEYWORD1>inc</KEYWORD1>
+                        <KEYWORD1>inx</KEYWORD1>
+                        <KEYWORD1>iny</KEYWORD1>
+                        <KEYWORD1>jmp</KEYWORD1>
+                        <KEYWORD1>jsr</KEYWORD1>
+                        <KEYWORD1>lda</KEYWORD1>
+                        <KEYWORD1>ldx</KEYWORD1>
+                        <KEYWORD1>ldy</KEYWORD1>
+                        <KEYWORD1>lsr</KEYWORD1>
+                        <KEYWORD1>nop</KEYWORD1>
+                        <KEYWORD1>ora</KEYWORD1>
+                        <KEYWORD1>pha</KEYWORD1>
+                        <KEYWORD1>php</KEYWORD1>
+                        <KEYWORD1>pla</KEYWORD1>
+                        <KEYWORD1>plp</KEYWORD1>
+                        <KEYWORD1>rol</KEYWORD1>
+                        <KEYWORD1>ror</KEYWORD1>
+                        <KEYWORD1>rti</KEYWORD1>
+                        <KEYWORD1>rts</KEYWORD1>
+                        <KEYWORD1>sbc</KEYWORD1>
+                        <KEYWORD1>sec</KEYWORD1>
+                        <KEYWORD1>sed</KEYWORD1>
+                        <KEYWORD1>sei</KEYWORD1>
+                        <KEYWORD1>sta</KEYWORD1>
+                        <KEYWORD1>stx</KEYWORD1>
+                        <KEYWORD1>sty</KEYWORD1>
+                        <KEYWORD1>tax</KEYWORD1>
+                        <KEYWORD1>tay</KEYWORD1>
+                        <KEYWORD1>tsx</KEYWORD1>
+                        <KEYWORD1>txa</KEYWORD1>
+                        <KEYWORD1>txs</KEYWORD1>
+                        <KEYWORD1>tya</KEYWORD1>
+		</KEYWORDS>
+
+                <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_LINE_START="TRUE" TYPE="LABEL">[a-zA-Z.][A-Za-z0-9_]*\$?</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-~!^*/+&lt;&gt;=&amp;|?%" TYPE="OPERATOR">.</SEQ_REGEXP>
+	</RULES>
+</MODE>
