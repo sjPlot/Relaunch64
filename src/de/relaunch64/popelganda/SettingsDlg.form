@@ -227,27 +227,33 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jComboBoxLineNumberAlign" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelFont" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButtonFont" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jTextFieldTabWidth" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jComboBoxAntiAlias" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxLineNumberAlign" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabelFont" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButtonFont" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jTextFieldTabWidth" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="407" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="427" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -276,7 +282,12 @@
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBoxLineNumberAlign" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="142" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxAntiAlias" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="97" max="32767" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -372,6 +383,24 @@
                 <Property name="name" type="java.lang.String" value="jComboBoxLineNumberAlign" noResource="true"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="jLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+                <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBoxAntiAlias">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="None"/>
+                    <StringItem index="1" value="Standard"/>
+                    <StringItem index="2" value="Subpixel"/>
+                  </StringArray>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jComboBoxAntiAlias" noResource="true"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel2">
@@ -404,8 +433,9 @@
                                       <Component id="jComboBoxSyntaxScheme" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jLabelSchemePreview" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxAlternativeAssemblyMode" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="456" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="423" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -422,7 +452,9 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelSchemePreview" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="274" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxAlternativeAssemblyMode" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="239" max="32767" attributes="0"/>
                       <Component id="jButtonApplyScheme" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -458,6 +490,13 @@
                 <Property name="name" type="java.lang.String" value="jLabelSchemePreview" noResource="true"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxAlternativeAssemblyMode">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxAlternativeAssemblyMode.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxAlternativeAssemblyMode.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxAlternativeAssemblyMode" noResource="true"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel1">
@@ -481,8 +520,9 @@
                           <Component id="jCheckBoxCheckUpdates" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBoxSaveOnCompile" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBoxReopenFiles" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxNimbusOnOSX" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="417" max="32767" attributes="0"/>
+                      <EmptySpace pref="433" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -495,7 +535,9 @@
                       <Component id="jCheckBoxSaveOnCompile" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jCheckBoxReopenFiles" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="212" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxNimbusOnOSX" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="196" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -520,6 +562,13 @@
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxReopenFiles.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxReopenFiles.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxReopenFiles" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxNimbusOnOSX">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxNimbusOnOSX.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxNimbusOnOSX.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxNimbusOnOSX" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

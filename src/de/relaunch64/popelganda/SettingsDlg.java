@@ -62,6 +62,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
 
@@ -96,13 +97,34 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         // set preferred compiler settings
         jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
         // init line number alignment
-        if (settings.getLineNumerAlignment() == Gutter.RIGHT) jComboBoxLineNumberAlign.setSelectedIndex(0);
-        else if (settings.getLineNumerAlignment() == Gutter.CENTER) jComboBoxLineNumberAlign.setSelectedIndex(1);
-        else if (settings.getLineNumerAlignment() == Gutter.LEFT) jComboBoxLineNumberAlign.setSelectedIndex(2);
+        switch (settings.getLineNumerAlignment()) {
+            case Gutter.RIGHT:
+                jComboBoxLineNumberAlign.setSelectedIndex(0);
+                break;
+            case Gutter.CENTER:
+                jComboBoxLineNumberAlign.setSelectedIndex(1);
+                break;
+            case Gutter.LEFT:
+                jComboBoxLineNumberAlign.setSelectedIndex(2);
+                break;
+        }
+        switch (settings.getAntiAlias()) {
+            case AntiAlias.NONE:
+                jComboBoxAntiAlias.setSelectedIndex(0);
+                break;
+            case AntiAlias.STANDARD:
+                jComboBoxAntiAlias.setSelectedIndex(1);
+                break;
+            case AntiAlias.SUBPIXEL:
+                jComboBoxAntiAlias.setSelectedIndex(2);
+                break;
+        }
         // init other settings
         jCheckBoxCheckUpdates.setSelected(settings.getCheckForUpdates());
         jCheckBoxSaveOnCompile.setSelected(settings.getSaveOnCompile());
         jCheckBoxReopenFiles.setSelected(settings.getReopenOnStartup());
+        jCheckBoxNimbusOnOSX.setSelected(settings.getNimbusOnOSX());
+        jCheckBoxAlternativeAssemblyMode.setSelected(settings.getAlternativeAssemblyMode());
         // init schemes
         initSchemes();
         // init user scripts, including combo box setting etc
@@ -231,6 +253,18 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 settings.setSaveOnCompile(jCheckBoxSaveOnCompile.isSelected());
             }
         });
+        jCheckBoxNimbusOnOSX.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settings.setNimbusOnOSX(jCheckBoxNimbusOnOSX.isSelected());
+            }
+        });
+        jCheckBoxAlternativeAssemblyMode.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settings.setAlternativeAssemblyMode(jCheckBoxAlternativeAssemblyMode.isSelected());
+            }
+        });
         jCheckBoxReopenFiles.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,9 +383,28 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         settings.setPreferredCompiler(jComboBoxPrefComp.getSelectedIndex());
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
-        if (jComboBoxLineNumberAlign.getSelectedIndex() == 0) settings.setLineNumerAlignment(Gutter.RIGHT);
-        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 1) settings.setLineNumerAlignment(Gutter.CENTER);
-        else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(Gutter.LEFT);
+        switch(jComboBoxLineNumberAlign.getSelectedIndex()) {
+            case 0:
+                settings.setLineNumerAlignment(Gutter.RIGHT);
+                break;
+            case 1:
+                settings.setLineNumerAlignment(Gutter.CENTER);
+                break;
+            case 2:
+                settings.setLineNumerAlignment(Gutter.LEFT);
+                break;
+        }
+        switch(jComboBoxAntiAlias.getSelectedIndex()) {
+            case 0:
+                settings.setAntiAlias(AntiAlias.NONE);
+                break;
+            case 1:
+                settings.setAntiAlias(AntiAlias.STANDARD);
+                break;
+            case 2:
+                settings.setAntiAlias(AntiAlias.SUBPIXEL);
+                break;
+        }
         setModifiedTabFont(false);
         editorPanes.updateFonts();
         editorPanes.updateAntiAlias();
@@ -476,15 +529,19 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jButtonApplyTabAndFont = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jComboBoxLineNumberAlign = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxAntiAlias = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
         jButtonApplyScheme = new javax.swing.JButton();
         jLabelSchemePreview = new javax.swing.JLabel();
+        jCheckBoxAlternativeAssemblyMode = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxCheckUpdates = new javax.swing.JCheckBox();
         jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
         jCheckBoxReopenFiles = new javax.swing.JCheckBox();
+        jCheckBoxNimbusOnOSX = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -622,6 +679,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jComboBoxLineNumberAlign.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Right", "Center", "Left" }));
         jComboBoxLineNumberAlign.setName("jComboBoxLineNumberAlign"); // NOI18N
 
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        jComboBoxAntiAlias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Standard", "Subpixel" }));
+        jComboBoxAntiAlias.setName("jComboBoxAntiAlias"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -629,23 +692,27 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel6)
-                    .add(jLabel10)
-                    .add(jLabel11)
-                    .add(jLabel1))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(jButtonApplyTabAndFont))
                     .add(jPanel5Layout.createSequentialGroup()
-                        .add(jLabelFont)
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel6)
+                            .add(jLabel10)
+                            .add(jLabel11)
+                            .add(jLabel1)
+                            .add(jLabel3))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButtonFont))
-                    .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(427, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jButtonApplyTabAndFont)
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jComboBoxAntiAlias, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jPanel5Layout.createSequentialGroup()
+                                .add(jLabelFont)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jButtonFont))
+                            .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(0, 407, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -668,7 +735,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 142, Short.MAX_VALUE)
+                .add(18, 18, 18)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(jComboBoxAntiAlias, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 97, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -689,6 +760,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
 
         jLabelSchemePreview.setName("jLabelSchemePreview"); // NOI18N
 
+        jCheckBoxAlternativeAssemblyMode.setText(resourceMap.getString("jCheckBoxAlternativeAssemblyMode.text")); // NOI18N
+        jCheckBoxAlternativeAssemblyMode.setToolTipText(resourceMap.getString("jCheckBoxAlternativeAssemblyMode.toolTipText")); // NOI18N
+        jCheckBoxAlternativeAssemblyMode.setName("jCheckBoxAlternativeAssemblyMode"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -705,8 +780,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 .add(jLabel2)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jLabelSchemePreview))
-                        .add(0, 456, Short.MAX_VALUE)))
+                            .add(jLabelSchemePreview)
+                            .add(jCheckBoxAlternativeAssemblyMode))
+                        .add(0, 423, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -718,7 +794,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabelSchemePreview)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 274, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jCheckBoxAlternativeAssemblyMode)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
                 .add(jButtonApplyScheme)
                 .addContainerGap())
         );
@@ -739,6 +817,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxReopenFiles.setToolTipText(resourceMap.getString("jCheckBoxReopenFiles.toolTipText")); // NOI18N
         jCheckBoxReopenFiles.setName("jCheckBoxReopenFiles"); // NOI18N
 
+        jCheckBoxNimbusOnOSX.setText(resourceMap.getString("jCheckBoxNimbusOnOSX.text")); // NOI18N
+        jCheckBoxNimbusOnOSX.setToolTipText(resourceMap.getString("jCheckBoxNimbusOnOSX.toolTipText")); // NOI18N
+        jCheckBoxNimbusOnOSX.setName("jCheckBoxNimbusOnOSX"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -748,8 +830,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jCheckBoxCheckUpdates)
                     .add(jCheckBoxSaveOnCompile)
-                    .add(jCheckBoxReopenFiles))
-                .addContainerGap(417, Short.MAX_VALUE))
+                    .add(jCheckBoxReopenFiles)
+                    .add(jCheckBoxNimbusOnOSX))
+                .addContainerGap(433, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -760,7 +843,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jCheckBoxSaveOnCompile)
                 .add(18, 18, 18)
                 .add(jCheckBoxReopenFiles)
-                .addContainerGap(212, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(jCheckBoxNimbusOnOSX)
+                .addContainerGap(196, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -793,9 +878,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JButton jButtonNewScript;
     private javax.swing.JButton jButtonRemoveScript;
     private javax.swing.JButton jButtonScriptHelp;
+    private javax.swing.JCheckBox jCheckBoxAlternativeAssemblyMode;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
+    private javax.swing.JCheckBox jCheckBoxNimbusOnOSX;
     private javax.swing.JCheckBox jCheckBoxReopenFiles;
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
+    private javax.swing.JComboBox jComboBoxAntiAlias;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;
     private javax.swing.JComboBox jComboBoxPrefComp;
@@ -804,6 +892,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

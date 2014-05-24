@@ -141,7 +141,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         initComponents();
         // remove borders on OS X
         if (settings.isOSX()) {
-            jButtonRunScript.setVisible(false);
             jTabbedPane1.setBorder(null);
             jTabbedPaneLogs.setBorder(null);
             jSplitPane1.setBorder(null);

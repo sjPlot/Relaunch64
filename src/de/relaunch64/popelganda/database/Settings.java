@@ -78,6 +78,7 @@ public class Settings {
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_CHECKUPDATES = "checkupdates";
     private static final String SETTING_SAVEONCOMPILE = "saveoncompile";
+    private static final String SETTING_NIMBUS_ON_OSX = "nimbusonosx";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
@@ -285,6 +286,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_SAVEONCOMPILE);
             el.setText("1");
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_NIMBUS_ON_OSX)) {
+            // create element
+            Element el = new Element(SETTING_NIMBUS_ON_OSX);
+            el.setText("0");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -633,6 +641,19 @@ public class Settings {
         Element el = settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE);
         if (null==el) {
             el = new Element(SETTING_SAVEONCOMPILE);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getNimbusOnOSX() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_NIMBUS_ON_OSX);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setNimbusOnOSX(boolean val)  {
+        Element el = settingsFile.getRootElement().getChild(SETTING_NIMBUS_ON_OSX);
+        if (null==el) {
+            el = new Element(SETTING_NIMBUS_ON_OSX);
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
