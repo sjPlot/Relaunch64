@@ -76,6 +76,7 @@ public class Assembler_64tass implements Assembler {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         String line;
         Matcher m;
+        // Daniel: I love this regex-stuff! Unfortunately I'm to old to understand it...
         Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
         Deque<String> scopes = new LinkedList<>();
 
