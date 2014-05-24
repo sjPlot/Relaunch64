@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!--
+	dreamass Assembly mode for jedit by Soci/Singular (soci at c64.rulez.org)
+-->
+
+<MODE>
+
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE=";" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
+                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/?^&amp;*" />
+	</PROPS>
+
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
+
+		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+
+                <SEQ_REGEXP HASH_CHARS="$%&amp;" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]+|%[01]+|&amp;[0-7]+</SEQ_REGEXP>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+                <SEQ_REGEXP HASH_CHARS="#" AT_WHITESPACE_END="TRUE" TYPE="KEYWORD3">#(error|if|ifdef|iffile|ifndef|ifnfile|elsif|elsifdef|elsiffile|elsifndef|elsifnfile|else|endif|include|macro|outfile|print|segdef|warning)\b</SEQ_REGEXP>
+
+		<KEYWORDS>
+                        <KEYWORD3>.segment</KEYWORD3>
+                        <KEYWORD3>.setpet</KEYWORD3>
+                        <KEYWORD3>.setscr</KEYWORD3>
+                        <KEYWORD3>.align</KEYWORD3>
+                        <KEYWORD3>.(</KEYWORD3>
+                        <KEYWORD3>.)</KEYWORD3>
+                        <KEYWORD3>.pseudopc</KEYWORD3>
+                        <KEYWORD3>.realpc</KEYWORD3>
+
+                        <KEYWORD4>.binclude</KEYWORD4>
+                        <KEYWORD4>.byte</KEYWORD4>
+                        <KEYWORD4>.db</KEYWORD4>
+                        <KEYWORD4>.dw</KEYWORD4>
+                        <KEYWORD4>.text</KEYWORD4>
+                        <KEYWORD4>.dt</KEYWORD4>
+                        <KEYWORD4>.pet</KEYWORD4>
+                        <KEYWORD4>.dp</KEYWORD4>
+                        <KEYWORD4>.scr</KEYWORD4>
+                        <KEYWORD4>.ds</KEYWORD4>
+                        <KEYWORD4>.word</KEYWORD4>
+                        <KEYWORD4>.dsb</KEYWORD4>
+
+			<!-- Instructions: standard -->
+                        <KEYWORD1>adc</KEYWORD1>
+                        <KEYWORD1>and</KEYWORD1>
+                        <KEYWORD1>asl</KEYWORD1>
+                        <KEYWORD1>bcc</KEYWORD1>
+                        <KEYWORD1>bcs</KEYWORD1>
+                        <KEYWORD1>beq</KEYWORD1>
+                        <KEYWORD1>bit</KEYWORD1>
+                        <KEYWORD1>bmi</KEYWORD1>
+                        <KEYWORD1>bne</KEYWORD1>
+                        <KEYWORD1>bpl</KEYWORD1>
+                        <KEYWORD1>brk</KEYWORD1>
+                        <KEYWORD1>bvc</KEYWORD1>
+                        <KEYWORD1>bvs</KEYWORD1>
+                        <KEYWORD1>clc</KEYWORD1>
+                        <KEYWORD1>cld</KEYWORD1>
+                        <KEYWORD1>cli</KEYWORD1>
+                        <KEYWORD1>clv</KEYWORD1>
+                        <KEYWORD1>cmp</KEYWORD1>
+                        <KEYWORD1>cpx</KEYWORD1>
+                        <KEYWORD1>cpy</KEYWORD1>
+                        <KEYWORD1>dec</KEYWORD1>
+                        <KEYWORD1>dex</KEYWORD1>
+                        <KEYWORD1>dey</KEYWORD1>
+                        <KEYWORD1>eor</KEYWORD1>
+                        <KEYWORD1>inc</KEYWORD1>
+                        <KEYWORD1>inx</KEYWORD1>
+                        <KEYWORD1>iny</KEYWORD1>
+                        <KEYWORD1>jmp</KEYWORD1>
+                        <KEYWORD1>jsr</KEYWORD1>
+                        <KEYWORD1>lda</KEYWORD1>
+                        <KEYWORD1>ldx</KEYWORD1>
+                        <KEYWORD1>ldy</KEYWORD1>
+                        <KEYWORD1>lsr</KEYWORD1>
+                        <KEYWORD1>nop</KEYWORD1>
+                        <KEYWORD1>ora</KEYWORD1>
+                        <KEYWORD1>pha</KEYWORD1>
+                        <KEYWORD1>php</KEYWORD1>
+                        <KEYWORD1>pla</KEYWORD1>
+                        <KEYWORD1>plp</KEYWORD1>
+                        <KEYWORD1>rol</KEYWORD1>
+                        <KEYWORD1>ror</KEYWORD1>
+                        <KEYWORD1>rti</KEYWORD1>
+                        <KEYWORD1>rts</KEYWORD1>
+                        <KEYWORD1>sbc</KEYWORD1>
+                        <KEYWORD1>sec</KEYWORD1>
+                        <KEYWORD1>sed</KEYWORD1>
+                        <KEYWORD1>sei</KEYWORD1>
+                        <KEYWORD1>sta</KEYWORD1>
+                        <KEYWORD1>stx</KEYWORD1>
+                        <KEYWORD1>sty</KEYWORD1>
+                        <KEYWORD1>tax</KEYWORD1>
+                        <KEYWORD1>tay</KEYWORD1>
+                        <KEYWORD1>tsx</KEYWORD1>
+                        <KEYWORD1>txa</KEYWORD1>
+                        <KEYWORD1>txs</KEYWORD1>
+                        <KEYWORD1>tya</KEYWORD1>
+
+			<!-- Instructions: Illegal -->
+                        <KEYWORD2>acn</KEYWORD2>
+                        <KEYWORD2>ahx</KEYWORD2>
+                        <KEYWORD2>alr</KEYWORD2>
+                        <KEYWORD2>anc</KEYWORD2>
+                        <KEYWORD2>arr</KEYWORD2>
+                        <KEYWORD2>axs</KEYWORD2>
+                        <KEYWORD2>dcp</KEYWORD2>
+                        <KEYWORD2>isc</KEYWORD2>
+                        <KEYWORD2>ki0</KEYWORD2>
+                        <KEYWORD2>ki1</KEYWORD2>
+                        <KEYWORD2>ki2</KEYWORD2>
+                        <KEYWORD2>ki3</KEYWORD2>
+                        <KEYWORD2>ki4</KEYWORD2>
+                        <KEYWORD2>ki5</KEYWORD2>
+                        <KEYWORD2>ki6</KEYWORD2>
+                        <KEYWORD2>ki7</KEYWORD2>
+                        <KEYWORD2>ki9</KEYWORD2>
+                        <KEYWORD2>kib</KEYWORD2>
+                        <KEYWORD2>kid</KEYWORD2>
+                        <KEYWORD2>kif</KEYWORD2>
+                        <KEYWORD2>las</KEYWORD2>
+                        <KEYWORD2>lax</KEYWORD2>
+                        <KEYWORD2>no0</KEYWORD2>
+                        <KEYWORD2>no2</KEYWORD2>
+                        <KEYWORD2>no4</KEYWORD2>
+                        <KEYWORD2>no6</KEYWORD2>
+                        <KEYWORD2>no8</KEYWORD2>
+                        <KEYWORD2>noc</KEYWORD2>
+                        <KEYWORD2>noe</KEYWORD2>
+                        <KEYWORD2>nox</KEYWORD2>
+                        <KEYWORD2>noy</KEYWORD2>
+                        <KEYWORD2>rla</KEYWORD2>
+                        <KEYWORD2>rra</KEYWORD2>
+                        <KEYWORD2>sax</KEYWORD2>
+                        <KEYWORD2>sbi</KEYWORD2>
+                        <KEYWORD2>shx</KEYWORD2>
+                        <KEYWORD2>slo</KEYWORD2>
+                        <KEYWORD2>sre</KEYWORD2>
+                        <KEYWORD2>tas</KEYWORD2>
+                        <KEYWORD2>xaa</KEYWORD2>
+
+			<!-- Functions -->
+                        <FUNCTION>isdef</FUNCTION>
+                        <FUNCTION>segmentof</FUNCTION>
+                        <FUNCTION>sizeof</FUNCTION>
+                        <FUNCTION>mod</FUNCTION>
+		</KEYWORDS>
+
+                <SEQ_REGEXP HASH_CHARS="@ABCDEFGHIJKLMNOPQRSTUVWXYZ_" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z_@][A-Za-z0-9_]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-~!^*/+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
+	</RULES>
+</MODE>
