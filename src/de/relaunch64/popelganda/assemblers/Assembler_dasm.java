@@ -55,10 +55,12 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumbers) {
+    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*"); // always in first column
+        LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
+        Pattern p = Pattern.compile("^(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b).*"); // always in first column
         String line;
+        boolean scopeFound = false;
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
@@ -67,6 +69,20 @@ public class Assembler_dasm implements Assembler
                 String label = m.group("label");
 
                 if (label != null) {
+                    if (lineNumber > 0) {
+                        if (label.charAt(0) == '.') { // local label
+                            if (scopeFound) continue;
+                            if (!localLabelValues.containsValue(label)) {
+                                localLabelValues.put(lineReader.getLineNumber(), label); // add if not listed already
+                            }
+                            continue;
+                        } 
+                        if (lineNumber < lineReader.getLineNumber()) {
+                            scopeFound = true;
+                        } else {
+                            localLabelValues.clear();
+                        }
+                    }
                     if (!labelValues.containsValue(label)) {
                         labelValues.put(lineReader.getLineNumber(), label); // add if not listed already
                     }
@@ -75,6 +91,7 @@ public class Assembler_dasm implements Assembler
         }
         catch (IOException ex) {
         }
+        labelValues.putAll(localLabelValues);
         return labelValues;
     }
 
