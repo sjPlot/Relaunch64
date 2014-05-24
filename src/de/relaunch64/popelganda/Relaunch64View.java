@@ -1379,14 +1379,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (!jPanelFind.isVisible()) {
             // make it visible
             jPanelFind.setVisible(true);
-            // for some reasons, making the hidden find pane visible
-            // removes anti alias setting. so we update anti alias here
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    editorPanes.updateAntiAlias();
-                }
-            });
         }
         jComboBoxFind.requestFocusInWindow();
     }
@@ -1430,14 +1422,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxFind.setForeground(Color.black);
         // make it visible
         jPanelFind.setVisible(false);
-        // for some reasons, hiding the find pane
-        // removes anti alias setting. so we update anti alias here
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                editorPanes.updateAntiAlias();
-            }
-        });
         // set input focus in main textfield
         editorPanes.setFocus();
     }
@@ -1475,14 +1459,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             else {
                 jTextFieldReplace.requestFocusInWindow();
             }
-            // for some reasons, making the hidden find pane visible
-            // removes anti alias setting. so we update anti alias here
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    editorPanes.updateAntiAlias();
-                }
-            });
         }
         // if textfield is already visible, replace term
         else {
@@ -1503,13 +1479,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // hide replace textfield
         jPanelReplace.setVisible(false);
         // for some reasons, hiding the  find pane 
-        // removes anti alias setting. so we update anti alias here
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                editorPanes.updateAntiAlias();
-            }
-        });
         // set input focus in main textfield
         editorPanes.setFocus();
     }

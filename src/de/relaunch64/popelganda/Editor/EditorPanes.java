@@ -346,13 +346,6 @@ public class EditorPanes {
             editorpane.setCompilerSyntax(compiler);
             // update syntax scheme
             editorpane.setSyntaxScheme();
-            // set antialias
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    editorpane.setTextAntiAlias();
-                }
-            });
             // set new compiler scheme
             ep.setCompiler(compiler);
         }
@@ -362,12 +355,6 @@ public class EditorPanes {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setSyntaxScheme();
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    editorpane.setTextAntiAlias();
-                }
-            });
         }
     }
     public void updateAssemblyMode() {
@@ -375,12 +362,6 @@ public class EditorPanes {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setCompilerSyntax(ea.getCompiler());
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    editorpane.setTextAntiAlias();
-                }
-            });
         }
     }
     public void updateLineNumberAlignment() {
@@ -403,12 +384,6 @@ public class EditorPanes {
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setTabs();
             editorpane.setFonts();
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    editorpane.setTextAntiAlias();
-                }
-            });
         }
     }
     /**

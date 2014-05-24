@@ -220,18 +220,30 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     public final void setLineNumberAlignment() {
         // set line number alignment
-        getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
+        if (settings!=null) getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
     }
     /**
      * Sets antialiasing for text.
      */
     public final void setTextAntiAlias() {
-        // set default font
-        Font mf = settings.getMainFont();
-        // set antialias
-        setProperty("view.antiAlias", "true");
-        getPainter().setAntiAlias(new AntiAlias(settings.getAntiAlias()));
-        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+        if (settings!=null) {
+            // set default font
+            Font mf = settings.getMainFont();
+            // set antialias
+            setProperty("view.antiAlias", "true");
+            getPainter().setAntiAlias(new AntiAlias(settings.getAntiAlias()));
+            getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+        }
+    }
+    /**
+     * Resizing the editor component removes anti alias and resets line alignment.
+     * Fixed by overriding repaint and calling methods there.
+     */
+    @Override
+    public void repaint() {
+        setTextAntiAlias();
+        setLineNumberAlignment();
+        super.repaint();
     }
     /**
      * Sets tab-size for editor component.
