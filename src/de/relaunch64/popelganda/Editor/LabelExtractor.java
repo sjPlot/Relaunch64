@@ -153,7 +153,8 @@ public class LabelExtractor {
                 ass = new Assembler_tmpx();
                 break;
             default:
-                return new LinkedHashMap<>();
+                ass = new Assembler_dummy();
+                break;
         }
         return ass.getLabels(lineReader);
     }
