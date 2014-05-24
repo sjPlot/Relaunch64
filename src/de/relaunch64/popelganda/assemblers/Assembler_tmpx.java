@@ -95,4 +95,13 @@ public class Assembler_tmpx implements Assembler
     public LinkedHashMap getFunctions(LineNumberReader lineReader) {
         return new LinkedHashMap<>();
     }
+
+    @Override
+    public String labelGetStart(String line, int pos) {
+        String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
+        Pattern p = Pattern.compile("(?i)([a-z0-9_]*[a-z]\\b).*");
+        Matcher m = p.matcher(line2);
+        if (!m.matches()) return "";
+        return new StringBuffer(m.group(1)).reverse().toString();
+    }
 }

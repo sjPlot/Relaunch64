@@ -42,4 +42,14 @@ public interface Assembler
 
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
+
+    /**
+     * Returns the label name part before the cursor.
+     * 
+     * @param line Currect line content
+     * @param pos Caret position
+     * 
+     * @return Label name part before the cursor.
+     */
+    String labelGetStart(String line, int pos);
 }

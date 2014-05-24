@@ -60,4 +60,9 @@ public class Assembler_dummy implements Assembler
     public LinkedHashMap getFunctions(LineNumberReader lineReader) {
         return new LinkedHashMap<>();
     }
+
+    @Override
+    public String labelGetStart(String line, int pos) {
+        return "";
+    }
 }
