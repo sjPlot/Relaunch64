@@ -64,11 +64,8 @@ public class Assembler_64tass implements Assembler {
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-64tass.xml",
-           "/de/relaunch64/popelganda/resources/modes/alt/assembly-64tass.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-64tass.xml";
     }
 
     @Override

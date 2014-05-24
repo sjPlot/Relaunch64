@@ -47,9 +47,8 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-        };
+    public String syntaxFile() {
+        return "";
     }
 
     @Override

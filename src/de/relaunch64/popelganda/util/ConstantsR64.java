@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Relaunch64View;
+import de.relaunch64.popelganda.assemblers.*;
 import java.awt.Color;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -146,25 +147,15 @@ public class ConstantsR64 {
     public static final int COMPILER_DREAMASS = 4;
     public static final int COMPILER_DASM = 5;
     public static final int COMPILER_TMPX = 6;
-    
-    public static final String[] assemblymodes = new String[] {
-        "/de/relaunch64/popelganda/resources/modes/assembly-kick.xml",
-        "/de/relaunch64/popelganda/resources/modes/assembly-acme.xml",
-        "/de/relaunch64/popelganda/resources/modes/assembly-64tass.xml",
-        "/de/relaunch64/popelganda/resources/modes/assembly-ca65.xml",
-        "/de/relaunch64/popelganda/resources/modes/assembly-dreamass.xml",
-        "/de/relaunch64/popelganda/resources/modes/assembly-dasm.xml",
-        "/de/relaunch64/popelganda/resources/modes/assembly-tmpx.xml"
-    };
-    
-    public static final String[] alternativeassemblymodes = new String[] {
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-kick.xml",
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-acme.xml",
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-64tass.xml",
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-ca65.xml",
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-dreamass.xml",
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-dasm.xml",
-        "/de/relaunch64/popelganda/resources/modes/alt/assembly-tmpx.xml"
+
+    public static final Assembler assemblers[] = {
+        new Assembler_kick(),
+        new Assembler_acme(),
+        new Assembler_64tass(),
+        new Assembler_ca65(),
+        new Assembler_dreamass(),
+        new Assembler_dasm(),
+        new Assembler_tmpx()
     };
     
     // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE

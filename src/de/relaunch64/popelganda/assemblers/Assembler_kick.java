@@ -50,11 +50,8 @@ public class Assembler_kick implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-kick.xml",
-            "/de/relaunch64/popelganda/resources/modes/alt/assembly-kick.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-kick.xml";
     }
 
     @Override

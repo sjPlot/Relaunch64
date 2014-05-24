@@ -50,11 +50,8 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-dasm.xml",
-            "/de/relaunch64/popelganda/resources/modes/alt/assembly-dasm.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-dasm.xml";
     }
 
     @Override

@@ -64,11 +64,8 @@ public class Assembler_dreamass implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-dreamass.xml",
-            "/de/relaunch64/popelganda/resources/modes/alt/assembly-dreamass.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-dreamass.xml";
     }
 
     @Override

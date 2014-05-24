@@ -38,7 +38,7 @@ import java.util.LinkedHashMap;
 public interface Assembler 
 {
     String name();
-    String[] syntaxFiles();
+    String syntaxFile();
 
     LinkedHashMap getLabels(LineNumberReader lineReader);
 }

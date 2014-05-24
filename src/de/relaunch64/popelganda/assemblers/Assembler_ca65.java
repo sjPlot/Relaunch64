@@ -50,11 +50,8 @@ public class Assembler_ca65 implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-ca65.xml",
-            "/de/relaunch64/popelganda/resources/modes/alt/assembly-ca65.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-ca65.xml";
     }
 
     @Override

@@ -62,11 +62,8 @@ public class Assembler_acme implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-acme.xml",
-            "/de/relaunch64/popelganda/resources/modes/alt/assembly-acme.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-acme.xml";
     }
 
     @Override

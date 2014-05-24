@@ -34,7 +34,7 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.assemblers.*;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -120,34 +120,7 @@ public class LabelExtractor {
         StringReader sr = new StringReader(source);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-        Assembler ass;     // TODO: this should be used instead of compiler
-        switch (compiler) {
-            case ConstantsR64.COMPILER_64TASS:
-                ass = new Assembler_64tass();
-                break;
-            case ConstantsR64.COMPILER_ACME:
-                ass = new Assembler_acme();
-                break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-                ass = new Assembler_kick();
-                break;
-            case ConstantsR64.COMPILER_CA65:
-                ass = new Assembler_ca65();
-                break;
-            case ConstantsR64.COMPILER_DREAMASS:
-                ass = new Assembler_dreamass();
-                break;
-            case ConstantsR64.COMPILER_DASM:
-                ass = new Assembler_dasm();
-                break;
-            case ConstantsR64.COMPILER_TMPX:
-                ass = new Assembler_tmpx();
-                break;
-            default:
-                ass = new Assembler_dummy();
-                break;
-        }
-        return ass.getLabels(lineReader);
+        return ConstantsR64.assemblers[compiler].getLabels(lineReader);
     }
 
     public static ArrayList getLabelLineNumbers(String source, int compiler) {

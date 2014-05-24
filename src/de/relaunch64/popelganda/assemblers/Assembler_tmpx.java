@@ -62,11 +62,8 @@ public class Assembler_tmpx implements Assembler
     }
 
     @Override
-    public String[] syntaxFiles() {
-        return new String[] {
-            "/de/relaunch64/popelganda/resources/modes/assembly-tmpx.xml",
-            "/de/relaunch64/popelganda/resources/modes/alt/assembly-tmpx.xml"
-        };
+    public String syntaxFile() {
+        return "assembly-tmpx.xml";
     }
 
     @Override

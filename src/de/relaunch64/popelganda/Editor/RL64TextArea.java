@@ -253,8 +253,9 @@ public class RL64TextArea extends StandaloneTextArea {
     public final void setCompilerSyntax(int compiler) {
         // set syntax style
         Mode mode = new Mode("asm");
-        String pathToMode = (settings.getAlternativeAssemblyMode()) ? ConstantsR64.alternativeassemblymodes[compiler] : ConstantsR64.assemblymodes[compiler];
-        mode.setProperty("file", pathToMode);
+        String pathToMode = "/de/relaunch64/popelganda/resources/modes/";
+        if (settings.getAlternativeAssemblyMode()) pathToMode += "alt/";
+        mode.setProperty("file", pathToMode + ConstantsR64.assemblers[compiler].syntaxFile());
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         getBuffer().setMode(mode);
