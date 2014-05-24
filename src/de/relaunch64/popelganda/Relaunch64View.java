@@ -141,7 +141,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init swing components
         initComponents();
         // remove borders on OS X
-        if (settings.isOSX()) {
+        if (settings.isOSX() && !settings.getNimbusOnOSX()) {
             jTabbedPane1.setBorder(null);
             jTabbedPaneLogs.setBorder(null);
             jSplitPane1.setBorder(null);
@@ -1564,7 +1564,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // retrieve all installed Look and Feels
         UIManager.LookAndFeelInfo[] installed_laf = UIManager.getInstalledLookAndFeels();
         // init found-variables
-        String classname = "";
+        String nimbusclassname = "";
         String aquaclassname = "";
         // in case we find "nimbus" LAF, set this as default on non-mac-os
         // because it simply looks the best.
@@ -1574,19 +1574,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 aquaclassname = laf.getClassName();
             }
             if (laf.getClassName().toLowerCase().contains("nimbus")) {
-                classname = laf.getClassName();
+                nimbusclassname = laf.getClassName();
             }
         }
         try {
             // check which laf was found and set appropriate default value 
-            if (!aquaclassname.isEmpty()) {
-                // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            if (!aquaclassname.isEmpty() && !settings.getNimbusOnOSX()) {
                 UIManager.setLookAndFeel(aquaclassname);
             }
             // check which laf was found and set appropriate default value 
-            else if (!classname.isEmpty()) {
-                // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                UIManager.setLookAndFeel(classname);
+            else if (!nimbusclassname.isEmpty()) {
+                UIManager.setLookAndFeel(nimbusclassname);
+            }
+            else {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             }
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
@@ -1594,7 +1595,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (settings.isOSX()) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
             System.setProperty("apple.laf.useScreenMenuBar", "true");
-            // Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
     }
