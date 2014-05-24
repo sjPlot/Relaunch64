@@ -797,7 +797,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             try {
                 int nr = Integer.parseInt(text.substring(2));
                 if (nr>=1 && nr<=ColorSchemes.SCHEME_NAMES.length) {
-                    settings.setSyntaxScheme(nr-1);
+                    settings.setColorScheme(nr-1);
                     editorPanes.updateColorScheme();
                 }
             }

@@ -126,7 +126,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         for (String sn : ColorSchemes.SCHEME_NAMES) jComboBoxSyntaxScheme.addItem(sn);
         jComboBoxSyntaxScheme.setMaximumRowCount(jComboBoxSyntaxScheme.getItemCount());
         try {
-            jComboBoxSyntaxScheme.setSelectedIndex(settings.getSyntaxScheme());
+            jComboBoxSyntaxScheme.setSelectedIndex(settings.getColorScheme());
         }
         catch (IllegalArgumentException ex) {
         }
@@ -348,7 +348,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         catch (NumberFormatException ex) {
         }
         settings.setPreferredCompiler(jComboBoxPrefComp.getSelectedIndex());
-        settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
+        settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         if (jComboBoxLineNumberAlign.getSelectedIndex() == 0) settings.setLineNumerAlignment(Gutter.RIGHT);
         else if (jComboBoxLineNumberAlign.getSelectedIndex() == 1) settings.setLineNumerAlignment(Gutter.CENTER);
         else if (jComboBoxLineNumberAlign.getSelectedIndex() == 2) settings.setLineNumerAlignment(Gutter.LEFT);
@@ -358,7 +358,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     }
     @Action(enabledProperty = "modifiedTabScheme")
     public void applyColorScheme() {
-        settings.setSyntaxScheme(jComboBoxSyntaxScheme.getSelectedIndex());
+        settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         setModifiedTabScheme(false);
         editorPanes.updateColorScheme();
         editorPanes.updateAntiAlias();

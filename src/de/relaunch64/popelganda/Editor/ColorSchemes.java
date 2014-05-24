@@ -32,10 +32,7 @@
  */
 package de.relaunch64.popelganda.Editor;
 
-import de.relaunch64.popelganda.util.ConstantsR64;
 import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
 import org.gjt.sp.util.SyntaxUtilities;
 
 /**

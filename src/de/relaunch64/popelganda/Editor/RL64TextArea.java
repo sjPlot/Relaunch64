@@ -54,18 +54,42 @@ public class RL64TextArea extends StandaloneTextArea {
     private final KeyListener keyListener;
     private final Settings settings;
     private int compiler;
-    
+    /**
+     * auto-completion popup for labels and macros etc.
+     */
     private JPopupMenu suggestionPopup = null;
     private JList suggestionList;
     private String suggestionSubWord;
     private static final String sugListContainerName="sugListContainerName";
-    
+    /**
+     * constant that defines which directives should be shown in auto-completion
+     * popup. This one shows labels only.
+     */
     private static final int SUGGESTION_LABEL = 1;
+    /**
+     * constant that defines which directives should be shown in auto-completion
+     * popup. This one shows functions only.
+     */
     private static final int SUGGESTION_FUNCTION = 2;
+    /**
+     * constant that defines which directives should be shown in auto-completion
+     * popup. This one shows macros only.
+     */
     private static final int SUGGESTION_MACRO = 3;
+    /**
+     * constant that defines which directives should be shown in auto-completion
+     * popup. This one shows macros and funtions.
+     */
     private static final int SUGGESTION_FUNCTION_MACRO = 4;
+    /**
+     * constant that defines which directives should be shown in auto-completion
+     * popup. This one shows macros, functions and script-commands
+     */
     private static final int SUGGESTION_FUNCTION_MACRO_SCRIPT = 5;
-
+    /**
+     * Load key and editor settings on class creation. Oblogatory. Personal
+     * settings may be changed via setProperty().
+     */
     static {
         props = new Properties();
         if (System.getProperty("os.name").toLowerCase().startsWith("mac os")) {
@@ -117,7 +141,12 @@ public class RL64TextArea extends StandaloneTextArea {
         }
         return loadedProps;
     }
-
+    /**
+     * Processes key events. Default key handler of jEdit component, which should
+     * work slightly faster than key listener
+     * 
+     * @param evt 
+     */
     @Override
     public void processKeyEvent(KeyEvent evt) {
         if (evt.getID() == KeyEvent.KEY_RELEASED) {
@@ -127,7 +156,9 @@ public class RL64TextArea extends StandaloneTextArea {
             super.processKeyEvent(evt);
         }
     }
-
+    /**
+     * Class that handles key events on editor component.
+     */
     private class RL64KeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent evt) {
@@ -135,22 +166,19 @@ public class RL64TextArea extends StandaloneTextArea {
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestion(SUGGESTION_LABEL);
             }
-            // ctrl+space opens label-auto-completion
+            // ctrl+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
             }
-            /**
-             * OS X stuff. Default shortcuts don't work on OS X
-             */
+             // OS X stuff. Default shortcuts don't work on OS X
             if (evt.getKeyCode()==KeyEvent.VK_X && evt.isMetaDown()) {
                 cutText();
             }
-            /**
-             * OS X stuff. Default shortcuts don't work on OS X
-             */
+             // OS X stuff. Default shortcuts don't work on OS X
             if (evt.getKeyCode()==KeyEvent.VK_C && evt.isMetaDown()) {
                 copyText();
             }
+             // OS X stuff. Default shortcuts don't work on OS X
             if (evt.getKeyCode()==KeyEvent.VK_V && evt.isMetaDown()) {
                 pasteText();
             }
@@ -158,24 +186,27 @@ public class RL64TextArea extends StandaloneTextArea {
     }
 
     /**
-     * OS X stuff
+     * OS X stuff. Default shortcuts don't work on OS X
      */
-    protected void cutText() {
+    public void cutText() {
         Registers.cut(this,'$');
     }
     /**
-     * OS X stuff
+     * OS X stuff. Default shortcuts don't work on OS X
      */
-    protected void copyText() {
+    public void copyText() {
         Registers.copy(this,'$');
     }
     /**
-     * OS X stuff
+     * OS X stuff. Default shortcuts don't work on OS X
      */
-    protected void pasteText() {
+    public void pasteText() {
         Registers.paste(this,'$');
     }
-    
+    /**
+     * Sets the font of the editor component and the gutter. Furthermore,
+     * antialias-setting is updated
+     */
     public final void setFonts() {
         // set default font
         Font mf = settings.getMainFont();
@@ -196,12 +227,16 @@ public class RL64TextArea extends StandaloneTextArea {
         // set antialias
         setTextAntiAlias();
     }
-
+    /**
+     * Sets line number alignment og gutter.
+     */
     public final void setLineNumberAlignment() {
         // set line number alignment
         getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
     }
-    
+    /**
+     * Sets antialiasing for text.
+     */
     public final void setTextAntiAlias() {
         // set default font
         Font mf = settings.getMainFont();
@@ -210,7 +245,9 @@ public class RL64TextArea extends StandaloneTextArea {
         getPainter().setAntiAlias(new AntiAlias(settings.getAntiAlias()));
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
-    
+    /**
+     * Sets tab-size for editor component.
+     */
     public final void setTabs() {
         // TODO indent doesn't seem to work
         // set default font
@@ -219,7 +256,12 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("buffer.folding", "indent");
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
-    
+    /**
+     * Sets the compiler syntax. See {@code ConstantsR64.assemblymodes} for different values. This method
+     * loads an XML file with syntax definition for keywords etc.
+     * 
+     * @param compiler the compiler, which syntax definition should be used.
+     */
     public final void setCompilerSyntax(int compiler) {
         // set syntax style
         Mode mode = new Mode("asm");
@@ -229,10 +271,13 @@ public class RL64TextArea extends StandaloneTextArea {
         // add mode to buffer
         getBuffer().setMode(mode);
     }
-    
+    /**
+     * Sets the color scheme / highlight color. No parameter is needed, since the 
+     * color scheme value is read from Settings class.
+     */
     public final void setSyntaxScheme() {
-        int scheme = settings.getSyntaxScheme();
-        // TODO alternative color schemes need other color values for literal3 and 4, and keyword 4
+        // get color scheme
+        int scheme = settings.getColorScheme();
         // syntax colors for editor
         setProperty("view.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
         setProperty("view.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND));
@@ -241,11 +286,13 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.style.comment3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
         setProperty("view.style.comment4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMMENT));
         setProperty("view.style.digit", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NUMBER));
+        // the alternative assembly mode highlights all numbers is same color
         if (settings.getAlternativeAssemblyMode()) {
             setProperty("view.style.literal3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
             setProperty("view.style.literal4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_STRING));
             setProperty("view.style.keyword4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD));
         }
+        // the default assembly mode highlights values and addresses in different colors
         else {
             setProperty("view.style.literal3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_BIN));
             setProperty("view.style.literal4", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_HEX));
@@ -271,7 +318,6 @@ public class RL64TextArea extends StandaloneTextArea {
         // set for- and background color of text area
         getPainter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND), Color.black));
         getPainter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL), Color.black));
-        // TODO gutter linenumber background not shown correctly, on OS X!
         // set for- and background color of line numbers
         getGutter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND), Color.black));
         getGutter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR), Color.black));
@@ -283,16 +329,24 @@ public class RL64TextArea extends StandaloneTextArea {
         // or if there's a specific order?
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
-    
+    /**
+     * Set compiler of current editor / buffer. Frequently needed information, for various functions,
+     * so we put this variable as a global field for this class.
+     * 
+     * @param c 
+     */
     public final void setCompiler(int c) {
         this.compiler = c;
     }
     public int getCompiler() {
         return compiler;
     }
-//    public RL64TextArea() {
-//        super(propertyManager);
-//    }
+    /**
+     * The StandaloneTextArea component of jEdit. Provides fast syntax highlighting and some other
+     * useful features. Replaces the default Swing JEditorPane.
+     * 
+     * @param settings 
+     */
     public RL64TextArea(Settings settings) {
         super(propertyManager);
         // save settings
@@ -305,12 +359,13 @@ public class RL64TextArea extends StandaloneTextArea {
         setTabs();
         // set fonts
         setFonts();
-        // TODO perhaps we have to derive from http://www.jedit.org/api/org/gjt/sp/jedit/input/TextAreaInputHandler.html
+        // setup keylistener
         keyListener = new RL64KeyListener();
     }
     /**
      * Specified the list of delimiter strings that separate words/token for recodgnizing
      * the syntax highlighting.
+     * 
      * @param compiler A constants indicating which ASM compiler is used. Refer to ConstantsR64
      * to retrieve the list of constants used.
      * @return A String with all delimiters for the highlight tokens.
@@ -378,11 +433,14 @@ public class RL64TextArea extends StandaloneTextArea {
         return str;
     }
     /**
+     * Create the auto-completion popup.
+     * 
      * @author Guillaume Polet
      * 
      * This example was taken from
      * http://stackoverflow.com/a/10883946/2094622
      * and modified for own purposes.
+     * 
      * @param type
      */
     protected void showSuggestion(int type) {

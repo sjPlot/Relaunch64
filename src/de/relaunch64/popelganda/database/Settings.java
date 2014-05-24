@@ -581,7 +581,7 @@ public class Settings {
         }
         el.setText(String.valueOf(compiler));
     }
-    public int getSyntaxScheme() {
+    public int getColorScheme() {
         Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
         try {
             if (el!=null) return Integer.parseInt(el.getText());
@@ -590,7 +590,7 @@ public class Settings {
         }
         return ColorSchemes.SCHEME_DEFAULT;
     }
-    public void setSyntaxScheme(int scheme) {
+    public void setColorScheme(int scheme) {
         Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
         if (null==el) {
             el = new Element(SETTING_SYNTAX_SCHEME);
