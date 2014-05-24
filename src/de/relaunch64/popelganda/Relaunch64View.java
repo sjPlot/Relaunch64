@@ -89,8 +89,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.PopupMenuEvent;
-import org.gjt.sp.jedit.JEditActionSet;
-import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
@@ -787,11 +785,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setLineNumerAlignment(Gutter.RIGHT);
                 editorPanes.updateLineNumberAlignment();
                 break;
-            case "d":
-                for (String a : editorPanes.getActiveEditorPane().getActionContext().getActionNames()) System.out.println(a);
-                JEditActionSet<JEditBeanShellAction> jbs = editorPanes.getActiveEditorPane().getActionContext().getActionSetForAction("show-suggestion-label");
-                // jbs.addAction(new JEditBeanShellAction("show-suggestion", "textArea.showSuggestion(int type);", "", true, true, true));
-                break;
         }
         if (text.startsWith("cs")) {
             try {
@@ -977,6 +970,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void redoAction() {
         editorPanes.redo();
+    }
+    @Action
+    public void cutAction() {
+        editorPanes.getActiveEditorPane().cutText();
+    }
+    @Action
+    public void copyAction() {
+        editorPanes.getActiveEditorPane().copyText();
+    }
+    @Action
+    public void pasteAction() {
+        editorPanes.getActiveEditorPane().pasteText();
     }
     @Action
     public void gotoLine() {
@@ -1887,6 +1892,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         undoMenuItem = new javax.swing.JMenuItem();
         redoMenuItem = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
+        cutMenuItem = new javax.swing.JMenuItem();
+        copyMenuItem = new javax.swing.JMenuItem();
+        pasteMenuItem = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         selectAllMenuItem = new javax.swing.JMenuItem();
         findMenu = new javax.swing.JMenu();
         findStartMenuItem = new javax.swing.JMenuItem();
@@ -2374,6 +2383,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator10.setName("jSeparator10"); // NOI18N
         editMenu.add(jSeparator10);
 
+        cutMenuItem.setAction(actionMap.get("cutAction")); // NOI18N
+        cutMenuItem.setName("cutMenuItem"); // NOI18N
+        editMenu.add(cutMenuItem);
+
+        copyMenuItem.setAction(actionMap.get("copyAction")); // NOI18N
+        copyMenuItem.setName("copyMenuItem"); // NOI18N
+        editMenu.add(copyMenuItem);
+
+        pasteMenuItem.setAction(actionMap.get("pasteAction")); // NOI18N
+        pasteMenuItem.setName("pasteMenuItem"); // NOI18N
+        editMenu.add(pasteMenuItem);
+
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        editMenu.add(jSeparator5);
+
         selectAllMenuItem.setAction(actionMap.get("selectAllText")); // NOI18N
         selectAllMenuItem.setName("selectAllMenuItem"); // NOI18N
         editMenu.add(selectAllMenuItem);
@@ -2789,6 +2813,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
@@ -2808,6 +2833,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFileMenuItem;
+    private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem quickRefMenuItem;
     private javax.swing.JMenuItem recent1MenuItem;
     private javax.swing.JMenuItem recent2MenuItem;

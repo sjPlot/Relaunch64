@@ -170,18 +170,6 @@ public class RL64TextArea extends StandaloneTextArea {
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
             }
-             // OS X stuff. Default shortcuts don't work on OS X
-            if (evt.getKeyCode()==KeyEvent.VK_X && evt.isMetaDown()) {
-                cutText();
-            }
-             // OS X stuff. Default shortcuts don't work on OS X
-            if (evt.getKeyCode()==KeyEvent.VK_C && evt.isMetaDown()) {
-                copyText();
-            }
-             // OS X stuff. Default shortcuts don't work on OS X
-            if (evt.getKeyCode()==KeyEvent.VK_V && evt.isMetaDown()) {
-                pasteText();
-            }
         }
     }
 

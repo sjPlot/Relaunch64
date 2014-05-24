@@ -751,24 +751,24 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="cutMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="actionMap.get(&quot;cut&quot;)" type="code"/>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="cutAction" methodName="cutAction"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="cutMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="copyMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="actionMap.get(&quot;copy&quot;)" type="code"/>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="copyAction" methodName="copyAction"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="copyMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="pasteMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="actionMap.get(&quot;paste&quot;)" type="code"/>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="pasteAction" methodName="pasteAction"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="pasteMenuItem" noResource="true"/>
               </Properties>
