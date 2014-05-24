@@ -23,11 +23,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -38,6 +38,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
@@ -118,8 +119,7 @@ public class RL64TextArea extends StandaloneTextArea {
     }
 
     @Override
-    public void processKeyEvent(KeyEvent evt)
-    {
+    public void processKeyEvent(KeyEvent evt) {
         if (evt.getID() == KeyEvent.KEY_RELEASED) {
             keyListener.keyReleased(evt);
         }
@@ -135,9 +135,47 @@ public class RL64TextArea extends StandaloneTextArea {
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestion(SUGGESTION_LABEL);
             }
+            // ctrl+space opens label-auto-completion
+            else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
+                showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
+            }
+            /**
+             * OS X stuff. Default shortcuts don't work on OS X
+             */
+            if (evt.getKeyCode()==KeyEvent.VK_X && evt.isMetaDown()) {
+                cutText();
+            }
+            /**
+             * OS X stuff. Default shortcuts don't work on OS X
+             */
+            if (evt.getKeyCode()==KeyEvent.VK_C && evt.isMetaDown()) {
+                copyText();
+            }
+            if (evt.getKeyCode()==KeyEvent.VK_V && evt.isMetaDown()) {
+                pasteText();
+            }
         }
     }
 
+    /**
+     * OS X stuff
+     */
+    protected void cutText() {
+        Registers.cut(this,'$');
+    }
+    /**
+     * OS X stuff
+     */
+    protected void copyText() {
+        Registers.copy(this,'$');
+    }
+    /**
+     * OS X stuff
+     */
+    protected void pasteText() {
+        Registers.paste(this,'$');
+    }
+    
     public final void setFonts() {
         // set default font
         Font mf = settings.getMainFont();
@@ -501,7 +539,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * @return 
      */
     public String getCaretString(boolean wholeWord, String specialDelimiter) {
-        final int position = getCaretPosition()-getLineStartOffset(getCaretLine());
+        final int position = getCaretPosition()-getLineStartOffset(getCaretLine())-1;
         String text = getLineText(getCaretLine());
         String addDelim;
         switch (getCompiler()) {
