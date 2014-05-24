@@ -386,7 +386,7 @@ public class RL64TextArea extends StandaloneTextArea {
                     break;
                 case SUGGESTION_LABEL:
                     // retrieve label list, remove last colon
-                    labels = LabelExtractor.getLabelNames(suggestionSubWord.trim(), true, getBuffer().getText(), getCompiler());
+                    labels = LabelExtractor.getLabelNames(suggestionSubWord.trim(), getBuffer().getText(), getCompiler());
                     break;
                 case SUGGESTION_FUNCTION_MACRO:
                     // retrieve label list, remove last colon

@@ -1051,13 +1051,13 @@ public class EditorPanes {
         gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
                                                 getActiveEditorPane().getCaretLine()+1,
                                                 LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
-                                                LabelExtractor.getLabelNames(false, false, getActiveSourceCode(), getActiveCompiler())));
+                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler())));
     }
     public void gotoPrevLabel() {
         gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                                                 getActiveEditorPane().getCaretLine()+1,
                                                 LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
-                                                LabelExtractor.getLabelNames(false, false, getActiveSourceCode(), getActiveCompiler())));
+                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler())));
     }
     public void gotoNextSection() {
         gotoSection(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
