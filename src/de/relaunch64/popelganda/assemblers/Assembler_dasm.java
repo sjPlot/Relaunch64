@@ -55,7 +55,7 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader) {
+    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumbers) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*"); // always in first column
         String line;
@@ -76,5 +76,10 @@ public class Assembler_dasm implements Assembler
         catch (IOException ex) {
         }
         return labelValues;
+    }
+
+    @Override
+    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
+        return new LinkedHashMap<>();
     }
 }

@@ -67,7 +67,7 @@ public class Assembler_tmpx implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader) {
+    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z][a-zA-Z0-9_]*\\b).*");
         String line;
@@ -89,5 +89,10 @@ public class Assembler_tmpx implements Assembler
         catch (IOException ex) {
         }
         return labelValues;
+    }
+
+    @Override
+    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
+        return new LinkedHashMap<>();
     }
 }

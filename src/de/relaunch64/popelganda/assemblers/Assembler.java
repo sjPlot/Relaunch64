@@ -40,5 +40,6 @@ public interface Assembler
     String name();
     String syntaxFile();
 
-    LinkedHashMap getLabels(LineNumberReader lineReader);
+    LinkedHashMap getLabels(LineNumberReader lineReader, int line);
+    LinkedHashMap getFunctions(LineNumberReader lineReader);
 }

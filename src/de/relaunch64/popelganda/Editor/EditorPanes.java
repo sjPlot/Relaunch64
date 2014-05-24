@@ -294,10 +294,10 @@ public class EditorPanes {
         gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), getCompilerCommentString()), name);
     }
     public void gotoLabel(String name) {
-        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveCompiler()), name);
+        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveCompiler(), 0), name);
     }
     public void gotoLabel(String name, int selectedTab) {
-        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveCompiler()), name);
+        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveCompiler(), 0), name);
     }
     public void gotoFunction(String name) {
         gotoLine(FunctionExtractor.getFunctions(getActiveSourceCode(), getActiveCompiler()), name);
@@ -1024,14 +1024,14 @@ public class EditorPanes {
         // goto next label
         gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
                                                 getActiveEditorPane().getCaretLine()+1,
-                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
-                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler())));
+                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0),
+                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler(), 0)));
     }
     public void gotoPrevLabel() {
         gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                                                 getActiveEditorPane().getCaretLine()+1,
-                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler()),
-                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler())));
+                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0),
+                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler(), 0)));
     }
     public void gotoNextSection() {
         gotoSection(EditorPaneTools.findJumpToken(DIRECTION_NEXT,

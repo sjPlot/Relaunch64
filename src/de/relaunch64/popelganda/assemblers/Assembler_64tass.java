@@ -69,7 +69,7 @@ public class Assembler_64tass implements Assembler {
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader) {
+    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         String line;
         Matcher m;
@@ -129,5 +129,10 @@ public class Assembler_64tass implements Assembler {
         catch (IOException ex) {
         }
         return labelValues;
+    }
+
+    @Override
+    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
+        return new LinkedHashMap<>();
     }
 }

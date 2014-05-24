@@ -383,7 +383,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
                             break;
                         case GOTO_LABEL:
-                            token = LabelExtractor.getLabelNames(true, editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
+                            token = LabelExtractor.getLabelNames(true, editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex), 0);
                             break;
                         case GOTO_FUNCTION:
                             token = FunctionExtractor.getFunctionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));

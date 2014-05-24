@@ -67,10 +67,12 @@ public class Assembler_acme implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader) {
+    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*");
+        LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
+        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b).*");
         String line;
+        boolean scopeFound = false;
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
@@ -79,7 +81,23 @@ public class Assembler_acme implements Assembler
                 String label = m.group("label");
 
                 if (label != null) {
+                    if (lineNumber > 0) {
+                        if (label.charAt(0) == '.') { // local label
+                            if (scopeFound) continue;
+                            if (!localLabelValues.containsValue(label)) {
+                                localLabelValues.put(lineReader.getLineNumber(), label); // add if not listed already
+                            }
+                            continue;
+                        } 
+                    }
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
+                    if (lineNumber > 0) {
+                        if (lineNumber < lineReader.getLineNumber()) {
+                            scopeFound = true;
+                        } else {
+                            localLabelValues.clear();
+                        }
+                    }
                     if (!labelValues.containsValue(label)) {
                         labelValues.put(lineReader.getLineNumber(), label); // add if not listed already
                     }
@@ -88,6 +106,12 @@ public class Assembler_acme implements Assembler
         }
         catch (IOException ex) {
         }
+        labelValues.putAll(localLabelValues);
         return labelValues;
+    }
+
+    @Override
+    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
+        return new LinkedHashMap<>();
     }
 }

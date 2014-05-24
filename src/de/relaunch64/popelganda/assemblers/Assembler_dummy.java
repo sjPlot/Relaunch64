@@ -52,7 +52,12 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader) {
+    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
+        return new LinkedHashMap<>();
+    }
+
+    @Override
+    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
         return new LinkedHashMap<>();
     }
 }
