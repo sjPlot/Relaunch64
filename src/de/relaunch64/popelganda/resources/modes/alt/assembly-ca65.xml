@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!--
+	ca65 Assembly mode for jedit by Soci/Singular (soci at c64.rulez.org)
+-->
+
+<MODE>
+
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE=";" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
+                <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/^&amp;*" />
+	</PROPS>
+
+	<RULES HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="TRUE">
+
+		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+
+                <SEQ_REGEXP HASH_CHARS="$%0123456789" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]+|[0-9][0-9a-fA-F]*h\b|%[01]+</SEQ_REGEXP>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR" AT_WHITESPACE_END="TRUE">:</MARK_PREVIOUS>
+
+		<KEYWORDS>
+                        <KEYWORD3>.a16</KEYWORD3>
+                        <KEYWORD3>.a8</KEYWORD3>
+                        <KEYWORD3>.align</KEYWORD3>
+                        <KEYWORD3>.assert</KEYWORD3>
+                        <KEYWORD3>.autoimport</KEYWORD3>
+                        <KEYWORD3>.bss</KEYWORD3>
+                        <KEYWORD3>.case</KEYWORD3>
+                        <KEYWORD3>.charmap</KEYWORD3>
+                        <KEYWORD3>.code</KEYWORD3>
+                        <KEYWORD3>.condes</KEYWORD3>
+                        <KEYWORD3>.constructor</KEYWORD3>
+                        <KEYWORD3>.data</KEYWORD3>
+                        <KEYWORD3>.debuginfo</KEYWORD3>
+                        <KEYWORD3>.def</KEYWORD3>
+                        <KEYWORD3>.define</KEYWORD3>
+                        <KEYWORD3>.defined</KEYWORD3>
+                        <KEYWORD3>.delmac</KEYWORD3>
+                        <KEYWORD3>.delmacro</KEYWORD3>
+                        <KEYWORD3>.destructor</KEYWORD3>
+                        <KEYWORD3>.else</KEYWORD3>
+                        <KEYWORD3>.elseif</KEYWORD3>
+                        <KEYWORD3>.end</KEYWORD3>
+                        <KEYWORD3>.endenum</KEYWORD3>
+                        <KEYWORD3>.endif</KEYWORD3>
+                        <KEYWORD3>.endmac</KEYWORD3>
+                        <KEYWORD3>.endmacro</KEYWORD3>
+                        <KEYWORD3>.endproc</KEYWORD3>
+                        <KEYWORD3>.endrep</KEYWORD3>
+                        <KEYWORD3>.endrepeat</KEYWORD3>
+                        <KEYWORD3>.endscope</KEYWORD3>
+                        <KEYWORD3>.endstruct</KEYWORD3>
+                        <KEYWORD3>.enum</KEYWORD3>
+                        <KEYWORD3>.error</KEYWORD3>
+                        <KEYWORD3>.exitmac</KEYWORD3>
+                        <KEYWORD3>.exitmacro</KEYWORD3>
+                        <KEYWORD3>.export</KEYWORD3>
+                        <KEYWORD3>.exportzp</KEYWORD3>
+                        <KEYWORD3>.faraddr</KEYWORD3>
+                        <KEYWORD3>.fatal</KEYWORD3>
+                        <KEYWORD3>.feature</KEYWORD3>
+                        <KEYWORD3>.fileopt</KEYWORD3>
+                        <KEYWORD3>.fopt</KEYWORD3>
+                        <KEYWORD3>.forceimport</KEYWORD3>
+                        <KEYWORD3>.global</KEYWORD3>
+                        <KEYWORD3>.globalzp</KEYWORD3>
+                        <KEYWORD3>.i16</KEYWORD3>
+                        <KEYWORD3>.i8</KEYWORD3>
+                        <KEYWORD3>.if</KEYWORD3>
+                        <KEYWORD3>.ifblank</KEYWORD3>
+                        <KEYWORD3>.ifconst</KEYWORD3>
+                        <KEYWORD3>.ifdef</KEYWORD3>
+                        <KEYWORD3>.ifnblank</KEYWORD3>
+                        <KEYWORD3>.ifndef</KEYWORD3>
+                        <KEYWORD3>.ifnref</KEYWORD3>
+                        <KEYWORD3>.ifp02</KEYWORD3>
+                        <KEYWORD3>.ifp816</KEYWORD3>
+                        <KEYWORD3>.ifpc02</KEYWORD3>
+                        <KEYWORD3>.ifpsc02</KEYWORD3>
+                        <KEYWORD3>.ifref</KEYWORD3>
+                        <KEYWORD3>.import</KEYWORD3>
+                        <KEYWORD3>.importzp</KEYWORD3>
+                        <KEYWORD3>.include</KEYWORD3>
+                        <KEYWORD3>.interruptor</KEYWORD3>
+                        <KEYWORD3>.linecont</KEYWORD3>
+                        <KEYWORD3>.list</KEYWORD3>
+                        <KEYWORD3>.listbytes</KEYWORD3>
+                        <KEYWORD3>.local</KEYWORD3>
+                        <KEYWORD3>.localchar</KEYWORD3>
+                        <KEYWORD3>.mac</KEYWORD3>
+                        <KEYWORD3>.macpack</KEYWORD3>
+                        <KEYWORD3>.macro</KEYWORD3>
+                        <KEYWORD3>.org</KEYWORD3>
+                        <KEYWORD3>.out</KEYWORD3>
+                        <KEYWORD3>.p02</KEYWORD3>
+                        <KEYWORD3>.p816</KEYWORD3>
+                        <KEYWORD3>.pagelen</KEYWORD3>
+                        <KEYWORD3>.pagelength</KEYWORD3>
+                        <KEYWORD3>.pc02</KEYWORD3>
+                        <KEYWORD3>.popcpu</KEYWORD3>
+                        <KEYWORD3>.popseg</KEYWORD3>
+                        <KEYWORD3>.proc</KEYWORD3>
+                        <KEYWORD3>.psc02</KEYWORD3>
+                        <KEYWORD3>.pushcpu</KEYWORD3>
+                        <KEYWORD3>.pushseg</KEYWORD3>
+                        <KEYWORD3>.reloc</KEYWORD3>
+                        <KEYWORD3>.repeat</KEYWORD3>
+                        <KEYWORD3>.res</KEYWORD3>
+                        <KEYWORD3>.rodata</KEYWORD3>
+                        <KEYWORD3>.scope</KEYWORD3>
+                        <KEYWORD3>.segment</KEYWORD3>
+                        <KEYWORD3>.setcpu</KEYWORD3>
+                        <KEYWORD3>.smart</KEYWORD3>
+                        <KEYWORD3>.struct</KEYWORD3>
+                        <KEYWORD3>.sunplus</KEYWORD3>
+                        <KEYWORD3>.undef</KEYWORD3>
+                        <KEYWORD3>.undefine</KEYWORD3>
+                        <KEYWORD3>.warning</KEYWORD3>
+                        <KEYWORD3>.zeropage</KEYWORD3>
+
+                        <KEYWORD4>.addr</KEYWORD4>
+                        <KEYWORD4>.asciiz</KEYWORD4>
+                        <KEYWORD4>.bankbytes</KEYWORD4>
+                        <KEYWORD4>.byt</KEYWORD4>
+                        <KEYWORD4>.byte</KEYWORD4>
+                        <KEYWORD4>.dbyt</KEYWORD4>
+                        <KEYWORD4>.dword</KEYWORD4>
+                        <KEYWORD4>.hibytes</KEYWORD4>
+                        <KEYWORD4>.incbin</KEYWORD4>
+                        <KEYWORD4>.lobytes</KEYWORD4>
+                        <KEYWORD4>.tag</KEYWORD4>
+                        <KEYWORD4>.word</KEYWORD4>
+
+			<!-- Instructions: standard -->
+                        <KEYWORD1>adc</KEYWORD1>
+                        <KEYWORD1>and</KEYWORD1>
+                        <KEYWORD1>asl</KEYWORD1>
+                        <KEYWORD1>bcc</KEYWORD1>
+                        <KEYWORD1>bcs</KEYWORD1>
+                        <KEYWORD1>beq</KEYWORD1>
+                        <KEYWORD1>bit</KEYWORD1>
+                        <KEYWORD1>bmi</KEYWORD1>
+                        <KEYWORD1>bne</KEYWORD1>
+                        <KEYWORD1>bpl</KEYWORD1>
+                        <KEYWORD1>brk</KEYWORD1>
+                        <KEYWORD1>bvc</KEYWORD1>
+                        <KEYWORD1>bvs</KEYWORD1>
+                        <KEYWORD1>clc</KEYWORD1>
+                        <KEYWORD1>cld</KEYWORD1>
+                        <KEYWORD1>cli</KEYWORD1>
+                        <KEYWORD1>clv</KEYWORD1>
+                        <KEYWORD1>cmp</KEYWORD1>
+                        <KEYWORD1>cpx</KEYWORD1>
+                        <KEYWORD1>cpy</KEYWORD1>
+                        <KEYWORD1>dec</KEYWORD1>
+                        <KEYWORD1>dex</KEYWORD1>
+                        <KEYWORD1>dey</KEYWORD1>
+                        <KEYWORD1>eor</KEYWORD1>
+                        <KEYWORD1>inc</KEYWORD1>
+                        <KEYWORD1>inx</KEYWORD1>
+                        <KEYWORD1>iny</KEYWORD1>
+                        <KEYWORD1>jmp</KEYWORD1>
+                        <KEYWORD1>jsr</KEYWORD1>
+                        <KEYWORD1>lda</KEYWORD1>
+                        <KEYWORD1>ldx</KEYWORD1>
+                        <KEYWORD1>ldy</KEYWORD1>
+                        <KEYWORD1>lsr</KEYWORD1>
+                        <KEYWORD1>nop</KEYWORD1>
+                        <KEYWORD1>ora</KEYWORD1>
+                        <KEYWORD1>pha</KEYWORD1>
+                        <KEYWORD1>php</KEYWORD1>
+                        <KEYWORD1>pla</KEYWORD1>
+                        <KEYWORD1>plp</KEYWORD1>
+                        <KEYWORD1>rol</KEYWORD1>
+                        <KEYWORD1>ror</KEYWORD1>
+                        <KEYWORD1>rti</KEYWORD1>
+                        <KEYWORD1>rts</KEYWORD1>
+                        <KEYWORD1>sbc</KEYWORD1>
+                        <KEYWORD1>sec</KEYWORD1>
+                        <KEYWORD1>sed</KEYWORD1>
+                        <KEYWORD1>sei</KEYWORD1>
+                        <KEYWORD1>sta</KEYWORD1>
+                        <KEYWORD1>stx</KEYWORD1>
+                        <KEYWORD1>sty</KEYWORD1>
+                        <KEYWORD1>tax</KEYWORD1>
+                        <KEYWORD1>tay</KEYWORD1>
+                        <KEYWORD1>tsx</KEYWORD1>
+                        <KEYWORD1>txa</KEYWORD1>
+                        <KEYWORD1>txs</KEYWORD1>
+                        <KEYWORD1>tya</KEYWORD1>
+
+			<!-- Instructions: Illegal -->
+                        <KEYWORD2>alr</KEYWORD2>
+                        <KEYWORD2>anc</KEYWORD2>
+                        <KEYWORD2>arr</KEYWORD2>
+                        <KEYWORD2>axs</KEYWORD2>
+                        <KEYWORD2>dcp</KEYWORD2>
+                        <KEYWORD2>isc</KEYWORD2>
+                        <KEYWORD2>las</KEYWORD2>
+                        <KEYWORD2>lax</KEYWORD2>
+                        <KEYWORD2>rla</KEYWORD2>
+                        <KEYWORD2>rra</KEYWORD2>
+                        <KEYWORD2>sax</KEYWORD2>
+                        <KEYWORD2>slo</KEYWORD2>
+                        <KEYWORD2>sre</KEYWORD2>
+
+			<!-- Predefined constants -->
+
+                        <LITERAL3>.cpu</LITERAL3>
+                        <LITERAL3>.paramcount</LITERAL3>
+                        <LITERAL3>.time</LITERAL3>
+                        <LITERAL3>.version </LITERAL3>
+
+			<!-- Functions -->
+                        <FUNCTION>.bankbyte</FUNCTION>
+                        <FUNCTION>.blank</FUNCTION>
+                        <FUNCTION>.concat</FUNCTION>
+                        <FUNCTION>.const</FUNCTION>
+                        <FUNCTION>.hibyte</FUNCTION>
+                        <FUNCTION>.hiword</FUNCTION>
+                        <FUNCTION>.ident</FUNCTION>
+                        <FUNCTION>.left</FUNCTION>
+                        <FUNCTION>.lobyte</FUNCTION>
+                        <FUNCTION>.loword</FUNCTION>
+                        <FUNCTION>.match</FUNCTION>
+                        <FUNCTION>.mid</FUNCTION>
+                        <FUNCTION>.ref</FUNCTION>
+                        <FUNCTION>.referenced</FUNCTION>
+                        <FUNCTION>.right</FUNCTION>
+                        <FUNCTION>.sizeof</FUNCTION>
+                        <FUNCTION>.strat</FUNCTION>
+                        <FUNCTION>.sprintf</FUNCTION>
+                        <FUNCTION>.string</FUNCTION>
+                        <FUNCTION>.strlen</FUNCTION>
+                        <FUNCTION>.tcount</FUNCTION>
+                        <FUNCTION>.xmatch</FUNCTION>
+		</KEYWORDS>
+
+                <SEQ_REGEXP HASH_CHARS="@ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z@][A-Za-z0-9_]*(?=:)</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-~!^*/+&lt;&gt;=&amp;|" TYPE="OPERATOR">[-!^*/+&lt;&gt;=&amp;|]</SEQ_REGEXP>
+	</RULES>
+</MODE>

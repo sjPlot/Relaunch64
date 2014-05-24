@@ -238,19 +238,7 @@
                         <FUNCTION>PerspectiveMatrix</FUNCTION>
 		</KEYWORDS>
 
-		<SEQ TYPE="OPERATOR">+</SEQ>
-		<SEQ TYPE="OPERATOR">-</SEQ>
-		<SEQ TYPE="OPERATOR">/</SEQ>
-		<SEQ TYPE="OPERATOR">*</SEQ>
-
-		<SEQ TYPE="OPERATOR">|</SEQ>
-		<SEQ TYPE="OPERATOR">^</SEQ>
-		<SEQ TYPE="OPERATOR">&amp;</SEQ>
-
-		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;</SEQ>
-
                 <SEQ_REGEXP HASH_CHARS="!" AT_WHITESPACE_END="TRUE" TYPE="LABEL">![A-Za-z_][A-Za-z0-9_]*(?=:)</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="-^*/+&lt;&gt;=&amp;|" TYPE="OPERATOR">[-^*/+&lt;&gt;=&amp;|]</SEQ_REGEXP>
 	</RULES>
 </MODE>
