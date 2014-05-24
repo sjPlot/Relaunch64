@@ -164,39 +164,39 @@
                         <KEYWORD2>xaa</KEYWORD2>
 
 			<!-- Predefined constants -->
-                        <LITERAL3>PI</LITERAL3>
-                        <LITERAL3>E</LITERAL3>
-                        <LITERAL3>AT_ABSOLUTE</LITERAL3>
-                        <LITERAL3>AT_ABSOLUTEX</LITERAL3>
-                        <LITERAL3>AT_ABSOLUTEY</LITERAL3>
-                        <LITERAL3>AT_IMMEDIATE</LITERAL3>
-                        <LITERAL3>AT_INDIRECT</LITERAL3>
-                        <LITERAL3>AT_IZEROPAGEX</LITERAL3>
-                        <LITERAL3>AT_IZEROPAGEY</LITERAL3>
-                        <LITERAL3>AT_NONE</LITERAL3>
-                        <LITERAL3>BF_C64FILE</LITERAL3>
-                        <LITERAL3>BF_BITMAP_SINGLECOLOR</LITERAL3>
-                        <LITERAL3>BF_KOALA</LITERAL3>
-                        <LITERAL3>BF_FLI</LITERAL3>
-                        <LITERAL3>BLACK</LITERAL3>
-                        <LITERAL3>WHITE</LITERAL3>
-                        <LITERAL3>RED</LITERAL3>
-                        <LITERAL3>CYAN</LITERAL3>
-                        <LITERAL3>PURPLE</LITERAL3>
-                        <LITERAL3>GREEN</LITERAL3>
-                        <LITERAL3>BLUE</LITERAL3>
-                        <LITERAL3>YELLOW</LITERAL3>
-                        <LITERAL3>ORANGE</LITERAL3>
-                        <LITERAL3>BROWN</LITERAL3>
-                        <LITERAL3>LIGHT_RED</LITERAL3>
-                        <LITERAL3>DARK_GRAY</LITERAL3>
-                        <LITERAL3>DARK_GREY</LITERAL3>
-                        <LITERAL3>GRAY</LITERAL3>
-                        <LITERAL3>GREY</LITERAL3>
-                        <LITERAL3>LIGHT_GREEN</LITERAL3>
-                        <LITERAL3>LIGHT_BLUE</LITERAL3>
-                        <LITERAL3>LIGHT_GRAY</LITERAL3>
-                        <LITERAL3>LIGHT_GREY</LITERAL3>
+                        <OPERATOR>PI</OPERATOR>
+                        <OPERATOR>E</OPERATOR>
+                        <OPERATOR>AT_ABSOLUTE</OPERATOR>
+                        <OPERATOR>AT_ABSOLUTEX</OPERATOR>
+                        <OPERATOR>AT_ABSOLUTEY</OPERATOR>
+                        <OPERATOR>AT_IMMEDIATE</OPERATOR>
+                        <OPERATOR>AT_INDIRECT</OPERATOR>
+                        <OPERATOR>AT_IZEROPAGEX</OPERATOR>
+                        <OPERATOR>AT_IZEROPAGEY</OPERATOR>
+                        <OPERATOR>AT_NONE</OPERATOR>
+                        <OPERATOR>BF_C64FILE</OPERATOR>
+                        <OPERATOR>BF_BITMAP_SINGLECOLOR</OPERATOR>
+                        <OPERATOR>BF_KOALA</OPERATOR>
+                        <OPERATOR>BF_FLI</OPERATOR>
+                        <OPERATOR>BLACK</OPERATOR>
+                        <OPERATOR>WHITE</OPERATOR>
+                        <OPERATOR>RED</OPERATOR>
+                        <OPERATOR>CYAN</OPERATOR>
+                        <OPERATOR>PURPLE</OPERATOR>
+                        <OPERATOR>GREEN</OPERATOR>
+                        <OPERATOR>BLUE</OPERATOR>
+                        <OPERATOR>YELLOW</OPERATOR>
+                        <OPERATOR>ORANGE</OPERATOR>
+                        <OPERATOR>BROWN</OPERATOR>
+                        <OPERATOR>LIGHT_RED</OPERATOR>
+                        <OPERATOR>DARK_GRAY</OPERATOR>
+                        <OPERATOR>DARK_GREY</OPERATOR>
+                        <OPERATOR>GRAY</OPERATOR>
+                        <OPERATOR>GREY</OPERATOR>
+                        <OPERATOR>LIGHT_GREEN</OPERATOR>
+                        <OPERATOR>LIGHT_BLUE</OPERATOR>
+                        <OPERATOR>LIGHT_GRAY</OPERATOR>
+                        <OPERATOR>LIGHT_GREY</OPERATOR>
 
 			<!-- Functions -->
                         <FUNCTION>abs</FUNCTION>

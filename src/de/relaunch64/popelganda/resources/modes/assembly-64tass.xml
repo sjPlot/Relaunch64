@@ -230,6 +230,10 @@
                         <KEYWORD2>slo</KEYWORD2>
                         <KEYWORD2>sre</KEYWORD2>
 
+			<!-- Predefined constants -->
+                        <OPERATOR>true</OPERATOR>
+                        <OPERATOR>false</OPERATOR>
+
 			<!-- Functions -->
                         <FUNCTION>abs</FUNCTION>
                         <FUNCTION>acos</FUNCTION>
@@ -274,8 +278,6 @@
 		<SEQ TYPE="OPERATOR">-</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
-		<SEQ TYPE="OPERATOR">true</SEQ>
-		<SEQ TYPE="OPERATOR">false</SEQ>
                 <!--<SEQ TYPE="OPERATOR">%</SEQ>-->
 
 		<SEQ TYPE="OPERATOR">|</SEQ>
