@@ -95,17 +95,29 @@ public class EditorPanes {
      * the method {@link #addNewTab(java.io.File, java.lang.String, java.lang.String, int)} that also
      * creates a new tab in the tabbed pane.
      * 
-     * @param editorPane 
      * @param fp the file path to a file, usually used when a new file is opened via menu or drag&drop
      * @param content the content (e.g. the content of the loaded file) that should be set as default
      * text in the editor pane
-     * @param c the default compiler for this editor pane, so the correct syntax highlighting is applied
+     * @param title Tab title
+     * @param compiler the default compiler for this editor pane, so the correct syntax highlighting is applied
      * @param script
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addEditorPane(final RL64TextArea editorPane, File fp, String content, int c, int script) {
+    public int addNewTab(File fp, String content, String title, int compiler, int script) {
+        // create new editor pane
+        final RL64TextArea editorPane = new RL64TextArea(settings);
+        editorPane.setName("jEditorPaneMain");
+        // enable drag&drop
+        editorPane.setDragEnabled(true);
+        DropTarget dropTarget = new DropTarget(editorPane, mainFrame);   
+        // get default tab title and add new tab to tabbed pane
+        tabbedPane.addTab(title, editorPane);
+        // check for file path and set it as tool tip
+        if (fp!=null && fp.exists()) {
+            tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
+        }
         // set compiler syntax style
-        editorPane.setCompiler(c);
+        editorPane.setCompiler(compiler);
         editorPane.setCompilerSyntax();
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
@@ -389,31 +401,6 @@ public class EditorPanes {
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setTabs(tabSize);
         }
-    }
-    /**
-     * 
-     * @param fp
-     * @param content
-     * @param title
-     * @param compiler
-     * @param script
-     * @return 
-     */
-    public int addNewTab(File fp, String content, String title, int compiler, int script) {
-        // create new editor pane
-        RL64TextArea editorPane = new RL64TextArea(settings);
-        editorPane.setName("jEditorPaneMain");
-        // enable drag&drop
-        editorPane.setDragEnabled(true);
-        DropTarget dropTarget = new DropTarget(editorPane, mainFrame);   
-        // get default tab title and add new tab to tabbed pane
-        tabbedPane.addTab(title, editorPane);
-        // check for file path and set it as tool tip
-        if (fp!=null && fp.exists()) {
-            tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
-        }
-        // enable syntax highlightinh
-        return addEditorPane(editorPane, fp, content, compiler, script);
     }
     /**
      * 
