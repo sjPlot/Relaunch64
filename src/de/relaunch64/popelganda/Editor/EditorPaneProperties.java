@@ -34,7 +34,6 @@ package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
 import java.io.File;
-import de.relaunch64.popelganda.Editor.RL64TextArea;
 
 /**
  *
@@ -74,12 +73,6 @@ public class EditorPaneProperties {
     }
     public void setFilePath(File fp) {
         filePath = fp;
-    }
-    public int getCompiler() {
-        return compiler;
-    }
-    public void setCompiler(int c) {
-        compiler = c;
     }
     public int getScript() {
         return script;

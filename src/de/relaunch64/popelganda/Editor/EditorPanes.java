@@ -106,7 +106,7 @@ public class EditorPanes {
     public int addEditorPane(final RL64TextArea editorPane, File fp, String content, int c, int script) {
         // set compiler syntax style
         editorPane.setCompiler(c);
-        editorPane.setCompilerSyntax(c);
+        editorPane.setCompilerSyntax();
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
         // set content, if available
@@ -167,8 +167,6 @@ public class EditorPanes {
         editorPaneProperties.setEditorPane(editorPane);
         // set filepath
         editorPaneProperties.setFilePath(fp);
-        // set compiler
-        editorPaneProperties.setCompiler(c);
         // set script
         editorPaneProperties.setScript(script);
         // set modified false
@@ -322,7 +320,7 @@ public class EditorPanes {
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether combo-box selection indicates a different compiler
         // from what was associated with the currently selected editor pane
-        return (editorPaneArray.get(selectedTab).getCompiler()!= selectedComp);
+        return (editorPaneArray.get(selectedTab).getEditorPane().getCompiler()!= selectedComp);
     }
     /**
      * 
@@ -342,13 +340,12 @@ public class EditorPanes {
             }
             // get editor pane
             final RL64TextArea editorpane = ep.getEditorPane();
+            // set new compiler scheme
+            editorpane.setCompiler(compiler);
             // change compiler syntax
-            editorpane.setCompilerSyntax(compiler);
+            editorpane.setCompilerSyntax();
             // update syntax scheme
             editorpane.setSyntaxScheme();
-            // set new compiler scheme
-            ep.setCompiler(compiler);
-            editorpane.setCompiler(compiler);
         }
     }
     public void updateColorScheme() {
@@ -362,7 +359,7 @@ public class EditorPanes {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setCompilerSyntax(ea.getCompiler());
+            editorpane.setCompilerSyntax();
         }
     }
     public void updateLineNumberAlignment() {
@@ -470,7 +467,7 @@ public class EditorPanes {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(index);
             // get editor pane
-            return ep.getCompiler();
+            return ep.getEditorPane().getCompiler();
         }
         catch (IndexOutOfBoundsException ex) {
             return ConstantsR64.ASM_KICKASSEMBLER;
@@ -832,7 +829,7 @@ public class EditorPanes {
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
             try {
                 // select compiler, so we update the highlight, if necessary
-                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getCompiler());
+                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getCompiler());
                 // select user script
                 jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
             }

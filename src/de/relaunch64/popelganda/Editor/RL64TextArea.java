@@ -258,10 +258,8 @@ public class RL64TextArea extends StandaloneTextArea {
     /**
      * Sets the compiler syntax. See {@code ConstantsR64.assemblymodes} for different values. This method
      * loads an XML file with syntax definition for keywords etc.
-     * 
-     * @param compiler the compiler, which syntax definition should be used.
      */
-    public final void setCompilerSyntax(int compiler) {
+    public final void setCompilerSyntax() {
         // set syntax style
         Mode mode = new Mode("asm");
         String pathToMode = "/de/relaunch64/popelganda/resources/modes/";
