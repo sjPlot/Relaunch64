@@ -604,13 +604,20 @@ public class EditorPanes {
                         return false;
                     }
                     finally {
+                        String buf = new String(buffer);
                         boolean updateTabPane = closeInitialTab();
+                        boolean CRLF = buf.contains("\r\n");
+                        if (CRLF) buf = buf.replaceAll("\r\n", "\n");
+                        boolean CR = buf.contains("\r");
+                        if (CR) buf = buf.replaceAll("\r", "\n");
                         // if yes, add new tab
-                        selectedTab = addNewTab(filepath, new String(buffer), getFileName(filepath), compiler, script)-1;
+                        selectedTab = addNewTab(filepath, buf, getFileName(filepath), compiler, script)-1;
                         // check whether compiler combobox needs update
                         if (updateTabPane) updateTabbedPane();
                         // set cursor
-                        setCursor(editorPaneArray.get(selectedTab).getEditorPane());
+                        EditorPaneProperties epp = editorPaneArray.get(selectedTab);
+                        setCursor(epp.getEditorPane());
+                        epp.setLineEnd(CRLF ? "\r\n" : (CR ? "\r" : "\n"));
                         return true;
                     }
                 }
@@ -679,8 +686,11 @@ public class EditorPanes {
                 // create filewriter
                 Writer fw = null;
                 try {
+                    EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     // retrieve text
-                    String content = editorPaneArray.get(selectedTab).getEditorPane().getText();
+                    String content = epp.getEditorPane().getText();
+                    String lineEnd = epp.getLineEnd();
+                    if (!lineEnd.equals("\n")) content = content.replaceAll("\n", lineEnd);
                     fw = new FileWriter(filepath);
                     fw.write(content);
                 }

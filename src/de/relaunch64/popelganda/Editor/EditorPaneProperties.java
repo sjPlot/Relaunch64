@@ -45,6 +45,7 @@ public class EditorPaneProperties {
     private File filePath;
     private int compiler;
     private int script;
+    private String lineEnd;
     
     public EditorPaneProperties() {
         resetEditorPanesProperties();
@@ -55,6 +56,7 @@ public class EditorPaneProperties {
         filePath = null;
         compiler = ConstantsR64.ASM_KICKASSEMBLER;
         script = 0;
+        lineEnd = "\n";
     }
     public RL64TextArea getEditorPane() {
         return editorPane;
@@ -79,5 +81,11 @@ public class EditorPaneProperties {
     }
     public void setScript(int s) {
         script = s;
+    }
+    public String getLineEnd() {
+        return lineEnd;
+    }
+    public void setLineEnd(String s) {
+        lineEnd = s;
     }
 }
