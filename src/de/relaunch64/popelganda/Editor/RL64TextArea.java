@@ -43,7 +43,6 @@ import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.syntax.ModeProvider;
-import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.util.SyntaxUtilities;
@@ -198,6 +197,7 @@ public class RL64TextArea extends StandaloneTextArea {
     /**
      * Sets the font of the editor component and the gutter. Furthermore,
      * antialias-setting is updated
+     * @param mf
      */
     public final void setFonts(Font mf) {
         // set text font
