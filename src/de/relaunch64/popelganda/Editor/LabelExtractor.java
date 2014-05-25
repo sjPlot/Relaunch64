@@ -34,7 +34,6 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -60,6 +59,7 @@ public class LabelExtractor {
      * {@code subWord} will
      * @param source
      * @param compiler
+     * @param lineNumber
      * 
      * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
@@ -86,6 +86,7 @@ public class LabelExtractor {
      * @param sortList If {@code true}, labels are sorted in alphabetical order.
      * @param source
      * @param compiler
+     * @param lineNumber
      * @return An array list of all label names from the source code.
      */
     public static ArrayList getLabelNames(boolean sortList, String source, int compiler, int lineNumber) {
@@ -113,6 +114,7 @@ public class LabelExtractor {
      * 
      * @param source
      * @param compiler
+     * @param lineNumber
      * @return All labels with their line numbers, or {@code null} if there are no labels
      * in the source code.
      */

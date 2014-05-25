@@ -109,6 +109,7 @@ public class ConstantsR64 {
 
     public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
     public static final String STRING_MACRO_KICKASSEMBLER = ".macro";
+    public static final String STRING_MACRO_TMPX = ".macro";
     public static final String STRING_MACRO_ACME = "!macro";
     public static final String STRING_MACRO_DASM = "mac";
     public static final String STRING_MACRO_DREAMASS = "#macro";

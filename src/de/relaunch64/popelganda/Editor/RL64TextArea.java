@@ -374,6 +374,7 @@ public class RL64TextArea extends StandaloneTextArea {
     public static String getDelimiterList(int compiler) {
         String str = ",;:{}()[]+-/%<=>&!|^~*";
         switch (compiler) {
+            case ConstantsR64.COMPILER_TMPX:
             case ConstantsR64.COMPILER_ACME:
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
@@ -396,6 +397,7 @@ public class RL64TextArea extends StandaloneTextArea {
         String str = "//";
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.COMPILER_TMPX:
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_CA65:
             case ConstantsR64.COMPILER_DREAMASS:
@@ -413,7 +415,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * @param compiler
      * @return 
      */
-    public static String getMacroString(int compiler) {
+    protected static String getMacroPrefix(int compiler) {
         String str = ".";
         switch (compiler) {
             case ConstantsR64.COMPILER_ACME:
@@ -424,6 +426,7 @@ public class RL64TextArea extends StandaloneTextArea {
                 break;
             case ConstantsR64.COMPILER_KICKASSEMBLER:
             case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.COMPILER_TMPX:
             case ConstantsR64.COMPILER_CA65:
                 str = ".";
                 break;
@@ -451,21 +454,7 @@ public class RL64TextArea extends StandaloneTextArea {
             // retrieve chars that have already been typed
             String macroPrefix = "";
             if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
-                switch (getCompiler()) {
-                    case ConstantsR64.COMPILER_KICKASSEMBLER:
-                    case ConstantsR64.COMPILER_64TASS:
-                    case ConstantsR64.COMPILER_CA65:
-                        macroPrefix = ".";
-                        break;
-                    case ConstantsR64.COMPILER_ACME:
-                        macroPrefix = "!";
-                        break;
-                    case ConstantsR64.COMPILER_DREAMASS:
-                        macroPrefix = "#";
-                        break;
-                    case ConstantsR64.COMPILER_DASM:
-                        break;
-                }
+                macroPrefix = getMacroPrefix(compiler);
             }
             suggestionSubWord = getCaretString(false, macroPrefix);
             // check for valid value
@@ -608,6 +597,7 @@ public class RL64TextArea extends StandaloneTextArea {
             case ConstantsR64.COMPILER_ACME:
             case ConstantsR64.COMPILER_64TASS:
             case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.COMPILER_TMPX:
                 addDelim = "\n\r:";
                 break;
             default:
