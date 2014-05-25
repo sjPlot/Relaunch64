@@ -610,6 +610,7 @@ public class EditorPanes {
                         if (CRLF) buf = buf.replaceAll("\r\n", "\n");
                         boolean CR = buf.contains("\r");
                         if (CR) buf = buf.replaceAll("\r", "\n");
+                        boolean LF = buf.contains("\n");
                         // if yes, add new tab
                         selectedTab = addNewTab(filepath, buf, getFileName(filepath), compiler, script)-1;
                         // check whether compiler combobox needs update
@@ -617,7 +618,7 @@ public class EditorPanes {
                         // set cursor
                         EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                         setCursor(epp.getEditorPane());
-                        epp.setLineEnd(CRLF ? "\r\n" : (CR ? "\r" : "\n"));
+                        epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.getProperty("line.separator"));
                         return true;
                     }
                 }

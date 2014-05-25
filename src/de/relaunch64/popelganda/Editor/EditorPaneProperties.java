@@ -56,7 +56,7 @@ public class EditorPaneProperties {
         filePath = null;
         compiler = ConstantsR64.ASM_KICKASSEMBLER;
         script = 0;
-        lineEnd = "\n";
+        lineEnd = System.getProperty("line.separator");
     }
     public RL64TextArea getEditorPane() {
         return editorPane;
