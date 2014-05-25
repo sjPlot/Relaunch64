@@ -2113,7 +2113,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
         jButtonRunScript.setName("jButtonRunScript"); // NOI18N
 
-        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
+        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES));
         jComboBoxCompilers.setToolTipText(resourceMap.getString("jComboBoxCompilers.toolTipText")); // NOI18N
         jComboBoxCompilers.setName("jComboBoxCompilers"); // NOI18N
 

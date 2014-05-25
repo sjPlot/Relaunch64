@@ -160,7 +160,7 @@ public class ConstantsR64 {
     };
     
     // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE
-    public static final String[] COMPILER_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65", "DreamAss", "DASM", "TMPx" };
+    public static final String[] ASM_NAMES = new String[] { "Kick Assembler", "ACME", "64tass", "ca65", "DreamAss", "DASM", "TMPx" };
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".src", ".s"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff", ".fli", ".afli", ".ifli"};

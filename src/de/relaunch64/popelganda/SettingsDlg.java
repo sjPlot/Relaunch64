@@ -661,7 +661,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jTextFieldTabWidth.setText(resourceMap.getString("jTextFieldTabWidth.text")); // NOI18N
         jTextFieldTabWidth.setName("jTextFieldTabWidth"); // NOI18N
 
-        jComboBoxPrefComp.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES));
+        jComboBoxPrefComp.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES));
         jComboBoxPrefComp.setName("jComboBoxPrefComp"); // NOI18N
 
         jLabel6.setDisplayedMnemonic('c');
