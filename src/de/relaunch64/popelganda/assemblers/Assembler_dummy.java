@@ -32,8 +32,10 @@
  */
 package de.relaunch64.popelganda.assemblers;
 
+import de.relaunch64.popelganda.util.ErrorHandler.ErrorInfo;
 import java.io.LineNumberReader;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 /**
  *
@@ -64,5 +66,11 @@ public class Assembler_dummy implements Assembler
     @Override
     public String labelGetStart(String line, int pos) {
         return "";
+    }
+
+    @Override
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+        final ArrayList<ErrorInfo> errors = new ArrayList<>();
+        return errors;
     }
 }

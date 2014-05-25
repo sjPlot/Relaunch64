@@ -32,6 +32,7 @@
  */
 package de.relaunch64.popelganda.assemblers;
 
+import de.relaunch64.popelganda.util.ErrorHandler.ErrorInfo;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.regex.Matcher;
@@ -39,6 +40,7 @@ import java.util.regex.Pattern;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Deque;
+import java.util.ArrayList;
 
 /**
  *
@@ -138,5 +140,28 @@ public class Assembler_ca65 implements Assembler
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
+    }
+
+    @Override
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+        final ArrayList<ErrorInfo> errors = new ArrayList<>();
+        String line;     // j.asm(4): Error: Symbol `i' is undefined
+        Pattern p = Pattern.compile("^(?<file>.*?)\\((?<line>\\d+)\\): (?:Error|Warning):.*");
+        try {
+            while ((line = lineReader.readLine()) != null) {
+                Matcher m = p.matcher(line);
+                if (!m.matches()) continue;
+                ErrorInfo e = new ErrorInfo(
+                        Integer.parseInt(m.group("line")),
+                        1,
+                        lineReader.getLineNumber(),
+                        m.group("file")
+                        );
+                errors.add(e);
+            }
+        }
+        catch (IOException ex) {
+        }
+        return errors;
     }
 }

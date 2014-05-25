@@ -32,8 +32,10 @@
  */
 package de.relaunch64.popelganda.assemblers;
 
+import de.relaunch64.popelganda.util.ErrorHandler.ErrorInfo;
 import java.io.LineNumberReader;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 public interface Assembler 
 {
@@ -52,4 +54,13 @@ public interface Assembler
      * @return Label name part before the cursor.
      */
     String labelGetStart(String line, int pos);
+
+    /**
+     * Returns error list
+     * 
+     * @param lineReader LineNumberReader for log
+     * 
+     * @return List of errors
+     */
+    ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader);
 }

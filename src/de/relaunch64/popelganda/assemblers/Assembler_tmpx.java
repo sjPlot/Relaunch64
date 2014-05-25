@@ -32,12 +32,14 @@
  */
 package de.relaunch64.popelganda.assemblers;
 
+import de.relaunch64.popelganda.util.ErrorHandler.ErrorInfo;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.LinkedHashMap;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  *
@@ -103,5 +105,28 @@ public class Assembler_tmpx implements Assembler
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
+    }
+
+    @Override
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+        final ArrayList<ErrorInfo> errors = new ArrayList<>();
+        String line;     //a.asm(4) : error 30: undefined label; 'i' //a.asm(4) : error 3: illegal mnemonic at col 14
+        Pattern p = Pattern.compile("^(?<file>.*?)\\((?<line>\\d+)\\) : error \\d+: .*?( at col (?<col>\\d+))?");
+        try {
+            while ((line = lineReader.readLine()) != null) {
+                Matcher m = p.matcher(line);
+                if (!m.matches()) continue;
+                ErrorInfo e = new ErrorInfo(
+                        Integer.parseInt(m.group("line")),
+                        (m.group("col") == null) ? 1 : Integer.parseInt(m.group("col")),
+                        lineReader.getLineNumber(),
+                        m.group("file")
+                        );
+                errors.add(e);
+            }
+        }
+        catch (IOException ex) {
+        }
+        return errors;
     }
 }

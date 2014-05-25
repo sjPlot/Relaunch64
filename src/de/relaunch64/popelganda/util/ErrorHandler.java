@@ -54,19 +54,19 @@ public class ErrorHandler {
     private int errorIndex = -1;
     private String basePath;
     
-   private class ErrorInfo {
+    public static class ErrorInfo {
         public final int line;
         public final int column;
         public final int logline;
         public final File file;
-        public ErrorInfo(int line, int column, int logline, File file) {
+        public ErrorInfo(int line, int column, int logline, String file) {
             this.line = line;
             this.column = column;
             this.logline = logline;
-            this.file = file;
+            this.file = new File(file);
         }
-   }
-   private final ArrayList<ErrorInfo> errors = new ArrayList<>();
+    }
+    private final ArrayList<ErrorInfo> errors = new ArrayList<>();
 
     public ErrorHandler() {
         clearErrors();
@@ -80,75 +80,11 @@ public class ErrorHandler {
     }
     public void readErrorLines(String log, int compiler) {
         // create buffered reader, needed for line number reader
-        BufferedReader br = new BufferedReader(new StringReader(log));
+        StringReader sr = new StringReader(log);
+        BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-        String line, pattern;
-        Pattern p;
-        int filenameGroup, lineGroup, columnGroup;
-        switch (compiler) {
-            case ConstantsR64.ASM_ACME: // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
-                pattern = "^(Error|Warning|Serious error) - File (.*?), line (\\d+) .*";
-                filenameGroup = 2;
-                lineGroup = 3;
-                columnGroup = 0;
-                break;
-            case ConstantsR64.ASM_KICKASSEMBLER: // at line 2, column 1 in /tmp/j.asm
-                pattern = "^at line (\\d+), column (\\d+) in (.*)";
-                filenameGroup = 3;
-                lineGroup = 1;
-                columnGroup = 2;
-                break;
-            case ConstantsR64.ASM_64TASS: // j.asm:4:5: error: not defined 'i'
-                pattern = "^(.*?):(\\d+):(\\d+): (error|warning):.*";
-                filenameGroup = 1;
-                lineGroup = 2;
-                columnGroup = 3;
-                break;
-            case ConstantsR64.ASM_CA65: // j.asm(4): Error: Symbol `i' is undefined
-                pattern = "^(.*?)\\((\\d+)\\): (Error|Warning):.*";
-                filenameGroup = 1;
-                lineGroup = 2;
-                columnGroup = 0;
-                break;
-            case ConstantsR64.ASM_DREAMASS: // j.asm:4: error:variable undefined: i
-                pattern = "^(.*?):(\\d+): (error|warning):.*";
-                filenameGroup = 1;
-                lineGroup = 2;
-                columnGroup = 0;
-                break;
-            case ConstantsR64.ASM_DASM: // a.asm (5): error: Syntax Error 'o o'.
-                pattern = "^(.*?) \\((\\d+)\\): (error|warning|fatal): .*";
-                filenameGroup = 1;
-                lineGroup = 2;
-                columnGroup = 0;
-                break;
-            // TODO tmpx-error line support
-//            case ConstantsR64.ASM_TMPX:
-//                break;
-            default:
-                return; // Unsupported
-        }
-        p = Pattern.compile(pattern);
-        // check for valid values
-        if (log!=null && !log.isEmpty()) {
-            // read line by line
-            try {
-                int linenumber=1;
-                while ((line = lineReader.readLine())!=null) {
-                    Matcher m = p.matcher(line);
-                    // check if we found error line
-                    if (m.matches()) {
-                       int column = 1;
-                       if (columnGroup != 0) column = Integer.parseInt(m.group(columnGroup));
-                       ErrorInfo e = new ErrorInfo(Integer.parseInt(m.group(lineGroup)), column, linenumber, new File(m.group(filenameGroup)));
-                       errors.add(e);
-                    }
-                    linenumber++;
-                }
-            }
-            catch (IOException ex) {
-            }
-        }
+
+        errors.addAll(ConstantsR64.assemblers[compiler].readErrorLines(lineReader));
     }
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
         if (hasErrors()) {
