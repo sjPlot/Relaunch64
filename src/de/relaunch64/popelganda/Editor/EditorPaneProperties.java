@@ -32,7 +32,6 @@
  */
 package de.relaunch64.popelganda.Editor;
 
-import de.relaunch64.popelganda.util.ConstantsR64;
 import java.io.File;
 
 /**
@@ -43,7 +42,6 @@ public class EditorPaneProperties {
     private RL64TextArea editorPane;
     private boolean modified;
     private File filePath;
-    private int compiler;
     private int script;
     private String lineEnd;
     
@@ -54,7 +52,6 @@ public class EditorPaneProperties {
         editorPane = null;
         modified = false;
         filePath = null;
-        compiler = ConstantsR64.ASM_KICKASSEMBLER;
         script = 0;
         lineEnd = System.getProperty("line.separator");
     }

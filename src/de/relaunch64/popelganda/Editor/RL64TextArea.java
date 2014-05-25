@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
@@ -60,6 +63,7 @@ public class RL64TextArea extends StandaloneTextArea {
     private JPopupMenu suggestionPopup = null;
     private JList suggestionList;
     private String suggestionSubWord;
+    private String suggestionContinuedWord;
     private static final String sugListContainerName="sugListContainerName";
     /**
      * constant that defines which directives should be shown in auto-completion
@@ -490,6 +494,7 @@ public class RL64TextArea extends StandaloneTextArea {
                 suggestionPopup.setBorder(null);
                 // create JList with label items
                 suggestionList = createSuggestionList(labels);
+                suggestionContinuedWord = suggestionSubWord;
                 // check minimum length of list and add scroll pane if list is too long
                 if (labels.length>20) {
                     javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
@@ -522,6 +527,9 @@ public class RL64TextArea extends StandaloneTextArea {
         catch (IndexOutOfBoundsException ex) {
         }
     }
+    /**
+     * Closes the auto-suggestion popup.
+     */
     protected void hideSuggestion() {
         if (suggestionPopup != null) {
             suggestionPopup.setVisible(false);
@@ -530,9 +538,22 @@ public class RL64TextArea extends StandaloneTextArea {
         // set focus back to editorpane
         requestFocusInWindow();
     }
+    /**
+     * Creates a JList object that is added to the suggestion / auto-completion
+     * popup.
+     * 
+     * @param labels the items of the list.
+     * @return a JList
+     */
     protected JList createSuggestionList(final Object[] labels) {
-        // create list
-        JList sList = new JList(labels);
+        // create list model
+        DefaultListModel dlm = new DefaultListModel();
+        // add items to list model. we need this for the key listener
+        // we need to add in reverse order, because items are added at
+        // start of list model
+        for (int i=labels.length-1; i>=0; i--) dlm.add(0, labels[i]);
+        // create list from list model
+        JList sList = new JList(dlm);
         sList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         sList.setSelectedIndex(0);
         sList.addMouseListener(new MouseAdapter() {
@@ -564,10 +585,36 @@ public class RL64TextArea extends StandaloneTextArea {
                 int index = Math.min(suggestionList.getSelectedIndex() - 1, 0);
                 suggestionList.setSelectedIndex(index);
             }
-            if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_DOWN) {
+            else if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_DOWN) {
                 evt.consume();
                 int index = Math.min(suggestionList.getSelectedIndex() + 1, suggestionList.getModel().getSize() - 1);
                 suggestionList.setSelectedIndex(index);
+            }
+            else {
+                // get typed char in list. we filter the list here when user continues
+                // typing when popup is already shown
+                String typedChar = String.valueOf(evt.getKeyChar());
+                // check whether types char is character or digit
+                Pattern p = Pattern.compile("[a-zA-Z0-9]+");
+                Matcher m = p.matcher(typedChar);
+                if (m.matches()) {
+                    // if yes, "virtually" append to already typed chars of
+                    // "suggestionSubWord", as if user would continue typing without
+                    // suggestion popup
+                    suggestionContinuedWord = suggestionContinuedWord+typedChar;
+                    // get list model with list items
+                    DefaultListModel dlm = (DefaultListModel) suggestionList.getModel();
+                    // iterate items
+                    for (int i=dlm.getSize()-1; i>=0; i--) {
+                        String el = dlm.get(i).toString();
+                        // check if item matches the "virtually" typed text
+                        if (!el.startsWith(suggestionContinuedWord)) {
+                            // if not, remove it
+                            dlm.remove(i);
+                        }
+                    }
+                    // TODO JList size could be changed when item list is reduced.
+                }
             }
         }
         @Override public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -655,7 +702,10 @@ public class RL64TextArea extends StandaloneTextArea {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    if (suggestionPopup!=null) suggestionPopup.setVisible(false);
+                    if (suggestionPopup!=null) {
+                        suggestionPopup.setVisible(false);
+                        suggestionPopup = null;
+                    }
                 }
             });
             /**
