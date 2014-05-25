@@ -483,8 +483,9 @@ public class RL64TextArea extends StandaloneTextArea {
                     break;
                 case SUGGESTION_LABEL:
                     suggestionSubWord = ConstantsR64.assemblers[getCompiler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
+                    if (suggestionSubWord.length() == 0) break;
                     // retrieve label list, remove last colon
-                    labels = LabelExtractor.getLabelNames(suggestionSubWord.trim(), getBuffer().getText(), getCompiler(), getCaretLine());
+                    labels = LabelExtractor.getLabelNames(suggestionSubWord, getBuffer().getText(), getCompiler(), getCaretLine());
                     break;
                 case SUGGESTION_FUNCTION_MACRO:
                     // retrieve label list, remove last colon

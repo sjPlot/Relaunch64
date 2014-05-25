@@ -139,7 +139,7 @@ public class Assembler_64tass implements Assembler {
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
-        Pattern p = Pattern.compile("(?i)([a-z0-9_.]*[a-z_]\\b).*");
+        Pattern p = Pattern.compile("(?i)([a-z0-9_.]*[a-z_]\\b)([^a-z0-9_.].*|$)");
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
