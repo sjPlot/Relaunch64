@@ -183,4 +183,12 @@ public class ConstantsR64 {
         "signum", "tan", "tanh", "trunc", "bool", "len", "all", "any", "str",
         "repr", "format", "range"
     };
+    
+    // check os
+    public static boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");
+    public static boolean IS_OSX = System.getProperty("os.name").toLowerCase().startsWith("mac os");
+    public static boolean IS_LINUX = System.getProperty("os.name").toLowerCase().contains("linux");
+    public static boolean IS_WINDOWS7 = System.getProperty("os.name").toLowerCase().startsWith("windows 7");
+    public static boolean IS_WINDOWS8 = System.getProperty("os.name").toLowerCase().startsWith("windows 8");
+    
 }

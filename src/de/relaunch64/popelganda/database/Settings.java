@@ -91,12 +91,6 @@ public class Settings {
     private static final String ATTR_SCRIPT = "script";
 
     private final File filepath;
-    private final boolean IS_WINDOWS;
-    private final boolean IS_WINDOWS7;
-    private final boolean IS_WINDOWS8;
-    private final boolean IS_OSX;
-    private final boolean IS_LINUX;
-    
     public static final int FONTNAME = 1;
     public static final int FONTSIZE = 2;
 
@@ -105,41 +99,6 @@ public class Settings {
     public static final int SPLITPANE_BOTHLOGRUN = 3;
     
     /**
-     * Indicates whether the OS is a windows OS
-     * @return 
-     */
-    public boolean isWindows() {
-        return IS_WINDOWS;
-    }
-    /**
-     * Indicates whether the OS is windows 7
-     * @return 
-     */
-    public boolean isWindows7() {
-        return IS_WINDOWS7;
-    }
-    /**
-     * Indicates whether the OS is windows 8
-     * @return 
-     */
-    public boolean isWindows8() {
-        return IS_WINDOWS8;
-    }
-    /**
-     * Indicates whether the OS is a Mac OS X
-     * @return 
-     */
-    public boolean isOSX() {
-        return IS_OSX;
-    }
-    /**
-     * Indicates whether the OS is Linux
-     * @return 
-     */
-    public boolean isLinux() {
-        return IS_LINUX;
-    }
-    /**
      * XML-Document that stores the settings-information
      */
     private Document settingsFile;    
@@ -147,12 +106,6 @@ public class Settings {
     public Settings() {
         // first of all, create the empty documents
         settingsFile = new Document(new Element("settings"));
-        // check os
-        IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");
-        IS_OSX = System.getProperty("os.name").toLowerCase().startsWith("mac os");
-        IS_LINUX = System.getProperty("os.name").toLowerCase().contains("linux");
-        IS_WINDOWS7 = System.getProperty("os.name").toLowerCase().startsWith("windows 7");
-        IS_WINDOWS8 = System.getProperty("os.name").toLowerCase().startsWith("windows 8");
         // create file path to settings file
         filepath = FileTools.createFilePath("relaunch64-settings.xml");
         // now fill the initoal elements
@@ -212,15 +165,15 @@ public class Settings {
         // init standard font. on mac, it's helvetica
         String font = "Helvetica";
         // on older windows arial
-        if (isWindows()) {
+        if (ConstantsR64.IS_WINDOWS) {
             font = "Arial";
             // on new windows Calibri
-            if (isWindows7() || isWindows8()) {
+            if (ConstantsR64.IS_WINDOWS7 || ConstantsR64.IS_WINDOWS8) {
                 font="Calibri";
             }
         } 
         // and on linux we take Nimbus Sans L Regular
-        else if (isLinux()) {
+        else if (ConstantsR64.IS_LINUX) {
             font = "Nimbus Sans L Regular";
         }
         for (int cnt=0; cnt<recentDocCount; cnt++) {

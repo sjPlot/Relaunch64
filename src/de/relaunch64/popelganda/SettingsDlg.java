@@ -985,7 +985,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 insert = fp+" "+outputfile;
                             }
                             // on OS X, check for Applications folder
-                            if (settings.isOSX() && fp.toLowerCase().contains("/Applications/") && !insert.startsWith("java")) insert = "open "+insert;
+                            if (ConstantsR64.IS_OSX && fp.toLowerCase().contains("/Applications/") && !insert.startsWith("java")) insert = "open "+insert;
                             // black color
                             jTextAreaUserScript.setForeground(Color.black);
                             // if text field is not empty and is not the default

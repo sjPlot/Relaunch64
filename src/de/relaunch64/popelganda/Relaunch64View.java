@@ -135,11 +135,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init default laf
         setDefaultLookAndFeel();
         // check for os x
-        if (settings.isOSX()) setupMacOSXApplicationListener();
+        if (ConstantsR64.IS_OSX) setupMacOSXApplicationListener();
         // init swing components
         initComponents();
         // remove borders on OS X
-        if (settings.isOSX() && !settings.getNimbusOnOSX()) {
+        if (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) {
             jTabbedPane1.setBorder(null);
             jTabbedPaneLogs.setBorder(null);
             jSplitPane1.setBorder(null);
@@ -710,7 +710,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //        });
         // if we don't have OS X, we need to change action's accelerator keys
         // all "meta" (OS X command key) are converted to "ctrl"
-        if (!settings.isOSX()) {
+        if (!ConstantsR64.IS_OSX) {
             // get application's actionmap
             javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getActionMap(Relaunch64View.class, this);
             // get all action values ("keys")
@@ -1538,7 +1538,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
         }
-        if (settings.isOSX()) {
+        if (ConstantsR64.IS_OSX) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
