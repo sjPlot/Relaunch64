@@ -448,6 +448,10 @@ public class RL64TextArea extends StandaloneTextArea {
     protected void showSuggestion(int type) {
         // hide old popup
         hideSuggestion();
+        
+        // TODO for debug, remove later
+        System.out.println(ConstantsR64.COMPILER_NAMES[getCompiler()]);
+        
         try {
             // retrieve chars that have already been typed
             String macroPrefix = "";
