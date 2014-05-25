@@ -246,6 +246,7 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     /**
      * Sets tab-size for editor component.
+     * @param tabSize
      */
     public final void setTabs(int tabSize) {
         setProperty("buffer.tabSize", String.valueOf(tabSize));
