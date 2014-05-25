@@ -72,14 +72,13 @@ public class Assembler_64tass implements Assembler {
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         String line;
-        Matcher m;
         // Daniel: I love this regex-stuff! Unfortunately I'm to old to understand it...
         Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
         Deque<String> scopes = new LinkedList<>();
 
         try {
             while ((line = lineReader.readLine()) != null) {
-                m = p.matcher(line);
+                Matcher m = p.matcher(line);
 
                 if (!m.matches()) continue;
                 String label = m.group("label");
@@ -110,19 +109,17 @@ public class Assembler_64tass implements Assembler {
                 }
 
                 String directive = m.group("directive"); // track scopes
-                if (directive != null) {
-                    directive = directive.toLowerCase();
-                    switch (directive) {
-                        case ".block":
-                        case ".proc":
-                            if (label != null) scopes.add(label); // new scope
-                            else scopes.add("");
-                            break;
-                        case ".bend":
-                        case ".pend":
-                            if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
-                            break;
-                    }
+                if (directive == null) continue;
+                switch (directive.toLowerCase()) {
+                    case ".block":
+                    case ".proc":
+                        if (label != null) scopes.add(label); // new scope
+                        else scopes.add("");
+                        break;
+                    case ".bend":
+                    case ".pend":
+                        if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
+                        break;
                 }
             }
         }

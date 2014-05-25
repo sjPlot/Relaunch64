@@ -37,6 +37,8 @@ import java.io.LineNumberReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Deque;
 
 /**
  *
@@ -58,8 +60,9 @@ public class Assembler_ca65 implements Assembler
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_@][a-zA-Z0-9_]*):.*");
         String line;
+        Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope)\\b)?\\s*(?<label2>[a-zA-Z_][a-zA-Z0-9_]*)?.*");
+        Deque<String> scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -69,6 +72,7 @@ public class Assembler_ca65 implements Assembler
                 String label = m.group("label");
 
                 if (label != null) {
+                    String fullLabel;
                     if (lineNumber > 0) {
                         if (label.charAt(0) == '@') { // local label
                             if (scopeFound) continue;
@@ -83,9 +87,36 @@ public class Assembler_ca65 implements Assembler
                             localLabelValues.clear();
                         }
                     }
-                    if (!labelValues.containsValue(label)) {
-                        labelValues.put(lineReader.getLineNumber(), label); // add if not listed already
+
+                    if (scopes.isEmpty()) {
+                        fullLabel = label; // global scope
+                    } else {
+                        StringBuilder kbuild = new StringBuilder();
+
+                        for (String s : scopes) { // build full name
+                            if (s.length() == 0) continue;
+                            kbuild.append(s);
+                            kbuild.append("::");
+                        }
+                        kbuild.append(label);
+                        fullLabel = kbuild.toString();
                     }
+
+                    if (!labelValues.containsValue(fullLabel)) {
+                        labelValues.put(lineReader.getLineNumber(), fullLabel); // add if not listed already
+                    }
+                }
+
+                String directive = m.group("directive"); // track scopes
+                if (directive == null) continue;
+                String label2 = m.group("label2"); // track scopes
+                switch (directive.toLowerCase()) {
+                    case ".scope":
+                        if (label2 != null) scopes.add(label2); // new scope
+                        break;
+                    case ".endscope":
+                        if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
+                        break;
                 }
             }
         }
@@ -103,7 +134,7 @@ public class Assembler_ca65 implements Assembler
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
-        Pattern p = Pattern.compile("(?i)([a-z0-9_]*[a-z_@])([^a-z0-9_].*|$)");
+        Pattern p = Pattern.compile("(?i)(([a-z0-9_]|::)*[a-z_@])([^a-z0-9_:].*|$)");
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
