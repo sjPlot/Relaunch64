@@ -113,7 +113,7 @@ public class ConstantsR64 {
     public static final String STRING_MACRO_ACME = "!macro";
     public static final String STRING_MACRO_DASM = "mac";
     public static final String STRING_MACRO_DREAMASS = "#macro";
-    public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()";
+    public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()\n";
     public static final String STRING_STRUCT_CA65 = ".struct";
     
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;

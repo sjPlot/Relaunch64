@@ -283,7 +283,7 @@ public class EditorPanes {
             // get current editor
             RL64TextArea ep = getActiveEditorPane();
             // set up section name
-            String insertString = getCompilerCommentString() + " ----- @" + name + "@ -----" + System.getProperty("line.separator");
+            String insertString = getCompilerCommentString() + " ----- @" + name + "@ -----\n";
             // insert string
             insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
         }
@@ -918,7 +918,7 @@ public class EditorPanes {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         // set up section name
-        String insertString = getCompilerCommentString() + " ----------------------------------------" + System.getProperty("line.separator");
+        String insertString = getCompilerCommentString() + " ----------------------------------------\n";
         // insert string
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
     }
@@ -928,7 +928,7 @@ public class EditorPanes {
         String insertString = "";
         switch (compiler) {
             case ConstantsR64.ASM_KICKASSEMBLER:
-                insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER + System.getProperty("line.separator");
+                insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER;
                 break;
         }
         // insert string

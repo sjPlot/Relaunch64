@@ -164,7 +164,7 @@ public class Tools {
                 bpl++;
                 // check if we reached end of line
                 if (bpl>=bytesPerLine || i==(content.length-1)) {
-                    sb.append(System.getProperty("line.separator"));
+                    sb.append("\n");
                     // start new line
                     startNewLine = true;
                     // reset bytes per line counter
@@ -318,7 +318,7 @@ public class Tools {
             for (int i=0; i<startaddress.length(); i++) {
                 output.append(",$3").append(startaddress.charAt(i));
             }
-            output.append(",$00,$00,$00").append(System.getProperty("line.separator"));
+            output.append(",$00,$00,$00").append("\n");
             switch (editorPanes.getActiveCompiler()) {
                 case ConstantsR64.ASM_ACME:
                     output.insert(0, "!byte ");
@@ -340,13 +340,13 @@ public class Tools {
                 case ConstantsR64.ASM_64TASS:
                 case ConstantsR64.ASM_CA65:
                 case ConstantsR64.ASM_DREAMASS:
-                    output.insert(0, "*=$0801"+System.getProperty("line.separator"));
+                    output.insert(0, "*=$0801\n");
                     break;
                 case ConstantsR64.ASM_KICKASSEMBLER:
-                    output.insert(0, ".pc = $0801"+System.getProperty("line.separator"));
+                    output.insert(0, ".pc = $0801\n");
                     break;
                 case ConstantsR64.ASM_DASM:
-                    output.insert(0, "org $0801"+System.getProperty("line.separator"));
+                    output.insert(0, "org $0801\n");
                     break;
             }
             editorPanes.insertString(output.toString());
@@ -449,7 +449,7 @@ public class Tools {
                     if (linkedfiles.size()>0) {
                         for (File f : linkedfiles) {
                             String rf = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
-                            editorPanes.insertString("\""+rf+"\""+System.getProperty("line.separator"));
+                            editorPanes.insertString("\""+rf+"\"\n");
                         }
                     }
                     // check if we have any valid values,
@@ -472,25 +472,25 @@ public class Tools {
                                 if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.ASM_ACME:
-                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = "!bin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_TMPX:
-                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".binary \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_KICKASSEMBLER:
-                                            insert = ".import text \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".import text \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_CA65:
-                                            insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".incbin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_DREAMASS:
-                                            insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".binclude \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_DASM:
-                                            insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = "incbin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_64TASS:
-                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".binary \""+relpath+"\"\n";
                                             break;
                                     }
                                 }
@@ -500,25 +500,25 @@ public class Tools {
                                 else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64") || FileTools.getFileExtension(f).equalsIgnoreCase("prg")) {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.ASM_ACME:
-                                            insert = "!bin \""+relpath+"\",,2"+System.getProperty("line.separator");
+                                            insert = "!bin \""+relpath+"\",,2\n";
                                             break;
                                         case ConstantsR64.ASM_TMPX:
-                                            insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            insert = ".binary \""+relpath+"\",2\n";
                                             break;
                                         case ConstantsR64.ASM_KICKASSEMBLER:
-                                            insert = ".import c64 \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".import c64 \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_CA65:
-                                            insert = ".incbin \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            insert = ".incbin \""+relpath+"\",2\n";
                                             break;
                                         case ConstantsR64.ASM_DREAMASS:
-                                            insert = ".binclude \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            insert = ".binclude \""+relpath+"\",2\n";
                                             break;
                                         case ConstantsR64.ASM_DASM:
-                                            insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = "incbin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_64TASS:
-                                            insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            insert = ".binary \""+relpath+"\",2\n";
                                             break;
                                     }
                                 }
@@ -530,25 +530,25 @@ public class Tools {
                                 else {
                                     switch (editorPanes.getActiveCompiler()) {
                                         case ConstantsR64.ASM_ACME:
-                                            insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = "!bin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_TMPX:
-                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".binary \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_KICKASSEMBLER:
-                                            insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".import binary \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_CA65:
-                                            insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".incbin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_DASM:
-                                            insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = "incbin \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_DREAMASS:
-                                            insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".binclude \""+relpath+"\"\n";
                                             break;
                                         case ConstantsR64.ASM_64TASS:
-                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            insert = ".binary \""+relpath+"\"\n";
                                             break;
                                     }
                                 }
@@ -568,25 +568,25 @@ public class Tools {
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
                                 switch (editorPanes.getActiveCompiler()) {
                                     case ConstantsR64.ASM_ACME:
-                                        insert = "!src \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = "!src \""+relpath+"\"\n";
                                         break;
                                     case ConstantsR64.ASM_TMPX:
-                                        insert = ".include \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = ".include \""+relpath+"\"\n";
                                         break;
                                     case ConstantsR64.ASM_DASM:
-                                        insert = "include \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = "include \""+relpath+"\"\n";
                                         break;
                                     case ConstantsR64.ASM_KICKASSEMBLER:
-                                        insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = ".import source \""+relpath+"\"\n";
                                         break;
                                     case ConstantsR64.ASM_CA65:
-                                        insert = ".include \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = ".include \""+relpath+"\"\n";
                                         break;
                                     case ConstantsR64.ASM_64TASS:
-                                        insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = ".binclude \""+relpath+"\"\n";
                                         break;
                                     case ConstantsR64.ASM_DREAMASS:
-                                        insert = "#include \""+relpath+"\""+System.getProperty("line.separator");
+                                        insert = "#include \""+relpath+"\"\n";
                                         break;
                                 }
                                 editorPanes.insertString(insert);

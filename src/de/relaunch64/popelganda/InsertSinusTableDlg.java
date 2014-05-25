@@ -126,7 +126,7 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
                         bytesPerLine++;
                         // check if we reached end of line
                         if (bytesPerLine>=bpl) {
-                            sb.append(System.getProperty("line.separator"));
+                            sb.append("\n");
                             // start new line
                             startNewLine = true;
                             // reset bytes per line counter
@@ -151,7 +151,7 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
                         bytesPerLine++;
                         // check if we reached end of line
                         if (bytesPerLine>=bpl || i<=-Math.PI/2) {
-                            sb.append(System.getProperty("line.separator"));
+                            sb.append("\n");
                             // start new line
                             startNewLine = true;
                             // reset bytes per line counter
