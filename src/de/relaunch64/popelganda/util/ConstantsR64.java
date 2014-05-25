@@ -47,7 +47,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.1.0 (Build 20140522)";
+    public static final String BUILD_VERSION = "3.1.0 (Build 20140525)";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -141,13 +141,13 @@ public class ConstantsR64 {
     public static final String CB_GOTO_FUNCTION_STRING = "Goto function ...";
     public static final String CB_GOTO_MACRO_STRING = "Goto macro ...";
     
-    public static final int COMPILER_KICKASSEMBLER = 0;
-    public static final int COMPILER_ACME = 1;
-    public static final int COMPILER_64TASS = 2;
-    public static final int COMPILER_CA65 = 3;
-    public static final int COMPILER_DREAMASS = 4;
-    public static final int COMPILER_DASM = 5;
-    public static final int COMPILER_TMPX = 6;
+    public static final int ASM_KICKASSEMBLER = 0;
+    public static final int ASM_ACME = 1;
+    public static final int ASM_64TASS = 2;
+    public static final int ASM_CA65 = 3;
+    public static final int ASM_DREAMASS = 4;
+    public static final int ASM_DASM = 5;
+    public static final int ASM_TMPX = 6;
 
     public static final Assembler assemblers[] = {
         new Assembler_kick(),

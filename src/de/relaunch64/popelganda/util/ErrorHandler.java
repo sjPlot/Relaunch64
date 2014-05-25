@@ -86,42 +86,45 @@ public class ErrorHandler {
         Pattern p;
         int filenameGroup, lineGroup, columnGroup;
         switch (compiler) {
-            case ConstantsR64.COMPILER_ACME: // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
+            case ConstantsR64.ASM_ACME: // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
                 pattern = "^(Error|Warning|Serious error) - File (.*?), line (\\d+) .*";
                 filenameGroup = 2;
                 lineGroup = 3;
                 columnGroup = 0;
                 break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER: // at line 2, column 1 in /tmp/j.asm
+            case ConstantsR64.ASM_KICKASSEMBLER: // at line 2, column 1 in /tmp/j.asm
                 pattern = "^at line (\\d+), column (\\d+) in (.*)";
                 filenameGroup = 3;
                 lineGroup = 1;
                 columnGroup = 2;
                 break;
-            case ConstantsR64.COMPILER_64TASS: // j.asm:4:5: error: not defined 'i'
+            case ConstantsR64.ASM_64TASS: // j.asm:4:5: error: not defined 'i'
                 pattern = "^(.*?):(\\d+):(\\d+): (error|warning):.*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 3;
                 break;
-            case ConstantsR64.COMPILER_CA65: // j.asm(4): Error: Symbol `i' is undefined
+            case ConstantsR64.ASM_CA65: // j.asm(4): Error: Symbol `i' is undefined
                 pattern = "^(.*?)\\((\\d+)\\): (Error|Warning):.*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 0;
                 break;
-            case ConstantsR64.COMPILER_DREAMASS: // j.asm:4: error:variable undefined: i
+            case ConstantsR64.ASM_DREAMASS: // j.asm:4: error:variable undefined: i
                 pattern = "^(.*?):(\\d+): (error|warning):.*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 0;
                 break;
-            case ConstantsR64.COMPILER_DASM: // a.asm (5): error: Syntax Error 'o o'.
+            case ConstantsR64.ASM_DASM: // a.asm (5): error: Syntax Error 'o o'.
                 pattern = "^(.*?) \\((\\d+)\\): (error|warning|fatal): .*";
                 filenameGroup = 1;
                 lineGroup = 2;
                 columnGroup = 0;
                 break;
+            // TODO tmpx-error line support
+//            case ConstantsR64.ASM_TMPX:
+//                break;
             default:
                 return; // Unsupported
         }

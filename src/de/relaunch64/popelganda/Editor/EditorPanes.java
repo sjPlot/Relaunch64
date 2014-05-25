@@ -473,7 +473,7 @@ public class EditorPanes {
             return ep.getCompiler();
         }
         catch (IndexOutOfBoundsException ex) {
-            return ConstantsR64.COMPILER_KICKASSEMBLER;
+            return ConstantsR64.ASM_KICKASSEMBLER;
         }
     }
     public int getScript(int index) {
@@ -955,7 +955,7 @@ public class EditorPanes {
         RL64TextArea ep = getActiveEditorPane();
         String insertString = "";
         switch (compiler) {
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.ASM_KICKASSEMBLER:
                 insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER + System.getProperty("line.separator");
                 break;
         }

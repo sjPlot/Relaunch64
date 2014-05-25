@@ -172,7 +172,6 @@ public class RL64TextArea extends StandaloneTextArea {
             }
         }
     }
-
     /**
      * OS X stuff. Default shortcuts don't work on OS X
      */
@@ -364,7 +363,7 @@ public class RL64TextArea extends StandaloneTextArea {
         keyListener = new RL64KeyListener();
     }
     /**
-     * Specified the list of delimiter strings that separate words/token for recodgnizing
+     * Specified the list of delimiter strings that separate words/token for recognizing
      * the syntax highlighting.
      * 
      * @param compiler A constants indicating which ASM compiler is used. Refer to ConstantsR64
@@ -374,37 +373,38 @@ public class RL64TextArea extends StandaloneTextArea {
     public static String getDelimiterList(int compiler) {
         String str = ",;:{}()[]+-/%<=>&!|^~*";
         switch (compiler) {
-            case ConstantsR64.COMPILER_TMPX:
-            case ConstantsR64.COMPILER_ACME:
-            case ConstantsR64.COMPILER_64TASS:
-            case ConstantsR64.COMPILER_CA65:
-            case ConstantsR64.COMPILER_DREAMASS:
-            case ConstantsR64.COMPILER_DASM:
+            case ConstantsR64.ASM_TMPX:
+            case ConstantsR64.ASM_ACME:
+            case ConstantsR64.ASM_64TASS:
+            case ConstantsR64.ASM_CA65:
+            case ConstantsR64.ASM_DREAMASS:
+            case ConstantsR64.ASM_DASM:
                 str = ",:{}()[]+-/<=>&|^~*";
                 break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.ASM_KICKASSEMBLER:
                 str = ",;:{}()[]+-/<=>&|^~*";
                 break;
         }
         return str;
     }
     /**
+     * Returns the comment string of the assembler {@code compiler}.
      * 
-     * @param compiler
+     * @param assembler
      * @return 
      */
-    public static String getCommentString(int compiler) {
+    public static String getCommentString(int assembler) {
         String str = "//";
-        switch (compiler) {
-            case ConstantsR64.COMPILER_ACME:
-            case ConstantsR64.COMPILER_TMPX:
-            case ConstantsR64.COMPILER_64TASS:
-            case ConstantsR64.COMPILER_CA65:
-            case ConstantsR64.COMPILER_DREAMASS:
-            case ConstantsR64.COMPILER_DASM:
+        switch (assembler) {
+            case ConstantsR64.ASM_ACME:
+            case ConstantsR64.ASM_TMPX:
+            case ConstantsR64.ASM_64TASS:
+            case ConstantsR64.ASM_CA65:
+            case ConstantsR64.ASM_DREAMASS:
+            case ConstantsR64.ASM_DASM:
                 str = ";";
                 break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.ASM_KICKASSEMBLER:
                 str = "//";
                 break;
         }
@@ -418,19 +418,19 @@ public class RL64TextArea extends StandaloneTextArea {
     protected static String getMacroPrefix(int compiler) {
         String str = ".";
         switch (compiler) {
-            case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.ASM_ACME:
                 str = "!";
                 break;
-            case ConstantsR64.COMPILER_DASM:
+            case ConstantsR64.ASM_DASM:
                 str = "";
                 break;
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-            case ConstantsR64.COMPILER_64TASS:
-            case ConstantsR64.COMPILER_TMPX:
-            case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.ASM_KICKASSEMBLER:
+            case ConstantsR64.ASM_64TASS:
+            case ConstantsR64.ASM_TMPX:
+            case ConstantsR64.ASM_CA65:
                 str = ".";
                 break;
-            case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.ASM_DREAMASS:
                 str = "#";
                 break;
         }
@@ -594,10 +594,10 @@ public class RL64TextArea extends StandaloneTextArea {
         String addDelim;
         switch (getCompiler()) {
             // use colon as additional delimiter for following assemblers
-            case ConstantsR64.COMPILER_ACME:
-            case ConstantsR64.COMPILER_64TASS:
-            case ConstantsR64.COMPILER_DREAMASS:
-            case ConstantsR64.COMPILER_TMPX:
+            case ConstantsR64.ASM_ACME:
+            case ConstantsR64.ASM_64TASS:
+            case ConstantsR64.ASM_DREAMASS:
+            case ConstantsR64.ASM_TMPX:
                 addDelim = "\n\r:";
                 break;
             default:

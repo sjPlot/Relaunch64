@@ -299,7 +299,7 @@ public class Settings {
         if (null==settingsFile.getRootElement().getChild(SETTING_PREF_COMP)) {
             // create element
             Element el = new Element(SETTING_PREF_COMP);
-            el.setText(String.valueOf(ConstantsR64.COMPILER_KICKASSEMBLER));
+            el.setText(String.valueOf(ConstantsR64.ASM_KICKASSEMBLER));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -579,7 +579,7 @@ public class Settings {
         }
         catch (NumberFormatException ex) {
         }
-        return ConstantsR64.COMPILER_KICKASSEMBLER;
+        return ConstantsR64.ASM_KICKASSEMBLER;
     }
     public void setPreferredCompiler(int compiler) {
         Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
@@ -827,7 +827,7 @@ public class Settings {
                 String attr_c = e.getAttributeValue(ATTR_COMPILER);
                 String attr_s = e.getAttributeValue(ATTR_SCRIPT);
                 // init defaults
-                int compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+                int compiler = ConstantsR64.ASM_KICKASSEMBLER;
                 int script = -1;
                 // check if we have compiler value
                 try {
@@ -835,7 +835,7 @@ public class Settings {
                     if (attr_s!=null) script = Integer.parseInt(attr_s);
                 }
                 catch (NumberFormatException ex) {
-                    compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+                    compiler = ConstantsR64.ASM_KICKASSEMBLER;
                     script = -1;
                 }
                 // add compiler and filepath to return value

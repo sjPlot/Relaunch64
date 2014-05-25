@@ -131,16 +131,17 @@ public class Tools {
             // get compiler byte-token
             String byteToken;
             switch (compiler) {
-                case ConstantsR64.COMPILER_ACME:
+                case ConstantsR64.ASM_ACME:
                     byteToken = "!byte";
                     break;
-                case ConstantsR64.COMPILER_DASM:
+                case ConstantsR64.ASM_DASM:
                     byteToken = "dc.b";
                     break;
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                case ConstantsR64.COMPILER_64TASS:
-                case ConstantsR64.COMPILER_DREAMASS:
-                case ConstantsR64.COMPILER_CA65:
+                case ConstantsR64.ASM_KICKASSEMBLER:
+                case ConstantsR64.ASM_64TASS:
+                case ConstantsR64.ASM_TMPX:
+                case ConstantsR64.ASM_DREAMASS:
+                case ConstantsR64.ASM_CA65:
                     byteToken = ".byte";
                     break;
                 default:
@@ -319,30 +320,32 @@ public class Tools {
             }
             output.append(",$00,$00,$00").append(System.getProperty("line.separator"));
             switch (editorPanes.getActiveCompiler()) {
-                case ConstantsR64.COMPILER_ACME:
+                case ConstantsR64.ASM_ACME:
                     output.insert(0, "!byte ");
                     break;
-                case ConstantsR64.COMPILER_DASM:
+                case ConstantsR64.ASM_DASM:
                     output.insert(0, "dc.b ");
                     break;
-                case ConstantsR64.COMPILER_64TASS:
-                case ConstantsR64.COMPILER_CA65:
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
-                case ConstantsR64.COMPILER_DREAMASS:
+                case ConstantsR64.ASM_64TASS:
+                case ConstantsR64.ASM_CA65:
+                case ConstantsR64.ASM_KICKASSEMBLER:
+                case ConstantsR64.ASM_TMPX:
+                case ConstantsR64.ASM_DREAMASS:
                     output.insert(0, ".byte ");
                     break;
             }
             switch (editorPanes.getActiveCompiler()) {
-                case ConstantsR64.COMPILER_ACME:
-                case ConstantsR64.COMPILER_64TASS:
-                case ConstantsR64.COMPILER_CA65:
-                case ConstantsR64.COMPILER_DREAMASS:
+                case ConstantsR64.ASM_ACME:
+                case ConstantsR64.ASM_TMPX:
+                case ConstantsR64.ASM_64TASS:
+                case ConstantsR64.ASM_CA65:
+                case ConstantsR64.ASM_DREAMASS:
                     output.insert(0, "*=$0801"+System.getProperty("line.separator"));
                     break;
-                case ConstantsR64.COMPILER_KICKASSEMBLER:
+                case ConstantsR64.ASM_KICKASSEMBLER:
                     output.insert(0, ".pc = $0801"+System.getProperty("line.separator"));
                     break;
-                case ConstantsR64.COMPILER_DASM:
+                case ConstantsR64.ASM_DASM:
                     output.insert(0, "org $0801"+System.getProperty("line.separator"));
                     break;
             }
@@ -468,22 +471,25 @@ public class Tools {
                                 // *************************
                                 if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
                                     switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.COMPILER_ACME:
+                                        case ConstantsR64.ASM_ACME:
                                             insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        case ConstantsR64.ASM_TMPX:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.ASM_KICKASSEMBLER:
                                             insert = ".import text \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_CA65:
+                                        case ConstantsR64.ASM_CA65:
                                             insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_DREAMASS:
+                                        case ConstantsR64.ASM_DREAMASS:
                                             insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_DASM:
+                                        case ConstantsR64.ASM_DASM:
                                             insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_64TASS:
+                                        case ConstantsR64.ASM_64TASS:
                                             insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                     }
@@ -493,22 +499,25 @@ public class Tools {
                                 // *************************
                                 else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64") || FileTools.getFileExtension(f).equalsIgnoreCase("prg")) {
                                     switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.COMPILER_ACME:
+                                        case ConstantsR64.ASM_ACME:
                                             insert = "!bin \""+relpath+"\",,2"+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        case ConstantsR64.ASM_TMPX:
+                                            insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.ASM_KICKASSEMBLER:
                                             insert = ".import c64 \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_CA65:
+                                        case ConstantsR64.ASM_CA65:
                                             insert = ".incbin \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_DREAMASS:
+                                        case ConstantsR64.ASM_DREAMASS:
                                             insert = ".binclude \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_DASM:
+                                        case ConstantsR64.ASM_DASM:
                                             insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_64TASS:
+                                        case ConstantsR64.ASM_64TASS:
                                             insert = ".binary \""+relpath+"\",2"+System.getProperty("line.separator");
                                             break;
                                     }
@@ -520,22 +529,25 @@ public class Tools {
                                 // *************************
                                 else {
                                     switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.COMPILER_ACME:
+                                        case ConstantsR64.ASM_ACME:
                                             insert = "!bin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_KICKASSEMBLER:
+                                        case ConstantsR64.ASM_TMPX:
+                                            insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
+                                            break;
+                                        case ConstantsR64.ASM_KICKASSEMBLER:
                                             insert = ".import binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_CA65:
+                                        case ConstantsR64.ASM_CA65:
                                             insert = ".incbin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_DASM:
+                                        case ConstantsR64.ASM_DASM:
                                             insert = "incbin \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_DREAMASS:
+                                        case ConstantsR64.ASM_DREAMASS:
                                             insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
-                                        case ConstantsR64.COMPILER_64TASS:
+                                        case ConstantsR64.ASM_64TASS:
                                             insert = ".binary \""+relpath+"\""+System.getProperty("line.separator");
                                             break;
                                     }
@@ -555,22 +567,25 @@ public class Tools {
                                 String insert = "";
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
                                 switch (editorPanes.getActiveCompiler()) {
-                                    case ConstantsR64.COMPILER_ACME:
+                                    case ConstantsR64.ASM_ACME:
                                         insert = "!src \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
-                                    case ConstantsR64.COMPILER_DASM:
-                                        insert = "include \""+relpath+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_KICKASSEMBLER:
-                                        insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
-                                        break;
-                                    case ConstantsR64.COMPILER_CA65:
+                                    case ConstantsR64.ASM_TMPX:
                                         insert = ".include \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
-                                    case ConstantsR64.COMPILER_64TASS:
+                                    case ConstantsR64.ASM_DASM:
+                                        insert = "include \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.ASM_KICKASSEMBLER:
+                                        insert = ".import source \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.ASM_CA65:
+                                        insert = ".include \""+relpath+"\""+System.getProperty("line.separator");
+                                        break;
+                                    case ConstantsR64.ASM_64TASS:
                                         insert = ".binclude \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
-                                    case ConstantsR64.COMPILER_DREAMASS:
+                                    case ConstantsR64.ASM_DREAMASS:
                                         insert = "#include \""+relpath+"\""+System.getProperty("line.separator");
                                         break;
                                 }

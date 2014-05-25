@@ -203,10 +203,10 @@ public class FunctionExtractor {
         // get scripts  here
         ArrayList<String> scripts = new ArrayList<>();
         switch(compiler) {
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.ASM_KICKASSEMBLER:
                 scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_KICKASS));
                 break;
-            case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.ASM_64TASS:
                 scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_64TASS));
                 break;
         }
@@ -248,8 +248,8 @@ public class FunctionExtractor {
 
     public static String getFunctionString(int compiler) {
         switch (compiler) {
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-            case ConstantsR64.COMPILER_64TASS:
+            case ConstantsR64.ASM_KICKASSEMBLER:
+            case ConstantsR64.ASM_64TASS:
             default:
                 return ConstantsR64.STRING_FUNCTION_KICKASSEMBLER;
         }
@@ -321,13 +321,13 @@ public class FunctionExtractor {
 
     protected static String addMacroToken(String keyword, String funmacString, int compiler) {
         // for dream ass, add "."
-        if (ConstantsR64.COMPILER_DREAMASS==compiler) {
+        if (ConstantsR64.ASM_DREAMASS==compiler) {
             keyword = "."+keyword;
         }
-        if (ConstantsR64.COMPILER_KICKASSEMBLER==compiler && funmacString.equals(getMacroString(compiler))) {
+        if (ConstantsR64.ASM_KICKASSEMBLER==compiler && funmacString.equals(getMacroString(compiler))) {
             keyword = ":"+keyword;
         }
-        if (ConstantsR64.COMPILER_ACME==compiler && funmacString.equals(getMacroString(compiler))) {
+        if (ConstantsR64.ASM_ACME==compiler && funmacString.equals(getMacroString(compiler))) {
             keyword = "+"+keyword;
         }
         return keyword;
@@ -339,17 +339,17 @@ public class FunctionExtractor {
 
     public static String getMacroString(int compiler) {
         switch (compiler) {
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
-            case ConstantsR64.COMPILER_64TASS:
-            case ConstantsR64.COMPILER_CA65:
+            case ConstantsR64.ASM_KICKASSEMBLER:
+            case ConstantsR64.ASM_64TASS:
+            case ConstantsR64.ASM_CA65:
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
-            case ConstantsR64.COMPILER_DREAMASS:
+            case ConstantsR64.ASM_DREAMASS:
                 return ConstantsR64.STRING_MACRO_DREAMASS;
-            case ConstantsR64.COMPILER_ACME:
+            case ConstantsR64.ASM_ACME:
                 return ConstantsR64.STRING_MACRO_ACME;
-            case ConstantsR64.COMPILER_TMPX:
+            case ConstantsR64.ASM_TMPX:
                 return ConstantsR64.STRING_MACRO_TMPX;
-            case ConstantsR64.COMPILER_DASM:
+            case ConstantsR64.ASM_DASM:
                 return ConstantsR64.STRING_MACRO_DASM;
             default:
                 return ConstantsR64.STRING_MACRO_KICKASSEMBLER;

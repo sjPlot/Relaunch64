@@ -54,7 +54,7 @@ public class EditorPaneProperties {
         editorPane = null;
         modified = false;
         filePath = null;
-        compiler = ConstantsR64.COMPILER_KICKASSEMBLER;
+        compiler = ConstantsR64.ASM_KICKASSEMBLER;
         script = 0;
     }
     public RL64TextArea getEditorPane() {

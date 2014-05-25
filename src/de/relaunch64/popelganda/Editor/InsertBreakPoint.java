@@ -66,7 +66,7 @@ public class InsertBreakPoint {
         // check for valid value
         if (null==editorPane) return;
         // check for KickAss
-        if (editorPane.getActiveCompiler()!=ConstantsR64.COMPILER_KICKASSEMBLER) {
+        if (editorPane.getActiveCompiler()!=ConstantsR64.ASM_KICKASSEMBLER) {
             JOptionPane.showMessageDialog(null, "Breakpoints are currently only supported under KickAssembler!");
             return;
         }
@@ -91,7 +91,7 @@ public class InsertBreakPoint {
     }
     public static boolean sourceHasBreakpointMacro(String source, int compiler) {
         switch (compiler) {
-            case ConstantsR64.COMPILER_KICKASSEMBLER:
+            case ConstantsR64.ASM_KICKASSEMBLER:
                 return (source!=null && source.contains(".macro break()"));
         }
         return false;
