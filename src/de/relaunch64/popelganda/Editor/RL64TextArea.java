@@ -247,13 +247,9 @@ public class RL64TextArea extends StandaloneTextArea {
     /**
      * Sets tab-size for editor component.
      */
-    public final void setTabs() {
-        // TODO indent doesn't seem to work
-        // set default font
-        Font mf = settings.getMainFont();
-        setProperty("buffer.tabSize", String.valueOf(settings.getTabWidth()));
-        setProperty("buffer.folding", "indent");
-        getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
+    public final void setTabs(int tabSize) {
+        setProperty("buffer.tabSize", String.valueOf(tabSize));
+        propertiesChanged();
     }
     /**
      * Sets the compiler syntax. See {@code ConstantsR64.assemblymodes} for different values. This method
@@ -354,7 +350,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // set syntaxscheme
         setSyntaxScheme();
         // set tab width
-        setTabs();
+        setTabs(settings.getTabWidth());
         // set fonts
         setFonts();
         // setup keylistener

@@ -407,6 +407,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         setModifiedTabFont(false);
         editorPanes.updateFonts();
+        editorPanes.setTabs(settings.getTabWidth());
         editorPanes.updateAntiAlias();
     }
     @Action(enabledProperty = "modifiedTabScheme")

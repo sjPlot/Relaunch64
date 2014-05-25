@@ -380,8 +380,14 @@ public class EditorPanes {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setTabs();
             editorpane.setFonts();
+        }
+    }
+    public void setTabs(int tabSize) {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            final RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setTabs(tabSize);
         }
     }
     /**
