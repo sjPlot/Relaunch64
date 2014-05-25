@@ -348,6 +348,7 @@ public class EditorPanes {
             editorpane.setSyntaxScheme();
             // set new compiler scheme
             ep.setCompiler(compiler);
+            editorpane.setCompiler(compiler);
         }
     }
     public void updateColorScheme() {

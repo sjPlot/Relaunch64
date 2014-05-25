@@ -115,7 +115,6 @@ public class Assembler_acme implements Assembler
         return new LinkedHashMap<>();
     }
 
-    // TODO labelsGetStart does not work right now, at least with ACME. Returns empty string, even if label ".la" etc. is in line
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
