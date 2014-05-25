@@ -785,6 +785,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setLineNumerAlignment(Gutter.RIGHT);
                 editorPanes.updateLineNumberAlignment();
                 break;
+            case "xyz":
+                String t1 = editorPanes.getActiveEditorPane().getText();
+                String t2 = editorPanes.getActiveEditorPane().getBuffer().getText();
+                t1 = t1.replaceAll("\r", "---r").replaceAll("\n", "---n");
+                t2 = t2.replaceAll("\r", "---r").replaceAll("\n", "---n");
+                System.out.println("Editor: "+t1);
+                System.out.println("Buffer: "+t2);
         }
         if (text.startsWith("cs")) {
             try {
