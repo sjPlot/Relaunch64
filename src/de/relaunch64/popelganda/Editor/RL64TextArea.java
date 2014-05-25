@@ -45,6 +45,7 @@ import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
+import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.util.SyntaxUtilities;
 
 /**
@@ -198,9 +199,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * Sets the font of the editor component and the gutter. Furthermore,
      * antialias-setting is updated
      */
-    public final void setFonts() {
-        // set default font
-        Font mf = settings.getMainFont();
+    public final void setFonts(Font mf) {
         // set text font
         setProperty("view.font", mf.getFontName());
         setProperty("view.fontsize", String.valueOf(mf.getSize()));
@@ -209,44 +208,30 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.font", mf.getFontName());
         setProperty("view.gutter.fontsize", String.valueOf(mf.getSize()));
         setProperty("view.gutter.fontstyle", "0");
-        // set line number alignment
-        setLineNumberAlignment();
         // set fonts
         setFont(mf);
         getPainter().setFont(mf);
         getGutter().setFont(mf);
-        // set antialias
-        setTextAntiAlias();
     }
     /**
      * Sets line number alignment og gutter.
+     * @param alignment
      */
-    public final void setLineNumberAlignment() {
-        // set line number alignment
-        if (settings!=null) getGutter().setLineNumberAlignment(settings.getLineNumerAlignment());
+    public final void setLineNumberAlignment(int alignment) {
+        String align;
+        switch (alignment) {
+            case Gutter.RIGHT: align = "right"; break;
+            case Gutter.CENTER: align = "center"; break;
+            default: align = "left"; break;
+        }
+        setProperty("view.gutter.numberAlignment", align);
     }
     /**
      * Sets antialiasing for text.
+     * @param antialias
      */
-    public final void setTextAntiAlias() {
-        if (settings!=null) {
-            // set default font
-            Font mf = settings.getMainFont();
-            // set antialias
-            setProperty("view.antiAlias", "true");
-            getPainter().setAntiAlias(new AntiAlias(settings.getAntiAlias()));
-            getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
-        }
-    }
-    /**
-     * Resizing the editor component removes anti alias and resets line alignment.
-     * Fixed by overriding repaint and calling methods there.
-     */
-    @Override
-    public void repaint() {
-        setTextAntiAlias();
-        setLineNumberAlignment();
-        super.repaint();
+    public final void setTextAntiAlias(String antialias) {
+        setProperty("view.antiAlias", antialias);
     }
     /**
      * Sets tab-size for editor component.
@@ -254,7 +239,6 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     public final void setTabs(int tabSize) {
         setProperty("buffer.tabSize", String.valueOf(tabSize));
-        propertiesChanged();
     }
     /**
      * Sets the compiler syntax. See {@code ConstantsR64.assemblymodes} for different values. This method
@@ -354,10 +338,14 @@ public class RL64TextArea extends StandaloneTextArea {
         setCompiler(settings.getPreferredCompiler());
         // set syntaxscheme
         setSyntaxScheme();
+        // set line number alignment
+        setLineNumberAlignment(settings.getLineNumerAlignment());
         // set tab width
         setTabs(settings.getTabWidth());
         // set fonts
-        setFonts();
+        setFonts(settings.getMainFont());
+        // set antialias
+        setTextAntiAlias(settings.getAntiAlias());
         // setup keylistener
         keyListener = new RL64KeyListener();
     }

@@ -737,15 +737,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         switch (text) {
             case "aa":
                 settings.setAntiAlias(AntiAlias.STANDARD);
-                editorPanes.updateAntiAlias();
+                editorPanes.setAntiAlias(settings.getAntiAlias());
                 break;
             case "aas":
                 settings.setAntiAlias(AntiAlias.SUBPIXEL);
-                editorPanes.updateAntiAlias();
+                editorPanes.setAntiAlias(settings.getAntiAlias());
                 break;
             case "aan":
                 settings.setAntiAlias(AntiAlias.NONE);
-                editorPanes.updateAntiAlias();
+                editorPanes.setAntiAlias(settings.getAntiAlias());
                 break;
             case "cs":
                 settings.setAlternativeAssemblyMode(false);
@@ -757,15 +757,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
             case "lal":
                 settings.setLineNumerAlignment(Gutter.LEFT);
-                editorPanes.updateLineNumberAlignment();
+                editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
                 break;
             case "lac":
                 settings.setLineNumerAlignment(Gutter.CENTER);
-                editorPanes.updateLineNumberAlignment();
+                editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
                 break;
             case "lar":
                 settings.setLineNumerAlignment(Gutter.RIGHT);
-                editorPanes.updateLineNumberAlignment();
+                editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
                 break;
             case "xyz":
                 String t1 = editorPanes.getActiveEditorPane().getText();
@@ -790,7 +790,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             try {
                 int size = Integer.parseInt(text.substring(2));
                 settings.setMainfont(new Font(settings.getMainfont(Settings.FONTNAME), Font.PLAIN, size));
-                editorPanes.updateFonts();
+                editorPanes.setFonts(settings.getMainFont());
             }
             catch(IndexOutOfBoundsException | NumberFormatException ex) {
             }

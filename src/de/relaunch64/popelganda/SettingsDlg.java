@@ -290,6 +290,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 setModifiedTabFont(true);
             }
         });
+        jComboBoxAntiAlias.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+            }
+        });
         jTextAreaUserScript.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
@@ -406,16 +412,16 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 break;
         }
         setModifiedTabFont(false);
-        editorPanes.updateFonts();
+        editorPanes.setFonts(settings.getMainFont());
+        editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
         editorPanes.setTabs(settings.getTabWidth());
-        editorPanes.updateAntiAlias();
+        editorPanes.setAntiAlias(settings.getAntiAlias());
     }
     @Action(enabledProperty = "modifiedTabScheme")
     public void applyColorScheme() {
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         setModifiedTabScheme(false);
         editorPanes.updateColorScheme();
-        editorPanes.updateAntiAlias();
     }
     @Action
     public void addNewScript() {

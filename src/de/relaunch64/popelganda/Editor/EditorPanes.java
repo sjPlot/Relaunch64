@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.awt.dnd.DropTarget;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -190,7 +191,6 @@ public class EditorPanes {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                editorPane.setFonts();
                 // set cursor
                 setCursor(editorPane);
             }
@@ -374,25 +374,26 @@ public class EditorPanes {
             editorpane.setCompilerSyntax();
         }
     }
-    public void updateLineNumberAlignment() {
+    public void setLineNumberAlignment(int alignment) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setLineNumberAlignment();
+            editorpane.setLineNumberAlignment(alignment);
         }
     }
-    public void updateAntiAlias() {
+    public void setAntiAlias(String antialias) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setTextAntiAlias();
+            editorpane.setTextAntiAlias(antialias);
+            editorpane.propertiesChanged();
         }
     }
-    public void updateFonts() {
+    public void setFonts(Font mf) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setFonts();
+            editorpane.setFonts(mf);
         }
     }
     public void setTabs(int tabSize) {
@@ -400,6 +401,7 @@ public class EditorPanes {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setTabs(tabSize);
+            editorpane.propertiesChanged();
         }
     }
     /**
