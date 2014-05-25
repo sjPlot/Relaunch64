@@ -49,7 +49,6 @@ import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -104,7 +103,7 @@ import org.jdesktop.application.TaskService;
  * The application's main frame.
  */
 public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
-    private EditorPanes editorPanes;
+    private final EditorPanes editorPanes;
     private final ErrorHandler errorHandler;
     private final FindReplace findReplace;
     private final List<Integer> comboBoxHeadings = new ArrayList<>();
@@ -120,7 +119,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
-    // TODO TMPx support
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());
@@ -1056,7 +1054,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      * 
      */
     @Action
-    public void addNewTab() {
+    public final void addNewTab() {
         editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler(), jComboBoxRunScripts.getSelectedIndex());
     }
     @Action
