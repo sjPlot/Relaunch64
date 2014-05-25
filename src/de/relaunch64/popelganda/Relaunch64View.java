@@ -157,7 +157,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         initComboBoxes();
         // init listeners and accelerator table
         initListeners();
-        initDropTargets();
         // set sys info
         jTextAreaLog.setText(Tools.getSystemInformation()+System.getProperty("line.separator"));
         // set application icon
@@ -165,29 +164,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // init editorpane-dataclass
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jComboBoxRunScripts, this, settings);
-        // init syntax highlighting for editor pane
-        editorPanes.addEditorPane(jEditorPaneMain, null, null, settings.getPreferredCompiler(), settings.getLastUserScript());
         // check if we have any parmater
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
         }
         // restore last opened files
         if (settings.getReopenOnStartup()) reopenFiles();
-        // set input focus
-        /**
-         * JDK 8 Lamda
-         */
-//        SwingUtilities.invokeLater(() -> {
-//            jEditorPaneMain.requestFocusInWindow();
-//        });
-        // set input focus
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                checkForUpdates();
-                jEditorPaneMain.requestFocusInWindow();
-            }
-        });
+        // open empty if none present
+        if (jTabbedPane1.getTabCount()<1) addNewTab();
     }
     /**
      * This is an application listener that is initialised when running the program
@@ -879,13 +863,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
         }
     }
-    /**
-     * 
-     */
-    private void initDropTargets() {
-        jEditorPaneMain.setDragEnabled(true);
-        DropTarget dropTarget = new DropTarget(jEditorPaneMain, this);   
-    }
     public void autoConvertNumbers(String selection) {
         // check for valid selection
         if (selection!=null && !selection.trim().isEmpty()) {
@@ -1165,14 +1142,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
                 }
             }
-            if (jTabbedPane1.getTabCount()<1) {
-                // init editorpane-dataclass
-                editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jComboBoxRunScripts, this, settings);
-                // init syntax highlighting for editor pane
-                editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler(), jComboBoxRunScripts.getSelectedIndex());
-                // set input focus
-                jEditorPaneMain.requestFocusInWindow();
-            }
+            if (jTabbedPane1.getTabCount()<1) addNewTab();
         }
     }
     /**
@@ -1811,7 +1781,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jEditorPaneMain = new de.relaunch64.popelganda.Editor.RL64TextArea(settings);
         jPanelFind = new javax.swing.JPanel();
         jButtonFindPrev = new javax.swing.JButton();
         jButtonFindNext = new javax.swing.JButton();
@@ -1957,10 +1926,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(100, 100));
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
-
-        jEditorPaneMain.setName("jEditorPaneMain"); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(Relaunch64View.class);
-        jTabbedPane1.addTab(resourceMap.getString("jEditorPaneMain.TabConstraints.tabTitle"), jEditorPaneMain); // NOI18N
 
         jPanelFind.setName("jPanelFind"); // NOI18N
 
@@ -2752,7 +2717,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;
-    private de.relaunch64.popelganda.Editor.RL64TextArea jEditorPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

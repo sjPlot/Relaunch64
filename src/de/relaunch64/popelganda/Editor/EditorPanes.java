@@ -587,46 +587,38 @@ public class EditorPanes {
             tabbedPane.setSelectedIndex(opened);
             return false;
         }
-        // retrieve current tab
-        int selectedTab = tabbedPane.getSelectedIndex();
-        // check whether we have any tab selected
-        if (selectedTab!=-1) {
-            try {
-                // check for valid value
-                if (filepath!=null && filepath.exists()) {
-                    // read file
-                    byte[] buffer = new byte[(int) filepath.length()];
-                    try (InputStream in = new FileInputStream(filepath)) {
-                        in.read(buffer);
-                    }
-                    catch (IOException ex) {
-                        ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-                        return false;
-                    }
-                    finally {
-                        String buf = new String(buffer);
-                        boolean updateTabPane = closeInitialTab();
-                        boolean CRLF = buf.contains("\r\n");
-                        if (CRLF) buf = buf.replaceAll("\r\n", "\n");
-                        boolean CR = buf.contains("\r");
-                        if (CR) buf = buf.replaceAll("\r", "\n");
-                        boolean LF = buf.contains("\n");
-                        // if yes, add new tab
-                        selectedTab = addNewTab(filepath, buf, getFileName(filepath), compiler, script)-1;
-                        // check whether compiler combobox needs update
-                        if (updateTabPane) updateTabbedPane();
-                        // set cursor
-                        EditorPaneProperties epp = editorPaneArray.get(selectedTab);
-                        setCursor(epp.getEditorPane());
-                        epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.getProperty("line.separator"));
-                        return true;
-                    }
+        try {
+            // check for valid value
+            if (filepath!=null && filepath.exists()) {
+                // read file
+                byte[] buffer = new byte[(int) filepath.length()];
+                try (InputStream in = new FileInputStream(filepath)) {
+                    in.read(buffer);
+                }
+                catch (IOException ex) {
+                    ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                    return false;
+                }
+                finally {
+                    String buf = new String(buffer);
+                    boolean CRLF = buf.contains("\r\n");
+                    if (CRLF) buf = buf.replaceAll("\r\n", "\n");
+                    boolean CR = buf.contains("\r");
+                    if (CR) buf = buf.replaceAll("\r", "\n");
+                    boolean LF = buf.contains("\n");
+                    // if yes, add new tab
+                    int selectedTab = addNewTab(filepath, buf, getFileName(filepath), compiler, script)-1;
+                    // set cursor
+                    EditorPaneProperties epp = editorPaneArray.get(selectedTab);
+                    setCursor(epp.getEditorPane());
+                    epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.getProperty("line.separator"));
+                    return true;
                 }
             }
-            catch (IndexOutOfBoundsException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-                return false;
-            }
+        }
+        catch (IndexOutOfBoundsException ex) {
+            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+            return false;
         }
         return false;
     }
@@ -643,29 +635,6 @@ public class EditorPanes {
             if (opened!=null && opened.equals(fp)) return i;
         }
         return -1;
-    }
-    private boolean closeInitialTab() {
-        // check if inital tab is empty and unused, and then remove it
-        // initial tab has no file path
-        File f = editorPaneArray.get(0).getFilePath();
-        // title is "untitled"
-        String t = tabbedPane.getTitleAt(0);
-        // initial tab has no content
-        String c = editorPaneArray.get(0).getEditorPane().getText();
-        // and is not modified.
-        boolean m = editorPaneArray.get(0).isModified();
-        if (null==f && t.equalsIgnoreCase("untitled") && (null==c || c.isEmpty()) && !m) {
-            // remove empty initial tab
-            try {
-                // if save successful, remove data
-                editorPaneArray.remove(0);
-                tabbedPane.remove(0);
-                return true;
-            }
-            catch (IndexOutOfBoundsException | UnsupportedOperationException ex) {
-            }
-        }
-        return false;
     }
     /**
      * 
