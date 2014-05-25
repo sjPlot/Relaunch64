@@ -1232,8 +1232,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             clearLog2();
             // clesr error lines
             errorHandler.clearErrors();
-            // remove \r
-            script = script.replaceAll("\r", "");
+            // convert CRLF to LF (WIN)
+            script = script.replaceAll("\r\n", "\n");
+            // convert CR to LF (MAC)
+            script = script.replaceAll("\r", "\n");
             // retrieve script lines
             String[] lines = script.split("\n");
             // check if source file needs to be saved and auto save is active
