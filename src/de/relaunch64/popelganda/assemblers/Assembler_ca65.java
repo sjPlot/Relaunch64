@@ -39,6 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Deque;
 import java.util.ArrayList;
 
@@ -60,21 +61,30 @@ public class Assembler_ca65 implements Assembler
 
     @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
+        class lineInfo {
+            final LinkedList<String> name;
+            final int line;
+            lineInfo(LinkedList<String> name, int line) {
+                this.name = name;
+                this.line = line;
+            }
+        };
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
+        LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
         Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope)\\b)?\\s*(?<label2>[a-zA-Z_][a-zA-Z0-9_]*)?.*");
-        Deque<String> scopes = new LinkedList<>();
+        LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
             while ((line = lineReader.readLine()) != null) {
+                if (lineReader.getLineNumber() == lineNumber) myscope = (LinkedList)scopes.clone();
+
                 Matcher m = p.matcher(line);
-
                 if (!m.matches()) continue;
-                String label = m.group("label");
 
+                String label = m.group("label");
                 if (label != null) {
-                    String fullLabel;
                     if (lineNumber > 0) {
                         if (label.charAt(0) == '@') { // local label
                             if (scopeFound) continue;
@@ -88,25 +98,13 @@ public class Assembler_ca65 implements Assembler
                         } else {
                             localLabelValues.clear();
                         }
-                    }
-
-                    if (scopes.isEmpty()) {
-                        fullLabel = label; // global scope
                     } else {
-                        StringBuilder kbuild = new StringBuilder();
-
-                        for (String s : scopes) { // build full name
-                            if (s.length() == 0) continue;
-                            kbuild.append(s);
-                            kbuild.append("::");
-                        }
-                        kbuild.append(label);
-                        fullLabel = kbuild.toString();
+                        if (label.charAt(0) == '@') continue; // ignore
                     }
 
-                    if (!labelValues.containsValue(fullLabel)) {
-                        labelValues.put(lineReader.getLineNumber(), fullLabel); // add if not listed already
-                    }
+                    LinkedList<String> newlabel = (LinkedList)scopes.clone();
+                    newlabel.addLast(label);
+                    labels.add(new lineInfo(newlabel, lineReader.getLineNumber()));
                 }
 
                 String directive = m.group("directive"); // track scopes
@@ -125,6 +123,55 @@ public class Assembler_ca65 implements Assembler
         catch (IOException ex) {
         }
         labelValues.putAll(localLabelValues);
+        // Simple global scope
+        if (myscope.isEmpty() || lineNumber < 1) {
+            for (lineInfo label : labels) {
+                String fullLabel;
+                StringBuilder kbuild = new StringBuilder();
+                boolean first = false;
+
+                for (String s : label.name) { // build full name
+                    if (first) kbuild.append("::");
+                    kbuild.append(s);
+                    first = true;
+                }
+
+                fullLabel = kbuild.toString();
+                if (!labelValues.containsValue(fullLabel)) {
+                    labelValues.put(label.line, fullLabel); // add if not listed already
+                }
+            }
+            return labelValues;
+        }
+        // Local scope
+        for (lineInfo label : labels) {
+            ListIterator<String> myscopei = myscope.listIterator(0);
+            StringBuilder kbuild = new StringBuilder();
+            boolean different = false, anon = false;
+
+            for (String name : label.name) {
+                if (different) {
+                    kbuild.append("::");
+                } else {
+                    if (myscopei.hasNext() && myscopei.next().equals(name)) continue;
+                    different = true;
+                }
+                if (name.length() == 0) {
+                    anon = true;
+                    break;
+                }
+                kbuild.append(name);
+            }
+            if (anon) continue;
+
+            if (!different) kbuild.append(label.name.getLast());
+            if (kbuild.length() == 0) continue;
+
+            String fullLabel = kbuild.toString();
+            if (!labelValues.containsValue(fullLabel)) {
+                labelValues.put(label.line, fullLabel); // add if not listed already
+            }
+        }
         return labelValues;
     }
 

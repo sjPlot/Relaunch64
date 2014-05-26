@@ -82,20 +82,39 @@ public class Assembler_64tass implements Assembler {
             }
         };
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
+        LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
         LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm to old to understand it...
-        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
+        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
-
+        boolean scopeFound = false;
         try {
             while ((line = lineReader.readLine()) != null) {
+                if (lineReader.getLineNumber() == lineNumber) myscope = (LinkedList)scopes.clone();
+
                 Matcher m = p.matcher(line);
-
                 if (!m.matches()) continue;
-                String label = m.group("label");
 
+                String label = m.group("label");
                 if (label != null) {
+                    if (lineNumber > 0) {
+                        if (label.charAt(0) == '_') { // local label
+                            if (scopeFound || lineNumber < 1) continue;
+                            if (!localLabelValues.containsValue(label)) {
+                                localLabelValues.put(lineReader.getLineNumber(), label); // add if not listed already
+                            }
+                            continue;
+                        } 
+                        if (lineNumber < lineReader.getLineNumber()) {
+                            scopeFound = true;
+                        } else {
+                            localLabelValues.clear();
+                        }
+                    } else {
+                        if (label.charAt(0) == '_') continue; // ignore
+                    }
+
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) {
                         continue; // ignore opcodes
                     }
@@ -103,8 +122,6 @@ public class Assembler_64tass implements Assembler {
                     newlabel.addLast(label);
                     labels.add(new lineInfo(newlabel, lineReader.getLineNumber()));
                 }
-
-                if (lineReader.getLineNumber() == lineNumber) myscope = (LinkedList)scopes.clone();
 
                 String directive = m.group("directive"); // track scopes
                 if (directive == null) continue;
@@ -123,6 +140,7 @@ public class Assembler_64tass implements Assembler {
         }
         catch (IOException ex) {
         }
+        labelValues.putAll(localLabelValues);
         // Simple global scope
         if (myscope.isEmpty() || lineNumber < 1) {
             for (lineInfo label : labels) {
@@ -135,8 +153,8 @@ public class Assembler_64tass implements Assembler {
                     kbuild.append(s);
                     first = true;
                 }
-                fullLabel = kbuild.toString();
 
+                fullLabel = kbuild.toString();
                 if (!labelValues.containsValue(fullLabel)) {
                     labelValues.put(label.line, fullLabel); // add if not listed already
                 }
@@ -172,7 +190,6 @@ public class Assembler_64tass implements Assembler {
                 labelValues.put(label.line, fullLabel); // add if not listed already
             }
         }
-
         return labelValues;
     }
 
