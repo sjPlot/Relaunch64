@@ -225,12 +225,14 @@ public class EditorPanes {
         return ep.getLineOfOffset(caretPosition);
     }
     public void gotoLine(int line, int column) {
-        // get text area
-        RL64TextArea ep = getActiveEditorPane();
-        // set caret position
-        ep.setCaretPosition(ep.getLineStartOffset(line-1)+column-1);
-        // scroll and center caret position
-        ep.scrollAndCenterCaret();
+        if (line > 0) {
+            // get text area
+            RL64TextArea ep = getActiveEditorPane();
+            // set caret position
+            ep.setCaretPosition(ep.getLineStartOffset(line-1)+column-1);
+            // scroll and center caret position
+            ep.scrollAndCenterCaret();
+        }
     }
     /**
      * Sets the input focus to the editor pane
@@ -994,29 +996,24 @@ public class EditorPanes {
         }
     }
     public void gotoNextLabel() {
-        // goto next label
-        gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
-                                                getActiveEditorPane().getCaretLine()+1,
-                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0),
-                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler(), 0)));
+        gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT, 
+                getActiveEditorPane().getCaretLine()+1,
+                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0)), 1);
     }
     public void gotoPrevLabel() {
-        gotoLabel(EditorPaneTools.findJumpToken(DIRECTION_PREV,
-                                                getActiveEditorPane().getCaretLine()+1,
-                                                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0),
-                                                LabelExtractor.getLabelNames(false, getActiveSourceCode(), getActiveCompiler(), 0)));
+        gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
+                getActiveEditorPane().getCaretLine()+1,
+                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0)), 1);
     }
     public void gotoNextSection() {
-        gotoSection(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
-                                                  getActiveEditorPane().getCaretLine()+1,
-                                                  SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString()),
-                                                  SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
+        gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
+                getActiveEditorPane().getCaretLine()+1,
+                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString())), 1);
     }
     public void gotoPrevSection() {
-        gotoSection(EditorPaneTools.findJumpToken(DIRECTION_PREV,
-                                                  getActiveEditorPane().getCaretLine()+1,
-                                                  SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString()),
-                                                  SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString())));
+        gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
+                getActiveEditorPane().getCaretLine()+1,
+                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString())), 1);
     }
     public void undo() {
         RL64TextArea ep = getActiveEditorPane();

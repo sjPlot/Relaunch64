@@ -82,13 +82,10 @@ public class EditorPaneTools {
             // TODO reselect replaced text
         }
     }
-    public static String findJumpToken(int direction, int currentLine, ArrayList<Integer> ln, ArrayList<String> names) {
+    public static int findJumpToken(int direction, int currentLine, ArrayList<Integer> ln) {
         // check for valid values
-        if (null==ln || null==names) return null;
-        String dest = null;
+        if (null==ln || ln.isEmpty()) return 0;
         // check if we found anything
-        boolean labelFound = false;
-        int wrap = 0;
         switch (direction) {
             case EditorPanes.DIRECTION_NEXT:
                 // iterate all line numbers
@@ -96,33 +93,22 @@ public class EditorPaneTools {
                     // if we found a line number greater than current
                     // line, we found the next label from caret position
                     if (ln.get(i)>currentLine) {
-                        dest = names.get(i);
-                        labelFound = true;
-                        break;
+                        return ln.get(i);
                     }
                 }
-                break;
+                return ln.get(0);
             case EditorPanes.DIRECTION_PREV:
-                wrap = ln.size()-1;
                 // iterate all line numbers
                 for (int i=ln.size()-1; i>=0; i--) {
                     // if we found a line number smaller than current
                     // line, we found the previous label from caret position
                     if (ln.get(i)<currentLine) {
-                        dest = names.get(i);
-                        labelFound = true;
-                        break;
+                        return ln.get(i);
                     }
                 }
-                break;
+                return ln.get(ln.size()-1);
+            default:
+                return 0;
         }
-        try {
-            // found anything?
-            // if not, start from beginning
-            if (!labelFound) dest = names.get(wrap);
-        }
-        catch (IndexOutOfBoundsException ex) {
-        }
-        return dest;
     }
 }
