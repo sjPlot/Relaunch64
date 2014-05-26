@@ -72,7 +72,7 @@ public class Assembler_acme implements Assembler
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b).*");
+        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b)?\\s*(?<directive>!(?:zone|zn|subzone|sz)\\b)?.*");
         String line;
         boolean scopeFound = false;
         try {
@@ -93,15 +93,18 @@ public class Assembler_acme implements Assembler
                         } 
                     }
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    if (lineNumber > 0) {
-                        if (lineNumber < lineReader.getLineNumber()) {
-                            scopeFound = true;
-                        } else {
-                            localLabelValues.clear();
-                        }
-                    }
                     if (!labelValues.containsValue(label)) {
                         labelValues.put(lineReader.getLineNumber(), label); // add if not listed already
+                    }
+                }
+
+                String directive = m.group("directive"); // track zones
+                if (directive == null) continue;
+                if (lineNumber > 0) {    // TODO: support subzones
+                    if (lineNumber < lineReader.getLineNumber()) {
+                        scopeFound = true;
+                    } else {
+                        localLabelValues.clear();
                     }
                 }
             }
