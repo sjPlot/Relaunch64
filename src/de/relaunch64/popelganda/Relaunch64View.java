@@ -996,14 +996,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void jumpToLabel() {
         // get word under caret
-        String label = editorPanes.getActiveEditorPane().getCaretString(true, "");
-        // check whether we have an assembler that uses colons at the end of labels
-        boolean isColonAssembler = (ConstantsR64.ASM_KICKASSEMBLER==editorPanes.getActiveCompiler() || 
-                                    ConstantsR64.ASM_DREAMASS==editorPanes.getActiveCompiler() || 
-                                    ConstantsR64.ASM_DASM==editorPanes.getActiveCompiler() || 
-                                    ConstantsR64.ASM_CA65==editorPanes.getActiveCompiler());
-        if (label!=null && isColonAssembler) label = label+":";
-        editorPanes.gotoLabel(label);
+        editorPanes.gotoLabel(editorPanes.getActiveEditorPane().getCaretString(true, ""));
     }
     @Action
     public void insertSection() {

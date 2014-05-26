@@ -299,9 +299,6 @@ public class EditorPanes {
      * 
      * @param name the name of the section where to go.
      */
-    public void gotoSection(String name) {
-        gotoLine(SectionExtractor.getSections(getActiveSourceCode(), getCompilerCommentString()), name);
-    }
     public void gotoSection(String name, int selectedTab) {
         gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), getCompilerCommentString()), name);
     }
