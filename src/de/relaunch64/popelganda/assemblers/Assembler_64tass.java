@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Deque;
@@ -72,11 +73,20 @@ public class Assembler_64tass implements Assembler {
 
     @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
+        class lineInfo {
+            final LinkedList<String> name;
+            final int line;
+            lineInfo(LinkedList<String> name, int line) {
+                this.name = name;
+                this.line = line;
+            }
+        };
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
+        LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm to old to understand it...
         Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
-        Deque<String> scopes = new LinkedList<>();
+        LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
 
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -86,29 +96,15 @@ public class Assembler_64tass implements Assembler {
                 String label = m.group("label");
 
                 if (label != null) {
-                    String fullLabel;
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) {
                         continue; // ignore opcodes
                     }
-
-                    if (scopes.isEmpty()) {
-                        fullLabel = label; // global scope
-                    } else {
-                        StringBuilder kbuild = new StringBuilder();
-
-                        for (String s : scopes) { // build full name
-                            if (s.length() == 0) continue;
-                            kbuild.append(s);
-                            kbuild.append('.');
-                        }
-                        kbuild.append(label);
-                        fullLabel = kbuild.toString();
-                    }
-
-                    if (!labelValues.containsValue(fullLabel)) {
-                        labelValues.put(lineReader.getLineNumber(), fullLabel); // add if not listed already
-                    }
+                    LinkedList<String> newlabel = (LinkedList)scopes.clone();
+                    newlabel.addLast(label);
+                    labels.add(new lineInfo(newlabel, lineReader.getLineNumber()));
                 }
+
+                if (lineReader.getLineNumber() == lineNumber) myscope = (LinkedList)scopes.clone();
 
                 String directive = m.group("directive"); // track scopes
                 if (directive == null) continue;
@@ -127,6 +123,56 @@ public class Assembler_64tass implements Assembler {
         }
         catch (IOException ex) {
         }
+        // Simple global scope
+        if (myscope.isEmpty() || lineNumber < 1) {
+            for (lineInfo label : labels) {
+                String fullLabel;
+                StringBuilder kbuild = new StringBuilder();
+                boolean first = false;
+
+                for (String s : label.name) { // build full name
+                    if (first) kbuild.append('.');
+                    kbuild.append(s);
+                    first = true;
+                }
+                fullLabel = kbuild.toString();
+
+                if (!labelValues.containsValue(fullLabel)) {
+                    labelValues.put(label.line, fullLabel); // add if not listed already
+                }
+            }
+            return labelValues;
+        }
+        // Local scope
+        for (lineInfo label : labels) {
+            ListIterator<String> myscopei = myscope.listIterator(0);
+            StringBuilder kbuild = new StringBuilder();
+            boolean different = false, anon = false;
+
+            for (String name : label.name) {
+                if (different) {
+                    kbuild.append('.');
+                } else {
+                    if (myscopei.hasNext() && myscopei.next().equals(name)) continue;
+                    different = true;
+                }
+                if (name.length() == 0) {
+                    anon = true;
+                    break;
+                }
+                kbuild.append(name);
+            }
+            if (anon) continue;
+
+            if (!different) kbuild.append(label.name.getLast());
+            if (kbuild.length() == 0) continue;
+
+            String fullLabel = kbuild.toString();
+            if (!labelValues.containsValue(fullLabel)) {
+                labelValues.put(label.line, fullLabel); // add if not listed already
+            }
+        }
+
         return labelValues;
     }
 
