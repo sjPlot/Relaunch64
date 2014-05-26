@@ -495,7 +495,7 @@ public class RL64TextArea extends StandaloneTextArea {
                     // else just add list w/o scroll pane
                     suggestionPopup.add(suggestionList, BorderLayout.CENTER);
                 }
-                suggestionPopup.show(this, location.x, getBaseline(0, 0) + location.y);
+                suggestionPopup.show(this, location.x + getGutter().getWidth(), getBaseline(0, 0) + location.y);
                 // set input focus to popup
                 /**
                  * JDK 8 Lambda
