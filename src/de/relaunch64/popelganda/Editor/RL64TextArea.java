@@ -39,6 +39,7 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.BorderFactory;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.Registers;
@@ -473,44 +474,49 @@ public class RL64TextArea extends StandaloneTextArea {
                     break;
             }
             // check if we have any labels
-            if (labels!=null && labels.length>0) {
-                Point location = offsetToXY(getCaretPosition());
-                // create suggestion pupup
-                suggestionPopup = new JPopupMenu();
-                suggestionPopup.removeAll();
-                suggestionPopup.setOpaque(false);
-                suggestionPopup.setBorder(null);
-                // create JList with label items
-                suggestionList = createSuggestionList(labels);
-                suggestionContinuedWord = suggestionSubWord;
-                // check minimum length of list and add scroll pane if list is too long
-                if (labels.length>20) {
-                    javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
-                    listScrollPane.setBorder(null);
-                    listScrollPane.setPreferredSize(new java.awt.Dimension(150,300));
-                    listScrollPane.setName(sugListContainerName);
-                    suggestionPopup.add(listScrollPane, BorderLayout.CENTER);
-                }
-                else {
-                    // else just add list w/o scroll pane
-                    suggestionPopup.add(suggestionList, BorderLayout.CENTER);
-                }
-                suggestionPopup.show(this, location.x + getGutter().getWidth(), getBaseline(0, 0) + location.y);
-                // set input focus to popup
-                /**
-                 * JDK 8 Lambda
-                 */
+            if (labels == null || labels.length < 1) return;
+            if (labels.length == 1) { // single suggestion, just type it in
+                    final String selectedSuggestion = ((String)labels[0]).substring(suggestionSubWord.length());
+                    getBuffer().insert(getCaretPosition(), selectedSuggestion);
+                    return;
+            }
+            Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
+            // create suggestion pupup
+            suggestionPopup = new JPopupMenu();
+            suggestionPopup.removeAll();
+            suggestionPopup.setOpaque(false);
+            suggestionPopup.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            // create JList with label items
+            suggestionList = createSuggestionList(suggestionSubWord, labels);
+            suggestionContinuedWord = suggestionSubWord;
+            // check minimum length of list and add scroll pane if list is too long
+            if (labels.length>20) {
+                javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
+                listScrollPane.setBorder(null);
+                listScrollPane.setPreferredSize(new java.awt.Dimension(suggestionList.getFixedCellWidth() + (int)listScrollPane.getVerticalScrollBar().getPreferredSize().getWidth(),300));
+                listScrollPane.setName(sugListContainerName);
+                suggestionPopup.add(listScrollPane, BorderLayout.CENTER);
+            }
+            else {
+                // else just add list w/o scroll pane
+                suggestionPopup.add(suggestionList, BorderLayout.CENTER);
+            }
+            suggestionPopup.show(this, location.x + getGutter().getWidth() - suggestionPopup.getMargin().left - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).left, 
+                    getBaseline(0, 0) + location.y - suggestionPopup.getMargin().top - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).top);
+            // set input focus to popup
+            /**
+             * JDK 8 Lambda
+             */
 //                SwingUtilities.invokeLater(() -> {
 //                    suggestionList.requestFocusInWindow();
 //                });
-                // set input focus to popup
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        suggestionList.requestFocusInWindow();
-                    }
-                });
-            }
+            // set input focus to popup
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    suggestionList.requestFocusInWindow();
+                }
+            });
         }
         catch (IndexOutOfBoundsException ex) {
         }
@@ -533,17 +539,26 @@ public class RL64TextArea extends StandaloneTextArea {
      * @param labels the items of the list.
      * @return a JList
      */
-    protected JList createSuggestionList(final Object[] labels) {
+    protected JList createSuggestionList(String subWord, final Object[] labels) {
         // create list model
         DefaultListModel dlm = new DefaultListModel();
+        String longest = "";
         // add items to list model. we need this for the key listener
         // we need to add in reverse order, because items are added at
         // start of list model
-        for (int i=labels.length-1; i>=0; i--) dlm.add(0, labels[i]);
+        for (int i = 0; i < labels.length; i++) {
+            String label = (String)labels[i];
+            if (label.equals(subWord)) continue;
+            dlm.addElement(label);
+            if (label.length() > longest.length()) longest = label;
+        }
         // create list from list model
         JList sList = new JList(dlm);
         sList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         sList.setSelectedIndex(0);
+        sList.setFont(settings.getMainFont());
+        sList.setPrototypeCellValue(longest);
+        sList.setFixedCellHeight(getPainter().getLineHeight());
         sList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -583,7 +598,7 @@ public class RL64TextArea extends StandaloneTextArea {
                 // typing when popup is already shown
                 String typedChar = String.valueOf(evt.getKeyChar());
                 // check whether types char is character or digit
-                Pattern p = Pattern.compile("[a-zA-Z0-9]+");
+                Pattern p = Pattern.compile("[a-zA-Z0-9.]+");
                 Matcher m = p.matcher(typedChar);
                 if (m.matches()) {
                     // if yes, "virtually" append to already typed chars of

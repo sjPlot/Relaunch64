@@ -78,6 +78,7 @@ public class FunctionExtractor {
         if (!subWord.isEmpty()) {
             for (int i=functions.size()-1; i>=0; i--) {
                 if (!functions.get(i).startsWith(subWord)) functions.remove(i);
+                else if (functions.get(i).equals(subWord)) functions.remove(i);
             }
         }
         // sort list
@@ -126,6 +127,7 @@ public class FunctionExtractor {
         if (!subWord.isEmpty()) {
             for (int i=macros.size()-1; i>=0; i--) {
                 if (!macros.get(i).startsWith(subWord)) macros.remove(i);
+                else if (macros.get(i).equals(subWord)) macros.remove(i);
             }
         }
         // sort list
@@ -216,6 +218,7 @@ public class FunctionExtractor {
             if (!subWord.isEmpty()) {
                 for (int i=scripts.size()-1; i>=0; i--) {
                     if (!scripts.get(i).startsWith(subWord)) scripts.remove(i);
+                    if (scripts.get(i).equals(subWord)) scripts.remove(i);
                 }
             }
         }
