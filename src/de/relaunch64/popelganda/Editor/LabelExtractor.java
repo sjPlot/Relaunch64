@@ -72,7 +72,6 @@ public class LabelExtractor {
         if (!subWord.isEmpty()) {
             for (int i=labels.size()-1; i>=0; i--) {
                 if (!labels.get(i).startsWith(subWord)) labels.remove(i);
-                else if (labels.get(i).equals(subWord)) labels.remove(i);
             }
         }
         // sort list

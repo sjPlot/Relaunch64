@@ -156,6 +156,8 @@ public class RL64TextArea extends StandaloneTextArea {
     public void processKeyEvent(KeyEvent evt) {
         if (evt.getID() == KeyEvent.KEY_RELEASED) {
             keyListener.keyReleased(evt);
+        } else if (evt.getID() == KeyEvent.KEY_PRESSED) {
+            keyListener.keyPressed(evt);
         }
         if (!evt.isConsumed()) {
             super.processKeyEvent(evt);
@@ -174,6 +176,37 @@ public class RL64TextArea extends StandaloneTextArea {
             // ctrl+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
+            }
+            if (suggestionPopup != null) {
+                if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    hideSuggestion();
+                } else {
+                    showSuggestion(SUGGESTION_LABEL);
+                }
+            }
+        }
+
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            if (suggestionPopup != null) {
+                if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    switch (evt.getKeyCode()) {
+                    case KeyEvent.VK_DOWN:
+                    case KeyEvent.VK_PAGE_DOWN:
+                        evt.consume();
+                        suggestionList.requestFocusInWindow();
+                        suggestionList.setSelectedIndex(0);
+                        break;
+                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_PAGE_UP:
+                        evt.consume();
+                        suggestionList.requestFocusInWindow();
+                        suggestionList.setSelectedIndex(suggestionList.getModel().getSize() - 1);
+                        suggestionList.ensureIndexIsVisible(suggestionList.getModel().getSize() - 1);
+                        break;
+                    default: break;
+                    }
+                }
             }
         }
     }
@@ -443,8 +476,11 @@ public class RL64TextArea extends StandaloneTextArea {
             String macroPrefix = "";
             if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
                 macroPrefix = getMacroPrefix(compiler);
+                suggestionSubWord = getCaretString(false, macroPrefix);
+            } else {
+                suggestionSubWord = ConstantsR64.assemblers[getCompiler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
+                if (suggestionSubWord.length() == 0) return;
             }
-            suggestionSubWord = getCaretString(false, macroPrefix);
             // check for valid value
             if (null==suggestionSubWord) return;
             // init variable
@@ -459,8 +495,6 @@ public class RL64TextArea extends StandaloneTextArea {
                     labels = FunctionExtractor.getMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getCompiler());
                     break;
                 case SUGGESTION_LABEL:
-                    suggestionSubWord = ConstantsR64.assemblers[getCompiler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
-                    if (suggestionSubWord.length() == 0) break;
                     // retrieve label list, remove last colon
                     labels = LabelExtractor.getLabelNames(suggestionSubWord, getBuffer().getText(), getCompiler(), getCaretLine()+1);
                     break;
@@ -483,8 +517,6 @@ public class RL64TextArea extends StandaloneTextArea {
             Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
             // create suggestion pupup
             suggestionPopup = new JPopupMenu();
-            suggestionPopup.removeAll();
-            suggestionPopup.setOpaque(false);
             suggestionPopup.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             // create JList with label items
             suggestionList = createSuggestionList(suggestionSubWord, labels);
@@ -492,31 +524,18 @@ public class RL64TextArea extends StandaloneTextArea {
             // check minimum length of list and add scroll pane if list is too long
             if (labels.length>20) {
                 javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
-                listScrollPane.setBorder(null);
-                listScrollPane.setPreferredSize(new java.awt.Dimension(suggestionList.getFixedCellWidth() + (int)listScrollPane.getVerticalScrollBar().getPreferredSize().getWidth(),300));
+                listScrollPane.setBorder(BorderFactory.createEmptyBorder());
+                listScrollPane.setPreferredSize(new java.awt.Dimension(suggestionList.getFixedCellWidth() + (int)listScrollPane.getVerticalScrollBar().getPreferredSize().getWidth(), 300));
                 listScrollPane.setName(sugListContainerName);
-                suggestionPopup.add(listScrollPane, BorderLayout.CENTER);
+                suggestionPopup.add(listScrollPane);
             }
             else {
                 // else just add list w/o scroll pane
-                suggestionPopup.add(suggestionList, BorderLayout.CENTER);
+                suggestionPopup.add(suggestionList);
             }
             suggestionPopup.show(this, location.x + getGutter().getWidth() - suggestionPopup.getMargin().left - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).left, 
-                    getBaseline(0, 0) + location.y - suggestionPopup.getMargin().top - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).top);
-            // set input focus to popup
-            /**
-             * JDK 8 Lambda
-             */
-//                SwingUtilities.invokeLater(() -> {
-//                    suggestionList.requestFocusInWindow();
-//                });
-            // set input focus to popup
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    suggestionList.requestFocusInWindow();
-                }
-            });
+                    getBaseline(0, 0) + location.y - suggestionPopup.getMargin().top - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).top + getPainter().getLineHeight());
+            requestFocusInWindow();
         }
         catch (IndexOutOfBoundsException ex) {
         }
@@ -548,14 +567,12 @@ public class RL64TextArea extends StandaloneTextArea {
         // start of list model
         for (int i = 0; i < labels.length; i++) {
             String label = (String)labels[i];
-            if (label.equals(subWord)) continue;
             dlm.addElement(label);
             if (label.length() > longest.length()) longest = label;
         }
         // create list from list model
         JList sList = new JList(dlm);
         sList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        sList.setSelectedIndex(0);
         sList.setFont(settings.getMainFont());
         sList.setPrototypeCellValue(longest);
         sList.setFixedCellHeight(getPainter().getLineHeight());
