@@ -58,6 +58,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -1536,6 +1537,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
+
+        try { // Try to scale default font size according to screen resolution.
+            Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
+            UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
+        } catch (Exception e) { }
     }
     /**
      * 
