@@ -40,7 +40,6 @@ import java.util.regex.Pattern;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Deque;
 import java.util.ArrayList;
 
 /**
@@ -68,7 +67,7 @@ public class Assembler_ca65 implements Assembler
                 this.name = name;
                 this.line = line;
             }
-        };
+        }
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
         LinkedList<lineInfo> labels = new LinkedList<>();

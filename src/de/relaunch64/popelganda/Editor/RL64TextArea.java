@@ -19,7 +19,6 @@ package de.relaunch64.popelganda.Editor;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Tools;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -473,9 +472,8 @@ public class RL64TextArea extends StandaloneTextArea {
         hideSuggestion();
         try {
             // retrieve chars that have already been typed
-            String macroPrefix = "";
             if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
-                macroPrefix = getMacroPrefix(compiler);
+                String macroPrefix = getMacroPrefix(compiler);
                 suggestionSubWord = getCaretString(false, macroPrefix);
             } else {
                 suggestionSubWord = ConstantsR64.assemblers[getCompiler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
@@ -513,6 +511,17 @@ public class RL64TextArea extends StandaloneTextArea {
                     final String selectedSuggestion = ((String)labels[0]).substring(suggestionSubWord.length());
                     getBuffer().insert(getCaretPosition(), selectedSuggestion);
                     return;
+            }
+            // check if caret is visible. if not, location is NULL, i.e. exception thrown
+            if (!isCaretVisible()) {
+                // TODO does not work, scrolling is done too late
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollToCaret(true);
+                    }
+                });
+                return;
             }
             Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
             // create suggestion pupup
@@ -555,18 +564,16 @@ public class RL64TextArea extends StandaloneTextArea {
      * Creates a JList object that is added to the suggestion / auto-completion
      * popup.
      * 
-     * @param labels the items of the list.
+     * @param labels the items of the
+     * @param subWord list.
      * @return a JList
      */
     protected JList createSuggestionList(String subWord, final Object[] labels) {
         // create list model
         DefaultListModel dlm = new DefaultListModel();
         String longest = "";
-        // add items to list model. we need this for the key listener
-        // we need to add in reverse order, because items are added at
-        // start of list model
-        for (int i = 0; i < labels.length; i++) {
-            String label = (String)labels[i];
+        for (Object l : labels) {
+            String label = (String) l;
             dlm.addElement(label);
             if (label.length() > longest.length()) longest = label;
         }

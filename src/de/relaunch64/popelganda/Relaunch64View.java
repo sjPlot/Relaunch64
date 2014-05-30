@@ -49,6 +49,7 @@ import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -1541,7 +1542,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         try { // Try to scale default font size according to screen resolution.
             Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
             UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
-        } catch (Exception e) { }
+        } catch (HeadlessException e) { }
     }
     /**
      * 
