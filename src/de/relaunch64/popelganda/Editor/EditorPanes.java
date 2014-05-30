@@ -154,6 +154,7 @@ public class EditorPanes {
                 }
             }
         });
+        // add buffer listener. the jEdit editor component has no document listener
         buffer.addBufferListener(new BufferListener() {
             @Override public void foldLevelChanged(JEditBuffer jeb, int i, int i1) {
             }
@@ -235,7 +236,7 @@ public class EditorPanes {
         }
     }
     /**
-     * Sets the input focus to the editor pane
+     * Sets the input focus to the editor pane.
      * 
      * @param editorPane 
      */
@@ -294,29 +295,69 @@ public class EditorPanes {
         }
     }
     /**
-     * In the currently opened tab / activated source, jumps to the line (scrolls the editor pane 
-     * to the related line and sets the caret to that line), which containts the section named {@code name}.
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the section named {@code name}.
      * 
      * @param name the name of the section where to go.
+     * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoSection(String name, int selectedTab) {
         gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), getCompilerCommentString()), name);
     }
+    /**
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the labek named {@code name}.
+     * 
+     * @param name the name of the label where to go.
+     */
     public void gotoLabel(String name) {
         gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveCompiler(), 0), name);
     }
+    /**
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the label named {@code name}.
+     * 
+     * @param name the name of the label where to go.
+     * @param selectedTab the tab, which contains the source where to go
+     */
     public void gotoLabel(String name, int selectedTab) {
         gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveCompiler(), 0), name);
     }
+    /**
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the function named {@code name}.
+     * 
+     * @param name the name of the function where to go.
+     */
     public void gotoFunction(String name) {
         gotoLine(FunctionExtractor.getFunctions(getActiveSourceCode(), getActiveCompiler()), name);
     }
+    /**
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the function named {@code name}.
+     * 
+     * @param name the name of the function where to go.
+     * @param selectedTab the tab, which contains the source where to go
+     */
     public void gotoFunction(String name, int selectedTab) {
         gotoLine(FunctionExtractor.getFunctions(getSourceCode(selectedTab), getActiveCompiler()), name);
     }
+    /**
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the macro named {@code name}.
+     * 
+     * @param name the name of the macro where to go.
+     */
     public void gotoMacro(String name) {
         gotoLine(FunctionExtractor.getMacros(getActiveSourceCode(), getActiveCompiler()), name);
     }
+    /**
+     * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
+     * and sets the caret to that line), which containts the macro named {@code name}.
+     * 
+     * @param name the name of the macro where to go.
+     * @param selectedTab the tab, which contains the source where to go
+     */
     public void gotoMacro(String name, int selectedTab) {
         gotoLine(FunctionExtractor.getMacros(getSourceCode(selectedTab), getActiveCompiler()), name);
     }
