@@ -170,17 +170,17 @@ public class RL64TextArea extends StandaloneTextArea {
         public void keyReleased(KeyEvent evt) {
             // ctrl+space opens label-auto-completion
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
-                showSuggestion(SUGGESTION_LABEL);
+                showSuggestionPopup(SUGGESTION_LABEL);
             }
             // ctrl+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
-                showSuggestion(SUGGESTION_FUNCTION_MACRO_SCRIPT);
+                showSuggestionPopup(SUGGESTION_FUNCTION_MACRO_SCRIPT);
             }
             if (suggestionPopup != null) {
                 if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     hideSuggestion();
                 } else {
-                    showSuggestion(SUGGESTION_LABEL);
+                    showSuggestionPopup(SUGGESTION_LABEL);
                 }
             }
         }
@@ -456,6 +456,23 @@ public class RL64TextArea extends StandaloneTextArea {
         }
         return str;
     }
+    protected void showSuggestionPopup(final int type) {
+        // check if caret is visible. if not, location is NULL, i.e. exception thrown
+        if (!isCaretVisible()) {
+            // scroll to caret
+            scrollToCaret(true);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // call suggestion popup
+                    showSuggestion(type);
+                }
+            });
+        }
+        else {
+            showSuggestion(type);
+        }
+    }    
     /**
      * Create the auto-completion popup.
      * 
@@ -512,18 +529,12 @@ public class RL64TextArea extends StandaloneTextArea {
                     getBuffer().insert(getCaretPosition(), selectedSuggestion);
                     return;
             }
-            // check if caret is visible. if not, location is NULL, i.e. exception thrown
-            if (!isCaretVisible()) {
-                // TODO does not work, scrolling is done too late
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollToCaret(true);
-                    }
-                });
-                return;
-            }
+            // get location of caret as coordinate
             Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
+            // check if null
+            if (null==location) {
+                location = new Point(0, 0);
+            }
             // create suggestion pupup
             suggestionPopup = new JPopupMenu();
             suggestionPopup.setBorder(BorderFactory.createLineBorder(Color.BLACK));
