@@ -172,7 +172,7 @@ public class RL64TextArea extends StandaloneTextArea {
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestionPopup(SUGGESTION_LABEL);
             }
-            // ctrl+space opens macro-function-auto-completion
+            // ctrl+shift+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
                 showSuggestionPopup(SUGGESTION_FUNCTION_MACRO_SCRIPT);
             }
@@ -187,6 +187,26 @@ public class RL64TextArea extends StandaloneTextArea {
 
         @Override
         public void keyPressed(KeyEvent evt) {
+            // insert indent on enter
+            // we count tabs on current line, insert enter, and indent by same amount of
+            // tabs as in previous line
+            if (evt.getKeyCode()==KeyEvent.VK_ENTER && !evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
+                // get text of current line
+                String line = getLineText(getCaretLine());
+                int tabcount = 0;
+                // count tabs at line start
+                while (line.charAt(tabcount)=='\t') {
+                    tabcount++;
+                }
+                // insert enter
+                insertEnterAndIndent();
+                // insert tabs according to prev line
+                while (tabcount>0) {
+                    insertTabAndIndent();
+                    tabcount--;
+                }
+                evt.consume();
+            }
             if (suggestionPopup != null) {
                 if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     switch (evt.getKeyCode()) {
