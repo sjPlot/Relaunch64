@@ -441,7 +441,6 @@ public class EditorPanes {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setTextAntiAlias(antialias);
-            editorpane.propertiesChanged();
         }
     }
     public void setFonts(Font mf) {
@@ -456,7 +455,6 @@ public class EditorPanes {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setTabs(tabSize);
-            editorpane.propertiesChanged();
         }
     }
     /**

@@ -71,6 +71,7 @@ public class ColorSchemes {
     public static final int COLOR_KEYWORD = 9;
     public static final int COLOR_COMPILERKEYWORD = 10;
     public static final int COLOR_SCRIPTKEYWORD = 11;
+    public static final int COLOR_SELECTION = 12;
     
     public static final int BACKGROUND = 99;
     public static final int LINE_BACKGROUND = 98;
@@ -103,6 +104,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(240, 240, 240); // light gray
                 case LINE_COLOR: return new Color(0,0,0); // black
                 case LINE_HIGHLIGHT: return new Color(220, 20, 60); // red
+                case COLOR_SELECTION: return new Color(204, 204, 204);
             }
             break;
         case SCHEME_PAIRED:
@@ -124,7 +126,8 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(244, 244, 244); // light gray
                 case LINE_COLOR: return new Color(0,0,0); // black
                 case LINE_HIGHLIGHT: return new Color(220, 20, 60); // red
-            }
+                case COLOR_SELECTION: return new Color(201, 201, 201);
+             }
             break;
         case SCHEME_C64:
             switch (tokentype) {
@@ -145,7 +148,8 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(160,160,255);
                 case LINE_COLOR: return new Color(64,64,224); 
                 case LINE_HIGHLIGHT: return new Color(255,255,255);
-            }
+                case COLOR_SELECTION: return new Color(50, 50, 173);
+             }
             break;
         case SCHEME_HELLO_KITTY:
             switch (tokentype) {
@@ -166,6 +170,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(255,182,193);
                 case LINE_COLOR: return new Color(255,182,193);
                 case LINE_HIGHLIGHT: return new Color(220,20,60);
+                case COLOR_SELECTION: return new Color(204, 200, 200);
             }
             break;
         case SCHEME_DARK:
@@ -187,6 +192,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(48,48,48);
                 case LINE_COLOR: return new Color(128,128,128);
                 case LINE_HIGHLIGHT: return new Color(211,211,211);
+                case COLOR_SELECTION: return new Color(5, 5, 5);
             }
             break;
         case SCHEME_BLUES:
@@ -208,6 +214,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(70,130,180);
                 case LINE_COLOR: return new Color(0,0,139);
                 case LINE_HIGHLIGHT: return new Color(199,21,133);
+                case COLOR_SELECTION: return new Color(198, 198, 204);
             }
             break;
         case SCHEME_SOLAR_LIGHT:
@@ -229,6 +236,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(238,233,214);
                 case LINE_COLOR: return new Color(148,162,162);
                 case LINE_HIGHLIGHT: return new Color(11,55,66);
+                case COLOR_SELECTION: return new Color(186, 182, 168);
             }
             break;
         case SCHEME_SOLAR_DARK:
@@ -250,6 +258,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(3,44,54);
                 case LINE_COLOR: return new Color(132,139,151);
                 case LINE_HIGHLIGHT: return new Color(253,246,229);
+                case COLOR_SELECTION: return new Color(3, 13, 15);
             }
             break;
         case SCHEME_DARK2:
@@ -271,6 +280,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(10,11,12);
                 case LINE_COLOR: return new Color(102,102,102);
                 case LINE_HIGHLIGHT: return new Color(4,136,174);
+                case COLOR_SELECTION: return new Color(53, 59, 64);
             }
             break;
         case SCHEME_GITHUB:
@@ -292,6 +302,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(236,236,236);
                 case LINE_COLOR: return new Color(160,160,160);
                 case LINE_HIGHLIGHT: return new Color(10,10,10);
+                case COLOR_SELECTION: return new Color(198, 198, 204);
             }
             break;
         case SCHEME_GREENBERET:
@@ -313,6 +324,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(180,191,180);
                 case LINE_COLOR: return new Color(139,69,19);
                 case LINE_HIGHLIGHT: return new Color(173,255,47);
+                case COLOR_SELECTION: return new Color(168, 179, 168);
             }
             break;
         case SCHEME_POPELGANDA:
@@ -334,7 +346,8 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(63,63,63);
                 case LINE_COLOR: return new Color(185,185,180);
                 case LINE_HIGHLIGHT: return new Color(255,255,255);
-            }
+                case COLOR_SELECTION: return new Color(25, 25, 25);
+             }
             break;
         case SCHEME_DEFAULT_REDUCED:
             switch (tokentype) {
@@ -358,6 +371,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(240, 240, 240); // light gray
                 case LINE_COLOR: return new Color(0,0,0); // black
                 case LINE_HIGHLIGHT: return new Color(220, 20, 60); // red
+                case COLOR_SELECTION: return new Color(204, 204, 204);
             }
             break;
         case SCHEME_POPELGANDA_REDUCED:
@@ -382,6 +396,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(63,63,63);
                 case LINE_COLOR: return new Color(185,185,180);
                 case LINE_HIGHLIGHT: return new Color(255,255,255);
+                case COLOR_SELECTION: return new Color(25, 25, 25);
             }
             break;
         case SCHEME_C64_REDUCED:
@@ -406,6 +421,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(160,160,255);
                 case LINE_COLOR: return new Color(64,64,224); 
                 case LINE_HIGHLIGHT: return new Color(255,255,255);
+                case COLOR_SELECTION: return new Color(50, 50, 173);
             }
             break;
         case SCHEME_GRAY:
@@ -427,6 +443,7 @@ public class ColorSchemes {
                 case LINE_BORDER: return new Color(230,230,230);
                 case LINE_COLOR: return new Color(149,149,149);
                 case LINE_HIGHLIGHT: return new Color(0,0,0);
+                case COLOR_SELECTION: return new Color(194, 194, 194);
             }
             break;
         }

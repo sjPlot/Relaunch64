@@ -264,7 +264,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxAlternativeAssemblyMode.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settings.setAlternativeAssemblyMode(jCheckBoxAlternativeAssemblyMode.isSelected());
+                setModifiedTabScheme(true);
             }
         });
         jCheckBoxReopenFiles.addActionListener(new java.awt.event.ActionListener() {
@@ -429,9 +429,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     }
     @Action(enabledProperty = "modifiedTabScheme")
     public void applyColorScheme() {
+        settings.setAlternativeAssemblyMode(jCheckBoxAlternativeAssemblyMode.isSelected());
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         setModifiedTabScheme(false);
         editorPanes.updateColorScheme();
+        editorPanes.updateAssemblyMode();
     }
     @Action
     public void addNewScript() {

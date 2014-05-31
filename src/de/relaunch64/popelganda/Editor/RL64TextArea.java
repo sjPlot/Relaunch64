@@ -268,6 +268,8 @@ public class RL64TextArea extends StandaloneTextArea {
         setFont(mf);
         getPainter().setFont(mf);
         getGutter().setFont(mf);
+        // fire property change message
+        propertiesChanged();
     }
     /**
      * Sets line number alignment og gutter.
@@ -281,6 +283,8 @@ public class RL64TextArea extends StandaloneTextArea {
             default: align = "left"; break;
         }
         setProperty("view.gutter.numberAlignment", align);
+        // fire property change message
+        propertiesChanged();
     }
     /**
      * Sets antialiasing for text.
@@ -288,6 +292,8 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     public final void setTextAntiAlias(String antialias) {
         setProperty("view.antiAlias", antialias);
+        // fire property change message
+        propertiesChanged();
     }
     /**
      * Sets tab-size for editor component.
@@ -295,6 +301,8 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     public final void setTabs(int tabSize) {
         setProperty("buffer.tabSize", String.valueOf(tabSize));
+        // fire property change message
+        propertiesChanged();
     }
     /**
      * Sets the compiler syntax. See {@code ConstantsR64.assemblymodes} for different values. This method
@@ -309,9 +317,13 @@ public class RL64TextArea extends StandaloneTextArea {
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         getBuffer().setMode(mode);
+        // fire property change message
+        propertiesChanged();
     }
     public final void setCodeFolding() {
         setProperty("buffer.folding", "explicit");
+        // fire property change message
+        propertiesChanged();
     }
     /**
      * Sets the color scheme / highlight color. No parameter is needed, since the 
@@ -355,6 +367,9 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.currentLineColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
         setProperty("view.gutter.focusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
         setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
+        // set text selection color
+        setProperty("view.selectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
+        setProperty("view.multipleSelectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
         // load color scheme
         Font mf = settings.getMainFont();
         // set for- and background color of text area
@@ -369,7 +384,9 @@ public class RL64TextArea extends StandaloneTextArea {
         getGutter().setBorder(1, bc, bc, bc);
         // or if there's a specific order?
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
-    }
+         // fire property change message
+        propertiesChanged();
+   }
     /**
      * Set compiler of current editor / buffer. Frequently needed information, for various functions,
      * so we put this variable as a global field for this class.
