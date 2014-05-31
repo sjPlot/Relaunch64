@@ -367,9 +367,11 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.gutter.currentLineColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
         setProperty("view.gutter.focusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
         setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
-        // set text selection color
+        // set text selection and caret color
         setProperty("view.selectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
         setProperty("view.multipleSelectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
+        setProperty("view.caretColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
+        setProperty("view.structureHighlightColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD));
         // load color scheme
         Font mf = settings.getMainFont();
         // set for- and background color of text area

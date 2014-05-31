@@ -264,7 +264,7 @@ public class ColorSchemes {
         case SCHEME_DARK2:
             switch (tokentype) {
                 case COLOR_NORMAL: return new Color(128,137,139); 
-                case COLOR_COMMENT: return new Color(64,69,70);
+                case COLOR_COMMENT: return new Color(74,81,82);
                 case COLOR_STRING: return new Color(233,170,145);
                 case COLOR_NUMBER: return new Color(228,101,184);
                 case COLOR_HEX: return new Color(97,172,123);
