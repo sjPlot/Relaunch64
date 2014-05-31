@@ -79,6 +79,26 @@ public class Assembler_tmpx implements Assembler
     }
 
     @Override
+    public String getIncludeSourceDirective(String path) {
+        return ".include \"" + path + "\"";
+    }
+
+    @Override
+    public String getIncludeTextDirective(String path) {
+        return ".binary \"" + path + "\"";
+    }
+
+    @Override
+    public String getIncludeC64Directive(String path) {
+        return ".binary \"" + path + "\",2";
+    }
+
+    @Override
+    public String getIncludeBinaryDirective(String path) {
+        return ".binary \"" + path + "\"";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z][a-zA-Z0-9_]*\\b).*");

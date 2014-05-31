@@ -69,6 +69,26 @@ public class Assembler_ca65 implements Assembler
     }
 
     @Override
+    public String getIncludeSourceDirective(String path) {
+        return ".include \"" + path + "\"";
+    }
+
+    @Override
+    public String getIncludeTextDirective(String path) {
+        return ".incbin \"" + path + "\"";
+    }
+
+    @Override
+    public String getIncludeC64Directive(String path) {
+        return ".incbin \"" + path + "\",2";
+    }
+
+    @Override
+    public String getIncludeBinaryDirective(String path) {
+        return ".incbin \"" + path + "\"";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         class lineInfo {
             final LinkedList<String> name;

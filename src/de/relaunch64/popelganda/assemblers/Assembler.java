@@ -44,6 +44,10 @@ public interface Assembler
 
     String getLineComment();
     String getByteDirective();
+    String getIncludeSourceDirective(String path);
+    String getIncludeTextDirective(String path);
+    String getIncludeC64Directive(String path);
+    String getIncludeBinaryDirective(String path);
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
 

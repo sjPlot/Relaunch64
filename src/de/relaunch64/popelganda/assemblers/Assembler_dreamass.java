@@ -81,6 +81,26 @@ public class Assembler_dreamass implements Assembler
     }
 
     @Override
+    public String getIncludeSourceDirective(String path) {
+        return "#include \"" + path + "\"";
+    }
+
+    @Override
+    public String getIncludeTextDirective(String path) {
+        return ".binclude \"" + path + "\"";
+    }
+
+    @Override
+    public String getIncludeC64Directive(String path) {
+        return ".binclude \"" + path + "\",2";
+    }
+
+    @Override
+    public String getIncludeBinaryDirective(String path) {
+        return ".binclude \"" + path + "\"";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumbers) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*");

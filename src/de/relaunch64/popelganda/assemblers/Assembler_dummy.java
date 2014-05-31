@@ -64,6 +64,26 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String getIncludeSourceDirective(String path) {
+        return "";
+    }
+
+    @Override
+    public String getIncludeTextDirective(String path) {
+        return "";
+    }
+
+    @Override
+    public String getIncludeC64Directive(String path) {
+        return "";
+    }
+
+    @Override
+    public String getIncludeBinaryDirective(String path) {
+        return "";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         return new LinkedHashMap<>();
     }

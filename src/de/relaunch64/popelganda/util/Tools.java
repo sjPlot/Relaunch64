@@ -434,93 +434,17 @@ public class Tools {
                             else {
                                 // retrieve relative path of iimport file
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
-                                // *************************
-                                // here we handle text files
-                                // *************************
-                                if (FileTools.getFileExtension(f).equalsIgnoreCase("txt")) {
-                                    switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.ASM_ACME:
-                                            insert = "!bin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_TMPX:
-                                            insert = ".binary \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_KICKASSEMBLER:
-                                            insert = ".import text \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_CA65:
-                                            insert = ".incbin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_DREAMASS:
-                                            insert = ".binclude \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_DASM:
-                                            insert = "incbin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_64TASS:
-                                            insert = ".binary \""+relpath+"\"\n";
-                                            break;
-                                    }
+                                switch (FileTools.getFileExtension(f).toLowerCase()) {
+                                    case "txt":
+                                        insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeTextDirective(relpath) + "\n";
+                                        break;
+                                    case "c64":
+                                    case "prg":
+                                        insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeC64Directive(relpath) + "\n";
+                                        break;
+                                    default:
+                                        insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeBinaryDirective(relpath) + "\n";
                                 }
-                                // *************************
-                                // here we handle c64 or prg files
-                                // *************************
-                                else if (FileTools.getFileExtension(f).equalsIgnoreCase("c64") || FileTools.getFileExtension(f).equalsIgnoreCase("prg")) {
-                                    switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.ASM_ACME:
-                                            insert = "!bin \""+relpath+"\",,2\n";
-                                            break;
-                                        case ConstantsR64.ASM_TMPX:
-                                            insert = ".binary \""+relpath+"\",2\n";
-                                            break;
-                                        case ConstantsR64.ASM_KICKASSEMBLER:
-                                            insert = ".import c64 \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_CA65:
-                                            insert = ".incbin \""+relpath+"\",2\n";
-                                            break;
-                                        case ConstantsR64.ASM_DREAMASS:
-                                            insert = ".binclude \""+relpath+"\",2\n";
-                                            break;
-                                        case ConstantsR64.ASM_DASM:
-                                            insert = "incbin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_64TASS:
-                                            insert = ".binary \""+relpath+"\",2\n";
-                                            break;
-                                    }
-                                }
-                                // *************************
-                                // here we handle any other valid binary files
-                                // like koa, fli, bin etc. See ConstantsR64.FILE_EXTENSIONS_INCLUDES
-                                // and FileTools.hasValidIncludeFileExtension for further info
-                                // *************************
-                                else {
-                                    switch (editorPanes.getActiveCompiler()) {
-                                        case ConstantsR64.ASM_ACME:
-                                            insert = "!bin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_TMPX:
-                                            insert = ".binary \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_KICKASSEMBLER:
-                                            insert = ".import binary \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_CA65:
-                                            insert = ".incbin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_DASM:
-                                            insert = "incbin \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_DREAMASS:
-                                            insert = ".binclude \""+relpath+"\"\n";
-                                            break;
-                                        case ConstantsR64.ASM_64TASS:
-                                            insert = ".binary \""+relpath+"\"\n";
-                                            break;
-                                    }
-                                }
-                                
                             }
                             editorPanes.insertString(insert);
                         }
@@ -532,31 +456,8 @@ public class Tools {
                         for (File f : sourcefiles) {
                             // if user hold down ctrl-key, use import-directive for asm-files
                             if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
-                                String insert = "";
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
-                                switch (editorPanes.getActiveCompiler()) {
-                                    case ConstantsR64.ASM_ACME:
-                                        insert = "!src \""+relpath+"\"\n";
-                                        break;
-                                    case ConstantsR64.ASM_TMPX:
-                                        insert = ".include \""+relpath+"\"\n";
-                                        break;
-                                    case ConstantsR64.ASM_DASM:
-                                        insert = "include \""+relpath+"\"\n";
-                                        break;
-                                    case ConstantsR64.ASM_KICKASSEMBLER:
-                                        insert = ".import source \""+relpath+"\"\n";
-                                        break;
-                                    case ConstantsR64.ASM_CA65:
-                                        insert = ".include \""+relpath+"\"\n";
-                                        break;
-                                    case ConstantsR64.ASM_64TASS:
-                                        insert = ".binclude \""+relpath+"\"\n";
-                                        break;
-                                    case ConstantsR64.ASM_DREAMASS:
-                                        insert = "#include \""+relpath+"\"\n";
-                                        break;
-                                }
+                                String insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeSourceDirective(relpath) + "\n";
                                 editorPanes.insertString(insert);
                             }
                             else {
