@@ -96,7 +96,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelFont.setFont(mainfont);
         // restart-to-apply-text hidden
         // set preferred compiler settings
-        jComboBoxPrefComp.setSelectedIndex(settings.getPreferredCompiler());
+        jComboBoxPrefComp.setSelectedIndex(settings.getPreferredAssembler());
         // init line number alignment
         switch (settings.getLineNumerAlignment()) {
             case Gutter.RIGHT:
@@ -396,7 +396,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         catch (NumberFormatException ex) {
         }
-        settings.setPreferredCompiler(jComboBoxPrefComp.getSelectedIndex());
+        settings.setPreferredAssembler(jComboBoxPrefComp.getSelectedIndex());
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         settings.setScaleFont(jCheckBoxScaleFonts.isSelected());
         switch(jComboBoxLineNumberAlign.getSelectedIndex()) {

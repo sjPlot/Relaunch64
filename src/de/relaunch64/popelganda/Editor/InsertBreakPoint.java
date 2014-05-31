@@ -65,13 +65,13 @@ public class InsertBreakPoint {
         // check for valid value
         if (null==editorPane) return;
         // check for KickAss
-        if (editorPane.getActiveCompiler()!=ConstantsR64.ASM_KICKASSEMBLER) {
+        if (editorPane.getActiveAssembler()!=ConstantsR64.ASM_KICKASSEMBLER) {
             JOptionPane.showMessageDialog(null, "Breakpoints are currently only supported under KickAssembler!");
             return;
         }
         boolean addMacro = false;
         // check if source already has a breakpoint macro
-        if (!sourceHasBreakpointMacro(editorPane.getActiveSourceCode(), editorPane.getActiveCompiler())) {
+        if (!sourceHasBreakpointMacro(editorPane.getActiveSourceCode(), editorPane.getActiveAssembler())) {
             // ask if macro should be added
             int option = JOptionPane.showConfirmDialog(null, "The breakpoint function requires a macro to be added to the source.\nWithout this macro, breakpoints won't work.\n\nDo you want to add this macro now to the end of the source?", "Insert Breakpoint", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             // check if user cancelled

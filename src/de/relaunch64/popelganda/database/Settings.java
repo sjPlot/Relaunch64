@@ -68,13 +68,13 @@ public class Settings {
     
     private static final String SETTING_RECENT_DOC = "recentDoc";
     private static final String SETTING_LAST_USED_PATH = "lastusedpath";
-    private static final String SETTING_PREF_COMP = "preferredCompiler";
+    private static final String SETTING_PREF_ASM = "preferredCompiler";
     private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_ANTIALIAS = "antialias";
     private static final String SETTING_SCALE_FONT = "scalefont";
-    private static final String REC_DOC_COMPILER = "compiler";
+    private static final String REC_DOC_ASSEMBLER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_CHECKUPDATES = "checkupdates";
@@ -88,7 +88,7 @@ public class Settings {
     private static final String SETTING_REOPEN_FILES = "reopenfiles";
     private static final String SETTING_REOPEN_FILES_CHILD = "rof";
 
-    private static final String ATTR_COMPILER = "compiler";
+    private static final String ATTR_ASM = "compiler";
     private static final String ATTR_SCRIPT = "script";
 
     private final File filepath;
@@ -257,9 +257,9 @@ public class Settings {
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PREF_COMP)) {
+        if (null==settingsFile.getRootElement().getChild(SETTING_PREF_ASM)) {
             // create element
-            Element el = new Element(SETTING_PREF_COMP);
+            Element el = new Element(SETTING_PREF_ASM);
             el.setText(String.valueOf(ConstantsR64.ASM_KICKASSEMBLER));
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
@@ -351,7 +351,7 @@ public class Settings {
         // if we have any valid document
         if (el!=null) {
             // retrieve compiler attribute
-            Attribute comp = el.getAttribute(REC_DOC_COMPILER);
+            Attribute comp = el.getAttribute(REC_DOC_ASSEMBLER);
             // if we have any valid attribute
             if (comp!=null) {
                 try {
@@ -501,7 +501,7 @@ public class Settings {
         }
         // add filepath
         el.setText(fp);
-        el.setAttribute(REC_DOC_COMPILER, String.valueOf(compiler));
+        el.setAttribute(REC_DOC_ASSEMBLER, String.valueOf(compiler));
         el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
     }
     public File getLastUsedPath() {
@@ -546,8 +546,8 @@ public class Settings {
         }
         el.setText(scale==Boolean.TRUE ? "1":"0");
     }
-    public int getPreferredCompiler() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
+    public int getPreferredAssembler() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_ASM);
         try {
             if (el!=null) return Integer.parseInt(el.getText());
         }
@@ -555,13 +555,13 @@ public class Settings {
         }
         return ConstantsR64.ASM_KICKASSEMBLER;
     }
-    public void setPreferredCompiler(int compiler) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);
+    public void setPreferredAssembler(int assembler) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_ASM);
         if (null==el) {
-            el = new Element(SETTING_PREF_COMP);
+            el = new Element(SETTING_PREF_ASM);
             settingsFile.getRootElement().addContent(el);
         }
-        el.setText(String.valueOf(compiler));
+        el.setText(String.valueOf(assembler));
     }
     public int getColorScheme() {
         Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
@@ -798,7 +798,7 @@ public class Settings {
             // check if exists
             if (f.exists()) {
                 // get compiler value
-                String attr_c = e.getAttributeValue(ATTR_COMPILER);
+                String attr_c = e.getAttributeValue(ATTR_ASM);
                 String attr_s = e.getAttributeValue(ATTR_SCRIPT);
                 // init defaults
                 int compiler = ConstantsR64.ASM_KICKASSEMBLER;
@@ -830,7 +830,7 @@ public class Settings {
         for (int i=0; i<ep.getCount(); i++) {
             // get file path and compiler settings of each file
             File fp = ep.getFilePath(i);
-            int c = ep.getCompiler(i);
+            int c = ep.getAssembler(i);
             int s = ep.getScript(i);
             // save if exists
             if (fp!=null && fp.exists()) {
@@ -838,7 +838,7 @@ public class Settings {
                 Element child = new Element(SETTING_REOPEN_FILES_CHILD);
                 // add path and compiler
                 child.setText(fp.getAbsolutePath());
-                child.setAttribute(ATTR_COMPILER, String.valueOf(c));
+                child.setAttribute(ATTR_ASM, String.valueOf(c));
                 child.setAttribute(ATTR_SCRIPT, String.valueOf(s));
                 // add to database
                 el.addContent(child);

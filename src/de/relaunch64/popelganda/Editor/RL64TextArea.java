@@ -419,7 +419,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // set explicit buffer folding
         setCodeFolding();
         // set default compiler
-        setAssembler(settings.getPreferredCompiler());
+        setAssembler(settings.getPreferredAssembler());
         // set syntaxscheme
         setSyntaxScheme();
         // set line number alignment

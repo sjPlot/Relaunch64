@@ -248,7 +248,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // init scripts
             initScripts();
             // init emulator combobox
-            jComboBoxCompilers.setSelectedIndex(settings.getPreferredCompiler());
+            jComboBoxCompilers.setSelectedIndex(settings.getPreferredAssembler());
             // select last used script
             jComboBoxRunScripts.setSelectedIndex(settings.getLastUserScript());
             // init goto comboboxes
@@ -366,19 +366,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     int doubleCounter = 2;
                     switch (comboBoxGotoIndex) {
                         case GOTO_SECTION:
-                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
+                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getLineComment());
                             break;
                         case GOTO_LABEL:
-                            token = LabelExtractor.getLabelNames(true, editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex), 0);
+                            token = LabelExtractor.getLabelNames(true, editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0);
                             break;
                         case GOTO_FUNCTION:
-                            token = FunctionExtractor.getFunctionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
+                            token = FunctionExtractor.getFunctionNames(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex));
                             break;
                         case GOTO_MACRO:
-                            token = FunctionExtractor.getMacroNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompiler(epIndex));
+                            token = FunctionExtractor.getMacroNames(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex));
                             break;
                         default:
-                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getCompilerCommentString());
+                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getLineComment());
                             break;
                     }
                     // check if anything found
@@ -1050,7 +1050,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     @Action
     public final void addNewTab() {
-        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredCompiler(), jComboBoxRunScripts.getSelectedIndex());
+        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredAssembler(), jComboBoxRunScripts.getSelectedIndex());
     }
     @Action
     public void openFile() {
@@ -1058,7 +1058,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openFile(fileToOpen);
     }
     private void openFile(File fileToOpen) {
-        openFile(fileToOpen, settings.getPreferredCompiler());
+        openFile(fileToOpen, settings.getPreferredAssembler());
     }
     private void openFile(File fileToOpen, int compiler) {
         openFile(fileToOpen, compiler, jComboBoxRunScripts.getSelectedIndex());
@@ -1170,7 +1170,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void runScript() {
         // check if user defined custom script
-        String script = Tools.getCustomScriptName(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
+        String script = Tools.getCustomScriptName(editorPanes.getActiveSourceCode(), ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getLineComment());
         // init cb-item
         Object item;
         // if we found no custom script in source, or script name was not found,
@@ -1234,7 +1234,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_SOURCE_DIR, parentFile);
                     // check if we have a cruncher-starttoken
-                    String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
+                    String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getLineComment());
                     // if we found cruncher-starttoken, replace placeholder 
                     if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
                     try {
@@ -1274,7 +1274,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         p.waitFor();
                         p.destroy();
                         // read and extract errors from log
-                        errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveCompiler());
+                        errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveAssembler());
                         // break loop if we have any errors
                         if (errorHandler.hasErrors() || p.exitValue()!=0) break;
                     }
@@ -1463,7 +1463,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void insertBytesFromFile() {
         // open dialog
         if (null==insertByteFromFileDlg) {
-            insertByteFromFileDlg = new InsertByteFromFileDlg(getFrame(), settings, editorPanes.getActiveCompiler());
+            insertByteFromFileDlg = new InsertByteFromFileDlg(getFrame(), settings, editorPanes.getActiveAssembler());
             insertByteFromFileDlg.setLocationRelativeTo(getFrame());
         }
         Relaunch64App.getApplication().show(insertByteFromFileDlg);
@@ -1491,7 +1491,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void insertSinusTable() {
         // open dialog
         if (null==insertSinusTableDlg) {
-            insertSinusTableDlg = new InsertSinusTableDlg(getFrame(), editorPanes.getActiveCompiler());
+            insertSinusTableDlg = new InsertSinusTableDlg(getFrame(), editorPanes.getActiveAssembler());
             insertSinusTableDlg.setLocationRelativeTo(getFrame());
         }
         Relaunch64App.getApplication().show(insertSinusTableDlg);

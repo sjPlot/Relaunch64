@@ -33,7 +33,6 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.Tools;
-import de.relaunch64.popelganda.util.ConstantsR64;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 

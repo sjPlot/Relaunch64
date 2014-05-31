@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
  * @author Daniel Lüdecke
  */
 public class SectionExtractor {
-    public static LinkedHashMap getSections(String source, String compilerComment) {
+    public static LinkedHashMap getSections(String source, String assemblerComment) {
         // prepare return values
         LinkedHashMap<Integer, String> sectionValues = new LinkedHashMap<>();
         // init vars
@@ -73,7 +73,7 @@ public class SectionExtractor {
                     m.reset(line); 
                     line = line.trim();
                     // check if line is a comment line and contains section pattern
-                    if (line.startsWith(compilerComment) && m.find()) {
+                    if (line.startsWith(assemblerComment) && m.find()) {
                         // if yes, add to return value
                         sectionValues.put(lineNumber, m.group(1));
                     }
@@ -84,11 +84,11 @@ public class SectionExtractor {
         }
         return sectionValues;
     }
-    public static ArrayList getSectionNames(String source, String compilerComment) {
+    public static ArrayList getSectionNames(String source, String assemblerComment) {
         // init return value
         ArrayList<String> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getSections(source, compilerComment);
+        LinkedHashMap<Integer, String> map = getSections(source, assemblerComment);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections
@@ -102,11 +102,11 @@ public class SectionExtractor {
         }
         return null;
     }
-    public static ArrayList getSectionLineNumbers(String source, String compilerComment) {
+    public static ArrayList getSectionLineNumbers(String source, String assemblerComment) {
         // init return value
         ArrayList<Integer> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getSections(source, compilerComment);
+        LinkedHashMap<Integer, String> map = getSections(source, assemblerComment);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections

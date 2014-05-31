@@ -100,11 +100,11 @@ public class EditorPanes {
      * @param content the content (e.g. the content of the loaded file) that should be set as default
      * text in the editor pane
      * @param title Tab title
-     * @param compiler the default compiler for this editor pane, so the correct syntax highlighting is applied
+     * @param assembler the default assembler for this editor pane, so the correct syntax highlighting is applied
      * @param script
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addNewTab(File fp, String content, String title, int compiler, int script) {
+    public int addNewTab(File fp, String content, String title, int assembler, int script) {
         // create new editor pane
         final RL64TextArea editorPane = new RL64TextArea(settings);
         editorPane.setName("jEditorPaneMain");
@@ -117,8 +117,8 @@ public class EditorPanes {
         if (fp!=null && fp.exists()) {
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
         }
-        // set compiler syntax style
-        editorPane.setAssembler(compiler);
+        // set assembler syntax style
+        editorPane.setAssembler(assembler);
         editorPane.setCompilerSyntax();
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
@@ -253,16 +253,6 @@ public class EditorPanes {
         }
     }
     /**
-     * The returns the comment char from the compiler syntax that is set
-     * for the current source code.
-     * 
-     * @return The comment string of the compiler that is set for the currently
-     * activated source code.
-     */
-    public String getCompilerCommentString() {
-        return ConstantsR64.assemblers[getActiveCompiler()].getLineComment();
-    }
-    /**
      * Inserts a (commented) section line into the source code. Sections are specific commented
      * line which may be used for source code navigation.
      * 
@@ -270,13 +260,13 @@ public class EditorPanes {
      */
     public void insertSection(String name) {
         // retrieve section names
-        ArrayList<String> names = SectionExtractor.getSectionNames(getActiveSourceCode(), getCompilerCommentString());
+        ArrayList<String> names = SectionExtractor.getSectionNames(getActiveSourceCode(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment());
         // check whether we either have no sections or new name does not already exists
         if (null==names || names.isEmpty() || !names.contains(name)) {
             // get current editor
             RL64TextArea ep = getActiveEditorPane();
             // set up section name
-            String insertString = getCompilerCommentString() + " ----- @" + name + "@ -----\n";
+            String insertString = ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " ----- @" + name + "@ -----\n";
             // insert string
             insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
         }
@@ -291,7 +281,7 @@ public class EditorPanes {
         String selection = ep.getSelectedText();
         if (selection!=null && !selection.isEmpty()) {
             // set up section name
-            String insertString = getCompilerCommentString() + " {{{\n" + selection + getCompilerCommentString() + " }}}\n";
+            String insertString = ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " {{{\n" + selection + ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " }}}\n";
             // insert string
             ep.replaceSelection(insertString);
         }
@@ -307,7 +297,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoSection(String name, int selectedTab) {
-        gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), getCompilerCommentString()), name);
+        gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), ConstantsR64.assemblers[getActiveAssembler()].getLineComment()), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -316,7 +306,7 @@ public class EditorPanes {
      * @param name the name of the label where to go.
      */
     public void gotoLabel(String name) {
-        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveCompiler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -326,7 +316,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoLabel(String name, int selectedTab) {
-        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveCompiler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveAssembler(), 0), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -335,7 +325,7 @@ public class EditorPanes {
      * @param name the name of the function where to go.
      */
     public void gotoFunction(String name) {
-        gotoLine(FunctionExtractor.getFunctions(getActiveSourceCode(), getActiveCompiler()), name);
+        gotoLine(FunctionExtractor.getFunctions(getActiveSourceCode(), getActiveAssembler()), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -345,7 +335,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoFunction(String name, int selectedTab) {
-        gotoLine(FunctionExtractor.getFunctions(getSourceCode(selectedTab), getActiveCompiler()), name);
+        gotoLine(FunctionExtractor.getFunctions(getSourceCode(selectedTab), getActiveAssembler()), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -354,7 +344,7 @@ public class EditorPanes {
      * @param name the name of the macro where to go.
      */
     public void gotoMacro(String name) {
-        gotoLine(FunctionExtractor.getMacros(getActiveSourceCode(), getActiveCompiler()), name);
+        gotoLine(FunctionExtractor.getMacros(getActiveSourceCode(), getActiveAssembler()), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -364,27 +354,27 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoMacro(String name, int selectedTab) {
-        gotoLine(FunctionExtractor.getMacros(getSourceCode(selectedTab), getActiveCompiler()), name);
+        gotoLine(FunctionExtractor.getMacros(getSourceCode(selectedTab), getActiveAssembler()), name);
     }
     /**
      * 
      * @return 
      */
     public boolean checkIfSyntaxChangeRequired() {
-        // get selected compiler
+        // get selected assembler
         int selectedComp = jComboBoxCompiler.getSelectedIndex();
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
-        // check whether combo-box selection indicates a different compiler
+        // check whether combo-box selection indicates a different assembler
         // from what was associated with the currently selected editor pane
         return (editorPaneArray.get(selectedTab).getEditorPane().getAssembler()!= selectedComp);
     }
     /**
      * 
-     * @param compiler 
+     * @param assembler 
      * @param script
      */
-    public void changeCompilerSyntax(int compiler, int script) {
+    public void changeCompilerSyntax(int assembler, int script) {
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         if (selectedTab != -1) {
@@ -393,13 +383,13 @@ public class EditorPanes {
             // change syntax scheme for recent docs
             if(getFilePath(selectedTab)!=null) {
                 int rd = settings.findRecentDoc(getFilePath(selectedTab).getPath());
-                settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), compiler, script);
+                settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), assembler, script);
             }
             // get editor pane
             final RL64TextArea editorpane = ep.getEditorPane();
-            // set new compiler scheme
-            editorpane.setAssembler(compiler);
-            // change compiler syntax
+            // set new assembler scheme
+            editorpane.setAssembler(assembler);
+            // change assembler syntax
             editorpane.setCompilerSyntax();
             // update syntax scheme
             editorpane.setSyntaxScheme();
@@ -496,11 +486,11 @@ public class EditorPanes {
      * 
      * @return 
      */
-    public int getActiveCompiler() {
+    public int getActiveAssembler() {
         // get selected tab
-        return getCompiler(tabbedPane.getSelectedIndex());
+        return getAssembler(tabbedPane.getSelectedIndex());
     }
-    public int getCompiler(int index) {
+    public int getAssembler(int index) {
         try {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(index);
@@ -607,11 +597,11 @@ public class EditorPanes {
     /**
      * 
      * @param filepath 
-     * @param compiler 
+     * @param assembler 
      * @param script 
      * @return  
      */
-    public boolean loadFile(File filepath, int compiler, int script) {
+    public boolean loadFile(File filepath, int assembler, int script) {
         // check if file is already opened
         int opened = getOpenedFileTab(filepath);
         if (opened!=-1) {
@@ -639,7 +629,7 @@ public class EditorPanes {
                     if (CR) buf = buf.replaceAll("\r", "\n");
                     boolean LF = buf.contains("\n");
                     // if yes, add new tab
-                    int selectedTab = addNewTab(filepath, buf, getFileName(filepath), compiler, script)-1;
+                    int selectedTab = addNewTab(filepath, buf, getFileName(filepath), assembler, script)-1;
                     // set cursor
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     setCursor(epp.getEditorPane());
@@ -846,7 +836,7 @@ public class EditorPanes {
         // check for valid value
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
             try {
-                // select compiler, so we update the highlight, if necessary
+                // select assembler, so we update the highlight, if necessary
                 jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler());
                 // select user script
                 jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
@@ -961,15 +951,15 @@ public class EditorPanes {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         // set up section name
-        String insertString = getCompilerCommentString() + " ----------------------------------------\n";
+        String insertString = ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " ----------------------------------------\n";
         // insert string
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
     }
-    public void insertBreakPoint(int compiler) {
+    public void insertBreakPoint(int assembler) {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         String insertString = "";
-        switch (compiler) {
+        switch (assembler) {
             case ConstantsR64.ASM_KICKASSEMBLER:
                 insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER;
                 break;
@@ -978,7 +968,7 @@ public class EditorPanes {
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
     }
     public void insertBreakPoint() {
-        insertBreakPoint(getActiveCompiler());
+        insertBreakPoint(getActiveAssembler());
     }
     /**
      * Generic goto-line-function. Goes to a line of a specific macro, function or label
@@ -1024,7 +1014,7 @@ public class EditorPanes {
         buffer.insert(position, text);
     }
     public void commentLine() {
-        EditorPaneTools.commentLine(getActiveEditorPane(), getCompilerCommentString());
+        EditorPaneTools.commentLine(getActiveEditorPane(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment());
     }
     public int getSelectedTab() {
         return tabbedPane.getSelectedIndex();
@@ -1039,22 +1029,22 @@ public class EditorPanes {
     public void gotoNextLabel() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT, 
                 getActiveEditorPane().getCaretLine()+1,
-                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0)), 1);
+                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveAssembler(), 0)), 1);
     }
     public void gotoPrevLabel() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                 getActiveEditorPane().getCaretLine()+1,
-                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveCompiler(), 0)), 1);
+                LabelExtractor.getLabelLineNumbers(getActiveSourceCode(), getActiveAssembler(), 0)), 1);
     }
     public void gotoNextSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
                 getActiveEditorPane().getCaretLine()+1,
-                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString())), 1);
+                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment())), 1);
     }
     public void gotoPrevSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                 getActiveEditorPane().getCaretLine()+1,
-                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getCompilerCommentString())), 1);
+                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment())), 1);
     }
     public void undo() {
         RL64TextArea ep = getActiveEditorPane();

@@ -58,14 +58,14 @@ public class LabelExtractor {
      * @param subWord A string which filters the list of labels. Only labels that start with
      * {@code subWord} will
      * @param source
-     * @param compiler
+     * @param assembler
      * @param lineNumber
      * 
      * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
-    public static Object[] getLabelNames(String subWord, String source, int compiler, int lineNumber) {
+    public static Object[] getLabelNames(String subWord, String source, int assembler, int lineNumber) {
         // get labels here
-        ArrayList<String> labels = getLabelNames(false, source, compiler, lineNumber);
+        ArrayList<String> labels = getLabelNames(false, source, assembler, lineNumber);
         // check for valid values
         if (null==labels || labels.isEmpty()) return null;
         // remove all labels that do not start with already typed chars
@@ -85,15 +85,15 @@ public class LabelExtractor {
      * 
      * @param sortList If {@code true}, labels are sorted in alphabetical order.
      * @param source
-     * @param compiler
+     * @param assembler
      * @param lineNumber
      * @return An array list of all label names from the source code.
      */
-    public static ArrayList getLabelNames(boolean sortList, String source, int compiler, int lineNumber) {
+    public static ArrayList getLabelNames(boolean sortList, String source, int assembler, int lineNumber) {
         // init return value
         ArrayList<String> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getLabels(source, compiler, lineNumber);
+        LinkedHashMap<Integer, String> map = getLabels(source, assembler, lineNumber);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections
@@ -113,23 +113,23 @@ public class LabelExtractor {
      * and label name as linked HashMap.
      * 
      * @param source
-     * @param compiler
+     * @param assembler
      * @param lineNumber
      * @return All labels with their line numbers, or {@code null} if there are no labels
      * in the source code.
      */
-    public static LinkedHashMap getLabels(String source, int compiler, int lineNumber) {
+    public static LinkedHashMap getLabels(String source, int assembler, int lineNumber) {
         StringReader sr = new StringReader(source);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-        return ConstantsR64.assemblers[compiler].getLabels(lineReader, lineNumber);
+        return ConstantsR64.assemblers[assembler].getLabels(lineReader, lineNumber);
     }
 
-    public static ArrayList getLabelLineNumbers(String source, int compiler, int lineNumber) {
+    public static ArrayList getLabelLineNumbers(String source, int assembler, int lineNumber) {
         // init return value
         ArrayList<Integer> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getLabels(source, compiler, lineNumber);
+        LinkedHashMap<Integer, String> map = getLabels(source, assembler, lineNumber);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections

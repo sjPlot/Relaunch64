@@ -292,7 +292,7 @@ public class Tools {
             }
         }
         if (dezaddress!=0) {
-            editorPanes.insertString(ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getBasicStart(dezaddress));
+            editorPanes.insertString(ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getBasicStart(dezaddress));
         }
     }
     /**
@@ -403,7 +403,7 @@ public class Tools {
                             String insert;
                             // if user hold down ctrl-key, import bytes from file
                             if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
-                                insert = Tools.getByteTableFromFile(f, editorPanes.getActiveCompiler());
+                                insert = Tools.getByteTableFromFile(f, editorPanes.getActiveAssembler());
                             }
                             // else use include-directive
                             else {
@@ -411,14 +411,14 @@ public class Tools {
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
                                 switch (FileTools.getFileExtension(f).toLowerCase()) {
                                     case "txt":
-                                        insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeTextDirective(relpath) + "\n";
+                                        insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeTextDirective(relpath) + "\n";
                                         break;
                                     case "c64":
                                     case "prg":
-                                        insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeC64Directive(relpath) + "\n";
+                                        insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeC64Directive(relpath) + "\n";
                                         break;
                                     default:
-                                        insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeBinaryDirective(relpath) + "\n";
+                                        insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeBinaryDirective(relpath) + "\n";
                                 }
                             }
                             editorPanes.insertString(insert);
@@ -432,7 +432,7 @@ public class Tools {
                             // if user hold down ctrl-key, use import-directive for asm-files
                             if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
-                                String insert = ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getIncludeSourceDirective(relpath) + "\n";
+                                String insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeSourceDirective(relpath) + "\n";
                                 editorPanes.insertString(insert);
                             }
                             else {
