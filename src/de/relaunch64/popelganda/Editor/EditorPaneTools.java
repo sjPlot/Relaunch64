@@ -42,9 +42,7 @@ import java.util.regex.Pattern;
  * @author Daniel Luedecke
  */
 public class EditorPaneTools {
-    public static void commentLine(RL64TextArea ep, int compiler) {
-        // retrieve comment string
-        String commentString = ConstantsR64.assemblers[compiler].getLineComment();
+    public static void commentLine(RL64TextArea ep, String commentString) {
         // check for text selection
         String selString = ep.getSelectedText();
         // if we have selection, add tab to each selected line

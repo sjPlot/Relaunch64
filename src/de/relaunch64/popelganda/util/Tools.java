@@ -214,8 +214,8 @@ public class Tools {
      * @return the start-address indicated by the start label, or {@code null} if no
      * start address was found.
      */
-    public static String getCruncherStart(String source, int compiler) {
-        String cs = ConstantsR64.assemblers[compiler].getLineComment() + " start=";
+    public static String getCruncherStart(String source, String commentString) {
+        String cs = commentString + " start=";
         // find start token
         int position = source.toLowerCase().indexOf(cs);
         // found?
@@ -240,8 +240,8 @@ public class Tools {
      * @return the script name indicated by the script label, or {@code null} if no
      * script name was found.
      */
-    public static String getCustomScriptName(String source, int compiler) {
-        String cs = ConstantsR64.assemblers[compiler].getLineComment() + " script=";
+    public static String getCustomScriptName(String source, String commentString) {
+        String cs = commentString + " script=";
         // find start token
         int position = source.toLowerCase().indexOf(cs);
         // found?

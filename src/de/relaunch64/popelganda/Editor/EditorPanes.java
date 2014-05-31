@@ -1023,7 +1023,7 @@ public class EditorPanes {
         buffer.insert(position, text);
     }
     public void commentLine() {
-        EditorPaneTools.commentLine(getActiveEditorPane(), getActiveCompiler());
+        EditorPaneTools.commentLine(getActiveEditorPane(), getCompilerCommentString());
     }
     public int getSelectedTab() {
         return tabbedPane.getSelectedIndex();

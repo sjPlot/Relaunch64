@@ -1170,7 +1170,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void runScript() {
         // check if user defined custom script
-        String script = Tools.getCustomScriptName(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+        String script = Tools.getCustomScriptName(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
         // init cb-item
         Object item;
         // if we found no custom script in source, or script name was not found,
@@ -1234,7 +1234,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_SOURCE_DIR, parentFile);
                     // check if we have a cruncher-starttoken
-                    String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveCompiler());
+                    String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getCompilerCommentString());
                     // if we found cruncher-starttoken, replace placeholder 
                     if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
                     try {
