@@ -61,6 +61,14 @@ public class Assembler_kick implements Assembler
     public String name() {
         return "Kick Assembler";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_KICKASS.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 0;
+    }
 
     @Override
     public String syntaxFile() {

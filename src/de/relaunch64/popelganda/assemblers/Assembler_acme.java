@@ -62,6 +62,14 @@ public class Assembler_acme implements Assembler
     public String name() {
         return "ACME";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_ACME.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 1;
+    }
 
     @Override
     public String syntaxFile() {

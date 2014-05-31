@@ -75,6 +75,14 @@ public class Assembler_64tass implements Assembler {
     public String name() {
         return "64tass";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_64TASS.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 2;
+    }
 
     @Override
     public String syntaxFile() {

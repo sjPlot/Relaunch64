@@ -50,6 +50,14 @@ public class Assembler_dasm implements Assembler
     public String name() {
         return "DASM";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_DASM.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 5;
+    }
 
     @Override
     public String syntaxFile() {

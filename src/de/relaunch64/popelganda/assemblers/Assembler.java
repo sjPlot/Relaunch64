@@ -54,6 +54,7 @@ public interface Assembler
     String[] getScriptKeywords();
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
+    int getID();
 
     /**
      * Returns the label name part before the cursor.

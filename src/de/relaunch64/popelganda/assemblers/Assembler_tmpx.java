@@ -62,6 +62,14 @@ public class Assembler_tmpx implements Assembler
     public String name() {
         return "TMPx";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_TMPX.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 6;
+    }
 
     @Override
     public String syntaxFile() {

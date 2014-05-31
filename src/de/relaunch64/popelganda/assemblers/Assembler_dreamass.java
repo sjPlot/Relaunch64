@@ -64,6 +64,14 @@ public class Assembler_dreamass implements Assembler
     public String name() {
         return "DreamAss";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_DREAMASS.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 4;
+    }
 
     @Override
     public String syntaxFile() {

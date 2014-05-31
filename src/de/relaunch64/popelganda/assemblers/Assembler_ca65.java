@@ -52,6 +52,14 @@ public class Assembler_ca65 implements Assembler
     public String name() {
         return "ca65";
     }
+    /**
+     * Assembler ID. Equals ConstantsR64.ASM_CA65.
+     * @return the unique assembler ID.
+     */
+    @Override
+    public int getID() {
+        return 3;
+    }
 
     @Override
     public String syntaxFile() {

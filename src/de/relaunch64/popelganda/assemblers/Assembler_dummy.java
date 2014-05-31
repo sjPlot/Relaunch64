@@ -49,6 +49,11 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
+    public int getID() {
+        return 99;
+    }
+
+    @Override
     public String syntaxFile() {
         return "";
     }
