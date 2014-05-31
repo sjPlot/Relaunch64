@@ -49,6 +49,11 @@ import java.util.ArrayList;
 public class Assembler_ca65 implements Assembler
 {
     @Override
+    public String[] getScriptKeywords() {
+        return null;
+    }
+    
+    @Override
     public String name() {
         return "ca65";
     }
@@ -66,6 +71,11 @@ public class Assembler_ca65 implements Assembler
     @Override
     public String getMacroPrefix() {
         return ".";
+    }
+
+    @Override
+    public String getMacroString() {
+        return ".macro";
     }
 
     @Override

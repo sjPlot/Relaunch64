@@ -34,7 +34,6 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
-import de.relaunch64.popelganda.Editor.RL64TextArea;
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -192,7 +191,7 @@ public class Tools {
      * with placeholder {@code START} as parameter for cruncher and packer.
      * 
      * @param source The (current) source code which should be examined for start label.
-     * @param compiler The compiler, which indicates the syntax used by {@code source}.
+     * @param commentString
      * @return the start-address indicated by the start label, or {@code null} if no
      * start address was found.
      */
@@ -218,7 +217,7 @@ public class Tools {
      * that defines a custom compiler script that should be used when compiling this sourc.
      * 
      * @param source The (current) source code which should be examined for script label.
-     * @param compiler The compiler, which indicates the syntax used by {@code source}.
+     * @param commentString
      * @return the script name indicated by the script label, or {@code null} if no
      * script name was found.
      */
@@ -425,7 +424,7 @@ public class Tools {
                     // if so, include files
                     if (includefiles.size()>0) {
                         for (File f : includefiles) {
-                            String insert = "";
+                            String insert;
                             // if user hold down ctrl-key, import bytes from file
                             if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
                                 insert = Tools.getByteTableFromFile(f, editorPanes.getActiveCompiler());

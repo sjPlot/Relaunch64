@@ -47,6 +47,11 @@ import java.util.ArrayList;
 public class Assembler_dasm implements Assembler
 {
     @Override
+    public String[] getScriptKeywords() {
+        return null;
+    }
+    
+    @Override
     public String name() {
         return "DASM";
     }
@@ -64,6 +69,11 @@ public class Assembler_dasm implements Assembler
     @Override
     public String getMacroPrefix() {
         return "";
+    }
+
+    @Override
+    public String getMacroString() {
+        return "mac";
     }
 
     @Override

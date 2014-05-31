@@ -47,6 +47,20 @@ import java.util.ArrayList;
 public class Assembler_kick implements Assembler
 {
     @Override
+    public String[] getScriptKeywords() {
+        return new String[] {
+            ".add", ".asNumber", ".asBoolean", ".charAt", ".get", ".getData", ".getPixel",
+            ".getMulticolorByte", ".getSinglecolorByte", ".size", ".substring", ".string",
+            ".toBinaryString", ".toHexString", ".toIntString", ".toOctalString",
+            "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
+            "exp", "expm1", "floor", "hypot", "List", "log", "log10", "log1p",
+            "LoadPicture", "LoadSid", "Matrix", "max", "min", "mod", "MoveMatrix",
+            "PerspectiveMatrix", "round", "ScaleMatrix", "sin", "sinh", "sort",
+            "signum", "tan", "tanh", "toDegree", "toRadians", "Vector"   
+        };
+    }
+    
+    @Override
     public String name() {
         return "Kick Assembler";
     }
@@ -64,6 +78,11 @@ public class Assembler_kick implements Assembler
     @Override
     public String getMacroPrefix() {
         return ".";
+    }
+
+    @Override
+    public String getMacroString() {
+        return ".macro";
     }
 
     @Override

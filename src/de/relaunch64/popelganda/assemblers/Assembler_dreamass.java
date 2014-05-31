@@ -61,6 +61,11 @@ public class Assembler_dreamass implements Assembler
     };
 
     @Override
+    public String[] getScriptKeywords() {
+        return null;
+    }
+    
+    @Override
     public String name() {
         return "DreamAss";
     }
@@ -78,6 +83,11 @@ public class Assembler_dreamass implements Assembler
     @Override
     public String getMacroPrefix() {
         return "#";
+    }
+
+    @Override
+    public String getMacroString() {
+        return "#macro";
     }
 
     @Override

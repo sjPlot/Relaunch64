@@ -324,40 +324,21 @@ public class FunctionExtractor {
         if (ConstantsR64.ASM_DREAMASS==compiler) {
             keyword = "."+keyword;
         }
-        if (ConstantsR64.ASM_KICKASSEMBLER==compiler && funmacString.equals(getMacroString(compiler))) {
+        if (ConstantsR64.ASM_KICKASSEMBLER==compiler && funmacString.equals(ConstantsR64.assemblers[compiler].getMacroString())) {
             keyword = ":"+keyword;
         }
-        if (ConstantsR64.ASM_ACME==compiler && funmacString.equals(getMacroString(compiler))) {
+        if (ConstantsR64.ASM_ACME==compiler && funmacString.equals(ConstantsR64.assemblers[compiler].getMacroString())) {
             keyword = "+"+keyword;
         }
         return keyword;
     }
     
     public static LinkedHashMap getMacros(String source, int compiler) {
-        return getFunctionsOrMacros(getMacroString(compiler), source, compiler);
-    }
-
-    public static String getMacroString(int compiler) {
-        switch (compiler) {
-            case ConstantsR64.ASM_KICKASSEMBLER:
-            case ConstantsR64.ASM_64TASS:
-            case ConstantsR64.ASM_CA65:
-                return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
-            case ConstantsR64.ASM_DREAMASS:
-                return ConstantsR64.STRING_MACRO_DREAMASS;
-            case ConstantsR64.ASM_ACME:
-                return ConstantsR64.STRING_MACRO_ACME;
-            case ConstantsR64.ASM_TMPX:
-                return ConstantsR64.STRING_MACRO_TMPX;
-            case ConstantsR64.ASM_DASM:
-                return ConstantsR64.STRING_MACRO_DASM;
-            default:
-                return ConstantsR64.STRING_MACRO_KICKASSEMBLER;
-        }
+        return getFunctionsOrMacros(ConstantsR64.assemblers[compiler].getMacroString(), source, compiler);
     }
 
     public static ArrayList getMacroNames(String source, int compiler) {
-        return getFunctionOrMacroNames(getMacroString(compiler), source, compiler);
+        return getFunctionOrMacroNames(ConstantsR64.assemblers[compiler].getMacroString(), source, compiler);
     }
 
     public static boolean isValidFunctionOrMacro(String keyword, String funmacString) {

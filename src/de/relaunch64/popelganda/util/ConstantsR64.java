@@ -108,11 +108,6 @@ public class ConstantsR64 {
     public static final String STRING_JUMP = "jump";
 
     public static final String STRING_FUNCTION_KICKASSEMBLER = ".function";
-    public static final String STRING_MACRO_KICKASSEMBLER = ".macro";
-    public static final String STRING_MACRO_TMPX = ".macro";
-    public static final String STRING_MACRO_ACME = "!macro";
-    public static final String STRING_MACRO_DASM = "mac";
-    public static final String STRING_MACRO_DREAMASS = "#macro";
     public static final String STRING_BREAKPOINT_KICKASSEMBLER = ":break()\n";
     public static final String STRING_STRUCT_CA65 = ".struct";
     
@@ -164,25 +159,6 @@ public class ConstantsR64 {
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".src", ".s"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff", ".fli", ".afli", ".ifli"};
-    
-    public static final String[] SCRIPT_KEYWORDS_KICKASS = new String[] {
-        ".add", ".asNumber", ".asBoolean", ".charAt", ".get", ".getData", ".getPixel",
-        ".getMulticolorByte", ".getSinglecolorByte", ".size", ".substring", ".string",
-        ".toBinaryString", ".toHexString", ".toIntString", ".toOctalString",
-        "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
-        "exp", "expm1", "floor", "hypot", "List", "log", "log10", "log1p",
-        "LoadPicture", "LoadSid", "Matrix", "max", "min", "mod", "MoveMatrix",
-        "PerspectiveMatrix", "round", "ScaleMatrix", "sin", "sinh", "sort",
-        "signum", "tan", "tanh", "toDegree", "toRadians", "Vector"   
-    };
-            
-    public static final String[] SCRIPT_KEYWORDS_64TASS = new String[] {
-        "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
-        "deg", "exp", "floor", "frac", "hypot", "log", "log10",
-        "max", "min", "mod", "rad", "round", "sign", "sin", "sinh", "sort",
-        "signum", "tan", "tanh", "trunc", "bool", "len", "all", "any", "str",
-        "repr", "format", "range"
-    };
     
     // check os
     public static boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");

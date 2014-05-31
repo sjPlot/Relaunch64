@@ -42,6 +42,8 @@ public interface Assembler
     String name();
     String syntaxFile();
 
+    String[] getScriptKeywords();
+    String getMacroString();
     String getMacroPrefix();
     String getLineComment();
     String getByteDirective();

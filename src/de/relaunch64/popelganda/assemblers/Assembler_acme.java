@@ -59,6 +59,11 @@ public class Assembler_acme implements Assembler
     };
 
     @Override
+    public String[] getScriptKeywords() {
+        return null;
+    }
+    
+    @Override
     public String name() {
         return "ACME";
     }
@@ -76,6 +81,11 @@ public class Assembler_acme implements Assembler
     @Override
     public String getMacroPrefix() {
         return "+";
+    }
+
+    @Override
+    public String getMacroString() {
+        return "!macro";
     }
 
     @Override
