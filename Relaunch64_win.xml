@@ -32,11 +32,11 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>3.0.1.0</fileVersion>
+    <fileVersion>3.1.0.0</fileVersion>
     <txtFileVersion>Relaunch64 V3</txtFileVersion>
     <fileDescription>A C64/65xx cross development IDE</fileDescription>
     <copyright>2003-2014 by Payday</copyright>
-    <productVersion>3.0.1.0</productVersion>
+    <productVersion>3.1.0.0</productVersion>
     <txtProductVersion>Relaunch64 V3</txtProductVersion>
     <productName>Relaunch64</productName>
     <companyName>Payday</companyName>
