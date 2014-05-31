@@ -40,6 +40,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.swing.UIManager;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -81,6 +82,7 @@ public class QuickReferences extends javax.swing.JDialog {
         InputStream is = null;
         javax.swing.JTextArea[] ta = new javax.swing.JTextArea[] {jTextArea1, jTextArea2, jTextArea3, jTextArea4, jTextArea5, jTextArea6};
         String[] refs = new String[] {"Vic-Register.txt", "Soundchip-Belegung.txt", "Rasterzeilen-Angaben.txt", "C64Fli.txt", "C64MemMap.txt", "C64ColorRam.txt"};
+        Font mf = new Font(Font.MONOSPACED, Font.PLAIN, ((Font)UIManager.getLookAndFeelDefaults().get("defaultFont")).getSize());
         try { 
             for (int cnt=0; cnt<refs.length; cnt++) {
                 is = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResourceAsStream("/de/relaunch64/popelganda/resources/quickref/"+refs[cnt]);
@@ -91,7 +93,7 @@ public class QuickReferences extends javax.swing.JDialog {
                     buff = is.read();
                     if (buff!=-1) ta[cnt].append(String.valueOf((char)buff));
                 }
-                ta[cnt].setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+                ta[cnt].setFont(mf);
                 ta[cnt].setCaretPosition(0);
             }
         }
