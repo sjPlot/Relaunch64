@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.Tools;
+import de.relaunch64.popelganda.util.ConstantsR64;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -43,7 +44,7 @@ import java.util.regex.Pattern;
 public class EditorPaneTools {
     public static void commentLine(RL64TextArea ep, int compiler) {
         // retrieve comment string
-        String commentString = RL64TextArea.getCommentString(compiler);
+        String commentString = ConstantsR64.assemblers[compiler].getLineComment();
         // check for text selection
         String selString = ep.getSelectedText();
         // if we have selection, add tab to each selected line

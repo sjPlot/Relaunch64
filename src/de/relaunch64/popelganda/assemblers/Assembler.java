@@ -42,6 +42,7 @@ public interface Assembler
     String name();
     String syntaxFile();
 
+    String getLineComment();
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
 

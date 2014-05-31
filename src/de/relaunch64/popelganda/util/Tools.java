@@ -215,7 +215,7 @@ public class Tools {
      * start address was found.
      */
     public static String getCruncherStart(String source, int compiler) {
-        String cs = RL64TextArea.getCommentString(compiler) + " start=";
+        String cs = ConstantsR64.assemblers[compiler].getLineComment() + " start=";
         // find start token
         int position = source.toLowerCase().indexOf(cs);
         // found?
@@ -241,7 +241,7 @@ public class Tools {
      * script name was found.
      */
     public static String getCustomScriptName(String source, int compiler) {
-        String cs = RL64TextArea.getCommentString(compiler) + " script=";
+        String cs = ConstantsR64.assemblers[compiler].getLineComment() + " script=";
         // find start token
         int position = source.toLowerCase().indexOf(cs);
         // found?

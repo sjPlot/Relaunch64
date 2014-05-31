@@ -59,6 +59,11 @@ public class Assembler_ca65 implements Assembler
     }
 
     @Override
+    public String getLineComment() {
+        return ";";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         class lineInfo {
             final LinkedList<String> name;

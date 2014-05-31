@@ -270,7 +270,7 @@ public class EditorPanes {
      * @return The comment string of the compiler given in {@code compiler}.
      */
     public String getCompilerCommentString(int compiler) {
-        return RL64TextArea.getCommentString(compiler);
+        return ConstantsR64.assemblers[compiler].getLineComment();
     }
     /**
      * Inserts a (commented) section line into the source code. Sections are specific commented

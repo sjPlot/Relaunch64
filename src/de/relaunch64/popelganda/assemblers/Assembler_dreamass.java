@@ -71,6 +71,11 @@ public class Assembler_dreamass implements Assembler
     }
 
     @Override
+    public String getLineComment() {
+        return ";";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumbers) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*");

@@ -54,6 +54,11 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String getLineComment() {
+        return "";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         return new LinkedHashMap<>();
     }

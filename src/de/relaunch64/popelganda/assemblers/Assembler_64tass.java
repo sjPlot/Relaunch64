@@ -71,6 +71,11 @@ public class Assembler_64tass implements Assembler {
     }
 
     @Override
+    public String getLineComment() {
+        return ";";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         class lineInfo {
             final LinkedList<String> name;

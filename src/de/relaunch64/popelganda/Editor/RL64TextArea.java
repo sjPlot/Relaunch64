@@ -459,29 +459,6 @@ public class RL64TextArea extends StandaloneTextArea {
         return str;
     }
     /**
-     * Returns the comment string of the assembler {@code compiler}.
-     * 
-     * @param assembler
-     * @return 
-     */
-    public static String getCommentString(int assembler) {
-        String str = "//";
-        switch (assembler) {
-            case ConstantsR64.ASM_ACME:
-            case ConstantsR64.ASM_TMPX:
-            case ConstantsR64.ASM_64TASS:
-            case ConstantsR64.ASM_CA65:
-            case ConstantsR64.ASM_DREAMASS:
-            case ConstantsR64.ASM_DASM:
-                str = ";";
-                break;
-            case ConstantsR64.ASM_KICKASSEMBLER:
-                str = "//";
-                break;
-        }
-        return str;
-    }
-    /**
      * 
      * @param compiler
      * @return 
