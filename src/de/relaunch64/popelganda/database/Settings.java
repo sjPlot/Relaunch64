@@ -73,6 +73,7 @@ public class Settings {
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_ANTIALIAS = "antialias";
+    private static final String SETTING_SCALE_FONT = "scalefont";
     private static final String REC_DOC_COMPILER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
@@ -211,6 +212,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_ANTIALIAS);
             el.setText(AntiAlias.SUBPIXEL);
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (null==settingsFile.getRootElement().getChild(SETTING_SCALE_FONT)) {
+            // create element
+            Element el = new Element(SETTING_SCALE_FONT);
+            el.setText("1");
             // and add it to the document
             settingsFile.getRootElement().addContent(el);
         }
@@ -524,6 +532,19 @@ public class Settings {
             settingsFile.getRootElement().addContent(el);
         }
         el.setText(aa);
+    }
+    public boolean getScaleFont() {
+        Element el = settingsFile.getRootElement().getChild(SETTING_SCALE_FONT);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setScaleFont(boolean scale) {
+        Element el = settingsFile.getRootElement().getChild(SETTING_SCALE_FONT);
+        if (null==el) {
+            el = new Element(SETTING_SCALE_FONT);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(scale==Boolean.TRUE ? "1":"0");
     }
     public int getPreferredCompiler() {
         Element el = settingsFile.getRootElement().getChild(SETTING_PREF_COMP);

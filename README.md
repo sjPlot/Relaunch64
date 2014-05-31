@@ -22,6 +22,7 @@ Relaunch64 3.1.0
 * improvements with goto error functions
 * many small (code) improvements
 * Aqua Look'n'Feel on OS X by default
+* UI font scaling to better fit screen resolution (can be switched off via preferences)
 
 ### Bug fixes
 

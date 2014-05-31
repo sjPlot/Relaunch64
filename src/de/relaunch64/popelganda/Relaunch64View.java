@@ -1542,11 +1542,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
-
-        try { // Try to scale default font size according to screen resolution.
-            Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
-            UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
-        } catch (HeadlessException e) { }
+        if (settings.getScaleFont()) {
+            try { // Try to scale default font size according to screen resolution.
+                Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
+                UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
+            } catch (HeadlessException e) { }
+        }
     }
     /**
      * 
