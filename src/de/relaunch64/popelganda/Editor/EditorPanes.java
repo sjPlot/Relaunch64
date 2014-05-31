@@ -259,18 +259,7 @@ public class EditorPanes {
      * activated source code.
      */
     public String getCompilerCommentString() {
-        return getCompilerCommentString(getActiveCompiler());
-    }
-    /**
-     * The returns the comment char from the compiler syntax for
-     * the compiler {@code compiler}.
-     * 
-     * @param compiler one of the compiler constans that indicate the 
-     * compiler syntax.
-     * @return The comment string of the compiler given in {@code compiler}.
-     */
-    public String getCompilerCommentString(int compiler) {
-        return ConstantsR64.assemblers[compiler].getLineComment();
+        return ConstantsR64.assemblers[getActiveCompiler()].getLineComment();
     }
     /**
      * Inserts a (commented) section line into the source code. Sections are specific commented
