@@ -76,6 +76,11 @@ public class Assembler_dreamass implements Assembler
     }
 
     @Override
+    public String getMacroPrefix() {
+        return "#";
+    }
+
+    @Override
     public String getByteDirective() {
         return ".byte";
     }

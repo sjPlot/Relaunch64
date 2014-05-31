@@ -62,6 +62,11 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
+    public String getMacroPrefix() {
+        return "";
+    }
+
+    @Override
     public String getByteDirective() {
         return "dc.b";
     }

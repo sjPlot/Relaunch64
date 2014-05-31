@@ -74,6 +74,11 @@ public class Assembler_acme implements Assembler
     }
 
     @Override
+    public String getMacroPrefix() {
+        return "+";
+    }
+
+    @Override
     public String getByteDirective() {
         return "!byte";
     }

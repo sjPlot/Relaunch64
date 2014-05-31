@@ -59,6 +59,11 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String getMacroPrefix() {
+        return "";
+    }
+
+    @Override
     public String getByteDirective() {
         return "";
     }

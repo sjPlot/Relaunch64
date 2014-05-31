@@ -42,6 +42,7 @@ public interface Assembler
     String name();
     String syntaxFile();
 
+    String getMacroPrefix();
     String getLineComment();
     String getByteDirective();
     String getIncludeSourceDirective(String path);

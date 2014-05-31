@@ -458,32 +458,6 @@ public class RL64TextArea extends StandaloneTextArea {
         }
         return str;
     }
-    /**
-     * 
-     * @param compiler
-     * @return 
-     */
-    protected static String getMacroPrefix(int compiler) {
-        String str = ".";
-        switch (compiler) {
-            case ConstantsR64.ASM_ACME:
-                str = "+";
-                break;
-            case ConstantsR64.ASM_DASM:
-                str = "";
-                break;
-            case ConstantsR64.ASM_KICKASSEMBLER:
-            case ConstantsR64.ASM_64TASS:
-            case ConstantsR64.ASM_TMPX:
-            case ConstantsR64.ASM_CA65:
-                str = ".";
-                break;
-            case ConstantsR64.ASM_DREAMASS:
-                str = "#";
-                break;
-        }
-        return str;
-    }
     protected void showSuggestionPopup(final int type) {
         // check for valid type
         if (-1==type) return;
@@ -520,7 +494,7 @@ public class RL64TextArea extends StandaloneTextArea {
         try {
             // retrieve chars that have already been typed
             if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
-                String macroPrefix = getMacroPrefix(compiler);
+                String macroPrefix = ConstantsR64.assemblers[getCompiler()].getMacroPrefix();
                 suggestionSubWord = getCaretString(false, macroPrefix);
             } else {
                 suggestionSubWord = ConstantsR64.assemblers[getCompiler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));

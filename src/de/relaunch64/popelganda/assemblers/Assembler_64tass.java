@@ -76,6 +76,11 @@ public class Assembler_64tass implements Assembler {
     }
 
     @Override
+    public String getMacroPrefix() {
+        return ".";
+    }
+
+    @Override
     public String getByteDirective() {
         return ".byte";
     }
