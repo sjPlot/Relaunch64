@@ -43,6 +43,7 @@ public interface Assembler
     String syntaxFile();
 
     String getLineComment();
+    String getByteDirective();
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
 

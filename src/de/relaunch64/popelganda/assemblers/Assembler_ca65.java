@@ -64,6 +64,11 @@ public class Assembler_ca65 implements Assembler
     }
 
     @Override
+    public String getByteDirective() {
+        return ".byte";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         class lineInfo {
             final LinkedList<String> name;

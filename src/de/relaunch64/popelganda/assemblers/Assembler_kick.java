@@ -62,6 +62,11 @@ public class Assembler_kick implements Assembler
     }
 
     @Override
+    public String getByteDirective() {
+        return ".byte";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):.*");

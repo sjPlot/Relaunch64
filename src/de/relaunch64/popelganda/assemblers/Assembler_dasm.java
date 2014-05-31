@@ -62,6 +62,11 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
+    public String getByteDirective() {
+        return "dc.b";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();

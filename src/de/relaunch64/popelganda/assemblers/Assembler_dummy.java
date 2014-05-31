@@ -59,6 +59,11 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String getByteDirective() {
+        return "";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         return new LinkedHashMap<>();
     }

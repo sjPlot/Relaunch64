@@ -85,25 +85,7 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
             int dummy = (int)(step*10000)+1;
             step = (double) dummy/10000;
             // get compiler byte-token
-            String byteToken;
-            switch (compiler) {
-                case ConstantsR64.ASM_ACME:
-                    byteToken = "!byte";
-                    break;
-                case ConstantsR64.ASM_DASM:
-                    byteToken = "dc.b";
-                    break;
-                case ConstantsR64.ASM_KICKASSEMBLER:
-                case ConstantsR64.ASM_DREAMASS:
-                case ConstantsR64.ASM_64TASS:
-                case ConstantsR64.ASM_TMPX:
-                case ConstantsR64.ASM_CA65:
-                    byteToken = ".byte";
-                    break;
-                default:
-                    byteToken = ".byte";
-                    break;
-            }
+            String byteToken = ConstantsR64.assemblers[compiler].getByteDirective();
             StringBuilder sb = new StringBuilder("");
             // some indicators for new lines and line-length of table
             boolean startNewLine = true;

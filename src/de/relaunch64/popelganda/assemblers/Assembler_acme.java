@@ -74,6 +74,11 @@ public class Assembler_acme implements Assembler
     }
 
     @Override
+    public String getByteDirective() {
+        return "!byte";
+    }
+
+    @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
