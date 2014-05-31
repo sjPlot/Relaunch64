@@ -193,37 +193,40 @@ public class RL64TextArea extends StandaloneTextArea {
             if (evt.getKeyCode()==KeyEvent.VK_ENTER && !evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                 // get text of current line
                 String line = getLineText(getCaretLine());
-                int tabcount = 0;
-                // count tabs at line start
-                while (line.charAt(tabcount)=='\t') {
-                    tabcount++;
-                }
-                // insert enter
-                insertEnterAndIndent();
-                // insert tabs according to prev line
-                while (tabcount>0) {
-                    insertTabAndIndent();
-                    tabcount--;
+                // check if we have any content in line
+                if (line!=null && !line.isEmpty()) {
+                    int tabcount = 0;
+                    // count tabs at line start
+                    while (line.charAt(tabcount)=='\t') {
+                        tabcount++;
+                    }
+                    // insert enter
+                    insertEnterAndIndent();
+                    // insert tabs according to prev line
+                    while (tabcount>0) {
+                        insertTabAndIndent();
+                        tabcount--;
+                    }
                 }
                 evt.consume();
             }
             if (suggestionPopup != null) {
                 if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     switch (evt.getKeyCode()) {
-                    case KeyEvent.VK_DOWN:
-                    case KeyEvent.VK_PAGE_DOWN:
-                        evt.consume();
-                        suggestionList.requestFocusInWindow();
-                        suggestionList.setSelectedIndex(0);
-                        break;
-                    case KeyEvent.VK_UP:
-                    case KeyEvent.VK_PAGE_UP:
-                        evt.consume();
-                        suggestionList.requestFocusInWindow();
-                        suggestionList.setSelectedIndex(suggestionList.getModel().getSize() - 1);
-                        suggestionList.ensureIndexIsVisible(suggestionList.getModel().getSize() - 1);
-                        break;
-                    default: break;
+                        case KeyEvent.VK_DOWN:
+                        case KeyEvent.VK_PAGE_DOWN:
+                            evt.consume();
+                            suggestionList.requestFocusInWindow();
+                            suggestionList.setSelectedIndex(0);
+                            break;
+                        case KeyEvent.VK_UP:
+                        case KeyEvent.VK_PAGE_UP:
+                            evt.consume();
+                            suggestionList.requestFocusInWindow();
+                            suggestionList.setSelectedIndex(suggestionList.getModel().getSize() - 1);
+                            suggestionList.ensureIndexIsVisible(suggestionList.getModel().getSize() - 1);
+                            break;
+                        default: break;
                     }
                 }
             }
@@ -307,6 +310,9 @@ public class RL64TextArea extends StandaloneTextArea {
         // add mode to buffer
         getBuffer().setMode(mode);
     }
+    public final void setCodeFolding() {
+        setProperty("buffer.folding", "explicit");
+    }
     /**
      * Sets the color scheme / highlight color. No parameter is needed, since the 
      * color scheme value is read from Settings class.
@@ -361,7 +367,6 @@ public class RL64TextArea extends StandaloneTextArea {
         getGutter().setCurrentLineForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT), Color.black));
         Color bc = SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER), Color.black);
         getGutter().setBorder(1, bc, bc, bc);
-        // TODO did not find out when it's best to call "setStyles" to make all stuff working
         // or if there's a specific order?
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));
     }
@@ -387,6 +392,8 @@ public class RL64TextArea extends StandaloneTextArea {
         super(propertyManager);
         // save settings
         this.settings = settings;
+        // set explicit buffer folding
+        setCodeFolding();
         // set default compiler
         setCompiler(settings.getPreferredCompiler());
         // set syntaxscheme
@@ -671,7 +678,6 @@ public class RL64TextArea extends StandaloneTextArea {
                             dlm.remove(i);
                         }
                     }
-                    // TODO JList size could be changed when item list is reduced.
                 }
             }
         }

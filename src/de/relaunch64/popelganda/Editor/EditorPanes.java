@@ -294,6 +294,21 @@ public class EditorPanes {
             ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");            
         }
     }
+    public void insertFolds() {
+        // get current editor
+        RL64TextArea ep = getActiveEditorPane();
+        // retrieve selected text
+        String selection = ep.getSelectedText();
+        if (selection!=null && !selection.isEmpty()) {
+            // set up section name
+            String insertString = getCompilerCommentString() + " {{{\n" + selection + getCompilerCommentString() + " }}}\n";
+            // insert string
+            ep.replaceSelection(insertString);
+        }
+        else {
+            ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");            
+        }
+    }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
      * and sets the caret to that line), which containts the section named {@code name}.

@@ -88,12 +88,11 @@ public class EditorPaneTools {
         // check if we found anything
         switch (direction) {
             case EditorPanes.DIRECTION_NEXT:
-                // iterate all line numbers
-                for (int i=0; i<ln.size(); i++) {
+                for (Integer ln1 : ln) {
                     // if we found a line number greater than current
                     // line, we found the next label from caret position
-                    if (ln.get(i)>currentLine) {
-                        return ln.get(i);
+                    if (ln1 > currentLine) {
+                        return ln1;
                     }
                 }
                 return ln.get(0);

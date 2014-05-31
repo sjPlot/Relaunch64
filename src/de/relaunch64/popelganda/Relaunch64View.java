@@ -915,6 +915,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
     }
     @Action
+    public void surroundFolds() {
+        editorPanes.insertFolds();
+    }
+    @Action
     public void expandFolds() {
         editorPanes.getActiveEditorPane().expandFold(true);
     }
@@ -1874,6 +1878,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator17 = new javax.swing.JPopupMenu.Separator();
         commentLineMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemSurroundFolds = new javax.swing.JMenuItem();
         jMenuItemExpandFold = new javax.swing.JMenuItem();
         jMenuItemCollapseFold = new javax.swing.JMenuItem();
         jSeparator23 = new javax.swing.JPopupMenu.Separator();
@@ -1929,6 +1934,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getActionMap(Relaunch64View.class, this);
         jButtonFindPrev.setAction(actionMap.get("findPrev")); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(Relaunch64View.class);
         jButtonFindPrev.setIcon(resourceMap.getIcon("jButtonFindPrev.icon")); // NOI18N
         jButtonFindPrev.setText(resourceMap.getString("jButtonFindPrev.text")); // NOI18N
         jButtonFindPrev.setName("jButtonFindPrev"); // NOI18N
@@ -2187,7 +2193,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPaneLogs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+            .add(jTabbedPaneLogs)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2202,7 +2208,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPane2)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2215,7 +2221,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 853, Short.MAX_VALUE)
+            .add(jSplitPane1)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2471,6 +2477,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator8.setName("jSeparator8"); // NOI18N
         sourceMenu.add(jSeparator8);
 
+        jMenuItemSurroundFolds.setAction(actionMap.get("surroundFolds")); // NOI18N
+        jMenuItemSurroundFolds.setName("jMenuItemSurroundFolds"); // NOI18N
+        sourceMenu.add(jMenuItemSurroundFolds);
+
         jMenuItemExpandFold.setAction(actionMap.get("expandFolds")); // NOI18N
         jMenuItemExpandFold.setName("jMenuItemExpandFold"); // NOI18N
         sourceMenu.add(jMenuItemExpandFold);
@@ -2725,6 +2735,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItemCollapseFold;
     private javax.swing.JMenuItem jMenuItemExpandFold;
+    private javax.swing.JMenuItem jMenuItemSurroundFolds;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

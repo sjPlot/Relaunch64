@@ -10,7 +10,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jSplitPane1" alignment="0" pref="853" max="32767" attributes="0"/>
+              <Component id="jSplitPane1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -71,6 +71,8 @@
                   <AccessibilityProperties>
                     <Property name="AccessibleContext.accessibleName" type="java.lang.String" resourceKey="jTabbedPane1.AccessibleContext.accessibleName"/>
                   </AccessibilityProperties>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanelFind">
                   <Properties>
@@ -259,7 +261,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="1" pref="367" max="32767" attributes="0"/>
+                      <Component id="jSplitPane2" alignment="1" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -368,7 +370,7 @@
                             <Component class="javax.swing.JComboBox" name="jComboBoxCompilers">
                               <Properties>
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                  <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.COMPILER_NAMES)" type="code"/>
+                                  <Connection code="new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES)" type="code"/>
                                 </Property>
                                 <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxCompilers.toolTipText"/>
                                 <Property name="name" type="java.lang.String" value="jComboBoxCompilers" noResource="true"/>
@@ -404,7 +406,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTabbedPaneLogs" alignment="0" pref="365" max="32767" attributes="0"/>
+                              <Component id="jTabbedPaneLogs" alignment="0" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -1002,6 +1004,14 @@
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator8">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator8" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSurroundFolds">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="surroundFolds" methodName="surroundFolds"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jMenuItemSurroundFolds" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemExpandFold">

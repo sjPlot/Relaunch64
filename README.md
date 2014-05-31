@@ -5,15 +5,21 @@ Relaunch64 3.1.0
 ----------------
 
 ### New features
-* completely new editor component with new features:
+* completely new editor component with new features, such as:
   * increased performance
-  * much faster with syntax highlighting
-  * code-folding
-  * rectangular selection (ctrl+mouse)
+  * much faster syntax highlighting
+  * rectangular text selection (ctrl+mouse)
+  * proper text anti-aliasing
 * added DASM support
 * added TMPx support
+* improved suggestion / auto-completion popup (ctrl+space):
+  * local labels outside the scope are not listed (only global labels and labels within scope)
+  * suggestion list will bi filtered when typing is continued
+  * editor scrolls to suggestion popup when caret is not visible
 * improvements with goto error functions
-* Aqua-look'n'feel on OS X by default
+* added alternative syntax highlighting mode (see preferences)
+* many small (code) improvements
+* Aqua Look'n'Feel on OS X by default
 
 ### Bug fixes
 
