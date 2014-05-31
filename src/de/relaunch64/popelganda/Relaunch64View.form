@@ -329,7 +329,7 @@
                                           <Component id="jComboBoxRunScripts" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jComboBoxCompilers" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace pref="181" max="32767" attributes="0"/>
+                                      <EmptySpace pref="92" max="32767" attributes="0"/>
                                       <Component id="jButtonRunScript" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
@@ -484,7 +484,7 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                  <JTabbedPaneConstraints tabName="Compiler log">
+                                  <JTabbedPaneConstraints tabName="Assembler log">
                                     <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel5.TabConstraints.tabTitle"/>
                                   </JTabbedPaneConstraints>
                                 </Constraint>

@@ -25,7 +25,7 @@
 
 	<h2>General</h2>
 	<ul>
-		<li><a href="#syntax">Syntax settings</a></li>
+		<li><a href="#syntax">Assembler settings</a></li>
 		<li><a href="#comments">Comment commands</a></li>
 		<li><a href="#userscripts">User scripts</a></li>
 		<li><a href="#editor">Editor</a></li>
@@ -42,16 +42,16 @@
 		<li><a href="#viewmenu">View menu</a></li>
 	</ul>
 
-<h1><a name="syntax">Syntax setting</a></h1>
+<h1><a name="syntax">Assembler setting</a></h1>
 
 <p>
 	In the <em>Compile and Run</em> area of the main window (upper right by default) you can select the 
-	compiler syntax of the current active source code. It is recommended to do so for two reasons:
+	assembler of the current active source code. It is recommended to do so for two reasons:
 </p>
 
 <ol>
-	<li>Selecting the correct syntax will ensure that the syntax highlighting is applied correctly.</li>
-	<li>The <em>Goto error</em> commands (see <a href="#navigatemenu">Navigate menu</a>) only work proper if the correct syntax is selected.</li>
+	<li>Selecting the correct assembler will ensure that the syntax highlighting is applied correctly.</li>
+	<li>The <em>Goto error</em> commands (see <a href="#navigatemenu">Navigate menu</a>) only work proper if the correct assembler is selected.</li>
 </ol>
 
 <h1><a name="comments">Comment commands</a></h1>
@@ -87,7 +87,7 @@
 
 	<p>
 		User scripts will be executed similar to bash or console commands. You
-		can run any compiler and / or emulator in the same way you would do when
+		can run any assembler and / or emulator in the same way you would do when
 		calling these tools from the console or a batch file.
 	</p>
 	<p>
@@ -139,7 +139,7 @@
 	OS X, starting Vice will throw an access denied error without the open-parameter). See examples below.
 </p>
 <p>
-	<strong>Note 2:</strong> If you specify full pathes to your compiler or emulator and the path contains whitechars (spaces),
+	<strong>Note 2:</strong> If you specify full pathes to your assembler or emulator and the path contains whitechars (spaces),
 	you need to set the path in quotes (see examples below). Placeholders like SOURCEFILE or OUTFILE, however, 
 	will be automatically quoted if necessary. You don't need to quote the placeholders.
 </p>
@@ -154,9 +154,9 @@
 <h2>Drag &amp; Drop</h2>
 
 <p>
-    You can drag &amp; drop executables from compilers, crunchers and emulators from the explorer (or file browser) window
+    You can drag &amp; drop executables from assemblers, crunchers and emulators from the explorer (or file browser) window
     onto the script text field. Relaunch64 will then automatically generate a proper scriptline, including recommended
-    parameter settings (in case the compiler, cruncher or emulator is recognized and supported).
+    parameter settings (in case the assembler, cruncher or emulator is recognized and supported).
 </p>
 
 <h2><a name="userscripts_examples">User scripts examples</a></h2>
@@ -197,7 +197,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 
 <p class="highlight">
     <strong>Note!</strong> Since the syntax of labels, macros and functions differs among
-    the various compilers, the <a href="#syntax">syntax settings</a> information is needed for 
+    the various assembler, the <a href="#syntax">assembler settings</a> information is needed for 
     the auto-completion-feature to work.
 </p>
 
@@ -293,7 +293,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 <p>
     This menu includes typical file operations like opening, saving and closing files.
     Note that the latest ten recent files can be opened quickly via the <em>Recent files</em>
-    submenu, and that the associated compiler and user script settings will be restored
+    submenu, and that the associated assembler and user script settings will be restored
     automatically when opening a recent document.
 </p>
 
@@ -329,7 +329,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 <p class="highlight">
     <strong>Note!</strong> The goto- and jump-functions only work properly if the <a href="#syntax">syntax settings</a>
     for each source code is correctly set. Since the syntax of labels, macros and functions differs among
-    the various compilers, the syntax setting information is needed for the navigate-functions to work.
+    the various assemblers, the syntax setting information is needed for the navigate-functions to work.
 </p>
 
 
@@ -374,7 +374,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
     While the <em>Jump to next/prev label</em> and <em>Jump to next/prev section</em> commands only work when you have
     labels or sections defined in your source, the <em>Jump to next/prev error</em> command only works after
     you have compiled a source file that contains errors. In case the assembler stops parsing your
-    source code due to errors, the <em>Compiler log</em> is shown and you can cycle through all
+    source code due to errors, the <em>Assembler log</em> is shown and you can cycle through all
     errors with the <em>Jump to next/prev error</em> command.
 </p>
 
@@ -395,8 +395,8 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 </p>
 <p>
     The <em>Run script</em> command runs the currently selected user script. User script are commands that
-    you would typically type into the console or terminal in order to run compilers, crunchers or emulators.
-    With these scripts you can execute your compiler, cruncher and emulator in order to compile your source
+    you would typically type into the console or terminal in order to run assemblers, crunchers or emulators.
+    With these scripts you can execute your assembler, cruncher and emulator in order to compile your source
     code and watch the compiled file in an emulator.
 </p>
 <p>
@@ -412,9 +412,9 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 </p>
 
 <p>
-    <em>Select syntax scheme</em> lets you switch between different compiler syntax schemes (e.g.
+    <em>Select assembler</em> lets you switch between different assembler syntax schemes (e.g.
     the KickAss syntax differs from ACME and 64tass) in order to correctly highlight keywords,
-    comments, compiler directives etc.
+    comments, assembler directives etc.
 </p>
 
 <br>
