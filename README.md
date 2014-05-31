@@ -20,6 +20,7 @@ Relaunch64 3.1.0
 * added code-folding support
 * added alternative syntax highlighting mode (see preferences)
 * improvements with goto error functions
+* jump to next/prev code fold function
 * many small (code) improvements
 * Aqua Look'n'Feel on OS X by default
 * UI font scaling to better fit screen resolution (can be switched off via preferences)
