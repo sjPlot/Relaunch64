@@ -165,7 +165,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // init editorpane-dataclass
-        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxCompilers, jComboBoxRunScripts, this, settings);
+        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, this, settings);
         // check if we have any parmater
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
@@ -248,7 +248,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // init scripts
             initScripts();
             // init emulator combobox
-            jComboBoxCompilers.setSelectedIndex(settings.getPreferredAssembler());
+            jComboBoxAssemblers.setSelectedIndex(settings.getPreferredAssembler());
             // select last used script
             jComboBoxRunScripts.setSelectedIndex(settings.getLastUserScript());
             // init goto comboboxes
@@ -293,14 +293,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
          */
 //        jComboBoxCompilers.addActionListener((java.awt.event.ActionEvent evt) -> {
 //            if (editorPanes.checkIfSyntaxChangeRequired()) {
-//                editorPanes.changeCompilerSyntax(jComboBoxCompilers.getSelectedIndex());
+//                editorPanes.changeAssembler(jComboBoxCompilers.getSelectedIndex());
 //            }
 //        });
-        jComboBoxCompilers.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxAssemblers.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 if (editorPanes.checkIfSyntaxChangeRequired()) {
-                    editorPanes.changeCompilerSyntax(jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
+                    editorPanes.changeAssembler(jComboBoxAssemblers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
                 }
                 // update recent doc
                 updateRecentDoc();
@@ -1074,7 +1074,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             settings.setLastUsedPath(fileToOpen);
             // select combobox item
             try {
-                jComboBoxCompilers.setSelectedIndex(compiler);
+                jComboBoxAssemblers.setSelectedIndex(compiler);
                 jComboBoxRunScripts.setSelectedIndex(script);
             }
             catch (IllegalArgumentException ex) {
@@ -1088,7 +1088,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         int rd = settings.findRecentDoc(cf);
         // if we have valid values, update recent doc
         if (rd!=-1 && cf!=null) {
-            settings.setRecentDoc(rd, cf.toString(), jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
+            settings.setRecentDoc(rd, cf.toString(), jComboBoxAssemblers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
         }
     }
     private void reopenFiles() {
@@ -1111,7 +1111,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFile() {
         if (editorPanes.saveFile()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxAssemblers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
             // and update menus
             setRecentDocuments();
         }
@@ -1157,7 +1157,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFileAs() {
         if (editorPanes.saveFileAs()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxCompilers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), jComboBoxAssemblers.getSelectedIndex(), jComboBoxRunScripts.getSelectedIndex());
             // and update menus
             setRecentDocuments();
         }
@@ -1338,8 +1338,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void selectSyntax() {
-        jComboBoxCompilers.showPopup();
-        jComboBoxCompilers.requestFocusInWindow();
+        jComboBoxAssemblers.showPopup();
+        jComboBoxAssemblers.requestFocusInWindow();
     }
     @Action
     public void selectLog() {
@@ -1803,7 +1803,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel9 = new javax.swing.JPanel();
         jComboBoxRunScripts = new javax.swing.JComboBox();
         jButtonRunScript = new javax.swing.JButton();
-        jComboBoxCompilers = new javax.swing.JComboBox();
+        jComboBoxAssemblers = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -2086,9 +2086,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
         jButtonRunScript.setName("jButtonRunScript"); // NOI18N
 
-        jComboBoxCompilers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES));
-        jComboBoxCompilers.setToolTipText(resourceMap.getString("jComboBoxCompilers.toolTipText")); // NOI18N
-        jComboBoxCompilers.setName("jComboBoxCompilers"); // NOI18N
+        jComboBoxAssemblers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES));
+        jComboBoxAssemblers.setToolTipText(resourceMap.getString("jComboBoxAssemblers.toolTipText")); // NOI18N
+        jComboBoxAssemblers.setName("jComboBoxAssemblers"); // NOI18N
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setToolTipText(resourceMap.getString("jLabel1.toolTipText")); // NOI18N
@@ -2109,7 +2109,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 92, Short.MAX_VALUE)
                 .add(jButtonRunScript)
                 .addContainerGap())
@@ -2123,7 +2123,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jLabel2))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBoxCompilers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1))
                 .addContainerGap())
         );
@@ -2732,7 +2732,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JCheckBox jCheckBoxMatchCase;
     private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JCheckBox jCheckBoxWholeWord;
-    private javax.swing.JComboBox jComboBoxCompilers;
+    private javax.swing.JComboBox jComboBoxAssemblers;
     private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;

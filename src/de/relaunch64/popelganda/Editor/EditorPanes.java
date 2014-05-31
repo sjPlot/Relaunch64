@@ -119,7 +119,7 @@ public class EditorPanes {
         }
         // set assembler syntax style
         editorPane.setAssembler(assembler);
-        editorPane.setCompilerSyntax();
+        editorPane.setAssemblyMode();
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
         // set content, if available
@@ -374,7 +374,7 @@ public class EditorPanes {
      * @param assembler 
      * @param script
      */
-    public void changeCompilerSyntax(int assembler, int script) {
+    public void changeAssembler(int assembler, int script) {
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         if (selectedTab != -1) {
@@ -390,7 +390,7 @@ public class EditorPanes {
             // set new assembler scheme
             editorpane.setAssembler(assembler);
             // change assembler syntax
-            editorpane.setCompilerSyntax();
+            editorpane.setAssemblyMode();
             // update syntax scheme
             editorpane.setSyntaxScheme();
         }
@@ -406,7 +406,7 @@ public class EditorPanes {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setCompilerSyntax();
+            editorpane.setAssemblyMode();
         }
     }
     public void setLineNumberAlignment(int alignment) {
