@@ -56,11 +56,10 @@ public class Assembler_kick implements Assembler
         return "assembly-kick.xml";
     }
 
-    // TODO kickass labels starting with "!" are not recognized
     @Override
     public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
         LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*):.*");
+        Pattern p = Pattern.compile("^\\s*(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):.*");
         String line;
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -86,11 +85,10 @@ public class Assembler_kick implements Assembler
         return new LinkedHashMap<>();
     }
 
-    // TODO kickass labels starting with "!" are not recognized
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
-        Pattern p = Pattern.compile("(?i)([a-z0-9_]*[a-z_]\\b).*");
+        Pattern p = Pattern.compile("(?i)([a-z0-9_]*(?:[a-z_]\\b!?|!)).*");
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
