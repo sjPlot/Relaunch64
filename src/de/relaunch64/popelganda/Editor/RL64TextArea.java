@@ -56,7 +56,7 @@ public class RL64TextArea extends StandaloneTextArea {
     private static final IPropertyManager propertyManager;
     private final KeyListener keyListener;
     private final Settings settings;
-    private int compiler;
+    private int assembler;
     /**
      * auto-completion popup for labels and macros etc.
      */
@@ -318,7 +318,7 @@ public class RL64TextArea extends StandaloneTextArea {
         Mode mode = new Mode("asm");
         String pathToMode = "/de/relaunch64/popelganda/resources/modes/";
         if (settings.getAlternativeAssemblyMode()) pathToMode += "alt/";
-        mode.setProperty("file", pathToMode + ConstantsR64.assemblers[compiler].syntaxFile());
+        mode.setProperty("file", pathToMode + ConstantsR64.assemblers[assembler].syntaxFile());
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         getBuffer().setMode(mode);
@@ -400,11 +400,11 @@ public class RL64TextArea extends StandaloneTextArea {
      * 
      * @param c 
      */
-    public final void setCompiler(int c) {
-        this.compiler = c;
+    public final void setAssembler(int c) {
+        this.assembler = c;
     }
-    public int getCompiler() {
-        return compiler;
+    public int getAssembler() {
+        return assembler;
     }
     /**
      * The StandaloneTextArea component of jEdit. Provides fast syntax highlighting and some other
@@ -419,7 +419,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // set explicit buffer folding
         setCodeFolding();
         // set default compiler
-        setCompiler(settings.getPreferredCompiler());
+        setAssembler(settings.getPreferredCompiler());
         // set syntaxscheme
         setSyntaxScheme();
         // set line number alignment
@@ -432,31 +432,6 @@ public class RL64TextArea extends StandaloneTextArea {
         setTextAntiAlias(settings.getAntiAlias());
         // setup keylistener
         keyListener = new RL64KeyListener();
-    }
-    /**
-     * Specified the list of delimiter strings that separate words/token for recognizing
-     * the syntax highlighting.
-     * 
-     * @param compiler A constants indicating which ASM compiler is used. Refer to ConstantsR64
-     * to retrieve the list of constants used.
-     * @return A String with all delimiters for the highlight tokens.
-     */
-    public static String getDelimiterList(int compiler) {
-        String str = ",;:{}()[]+-/%<=>&!|^~*";
-        switch (compiler) {
-            case ConstantsR64.ASM_TMPX:
-            case ConstantsR64.ASM_ACME:
-            case ConstantsR64.ASM_64TASS:
-            case ConstantsR64.ASM_CA65:
-            case ConstantsR64.ASM_DREAMASS:
-            case ConstantsR64.ASM_DASM:
-                str = ",:{}()[]+-/<=>&|^~*";
-                break;
-            case ConstantsR64.ASM_KICKASSEMBLER:
-                str = ",;:{}()[]+-/<=>&|^~*";
-                break;
-        }
-        return str;
     }
     protected void showSuggestionPopup(final int type) {
         // check for valid type
@@ -494,10 +469,10 @@ public class RL64TextArea extends StandaloneTextArea {
         try {
             // retrieve chars that have already been typed
             if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
-                String macroPrefix = ConstantsR64.assemblers[getCompiler()].getMacroPrefix();
+                String macroPrefix = ConstantsR64.assemblers[getAssembler()].getMacroPrefix();
                 suggestionSubWord = getCaretString(false, macroPrefix);
             } else {
-                suggestionSubWord = ConstantsR64.assemblers[getCompiler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
+                suggestionSubWord = ConstantsR64.assemblers[getAssembler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
                 if (suggestionSubWord.length() == 0) return;
             }
             // check for valid value
@@ -507,23 +482,23 @@ public class RL64TextArea extends StandaloneTextArea {
             switch(type) {
                 case SUGGESTION_FUNCTION:
                     // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getFunctionNames(suggestionSubWord.trim(), getBuffer().getText(), getCompiler());
+                    labels = FunctionExtractor.getFunctionNames(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
                     break;
                 case SUGGESTION_MACRO:
                     // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getCompiler());
+                    labels = FunctionExtractor.getMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
                     break;
                 case SUGGESTION_LABEL:
                     // retrieve label list, remove last colon
-                    labels = LabelExtractor.getLabelNames(suggestionSubWord, getBuffer().getText(), getCompiler(), getCaretLine()+1);
+                    labels = LabelExtractor.getLabelNames(suggestionSubWord, getBuffer().getText(), getAssembler(), getCaretLine()+1);
                     break;
                 case SUGGESTION_FUNCTION_MACRO:
                     // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getFunctionAndMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getCompiler());
+                    labels = FunctionExtractor.getFunctionAndMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
                     break;
                 case SUGGESTION_FUNCTION_MACRO_SCRIPT:
                     // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getFunctionMacroScripts(suggestionSubWord.trim(), getBuffer().getText(), getCompiler());
+                    labels = FunctionExtractor.getFunctionMacroScripts(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
                     break;
             }
             // check if we have any labels
@@ -679,7 +654,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // if empty, return empty string
         if (text.trim().isEmpty()) return "";
         String addDelim;
-        switch (getCompiler()) {
+        switch (getAssembler()) {
             // use colon as additional delimiter for following assemblers
             case ConstantsR64.ASM_ACME:
             case ConstantsR64.ASM_64TASS:

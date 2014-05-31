@@ -54,6 +54,11 @@ public class Assembler_ca65 implements Assembler
     }
 
     @Override
+    public String getDelimiterList() {
+        return ",:{}()[]+-/<=>&|^~*";
+    }
+    
+    @Override
     public String syntaxFile() {
         return "assembly-ca65.xml";
     }

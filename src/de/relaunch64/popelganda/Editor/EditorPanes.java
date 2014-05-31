@@ -118,7 +118,7 @@ public class EditorPanes {
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
         }
         // set compiler syntax style
-        editorPane.setCompiler(compiler);
+        editorPane.setAssembler(compiler);
         editorPane.setCompilerSyntax();
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
@@ -377,7 +377,7 @@ public class EditorPanes {
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether combo-box selection indicates a different compiler
         // from what was associated with the currently selected editor pane
-        return (editorPaneArray.get(selectedTab).getEditorPane().getCompiler()!= selectedComp);
+        return (editorPaneArray.get(selectedTab).getEditorPane().getAssembler()!= selectedComp);
     }
     /**
      * 
@@ -398,7 +398,7 @@ public class EditorPanes {
             // get editor pane
             final RL64TextArea editorpane = ep.getEditorPane();
             // set new compiler scheme
-            editorpane.setCompiler(compiler);
+            editorpane.setAssembler(compiler);
             // change compiler syntax
             editorpane.setCompilerSyntax();
             // update syntax scheme
@@ -505,7 +505,7 @@ public class EditorPanes {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(index);
             // get editor pane
-            return ep.getEditorPane().getCompiler();
+            return ep.getEditorPane().getAssembler();
         }
         catch (IndexOutOfBoundsException ex) {
             return ConstantsR64.ASM_KICKASSEMBLER;
@@ -847,7 +847,7 @@ public class EditorPanes {
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
             try {
                 // select compiler, so we update the highlight, if necessary
-                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getCompiler());
+                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler());
                 // select user script
                 jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
             }

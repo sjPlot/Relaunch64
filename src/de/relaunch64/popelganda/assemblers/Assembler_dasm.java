@@ -52,6 +52,11 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
+    public String getDelimiterList() {
+        return ",:{}()[]+-/<=>&|^~*";
+    }
+    
+    @Override
     public String syntaxFile() {
         return "assembly-dasm.xml";
     }

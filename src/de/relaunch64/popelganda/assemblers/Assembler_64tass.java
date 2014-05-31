@@ -69,6 +69,11 @@ public class Assembler_64tass implements Assembler {
     };
 
     @Override
+    public String getDelimiterList() {
+        return ",:{}()[]+-/<=>&|^~*";
+    }
+    
+    @Override
     public String name() {
         return "64tass";
     }

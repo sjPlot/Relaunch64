@@ -64,6 +64,11 @@ public class Assembler_acme implements Assembler
     }
 
     @Override
+    public String getDelimiterList() {
+        return ",:{}()[]+-/<=>&|^~*";
+    }
+    
+    @Override
     public String syntaxFile() {
         return "assembly-acme.xml";
     }
