@@ -91,6 +91,11 @@ public class Assembler_kick implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return ".pc = $801\n:BasicUpstart(" + Integer.toString(start) + ")\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return ".import source \"" + path + "\"";
     }

@@ -82,6 +82,11 @@ public class Assembler_dasm implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return " org $801\n dc.w .0, 10\n dc.b $9e, \"" + Integer.toString(start) + "\", 0\n.0 dc.w 0\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return "include \"" + path + "\"";
     }

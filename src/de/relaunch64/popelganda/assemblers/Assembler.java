@@ -47,6 +47,7 @@ public interface Assembler
     String getMacroPrefix();
     String getLineComment();
     String getByteDirective();
+    String getBasicStart(int start);
     String getIncludeSourceDirective(String path);
     String getIncludeTextDirective(String path);
     String getIncludeC64Directive(String path);

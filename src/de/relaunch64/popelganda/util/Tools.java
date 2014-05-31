@@ -292,31 +292,7 @@ public class Tools {
             }
         }
         if (dezaddress!=0) {
-            // convert to string, so we can access each single digit
-            startaddress = String.valueOf(dezaddress);
-            StringBuilder output = new StringBuilder(" $0c,$08,$0a,$00,$9e");
-            // copy all digits
-            for (int i=0; i<startaddress.length(); i++) {
-                output.append(",$3").append(startaddress.charAt(i));
-            }
-            output.append(",$00,$00,$00").append("\n");
-            output.insert(0, ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getByteDirective());
-            switch (editorPanes.getActiveCompiler()) {
-                case ConstantsR64.ASM_ACME:
-                case ConstantsR64.ASM_TMPX:
-                case ConstantsR64.ASM_64TASS:
-                case ConstantsR64.ASM_CA65:
-                case ConstantsR64.ASM_DREAMASS:
-                    output.insert(0, "*=$0801\n");
-                    break;
-                case ConstantsR64.ASM_KICKASSEMBLER:
-                    output.insert(0, ".pc = $0801\n");
-                    break;
-                case ConstantsR64.ASM_DASM:
-                    output.insert(0, "org $0801\n");
-                    break;
-            }
-            editorPanes.insertString(output.toString());
+            editorPanes.insertString(ConstantsR64.assemblers[editorPanes.getActiveCompiler()].getBasicStart(dezaddress));
         }
     }
     /**

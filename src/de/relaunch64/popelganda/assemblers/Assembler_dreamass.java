@@ -96,6 +96,11 @@ public class Assembler_dreamass implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return "*= $801\n.(\n.word s, 10\n.pet $9e, \"" + Integer.toString(start) + "\", 0\ns .word 0\n.)\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return "#include \"" + path + "\"";
     }

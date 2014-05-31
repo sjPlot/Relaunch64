@@ -84,6 +84,11 @@ public class Assembler_ca65 implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return ".org $7ff\n!word $801, (:+), 10\n.byte $9e\n.asciiz \"" + Integer.toString(start) + "\"\n: .word 0\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return ".include \"" + path + "\"";
     }

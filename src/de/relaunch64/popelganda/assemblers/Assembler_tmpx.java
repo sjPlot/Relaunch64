@@ -94,6 +94,11 @@ public class Assembler_tmpx implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return "*= $801\n.block\n.word s, 10\n.byte $9e\n.null \"" + Integer.toString(start) + "\"\ns .word 0\n.bend\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return ".include \"" + path + "\"";
     }

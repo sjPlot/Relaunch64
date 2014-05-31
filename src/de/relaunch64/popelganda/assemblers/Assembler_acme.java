@@ -94,6 +94,11 @@ public class Assembler_acme implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return "*= $801\n!word (+), 10\n!text $9e, \"" + Integer.toString(start) + "\", 0\n+ !word 0\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return "!src \"" + path + "\"";
     }

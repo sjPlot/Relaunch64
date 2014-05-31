@@ -79,6 +79,11 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return "";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return "";
     }

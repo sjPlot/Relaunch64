@@ -102,6 +102,11 @@ public class Assembler_64tass implements Assembler {
     }
 
     @Override
+    public String getBasicStart(int start) {
+        return "*= $801\n.word (+), 10\n.null $9e, \"" + Integer.toString(start) + "\"\n+ .word 0\n";
+    }
+
+    @Override
     public String getIncludeSourceDirective(String path) {
         return ".include \"" + path + "\"";
     }
