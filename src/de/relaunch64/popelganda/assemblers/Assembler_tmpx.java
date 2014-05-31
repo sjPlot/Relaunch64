@@ -32,14 +32,14 @@
  */
 package de.relaunch64.popelganda.assemblers;
 
-import de.relaunch64.popelganda.util.ErrorHandler.ErrorInfo;
+import de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.LinkedHashMap;
-import java.util.Arrays;
-import java.util.ArrayList;
 
 /**
  *

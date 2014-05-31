@@ -30,9 +30,11 @@
  * Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm 
  * erhalten haben. Falls nicht, siehe <http://www.gnu.org/licenses/>.
  */
-package de.relaunch64.popelganda.util;
+package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
+import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.util.FileTools;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.LineNumberReader;
@@ -46,6 +48,7 @@ import javax.swing.text.Element;
 /**
  *
  * @author Daniel Luedecke
+ * @author Soci/Singular
  */
 public class ErrorHandler {
     private int errorIndex = -1;

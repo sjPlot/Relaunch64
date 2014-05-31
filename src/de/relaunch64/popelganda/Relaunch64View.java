@@ -33,6 +33,7 @@
 
 package de.relaunch64.popelganda;
 
+import de.relaunch64.popelganda.assemblers.ErrorHandler;
 import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
@@ -43,7 +44,6 @@ import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.FindTerms;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
-import de.relaunch64.popelganda.util.ErrorHandler;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
