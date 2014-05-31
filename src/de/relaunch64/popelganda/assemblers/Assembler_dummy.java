@@ -49,11 +49,6 @@ public class Assembler_dummy implements Assembler
     }
 
     @Override
-    public String getDelimiterList() {
-        return "";
-    }
-    
-    @Override
     public String syntaxFile() {
         return "";
     }

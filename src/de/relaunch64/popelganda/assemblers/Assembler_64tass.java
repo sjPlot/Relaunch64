@@ -59,7 +59,10 @@ public class Assembler_64tass implements Assembler {
         "SED", "SEI", "SHA", "SHL", "SHR", "SHS", "SHX", "SHY", "SLO", "SRE",
         "STA", "STX", "STY", "TAX", "TAY", "TSX", "TXA", "TXS", "TYA"
     };
-
+    /**
+     * String array with Math functions and scripting language keywords, in
+     * case the assembler supports this. Used for syntax highlighting keywords.
+     */
     final static String[] scriptKeywords = {
         "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
         "deg", "exp", "floor", "frac", "hypot", "log", "log10",
@@ -68,11 +71,6 @@ public class Assembler_64tass implements Assembler {
         "repr", "format", "range"
     };
 
-    @Override
-    public String getDelimiterList() {
-        return ",:{}()[]+-/<=>&|^~*";
-    }
-    
     @Override
     public String name() {
         return "64tass";
@@ -147,7 +145,7 @@ public class Assembler_64tass implements Assembler {
         LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
         LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
-        // Daniel: I love this regex-stuff! Unfortunately I'm to old to understand it...
+        // Daniel: I love this regex-stuff! Unfortunately I'm too old to understand it...
         Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;

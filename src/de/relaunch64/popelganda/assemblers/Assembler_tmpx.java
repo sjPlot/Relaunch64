@@ -64,11 +64,6 @@ public class Assembler_tmpx implements Assembler
     }
 
     @Override
-    public String getDelimiterList() {
-        return ",:{}()[]+-/<=>&|^~*";
-    }
-    
-    @Override
     public String syntaxFile() {
         return "assembly-tmpx.xml";
     }

@@ -42,7 +42,6 @@ public interface Assembler
     String name();
     String syntaxFile();
 
-    String getDelimiterList();
     String getMacroString();
     String getMacroPrefix();
     String getLineComment();

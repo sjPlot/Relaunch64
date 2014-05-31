@@ -58,11 +58,6 @@ public class Assembler_kick implements Assembler
     };
 
     @Override
-    public String getDelimiterList() {
-        return ",;:{}()[]+-/<=>&|^~*";
-    }
-    
-    @Override
     public String name() {
         return "Kick Assembler";
     }

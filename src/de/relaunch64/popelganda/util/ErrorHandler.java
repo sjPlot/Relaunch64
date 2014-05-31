@@ -75,13 +75,13 @@ public class ErrorHandler {
     public String getBasePath() {
         return basePath;
     }
-    public void readErrorLines(String log, int compiler) {
+    public void readErrorLines(String log, int assembler) {
         // create buffered reader, needed for line number reader
         StringReader sr = new StringReader(log);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
 
-        errors.addAll(ConstantsR64.assemblers[compiler].readErrorLines(lineReader));
+        errors.addAll(ConstantsR64.assemblers[assembler].readErrorLines(lineReader));
     }
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
         if (hasErrors()) {

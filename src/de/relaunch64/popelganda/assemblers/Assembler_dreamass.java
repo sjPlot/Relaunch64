@@ -66,11 +66,6 @@ public class Assembler_dreamass implements Assembler
     }
 
     @Override
-    public String getDelimiterList() {
-        return ",:{}()[]+-/<=>&|^~*";
-    }
-    
-    @Override
     public String syntaxFile() {
         return "assembly-dreamass.xml";
     }
