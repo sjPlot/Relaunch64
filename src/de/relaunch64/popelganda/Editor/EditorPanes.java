@@ -123,13 +123,14 @@ public class EditorPanes {
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
         // set content, if available
-        // TODO undo removes loaded text
+        buffer.setUndoLimit(0);
         if (content!= null && !content.isEmpty()) {
             editorPane.setText(content);
         }
         else {
             editorPane.setText("");
         }
+        buffer.setUndoLimit(100);
         // add caret listener
         /**
          * JDK 8 version of caret listener
