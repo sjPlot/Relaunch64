@@ -769,33 +769,27 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setLineNumerAlignment(Gutter.RIGHT);
                 editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
                 break;
-            case "xyz":
-                String t1 = editorPanes.getActiveEditorPane().getText();
-                String t2 = editorPanes.getActiveEditorPane().getBuffer().getText();
-                t1 = t1.replaceAll("\r", "---r").replaceAll("\n", "---n");
-                t2 = t2.replaceAll("\r", "---r").replaceAll("\n", "---n");
-                System.out.println("Editor: "+t1);
-                System.out.println("Buffer: "+t2);
         }
-        if (text.startsWith("cs")) {
-            try {
+        try {
+            if (text.startsWith("cs")) {
                 int nr = Integer.parseInt(text.substring(2));
                 if (nr>=1 && nr<=ColorSchemes.SCHEME_NAMES.length) {
                     settings.setColorScheme(nr-1);
                     editorPanes.updateColorScheme();
                 }
             }
-            catch(IndexOutOfBoundsException | NumberFormatException ex) {
-            }
-        }
-        else if (text.startsWith("fs")) {
-            try {
+            else if (text.startsWith("fs")) {
                 int size = Integer.parseInt(text.substring(2));
                 settings.setMainfont(new Font(settings.getMainfont(Settings.FONTNAME), Font.PLAIN, size));
                 editorPanes.setFonts(settings.getMainFont());
             }
-            catch(IndexOutOfBoundsException | NumberFormatException ex) {
+            else if (text.startsWith("ts")) {
+                int size = Integer.parseInt(text.substring(2));
+                settings.setTabWidth(size);
+                editorPanes.setTabs(size);
             }
+        }
+        catch(IndexOutOfBoundsException | NumberFormatException ex) {
         }
         jTextFieldGotoLine.setText("");
     }

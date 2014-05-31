@@ -193,15 +193,15 @@ public class RL64TextArea extends StandaloneTextArea {
             if (evt.getKeyCode()==KeyEvent.VK_ENTER && !evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                 // get text of current line
                 String line = getLineText(getCaretLine());
+                // insert enter
+                insertEnterAndIndent();
                 // check if we have any content in line
                 if (line!=null && !line.isEmpty()) {
                     int tabcount = 0;
                     // count tabs at line start
-                    while (line.charAt(tabcount)=='\t') {
+                    while (tabcount<line.length() && line.charAt(tabcount)=='\t') {
                         tabcount++;
                     }
-                    // insert enter
-                    insertEnterAndIndent();
                     // insert tabs according to prev line
                     while (tabcount>0) {
                         insertTabAndIndent();
