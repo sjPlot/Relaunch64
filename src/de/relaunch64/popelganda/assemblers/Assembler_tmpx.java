@@ -59,11 +59,6 @@ public class Assembler_tmpx implements Assembler
     };
 
     @Override
-    public String[] getScriptKeywords() {
-        return null;
-    }
-    
-    @Override
     public String name() {
         return "TMPx";
     }
@@ -116,6 +111,11 @@ public class Assembler_tmpx implements Assembler
     @Override
     public String getIncludeBinaryDirective(String path) {
         return ".binary \"" + path + "\"";
+    }
+
+    @Override
+    public String[] getScriptKeywords() {
+        return new String[] {};
     }
 
     @Override

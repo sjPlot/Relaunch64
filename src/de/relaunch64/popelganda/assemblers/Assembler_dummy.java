@@ -44,11 +44,6 @@ import java.util.ArrayList;
 public class Assembler_dummy implements Assembler
 {
     @Override
-    public String[] getScriptKeywords() {
-        return null;
-    }
-    
-    @Override
     public String name() {
         return "Dummy";
     }
@@ -72,7 +67,7 @@ public class Assembler_dummy implements Assembler
     public String getMacroString() {
         return "";
     }
-    
+
     @Override
     public String getByteDirective() {
         return "";
@@ -101,6 +96,11 @@ public class Assembler_dummy implements Assembler
     @Override
     public String getIncludeBinaryDirective(String path) {
         return "";
+    }
+
+    @Override
+    public String[] getScriptKeywords() {
+        return new String[] {};
     }
 
     @Override

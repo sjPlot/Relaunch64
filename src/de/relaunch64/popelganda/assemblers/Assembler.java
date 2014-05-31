@@ -42,7 +42,6 @@ public interface Assembler
     String name();
     String syntaxFile();
 
-    String[] getScriptKeywords();
     String getMacroString();
     String getMacroPrefix();
     String getLineComment();
@@ -52,6 +51,7 @@ public interface Assembler
     String getIncludeTextDirective(String path);
     String getIncludeC64Directive(String path);
     String getIncludeBinaryDirective(String path);
+    String[] getScriptKeywords();
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
 

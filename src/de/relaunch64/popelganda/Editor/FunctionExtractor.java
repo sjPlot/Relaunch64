@@ -202,14 +202,7 @@ public class FunctionExtractor {
         ArrayList<String> macros = getMacroNamesAsList(subWord, source, compiler);
         // get scripts  here
         ArrayList<String> scripts = new ArrayList<>();
-        switch(compiler) {
-            case ConstantsR64.ASM_KICKASSEMBLER:
-                scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_KICKASS));
-                break;
-            case ConstantsR64.ASM_64TASS:
-                scripts.addAll(Arrays.asList(ConstantsR64.SCRIPT_KEYWORDS_64TASS));
-                break;
-        }
+        scripts.addAll(Arrays.asList(ConstantsR64.assemblers[compiler].getScriptKeywords()));
         // check for valid values
         if (!scripts.isEmpty()) {
             // remove all labels that do not start with already typed chars

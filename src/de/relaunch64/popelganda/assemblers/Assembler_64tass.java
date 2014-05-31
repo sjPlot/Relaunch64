@@ -60,17 +60,14 @@ public class Assembler_64tass implements Assembler {
         "STA", "STX", "STY", "TAX", "TAY", "TSX", "TXA", "TXS", "TYA"
     };
 
-    @Override
-    public String[] getScriptKeywords() {
-        return new String[] {
-            "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
-            "deg", "exp", "floor", "frac", "hypot", "log", "log10",
-            "max", "min", "mod", "rad", "round", "sign", "sin", "sinh", "sort",
-            "signum", "tan", "tanh", "trunc", "bool", "len", "all", "any", "str",
-            "repr", "format", "range"
-        };
-    }
-    
+    final static String[] scriptKeywords = {
+        "abs", "acos", "asin", "atan", "atan2", "cbrt", "ceil", "cos", "cosh",
+        "deg", "exp", "floor", "frac", "hypot", "log", "log10",
+        "max", "min", "mod", "rad", "round", "sign", "sin", "sinh", "sort",
+        "signum", "tan", "tanh", "trunc", "bool", "len", "all", "any", "str",
+        "repr", "format", "range"
+    };
+
     @Override
     public String name() {
         return "64tass";
@@ -124,6 +121,11 @@ public class Assembler_64tass implements Assembler {
     @Override
     public String getIncludeBinaryDirective(String path) {
         return ".binary \"" + path + "\"";
+    }
+
+    @Override
+    public String[] getScriptKeywords() {
+        return scriptKeywords;
     }
 
     @Override

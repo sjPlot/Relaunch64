@@ -47,11 +47,6 @@ import java.util.ArrayList;
 public class Assembler_dasm implements Assembler
 {
     @Override
-    public String[] getScriptKeywords() {
-        return null;
-    }
-    
-    @Override
     public String name() {
         return "DASM";
     }
@@ -104,6 +99,11 @@ public class Assembler_dasm implements Assembler
     @Override
     public String getIncludeBinaryDirective(String path) {
         return "incbin \"" + path + "\"";
+    }
+
+    @Override
+    public String[] getScriptKeywords() {
+        return new String[] {};
     }
 
     @Override

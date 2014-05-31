@@ -61,11 +61,6 @@ public class Assembler_dreamass implements Assembler
     };
 
     @Override
-    public String[] getScriptKeywords() {
-        return null;
-    }
-    
-    @Override
     public String name() {
         return "DreamAss";
     }
@@ -118,6 +113,11 @@ public class Assembler_dreamass implements Assembler
     @Override
     public String getIncludeBinaryDirective(String path) {
         return ".binclude \"" + path + "\"";
+    }
+
+    @Override
+    public String[] getScriptKeywords() {
+        return new String[] {};
     }
 
     @Override
