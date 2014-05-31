@@ -153,6 +153,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
+        // set compiler log font to monospace
+        jTextAreaCompilerOutput.setFont(new Font(Font.MONOSPACED, Font.PLAIN, ((Font)UIManager.getLookAndFeelDefaults().get("defaultFont")).getSize()));
         // init combo boxes
         initComboBoxes();
         // init listeners and accelerator table
@@ -2174,7 +2176,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         jTextAreaCompilerOutput.setEditable(false);
-        jTextAreaCompilerOutput.setFont(resourceMap.getFont("jTextAreaCompilerOutput.font")); // NOI18N
         jTextAreaCompilerOutput.setName("jTextAreaCompilerOutput"); // NOI18N
         jScrollPane3.setViewportView(jTextAreaCompilerOutput);
 
