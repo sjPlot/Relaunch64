@@ -85,6 +85,7 @@ public class Assembler_kick implements Assembler
         return new LinkedHashMap<>();
     }
 
+    // TODO kickass labels starting with "!" are not recognized
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();

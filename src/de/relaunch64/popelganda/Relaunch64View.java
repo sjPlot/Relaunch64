@@ -1288,7 +1288,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // select error log if we have errors
             if (errorHandler.hasErrors()) {
                 // show error log
-                selectLog2();
+                jTabbedPaneLogs.setSelectedIndex(1);
                 // show first error
                 errorHandler.gotoFirstError(editorPanes, jTextAreaCompilerOutput);
             }
@@ -1296,6 +1296,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         else {
             JOptionPane.showMessageDialog(getFrame(), "Please open preferences and add a 'compile and run' script first!");
         }
+    }
+    @Action
+    public void gotoNextFold() {
+        editorPanes.getActiveEditorPane().goToNextFold(false);
+    }
+    @Action
+    public void gotoPrevFold() {
+        editorPanes.getActiveEditorPane().goToPrevFold(false);
     }
     @Action
     public void switchLogPosition() {
@@ -1332,12 +1340,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxCompilers.requestFocusInWindow();
     }
     @Action
-    public void selectLog1() {
-        jTabbedPaneLogs.setSelectedIndex(0);
-    }
-    @Action
-    public void selectLog2() {
-        jTabbedPaneLogs.setSelectedIndex(1);
+    public void selectLog() {
+        int selected = jTabbedPaneLogs.getSelectedIndex();
+        jTabbedPaneLogs.setSelectedIndex((0==selected) ? 1 : 0);
     }
     @Action
     public void selectAllText() {
@@ -1866,6 +1871,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator20 = new javax.swing.JPopupMenu.Separator();
         gotoNextErrorMenuItem = new javax.swing.JMenuItem();
         gotoPrevErrorMenuItem = new javax.swing.JMenuItem();
+        jSeparator21 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemNextFold = new javax.swing.JMenuItem();
+        jMenuItemPrevFold = new javax.swing.JMenuItem();
         sourceMenu = new javax.swing.JMenu();
         runScriptMenuItem = new javax.swing.JMenuItem();
         focusScriptMenuItem = new javax.swing.JMenuItem();
@@ -1890,7 +1898,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMainTabMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         viewLog1MenuItem = new javax.swing.JMenuItem();
-        viewLog2MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
         switchBothMenuItem = new javax.swing.JMenuItem();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
@@ -2442,6 +2449,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         gotoPrevErrorMenuItem.setName("gotoPrevErrorMenuItem"); // NOI18N
         gotoMenu.add(gotoPrevErrorMenuItem);
 
+        jSeparator21.setName("jSeparator21"); // NOI18N
+        gotoMenu.add(jSeparator21);
+
+        jMenuItemNextFold.setAction(actionMap.get("gotoNextFold")); // NOI18N
+        jMenuItemNextFold.setName("jMenuItemNextFold"); // NOI18N
+        gotoMenu.add(jMenuItemNextFold);
+
+        jMenuItemPrevFold.setAction(actionMap.get("gotoPrevFold")); // NOI18N
+        jMenuItemPrevFold.setName("jMenuItemPrevFold"); // NOI18N
+        gotoMenu.add(jMenuItemPrevFold);
+
         menuBar.add(gotoMenu);
 
         sourceMenu.setMnemonic('S');
@@ -2538,24 +2556,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
 
-        viewLog1MenuItem.setAction(actionMap.get("selectLog1")); // NOI18N
+        viewLog1MenuItem.setAction(actionMap.get("selectLog")); // NOI18N
         viewLog1MenuItem.setMnemonic('R');
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
         viewMenu.add(viewLog1MenuItem);
-
-        viewLog2MenuItem.setAction(actionMap.get("selectLog2")); // NOI18N
-        viewLog2MenuItem.setMnemonic('C');
-        viewLog2MenuItem.setName("viewLog2MenuItem"); // NOI18N
-        viewMenu.add(viewLog2MenuItem);
 
         jSeparator19.setName("jSeparator19"); // NOI18N
         viewMenu.add(jSeparator19);
 
         switchBothMenuItem.setAction(actionMap.get("switchBothPosition")); // NOI18N
+        switchBothMenuItem.setToolTipText(resourceMap.getString("switchBothMenuItem.toolTipText")); // NOI18N
         switchBothMenuItem.setName("switchBothMenuItem"); // NOI18N
         viewMenu.add(switchBothMenuItem);
 
         switchLogPosMenuItem.setAction(actionMap.get("switchLogPosition")); // NOI18N
+        switchLogPosMenuItem.setToolTipText(resourceMap.getString("switchLogPosMenuItem.toolTipText")); // NOI18N
         switchLogPosMenuItem.setName("switchLogPosMenuItem"); // NOI18N
         viewMenu.add(switchLogPosMenuItem);
 
@@ -2730,6 +2745,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItemCollapseFold;
     private javax.swing.JMenuItem jMenuItemExpandFold;
+    private javax.swing.JMenuItem jMenuItemNextFold;
+    private javax.swing.JMenuItem jMenuItemPrevFold;
     private javax.swing.JMenuItem jMenuItemSurroundFolds;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2755,6 +2772,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
+    private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator22;
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -2808,7 +2826,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem switchLogPosMenuItem;
     private javax.swing.JMenuItem undoMenuItem;
     private javax.swing.JMenuItem viewLog1MenuItem;
-    private javax.swing.JMenuItem viewLog2MenuItem;
     private javax.swing.JMenuItem viewMainTabMenuItem;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables

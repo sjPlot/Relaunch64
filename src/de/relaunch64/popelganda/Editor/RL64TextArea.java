@@ -168,19 +168,24 @@ public class RL64TextArea extends StandaloneTextArea {
     private class RL64KeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent evt) {
+            int type = -1;
             // ctrl+space opens label-auto-completion
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
-                showSuggestionPopup(SUGGESTION_LABEL);
+                type = SUGGESTION_LABEL;
+                // show popup
+                showSuggestionPopup(type);
             }
             // ctrl+shift+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
-                showSuggestionPopup(SUGGESTION_FUNCTION_MACRO_SCRIPT);
+                type = SUGGESTION_FUNCTION_MACRO_SCRIPT;
+                // show popup
+                showSuggestionPopup(type);
             }
-            if (suggestionPopup != null) {
+            if (suggestionPopup!=null) {
                 if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     hideSuggestion();
                 } else {
-                    showSuggestionPopup(SUGGESTION_LABEL);
+                    showSuggestionPopup(type);
                 }
             }
         }
@@ -485,7 +490,7 @@ public class RL64TextArea extends StandaloneTextArea {
         String str = ".";
         switch (compiler) {
             case ConstantsR64.ASM_ACME:
-                str = "!";
+                str = "+";
                 break;
             case ConstantsR64.ASM_DASM:
                 str = "";
@@ -503,6 +508,8 @@ public class RL64TextArea extends StandaloneTextArea {
         return str;
     }
     protected void showSuggestionPopup(final int type) {
+        // check for valid type
+        if (-1==type) return;
         // check if caret is visible. if not, location is NULL, i.e. exception thrown
         if (!isCaretVisible()) {
             // scroll to caret
@@ -714,8 +721,12 @@ public class RL64TextArea extends StandaloneTextArea {
      * @return 
      */
     public String getCaretString(boolean wholeWord, String specialDelimiter) {
+        // get caret position in line offset
         final int position = getCaretPosition()-getLineStartOffset(getCaretLine())-1;
+        // get line text
         String text = getLineText(getCaretLine());
+        // if empty, return empty string
+        if (text.trim().isEmpty()) return "";
         String addDelim;
         switch (getCompiler()) {
             // use colon as additional delimiter for following assemblers
@@ -748,28 +759,30 @@ public class RL64TextArea extends StandaloneTextArea {
                 break;
             }
         }
-        if (start > position) {
-            return null;
-        }
         // check if we want the complete word at the caret
-        if (wholeWord) {
-            int end = start;
-            while (end<text.length() && !Character.isWhitespace(text.charAt(end)) && !Tools.isDelimiter(text.substring(end, end+1), addDelim)) end++;
-            // if we found a special delimiter at beginning, add it to return string
+        try {
+            if (wholeWord) {
+                int end = start;
+                while (end<text.length() && !Character.isWhitespace(text.charAt(end)) && !Tools.isDelimiter(text.substring(end, end+1), addDelim)) end++;
+                // if we found a special delimiter at beginning, add it to return string
+                if (isSpecialDelimiter) {
+                    return (specialDelimiter+text.substring(start, end));
+                }
+                else {
+                    return text.substring(start, end);
+                }
+            }
+            // retrieve chars that have already been typed
             if (isSpecialDelimiter) {
-                return (specialDelimiter+text.substring(start, end));
+                // if we found a special delimiter at beginning, add it to return string
+                return (specialDelimiter+text.substring(start, position+1));
             }
             else {
-                return text.substring(start, end);
+                return text.substring(start, position+1);
             }
         }
-        // retrieve chars that have already been typed
-        if (isSpecialDelimiter) {
-            // if we found a special delimiter at beginning, add it to return string
-            return (specialDelimiter+text.substring(start, position));
-        }
-        else {
-            return text.substring(start, position);
+        catch (IndexOutOfBoundsException ex) {
+            return null;
         }
     }
     /**

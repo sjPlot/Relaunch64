@@ -953,6 +953,27 @@
                 <Property name="name" type="java.lang.String" value="gotoPrevErrorMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator21">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator21" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemNextFold">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoNextFold" methodName="gotoNextFold"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jMenuItemNextFold" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemPrevFold">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoPrevFold" methodName="gotoPrevFold"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jMenuItemPrevFold" noResource="true"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="sourceMenu">
@@ -1130,19 +1151,10 @@
             <MenuItem class="javax.swing.JMenuItem" name="viewLog1MenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog1" methodName="selectLog1"/>
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog" methodName="selectLog"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="82"/>
                 <Property name="name" type="java.lang.String" value="viewLog1MenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="viewLog2MenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectLog2" methodName="selectLog2"/>
-                </Property>
-                <Property name="mnemonic" type="int" value="67"/>
-                <Property name="name" type="java.lang.String" value="viewLog2MenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator19">
@@ -1155,6 +1167,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="switchBothPosition" methodName="switchBothPosition"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="switchBothMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="switchBothMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -1163,6 +1176,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="switchLogPosition" methodName="switchLogPosition"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="switchLogPosMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="switchLogPosMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
