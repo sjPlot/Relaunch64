@@ -61,6 +61,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * auto-completion popup for labels and macros etc.
      */
     private JPopupMenu suggestionPopup = null;
+    private int suggestionType = -1;
     private JList suggestionList;
     private String suggestionSubWord;
     private String suggestionContinuedWord;
@@ -168,24 +169,23 @@ public class RL64TextArea extends StandaloneTextArea {
     private class RL64KeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent evt) {
-            int type = -1;
             // ctrl+space opens label-auto-completion
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
-                type = SUGGESTION_LABEL;
+                suggestionType = SUGGESTION_LABEL;
                 // show popup
-                showSuggestionPopup(type);
+                showSuggestionPopup(suggestionType);
             }
             // ctrl+shift+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
-                type = SUGGESTION_FUNCTION_MACRO_SCRIPT;
+                suggestionType = SUGGESTION_FUNCTION_MACRO_SCRIPT;
                 // show popup
-                showSuggestionPopup(type);
+                showSuggestionPopup(suggestionType);
             }
             if (suggestionPopup!=null) {
                 if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     hideSuggestion();
                 } else {
-                    showSuggestionPopup(type);
+                    showSuggestionPopup(suggestionType);
                 }
             }
         }
@@ -578,9 +578,9 @@ public class RL64TextArea extends StandaloneTextArea {
             // check if we have any labels
             if (labels == null || labels.length < 1) return;
             if (labels.length == 1) { // single suggestion, just type it in
-                    final String selectedSuggestion = ((String)labels[0]).substring(suggestionSubWord.length());
-                    getBuffer().insert(getCaretPosition(), selectedSuggestion);
-                    return;
+                final String selectedSuggestion = ((String)labels[0]).substring(suggestionSubWord.length());
+                getBuffer().insert(getCaretPosition(), selectedSuggestion);
+                return;
             }
             // get location of caret as coordinate
             Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
