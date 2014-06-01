@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  *
  * @author Soci/Singular
  */
-public class Assembler_tmpx implements Assembler
+class Assembler_tmpx implements Assembler
 {
     final static String opcodes[] = { // must be sorted!
         "ADC", "AHX", "ALR", "ANC", "AND", "ARR", "ASL", "AXS", "BCC", "BCS",

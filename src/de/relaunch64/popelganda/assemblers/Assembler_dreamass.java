@@ -45,7 +45,7 @@ import java.util.ArrayList;
  *
  * @author Soci/Singular
  */
-public class Assembler_dreamass implements Assembler
+class Assembler_dreamass implements Assembler
 {
     final static String opcodes[] = { // must be sorted!
         "ACN", "ADC", "AHX", "ALR", "ANC", "AND", "ARR", "ASL", "AXS", "BCC",

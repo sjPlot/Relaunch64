@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
@@ -396,7 +397,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         catch (NumberFormatException ex) {
         }
-        settings.setPreferredAssembler(ConstantsR64.assemblers[jComboBoxPrefComp.getSelectedIndex()]);
+        settings.setPreferredAssembler(Assemblers.byID(jComboBoxPrefComp.getSelectedIndex()));
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         settings.setScaleFont(jCheckBoxScaleFonts.isSelected());
         switch(jComboBoxLineNumberAlign.getSelectedIndex()) {
@@ -681,7 +682,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jTextFieldTabWidth.setText(resourceMap.getString("jTextFieldTabWidth.text")); // NOI18N
         jTextFieldTabWidth.setName("jTextFieldTabWidth"); // NOI18N
 
-        jComboBoxPrefComp.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES));
+        jComboBoxPrefComp.setModel(new javax.swing.DefaultComboBoxModel(Assemblers.names()));
         jComboBoxPrefComp.setName("jComboBoxPrefComp"); // NOI18N
 
         jLabel6.setDisplayedMnemonic('c');

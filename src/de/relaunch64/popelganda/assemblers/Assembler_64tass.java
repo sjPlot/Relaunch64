@@ -47,7 +47,7 @@ import java.util.ArrayList;
  *
  * @author Soci/Singular
  */
-public class Assembler_64tass implements Assembler {
+class Assembler_64tass implements Assembler {
     final static String opcodes[] = { // must be sorted!
         "ADC", "ANC", "AND", "ANE", "ARR", "ASL", "ASR", "BCC", "BCS", "BEQ",
         "BGE", "BIT", "BLT", "BMI", "BNE", "BPL", "BRK", "BVC", "BVS", "CLC",

@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.dnd.DropTarget;
 import java.awt.Font;
 import java.io.File;
@@ -499,7 +500,7 @@ public class EditorPanes {
             return ep.getEditorPane().getAssembler();
         }
         catch (IndexOutOfBoundsException ex) {
-            return ConstantsR64.ASM_KICKASSEMBLER;
+            return Assemblers.ASM_KICKASSEMBLER;
         }
     }
     public int getScript(int index) {
@@ -960,7 +961,7 @@ public class EditorPanes {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         String insertString = "";
-        if (assembler == ConstantsR64.ASM_KICKASSEMBLER) {
+        if (assembler == Assemblers.ASM_KICKASSEMBLER) {
             insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER;
         }
         // insert string

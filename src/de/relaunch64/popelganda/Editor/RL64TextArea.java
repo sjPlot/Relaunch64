@@ -20,6 +20,7 @@ import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Tools;
 import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -656,10 +657,10 @@ public class RL64TextArea extends StandaloneTextArea {
         if (text.trim().isEmpty()) return "";
         String addDelim;
             // use colon as additional delimiter for following assemblers
-        if (getAssembler() == ConstantsR64.ASM_ACME ||
-            getAssembler() == ConstantsR64.ASM_64TASS ||
-            getAssembler() == ConstantsR64.ASM_DREAMASS ||
-            getAssembler() == ConstantsR64.ASM_TMPX) {
+        if (getAssembler() == Assemblers.ASM_ACME ||
+            getAssembler() == Assemblers.ASM_64TASS ||
+            getAssembler() == Assemblers.ASM_DREAMASS ||
+            getAssembler() == Assemblers.ASM_TMPX) {
             addDelim = "\n\r:";
         } else {
             addDelim = "\n\r";

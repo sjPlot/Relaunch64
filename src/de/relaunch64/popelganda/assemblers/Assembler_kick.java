@@ -44,7 +44,7 @@ import java.util.ArrayList;
  *
  * @author Soci/Singular
  */
-public class Assembler_kick implements Assembler
+class Assembler_kick implements Assembler
 {
     final static String[] scriptKeywords = {
         ".add", ".asNumber", ".asBoolean", ".charAt", ".get", ".getData", ".getPixel",

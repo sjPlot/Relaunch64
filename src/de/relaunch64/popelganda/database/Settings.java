@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -263,7 +264,7 @@ public class Settings {
         if (null==root.getChild(SETTING_PREF_ASM)) {
             // create element
             Element el = new Element(SETTING_PREF_ASM);
-            el.setText(String.valueOf(ConstantsR64.ASM_KICKASSEMBLER.getID()));
+            el.setText(String.valueOf(Assemblers.ASM_KICKASSEMBLER.getID()));
             // and add it to the document
             root.addContent(el);
         }
@@ -348,7 +349,7 @@ public class Settings {
      */
     public Assembler getRecentDocAssembler(int nr) {
         // checl for valid parameter
-        if (nr<0) return ConstantsR64.ASM_KICKASSEMBLER;
+        if (nr<0) return Assemblers.ASM_KICKASSEMBLER;
         // retrieve element
         Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
@@ -358,15 +359,15 @@ public class Settings {
             // if we have any valid attribute
             if (comp!=null) {
                 try {
-                    return ConstantsR64.assemblers[Integer.parseInt(comp.getValue())];
+                    return Assemblers.byID(Integer.parseInt(comp.getValue()));
                 }
                 catch (Exception ex) {
-                    return ConstantsR64.ASM_KICKASSEMBLER;
+                    return Assemblers.ASM_KICKASSEMBLER;
                 }
             }
         }
         // else return null
-        return ConstantsR64.ASM_KICKASSEMBLER;
+        return Assemblers.ASM_KICKASSEMBLER;
     }
     /**
      * 
@@ -478,7 +479,7 @@ public class Settings {
             }
             // else fill remaining recent documents with empty strings
             else {
-                setRecentDoc(cnt, "", ConstantsR64.ASM_KICKASSEMBLER, -1);
+                setRecentDoc(cnt, "", Assemblers.ASM_KICKASSEMBLER, -1);
             }
         }
     }
@@ -552,11 +553,11 @@ public class Settings {
     public Assembler getPreferredAssembler() {
         Element el = root.getChild(SETTING_PREF_ASM);
         try {
-            if (el!=null) return ConstantsR64.assemblers[Integer.parseInt(el.getText())];
+            if (el!=null) return Assemblers.byID(Integer.parseInt(el.getText()));
         }
         catch (Exception ex) {
         }
-        return ConstantsR64.ASM_KICKASSEMBLER;
+        return Assemblers.ASM_KICKASSEMBLER;
     }
     public void setPreferredAssembler(Assembler assembler) {
         Element el = root.getChild(SETTING_PREF_ASM);
@@ -804,15 +805,15 @@ public class Settings {
                 String attr_c = e.getAttributeValue(ATTR_ASM);
                 String attr_s = e.getAttributeValue(ATTR_SCRIPT);
                 // init defaults
-                Assembler assembler = ConstantsR64.ASM_KICKASSEMBLER;
+                Assembler assembler = Assemblers.ASM_KICKASSEMBLER;
                 int script = -1;
                 // check if we have compiler value
                 try {
-                    if (attr_c!=null) assembler = ConstantsR64.assemblers[Integer.parseInt(attr_c)];
+                    if (attr_c!=null) assembler = Assemblers.byID(Integer.parseInt(attr_c));
                     if (attr_s!=null) script = Integer.parseInt(attr_s);
                 }
                 catch (NumberFormatException ex) {
-                    assembler = ConstantsR64.ASM_KICKASSEMBLER;
+                    assembler = Assemblers.ASM_KICKASSEMBLER;
                     script = -1;
                 }
                 // add compiler and filepath to return value

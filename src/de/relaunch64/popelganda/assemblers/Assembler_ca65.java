@@ -46,7 +46,7 @@ import java.util.ArrayList;
  *
  * @author Soci/Singular
  */
-public class Assembler_ca65 implements Assembler
+class Assembler_ca65 implements Assembler
 {
     @Override
     public String name() {

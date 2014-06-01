@@ -41,7 +41,7 @@ import java.util.ArrayList;
  *
  * @author Soci/Singular
  */
-public class Assembler_dummy implements Assembler
+class Assembler_dummy implements Assembler
 {
     @Override
     public String name() {

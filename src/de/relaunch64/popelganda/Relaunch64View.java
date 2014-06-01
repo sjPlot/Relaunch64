@@ -35,6 +35,7 @@ package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.assemblers.ErrorHandler;
 import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.FunctionExtractor;
@@ -301,7 +302,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override
             public void actionPerformed(ActionEvent evt) {
                 if (editorPanes.checkIfSyntaxChangeRequired()) {
-                    editorPanes.changeAssembler(ConstantsR64.assemblers[jComboBoxAssemblers.getSelectedIndex()], jComboBoxRunScripts.getSelectedIndex());
+                    editorPanes.changeAssembler(Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
                 }
                 // update recent doc
                 updateRecentDoc();
@@ -1089,7 +1090,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         int rd = settings.findRecentDoc(cf);
         // if we have valid values, update recent doc
         if (rd!=-1 && cf!=null) {
-            settings.setRecentDoc(rd, cf.toString(), ConstantsR64.assemblers[jComboBoxAssemblers.getSelectedIndex()], jComboBoxRunScripts.getSelectedIndex());
+            settings.setRecentDoc(rd, cf.toString(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
         }
     }
     private void reopenFiles() {
@@ -1103,10 +1104,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 File fp = new File(o[0].toString());
                 Assembler assembler;
                 try {
-                    assembler = ConstantsR64.assemblers[Integer.parseInt(o[1].toString())];
+                    assembler = Assemblers.byID(Integer.parseInt(o[1].toString()));
                 }
                 catch (NumberFormatException ex) {
-                    assembler = ConstantsR64.ASM_KICKASSEMBLER;
+                    assembler = Assemblers.ASM_KICKASSEMBLER;
                 }
                 int script = Integer.parseInt(o[2].toString());
                 // open file
@@ -1118,7 +1119,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFile() {
         if (editorPanes.saveFile()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), ConstantsR64.assemblers[jComboBoxAssemblers.getSelectedIndex()], jComboBoxRunScripts.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
             // and update menus
             setRecentDocuments();
         }
@@ -1164,7 +1165,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFileAs() {
         if (editorPanes.saveFileAs()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), ConstantsR64.assemblers[jComboBoxAssemblers.getSelectedIndex()], jComboBoxRunScripts.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
             // and update menus
             setRecentDocuments();
         }
@@ -2095,7 +2096,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
         jButtonRunScript.setName("jButtonRunScript"); // NOI18N
 
-        jComboBoxAssemblers.setModel(new javax.swing.DefaultComboBoxModel(ConstantsR64.ASM_NAMES));
+        jComboBoxAssemblers.setModel(new javax.swing.DefaultComboBoxModel(Assemblers.names()));
         jComboBoxAssemblers.setToolTipText(resourceMap.getString("jComboBoxAssemblers.toolTipText")); // NOI18N
         jComboBoxAssemblers.setName("jComboBoxAssemblers"); // NOI18N
 

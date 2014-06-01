@@ -36,6 +36,7 @@ package de.relaunch64.popelganda.Editor;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Tools;
 import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -310,13 +311,13 @@ public class FunctionExtractor {
 
     protected static String addMacroToken(String keyword, String funmacString, Assembler assembler) {
         // for dream ass, add "."
-        if (ConstantsR64.ASM_DREAMASS == assembler) {
+        if (Assemblers.ASM_DREAMASS == assembler) {
             keyword = "."+keyword;
         }
-        if (ConstantsR64.ASM_KICKASSEMBLER == assembler && funmacString.equals(assembler.getMacroString())) {
+        if (Assemblers.ASM_KICKASSEMBLER == assembler && funmacString.equals(assembler.getMacroString())) {
             keyword = ":"+keyword;
         }
-        if (ConstantsR64.ASM_ACME == assembler && funmacString.equals(assembler.getMacroString())) {
+        if (Assemblers.ASM_ACME == assembler && funmacString.equals(assembler.getMacroString())) {
             keyword = "+"+keyword;
         }
         return keyword;
