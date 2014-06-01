@@ -38,10 +38,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,8 +50,6 @@ public class SectionExtractor {
     public static LinkedHashMap getSections(String source, String assemblerComment) {
         // prepare return values
         LinkedHashMap<String, Integer> sectionValues = new LinkedHashMap<>();
-        // init vars
-        int lineNumber = 0;
         String line;
         // go if not null
         if (source!=null) {
@@ -62,21 +57,13 @@ public class SectionExtractor {
             BufferedReader br = new BufferedReader(new StringReader(source));
             LineNumberReader lineReader = new LineNumberReader(br);
             // Section-pattern is a comment line with "@<section description>@"
-            Pattern p = Pattern.compile("@(.*?)@");
-            Matcher m = p.matcher("");
+            Pattern p = Pattern.compile("^\\s*" + assemblerComment + ".*@(.*?)@.*");
             // read line by line
             try {
                 while ((line = lineReader.readLine())!=null) {
-                    // increase line counter
-                    lineNumber++;
-                    //reset the input (matcher)
-                    m.reset(line); 
-                    line = line.trim();
-                    // check if line is a comment line and contains section pattern
-                    if (line.startsWith(assemblerComment) && m.find()) {
-                        // if yes, add to return value
-                        sectionValues.put(m.group(1), lineNumber);
-                    }
+                    Matcher m = p.matcher(line);
+                    if (!m.matches()) continue;
+                    sectionValues.put(m.group(1), lineReader.getLineNumber());
                 }
             }
             catch (IOException ex) {
@@ -85,40 +72,10 @@ public class SectionExtractor {
         return sectionValues;
     }
     public static ArrayList getSectionLineNumbers(String source, String assemblerComment) {
-        // init return value
-        ArrayList<Integer> retval = new ArrayList<>();
-        // retrieve sections
-        LinkedHashMap<String, Integer> map = getSections(source, assemblerComment);
-        // check for valid value
-        if (map!=null && !map.isEmpty()) {
-            // retrieve only string values of sections
-            Collection<Integer> c = map.values();
-            // create iterator
-            Iterator<Integer> i = c.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) retval.add(i.next());
-            // return result
-            return retval;
-        }
-        return null;
+        return new ArrayList<>(getSections(source, assemblerComment).values());
     }
     public static ArrayList getSectionNames(String source, String assemblerComment) {
-        // init return value
-        ArrayList<String> retval = new ArrayList<>();
-        // retrieve sections
-        LinkedHashMap<String, Integer> map = getSections(source, assemblerComment);
-        // check for valid value
-        if (map!=null && !map.isEmpty()) {
-            // retrieve only string values of sections
-            Set<String> ks = map.keySet();
-            // create iterator
-            Iterator<String> i = ks.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) retval.add(i.next());
-            // return result
-            return retval;
-        }
-        return null;
+        return new ArrayList<>(getSections(source, assemblerComment).keySet());
     }
     
 }
