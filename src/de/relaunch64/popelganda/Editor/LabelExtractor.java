@@ -33,17 +33,12 @@
 
 package de.relaunch64.popelganda.Editor;
 
-import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Collection;
-import java.util.Set;
 
 /**
  *
@@ -58,15 +53,13 @@ public class LabelExtractor {
      * 
      * @param subWord A string which filters the list of labels. Only labels that start with
      * {@code subWord} will
-     * @param source
-     * @param assembler
-     * @param lineNumber
+     * @param labels
      * 
      * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
     public static ArrayList<String> getSubNames(String subWord, ArrayList<String> labels) {
         // check for valid values
-        if (null==labels || labels.isEmpty()) return new ArrayList<String>();
+        if (null==labels || labels.isEmpty()) return new ArrayList<>();
         // remove all labels that do not start with already typed chars
         if (!subWord.isEmpty()) {
             for (int i=labels.size()-1; i>=0; i--) {
@@ -80,14 +73,11 @@ public class LabelExtractor {
      * Retrieves a list of all labels from the current activated source code
      * (see {@link #getActiveSourceCode()}).
      * 
-     * @param sortList If {@code true}, labels are sorted in alphabetical order.
-     * @param source
-     * @param assembler
-     * @param lineNumber
+     * @param map
      * @return An array list of all label names from the source code.
      */
     public static ArrayList<String> getNames(LinkedHashMap<String, Integer> map) {
-        return new ArrayList<String>(map.keySet());
+        return new ArrayList<>(map.keySet());
     }
     /**
      * This method retrieves all labels from the current activated source code
@@ -108,6 +98,6 @@ public class LabelExtractor {
     }
 
     public static ArrayList<Integer> getLineNumbers(LinkedHashMap<String, Integer> map) {
-        return new ArrayList<Integer>(map.values());
+        return new ArrayList<>(map.values());
     }
 }

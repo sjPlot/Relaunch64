@@ -62,7 +62,7 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
      * Creates new form InsertByteFromFileDlg
      * @param parent
      * @param s
-     * @param c
+     * @param assembler
      */
     public InsertByteFromFileDlg(java.awt.Frame parent, Settings s, Assembler assembler) {
         super(parent);
