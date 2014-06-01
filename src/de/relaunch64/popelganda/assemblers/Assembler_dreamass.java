@@ -38,6 +38,7 @@ import java.io.LineNumberReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -139,13 +140,19 @@ class Assembler_dreamass implements Assembler
     }
 
     @Override
-    public labelList getLabels(LineNumberReader lineReader, int lineNumbers) {
+    public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b)?\\s*(?<directive>#macro\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
+        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b)?\\s*(?<directive>(?:#macro\\b|\\.[()]))?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
         String line;
-        try { // TODO: scoping traversal with @, .( .)
+        LinkedList<LinkedHashMap<String, Integer>> scopes = new LinkedList<>(), myscope = new LinkedList<>();
+        myscope.add(labelValues);
+        try { // TODO: scoping traversal with @
             while ((line = lineReader.readLine()) != null) {
+                if (lineReader.getLineNumber() == lineNumber) {
+                    myscope = (LinkedList)scopes.clone();
+                    myscope.add(labelValues);
+                }
                 Matcher m = p.matcher(line);
 
                 if (!m.matches()) continue;
@@ -153,13 +160,26 @@ class Assembler_dreamass implements Assembler
 
                 if (label != null) {
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    returnValue.labels.put(label, lineReader.getLineNumber());
+                    labelValues.put(label, lineReader.getLineNumber());
                 }
 
                 String directive = m.group("directive");
                 if (directive == null) continue;
-                label = m.group("name");
-                if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
+                switch (directive) {
+                    case "#macro":
+                        label = m.group("name");
+                        if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
+                        break;
+                    case ".(":
+                        scopes.add(labelValues);labelValues = new LinkedHashMap<>();
+                        break;
+                    case ".)":
+                        if (!scopes.isEmpty()) labelValues = scopes.removeLast();
+                        break;
+                }
+            }
+            for (LinkedHashMap<String, Integer> map : myscope) {
+                returnValue.labels.putAll(map);
             }
         }
         catch (IOException ex) {
