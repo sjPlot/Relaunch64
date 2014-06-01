@@ -51,7 +51,7 @@
 
 <ol>
 	<li>Selecting the correct assembler will ensure that the syntax highlighting is applied correctly.</li>
-	<li>The <em>Goto error</em> commands (see <a href="#navigatemenu">Navigate menu</a>) only work proper if the correct assembler is selected.</li>
+	<li>The <em>Goto</em> commands (see <a href="#navigatemenu">Navigate menu</a>) only work proper if the correct assembler is selected.</li>
 </ol>
 
 <h1><a name="comments">Comment commands</a></h1>
@@ -148,7 +148,7 @@
 	<strong>Note 3:</strong> To make use of the START placeholder, you have to specify the start address in
         a comment line with following syntax:<br>&lt;comment sign&gt; start=&lt;start address&gt;, for instance:
         <br><span class="pcode">// start=$c000 (for Kick Assembler)<br>
-	; start=12288 (for ACME)</span>
+	; start=12288 (for other assemblers)</span>
 </p>
 
 <h2>Drag &amp; Drop</h2>
@@ -172,6 +172,10 @@ x64 OUTFILE</div>
 <h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
 <div class="pcode">acme --outfile OUTFILE --format cbm SOURCEFILE<br>
 &quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; OUTFILE</div>
+
+<h3>64tass on OS X</h3>
+<div class="pcode">/usr/local/bin/64tass -C -a -i SOURCEFILE -o OUTFILE<br>
+open /Applications/Vice64/x64.app OUTFILE</div>
 
 <h3>Using KickAss and Vice on Windows</h3>
 <div class="pcode">java -jar C:\Users\Luedeke\Documents\C64\KickAss\KickAss.jar SOURCEFILE<br>
@@ -197,7 +201,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 
 <p class="highlight">
     <strong>Note!</strong> Since the syntax of labels, macros and functions differs among
-    the various assembler, the <a href="#syntax">assembler settings</a> information is needed for 
+    the various assemblers, the <a href="#syntax">assembler settings</a> information is needed for 
     the auto-completion-feature to work.
 </p>
 
@@ -210,7 +214,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 </p>
 
 <p>
-    Note that only those local labels within scope will be shown in the popup. Furthermore, you can continue
+    Note that only those local labels within reachable scope will be shown in the popup. Furthermore, you can continue
     typing while the popup is visible. The list of labels will then be filtered.
 </p>
 
@@ -327,9 +331,9 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 <h1><a name="navigatemenu">Navigate menu</a></h1>
 
 <p class="highlight">
-    <strong>Note!</strong> The goto- and jump-functions only work properly if the <a href="#syntax">syntax settings</a>
+    <strong>Note!</strong> The goto- and jump-functions only work properly if the <a href="#syntax">assembler settings</a>
     for each source code is correctly set. Since the syntax of labels, macros and functions differs among
-    the various assemblers, the syntax setting information is needed for the navigate-functions to work.
+    the various assemblers, the assembler setting information is needed for the navigate-functions to work.
 </p>
 
 
@@ -414,7 +418,8 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 <p>
     <em>Select assembler</em> lets you switch between different assembler syntax schemes (e.g.
     the KickAss syntax differs from ACME and 64tass) in order to correctly highlight keywords,
-    comments, assembler directives etc.
+    comments, assembler directives etc. and in order to make the <a href="#navigatemenu">navigate functions</a>
+    work correctly.
 </p>
 
 <br>

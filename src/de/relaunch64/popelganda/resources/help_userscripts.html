@@ -18,7 +18,7 @@
 
 	<p>
 		User scripts will be executed similar to bash or console commands. You
-		can run any compiler and / or emulator in the same way you would do when
+		can run any assembler and / or emulator in the same way you would do when
 		calling these tools from the console or a batch file.
 	</p>
 	<p>
@@ -70,7 +70,7 @@
 	OS X, starting Vice will throw an access denied error without the open-parameter). See examples below.
 </p>
 <p>
-	<strong>Note 2:</strong> If you specify full pathes to your compiler or emulator and the path contains whitechars (spaces),
+	<strong>Note 2:</strong> If you specify full pathes to your assembler or emulator and the path contains whitechars (spaces),
 	you need to set the path in quotes (see examples below). Placeholders like SOURCEFILE or OUTFILE, however, 
 	will be automatically quoted if necessary. You don't need to quote the placeholders.
 </p>
@@ -79,15 +79,15 @@
 	<strong>Note 3:</strong> To make use of the START placeholder, you have to specify the start address in
         a comment line with following syntax:<br>&lt;comment sign&gt; start=&lt;start address&gt;, for instance:
         <br><span class="pcode">// start=$c000 (for Kick Assembler)<br>
-	; start=12288 (for ACME)</span>
+	; start=12288 (for other assemblers)</span>
 </p>
 
 <h1>Drag &amp; Drop</h1>
 
 <p>
-    You can drag &amp; drop executables from compilers, crunchers and emulators from the explorer (or file browser) window
+    You can drag &amp; drop executables from assemblers, crunchers and emulators from the explorer (or file browser) window
     onto the script text field. Relaunch64 will then automatically generate a proper scriptline, including recommended
-    parameter settings (in case the compiler, cruncher or emulator is recognized and supported).
+    parameter settings (in case the assembler, cruncher or emulator is recognized and supported).
 </p>
 
 <h1>Examples</h1>
@@ -103,6 +103,10 @@ x64 OUTFILE</div>
 <h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
 <div class="pcode">acme --outfile OUTFILE --format cbm SOURCEFILE<br>
 &quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; OUTFILE</div>
+
+<h3>64tass on OS X</h3>
+<div class="pcode">/usr/local/bin/64tass -C -a -i SOURCEFILE -o OUTFILE<br>
+open /Applications/Vice64/x64.app OUTFILE</div>
 
 <h3>Using KickAss and Vice on Windows</h3>
 <div class="pcode">java -jar C:\Users\Luedeke\Documents\C64\KickAss\KickAss.jar SOURCEFILE<br>

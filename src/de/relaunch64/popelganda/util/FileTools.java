@@ -322,6 +322,7 @@ public class FileTools {
      * This method returns the absolute path from a relative file path given
      * in {@code relativePath} in relation to the source / base directory given
      * in {@code sourcepath}.
+     * 
      * @param sourcePath An absolute file path or directory path.
      * @param relativePath The relative path, which is relative to {@code sourcePathh}
      * @return <ul><li>The absolute path of {@code relativePath}, with relation to {@code sourcePath}</li>
