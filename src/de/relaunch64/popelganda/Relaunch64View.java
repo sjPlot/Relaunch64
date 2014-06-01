@@ -1209,9 +1209,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // retrieve script lines
             String[] lines = script.split("\n");
             // check if source file needs to be saved and auto save is active
-            if (settings.getSaveOnCompile() && editorPanes.isModified()) editorPanes.saveFile();
+            if (editorPanes.getActiveFilePath() == null || (settings.getSaveOnCompile() && editorPanes.isModified())) editorPanes.saveFile();
             // retrieve ASM-Source file
             File sourceFile = editorPanes.getActiveFilePath();
+            // no file :(
+            if (sourceFile == null) return;
             // set base path for relative paths
             errorHandler.setBasePath(FileTools.getFilePath(sourceFile));
             // retrieve parent file. needed to construct output file paths
