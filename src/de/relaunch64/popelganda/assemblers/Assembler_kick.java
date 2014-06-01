@@ -137,8 +137,8 @@ class Assembler_kick implements Assembler
 
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
-        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):.*");
+        labelList returnValue = new labelList(null, null, null);
+        Pattern p = Pattern.compile("^\\s*(?:(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):\\s*)?(?<directive>\\.(?:function|macro)\\b\\s*)?(?:(?<name>[a-zA-Z_][a-zA-Z0-9_]*)\\s*\\()?.*");
         String line;
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -146,12 +146,19 @@ class Assembler_kick implements Assembler
 
                 if (!m.matches()) continue;
                 String label = m.group("label");
-                labelValues.put(label, lineReader.getLineNumber());
+                if (label != null) returnValue.labels.put(label, lineReader.getLineNumber());
+                String directive = m.group("directive");
+                label = m.group("name");
+                if (label == null) continue;
+                switch (directive) {
+                    case ".function": returnValue.functions.put(label, lineReader.getLineNumber()); break;
+                    case ".macro": returnValue.functions.put(label, lineReader.getLineNumber()); break;
+                }
             }
         }
         catch (IOException ex) {
         }
-        return new labelList(labelValues, null, null);
+        return returnValue;
     }
 
     @Override
