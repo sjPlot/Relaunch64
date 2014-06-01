@@ -214,7 +214,7 @@ public class EditorPanes {
         return ep.getLineOfOffset(caretPosition);
     }
     /**
-     * Genereic goto line function. Scrolls the active editor pane
+     * Generic goto line function. Scrolls the active editor pane
      * to the line {@code line} and sets the caret to the column
      * {@code column}.
      * 
