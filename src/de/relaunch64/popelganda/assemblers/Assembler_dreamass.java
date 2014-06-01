@@ -91,12 +91,7 @@ class Assembler_dreamass implements Assembler
 
     @Override
     public String getMacroPrefix() {
-        return "#";
-    }
-
-    @Override
-    public String getMacroString() {
-        return "#macro";
+        return ".";
     }
 
     @Override

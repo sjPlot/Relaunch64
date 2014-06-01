@@ -64,21 +64,17 @@ public class LabelExtractor {
      * 
      * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
-    public static Object[] getLabelNames(String subWord, String source, Assembler assembler, int lineNumber) {
-        // get labels here
-        ArrayList<String> labels = getLabelNames(false, source, assembler, lineNumber);
+    public static ArrayList<String> getSubNames(String subWord, ArrayList<String> labels) {
         // check for valid values
-        if (null==labels || labels.isEmpty()) return null;
+        if (null==labels || labels.isEmpty()) return new ArrayList<String>();
         // remove all labels that do not start with already typed chars
         if (!subWord.isEmpty()) {
             for (int i=labels.size()-1; i>=0; i--) {
                 if (!labels.get(i).startsWith(subWord)) labels.remove(i);
             }
         }
-        // sort list
-        Collections.sort(labels);
         // return as object array
-        return labels.toArray();
+        return labels;
     }
     /**
      * Retrieves a list of all labels from the current activated source code
@@ -90,25 +86,8 @@ public class LabelExtractor {
      * @param lineNumber
      * @return An array list of all label names from the source code.
      */
-    public static ArrayList getLabelNames(boolean sortList, String source, Assembler assembler, int lineNumber) {
-        // init return value
-        ArrayList<String> retval = new ArrayList<>();
-        // retrieve sections
-        LinkedHashMap<String, Integer> map = getLabels(source, assembler, lineNumber);
-        // check for valid value
-        if (map!=null && !map.isEmpty()) {
-            // retrieve only string values of sections
-            Set<String> ks = map.keySet();
-            // create iterator
-            Iterator<String> i = ks.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) retval.add(i.next());
-            // sort
-            if (sortList) Collections.sort(retval);
-            // return result
-            return retval;
-        }
-        return null;
+    public static ArrayList<String> getNames(LinkedHashMap<String, Integer> map) {
+        return new ArrayList<String>(map.keySet());
     }
     /**
      * This method retrieves all labels from the current activated source code
@@ -128,22 +107,21 @@ public class LabelExtractor {
         return assembler.getLabels(lineReader, lineNumber).labels;
     }
 
-    public static ArrayList getLabelLineNumbers(String source, Assembler assembler, int lineNumber) {
-        // init return value
-        ArrayList<Integer> retval = new ArrayList<>();
-        // retrieve sections
-        LinkedHashMap<String, Integer> map = getLabels(source, assembler, lineNumber);
-        // check for valid value
-        if (map!=null && !map.isEmpty()) {
-            // retrieve only string values of sections
-            Collection<Integer> vs = map.values();
-            // create iterator
-            Iterator<Integer> i = vs.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) retval.add(i.next());
-            // return result
-            return retval;
-        }
-        return null;
+    public static LinkedHashMap getFunctions(String source, Assembler assembler, int lineNumber) {
+        StringReader sr = new StringReader(source);
+        BufferedReader br = new BufferedReader(sr);
+        LineNumberReader lineReader = new LineNumberReader(br);
+        return assembler.getLabels(lineReader, lineNumber).functions;
+    }
+
+    public static LinkedHashMap getMacros(String source, Assembler assembler, int lineNumber) {
+        StringReader sr = new StringReader(source);
+        BufferedReader br = new BufferedReader(sr);
+        LineNumberReader lineReader = new LineNumberReader(br);
+        return assembler.getLabels(lineReader, lineNumber).macros;
+    }
+
+    public static ArrayList<Integer> getLineNumbers(LinkedHashMap<String, Integer> map) {
+        return new ArrayList<Integer>(map.values());
     }
 }

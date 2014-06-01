@@ -78,12 +78,7 @@ class Assembler_ca65 implements Assembler
 
     @Override
     public String getMacroPrefix() {
-        return ".";
-    }
-
-    @Override
-    public String getMacroString() {
-        return ".macro";
+        return "";
     }
 
     @Override

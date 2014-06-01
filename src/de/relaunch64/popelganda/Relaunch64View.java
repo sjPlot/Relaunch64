@@ -38,7 +38,6 @@ import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
 import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
-import de.relaunch64.popelganda.Editor.FunctionExtractor;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
@@ -71,6 +70,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventObject;
@@ -371,13 +371,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getActiveAssembler().getLineComment());
                             break;
                         case GOTO_LABEL:
-                            token = LabelExtractor.getLabelNames(true, editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0);
+                            token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0));
                             break;
                         case GOTO_FUNCTION:
-                            token = FunctionExtractor.getFunctionNames(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex));
+                            token = LabelExtractor.getNames(LabelExtractor.getFunctions(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0));
                             break;
                         case GOTO_MACRO:
-                            token = FunctionExtractor.getMacroNames(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex));
+                            token = LabelExtractor.getNames(LabelExtractor.getMacros(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0));
                             break;
                         default:
                             token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getActiveAssembler().getLineComment());
@@ -391,6 +391,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         comboBoxHeadingsEditorPaneIndex.add(epIndex);
                         // if yes, add file name of editor pane as "heading" for following sections
                         completeComboBoxList.add(FileTools.getFileName(editorPanes.getEditorPaneProperties(epIndex).getFilePath()));
+                        // sort list
+                        Collections.sort(token);
                         // add all found section strings to combo box
                         for (String arg : token) {
                             // items have a small margin, headings do not

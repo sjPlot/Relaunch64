@@ -93,11 +93,6 @@ class Assembler_tmpx implements Assembler
     }
 
     @Override
-    public String getMacroString() {
-        return ".macro";
-    }
-
-    @Override
     public String getByteDirective() {
         return ".byte";
     }

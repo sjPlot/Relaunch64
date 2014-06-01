@@ -74,11 +74,6 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
-    public String getMacroString() {
-        return "";
-    }
-
-    @Override
     public String getByteDirective() {
         return "";
     }

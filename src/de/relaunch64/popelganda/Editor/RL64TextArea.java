@@ -35,6 +35,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
@@ -480,36 +483,47 @@ public class RL64TextArea extends StandaloneTextArea {
             // check for valid value
             if (null==suggestionSubWord) return;
             // init variable
-            Object[] labels = null;
+            ArrayList<String> labels = null;
             switch(type) {
                 case SUGGESTION_FUNCTION:
                     // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getFunctionNames(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getFunctions(getBuffer().getText(), getAssembler(), getCaretLine() + 1)));
                     break;
                 case SUGGESTION_MACRO:
                     // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
+                    labels = new ArrayList<>();
+                    for (String i : LabelExtractor.getNames(LabelExtractor.getMacros(getBuffer().getText(), getAssembler(), getCaretLine() + 1))) {
+                        labels.add(getAssembler().getMacroPrefix() + i);
+                    }
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
                     break;
                 case SUGGESTION_LABEL:
                     // retrieve label list, remove last colon
-                    labels = LabelExtractor.getLabelNames(suggestionSubWord, getBuffer().getText(), getAssembler(), getCaretLine()+1);
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getLabels(getBuffer().getText(), getAssembler(), getCaretLine() + 1)));
                     break;
                 case SUGGESTION_FUNCTION_MACRO:
-                    // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getFunctionAndMacroNames(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getFunctions(getBuffer().getText(), getAssembler(), getCaretLine() + 1)));
+                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getMacros(getBuffer().getText(), getAssembler(), getCaretLine() + 1))));
                     break;
                 case SUGGESTION_FUNCTION_MACRO_SCRIPT:
-                    // retrieve label list, remove last colon
-                    labels = FunctionExtractor.getFunctionMacroScripts(suggestionSubWord.trim(), getBuffer().getText(), getAssembler());
+                    labels = new ArrayList<>();
+                    for (String i : LabelExtractor.getNames(LabelExtractor.getMacros(getBuffer().getText(), getAssembler(), getCaretLine() + 1))) {
+                        labels.add(getAssembler().getMacroPrefix() + i);
+                    }
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
+                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getFunctions(getBuffer().getText(), getAssembler(), getCaretLine() + 1))));
+                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, new ArrayList(Arrays.asList(getAssembler().getScriptKeywords()))));
                     break;
             }
             // check if we have any labels
-            if (labels == null || labels.length < 1) return;
-            if (labels.length == 1) { // single suggestion, just type it in
-                final String selectedSuggestion = ((String)labels[0]).substring(suggestionSubWord.length());
+            if (labels == null || labels.size() < 1) return;
+            if (labels.size() == 1) { // single suggestion, just type it in
+                final String selectedSuggestion = labels.get(0).substring(suggestionSubWord.length());
                 getBuffer().insert(getCaretPosition(), selectedSuggestion);
                 return;
             }
+            // sort list
+            Collections.sort(labels);
             // get location of caret as coordinate
             Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
             // check if null
@@ -523,7 +537,7 @@ public class RL64TextArea extends StandaloneTextArea {
             suggestionList = createSuggestionList(suggestionSubWord, labels);
             suggestionContinuedWord = suggestionSubWord;
             // check minimum length of list and add scroll pane if list is too long
-            if (labels.length>20) {
+            if (labels.size() > 20) {
                 javax.swing.JScrollPane listScrollPane = new javax.swing.JScrollPane(suggestionList);
                 listScrollPane.setBorder(BorderFactory.createEmptyBorder());
                 listScrollPane.setPreferredSize(new java.awt.Dimension(suggestionList.getFixedCellWidth() + (int)listScrollPane.getVerticalScrollBar().getPreferredSize().getWidth(), 300));
@@ -560,7 +574,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * @param subWord list.
      * @return a JList
      */
-    protected JList createSuggestionList(String subWord, final Object[] labels) {
+    protected JList createSuggestionList(String subWord, final ArrayList<String> labels) {
         // create list model
         DefaultListModel dlm = new DefaultListModel();
         String longest = "";

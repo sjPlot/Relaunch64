@@ -80,11 +80,6 @@ class Assembler_dasm implements Assembler
     }
 
     @Override
-    public String getMacroString() {
-        return "mac";
-    }
-
-    @Override
     public String getByteDirective() {
         return "dc.b";
     }

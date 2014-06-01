@@ -92,11 +92,6 @@ class Assembler_acme implements Assembler
     }
 
     @Override
-    public String getMacroString() {
-        return "!macro";
-    }
-
-    @Override
     public String getByteDirective() {
         return "!byte";
     }

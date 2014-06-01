@@ -58,7 +58,6 @@ public interface Assembler
     int getID();
     String syntaxFile();
 
-    String getMacroString();
     String getMacroPrefix();
     String getLineComment();
     String getByteDirective();

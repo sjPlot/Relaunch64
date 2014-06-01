@@ -54,7 +54,7 @@ class Assembler_kick implements Assembler
         "exp", "expm1", "floor", "hypot", "List", "log", "log10", "log1p",
         "LoadPicture", "LoadSid", "Matrix", "max", "min", "mod", "MoveMatrix",
         "PerspectiveMatrix", "round", "ScaleMatrix", "sin", "sinh", "sort",
-        "signum", "tan", "tanh", "toDegree", "toRadians", "Vector"   
+        "signum", "tan", "tanh", "toDegree", "toRadians", "Vector"
     };
 
     @Override
@@ -87,12 +87,7 @@ class Assembler_kick implements Assembler
 
     @Override
     public String getMacroPrefix() {
-        return ".";
-    }
-
-    @Override
-    public String getMacroString() {
-        return ".macro";
+        return ":";
     }
 
     @Override
@@ -138,7 +133,7 @@ class Assembler_kick implements Assembler
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         labelList returnValue = new labelList(null, null, null);
-        Pattern p = Pattern.compile("^\\s*(?:(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):\\s*)?(?<directive>\\.(?:function|macro)\\b\\s*)?(?:(?<name>[a-zA-Z_][a-zA-Z0-9_]*)\\s*\\()?.*");
+        Pattern p = Pattern.compile("^\\s*(?:(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):\\s*)?(?<directive>\\.(?:function|macro)\\b)?\\s*(?:(?<name>[a-zA-Z_][a-zA-Z0-9_]*)\\s*\\()?.*");
         String line;
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -148,11 +143,12 @@ class Assembler_kick implements Assembler
                 String label = m.group("label");
                 if (label != null) returnValue.labels.put(label, lineReader.getLineNumber());
                 String directive = m.group("directive");
+                if (directive == null) continue;
                 label = m.group("name");
                 if (label == null) continue;
                 switch (directive) {
                     case ".function": returnValue.functions.put(label, lineReader.getLineNumber()); break;
-                    case ".macro": returnValue.functions.put(label, lineReader.getLineNumber()); break;
+                    case ".macro": returnValue.macros.put(label, lineReader.getLineNumber()); break;
                 }
             }
         }
