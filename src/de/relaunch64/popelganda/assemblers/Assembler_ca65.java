@@ -136,11 +136,11 @@ class Assembler_ca65 implements Assembler
                 this.line = line;
             }
         }
-        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
+        labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
         LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
-        Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope)\\b)?\\s*(?<label2>[a-zA-Z_][a-zA-Z0-9_]*)?.*");
+        Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope|macro|endmacro)\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -173,37 +173,47 @@ class Assembler_ca65 implements Assembler
 
                 String directive = m.group("directive"); // track scopes
                 if (directive == null) continue;
-                String label2 = m.group("label2"); // track scopes
+                label = m.group("name"); // track scopes
                 switch (directive.toLowerCase()) {
                     case ".scope":
-                        if (label2 != null) scopes.add(label2); // new scope
+                        scopes.add((label != null) ? label : ""); // new scope
                         break;
                     case ".endscope":
+                    case ".endmacro":
                         if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
+                        break;
+                    case ".macro":
+                        if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
+                        scopes.add("");
                         break;
                 }
             }
         }
         catch (IOException ex) {
         }
-        labelValues.putAll(localLabelValues);
+        returnValue.labels.putAll(localLabelValues);
         // Simple global scope
         if (myscope.isEmpty() || lineNumber < 1) {
             for (lineInfo label : labels) {
                 String fullLabel;
                 StringBuilder kbuild = new StringBuilder();
-                boolean first = false;
+                boolean first = false, anon = false;
 
-                for (String s : label.name) { // build full name
+                for (String name : label.name) { // build full name
+                    if (name.length() == 0) {
+                        anon = true;
+                        break;
+                    }
                     if (first) kbuild.append("::");
-                    kbuild.append(s);
+                    kbuild.append(name);
                     first = true;
                 }
+                if (anon) continue;
 
                 fullLabel = kbuild.toString();
-                labelValues.put(fullLabel, label.line);
+                returnValue.labels.put(fullLabel, label.line);
             }
-            return new labelList(labelValues, null, null);
+            return returnValue;
         }
         // Local scope
         for (lineInfo label : labels) {
@@ -230,9 +240,9 @@ class Assembler_ca65 implements Assembler
             if (kbuild.length() == 0) continue;
 
             String fullLabel = kbuild.toString();
-            labelValues.put(fullLabel, label.line);
+            returnValue.labels.put(fullLabel, label.line);
         }
-        return new labelList(labelValues, null, null);
+        return returnValue;
     }
 
     @Override
