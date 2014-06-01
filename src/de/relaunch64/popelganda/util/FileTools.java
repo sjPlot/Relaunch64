@@ -245,7 +245,7 @@ public class FileTools {
      */
     public static String getFileName(File f) {
         // check if we have any file
-        if (f!=null) {
+        if (f!=null && f.exists()) {
             // get filename
             String fname = f.getName();
             // find file-extension
