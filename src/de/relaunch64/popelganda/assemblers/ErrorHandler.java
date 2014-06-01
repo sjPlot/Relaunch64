@@ -175,12 +175,12 @@ public class ErrorHandler {
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
                 // scroll some lines back, if possible
-                e = ta.getDocument().getDefaultRootElement().getElement(line-1);
+                e = ta.getDocument().getDefaultRootElement().getElement(line);
                 if (e!=null) caret = e.getStartOffset();
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
                 // scroll some lines further, if possible
-                e = ta.getDocument().getDefaultRootElement().getElement(line+1);
+                e = ta.getDocument().getDefaultRootElement().getElement(line-2);
                 if (e!=null) caret = e.getStartOffset();
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
