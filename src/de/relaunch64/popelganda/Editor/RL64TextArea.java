@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
@@ -493,8 +494,9 @@ public class RL64TextArea extends StandaloneTextArea {
                 case SUGGESTION_MACRO:
                     // retrieve label list, remove last colon
                     labels = new ArrayList<>();
-                    for (String i : LabelExtractor.getNames(allLabels.macros)) {
-                        labels.add(getAssembler().getMacroPrefix() + i);
+                    for (Iterator it = LabelExtractor.getNames(allLabels.macros).iterator(); it.hasNext();) {
+                        Object i = it.next();
+                        labels.add(getAssembler().getMacroPrefix() + i.toString());
                     }
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
                     break;
@@ -508,8 +510,9 @@ public class RL64TextArea extends StandaloneTextArea {
                     break;
                 case SUGGESTION_FUNCTION_MACRO_SCRIPT:
                     labels = new ArrayList<>();
-                    for (String i : LabelExtractor.getNames(allLabels.macros)) {
-                        labels.add(getAssembler().getMacroPrefix() + i);
+                    for (Iterator it = LabelExtractor.getNames(allLabels.macros).iterator(); it.hasNext();) {
+                        Object i = it.next();
+                        labels.add(getAssembler().getMacroPrefix() + i.toString());
                     }
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
                     labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions)));
