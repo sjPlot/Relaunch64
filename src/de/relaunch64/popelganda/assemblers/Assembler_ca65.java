@@ -48,6 +48,13 @@ import java.util.ArrayList;
  */
 class Assembler_ca65 implements Assembler
 {
+    final static String[] scriptKeywords = {
+        ".bankbyte", ".blank", ".concat", ".const", ".hibyte", ".hiword",
+        ".ident", ".left", ".lobyte", ".loword", ".match", ".mid", ".ref",
+        ".referenced", ".right", ".sizeof", ".sprintf", ".strat", ".string",
+        ".strlen", ".tcount", ".xmatch"
+    };
+
     @Override
     public String name() {
         return "ca65";
@@ -113,7 +120,7 @@ class Assembler_ca65 implements Assembler
 
     @Override
     public String[] getScriptKeywords() {
-        return new String[] {};
+        return scriptKeywords;
     }
 
     @Override
