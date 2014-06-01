@@ -68,7 +68,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 public class EditorPanes {
     private final List<EditorPaneProperties> editorPaneArray = new ArrayList<>();
     private JTabbedPane tabbedPane = null;
-    private JComboBox jComboBoxCompiler = null;
+    private JComboBox jComboBoxAssembler = null;
     private JComboBox jComboBoxScripts = null;
     private final Relaunch64View mainFrame;
     private final Settings settings;
@@ -90,7 +90,7 @@ public class EditorPanes {
         settings = set;
         editorPaneArray.clear();
         tabbedPane = tp;
-        jComboBoxCompiler = cbc;
+        jComboBoxAssembler = cbc;
         jComboBoxScripts = cbs;
     }
     /**
@@ -369,7 +369,7 @@ public class EditorPanes {
      */
     public boolean checkIfSyntaxChangeRequired() {
         // get selected assembler
-        int selectedComp = jComboBoxCompiler.getSelectedIndex();
+        int selectedComp = jComboBoxAssembler.getSelectedIndex();
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether combo-box selection indicates a different assembler
@@ -846,7 +846,7 @@ public class EditorPanes {
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
             try {
                 // select assembler, so we update the highlight, if necessary
-                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID());
+                jComboBoxAssembler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID());
                 // select user script
                 jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
             }

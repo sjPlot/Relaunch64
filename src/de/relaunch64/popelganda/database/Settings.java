@@ -361,7 +361,7 @@ public class Settings {
                 try {
                     return Assemblers.byID(Integer.parseInt(comp.getValue()));
                 }
-                catch (Exception ex) {
+                catch (NumberFormatException ex) {
                     return Assemblers.ASM_KICKASSEMBLER;
                 }
             }
@@ -429,7 +429,7 @@ public class Settings {
      * This method adds the file from the filepath {@code fp} to the list of recent
      * documents and rotates that list, if necessary.
      * @param fp the filepath to the document that should be added to the list of recent documents
-     * @param compiler
+     * @param assembler
      * @param userScript
      */
     public void addToRecentDocs(String fp, Assembler assembler, int userScript) {
@@ -487,7 +487,7 @@ public class Settings {
      * Add a new recent document to the position {@code nr} in the list of recent documents.
      * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
      * @param fp the filepath to the recently used document as string
-     * @param compiler
+     * @param assembler
      * @param userScript
      */
     public void setRecentDoc(int nr, String fp, Assembler assembler, int userScript) {
@@ -555,7 +555,7 @@ public class Settings {
         try {
             if (el!=null) return Assemblers.byID(Integer.parseInt(el.getText()));
         }
-        catch (Exception ex) {
+        catch (NumberFormatException ex) {
         }
         return Assemblers.ASM_KICKASSEMBLER;
     }
