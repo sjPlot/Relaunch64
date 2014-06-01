@@ -488,11 +488,9 @@ public class RL64TextArea extends StandaloneTextArea {
             Assembler.labelList allLabels = LabelExtractor.getLabels(getBuffer().getText(), getAssembler(), getCaretLine() + 1);
             switch(type) {
                 case SUGGESTION_FUNCTION:
-                    // retrieve label list, remove last colon
                     labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions));
                     break;
                 case SUGGESTION_MACRO:
-                    // retrieve label list, remove last colon
                     labels = new ArrayList<>();
                     for (Iterator it = LabelExtractor.getNames(allLabels.macros).iterator(); it.hasNext();) {
                         Object i = it.next();
@@ -501,7 +499,6 @@ public class RL64TextArea extends StandaloneTextArea {
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
                     break;
                 case SUGGESTION_LABEL:
-                    // retrieve label list, remove last colon
                     labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.labels));
                     break;
                 case SUGGESTION_FUNCTION_MACRO:
@@ -525,6 +522,26 @@ public class RL64TextArea extends StandaloneTextArea {
                 final String selectedSuggestion = labels.get(0).substring(suggestionSubWord.length());
                 getBuffer().insert(getCaretPosition(), selectedSuggestion);
                 return;
+            }
+            { // insert longest prefix
+                int k = suggestionSubWord.length();
+                String prefix = labels.get(0).substring(k);
+                int m = prefix.length();
+                for (String i : labels) {
+                    i = i.substring(k);
+                    int end = (m < i.length()) ? m : i.length();
+                    int j;
+                    for (j = 0; j < end; j++) {
+                        if (prefix.charAt(j) != i.charAt(j)) break;
+                    }
+                    if (m > j) m = j;
+                    if (m == 0) break;
+                }
+                if (m > 0) {
+                    final String common = prefix.substring(0, m);
+                    getBuffer().insert(getCaretPosition(), common);
+                    suggestionSubWord = suggestionSubWord + common;
+                }
             }
             // sort list
             Collections.sort(labels);
