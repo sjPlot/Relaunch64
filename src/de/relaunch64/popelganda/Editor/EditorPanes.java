@@ -308,7 +308,7 @@ public class EditorPanes {
      * @param name the name of the label where to go.
      */
     public void gotoLabel(String name) {
-        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).labels, name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -318,7 +318,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoLabel(String name, int selectedTab) {
-        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveAssembler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveAssembler(), 0).labels, name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -327,7 +327,7 @@ public class EditorPanes {
      * @param name the name of the function where to go.
      */
     public void gotoFunction(String name) {
-        gotoLine(LabelExtractor.getFunctions(getActiveSourceCode(), getActiveAssembler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).functions, name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -337,7 +337,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoFunction(String name, int selectedTab) {
-        gotoLine(LabelExtractor.getFunctions(getSourceCode(selectedTab), getActiveAssembler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveAssembler(), 0).functions, name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -346,7 +346,7 @@ public class EditorPanes {
      * @param name the name of the macro where to go.
      */
     public void gotoMacro(String name) {
-        gotoLine(LabelExtractor.getMacros(getActiveSourceCode(), getActiveAssembler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).macros, name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -356,7 +356,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoMacro(String name, int selectedTab) {
-        gotoLine(LabelExtractor.getMacros(getSourceCode(selectedTab), getActiveAssembler(), 0), name);
+        gotoLine(LabelExtractor.getLabels(getSourceCode(selectedTab), getActiveAssembler(), 0).macros, name);
     }
     /**
      * Checks if the selected assembler (from the combo box) differs from the
@@ -1084,12 +1084,12 @@ public class EditorPanes {
     public void gotoNextLabel() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT, 
                 getActiveEditorPane().getCaretLine()+1,
-                LabelExtractor.getLineNumbers(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0))), 1);
+                LabelExtractor.getLineNumbers(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).labels)), 1);
     }
     public void gotoPrevLabel() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                 getActiveEditorPane().getCaretLine()+1,
-                LabelExtractor.getLineNumbers(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0))), 1);
+                LabelExtractor.getLineNumbers(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).labels)), 1);
     }
     public void gotoNextSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT,

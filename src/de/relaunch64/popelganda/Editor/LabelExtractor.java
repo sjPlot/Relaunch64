@@ -100,25 +100,11 @@ public class LabelExtractor {
      * @return All labels with their line numbers, or {@code null} if there are no labels
      * in the source code.
      */
-    public static LinkedHashMap getLabels(String source, Assembler assembler, int lineNumber) {
+    public static Assembler.labelList getLabels(String source, Assembler assembler, int lineNumber) {
         StringReader sr = new StringReader(source);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-        return assembler.getLabels(lineReader, lineNumber).labels;
-    }
-
-    public static LinkedHashMap getFunctions(String source, Assembler assembler, int lineNumber) {
-        StringReader sr = new StringReader(source);
-        BufferedReader br = new BufferedReader(sr);
-        LineNumberReader lineReader = new LineNumberReader(br);
-        return assembler.getLabels(lineReader, lineNumber).functions;
-    }
-
-    public static LinkedHashMap getMacros(String source, Assembler assembler, int lineNumber) {
-        StringReader sr = new StringReader(source);
-        BufferedReader br = new BufferedReader(sr);
-        LineNumberReader lineReader = new LineNumberReader(br);
-        return assembler.getLabels(lineReader, lineNumber).macros;
+        return assembler.getLabels(lineReader, lineNumber);
     }
 
     public static ArrayList<Integer> getLineNumbers(LinkedHashMap<String, Integer> map) {

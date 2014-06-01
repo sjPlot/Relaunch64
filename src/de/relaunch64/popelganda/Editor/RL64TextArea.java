@@ -484,34 +484,35 @@ public class RL64TextArea extends StandaloneTextArea {
             if (null==suggestionSubWord) return;
             // init variable
             ArrayList<String> labels = null;
+            Assembler.labelList allLabels = LabelExtractor.getLabels(getBuffer().getText(), getAssembler(), getCaretLine() + 1);
             switch(type) {
                 case SUGGESTION_FUNCTION:
                     // retrieve label list, remove last colon
-                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getFunctions(getBuffer().getText(), getAssembler(), getCaretLine() + 1)));
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions));
                     break;
                 case SUGGESTION_MACRO:
                     // retrieve label list, remove last colon
                     labels = new ArrayList<>();
-                    for (String i : LabelExtractor.getNames(LabelExtractor.getMacros(getBuffer().getText(), getAssembler(), getCaretLine() + 1))) {
+                    for (String i : LabelExtractor.getNames(allLabels.macros)) {
                         labels.add(getAssembler().getMacroPrefix() + i);
                     }
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
                     break;
                 case SUGGESTION_LABEL:
                     // retrieve label list, remove last colon
-                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getLabels(getBuffer().getText(), getAssembler(), getCaretLine() + 1)));
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.labels));
                     break;
                 case SUGGESTION_FUNCTION_MACRO:
-                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getFunctions(getBuffer().getText(), getAssembler(), getCaretLine() + 1)));
-                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getMacros(getBuffer().getText(), getAssembler(), getCaretLine() + 1))));
+                    labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions));
+                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.macros)));
                     break;
                 case SUGGESTION_FUNCTION_MACRO_SCRIPT:
                     labels = new ArrayList<>();
-                    for (String i : LabelExtractor.getNames(LabelExtractor.getMacros(getBuffer().getText(), getAssembler(), getCaretLine() + 1))) {
+                    for (String i : LabelExtractor.getNames(allLabels.macros)) {
                         labels.add(getAssembler().getMacroPrefix() + i);
                     }
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
-                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(LabelExtractor.getFunctions(getBuffer().getText(), getAssembler(), getCaretLine() + 1))));
+                    labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions)));
                     labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, new ArrayList(Arrays.asList(getAssembler().getScriptKeywords()))));
                     break;
             }
