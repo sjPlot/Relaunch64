@@ -1221,6 +1221,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             File outFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+".prg");
             // create compressed file
             File compressedFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+"-compressed.prg");
+            // select compiler log window
+            jTabbedPaneLogs.setSelectedIndex(1);
             // iterate script
             for (String cmd : lines) {
                 cmd = cmd.trim();
