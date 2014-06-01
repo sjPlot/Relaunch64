@@ -36,6 +36,7 @@ import de.relaunch64.popelganda.Relaunch64View;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.awt.dnd.DropTarget;
 import java.awt.Font;
 import java.io.File;
@@ -104,7 +105,7 @@ public class EditorPanes {
      * @param script
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addNewTab(File fp, String content, String title, int assembler, int script) {
+    public int addNewTab(File fp, String content, String title, Assembler assembler, int script) {
         // create new editor pane
         final RL64TextArea editorPane = new RL64TextArea(settings);
         editorPane.setName("jEditorPaneMain");
@@ -260,13 +261,13 @@ public class EditorPanes {
      */
     public void insertSection(String name) {
         // retrieve section names
-        ArrayList<String> names = SectionExtractor.getSectionNames(getActiveSourceCode(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment());
+        ArrayList<String> names = SectionExtractor.getSectionNames(getActiveSourceCode(), getActiveAssembler().getLineComment());
         // check whether we either have no sections or new name does not already exists
         if (null==names || names.isEmpty() || !names.contains(name)) {
             // get current editor
             RL64TextArea ep = getActiveEditorPane();
             // set up section name
-            String insertString = ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " ----- @" + name + "@ -----\n";
+            String insertString = getActiveAssembler().getLineComment() + " ----- @" + name + "@ -----\n";
             // insert string
             insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
         }
@@ -281,7 +282,7 @@ public class EditorPanes {
         String selection = ep.getSelectedText();
         if (selection!=null && !selection.isEmpty()) {
             // set up section name
-            String insertString = ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " {{{\n" + selection + ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " }}}\n";
+            String insertString = getActiveAssembler().getLineComment() + " {{{\n" + selection + getActiveAssembler().getLineComment() + " }}}\n";
             // insert string
             ep.replaceSelection(insertString);
         }
@@ -297,7 +298,7 @@ public class EditorPanes {
      * @param selectedTab the tab, which contains the source where to go
      */
     public void gotoSection(String name, int selectedTab) {
-        gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), ConstantsR64.assemblers[getActiveAssembler()].getLineComment()), name);
+        gotoLine(SectionExtractor.getSections(getSourceCode(selectedTab), getActiveAssembler().getLineComment()), name);
     }
     /**
      * Jumps to the line (scrolls the editor pane of the tab {@code selectedTab} to the related line 
@@ -367,14 +368,14 @@ public class EditorPanes {
         int selectedTab = tabbedPane.getSelectedIndex();
         // check whether combo-box selection indicates a different assembler
         // from what was associated with the currently selected editor pane
-        return (editorPaneArray.get(selectedTab).getEditorPane().getAssembler()!= selectedComp);
+        return (editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID() != selectedComp);
     }
     /**
      * 
      * @param assembler 
      * @param script
      */
-    public void changeAssembler(int assembler, int script) {
+    public void changeAssembler(Assembler assembler, int script) {
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         if (selectedTab != -1) {
@@ -486,11 +487,11 @@ public class EditorPanes {
      * 
      * @return 
      */
-    public int getActiveAssembler() {
+    public Assembler getActiveAssembler() {
         // get selected tab
         return getAssembler(tabbedPane.getSelectedIndex());
     }
-    public int getAssembler(int index) {
+    public Assembler getAssembler(int index) {
         try {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(index);
@@ -601,7 +602,7 @@ public class EditorPanes {
      * @param script 
      * @return  
      */
-    public boolean loadFile(File filepath, int assembler, int script) {
+    public boolean loadFile(File filepath, Assembler assembler, int script) {
         // check if file is already opened
         int opened = getOpenedFileTab(filepath);
         if (opened!=-1) {
@@ -837,7 +838,7 @@ public class EditorPanes {
         if (selectedTab!=-1 && !editorPaneArray.isEmpty()) {
             try {
                 // select assembler, so we update the highlight, if necessary
-                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler());
+                jComboBoxCompiler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID());
                 // select user script
                 jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
             }
@@ -951,18 +952,16 @@ public class EditorPanes {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         // set up section name
-        String insertString = ConstantsR64.assemblers[getActiveAssembler()].getLineComment() + " ----------------------------------------\n";
+        String insertString = getActiveAssembler().getLineComment() + " ----------------------------------------\n";
         // insert string
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
     }
-    public void insertBreakPoint(int assembler) {
+    public void insertBreakPoint(Assembler assembler) {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
         String insertString = "";
-        switch (assembler) {
-            case ConstantsR64.ASM_KICKASSEMBLER:
-                insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER;
-                break;
+        if (assembler == ConstantsR64.ASM_KICKASSEMBLER) {
+            insertString = ConstantsR64.STRING_BREAKPOINT_KICKASSEMBLER;
         }
         // insert string
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
@@ -1014,7 +1013,7 @@ public class EditorPanes {
         buffer.insert(position, text);
     }
     public void commentLine() {
-        EditorPaneTools.commentLine(getActiveEditorPane(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment());
+        EditorPaneTools.commentLine(getActiveEditorPane(), getActiveAssembler().getLineComment());
     }
     public int getSelectedTab() {
         return tabbedPane.getSelectedIndex();
@@ -1039,12 +1038,12 @@ public class EditorPanes {
     public void gotoNextSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
                 getActiveEditorPane().getCaretLine()+1,
-                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment())), 1);
+                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getActiveAssembler().getLineComment())), 1);
     }
     public void gotoPrevSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                 getActiveEditorPane().getCaretLine()+1,
-                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), ConstantsR64.assemblers[getActiveAssembler()].getLineComment())), 1);
+                SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getActiveAssembler().getLineComment())), 1);
     }
     public void undo() {
         RL64TextArea ep = getActiveEditorPane();

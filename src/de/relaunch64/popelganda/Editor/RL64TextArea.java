@@ -19,6 +19,7 @@ package de.relaunch64.popelganda.Editor;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Tools;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -56,7 +57,7 @@ public class RL64TextArea extends StandaloneTextArea {
     private static final IPropertyManager propertyManager;
     private final KeyListener keyListener;
     private final Settings settings;
-    private int assembler;
+    private Assembler assembler;
     /**
      * auto-completion popup for labels and macros etc.
      */
@@ -318,7 +319,7 @@ public class RL64TextArea extends StandaloneTextArea {
         Mode mode = new Mode("asm");
         String pathToMode = "/de/relaunch64/popelganda/resources/modes/";
         if (settings.getAlternativeAssemblyMode()) pathToMode += "alt/";
-        mode.setProperty("file", pathToMode + ConstantsR64.assemblers[assembler].syntaxFile());
+        mode.setProperty("file", pathToMode + assembler.syntaxFile());
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         getBuffer().setMode(mode);
@@ -400,10 +401,10 @@ public class RL64TextArea extends StandaloneTextArea {
      * 
      * @param c 
      */
-    public final void setAssembler(int c) {
-        this.assembler = c;
+    public final void setAssembler(Assembler assembler) {
+        this.assembler = assembler;
     }
-    public int getAssembler() {
+    public Assembler getAssembler() {
         return assembler;
     }
     /**
@@ -469,10 +470,10 @@ public class RL64TextArea extends StandaloneTextArea {
         try {
             // retrieve chars that have already been typed
             if (type==SUGGESTION_FUNCTION_MACRO_SCRIPT) {
-                String macroPrefix = ConstantsR64.assemblers[getAssembler()].getMacroPrefix();
+                String macroPrefix = getAssembler().getMacroPrefix();
                 suggestionSubWord = getCaretString(false, macroPrefix);
             } else {
-                suggestionSubWord = ConstantsR64.assemblers[getAssembler()].labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
+                suggestionSubWord = getAssembler().labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
                 if (suggestionSubWord.length() == 0) return;
             }
             // check for valid value
@@ -654,18 +655,16 @@ public class RL64TextArea extends StandaloneTextArea {
         // if empty, return empty string
         if (text.trim().isEmpty()) return "";
         String addDelim;
-        switch (getAssembler()) {
             // use colon as additional delimiter for following assemblers
-            case ConstantsR64.ASM_ACME:
-            case ConstantsR64.ASM_64TASS:
-            case ConstantsR64.ASM_DREAMASS:
-            case ConstantsR64.ASM_TMPX:
-                addDelim = "\n\r:";
-                break;
-            default:
-                addDelim = "\n\r";
-                break;
+        if (getAssembler() == ConstantsR64.ASM_ACME ||
+            getAssembler() == ConstantsR64.ASM_64TASS ||
+            getAssembler() == ConstantsR64.ASM_DREAMASS ||
+            getAssembler() == ConstantsR64.ASM_TMPX) {
+            addDelim = "\n\r:";
+        } else {
+            addDelim = "\n\r";
         }
+
         // get position start
         int start = Math.max(0, position);
         boolean isSpecialDelimiter = false;

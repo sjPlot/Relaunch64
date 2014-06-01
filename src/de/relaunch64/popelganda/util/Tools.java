@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda.util;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -96,8 +97,8 @@ public class Tools {
      * @return a string value with the complete byte table, i.e. all byte values from the
      * file are converted to a byte-table. Or {@code null} if an error occured.
      */
-    public static String getByteTableFromFile(File f, int compiler) {
-        return getByteTableFromFile(f, 0, -1, compiler, 8);
+    public static String getByteTableFromFile(File f, Assembler assembler) {
+        return getByteTableFromFile(f, 0, -1, assembler, 8);
     }
     /**
      * Reads a binary file and returns its content as byte table string.
@@ -108,8 +109,8 @@ public class Tools {
      * @return a string value with the complete byte table, i.e. all byte values from the
      * file are converted to a byte-table. Or {@code null} if an error occured.
      */
-    public static String getByteTableFromFile(File f, int compiler, int bytesPerLine) {
-        return getByteTableFromFile(f, 0, -1, compiler, bytesPerLine);
+    public static String getByteTableFromFile(File f, Assembler assembler, int bytesPerLine) {
+        return getByteTableFromFile(f, 0, -1, assembler, bytesPerLine);
     }
     /**
      * Reads a binary file and returns its content as byte table string.
@@ -122,13 +123,13 @@ public class Tools {
      * @return a string value with the complete byte table, i.e. all byte values from the
      * file are converted to a byte-table. Or {@code null} if an error occured.
      */
-    public static String getByteTableFromFile(File f, int startOffset, int endOffset, int compiler, int bytesPerLine) {
+    public static String getByteTableFromFile(File f, int startOffset, int endOffset, Assembler assembler, int bytesPerLine) {
         // read File and retrieve content as byte arry
         byte[] content = FileTools.readBinaryFile(f, startOffset, endOffset);
         // check if we have content
         if (content!=null && content.length>0) {
             // get compiler byte-token
-            String byteToken = ConstantsR64.assemblers[compiler].getByteDirective();
+            String byteToken = assembler.getByteDirective();
             StringBuilder sb = new StringBuilder("");
             // some indicators for new lines and line-length of table
             boolean startNewLine = true;
@@ -292,7 +293,7 @@ public class Tools {
             }
         }
         if (dezaddress!=0) {
-            editorPanes.insertString(ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getBasicStart(dezaddress));
+            editorPanes.insertString(editorPanes.getActiveAssembler().getBasicStart(dezaddress));
         }
     }
     /**
@@ -411,14 +412,14 @@ public class Tools {
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
                                 switch (FileTools.getFileExtension(f).toLowerCase()) {
                                     case "txt":
-                                        insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeTextDirective(relpath) + "\n";
+                                        insert = editorPanes.getActiveAssembler().getIncludeTextDirective(relpath) + "\n";
                                         break;
                                     case "c64":
                                     case "prg":
-                                        insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeC64Directive(relpath) + "\n";
+                                        insert = editorPanes.getActiveAssembler().getIncludeC64Directive(relpath) + "\n";
                                         break;
                                     default:
-                                        insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeBinaryDirective(relpath) + "\n";
+                                        insert = editorPanes.getActiveAssembler().getIncludeBinaryDirective(relpath) + "\n";
                                 }
                             }
                             editorPanes.insertString(insert);
@@ -432,7 +433,7 @@ public class Tools {
                             // if user hold down ctrl-key, use import-directive for asm-files
                             if (dtde.getDropAction()==DnDConstants.ACTION_COPY) {
                                 String relpath = FileTools.getRelativePath(editorPanes.getActiveFilePath(), f);
-                                String insert = ConstantsR64.assemblers[editorPanes.getActiveAssembler()].getIncludeSourceDirective(relpath) + "\n";
+                                String insert = editorPanes.getActiveAssembler().getIncludeSourceDirective(relpath) + "\n";
                                 editorPanes.insertString(insert);
                             }
                             else {

@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -65,7 +66,7 @@ public class InsertBreakPoint {
         // check for valid value
         if (null==editorPane) return;
         // check for KickAss
-        if (editorPane.getActiveAssembler()!=ConstantsR64.ASM_KICKASSEMBLER) {
+        if (editorPane.getActiveAssembler() != ConstantsR64.ASM_KICKASSEMBLER) {
             JOptionPane.showMessageDialog(null, "Breakpoints are currently only supported under KickAssembler!");
             return;
         }
@@ -88,10 +89,9 @@ public class InsertBreakPoint {
             editorPane.insertString(breakPointMacro, endpos);
         }
     }
-    public static boolean sourceHasBreakpointMacro(String source, int compiler) {
-        switch (compiler) {
-            case ConstantsR64.ASM_KICKASSEMBLER:
-                return (source!=null && source.contains(".macro break()"));
+    public static boolean sourceHasBreakpointMacro(String source, Assembler assembler) {
+        if (assembler == ConstantsR64.ASM_KICKASSEMBLER) {
+            return (source!=null && source.contains(".macro break()"));
         }
         return false;
     }

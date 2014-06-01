@@ -35,6 +35,7 @@ package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Tools;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -52,7 +53,7 @@ import java.util.LinkedHashMap;
  */
 public class FunctionExtractor {
 
-    public static ArrayList getFunctionNames(String source, int assembler) {
+    public static ArrayList getFunctionNames(String source, Assembler assembler) {
         return getFunctionOrMacroNames(getFunctionString(assembler), source, assembler);
     }
     /**
@@ -69,7 +70,7 @@ public class FunctionExtractor {
      * @return An array list of sorted functions, where only those functions are returned 
      * that start with {@code subWord}.
      */
-    public static ArrayList<String> getFunctionNamesAsList(String subWord, String source, int assembler) {
+    public static ArrayList<String> getFunctionNamesAsList(String subWord, String source, Assembler assembler) {
         // get labels here
         ArrayList<String> functions = getFunctionNames(source, assembler);
         // check for valid values
@@ -99,7 +100,7 @@ public class FunctionExtractor {
      * @return An object array of sorted functions, where only those functions are returned 
      * that start with {@code subWord}.
      */
-    public static Object[] getFunctionNames(String subWord, String source, int assembler) {
+    public static Object[] getFunctionNames(String subWord, String source, Assembler assembler) {
         ArrayList<String> functions = getFunctionNamesAsList(subWord, source, assembler);
         return (functions!=null) ? functions.toArray() : null;
     }    
@@ -117,7 +118,7 @@ public class FunctionExtractor {
      * @return An array list of sorted functions, where only those macros are returned 
      * that start with {@code subWord}.
      */
-    public static ArrayList<String> getMacroNamesAsList(String subWord, String source, int assembler) {
+    public static ArrayList<String> getMacroNamesAsList(String subWord, String source, Assembler assembler) {
         // get labels here
         ArrayList<String> macros = getMacroNames(source, assembler);
         // check for valid values
@@ -146,7 +147,7 @@ public class FunctionExtractor {
      * @return An object array of sorted functions, where only those macros are returned 
      * that start with {@code subWord}.
      */
-    public static Object[] getMacroNames(String subWord, String source, int assembler) {
+    public static Object[] getMacroNames(String subWord, String source, Assembler assembler) {
         ArrayList<String> macros = getMacroNamesAsList(subWord, source, assembler);
         return (macros!=null) ? macros.toArray() : null;
     }
@@ -164,7 +165,7 @@ public class FunctionExtractor {
      * @return An object array of sorted functions and macros, where only those functions and macros
      * are returned that start with {@code subWord}.
      */
-    public static Object[] getFunctionAndMacroNames(String subWord, String source, int assembler) {
+    public static Object[] getFunctionAndMacroNames(String subWord, String source, Assembler assembler) {
         // get labels here
         ArrayList<String> functions = getFunctionNamesAsList(subWord, source, assembler);
         // get macros here
@@ -195,14 +196,14 @@ public class FunctionExtractor {
      * @return An object array of sorted functions and macros, where only those functions and macros
      * are returned that start with {@code subWord}.
      */
-    public static Object[] getFunctionMacroScripts(String subWord, String source, int assembler) {
+    public static Object[] getFunctionMacroScripts(String subWord, String source, Assembler assembler) {
         // get labels here
         ArrayList<String> functions = getFunctionNamesAsList(subWord, source, assembler);
         // get labels here
         ArrayList<String> macros = getMacroNamesAsList(subWord, source, assembler);
         // get scripts  here
         ArrayList<String> scripts = new ArrayList<>();
-        scripts.addAll(Arrays.asList(ConstantsR64.assemblers[assembler].getScriptKeywords()));
+        scripts.addAll(Arrays.asList(assembler.getScriptKeywords()));
         // check for valid values
         if (!scripts.isEmpty()) {
             // remove all labels that do not start with already typed chars
@@ -235,20 +236,15 @@ public class FunctionExtractor {
      * @return All functions with their line numbers, or {@code null} if there are no functions
      * in the source code.
      */
-    public static LinkedHashMap getFunctions(String source, int assembler) {
+    public static LinkedHashMap getFunctions(String source, Assembler assembler) {
         return getFunctionsOrMacros(getFunctionString(assembler), source, assembler);
     }
 
-    public static String getFunctionString(int assembler) {
-        switch (assembler) {
-            case ConstantsR64.ASM_KICKASSEMBLER:
-            case ConstantsR64.ASM_64TASS:
-            default:
-                return ConstantsR64.STRING_FUNCTION_KICKASSEMBLER;
-        }
+    public static String getFunctionString(Assembler assembler) {
+        return ConstantsR64.STRING_FUNCTION_KICKASSEMBLER;
     }
 
-    public static String getFunctionOrMacroFromLine(String line, int assembler, String funmacString) {
+    public static String getFunctionOrMacroFromLine(String line, Assembler assembler, String funmacString) {
         line = line.trim();
         if (isValidFunctionOrMacro(line, funmacString)) {
             // separator strings
@@ -270,7 +266,7 @@ public class FunctionExtractor {
         return null;
     }
 
-    public static ArrayList getFunctionOrMacroNames(String funmacString, String source, int assembler) {
+    public static ArrayList getFunctionOrMacroNames(String funmacString, String source, Assembler assembler) {
         ArrayList<String> retval = new ArrayList<>();
         LinkedHashMap<Integer, String> map = getFunctionsOrMacros(funmacString, source, assembler);
         if (map != null && !map.isEmpty()) {
@@ -284,7 +280,7 @@ public class FunctionExtractor {
         return null;
     }
 
-    public static LinkedHashMap getFunctionsOrMacros(String funmacString, String source, int assembler) {
+    public static LinkedHashMap getFunctionsOrMacros(String funmacString, String source, Assembler assembler) {
         LinkedHashMap<Integer, String> functions = new LinkedHashMap<>();
         // init vars
         int lineNumber = 0;
@@ -312,26 +308,26 @@ public class FunctionExtractor {
         return functions;
     }
 
-    protected static String addMacroToken(String keyword, String funmacString, int assembler) {
+    protected static String addMacroToken(String keyword, String funmacString, Assembler assembler) {
         // for dream ass, add "."
-        if (ConstantsR64.ASM_DREAMASS==assembler) {
+        if (ConstantsR64.ASM_DREAMASS == assembler) {
             keyword = "."+keyword;
         }
-        if (ConstantsR64.ASM_KICKASSEMBLER==assembler && funmacString.equals(ConstantsR64.assemblers[assembler].getMacroString())) {
+        if (ConstantsR64.ASM_KICKASSEMBLER == assembler && funmacString.equals(assembler.getMacroString())) {
             keyword = ":"+keyword;
         }
-        if (ConstantsR64.ASM_ACME==assembler && funmacString.equals(ConstantsR64.assemblers[assembler].getMacroString())) {
+        if (ConstantsR64.ASM_ACME == assembler && funmacString.equals(assembler.getMacroString())) {
             keyword = "+"+keyword;
         }
         return keyword;
     }
     
-    public static LinkedHashMap getMacros(String source, int assembler) {
-        return getFunctionsOrMacros(ConstantsR64.assemblers[assembler].getMacroString(), source, assembler);
+    public static LinkedHashMap getMacros(String source, Assembler assembler) {
+        return getFunctionsOrMacros(assembler.getMacroString(), source, assembler);
     }
 
-    public static ArrayList getMacroNames(String source, int assembler) {
-        return getFunctionOrMacroNames(ConstantsR64.assemblers[assembler].getMacroString(), source, assembler);
+    public static ArrayList getMacroNames(String source, Assembler assembler) {
+        return getFunctionOrMacroNames(assembler.getMacroString(), source, assembler);
     }
 
     public static boolean isValidFunctionOrMacro(String keyword, String funmacString) {

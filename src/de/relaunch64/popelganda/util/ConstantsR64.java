@@ -136,32 +136,32 @@ public class ConstantsR64 {
     public static final String CB_GOTO_FUNCTION_STRING = "Goto function ...";
     public static final String CB_GOTO_MACRO_STRING = "Goto macro ...";
     
-    public static final int ASM_KICKASSEMBLER = 0;
-    public static final int ASM_ACME = 1;
-    public static final int ASM_64TASS = 2;
-    public static final int ASM_CA65 = 3;
-    public static final int ASM_DREAMASS = 4;
-    public static final int ASM_DASM = 5;
-    public static final int ASM_TMPX = 6;
+    public static final Assembler ASM_KICKASSEMBLER = new Assembler_kick();
+    public static final Assembler ASM_ACME = new Assembler_acme();
+    public static final Assembler ASM_64TASS = new Assembler_64tass();
+    public static final Assembler ASM_CA65 = new Assembler_ca65();
+    public static final Assembler ASM_DREAMASS = new Assembler_dreamass(); 
+    public static final Assembler ASM_DASM = new Assembler_dasm();
+    public static final Assembler ASM_TMPX = new Assembler_tmpx();
 
     public static final Assembler assemblers[] = {
-        new Assembler_kick(),
-        new Assembler_acme(),
-        new Assembler_64tass(),
-        new Assembler_ca65(),
-        new Assembler_dreamass(),
-        new Assembler_dasm(),
-        new Assembler_tmpx()
+        ASM_KICKASSEMBLER,
+        ASM_ACME,
+        ASM_64TASS,
+        ASM_CA65,
+        ASM_DREAMASS,
+        ASM_DASM,
+        ASM_TMPX
     };
     
     // CAUTION! MUST HAVE SAME SIZE AND ORDER AS DEFAULT COMPILER AVAILABLE
-    public static final String[] ASM_NAMES = new String[] { assemblers[ASM_KICKASSEMBLER].name(), 
-                                                            assemblers[ASM_ACME].name(), 
-                                                            assemblers[ASM_64TASS].name(), 
-                                                            assemblers[ASM_CA65].name(), 
-                                                            assemblers[ASM_DREAMASS].name(), 
-                                                            assemblers[ASM_DASM].name(), 
-                                                            assemblers[ASM_TMPX].name() };
+    public static final String[] ASM_NAMES = new String[] { ASM_KICKASSEMBLER.name(), 
+                                                            ASM_ACME.name(), 
+                                                            ASM_64TASS.name(), 
+                                                            ASM_CA65.name(), 
+                                                            ASM_DREAMASS.name(), 
+                                                            ASM_DASM.name(), 
+                                                            ASM_TMPX.name() };
     
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".src", ".s"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff", ".fli", ".afli", ".ifli"};

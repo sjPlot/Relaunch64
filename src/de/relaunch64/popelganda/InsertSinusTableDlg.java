@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -49,11 +50,11 @@ import org.jdesktop.application.Action;
 public class InsertSinusTableDlg extends javax.swing.JDialog {
 
     private String bytetable = null;
-    private final int compiler;
+    private final String byteToken;
     
-    public InsertSinusTableDlg(java.awt.Frame parent, int c) {
+    public InsertSinusTableDlg(java.awt.Frame parent, Assembler assembler) {
         super(parent);
-        compiler = c;
+        byteToken = assembler.getByteDirective();
         bytetable = null;
         initComponents();
         // set application icon
@@ -85,7 +86,6 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
             int dummy = (int)(step*10000)+1;
             step = (double) dummy/10000;
             // get compiler byte-token
-            String byteToken = ConstantsR64.assemblers[compiler].getByteDirective();
             StringBuilder sb = new StringBuilder("");
             // some indicators for new lines and line-length of table
             boolean startNewLine = true;

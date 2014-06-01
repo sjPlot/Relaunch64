@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -63,7 +64,7 @@ public class LabelExtractor {
      * 
      * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
-    public static Object[] getLabelNames(String subWord, String source, int assembler, int lineNumber) {
+    public static Object[] getLabelNames(String subWord, String source, Assembler assembler, int lineNumber) {
         // get labels here
         ArrayList<String> labels = getLabelNames(false, source, assembler, lineNumber);
         // check for valid values
@@ -89,7 +90,7 @@ public class LabelExtractor {
      * @param lineNumber
      * @return An array list of all label names from the source code.
      */
-    public static ArrayList getLabelNames(boolean sortList, String source, int assembler, int lineNumber) {
+    public static ArrayList getLabelNames(boolean sortList, String source, Assembler assembler, int lineNumber) {
         // init return value
         ArrayList<String> retval = new ArrayList<>();
         // retrieve sections
@@ -118,14 +119,14 @@ public class LabelExtractor {
      * @return All labels with their line numbers, or {@code null} if there are no labels
      * in the source code.
      */
-    public static LinkedHashMap getLabels(String source, int assembler, int lineNumber) {
+    public static LinkedHashMap getLabels(String source, Assembler assembler, int lineNumber) {
         StringReader sr = new StringReader(source);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-        return ConstantsR64.assemblers[assembler].getLabels(lineReader, lineNumber);
+        return assembler.getLabels(lineReader, lineNumber);
     }
 
-    public static ArrayList getLabelLineNumbers(String source, int assembler, int lineNumber) {
+    public static ArrayList getLabelLineNumbers(String source, Assembler assembler, int lineNumber) {
         // init return value
         ArrayList<Integer> retval = new ArrayList<>();
         // retrieve sections

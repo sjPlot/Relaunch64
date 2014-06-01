@@ -36,6 +36,7 @@ import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -262,7 +263,7 @@ public class Settings {
         if (null==root.getChild(SETTING_PREF_ASM)) {
             // create element
             Element el = new Element(SETTING_PREF_ASM);
-            el.setText(String.valueOf(ConstantsR64.ASM_KICKASSEMBLER));
+            el.setText(String.valueOf(ConstantsR64.ASM_KICKASSEMBLER.getID()));
             // and add it to the document
             root.addContent(el);
         }
@@ -345,9 +346,9 @@ public class Settings {
      * @param nr
      * @return 
      */
-    public int getRecentDocCompiler(int nr) {
+    public Assembler getRecentDocAssembler(int nr) {
         // checl for valid parameter
-        if (nr<0) return 0;
+        if (nr<0) return ConstantsR64.ASM_KICKASSEMBLER;
         // retrieve element
         Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
@@ -357,15 +358,15 @@ public class Settings {
             // if we have any valid attribute
             if (comp!=null) {
                 try {
-                    return Integer.parseInt(comp.getValue());
+                    return ConstantsR64.assemblers[Integer.parseInt(comp.getValue())];
                 }
-                catch (NumberFormatException ex) {
-                    return 0;
+                catch (Exception ex) {
+                    return ConstantsR64.ASM_KICKASSEMBLER;
                 }
             }
         }
         // else return null
-        return 0;
+        return ConstantsR64.ASM_KICKASSEMBLER;
     }
     /**
      * 
@@ -430,7 +431,7 @@ public class Settings {
      * @param compiler
      * @param userScript
      */
-    public void addToRecentDocs(String fp, int compiler, int userScript) {
+    public void addToRecentDocs(String fp, Assembler assembler, int userScript) {
         // check for valid parameter
         if (null==fp || fp.isEmpty()) {
             return;
@@ -442,19 +443,19 @@ public class Settings {
         }
         // create linked list
         LinkedList<String> recdocs = new LinkedList<>();
-        // linked list for compilers
-        LinkedList<Integer> reccomps = new LinkedList<>();
+        // linked list for assemblers
+        LinkedList<Assembler> recasms = new LinkedList<>();
         // linked list for scripts
         LinkedList<Integer> recscripts = new LinkedList<>();
         // add new filepath to linked list
         recdocs.add(fp);
-        reccomps.add(compiler);
+        recasms.add(assembler);
         recscripts.add(userScript);
         // iterate all current recent documents
         for (int cnt=1; cnt<=recentDocCount; cnt++) {
             // retrieve recent document
             String recentDoc = getRecentDocAsString(cnt);
-            int comp = getRecentDocCompiler(cnt);
+            Assembler asm = getRecentDocAssembler(cnt);
             int script = getRecentDocScript(cnt);
             // check whether the linked list already contains such a document
             if (recentDoc!=null && !recentDoc.isEmpty()) {
@@ -462,7 +463,7 @@ public class Settings {
                 dummy = new File(recentDoc);
                 // if not, add it to the list
                 if (dummy.exists() && !recdocs.contains(recentDoc)) {
-                    reccomps.add(comp);
+                    recasms.add(asm);
                     recscripts.add(script);
                     recdocs.add(recentDoc);
                 }
@@ -473,11 +474,11 @@ public class Settings {
             // check for valid bounds of linked list
             if (recdocs.size()>=cnt) {
                 // and set recent document
-                setRecentDoc(cnt, recdocs.get(cnt-1), reccomps.get(cnt-1), recscripts.get(cnt-1));
+                setRecentDoc(cnt, recdocs.get(cnt-1), recasms.get(cnt-1), recscripts.get(cnt-1));
             }
             // else fill remaining recent documents with empty strings
             else {
-                setRecentDoc(cnt, "", -1, -1);
+                setRecentDoc(cnt, "", ConstantsR64.ASM_KICKASSEMBLER, -1);
             }
         }
     }
@@ -488,7 +489,7 @@ public class Settings {
      * @param compiler
      * @param userScript
      */
-    public void setRecentDoc(int nr, String fp, int compiler, int userScript) {
+    public void setRecentDoc(int nr, String fp, Assembler assembler, int userScript) {
         // check for valid parameter
         if (null==fp || -1==nr) {
             return;
@@ -503,7 +504,7 @@ public class Settings {
         }
         // add filepath
         el.setText(fp);
-        el.setAttribute(REC_DOC_ASSEMBLER, String.valueOf(compiler));
+        el.setAttribute(REC_DOC_ASSEMBLER, String.valueOf(assembler.getID()));
         el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
     }
     public File getLastUsedPath() {
@@ -548,22 +549,22 @@ public class Settings {
         }
         el.setText(scale==Boolean.TRUE ? "1":"0");
     }
-    public int getPreferredAssembler() {
+    public Assembler getPreferredAssembler() {
         Element el = root.getChild(SETTING_PREF_ASM);
         try {
-            if (el!=null) return Integer.parseInt(el.getText());
+            if (el!=null) return ConstantsR64.assemblers[Integer.parseInt(el.getText())];
         }
-        catch (NumberFormatException ex) {
+        catch (Exception ex) {
         }
         return ConstantsR64.ASM_KICKASSEMBLER;
     }
-    public void setPreferredAssembler(int assembler) {
+    public void setPreferredAssembler(Assembler assembler) {
         Element el = root.getChild(SETTING_PREF_ASM);
         if (null==el) {
             el = new Element(SETTING_PREF_ASM);
             root.addContent(el);
         }
-        el.setText(String.valueOf(assembler));
+        el.setText(String.valueOf(assembler.getID()));
     }
     public int getColorScheme() {
         Element el = root.getChild(SETTING_SYNTAX_SCHEME);
@@ -803,19 +804,19 @@ public class Settings {
                 String attr_c = e.getAttributeValue(ATTR_ASM);
                 String attr_s = e.getAttributeValue(ATTR_SCRIPT);
                 // init defaults
-                int compiler = ConstantsR64.ASM_KICKASSEMBLER;
+                Assembler assembler = ConstantsR64.ASM_KICKASSEMBLER;
                 int script = -1;
                 // check if we have compiler value
                 try {
-                    if (attr_c!=null) compiler = Integer.parseInt(attr_c);
+                    if (attr_c!=null) assembler = ConstantsR64.assemblers[Integer.parseInt(attr_c)];
                     if (attr_s!=null) script = Integer.parseInt(attr_s);
                 }
                 catch (NumberFormatException ex) {
-                    compiler = ConstantsR64.ASM_KICKASSEMBLER;
+                    assembler = ConstantsR64.ASM_KICKASSEMBLER;
                     script = -1;
                 }
                 // add compiler and filepath to return value
-                rofiles.add(new Object[]{f,compiler,script});
+                rofiles.add(new Object[]{f,assembler,script});
             }
         }
         return rofiles;
@@ -832,7 +833,7 @@ public class Settings {
         for (int i=0; i<ep.getCount(); i++) {
             // get file path and compiler settings of each file
             File fp = ep.getFilePath(i);
-            int c = ep.getAssembler(i);
+            int c = ep.getAssembler(i).getID();
             int s = ep.getScript(i);
             // save if exists
             if (fp!=null && fp.exists()) {

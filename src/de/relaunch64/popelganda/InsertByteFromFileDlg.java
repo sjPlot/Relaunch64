@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.Tools;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -55,7 +56,7 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
 
     private File fileToOpen = null;
     private String bytetable = null;
-    private final int compiler;
+    private final Assembler assembler;
     private final Settings settings;
     /**
      * Creates new form InsertByteFromFileDlg
@@ -63,10 +64,10 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
      * @param s
      * @param c
      */
-    public InsertByteFromFileDlg(java.awt.Frame parent, Settings s, int c) {
+    public InsertByteFromFileDlg(java.awt.Frame parent, Settings s, Assembler assembler) {
         super(parent);
-        settings = s;
-        compiler = c;
+        this.settings = s;
+        this.assembler = assembler;
         bytetable = null;
         fileToOpen = null;
         initComponents();
@@ -101,7 +102,7 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
                 // check for valid file
                 if (fileToOpen!=null && fileToOpen.exists()) {
                     // retrieve byte table from file
-                    bytetable = Tools.getByteTableFromFile(fileToOpen, start, end, compiler, bpl);
+                    bytetable = Tools.getByteTableFromFile(fileToOpen, start, end, assembler, bpl);
                     // update last used directory
                     settings.setLastUsedPath(fileToOpen);
                     setVisible(false);

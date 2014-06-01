@@ -35,6 +35,7 @@ package de.relaunch64.popelganda.assemblers;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.LineNumberReader;
@@ -78,13 +79,13 @@ public class ErrorHandler {
     public String getBasePath() {
         return basePath;
     }
-    public void readErrorLines(String log, int assembler) {
+    public void readErrorLines(String log, Assembler assembler) {
         // create buffered reader, needed for line number reader
         StringReader sr = new StringReader(log);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
 
-        errors.addAll(ConstantsR64.assemblers[assembler].readErrorLines(lineReader));
+        errors.addAll(assembler.readErrorLines(lineReader));
     }
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
         if (hasErrors()) {
