@@ -57,6 +57,13 @@ class Assembler_acme implements Assembler
         "SRE", "STA", "STX", "STY", "TAX", "TAY", "TOP", "TSX", "TXA", "TXS",
         "TYA"
     };
+    /**
+     * String array with Math functions and scripting language keywords, in
+     * case the assembler supports this. Used for syntax highlighting keywords.
+     */
+    final static String[] scriptKeywords = {
+        "sin", "cos", "tan", "arcsin", "arccos", "arctan", "int", "float"
+    };
 
     @Override
     public String name() {
@@ -123,7 +130,7 @@ class Assembler_acme implements Assembler
 
     @Override
     public String[] getScriptKeywords() {
-        return new String[] {};
+        return scriptKeywords;
     }
 
     @Override
