@@ -11,9 +11,11 @@ Relaunch64 3.1.0
   - rectangular text selection (ctrl+mouse)
   - code-folding
   - proper text anti-aliasing
-* improved suggestion / auto-completion popup (ctrl+space):
+  - improved line number display and handling
+  - changes on color scheme, font and tab size etc. immediately take effect
+* improved suggestion / auto-completion popup (ctrl+space and ctrl+shift+space):
   - local labels outside the scope are not listed (only global labels and labels within scope)
-  - suggestion list will bi filtered when typing is continued
+  - filter suggestion list by typing
   - editor scrolls to suggestion popup when caret is not visible
 * added DASM support
 * added TMPx support
@@ -21,12 +23,12 @@ Relaunch64 3.1.0
 * added alternative syntax highlighting mode (see preferences)
 * improvements with goto error functions
 * jump to next/prev code fold function
-* many small (code) improvements
 * Aqua Look'n'Feel on OS X by default
 * UI font scaling to better fit screen resolution (can be switched off via preferences)
+* many (code) improvements, code cleanup
 
 ### Bug fixes
-
+* Modified files, which should have been saved before compiling, were not checked if they really exist.
 
 Relaunch64 3.0.1
 ----------------
