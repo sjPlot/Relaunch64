@@ -98,11 +98,12 @@ public class Settings {
     public static final int SPLITPANE_LOG = 1;
     public static final int SPLITPANE_RUN = 2;
     public static final int SPLITPANE_BOTHLOGRUN = 3;
-    
+
     /**
      * XML-Document that stores the settings-information
      */
-    private Document settingsFile;    
+    private Document settingsFile;
+    private Element root;
 
     public Settings() {
         // first of all, create the empty documents
@@ -163,6 +164,7 @@ public class Settings {
      * new elements. This ensures compatibility to older/news settings-file-versions.
      */
     private void fillElements() {
+        root = settingsFile.getRootElement();
         // init standard font. on mac, it's helvetica
         String font = "Helvetica";
         // on older windows arial
@@ -181,130 +183,130 @@ public class Settings {
             // create field-identifier
             String fi = SETTING_RECENT_DOC+String.valueOf(cnt+1);
             // retrieve content
-            if (null==settingsFile.getRootElement().getChild(fi)) {
+            if (null==root.getChild(fi)) {
                 // create a filepath-element
                 Element el = new Element(fi);
                 el.setText("");
                 // and add it to the document
-                settingsFile.getRootElement().addContent(el);
+                root.addContent(el);
             }
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES)) {
+        if (null==root.getChild(SETTING_REOPEN_FILES)) {
             // create element for font
             Element el = new Element(SETTING_REOPEN_FILES);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_MAINFONT)) {
+        if (null==root.getChild(SETTING_MAINFONT)) {
             // create element for font
             Element el = new Element(SETTING_MAINFONT);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
             el.setText(font);
             el.setAttribute("size", "11");
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH)) {
+        if (null==root.getChild(SETTING_LAST_USED_PATH)) {
             // create element
             Element el = new Element(SETTING_LAST_USED_PATH);
             el.setText("");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_ANTIALIAS)) {
+        if (null==root.getChild(SETTING_ANTIALIAS)) {
             // create element
             Element el = new Element(SETTING_ANTIALIAS);
             el.setText(AntiAlias.SUBPIXEL);
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_SCALE_FONT)) {
+        if (null==root.getChild(SETTING_SCALE_FONT)) {
             // create element
             Element el = new Element(SETTING_SCALE_FONT);
             el.setText("1");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES)) {
+        if (null==root.getChild(SETTING_CHECKUPDATES)) {
             // create element
             Element el = new Element(SETTING_CHECKUPDATES);
             el.setText("1");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_ALT_ASM_MODE)) {
+        if (null==root.getChild(SETTING_ALT_ASM_MODE)) {
             // create element
             Element el = new Element(SETTING_ALT_ASM_MODE);
             el.setText("0");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES_ON_STARTUP)) {
+        if (null==root.getChild(SETTING_REOPEN_FILES_ON_STARTUP)) {
             // create element
             Element el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
             el.setText("1");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE)) {
+        if (null==root.getChild(SETTING_SAVEONCOMPILE)) {
             // create element
             Element el = new Element(SETTING_SAVEONCOMPILE);
             el.setText("1");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_NIMBUS_ON_OSX)) {
+        if (null==root.getChild(SETTING_NIMBUS_ON_OSX)) {
             // create element
             Element el = new Element(SETTING_NIMBUS_ON_OSX);
             el.setText("0");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_PREF_ASM)) {
+        if (null==root.getChild(SETTING_PREF_ASM)) {
             // create element
             Element el = new Element(SETTING_PREF_ASM);
             el.setText(String.valueOf(ConstantsR64.ASM_KICKASSEMBLER));
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME)) {
+        if (null==root.getChild(SETTING_SYNTAX_SCHEME)) {
             // create element
             Element el = new Element(SETTING_SYNTAX_SCHEME);
             el.setText(String.valueOf(ColorSchemes.SCHEME_DEFAULT));
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT)) {
+        if (null==root.getChild(SETTING_LAST_SCRIPT)) {
             // create element
             Element el = new Element(SETTING_LAST_SCRIPT);
             el.setText("0");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_LOGSPLITLAYOUT)) {
+        if (null==root.getChild(SETTING_LOGSPLITLAYOUT)) {
             // create a filepath-element
             Element el = new Element(SETTING_LOGSPLITLAYOUT);
             el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_BOTHLOGRUNSPLITLAYOUT)) {
+        if (null==root.getChild(SETTING_BOTHLOGRUNSPLITLAYOUT)) {
             // create a filepath-element
             Element el = new Element(SETTING_BOTHLOGRUNSPLITLAYOUT);
             el.setText(String.valueOf(JSplitPane.VERTICAL_SPLIT));
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_TABWIDTH)) {
+        if (null==root.getChild(SETTING_TABWIDTH)) {
             // create a filepath-element
             Element el = new Element(SETTING_TABWIDTH);
             el.setText("4");
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
-        if (null==settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
+        if (null==root.getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
             // create a filepath-element
             Element el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
             el.setText(String.valueOf(Gutter.RIGHT));
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
     }
     /**
@@ -317,7 +319,7 @@ public class Settings {
         // checl for valid parameter
         if (nr<0) return null;
         // retrieve element
-        Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
         if (el!=null) {
             // check whether its value is empty
@@ -347,7 +349,7 @@ public class Settings {
         // checl for valid parameter
         if (nr<0) return 0;
         // retrieve element
-        Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
         if (el!=null) {
             // retrieve compiler attribute
@@ -374,7 +376,7 @@ public class Settings {
         // checl for valid parameter
         if (nr<0) return 0;
         // retrieve element
-        Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
         if (el!=null) {
             // retrieve compiler attribute
@@ -492,12 +494,12 @@ public class Settings {
             return;
         }
         // retrieve element
-        Element el = settingsFile.getRootElement().getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if element does not exist, create new...
         if (null==el) {
             el = new Element(SETTING_RECENT_DOC+String.valueOf(nr));
             // and add it to the document
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         // add filepath
         el.setText(fp);
@@ -505,7 +507,7 @@ public class Settings {
         el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
     }
     public File getLastUsedPath() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH);
+        Element el = root.getChild(SETTING_LAST_USED_PATH);
         File value = null;
         if (el!=null) {
             value = new File(el.getText());
@@ -513,41 +515,41 @@ public class Settings {
         return value;
     }
     public void setLastUsedPath(File f) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_USED_PATH);
+        Element el = root.getChild(SETTING_LAST_USED_PATH);
         if (null==el) {
             el = new Element(SETTING_LAST_USED_PATH);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(f.getAbsolutePath());
     }
     public String getAntiAlias() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_ANTIALIAS);
+        Element el = root.getChild(SETTING_ANTIALIAS);
         if (el!=null) return el.getText();
         return AntiAlias.SUBPIXEL;
     }
     public void setAntiAlias(String aa) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_ANTIALIAS);
+        Element el = root.getChild(SETTING_ANTIALIAS);
         if (null==el) {
             el = new Element(SETTING_ANTIALIAS);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(aa);
     }
     public boolean getScaleFont() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_SCALE_FONT);
+        Element el = root.getChild(SETTING_SCALE_FONT);
         if (el!=null) return el.getText().equals("1");
         return true;
     }
     public void setScaleFont(boolean scale) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_SCALE_FONT);
+        Element el = root.getChild(SETTING_SCALE_FONT);
         if (null==el) {
             el = new Element(SETTING_SCALE_FONT);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(scale==Boolean.TRUE ? "1":"0");
     }
     public int getPreferredAssembler() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_ASM);
+        Element el = root.getChild(SETTING_PREF_ASM);
         try {
             if (el!=null) return Integer.parseInt(el.getText());
         }
@@ -556,15 +558,15 @@ public class Settings {
         return ConstantsR64.ASM_KICKASSEMBLER;
     }
     public void setPreferredAssembler(int assembler) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_PREF_ASM);
+        Element el = root.getChild(SETTING_PREF_ASM);
         if (null==el) {
             el = new Element(SETTING_PREF_ASM);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(String.valueOf(assembler));
     }
     public int getColorScheme() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
+        Element el = root.getChild(SETTING_SYNTAX_SCHEME);
         try {
             if (el!=null) return Integer.parseInt(el.getText());
         }
@@ -573,80 +575,80 @@ public class Settings {
         return ColorSchemes.SCHEME_DEFAULT;
     }
     public void setColorScheme(int scheme) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_SYNTAX_SCHEME);
+        Element el = root.getChild(SETTING_SYNTAX_SCHEME);
         if (null==el) {
             el = new Element(SETTING_SYNTAX_SCHEME);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(String.valueOf(scheme));
     }
     public boolean getCheckForUpdates() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);
+        Element el = root.getChild(SETTING_CHECKUPDATES);
         if (el!=null) return el.getText().equals("1");
         return true;
     }
     public void setCheckForUpdates(boolean val)  {
-        Element el = settingsFile.getRootElement().getChild(SETTING_CHECKUPDATES);
+        Element el = root.getChild(SETTING_CHECKUPDATES);
         if (null==el) {
             el = new Element(SETTING_CHECKUPDATES);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public boolean getAlternativeAssemblyMode() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_ALT_ASM_MODE);
+        Element el = root.getChild(SETTING_ALT_ASM_MODE);
         if (el!=null) return el.getText().equals("1");
         return false;
     }
     public void setAlternativeAssemblyMode(boolean val)  {
-        Element el = settingsFile.getRootElement().getChild(SETTING_ALT_ASM_MODE);
+        Element el = root.getChild(SETTING_ALT_ASM_MODE);
         if (null==el) {
             el = new Element(SETTING_ALT_ASM_MODE);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public boolean getSaveOnCompile() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE);
+        Element el = root.getChild(SETTING_SAVEONCOMPILE);
         if (el!=null) return el.getText().equals("1");
         return true;
     }
     public void setSaveOnCompile(boolean val)  {
-        Element el = settingsFile.getRootElement().getChild(SETTING_SAVEONCOMPILE);
+        Element el = root.getChild(SETTING_SAVEONCOMPILE);
         if (null==el) {
             el = new Element(SETTING_SAVEONCOMPILE);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public boolean getNimbusOnOSX() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_NIMBUS_ON_OSX);
+        Element el = root.getChild(SETTING_NIMBUS_ON_OSX);
         if (el!=null) return el.getText().equals("1");
         return false;
     }
     public void setNimbusOnOSX(boolean val)  {
-        Element el = settingsFile.getRootElement().getChild(SETTING_NIMBUS_ON_OSX);
+        Element el = root.getChild(SETTING_NIMBUS_ON_OSX);
         if (null==el) {
             el = new Element(SETTING_NIMBUS_ON_OSX);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public boolean getReopenOnStartup() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES_ON_STARTUP);
+        Element el = root.getChild(SETTING_REOPEN_FILES_ON_STARTUP);
         if (el!=null) return el.getText().equals("1");
         return true;
     }
     public void setReopenOnStartup(boolean val)  {
-        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES_ON_STARTUP);
+        Element el = root.getChild(SETTING_REOPEN_FILES_ON_STARTUP);
         if (null==el) {
             el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public int getTabWidth() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_TABWIDTH);
+        Element el = root.getChild(SETTING_TABWIDTH);
         if (el!=null) {
             try {
                 return Integer.parseInt(el.getText());
@@ -658,15 +660,15 @@ public class Settings {
         return 4;
     }
     public void setTabWidth(int tabwidth) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_TABWIDTH);
+        Element el = root.getChild(SETTING_TABWIDTH);
         if (null==el) {
             el = new Element(SETTING_TABWIDTH);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(String.valueOf(tabwidth));
     }
     public int getLastUserScript() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT);
+        Element el = root.getChild(SETTING_LAST_SCRIPT);
         try {
             if (el!=null) return Integer.parseInt(el.getText());
         }
@@ -675,10 +677,10 @@ public class Settings {
         return 0;
     }
     public void setLastUserScript(int index) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_LAST_SCRIPT);
+        Element el = root.getChild(SETTING_LAST_SCRIPT);
         if (null==el) {
             el = new Element(SETTING_LAST_SCRIPT);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(String.valueOf(index));
     }
@@ -693,7 +695,7 @@ public class Settings {
      * @return the related font-information as string.
      */
     public String getMainfont(int what) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_MAINFONT);
+        Element el = root.getChild(SETTING_MAINFONT);
         String retval = "";
         if (el!=null) {
             switch (what) {
@@ -708,15 +710,15 @@ public class Settings {
      * @return the main-font as {@code Font} variable.
      */
     public Font getMainFont() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_MAINFONT);
+        Element el = root.getChild(SETTING_MAINFONT);
         int fsize = Integer.parseInt(el.getAttributeValue("size"));
         return new Font(el.getText(), Font.PLAIN, fsize);
     }
     public void setMainfont(Font f) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_MAINFONT);
+        Element el = root.getChild(SETTING_MAINFONT);
         if (null==el) {
             el = new Element(SETTING_MAINFONT);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(f.getName());
         el.setAttribute("size", String.valueOf(f.getSize()));
@@ -732,7 +734,7 @@ public class Settings {
                 break;
         }
         // get attribute which stores last used desktop number
-        Element el = settingsFile.getRootElement().getChild(splitname);
+        Element el = root.getChild(splitname);
         // check for valid value
         if (el!=null) {
             try {
@@ -754,15 +756,15 @@ public class Settings {
             case SPLITPANE_BOTHLOGRUN:
                 splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;
         }
-        Element el = settingsFile.getRootElement().getChild(splitname);
+        Element el = root.getChild(splitname);
         if (null==el) {
             el = new Element(splitname);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(String.valueOf(val));
     }
     public int getLineNumerAlignment() {
-        Element el = settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT);
+        Element el = root.getChild(SETTING_LINE_NUMBER_ALIGNMENT);
         if (el!=null) {
             try {
                 return Integer.parseInt(el.getText());
@@ -774,16 +776,16 @@ public class Settings {
         return Gutter.RIGHT;
     }
     public void setLineNumerAlignment(int align) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_LINE_NUMBER_ALIGNMENT);
+        Element el = root.getChild(SETTING_LINE_NUMBER_ALIGNMENT);
         if (null==el) {
             el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         el.setText(String.valueOf(align));
     }
     public ArrayList<Object[]> getReopenFiles() {
         // get reopen files
-        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES);
+        Element el = root.getChild(SETTING_REOPEN_FILES);
         // check if we have any
         if (null==el) return null;
         // create return value
@@ -819,10 +821,10 @@ public class Settings {
         return rofiles;
     }
     public void setReopenFiles(EditorPanes ep) {
-        Element el = settingsFile.getRootElement().getChild(SETTING_REOPEN_FILES);
+        Element el = root.getChild(SETTING_REOPEN_FILES);
         if (null==el) {
             el = new Element(SETTING_REOPEN_FILES);
-            settingsFile.getRootElement().addContent(el);
+            root.addContent(el);
         }
         // remove existing content
         el.removeContent();
