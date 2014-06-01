@@ -6,15 +6,15 @@ Relaunch64 3.1.0
 
 ### New features
 * completely new editor component with new features, such as:
-  * increased performance
-  * much faster syntax highlighting
-  * rectangular text selection (ctrl+mouse)
-  * code-folding
-  * proper text anti-aliasing
+  - increased performance
+  - much faster syntax highlighting
+  - rectangular text selection (ctrl+mouse)
+  - code-folding
+  - proper text anti-aliasing
 * improved suggestion / auto-completion popup (ctrl+space):
-  * local labels outside the scope are not listed (only global labels and labels within scope)
-  * suggestion list will bi filtered when typing is continued
-  * editor scrolls to suggestion popup when caret is not visible
+  - local labels outside the scope are not listed (only global labels and labels within scope)
+  - suggestion list will bi filtered when typing is continued
+  - editor scrolls to suggestion popup when caret is not visible
 * added DASM support
 * added TMPx support
 * added code-folding support

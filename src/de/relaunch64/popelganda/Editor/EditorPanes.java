@@ -124,7 +124,7 @@ public class EditorPanes {
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
         // set content, if available
-        buffer.setUndoLimit(0);
+        buffer.setUndoLimit(0); // haha, cheater! ;-)
         if (content!= null && !content.isEmpty()) {
             editorPane.setText(content);
         }

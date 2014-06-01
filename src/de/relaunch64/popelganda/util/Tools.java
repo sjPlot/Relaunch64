@@ -93,7 +93,7 @@ public class Tools {
      * Reads a binary file and returns its content as byte table string.
      * 
      * @param f FilePath to the binary file
-     * @param compiler the currently active compiler. used for the compiler-specific byte-token
+     * @param assembler the currently active assembler. used for the assembler-specific byte-token
      * @return a string value with the complete byte table, i.e. all byte values from the
      * file are converted to a byte-table. Or {@code null} if an error occured.
      */
@@ -104,7 +104,7 @@ public class Tools {
      * Reads a binary file and returns its content as byte table string.
      * 
      * @param f FilePath to the binary file
-     * @param compiler the currently active compiler. used for the compiler-specific byte-token
+     * @param assembler the currently active assembler. used for the assembler-specific byte-token
      * @param bytesPerLine the amounts of bytes per line in the byte table
      * @return a string value with the complete byte table, i.e. all byte values from the
      * file are converted to a byte-table. Or {@code null} if an error occured.
@@ -118,7 +118,7 @@ public class Tools {
      * @param f FilePath to the binary file
      * @param startOffset start offset for the first byte to read from file
      * @param endOffset end offset, the last byte that should be read from file
-     * @param compiler the currently active compiler. used for the compiler-specific byte-token
+     * @param assembler the currently active assembler. used for the assembler-specific byte-token
      * @param bytesPerLine the amounts of bytes per line in the byte table
      * @return a string value with the complete byte table, i.e. all byte values from the
      * file are converted to a byte-table. Or {@code null} if an error occured.

@@ -1105,7 +1105,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 try {
                     assembler = ConstantsR64.assemblers[Integer.parseInt(o[1].toString())];
                 }
-                catch (Exception ex) {
+                catch (NumberFormatException ex) {
                     assembler = ConstantsR64.ASM_KICKASSEMBLER;
                 }
                 int script = Integer.parseInt(o[2].toString());

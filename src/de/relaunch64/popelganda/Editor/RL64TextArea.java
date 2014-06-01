@@ -399,7 +399,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * Set compiler of current editor / buffer. Frequently needed information, for various functions,
      * so we put this variable as a global field for this class.
      * 
-     * @param c 
+     * @param assembler
      */
     public final void setAssembler(Assembler assembler) {
         this.assembler = assembler;
