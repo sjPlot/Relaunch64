@@ -61,6 +61,14 @@ class Assembler_dreamass implements Assembler
         "TAY", "TSX", "TXA", "TXS", "TYA", "XAA"
     };
 
+    /**
+     * String array with Math functions and scripting language keywords, in
+     * case the assembler supports this. Used for syntax highlighting keywords.
+     */
+    final static String[] scriptKeywords = {
+        "isdef", "segmentof", "sizeof", "mod"
+    };
+
     @Override
     public String name() {
         return "DreamAss";
@@ -126,7 +134,7 @@ class Assembler_dreamass implements Assembler
 
     @Override
     public String[] getScriptKeywords() {
-        return new String[] {};
+        return scriptKeywords;
     }
 
     @Override

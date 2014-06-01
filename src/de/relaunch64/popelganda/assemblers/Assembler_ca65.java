@@ -48,6 +48,10 @@ import java.util.ArrayList;
  */
 class Assembler_ca65 implements Assembler
 {
+    /**
+     * String array with Math functions and scripting language keywords, in
+     * case the assembler supports this. Used for syntax highlighting keywords.
+     */
     final static String[] scriptKeywords = {
         ".bankbyte", ".blank", ".concat", ".const", ".hibyte", ".hiword",
         ".ident", ".left", ".lobyte", ".loword", ".match", ".mid", ".ref",
