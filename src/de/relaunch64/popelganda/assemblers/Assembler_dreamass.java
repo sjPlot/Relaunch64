@@ -140,10 +140,11 @@ class Assembler_dreamass implements Assembler
 
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumbers) {
+        labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b).*");
+        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_][a-zA-Z0-9_]*\\b)?\\s*(?<directive>#macro\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
         String line;
-        try {
+        try { // TODO: scoping traversal with @, .( .)
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
 
@@ -152,13 +153,18 @@ class Assembler_dreamass implements Assembler
 
                 if (label != null) {
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    labelValues.put(label, lineReader.getLineNumber());
+                    returnValue.labels.put(label, lineReader.getLineNumber());
                 }
+
+                String directive = m.group("directive");
+                if (directive == null) continue;
+                label = m.group("name");
+                if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
             }
         }
         catch (IOException ex) {
         }
-        return new labelList(labelValues, null, null);
+        return returnValue;
     }
 
     @Override
