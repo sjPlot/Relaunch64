@@ -33,9 +33,7 @@
 package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
-import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
-import de.relaunch64.popelganda.assemblers.Assembler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.LineNumberReader;
