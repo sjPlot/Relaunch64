@@ -164,7 +164,7 @@ class Assembler_64tass implements Assembler {
         LinkedList<lineInfo> labels = new LinkedList<>(), localLabels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm too old to understand it...
-        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm)\\b)?.*");
+        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -200,6 +200,8 @@ class Assembler_64tass implements Assembler {
                     switch (directive.toLowerCase()) {
                         case ".block":
                         case ".proc":
+                        case ".struct":
+                        case ".union":
                             if (label != null) scopes.add(label); // new scope
                             else scopes.add("");
                             break;
@@ -207,6 +209,8 @@ class Assembler_64tass implements Assembler {
                         case ".pend":
                         case ".endf":
                         case ".endm":
+                        case ".ends":
+                        case ".endu":
                             if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
                             break;
                         case ".macro":
