@@ -133,7 +133,7 @@ class Assembler_kick implements Assembler
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         labelList returnValue = new labelList(null, null, null);
-        Pattern p = Pattern.compile("^\\s*(?:(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):\\s*)?(?<directive>\\.(?:function|macro|const|var)\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
+        Pattern p = Pattern.compile("^\\s*(?:(?<label>!?[a-zA-Z_][a-zA-Z0-9_]*):\\s*)?(?<directive>\\.(?:function|macro|pseudocommand|const|var)\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
         String line;
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -150,6 +150,7 @@ class Assembler_kick implements Assembler
                     case ".const":
                     case ".var": returnValue.labels.put(label, lineReader.getLineNumber()); break;
                     case ".function": returnValue.functions.put(label, lineReader.getLineNumber()); break;
+                    case ".pseudocommand":
                     case ".macro": returnValue.macros.put(label, lineReader.getLineNumber()); break;
                 }
             }
