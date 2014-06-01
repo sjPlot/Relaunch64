@@ -50,6 +50,11 @@ class Assembler_dasm implements Assembler
     public String name() {
         return "DASM";
     }
+
+    @Override
+    public String fileName() {
+        return "dasm";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_DASM.
      * @return the unique assembler ID.
@@ -112,6 +117,11 @@ class Assembler_dasm implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return new String[] {};
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return fp + " " + INPUT_FILE + " -o" + OUTPUT_FILE;
     }
 
     @Override

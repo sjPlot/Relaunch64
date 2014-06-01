@@ -39,7 +39,13 @@ import java.util.ArrayList;
 
 public interface Assembler 
 {
+    static final String INPUT_FILE = "SOURCEFILE";
+    static final String SOURCE_DIR = "SOURCEDIR";
+    static final String OUTPUT_FILE = "OUTFILE";
+
     String name();
+    String fileName();
+    int getID();
     String syntaxFile();
 
     String getMacroString();
@@ -52,9 +58,9 @@ public interface Assembler
     String getIncludeC64Directive(String path);
     String getIncludeBinaryDirective(String path);
     String[] getScriptKeywords();
+    String getDefaultCommandLine(String fp);
     LinkedHashMap getLabels(LineNumberReader lineReader, int line);
     LinkedHashMap getFunctions(LineNumberReader lineReader);
-    int getID();
 
     /**
      * Returns the label name part before the cursor.

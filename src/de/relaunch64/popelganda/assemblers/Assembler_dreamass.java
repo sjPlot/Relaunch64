@@ -64,6 +64,11 @@ class Assembler_dreamass implements Assembler
     public String name() {
         return "DreamAss";
     }
+
+    @Override
+    public String fileName() {
+        return "dreamass";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_DREAMASS.
      * @return the unique assembler ID.
@@ -126,6 +131,11 @@ class Assembler_dreamass implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return new String[] {};
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return fp + " -I" + SOURCE_DIR + " -o " + OUTPUT_FILE + " " + INPUT_FILE;
     }
 
     @Override

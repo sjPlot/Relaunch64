@@ -1238,11 +1238,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     String cf = compressedFile.toString();
                     if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
                     // replace placeholders
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_INPUT_FILE, sf);
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_OUPUT_FILE, of);
+                    cmd = cmd.replace(Assembler.INPUT_FILE, sf);
+                    cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, of);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_SOURCE_DIR, parentFile);
+                    cmd = cmd.replace(Assembler.SOURCE_DIR, parentFile);
                     // check if we have a cruncher-starttoken
                     String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveAssembler().getLineComment());
                     // if we found cruncher-starttoken, replace placeholder 

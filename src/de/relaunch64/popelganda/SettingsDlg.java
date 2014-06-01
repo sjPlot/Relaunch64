@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.Color;
 import java.awt.Font;
@@ -993,22 +994,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                             String text = jTextAreaUserScript.getText();
                             // define output file. if we have a cruncher with "compressed file" placeholder,
                             // we assume that output file will be compressed.
-                            String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : ConstantsR64.ASSEMBLER_OUPUT_FILE;
+                            String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : Assembler.OUTPUT_FILE;
                             String insert = "";
-                            if (fp.toLowerCase().contains("acme")) {
-                                insert = fp+" "+ConstantsR64.DEFAULT_ACME_PARAM;
-                            }
-                            else if (fp.toLowerCase().contains("kickass")) {
-                                insert = "java -jar "+fp+" "+ConstantsR64.DEFAULT_KICKASS_PARAM;
-                            }
-                            else if (fp.toLowerCase().contains("64tass")) {
-                                insert = fp+" "+ConstantsR64.DEFAULT_64TASS_PARAM;
-                            }
-                            else if (fp.toLowerCase().contains("ca65")) {
-                                insert = fp+" "+ConstantsR64.DEFAULT_CA65_PARAM;
-                            }
-                            else if (fp.toLowerCase().contains("dreamass")) {
-                                insert = fp+" "+ConstantsR64.DEFAULT_DREAMASS_PARAM;
+                            Assembler assembler = Assemblers.byFileName(fp);
+                            if (assembler != null) {
+                                insert = assembler.getDefaultCommandLine(fp);
                             }
                             else if (fp.toLowerCase().contains("exomizer")) {
                                 insert = fp+" "+ConstantsR64.DEFAULT_EXOMIZER_PARAM;

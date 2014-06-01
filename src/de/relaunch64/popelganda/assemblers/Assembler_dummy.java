@@ -49,6 +49,11 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String fileName() {
+        return "";
+    }
+
+    @Override
     public int getID() {
         return 99;
     }
@@ -106,6 +111,11 @@ class Assembler_dummy implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return new String[] {};
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return "";
     }
 
     @Override

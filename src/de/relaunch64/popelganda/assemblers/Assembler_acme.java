@@ -62,6 +62,11 @@ class Assembler_acme implements Assembler
     public String name() {
         return "ACME";
     }
+
+    @Override
+    public String fileName() {
+        return "acme";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_ACME.
      * @return the unique assembler ID.
@@ -124,6 +129,11 @@ class Assembler_acme implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return new String[] {};
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return fp + " --outfile " + OUTPUT_FILE + " --format cbm " + INPUT_FILE;
     }
 
     @Override

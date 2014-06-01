@@ -62,6 +62,11 @@ class Assembler_tmpx implements Assembler
     public String name() {
         return "TMPx";
     }
+
+    @Override
+    public String fileName() {
+        return "tmpx";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_TMPX.
      * @return the unique assembler ID.
@@ -124,6 +129,11 @@ class Assembler_tmpx implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return new String[] {};
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return fp + " -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
     }
 
     @Override

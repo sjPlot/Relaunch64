@@ -114,20 +114,12 @@ public class ConstantsR64 {
     public static final int DEFAULT_FONT_SIZE = 13;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
     
-    public static final String ASSEMBLER_INPUT_FILE = "SOURCEFILE";
-    public static final String ASSEMBLER_SOURCE_DIR = "SOURCEDIR";
-    public static final String ASSEMBLER_OUPUT_FILE = "OUTFILE";
     public static final String ASSEMBLER_START_ADDRESS = "START";
     public static final String ASSEMBLER_UNCOMPRESSED_FILE = "UNCOMPFILE";
     public static final String ASSEMBLER_COMPRESSED_FILE = "COMPFILE";
     
-    public static final String DEFAULT_ACME_PARAM = "--outfile "+ASSEMBLER_OUPUT_FILE+" --format cbm "+ASSEMBLER_INPUT_FILE;
-    public static final String DEFAULT_DREAMASS_PARAM = "-I"+ASSEMBLER_SOURCE_DIR+" -o "+ASSEMBLER_OUPUT_FILE+" "+ASSEMBLER_INPUT_FILE;
-    public static final String DEFAULT_64TASS_PARAM = "-C -a -i "+ASSEMBLER_INPUT_FILE+" -o "+ASSEMBLER_OUPUT_FILE;
-    public static final String DEFAULT_CA65_PARAM = "-o "+ASSEMBLER_OUPUT_FILE;
     public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ASSEMBLER_START_ADDRESS+" "+ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ASSEMBLER_COMPRESSED_FILE;    
     public static final String DEFAULT_PUCRUNCH_PARAM = ASSEMBLER_UNCOMPRESSED_FILE+" "+ASSEMBLER_COMPRESSED_FILE+" -x"+ASSEMBLER_START_ADDRESS;
-    public static final String DEFAULT_KICKASS_PARAM = ASSEMBLER_INPUT_FILE;
     
     public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";

@@ -52,6 +52,11 @@ class Assembler_ca65 implements Assembler
     public String name() {
         return "ca65";
     }
+
+    @Override
+    public String fileName() {
+        return "ca65";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_CA65.
      * @return the unique assembler ID.
@@ -114,6 +119,11 @@ class Assembler_ca65 implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return new String[] {};
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return fp + " -o " + OUTPUT_FILE;
     }
 
     @Override

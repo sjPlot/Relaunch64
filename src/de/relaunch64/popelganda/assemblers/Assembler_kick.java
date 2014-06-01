@@ -61,6 +61,11 @@ class Assembler_kick implements Assembler
     public String name() {
         return "Kick Assembler";
     }
+
+    @Override
+    public String fileName() {
+        return "kickass";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_KICKASS.
      * @return the unique assembler ID.
@@ -123,6 +128,11 @@ class Assembler_kick implements Assembler
     @Override
     public String[] getScriptKeywords() {
         return scriptKeywords;
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return "java -jar " + fp + " INPUT_FILE";
     }
 
     @Override

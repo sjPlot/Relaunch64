@@ -75,6 +75,11 @@ class Assembler_64tass implements Assembler {
     public String name() {
         return "64tass";
     }
+
+    @Override
+    public String fileName() {
+        return "64tass";
+    }
     /**
      * Assembler ID. Equals ConstantsR64.ASM_64TASS.
      * @return the unique assembler ID.
@@ -137,6 +142,11 @@ class Assembler_64tass implements Assembler {
     @Override
     public String[] getScriptKeywords() {
         return scriptKeywords;
+    }
+
+    @Override
+    public String getDefaultCommandLine(String fp) {
+        return fp + " -C -a -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
     }
 
     @Override

@@ -66,6 +66,16 @@ public class Assemblers {
         }
     }
 
+    public static Assembler byFileName(String name) {
+        String lower = name.toLowerCase();
+        for (Assembler i : assemblers) {
+            if (lower.contains(i.fileName())) {
+                return i;
+            }
+        }
+        return null;
+    }
+
     public static String[] names() {
         ArrayList<String> names = new ArrayList <>();
         for (Assembler i : assemblers) {
