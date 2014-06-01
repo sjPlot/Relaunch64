@@ -482,7 +482,7 @@ public class EditorPanes {
      * method when user changes tab size. This method takes immediately
      * effect and changes the indent size of all opened editor panes.
      * 
-     * @param tabSize 
+     * @param tabSize the new indent size for tabs, measured in characters
      */
     public void setTabs(int tabSize) {
         for (EditorPaneProperties ea : editorPaneArray) {
@@ -492,13 +492,24 @@ public class EditorPanes {
         }
     }
     /**
+     * Returns the active editor pane (instance of {@code RL64TextArea}). An editor pane
+     * is considered as <em>active</em> if it's displayed in the currently selected tab.
      * 
-     * @return 
+     * @return Returns the active editor pane, or {@code null} if an error occured.
      */
     public RL64TextArea getActiveEditorPane() {
         // get selected tab
         return getEditorPane(tabbedPane.getSelectedIndex());
     }
+    /**
+     * Returns the editor pane (instance of {@code RL64TextArea}) with the index number
+     * {@code index}. The instances of RL64TextAreas are stored in the 
+     * {@code editorPaneArray}, which is an array of {@link EditorPaneProperties}.
+     * 
+     * @param index the index number of the editor pane that should be retrieved.
+     * @return Returns the editor pane with the index number {@code index}, 
+     * or {@code null} if an error occured or {@code index} is out of bounds.
+     */
     public RL64TextArea getEditorPane(int index) {
         try {
             // get editor pane
@@ -511,15 +522,26 @@ public class EditorPanes {
         }
     }
     /**
+     * Returns the active sourcecode, ie the content of the currently active editor pane 
+     * (instance of {@code RL64TextArea}). An editor pane
+     * is considered as <em>active</em> if it's displayed in the currently selected tab.
      * 
-     * @return 
+     * @return the source code (content) of the currently active editor pane.
      */
     public String getActiveSourceCode() {
         return getSourceCode(getActiveEditorPane());
     }
+    /**
+     * Returns the sourcecode, ie the content of the editor pane 
+     * (instance of {@code RL64TextArea}) with the index number
+     * {@code index}. The instances of RL64TextAreas are stored in the 
+     * {@code editorPaneArray}, which is an array of {@link EditorPaneProperties}.
+     * 
+     * @param index
+     * @return the source code (content) of the editor pane with the index number {@code index}.
+     */
     public String getSourceCode(int index) {
-        RL64TextArea ep = getEditorPane(index);
-        return getSourceCode(ep);
+        return getSourceCode(getEditorPane(index));
     }
     public String getSourceCode(RL64TextArea ep) {
         if (ep!=null) {
