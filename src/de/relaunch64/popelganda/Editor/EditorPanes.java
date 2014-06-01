@@ -702,7 +702,7 @@ public class EditorPanes {
                     if (CR) buf = buf.replaceAll("\r", "\n");
                     boolean LF = buf.contains("\n");
                     // if yes, add new tab
-                    int selectedTab = addNewTab(filepath, buf, getFileName(filepath), assembler, script)-1;
+                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script)-1;
                     // set cursor
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     setCursor(epp.getEditorPane());
@@ -719,6 +719,7 @@ public class EditorPanes {
     }
     /**
      * Returns the index of the tab with the file {@code fp}.
+     * 
      * @param fp The file path of a file which should be found in all
      * opened tabs.
      * @return The index of the tab with the file {@code fp}, or
@@ -732,13 +733,23 @@ public class EditorPanes {
         return -1;
     }
     /**
+     * Saves the file from the currently selected tab to the filepath {@code filepath}.
      * 
-     * @param filepath
-     * @return 
+     * @param filepath the filepath where to save the file.
+     * @return {@code true} if file was successfully saved, {@code false} otherwise.
      */
     private boolean saveFile(File filepath) {
         return saveFile(tabbedPane.getSelectedIndex(), filepath, false);
     }
+    /**
+     * Saves the file from the tab {@code selectedTab} to the filepath {@code filepath}.
+     * 
+     * @param selectedTab the index number of the tab whose content should be saved.
+     * @param filepath the filepath where to save the file.
+     * @param ignoreModified when new files are created (new tab), they have no specific modified-status.
+     * in such cases, for instance, use {@code true} for this parameter to force saving, even if file is not modified.
+     * @return {@code true} if file was successfully saved, {@code false} otherwise.
+     */
     private boolean saveFile(int selectedTab, File filepath, boolean ignoreModified) {
         // check whether we have any tab selected
         if (selectedTab!=-1) {
@@ -782,8 +793,9 @@ public class EditorPanes {
         return true;
     }
     /**
+     * Saves the content of the currently selected tab.
      * 
-     * @return 
+     * @return {@code true} if file was successfully saved, {@code false} otherwise.
      */
     public boolean saveFile() {
         // retrieve current tab
@@ -802,6 +814,12 @@ public class EditorPanes {
         }
         return false;
     }
+    /**
+     * Saves all opened files.
+     * 
+     * @return {@code true} if all files could be saved properly, {@code false} if at least
+     * one save attempt failed.
+     */
     public boolean saveAllFiles() {
         // global error
         boolean allOk = true;
@@ -818,14 +836,22 @@ public class EditorPanes {
         }
         return allOk;
     }
+    /**
+     * Saves the file / content of the current selected tab under a new
+     * file name and path.
+     * 
+     * @return {@code true} if file was successfully saved, {@code false} otherwise.
+     */
     public boolean saveFileAs() {
         // retrieve current tab
         return saveFileAs(tabbedPane.getSelectedIndex());
     }
     /**
+     * Saves the file / content of the tab with the index {@code selectedTab} under a new
+     * file name and path.
      * 
-     * @param selectedTab
-     * @return 
+     * @param selectedTab the index number of the tab whose content should be saved.
+     * @return {@code true} if file was successfully saved, {@code false} otherwise.
      */
     public boolean saveFileAs(int selectedTab) {
         // check whether we have any tab selected
@@ -845,7 +871,7 @@ public class EditorPanes {
             // check for valid value
             if (fileToSave!=null) {
                 // check whether the user entered a file extension. if not,
-                // add ".zkn3" as extension
+                // add ".asm" as extension
                 if (!FileTools.hasValidFileExtension(fileToSave)) {
                     fileToSave = new File(fileToSave.getPath()+".asm");
                 }
@@ -881,13 +907,15 @@ public class EditorPanes {
         return false;
     }
     /**
+     * Sets the title of the tab with the index {@code index}.
      * 
-     * @param index
-     * @param fp 
+     * @param index the index of the tab whose title should be changed.
+     * @param fp the file which is associated with the tab. used to set
+     * the file path as tool tip of the tab.
      */
     private void setTabTitle(int index, File fp) {
         // get filename
-        String fn = getFileName(fp);
+        String fn = FileTools.getFileName(fp);
         // check whether we have any valid filepath at all
         if (fn!=null) {
             // set file-name and app-name in title-bar
@@ -901,7 +929,9 @@ public class EditorPanes {
         }
     }
     /**
-     * 
+     * This method does not really do what the name might suggests. If another tab is
+     * selected, this method updates the combo boxes for assembler and user scripts
+     * whith the values that are associated with the selected editor pane (tab).
      */
     public void updateTabbedPane() {
         // get selectect tab
@@ -919,26 +949,6 @@ public class EditorPanes {
         }
     }
     /**
-     * Gets the filename's name of a file-path (w/o extension).
-     * 
-     * @param f A filepath.
-     * @return the filename's name of a file-path (w/o extension).
-     */
-    private String getFileName(File f) {
-        // check whether we have any valid filepath at all
-        if (f!=null && f.exists()) {
-            String fname = f.getName();
-            // find file-extension
-            int extpos = fname.lastIndexOf(".");
-            // set the filename as title
-            if (extpos!=-1) {
-                // return file-name
-                return fname.substring(0,extpos);
-            }
-        }
-        return null;
-    }
-    /**
      * The count of editor panes.
      * 
      * @return The count of editor panes.
@@ -950,7 +960,8 @@ public class EditorPanes {
      * Checks whether the file / editor pane on the currently activated
      * JTabbedPane's selected tab is modified or not.
      * 
-     * @return 
+     * @return {@code true} if editor pane's content of the selected JTabbedPane's tab
+     * is modified.
      */
     public boolean isModified() {
         return isModified(tabbedPane.getSelectedIndex());
@@ -959,7 +970,7 @@ public class EditorPanes {
      * Checks whether the file / editor pane on the JTabbedPane with the
      * index {@code selectedTab} is modified or not.
      * 
-     * @param selectedTab
+     * @param selectedTab the tab which should be checked for modifications
      * @return {@code true} if editor pane's content on the JTabbedPane's tab
      * with index {@code selectedTab} is modified.
      */
@@ -975,12 +986,13 @@ public class EditorPanes {
     }
     /**
      * Closes the current activated editor pane file. If editor content is
-     * modified, an JOptionPane will popup and asks for saving changes.
+     * modified, a JOptionPane will popup and asks for saving changes.
      * After that, the currently activated editor pane will be removed
      * from the {@link #editorPaneArray}.
      * 
      * <b>Note that the currently selected tab from the {@link #tabbedPane}
-     * has to be removed manually!</b>
+     * has to be removed manually (e.g. to be done in the method that calls
+     * this method)!</b>
      * 
      * @return {@code true} if editor pane (file) was successfully closed.
      */
@@ -1028,6 +1040,12 @@ public class EditorPanes {
         // insert string
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
     }
+    /**
+     * Inserts a breakpoint macro to make use of VICE's debugging feature.
+     * Currently only works with KickAss, should be rewritten.
+     * 
+     * @param assembler not used, only applies to kickass
+     */
     public void insertBreakPoint(Assembler assembler) {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
@@ -1038,7 +1056,12 @@ public class EditorPanes {
         // insert string
         insertString(insertString, ep.getLineStartOffset(ep.getCaretLine()));
     }
+    /**
+     * Inserts a breakpoint macro to make use of VICE's debugging feature.
+     * Currently only works with KickAss, should be rewritten.
+     */
     public void insertBreakPoint() {
+        // TODO may be more generic, see http://codebase64.org/doku.php?id=base:using_the_vice_monitor
         insertBreakPoint(getActiveAssembler());
     }
     /**
@@ -1058,19 +1081,48 @@ public class EditorPanes {
         catch (Exception e) {
         }
     }
+    /**
+     * Inserts the string {@code text} at the caret position
+     * into the currently activated editor pane.
+     * An editor pane is considered as <em>active</em> if it's displayed in the currently selected tab.
+     * 
+     * @param text the content that should be pasted into the source
+     */
     public void insertString(String text) {
         insertString(text, getActiveEditorPane().getCaretPosition());
     }
+    /**
+     * Inserts the string {@code text} at the specific caret position {@code position}
+     * into the currently activated editor pane.
+     * An editor pane is considered as <em>active</em> if it's displayed in the currently selected tab.
+     * 
+     * @param text the content that should be pasted into the source
+     * @param position the caret position where to paste the content ({@code text}).
+     */
     public void insertString(String text, int position) {
         JEditBuffer buffer = getActiveEditorPane().getBuffer();
         buffer.insert(position, text);
     }
+    /**
+     * (Un-)comments the current text selection.
+     */
     public void commentLine() {
         EditorPaneTools.commentLine(getActiveEditorPane(), getActiveAssembler().getLineComment());
     }
+    /**
+     * Gets the currently selected tab.
+     * 
+     * @return the index number of the currently selected tab
+     */
     public int getSelectedTab() {
         return tabbedPane.getSelectedIndex();
     }
+    /**
+     * Selects the tab with the index {@code tab}. May be used on compiling a source, to open 
+     * a certain tab, which contains errors.
+     * 
+     * @param tab the index of the tab that should be selected.
+     */
     public void setSelectedTab(int tab) {
         try {
             tabbedPane.setSelectedIndex(tab);
@@ -1078,21 +1130,37 @@ public class EditorPanes {
         catch (IndexOutOfBoundsException ex) {
         }
     }
+    /**
+     * Scrolls the caret to the next label (if any) in the current editor pane. If last label
+     * is reached, wraps around and jumps to first label.
+     */
     public void gotoNextLabel() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT, 
                 getActiveEditorPane().getCaretLine()+1,
                 LabelExtractor.getLineNumbers(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).labels)), 1);
     }
+    /**
+     * Scrolls the caret to the previous label (if any) in the current editor pane. If first label
+     * is reached, wraps around and jumps to last label.
+     */
     public void gotoPrevLabel() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                 getActiveEditorPane().getCaretLine()+1,
                 LabelExtractor.getLineNumbers(LabelExtractor.getLabels(getActiveSourceCode(), getActiveAssembler(), 0).labels)), 1);
     }
+    /**
+     * Scrolls the caret to the next section (if any) in the current editor pane. If last section
+     * is reached, wraps around and jumps to first section.
+     */
     public void gotoNextSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_NEXT,
                 getActiveEditorPane().getCaretLine()+1,
                 SectionExtractor.getSectionLineNumbers(getActiveSourceCode(), getActiveAssembler().getLineComment())), 1);
     }
+    /**
+     * Scrolls the caret to the previous section (if any) in the current editor pane. If first section
+     * is reached, wraps around and jumps to last section.
+     */
     public void gotoPrevSection() {
         gotoLine(EditorPaneTools.findJumpToken(DIRECTION_PREV,
                 getActiveEditorPane().getCaretLine()+1,
