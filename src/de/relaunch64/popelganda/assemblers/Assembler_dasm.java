@@ -126,10 +126,11 @@ class Assembler_dasm implements Assembler
 
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
-        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
+        labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b).*"); // always in first column
+        Pattern p = Pattern.compile("(?i)(?<label>^[a-z_.][a-z0-9_]*\\b)?(?:^\\s*(?<directive>(?:mac|endm)\\b)\\s*(?<name>[a-z_][a-z0-9_]*\\b))?.*"); // label always in first column
         String line;
+        boolean macro = false;
         boolean scopeFound = false;
         try {
             while ((line = lineReader.readLine()) != null) {
@@ -138,7 +139,7 @@ class Assembler_dasm implements Assembler
                 if (!m.matches()) continue;
                 String label = m.group("label");
 
-                if (label != null) {
+                if (label != null && !macro) {
                     if (lineNumber > 0) {
                         if (label.charAt(0) == '.') { // local label
                             if (!scopeFound) localLabelValues.put(label, lineReader.getLineNumber());
@@ -150,14 +151,27 @@ class Assembler_dasm implements Assembler
                             localLabelValues.clear();
                         }
                     }
-                    labelValues.put(label, lineReader.getLineNumber());
+                    returnValue.labels.put(label, lineReader.getLineNumber());
+                }
+
+                String directive = m.group("directive");
+                if (directive == null) continue;
+                switch (directive.toLowerCase()) {
+                    case "mac":
+                        macro = true;
+                        label = m.group("name");
+                        if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
+                        break;
+                    case "endm":
+                        macro = false;
+                        break;
                 }
             }
         }
         catch (IOException ex) {
         }
-        labelValues.putAll(localLabelValues);
-        return new labelList(labelValues, null, null);
+        returnValue.labels.putAll(localLabelValues);
+        return returnValue;
     }
 
     @Override

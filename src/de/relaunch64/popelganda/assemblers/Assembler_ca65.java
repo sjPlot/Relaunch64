@@ -140,7 +140,7 @@ class Assembler_ca65 implements Assembler
         LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
         LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
-        Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope|macro|endmacro)\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*)?.*");
+        Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope|macro|endmacro)\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -152,23 +152,24 @@ class Assembler_ca65 implements Assembler
 
                 String label = m.group("label");
                 if (label != null) {
+                    boolean local = (label.charAt(0) == '@');
                     if (lineNumber > 0) {
-                        if (label.charAt(0) == '@') { // local label
+                        if (local) { // local label
                             if (!scopeFound) localLabelValues.put(label, lineReader.getLineNumber());
-                            continue;
-                        } 
-                        if (lineNumber < lineReader.getLineNumber()) {
-                            scopeFound = true;
-                        } else {
-                            localLabelValues.clear();
+                        }  else {
+                            if (lineNumber < lineReader.getLineNumber()) {
+                                scopeFound = true;
+                            } else {
+                                localLabelValues.clear();
+                            }
                         }
-                    } else {
-                        if (label.charAt(0) == '@') continue; // ignore
                     }
 
-                    LinkedList<String> newlabel = (LinkedList)scopes.clone();
-                    newlabel.addLast(label);
-                    labels.add(new lineInfo(newlabel, lineReader.getLineNumber()));
+                    if (!local) {
+                        LinkedList<String> newlabel = (LinkedList)scopes.clone();
+                        newlabel.addLast(label);
+                        labels.add(new lineInfo(newlabel, lineReader.getLineNumber()));
+                    }
                 }
 
                 String directive = m.group("directive"); // track scopes
