@@ -138,9 +138,9 @@ class Assembler_acme implements Assembler
 
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
-        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
+        labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b)?\\s*(?<directive>!(?:zone|zn|subzone|sz)\\b)?.*");
+        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b)?\\s*(?<directive>!(?:zone|zn|subzone|sz|macro)\\b)?\\s*(?<name>[a-zA-Z_][a-zA-Z0-9_]*\\b)?.*");
         String line;
         boolean scopeFound = false;
         try {
@@ -158,24 +158,31 @@ class Assembler_acme implements Assembler
                         } 
                     }
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    labelValues.put(label, lineReader.getLineNumber());
+                    returnValue.labels.put(label, lineReader.getLineNumber());
                 }
 
                 String directive = m.group("directive"); // track zones
                 if (directive == null) continue;
-                if (lineNumber > 0) {    // TODO: support subzones
-                    if (lineNumber < lineReader.getLineNumber()) {
-                        scopeFound = true;
-                    } else {
-                        localLabelValues.clear();
-                    }
+                switch (directive) {
+                    case "!macro":
+                        label = m.group("name");
+                        if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
+                        break;
+                    default:
+                        if (lineNumber > 0) {    // TODO: support subzones
+                            if (lineNumber < lineReader.getLineNumber()) {
+                                scopeFound = true;
+                            } else {
+                                localLabelValues.clear();
+                            }
+                        }
                 }
             }
         }
         catch (IOException ex) {
         }
-        labelValues.putAll(localLabelValues);
-        return new labelList(labelValues, null, null);
+        returnValue.labels.putAll(localLabelValues);
+        return returnValue;
     }
 
     @Override
