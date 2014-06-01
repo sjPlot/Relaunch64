@@ -94,16 +94,15 @@ public class EditorPanes {
         jComboBoxScripts = cbs;
     }
     /**
-     * Adds a new editor pane to a new created tab of the tabbed pane. Usually only called from 
-     * the method {@link #addNewTab(java.io.File, java.lang.String, java.lang.String, int)} that also
-     * creates a new tab in the tabbed pane.
+     * Adds a new editor pane to a new created tab of the tabbed pane.
      * 
      * @param fp the file path to a file, usually used when a new file is opened via menu or drag&drop
      * @param content the content (e.g. the content of the loaded file) that should be set as default
      * text in the editor pane
      * @param title Tab title
      * @param assembler the default assembler for this editor pane, so the correct syntax highlighting is applied
-     * @param script
+     * @param script the current selected user script that will be associated with 
+     * this sourcecode on init
      * @return the new total amount of existing tabs after this tab has been added.
      */
     public int addNewTab(File fp, String content, String title, Assembler assembler, int script) {
@@ -124,8 +123,9 @@ public class EditorPanes {
         editorPane.setAssemblyMode();
         // add mode to buffer
         JEditBuffer buffer = editorPane.getBuffer();
-        // set content, if available
+        // limit undo, so initial text setting will not be undoable
         buffer.setUndoLimit(0); // haha, cheater! ;-)
+        // set content, if available
         if (content!= null && !content.isEmpty()) {
             editorPane.setText(content);
         }
@@ -133,18 +133,6 @@ public class EditorPanes {
             editorPane.setText("");
         }
         buffer.setUndoLimit(100);
-        // add caret listener
-        /**
-         * JDK 8 version of caret listener
-         */
-//        editorPane.addCaretListener((javax.swing.event.CaretEvent e) -> {
-//            // retrieve selection
-//            int selection = e.getMark()-e.getDot();
-//            // here we have selected text
-//            if (selection!=0) {
-//                mainFrame.autoConvertNumbers(editorPane.getSelectedText());
-//            }
-//        });
         // add caret listener
         editorPane.addCaretListener(new javax.swing.event.CaretListener() {
             @Override public void caretUpdate(javax.swing.event.CaretEvent e) {
@@ -228,6 +216,14 @@ public class EditorPanes {
     public int getLineNumber(RL64TextArea ep, int caretPosition) {
         return ep.getLineOfOffset(caretPosition);
     }
+    /**
+     * Genereic goto line function. Scrolls the active editor pane
+     * to the line {@code line} and sets the caret to the column
+     * {@code column}.
+     * 
+     * @param line
+     * @param column 
+     */
     public void gotoLine(int line, int column) {
         if (line > 0) {
             // get text area
@@ -276,6 +272,10 @@ public class EditorPanes {
             ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");            
         }
     }
+    /**
+     * Inserts fold tags into the source. Selected text will be surrounded by
+     * fold tags.
+     */
     public void insertFolds() {
         // get current editor
         RL64TextArea ep = getActiveEditorPane();
@@ -359,8 +359,13 @@ public class EditorPanes {
         gotoLine(FunctionExtractor.getMacros(getSourceCode(selectedTab), getActiveAssembler()), name);
     }
     /**
+     * Checks if the selected assembler (from the combo box) differs from the
+     * editor pane's associated assmbler. If yes, consider calling
+     * {@link #changeAssembler(de.relaunch64.popelganda.assemblers.Assembler, int)}
+     * to change the highlighting etc.
      * 
-     * @return 
+     * @return {@code true} if user-selected assembler and editor pane's assembler
+     * differ.
      */
     public boolean checkIfSyntaxChangeRequired() {
         // get selected assembler
@@ -372,6 +377,8 @@ public class EditorPanes {
         return (editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID() != selectedComp);
     }
     /**
+     * Changes the assembler that is associated with the current activated
+     * editor pane. Furtherm
      * 
      * @param assembler 
      * @param script
