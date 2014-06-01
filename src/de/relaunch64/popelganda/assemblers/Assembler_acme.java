@@ -208,7 +208,7 @@ class Assembler_acme implements Assembler
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         1,
-                        lineReader.getLineNumber(),
+                        lineReader.getLineNumber(), 1,
                         m.group("file")
                         );
                 errors.add(e);

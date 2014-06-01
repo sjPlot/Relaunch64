@@ -45,6 +45,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
+import javax.swing.text.Highlighter.HighlightPainter;
+import javax.swing.text.DefaultHighlighter;
+import java.awt.Color;
 
 /**
  *
@@ -59,11 +62,13 @@ public class ErrorHandler {
         public final int line;
         public final int column;
         public final int logline;
+        public final int loglen;
         public final File file;
-        public ErrorInfo(int line, int column, int logline, String file) {
+        public ErrorInfo(int line, int column, int logline, int loglen, String file) {
             this.line = line;
             this.column = column;
             this.logline = logline;
+            this.loglen = loglen;
             this.file = new File(file);
         }
     }
@@ -163,27 +168,34 @@ public class ErrorHandler {
         return null;
     }
     public void scrollToErrorInLog(JTextArea ta) {
-        int line = errors.get(errorIndex).logline;
+        int line = errors.get(errorIndex).logline - 1;
+        int len = errors.get(errorIndex).loglen;
+        if (line < 0) line = 0;
         try {
             // retrieve element and check whether line is inside bounds
             Element e = ta.getDocument().getDefaultRootElement().getElement(line);
             if (e!=null) {
                 // retrieve caret of requested line
-                int caret = e.getStartOffset();
+                int caret = e.getStartOffset(), start, end;
                 // set new caret position
                 ta.setCaretPosition(caret);
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
                 // scroll some lines back, if possible
-                e = ta.getDocument().getDefaultRootElement().getElement(line);
+                e = ta.getDocument().getDefaultRootElement().getElement(line + len);
                 if (e!=null) caret = e.getStartOffset();
+                end = caret;
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
                 // scroll some lines further, if possible
-                e = ta.getDocument().getDefaultRootElement().getElement((line > 1) ? (line-2) : 0);
+                e = ta.getDocument().getDefaultRootElement().getElement(line);
                 if (e!=null) caret = e.getStartOffset();
+                start = caret;
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
+                HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
+                ta.getHighlighter().removeAllHighlights();
+                ta.getHighlighter().addHighlight(start, end, painter);
             }
         }
         catch(BadLocationException | IllegalArgumentException | IndexOutOfBoundsException ex) {

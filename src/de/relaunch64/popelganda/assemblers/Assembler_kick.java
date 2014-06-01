@@ -180,7 +180,7 @@ class Assembler_kick implements Assembler
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         Integer.parseInt(m.group("col")),
-                        lineReader.getLineNumber(),
+                        lineReader.getLineNumber() - 1, 2,
                         m.group("file")
                         );
                 errors.add(e);
