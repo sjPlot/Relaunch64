@@ -404,6 +404,10 @@ public class EditorPanes {
             editorpane.setSyntaxScheme();
         }
     }
+    /**
+     * Updates color schemes for all opened editor panes. Call this method
+     * when user selects a new syntax highlight color scheme.
+     */
     public void updateColorScheme() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
@@ -411,6 +415,10 @@ public class EditorPanes {
             editorpane.setSyntaxScheme();
         }
     }
+    /**
+     * Updates assembly mode for all opened editor panes. Call this
+     * method when user changes the assembly mode.
+     */
     public void updateAssemblyMode() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
@@ -418,6 +426,18 @@ public class EditorPanes {
             editorpane.setAssemblyMode();
         }
     }
+    /**
+     * Updates line number alignment for gutters of all opened editor panes. Call this
+     * method when user changes the line number alignment.
+     * 
+     * @param alignment the number alignment. Use one of following constants:
+     * <ul>
+     * <li>Gutter.LEFT</li>
+     * <li>Gutter.CENTER</li>
+     * <li>Gutter.RIGHT</li>
+     * </ul>
+     * or use {@code Settings.getLineNumerAlignment()}.
+     */
     public void setLineNumberAlignment(int alignment) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
@@ -425,6 +445,18 @@ public class EditorPanes {
             editorpane.setLineNumberAlignment(alignment);
         }
     }
+    /**
+     * Updates anti aliasing for all opened editor panes. Call this
+     * method when user changes the anti alias style.
+     * 
+     * @param antialias the alias style. Use one of following constants:
+     * <ul>
+     * <li>AntiAlias.STANDARD</li>
+     * <li>AntiAlias.SUBPIXEL</li>
+     * <li>AntiAlias.NONE</li>
+     * </ul>
+     * or use {@code Settings.getAntiAlias()}.
+     */    
     public void setAntiAlias(String antialias) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
@@ -432,6 +464,12 @@ public class EditorPanes {
             editorpane.setTextAntiAlias(antialias);
         }
     }
+    /**
+     * Updates font settings for all opened editor panes. Call this
+     * method when user changes font type or size.
+     * 
+     * @param mf the new font.
+     */
     public void setFonts(Font mf) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
@@ -439,6 +477,13 @@ public class EditorPanes {
             editorpane.setFonts(mf);
         }
     }
+    /**
+     * Updates the tab sizefor all opened editor panes. Call this
+     * method when user changes tab size. This method takes immediately
+     * effect and changes the indent size of all opened editor panes.
+     * 
+     * @param tabSize 
+     */
     public void setTabs(int tabSize) {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
