@@ -47,6 +47,14 @@ public class Assemblers {
     public static final Assembler ASM_DASM = new Assembler_dasm();
     public static final Assembler ASM_TMPX = new Assembler_tmpx();
 
+    public static final int ID_KICKASS = 0;
+    public static final int ID_ACME = 1;
+    public static final int ID_64TASS = 2;
+    public static final int ID_CA65 = 3;
+    public static final int ID_DREAMASS = 4;
+    public static final int ID_DASM = 5;
+    public static final int ID_TMPX = 6;
+    
     private static final Assembler assemblers[] = {
         ASM_KICKASSEMBLER,
         ASM_ACME,

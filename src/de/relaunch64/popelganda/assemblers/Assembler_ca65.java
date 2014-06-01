@@ -58,12 +58,12 @@ class Assembler_ca65 implements Assembler
         return "ca65";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_CA65.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 3;
+        return Assemblers.ID_CA65;
     }
 
     @Override

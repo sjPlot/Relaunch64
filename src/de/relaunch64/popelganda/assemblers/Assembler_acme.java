@@ -68,12 +68,12 @@ class Assembler_acme implements Assembler
         return "acme";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_ACME.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 1;
+        return Assemblers.ID_ACME;
     }
 
     @Override

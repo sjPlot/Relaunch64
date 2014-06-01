@@ -56,12 +56,12 @@ class Assembler_dasm implements Assembler
         return "dasm";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_DASM.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 5;
+        return Assemblers.ID_DASM;
     }
 
     @Override

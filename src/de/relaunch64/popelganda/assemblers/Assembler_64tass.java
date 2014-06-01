@@ -81,12 +81,12 @@ class Assembler_64tass implements Assembler {
         return "64tass";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_64TASS.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 2;
+        return Assemblers.ID_64TASS;
     }
 
     @Override

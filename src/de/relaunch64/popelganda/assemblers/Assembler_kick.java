@@ -67,12 +67,12 @@ class Assembler_kick implements Assembler
         return "kickass";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_KICKASS.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 0;
+        return Assemblers.ID_KICKASS;
     }
 
     @Override

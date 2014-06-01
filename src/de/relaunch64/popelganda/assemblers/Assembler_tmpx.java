@@ -68,12 +68,12 @@ class Assembler_tmpx implements Assembler
         return "tmpx";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_TMPX.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 6;
+        return Assemblers.ID_TMPX;
     }
 
     @Override

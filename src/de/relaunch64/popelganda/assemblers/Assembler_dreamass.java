@@ -70,12 +70,12 @@ class Assembler_dreamass implements Assembler
         return "dreamass";
     }
     /**
-     * Assembler ID. Equals ConstantsR64.ASM_DREAMASS.
+     * Assembler ID.
      * @return the unique assembler ID.
      */
     @Override
     public int getID() {
-        return 4;
+        return Assemblers.ID_DREAMASS;
     }
 
     @Override
