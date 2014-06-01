@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
 public class SectionExtractor {
     public static LinkedHashMap getSections(String source, String assemblerComment) {
         // prepare return values
-        LinkedHashMap<Integer, String> sectionValues = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> sectionValues = new LinkedHashMap<>();
         // init vars
         int lineNumber = 0;
         String line;
@@ -75,7 +75,7 @@ public class SectionExtractor {
                     // check if line is a comment line and contains section pattern
                     if (line.startsWith(assemblerComment) && m.find()) {
                         // if yes, add to return value
-                        sectionValues.put(lineNumber, m.group(1));
+                        sectionValues.put(m.group(1), lineNumber);
                     }
                 }
             }
@@ -84,17 +84,17 @@ public class SectionExtractor {
         }
         return sectionValues;
     }
-    public static ArrayList getSectionNames(String source, String assemblerComment) {
+    public static ArrayList getSectionLineNumbers(String source, String assemblerComment) {
         // init return value
-        ArrayList<String> retval = new ArrayList<>();
+        ArrayList<Integer> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getSections(source, assemblerComment);
+        LinkedHashMap<String, Integer> map = getSections(source, assemblerComment);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections
-            Collection<String> c = map.values();
+            Collection<Integer> c = map.values();
             // create iterator
-            Iterator<String> i = c.iterator();
+            Iterator<Integer> i = c.iterator();
             // add all ssction names to return value
             while(i.hasNext()) retval.add(i.next());
             // return result
@@ -102,17 +102,17 @@ public class SectionExtractor {
         }
         return null;
     }
-    public static ArrayList getSectionLineNumbers(String source, String assemblerComment) {
+    public static ArrayList getSectionNames(String source, String assemblerComment) {
         // init return value
-        ArrayList<Integer> retval = new ArrayList<>();
+        ArrayList<String> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getSections(source, assemblerComment);
+        LinkedHashMap<String, Integer> map = getSections(source, assemblerComment);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections
-            Set<Integer> ks = map.keySet();
+            Set<String> ks = map.keySet();
             // create iterator
-            Iterator<Integer> i = ks.iterator();
+            Iterator<String> i = ks.iterator();
             // add all ssction names to return value
             while(i.hasNext()) retval.add(i.next());
             // return result

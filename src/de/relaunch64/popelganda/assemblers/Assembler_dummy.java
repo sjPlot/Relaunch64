@@ -119,13 +119,8 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
-        return new LinkedHashMap<>();
-    }
-
-    @Override
-    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
-        return new LinkedHashMap<>();
+    public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
+        return new labelList(null, null, null);
     }
 
     @Override

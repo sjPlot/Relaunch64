@@ -137,9 +137,9 @@ class Assembler_acme implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
-        LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
-        LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
+    public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
+        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z_.][a-zA-Z0-9_]*\\b)?\\s*(?<directive>!(?:zone|zn|subzone|sz)\\b)?.*");
         String line;
         boolean scopeFound = false;
@@ -153,17 +153,12 @@ class Assembler_acme implements Assembler
                 if (label != null) {
                     if (lineNumber > 0) {
                         if (label.charAt(0) == '.') { // local label
-                            if (scopeFound) continue;
-                            if (!localLabelValues.containsValue(label)) {
-                                localLabelValues.put(lineReader.getLineNumber(), label); // add if not listed already
-                            }
+                            if (!scopeFound) localLabelValues.put(label, lineReader.getLineNumber());
                             continue;
                         } 
                     }
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    if (!labelValues.containsValue(label)) {
-                        labelValues.put(lineReader.getLineNumber(), label); // add if not listed already
-                    }
+                    labelValues.put(label, lineReader.getLineNumber());
                 }
 
                 String directive = m.group("directive"); // track zones
@@ -180,12 +175,7 @@ class Assembler_acme implements Assembler
         catch (IOException ex) {
         }
         labelValues.putAll(localLabelValues);
-        return labelValues;
-    }
-
-    @Override
-    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
-        return new LinkedHashMap<>();
+        return new labelList(labelValues, null, null);
     }
 
     @Override

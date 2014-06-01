@@ -149,22 +149,27 @@ class Assembler_64tass implements Assembler {
         return fp + " -C -a -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
     }
 
+    private enum labelType {
+        LABEL, FUNCTION, MACRO
+    }
+
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
+    public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         class lineInfo {
             final LinkedList<String> name;
             final int line;
-            lineInfo(LinkedList<String> name, int line) {
+            final labelType type;
+            lineInfo(LinkedList<String> name, int line, labelType type) {
                 this.name = name;
                 this.line = line;
+                this.type = type;
             }
         }
-        LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
-        LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
-        LinkedList<lineInfo> labels = new LinkedList<>();
+        labelList returnValue = new labelList(null, null, null);
+        LinkedList<lineInfo> labels = new LinkedList<>(), localLabels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm too old to understand it...
-        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend)\\b)?.*");
+        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -175,69 +180,108 @@ class Assembler_64tass implements Assembler {
                 if (!m.matches()) continue;
 
                 String label = m.group("label");
+                LinkedList<String> newlabel;
+                boolean local;
                 if (label != null) {
-                    if (lineNumber > 0) {
-                        if (label.charAt(0) == '_') { // local label
-                            if (scopeFound || lineNumber < 1) continue;
-                            if (!localLabelValues.containsValue(label)) {
-                                localLabelValues.put(lineReader.getLineNumber(), label); // add if not listed already
-                            }
-                            continue;
-                        } 
-                        if (lineNumber < lineReader.getLineNumber()) {
-                            scopeFound = true;
-                        } else {
-                            localLabelValues.clear();
-                        }
-                    } else {
-                        if (label.charAt(0) == '_') continue; // ignore
-                    }
+                    local = (label.charAt(0) == '_');
 
-                    if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) {
-                        continue; // ignore opcodes
+                    if (local) {
+                        newlabel = new LinkedList();
+                    } else {
+                        if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) {
+                            continue; // ignore opcodes
+                        }
+                        newlabel = (LinkedList)scopes.clone();
                     }
-                    LinkedList<String> newlabel = (LinkedList)scopes.clone();
                     newlabel.addLast(label);
-                    labels.add(new lineInfo(newlabel, lineReader.getLineNumber()));
+                } else {
+                    local = false;
+                    newlabel = null;
                 }
 
                 String directive = m.group("directive"); // track scopes
-                if (directive == null) continue;
-                switch (directive.toLowerCase()) {
-                    case ".block":
-                    case ".proc":
-                        if (label != null) scopes.add(label); // new scope
-                        else scopes.add("");
-                        break;
-                    case ".bend":
-                    case ".pend":
-                        if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
-                        break;
+                labelType type = labelType.LABEL;
+                if (directive != null) {
+                    switch (directive.toLowerCase()) {
+                        case ".block":
+                        case ".proc":
+                            if (label != null) scopes.add(label); // new scope
+                            else scopes.add("");
+                            break;
+                        case ".bend":
+                        case ".pend":
+                        case ".endf":
+                        case ".endm":
+                            if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
+                            break;
+                        case ".macro":
+                        case ".segment":
+                            type = labelType.MACRO;
+                            scopes.add("");
+                            break;
+                        case ".function":
+                            type = labelType.FUNCTION;
+                            scopes.add("");
+                            break;
+                    }
+                }
+                if (newlabel != null) {
+                    if (local) {
+                        if (!scopeFound && lineNumber > 0) localLabels.add(new lineInfo(newlabel, lineReader.getLineNumber(), type));
+                    } else {
+                        labels.add(new lineInfo(newlabel, lineReader.getLineNumber(), type));
+                        if (!scopeFound && lineNumber > 0) {
+                            if (lineNumber < lineReader.getLineNumber()) {
+                                scopeFound = true;
+                            } else {
+                                localLabels.clear();
+                            }
+                        }
+                    }
                 }
             }
         }
         catch (IOException ex) {
         }
-        labelValues.putAll(localLabelValues);
+        for (lineInfo label : localLabels) {
+            LinkedHashMap map;
+            switch (label.type) {
+                default:
+                case LABEL: map = returnValue.labels; break;
+                case FUNCTION: map = returnValue.functions; break;
+                case MACRO: map = returnValue.macros; break;
+            }
+            map.put(label.name, label.line);
+        }
         // Simple global scope
         if (myscope.isEmpty() || lineNumber < 1) {
             for (lineInfo label : labels) {
                 String fullLabel;
                 StringBuilder kbuild = new StringBuilder();
-                boolean first = false;
+                boolean first = false, anon = false;
 
-                for (String s : label.name) { // build full name
+                for (String name : label.name) { // build full name
+                    if (name.length() == 0) {
+                        anon = true;
+                        break;
+                    }
                     if (first) kbuild.append('.');
-                    kbuild.append(s);
+                    kbuild.append(name);
                     first = true;
                 }
+                if (anon) continue;
 
                 fullLabel = kbuild.toString();
-                if (!labelValues.containsValue(fullLabel)) {
-                    labelValues.put(label.line, fullLabel); // add if not listed already
+                LinkedHashMap map;
+                switch (label.type) {
+                    default:
+                    case LABEL: map = returnValue.labels; break;
+                    case FUNCTION: map = returnValue.functions; break;
+                    case MACRO: map = returnValue.macros; break;
                 }
+                map.put(fullLabel, label.line);
             }
-            return labelValues;
+            return returnValue;
         }
         // Local scope
         for (lineInfo label : labels) {
@@ -264,16 +308,16 @@ class Assembler_64tass implements Assembler {
             if (kbuild.length() == 0) continue;
 
             String fullLabel = kbuild.toString();
-            if (!labelValues.containsValue(fullLabel)) {
-                labelValues.put(label.line, fullLabel); // add if not listed already
+            LinkedHashMap map;
+            switch (label.type) {
+                default:
+                case LABEL: map = returnValue.labels; break;
+                case FUNCTION: map = returnValue.functions; break;
+                case MACRO: map = returnValue.macros; break;
             }
+            map.put(fullLabel, label.line);
         }
-        return labelValues;
-    }
-
-    @Override
-    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
-        return new LinkedHashMap<>();
+        return returnValue;
     }
 
     @Override

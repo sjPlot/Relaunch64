@@ -94,15 +94,17 @@ public class LabelExtractor {
         // init return value
         ArrayList<String> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getLabels(source, assembler, lineNumber);
+        LinkedHashMap<String, Integer> map = getLabels(source, assembler, lineNumber);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections
-            Collection<String> vs = map.values();
+            Set<String> ks = map.keySet();
             // create iterator
-            Iterator<String> i = vs.iterator();
+            Iterator<String> i = ks.iterator();
             // add all ssction names to return value
             while(i.hasNext()) retval.add(i.next());
+            // sort
+            if (sortList) Collections.sort(retval);
             // return result
             return retval;
         }
@@ -123,20 +125,20 @@ public class LabelExtractor {
         StringReader sr = new StringReader(source);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-        return assembler.getLabels(lineReader, lineNumber);
+        return assembler.getLabels(lineReader, lineNumber).labels;
     }
 
     public static ArrayList getLabelLineNumbers(String source, Assembler assembler, int lineNumber) {
         // init return value
         ArrayList<Integer> retval = new ArrayList<>();
         // retrieve sections
-        LinkedHashMap<Integer, String> map = getLabels(source, assembler, lineNumber);
+        LinkedHashMap<String, Integer> map = getLabels(source, assembler, lineNumber);
         // check for valid value
         if (map!=null && !map.isEmpty()) {
             // retrieve only string values of sections
-            Set<Integer> ks = map.keySet();
+            Collection<Integer> vs = map.values();
             // create iterator
-            Iterator<Integer> i = ks.iterator();
+            Iterator<Integer> i = vs.iterator();
             // add all ssction names to return value
             while(i.hasNext()) retval.add(i.next());
             // return result

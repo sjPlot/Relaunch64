@@ -127,7 +127,7 @@ class Assembler_ca65 implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
+    public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         class lineInfo {
             final LinkedList<String> name;
             final int line;
@@ -136,8 +136,8 @@ class Assembler_ca65 implements Assembler
                 this.line = line;
             }
         }
-        LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
-        LinkedHashMap<Integer, String> localLabelValues = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
         LinkedList<lineInfo> labels = new LinkedList<>();
         String line;
         Pattern p = Pattern.compile("^\\s*(?:(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)\\s*[:=])?\\s*(?<directive>\\.(?:scope|endscope)\\b)?\\s*(?<label2>[a-zA-Z_][a-zA-Z0-9_]*)?.*");
@@ -154,10 +154,7 @@ class Assembler_ca65 implements Assembler
                 if (label != null) {
                     if (lineNumber > 0) {
                         if (label.charAt(0) == '@') { // local label
-                            if (scopeFound) continue;
-                            if (!localLabelValues.containsValue(label)) {
-                                localLabelValues.put(lineReader.getLineNumber(), label); // add if not listed already
-                            }
+                            if (!scopeFound) localLabelValues.put(label, lineReader.getLineNumber());
                             continue;
                         } 
                         if (lineNumber < lineReader.getLineNumber()) {
@@ -204,11 +201,9 @@ class Assembler_ca65 implements Assembler
                 }
 
                 fullLabel = kbuild.toString();
-                if (!labelValues.containsValue(fullLabel)) {
-                    labelValues.put(label.line, fullLabel); // add if not listed already
-                }
+                labelValues.put(fullLabel, label.line);
             }
-            return labelValues;
+            return new labelList(labelValues, null, null);
         }
         // Local scope
         for (lineInfo label : labels) {
@@ -235,16 +230,9 @@ class Assembler_ca65 implements Assembler
             if (kbuild.length() == 0) continue;
 
             String fullLabel = kbuild.toString();
-            if (!labelValues.containsValue(fullLabel)) {
-                labelValues.put(label.line, fullLabel); // add if not listed already
-            }
+            labelValues.put(fullLabel, label.line);
         }
-        return labelValues;
-    }
-
-    @Override
-    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
-        return new LinkedHashMap<>();
+        return new labelList(labelValues, null, null);
     }
 
     @Override

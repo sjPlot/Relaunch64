@@ -1054,30 +1054,11 @@ public class EditorPanes {
      * {@code getLabels()}, {@code getFunctions()} or {@code getMacros()}.
      * @param name The name of the label / macro / function where to go
      */
-    protected void gotoLine(LinkedHashMap<Integer, String> map, String name) {
-        // names and linenumbers
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<Integer> lines = new ArrayList<>();
-        // check for valid value
-        if (map!=null && !map.isEmpty() && name!=null && !name.isEmpty()) {
-            // retrieve only string values of sections
-            Collection<String> c = map.values();
-            // create iterator
-            Iterator<String> i = c.iterator();
-            // add all ssction names to return value
-            while(i.hasNext()) names.add(i.next());
-            // retrieve only string values of sections
-            Set<Integer> ks = map.keySet();
-            // create iterator
-            Iterator<Integer> ksi = ks.iterator();
-            // add all label names to return value
-            while(ksi.hasNext()) lines.add(ksi.next());
-            // find section name
-            int pos = names.indexOf(name);
-            if (pos!=-1) {
-                // retrieve associated line number
-                gotoLine(lines.get(pos), 1);
-            }
+    protected void gotoLine(LinkedHashMap<String, Integer> map, String name) {
+        try {
+            gotoLine(map.get(name), 1);
+        }
+        catch (Exception e) {
         }
     }
     public void insertString(String text) {

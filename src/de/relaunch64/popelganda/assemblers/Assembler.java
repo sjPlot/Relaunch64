@@ -42,6 +42,16 @@ public interface Assembler
     static final String INPUT_FILE = "SOURCEFILE";
     static final String SOURCE_DIR = "SOURCEDIR";
     static final String OUTPUT_FILE = "OUTFILE";
+    static class labelList {
+         public final LinkedHashMap labels;
+         public final LinkedHashMap functions;
+         public final LinkedHashMap macros;
+         labelList(LinkedHashMap<String, Integer> labels, LinkedHashMap<String, Integer> functions, LinkedHashMap<String, Integer> macros) {
+             this.labels = (labels != null) ? labels : new LinkedHashMap<String, Integer>();
+             this.functions = (functions != null) ? functions : new LinkedHashMap<String, Integer>();
+             this.macros = (macros != null) ? macros : new LinkedHashMap<String, Integer>();
+         }
+    }
 
     String name();
     String fileName();
@@ -59,8 +69,7 @@ public interface Assembler
     String getIncludeBinaryDirective(String path);
     String[] getScriptKeywords();
     String getDefaultCommandLine(String fp);
-    LinkedHashMap getLabels(LineNumberReader lineReader, int line);
-    LinkedHashMap getFunctions(LineNumberReader lineReader);
+    labelList getLabels(LineNumberReader lineReader, int line);
 
     /**
      * Returns the label name part before the cursor.

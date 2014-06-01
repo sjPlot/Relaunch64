@@ -47,6 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  *
@@ -269,10 +270,10 @@ public class FunctionExtractor {
 
     public static ArrayList getFunctionOrMacroNames(String funmacString, String source, Assembler assembler) {
         ArrayList<String> retval = new ArrayList<>();
-        LinkedHashMap<Integer, String> map = getFunctionsOrMacros(funmacString, source, assembler);
+        LinkedHashMap<String, Integer> map = getFunctionsOrMacros(funmacString, source, assembler);
         if (map != null && !map.isEmpty()) {
-            Collection<String> c = map.values();
-            Iterator<String> i = c.iterator();
+            Set<String> ks = map.keySet();
+            Iterator<String> i = ks.iterator();
             while (i.hasNext()) {
                 retval.add(i.next());
             }
@@ -282,7 +283,7 @@ public class FunctionExtractor {
     }
 
     public static LinkedHashMap getFunctionsOrMacros(String funmacString, String source, Assembler assembler) {
-        LinkedHashMap<Integer, String> functions = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> functions = new LinkedHashMap<>();
         // init vars
         int lineNumber = 0;
         String line;
@@ -298,9 +299,7 @@ public class FunctionExtractor {
                         // like colon for kickass or plus-sign for ACME
                         keyword = addMacroToken(keyword, funmacString, assembler);
                         // if keyword does not already exist, add it to results list
-                        if (!functions.containsValue(keyword)) {
-                            functions.put(lineNumber, keyword);
-                        }
+                        functions.put(keyword, lineNumber);
                     }
                 }
             } catch (IOException ex) {

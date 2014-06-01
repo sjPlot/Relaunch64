@@ -137,8 +137,8 @@ class Assembler_tmpx implements Assembler
     }
 
     @Override
-    public LinkedHashMap getLabels(LineNumberReader lineReader, int lineNumber) {
-        LinkedHashMap<Integer, String> labelValues = new LinkedHashMap<>();
+    public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
+        LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
         Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z][a-zA-Z0-9_]*\\b).*");
         String line;
         try {
@@ -150,20 +150,13 @@ class Assembler_tmpx implements Assembler
 
                 if (label != null) {
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    if (!labelValues.containsValue(label)) {
-                        labelValues.put(lineReader.getLineNumber(), label); // add if not listed already
-                    }
+                    labelValues.put(label, lineReader.getLineNumber());
                 }
             }
         }
         catch (IOException ex) {
         }
-        return labelValues;
-    }
-
-    @Override
-    public LinkedHashMap getFunctions(LineNumberReader lineReader) {
-        return new LinkedHashMap<>();
+        return new labelList(labelValues, null, null);
     }
 
     @Override
