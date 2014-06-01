@@ -98,7 +98,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelFont.setFont(mainfont);
         // restart-to-apply-text hidden
         // set preferred compiler settings
-        jComboBoxPrefComp.setSelectedIndex(settings.getPreferredAssembler().getID());
+        jComboBoxPrefASM.setSelectedIndex(settings.getPreferredAssembler().getID());
         // init line number alignment
         switch (settings.getLineNumerAlignment()) {
             case Gutter.RIGHT:
@@ -275,7 +275,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 settings.setReopenOnStartup(jCheckBoxReopenFiles.isSelected());
             }
         });
-        jComboBoxPrefComp.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxPrefASM.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabFont(true);
@@ -398,7 +398,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         catch (NumberFormatException ex) {
         }
-        settings.setPreferredAssembler(Assemblers.byID(jComboBoxPrefComp.getSelectedIndex()));
+        settings.setPreferredAssembler(Assemblers.byID(jComboBoxPrefASM.getSelectedIndex()));
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         settings.setScaleFont(jCheckBoxScaleFonts.isSelected());
         switch(jComboBoxLineNumberAlign.getSelectedIndex()) {
@@ -545,7 +545,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jButtonFont = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jTextFieldTabWidth = new javax.swing.JTextField();
-        jComboBoxPrefComp = new javax.swing.JComboBox();
+        jComboBoxPrefASM = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jButtonApplyTabAndFont = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -683,11 +683,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jTextFieldTabWidth.setText(resourceMap.getString("jTextFieldTabWidth.text")); // NOI18N
         jTextFieldTabWidth.setName("jTextFieldTabWidth"); // NOI18N
 
-        jComboBoxPrefComp.setModel(new javax.swing.DefaultComboBoxModel(Assemblers.names()));
-        jComboBoxPrefComp.setName("jComboBoxPrefComp"); // NOI18N
+        jComboBoxPrefASM.setModel(new javax.swing.DefaultComboBoxModel(Assemblers.names()));
+        jComboBoxPrefASM.setName("jComboBoxPrefASM"); // NOI18N
 
         jLabel6.setDisplayedMnemonic('c');
-        jLabel6.setLabelFor(jComboBoxPrefComp);
+        jLabel6.setLabelFor(jComboBoxPrefASM);
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
@@ -744,7 +744,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(jButtonFont))
                                     .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                    .add(jComboBoxPrefASM, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                             .add(jPanel5Layout.createSequentialGroup()
                                 .add(jCheckBoxScaleFonts)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -767,7 +767,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(18, 18, 18)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel6)
-                    .add(jComboBoxPrefComp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxPrefASM, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(18, 18, 18)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
@@ -928,7 +928,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JComboBox jComboBoxAntiAlias;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;
-    private javax.swing.JComboBox jComboBoxPrefComp;
+    private javax.swing.JComboBox jComboBoxPrefASM;
     private javax.swing.JComboBox jComboBoxSyntaxScheme;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

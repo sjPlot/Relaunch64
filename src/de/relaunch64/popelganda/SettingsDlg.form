@@ -251,7 +251,7 @@
                                               <Component id="jButtonFont" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jTextFieldTabWidth" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jComboBoxPrefComp" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jComboBoxPrefASM" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -284,7 +284,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBoxPrefComp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxPrefASM" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -349,19 +349,19 @@
                 <Property name="name" type="java.lang.String" value="jTextFieldTabWidth" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBoxPrefComp">
+            <Component class="javax.swing.JComboBox" name="jComboBoxPrefASM">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new javax.swing.DefaultComboBoxModel(Assemblers.names())" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jComboBoxPrefComp" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="jComboBoxPrefASM" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
                 <Property name="displayedMnemonic" type="int" value="99"/>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="jComboBoxPrefComp"/>
+                  <ComponentRef name="jComboBoxPrefASM"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
                 <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
