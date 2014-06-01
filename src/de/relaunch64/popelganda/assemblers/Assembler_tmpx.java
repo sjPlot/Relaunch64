@@ -36,6 +36,7 @@ import de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
@@ -138,11 +139,18 @@ class Assembler_tmpx implements Assembler
 
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
+        labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> labelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z][a-zA-Z0-9_]*\\b).*");
+        Pattern p = Pattern.compile("^\\s*(?<label>[a-zA-Z][a-zA-Z0-9_]*\\b)?\\s*(?<directive>\\.(?:block|bend|macro|segment|endm)\\b)?.*");
         String line;
+        LinkedList<LinkedHashMap<String, Integer>> scopes = new LinkedList<>(), myscope = new LinkedList<>();
+        myscope.add(labelValues);
         try {
             while ((line = lineReader.readLine()) != null) {
+                if (lineReader.getLineNumber() == lineNumber) {
+                    myscope = (LinkedList)scopes.clone();
+                    myscope.add(labelValues);
+                }
                 Matcher m = p.matcher(line);
 
                 if (!m.matches()) continue;
@@ -150,13 +158,37 @@ class Assembler_tmpx implements Assembler
 
                 if (label != null) {
                     if (label.length() == 3 && Arrays.binarySearch(opcodes, label.toUpperCase()) >= 0) continue;
-                    labelValues.put(label, lineReader.getLineNumber());
                 }
+
+                String directive = m.group("directive");
+                if (directive != null) {
+                    switch (directive) {
+                        case ".macro":
+                        case ".segment":
+                            if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
+                            scopes.add(labelValues);labelValues = new LinkedHashMap<>();
+                            break;
+                        case ".block":
+                            if (label != null) labelValues.put(label, lineReader.getLineNumber());
+                            scopes.add(labelValues);labelValues = new LinkedHashMap<>();
+                            break;
+                        case ".endm":
+                        case ".bend":
+                            if (label != null) labelValues.put(label, lineReader.getLineNumber());
+                            if (!scopes.isEmpty()) labelValues = scopes.removeLast();
+                            break;
+                    }
+                    continue;
+                }
+                if (label != null) labelValues.put(label, lineReader.getLineNumber());
+            }
+            for (LinkedHashMap<String, Integer> map : myscope) {
+                returnValue.labels.putAll(map);
             }
         }
         catch (IOException ex) {
         }
-        return new labelList(labelValues, null, null);
+        return returnValue;
     }
 
     @Override
