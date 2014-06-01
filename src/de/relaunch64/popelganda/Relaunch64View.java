@@ -1100,15 +1100,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (files!=null && !files.isEmpty()) {
             // retrieve set
             for (Object[] o : files) {
-                // retrieve data
+                // retrieve data: file path
                 File fp = new File(o[0].toString());
-                Assembler assembler;
-                try {
-                    assembler = Assemblers.byID(Integer.parseInt(o[1].toString()));
-                }
-                catch (NumberFormatException ex) {
-                    assembler = Assemblers.ASM_KICKASSEMBLER;
-                }
+                // retrieve data: assembler
+                Assembler assembler = (Assembler)o[1];
+                // retrieve data: script
                 int script = Integer.parseInt(o[2].toString());
                 // open file
                 openFile(fp, assembler, script);
