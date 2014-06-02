@@ -1051,7 +1051,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                             // if text field is not empty and is not the default
                             // quick help text, insert new line
                             if (!text.isEmpty() && !text.equalsIgnoreCase(quickHelpText)) {
-                                jTextAreaUserScript.append(System.getProperty("line.separator"));
+                                jTextAreaUserScript.append(System.lineSeparator());
                             }
                             else {
                                 jTextAreaUserScript.setText("");

@@ -83,9 +83,9 @@ public class Tools {
      */
     public static String getSystemInformation() {
         StringBuilder sysinfo = new StringBuilder("");
-        sysinfo.append(ConstantsR64.APPLICATION_SHORT_TITLE).append(" ").append(ConstantsR64.BUILD_VERSION).append(System.getProperty("line.separator"));
-        sysinfo.append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.version")).append(" (").append(System.getProperty("os.arch")).append(")").append(System.getProperty("line.separator"));
-        sysinfo.append("Java-Version ").append(System.getProperty("java.version")).append(" (").append(System.getProperty("java.vendor")).append(")").append(System.getProperty("line.separator"));
+        sysinfo.append(ConstantsR64.APPLICATION_SHORT_TITLE).append(" ").append(ConstantsR64.BUILD_VERSION).append(System.lineSeparator());
+        sysinfo.append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.version")).append(" (").append(System.getProperty("os.arch")).append(")").append(System.lineSeparator());
+        sysinfo.append("Java-Version ").append(System.getProperty("java.version")).append(" (").append(System.getProperty("java.vendor")).append(")").append(System.lineSeparator());
         sysinfo.append(System.getProperty("java.home"));
         return sysinfo.toString();
     }

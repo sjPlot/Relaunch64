@@ -119,7 +119,7 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
     protected void finished() {
         if (updateavailable) {
             //log info
-            ConstantsR64.r64logger.log(Level.INFO,("A new version of Relaunch64 is available!"+System.getProperty("line.separator")+"Download from "+ConstantsR64.UPDATE_URI));
+            ConstantsR64.r64logger.log(Level.INFO,("A new version of Relaunch64 is available!"+System.lineSeparator()+"Download from "+ConstantsR64.UPDATE_URI));
         }
         else {
             // log latest available build

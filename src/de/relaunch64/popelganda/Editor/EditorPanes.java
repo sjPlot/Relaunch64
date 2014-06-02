@@ -433,7 +433,7 @@ public class EditorPanes {
      * <li>Gutter.CENTER</li>
      * <li>Gutter.RIGHT</li>
      * </ul>
-     * or use {@code Settings.getLineNumerAlignment()}.
+     * or use {@link de.relaunch64.popelganda.database.Settings#getLineNumerAlignment() getLineNumerAlignment()}.
      */
     public void setLineNumberAlignment(int alignment) {
         for (EditorPaneProperties ea : editorPaneArray) {
@@ -452,7 +452,7 @@ public class EditorPanes {
      * <li>AntiAlias.SUBPIXEL</li>
      * <li>AntiAlias.NONE</li>
      * </ul>
-     * or use {@code Settings.getAntiAlias()}.
+     * or use {@link de.relaunch64.popelganda.database.Settings#getAntiAlias() getAntiAlias()}.
      */    
     public void setAntiAlias(String antialias) {
         for (EditorPaneProperties ea : editorPaneArray) {
@@ -706,7 +706,7 @@ public class EditorPanes {
                     // set cursor
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     setCursor(epp.getEditorPane());
-                    epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.getProperty("line.separator"));
+                    epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.lineSeparator());
                     return true;
                 }
             }

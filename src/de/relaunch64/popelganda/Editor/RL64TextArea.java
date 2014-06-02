@@ -273,9 +273,9 @@ public class RL64TextArea extends StandaloneTextArea {
         Registers.paste(this,'$');
     }
     /**
-     * Sets the font of the editor component and the gutter. Furthermore,
-     * antialias-setting is updated
-     * @param mf
+     * Sets the font of the editor component and the gutter.
+     * 
+     * @param mf the new font
      */
     public final void setFonts(Font mf) {
         // set text font
@@ -294,8 +294,15 @@ public class RL64TextArea extends StandaloneTextArea {
         propertiesChanged();
     }
     /**
-     * Sets line number alignment og gutter.
-     * @param alignment
+     * Sets line number alignment inside gutter.
+     * 
+     * @param alignment the number alignment. Use one of following constants:
+     * <ul>
+     * <li>Gutter.LEFT</li>
+     * <li>Gutter.CENTER</li>
+     * <li>Gutter.RIGHT</li>
+     * </ul>
+     * or use {@link de.relaunch64.popelganda.database.Settings#getLineNumerAlignment() getLineNumerAlignment()}.
      */
     public final void setLineNumberAlignment(int alignment) {
         String align;
@@ -310,7 +317,14 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     /**
      * Sets antialiasing for text.
-     * @param antialias
+     * 
+     * @param antialias the alias style. Use one of following constants:
+     * <ul>
+     * <li>AntiAlias.STANDARD</li>
+     * <li>AntiAlias.SUBPIXEL</li>
+     * <li>AntiAlias.NONE</li>
+     * </ul>
+     * or use {@link de.relaunch64.popelganda.database.Settings#getAntiAlias() getAntiAlias()}.
      */
     public final void setTextAntiAlias(String antialias) {
         setProperty("view.antiAlias", antialias);
@@ -319,7 +333,8 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     /**
      * Sets tab-size for editor component.
-     * @param tabSize
+     * 
+     * @param tabSize the new indent size for tabs, measured in characters
      */
     public final void setTabs(int tabSize) {
         setProperty("buffer.tabSize", String.valueOf(tabSize));
@@ -327,8 +342,8 @@ public class RL64TextArea extends StandaloneTextArea {
         propertiesChanged();
     }
     /**
-     * Sets the compiler syntax. See {@code ConstantsR64.assemblymodes} for different values. This method
-     * loads an XML file with syntax definition for keywords etc.
+     * Sets the compiler syntax. See {@link de.relaunch64.popelganda.assemblers.Assembler#syntaxFile() syntaxFile()} 
+     * for different values. This method loads an XML file with syntax definition for keywords etc.
      */
     public final void setAssemblyMode() {
         // set syntax style
@@ -342,6 +357,9 @@ public class RL64TextArea extends StandaloneTextArea {
         // fire property change message
         propertiesChanged();
     }
+    /**
+     * Enables code-folding.
+     */
     public final void setCodeFolding() {
         setProperty("buffer.folding", "explicit");
         // fire property change message
@@ -415,11 +433,19 @@ public class RL64TextArea extends StandaloneTextArea {
      * Set compiler of current editor / buffer. Frequently needed information, for various functions,
      * so we put this variable as a global field for this class.
      * 
-     * @param assembler
+     * @param assembler a reference to the {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}.
+     * 
      */
     public final void setAssembler(Assembler assembler) {
         this.assembler = assembler;
     }
+    /**
+     * Returns the current {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class} 
+     * associated with this text area instance.
+     * 
+     * @return the current {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}
+     * for this text area.
+     */
     public Assembler getAssembler() {
         return assembler;
     }
@@ -427,7 +453,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * The StandaloneTextArea component of jEdit. Provides fast syntax highlighting and some other
      * useful features. Replaces the default Swing JEditorPane.
      * 
-     * @param settings 
+     * @param settings a reference to the {@link de.relaunch64.popelganda.database.Settings Settings-class}.
      */
     public RL64TextArea(Settings settings) {
         super(propertyManager);
@@ -450,6 +476,25 @@ public class RL64TextArea extends StandaloneTextArea {
         // setup keylistener
         keyListener = new RL64KeyListener();
     }
+    /**
+     * Checks whether the caret is visible and if not, scrolls editor to caret before opening
+     * the suggestion popup.
+     * 
+     * @param type the type of suggestions for the popup. See 
+     * <ul>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_LABEL SUGGESTION_LABEL}</li>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_FUNCTION_MACRO_SCRIPT SUGGESTION_FUNCTION_MACRO_SCRIPT}</li>
+     * </ul>
+     * Currently not supported are
+     * <ul>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_FUNCTION SUGGESTION_FUNCTION}</li>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_MACRO SUGGESTION_MACRO}</li>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_FUNCTION_MACRO SUGGESTION_FUNCTION_MACRO}</li>
+     * </ul>
+     * 
+     * @return {@code true} if either auto-completion was performed or popup displayed. {@code false}
+     * if no labels have been found and no popup is displayed.
+     */
     protected boolean showSuggestionPopup(final int type) {
         // check for valid type
         if (-1==type) return false;
@@ -479,7 +524,18 @@ public class RL64TextArea extends StandaloneTextArea {
      * http://stackoverflow.com/a/10883946/2094622
      * and modified for own purposes.
      * 
-     * @param type
+     * @param type the type of suggestions for the popup. See 
+     * <ul>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_LABEL SUGGESTION_LABEL}</li>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_FUNCTION_MACRO_SCRIPT SUGGESTION_FUNCTION_MACRO_SCRIPT}</li>
+     * </ul>
+     * Currently not supported are
+     * <ul>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_FUNCTION SUGGESTION_FUNCTION}</li>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_MACRO SUGGESTION_MACRO}</li>
+     * <li>{@link de.relaunch64.popelganda.Editor.RL64TextArea#SUGGESTION_FUNCTION_MACRO SUGGESTION_FUNCTION_MACRO}</li>
+     * </ul>
+     * 
      * @return {@code true} if either auto-completion was performed or popup displayed. {@code false}
      * if no labels have been found and no popup is displayed.
      */
@@ -499,12 +555,17 @@ public class RL64TextArea extends StandaloneTextArea {
             if (null==suggestionSubWord) return false;
             // init variable
             ArrayList<String> labels = null;
+            // get all labels, functions and macros of current source code
             Assembler.labelList allLabels = LabelExtractor.getLabels(getBuffer().getText(), getAssembler(), getCaretLine() + 1);
             switch(type) {
+                // retrieve only functions. currently not used.
                 case SUGGESTION_FUNCTION:
                     labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions));
                     break;
+                // retrieve only macros. currently not used.
                 case SUGGESTION_MACRO:
+                    // we have to copy labels into new arry first because of assemvler specific
+                    // macro prefix here.
                     labels = new ArrayList<>();
                     for (Iterator it = LabelExtractor.getNames(allLabels.macros).iterator(); it.hasNext();) {
                         Object i = it.next();
@@ -512,50 +573,66 @@ public class RL64TextArea extends StandaloneTextArea {
                     }
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
                     break;
+                // retrieve only labels. shown on ctrl+space
                 case SUGGESTION_LABEL:
                     labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.labels));
                     break;
+                // retrieve functions and macros. currently not used.
                 case SUGGESTION_FUNCTION_MACRO:
                     labels = LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions));
                     labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.macros)));
                     break;
+                // retrieve functions, macros and script-commands. used on ctrl+shift+space
                 case SUGGESTION_FUNCTION_MACRO_SCRIPT:
+                    // we have to copy labels into new arry first because of assemvler specific
+                    // macro prefix here.
                     labels = new ArrayList<>();
                     for (Iterator it = LabelExtractor.getNames(allLabels.macros).iterator(); it.hasNext();) {
                         Object i = it.next();
                         labels.add(getAssembler().getMacroPrefix() + i.toString());
                     }
+                    // get macro names
                     labels = LabelExtractor.getSubNames(suggestionSubWord, labels);
+                    // add functions
                     labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, LabelExtractor.getNames(allLabels.functions)));
+                    // and add script-keywords
                     labels.addAll(LabelExtractor.getSubNames(suggestionSubWord, new ArrayList(Arrays.asList(getAssembler().getScriptKeywords()))));
                     break;
             }
             // check if we have any labels
-            if (labels == null || labels.size() < 1) return false;
-            if (labels.size() == 1) { // single suggestion, just type it in
+            if (null==labels || labels.size()<1) return false;
+            // single suggestion, just type it in
+            if (1==labels.size()) { 
                 final String selectedSuggestion = labels.get(0).substring(suggestionSubWord.length());
                 getBuffer().insert(getCaretPosition(), selectedSuggestion);
                 return true;
             }
-            { // insert longest prefix
-                int k = suggestionSubWord.length();
-                String prefix = labels.get(0).substring(k);
-                int m = prefix.length();
-                for (String i : labels) {
-                    i = i.substring(k);
-                    int end = (m < i.length()) ? m : i.length();
-                    int j;
-                    for (j = 0; j < end; j++) {
-                        if (prefix.charAt(j) != i.charAt(j)) break;
-                    }
-                    if (m > j) m = j;
-                    if (m == 0) break;
+            // insert longest prefix
+            int k = suggestionSubWord.length();
+            String prefix = labels.get(0).substring(k);
+            int m = prefix.length();
+            // all available labels are checked for the currently typed chars
+            // (suggestionSubWord). if all remaining labels have even more common
+            // chars that follow the currently typed string, we do some auto-complete
+            // already here. for instance, if typing ".lo" means that only labels
+            // ".loop1", ".loop2" and ".loop3" remain, we can at least automatically
+            // insert "op" to complete ".loop".
+            // useful for users that don't like to use the popup and want to type
+            // remaining chars by hand.
+            for (String i : labels) {
+                i = i.substring(k);
+                int end = (m < i.length()) ? m : i.length();
+                int j;
+                for (j=0; j<end; j++) {
+                    if (prefix.charAt(j) != i.charAt(j)) break;
                 }
-                if (m > 0) {
-                    final String common = prefix.substring(0, m);
-                    getBuffer().insert(getCaretPosition(), common);
-                    suggestionSubWord = suggestionSubWord + common;
-                }
+                if (m > j) m = j;
+                if (0==m) break;
+            }
+            if (m>0) {
+                final String common = prefix.substring(0, m);
+                getBuffer().insert(getCaretPosition(), common);
+                suggestionSubWord = suggestionSubWord + common;
             }
             // sort list
             Collections.sort(labels);
@@ -569,7 +646,7 @@ public class RL64TextArea extends StandaloneTextArea {
             suggestionPopup = new JPopupMenu();
             suggestionPopup.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             // create JList with label items
-            suggestionList = createSuggestionList(suggestionSubWord, labels);
+            suggestionList = createSuggestionList(labels);
             suggestionContinuedWord = suggestionSubWord;
             // check minimum length of list and add scroll pane if list is too long
             if (labels.size() > 20) {
@@ -583,8 +660,10 @@ public class RL64TextArea extends StandaloneTextArea {
                 // else just add list w/o scroll pane
                 suggestionPopup.add(suggestionList);
             }
-            suggestionPopup.show(this, location.x + getGutter().getWidth() - suggestionPopup.getMargin().left - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).left, 
-                    getBaseline(0, 0) + location.y - suggestionPopup.getMargin().top - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).top + getPainter().getLineHeight());
+            // show popup below typed text
+            suggestionPopup.show(this, 
+                                location.x + getGutter().getWidth() - suggestionPopup.getMargin().left - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).left, 
+                                getBaseline(0, 0) + location.y - suggestionPopup.getMargin().top - suggestionPopup.getBorder().getBorderInsets(suggestionPopup).top + getPainter().getLineHeight());
             requestFocusInWindow();
         }
         catch (IndexOutOfBoundsException ex) {
@@ -606,11 +685,10 @@ public class RL64TextArea extends StandaloneTextArea {
      * Creates a JList object that is added to the suggestion / auto-completion
      * popup.
      * 
-     * @param labels the items of the
-     * @param subWord list.
+     * @param labels the items of the list.
      * @return a JList
      */
-    protected JList createSuggestionList(String subWord, final ArrayList<String> labels) {
+    protected JList createSuggestionList(final ArrayList<String> labels) {
         // create list model
         DefaultListModel dlm = new DefaultListModel();
         String longest = "";
@@ -664,7 +742,7 @@ public class RL64TextArea extends StandaloneTextArea {
                 // typing when popup is already shown
                 String typedChar = String.valueOf(evt.getKeyChar());
                 // check whether types char is character or digit
-                Pattern p = Pattern.compile("[a-zA-Z0-9.]+");
+                Pattern p = Pattern.compile("[a-zA-Z0-9.]+"); // my first successful regex in this code, yeah! (by Daniel)
                 Matcher m = p.matcher(typedChar);
                 if (m.matches()) {
                     // if yes, "virtually" append to already typed chars of
@@ -693,10 +771,14 @@ public class RL64TextArea extends StandaloneTextArea {
         }
     };
     /**
+     * Retrieves the string that starts before the current caret position and ends under the current caret position.
      * 
-     * @param wholeWord
-     * @param specialDelimiter
-     * @return 
+     * @param wholeWord if {@code true}, the whole word under the caret is retrieved. if {@code false}, only the
+     * string from before the caret until caret position.
+     * @param specialDelimiter a list of additional delimiters that have to be considered beyond the
+     * default delimiter list from {@link de.relaunch64.popelganda.util.Tools#isDelimiter(java.lang.Character, java.lang.String) isDelimiter()}.
+     * 
+     * @return the string under the caret.
      */
     public String getCaretString(boolean wholeWord, String specialDelimiter) {
         // get caret position in line offset
