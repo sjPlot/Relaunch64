@@ -166,7 +166,8 @@ public class FileTools {
      * {@code f} is returned.
      * 
      * @param f A file including complete file path.
-     * @return The file path to {@code f}, without file name.
+     * @return The file path to {@code f}, without file name, or {@code null}
+     * if {@code f} is {@code null} or does not exist.
      */
     public static String getFilePath(File f) {
         if (f!=null && f.exists()) {

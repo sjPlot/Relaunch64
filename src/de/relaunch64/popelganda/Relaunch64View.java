@@ -1219,7 +1219,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // no file :(
             if (sourceFile == null) return;
             // set base path for relative paths
-            errorHandler.setBasePath(FileTools.getFilePath(sourceFile));
+            errorHandler.setBasePath(sourceFile);
             // retrieve parent file. needed to construct output file paths
             String parentFile = (null==sourceFile.getParentFile()) ? sourceFile.toString() : sourceFile.getParentFile().toString();
             // create Output file
