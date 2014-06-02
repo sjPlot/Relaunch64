@@ -156,7 +156,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
         // set compiler log font to monospace
-        jTextAreaCompilerOutput.setFont(new Font(Font.MONOSPACED, Font.PLAIN, ((Font)UIManager.getLookAndFeelDefaults().get("defaultFont")).getSize()));
+        javax.swing.UIDefaults uid = UIManager.getLookAndFeelDefaults();
+        Object defaultFont = uid.get("defaultFont");
+        // check if LaF supports default font
+        if (defaultFont!=null) {
+            jTextAreaCompilerOutput.setFont(new Font(Font.MONOSPACED, Font.PLAIN, ((Font)defaultFont).getSize()));
+        }
         // init combo boxes
         initComboBoxes();
         // init listeners and accelerator table
@@ -1382,7 +1387,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                    jCheckBoxRegEx.isSelected(), 
                                    jCheckBoxWholeWord.isSelected(),
                                    jCheckBoxMatchCase.isSelected());
-            jComboBoxFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+            jComboBoxFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), 
+                                                             jCheckBoxWholeWord.isSelected(), 
+                                                             jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
         }
     }
     @Action
@@ -1398,7 +1405,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                    jCheckBoxRegEx.isSelected(),
                                    jCheckBoxWholeWord.isSelected(),
                                    jCheckBoxMatchCase.isSelected());
-            jComboBoxFind.setForeground(findReplace.findPrev() ? Color.black : Color.red);
+            jComboBoxFind.setForeground(findReplace.findPrev(jCheckBoxRegEx.isSelected(), 
+                                                             jCheckBoxWholeWord.isSelected(), 
+                                                             jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
         }
     }
     private void findCancel() {
@@ -1556,7 +1565,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (settings.getScaleFont()) {
             try { // Try to scale default font size according to screen resolution.
                 Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
-                UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
+                // check if laf supports default font
+                if (fm!=null) {
+                    UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
+                }
             } catch (HeadlessException e) { }
         }
     }
