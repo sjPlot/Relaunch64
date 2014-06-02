@@ -82,7 +82,15 @@ public class QuickReferences extends javax.swing.JDialog {
         InputStream is = null;
         javax.swing.JTextArea[] ta = new javax.swing.JTextArea[] {jTextArea1, jTextArea2, jTextArea3, jTextArea4, jTextArea5, jTextArea6};
         String[] refs = new String[] {"Vic-Register.txt", "Soundchip-Belegung.txt", "Rasterzeilen-Angaben.txt", "C64Fli.txt", "C64MemMap.txt", "C64ColorRam.txt"};
-        Font mf = new Font(Font.MONOSPACED, Font.PLAIN, ((Font)UIManager.getLookAndFeelDefaults().get("defaultFont")).getSize());
+        Font mf;
+        Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
+        // check if laf supports default font
+        if (fm!=null) {
+            mf = new Font(Font.MONOSPACED, Font.PLAIN, fm.getSize());
+        }
+        else {
+            mf = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+        }
         try { 
             for (int cnt=0; cnt<refs.length; cnt++) {
                 is = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getClass().getResourceAsStream("/de/relaunch64/popelganda/resources/quickref/"+refs[cnt]);
