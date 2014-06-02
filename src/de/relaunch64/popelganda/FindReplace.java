@@ -97,7 +97,8 @@ public class FindReplace {
         updateContent();
         // if user has done many changes, reset matcher
         if (oldContent!=null && content!=null && (Math.abs(oldContent.length()-content.length())>1)) forceInit = true;
-        if (newFindTerm || forceInit) initmatcher(isRegEx, wholeWord, matchCase);
+        // if we have a new find term, or tab has changed, init matcher
+        if (newFindTerm || forceInit || (lastActiveTab!=activeTab)) initmatcher(isRegEx, wholeWord, matchCase);
     }
     /**
      * Resets the find and replace terms.
@@ -183,6 +184,9 @@ public class FindReplace {
         }
         return (findselections.size()>0);
     }
+    /**
+     * Selects the find term with the index {@code findpos}.
+     */
     protected void selectFindTerm() {
         // set caret
         editorPane.setCaretPosition(findselections.get(findpos)[0]);
@@ -192,11 +196,14 @@ public class FindReplace {
         editorPane.requestFocusInWindow();
     }
     /**
+     * Finds the next occurence of a find term. If last find term was reached, the index {@code findpos}
+     * is set to 0 and the first occurence is selected.
      * 
-     * @param isRegEx
-     * @param wholeWord
-     * @param matchCase
-     * @return 
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * @return {@code true} if any find terms have been found and selected, {@code false} if nothing found
+     * or search content was empty.
      */
     public boolean findNext(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         // when we have no founds or when the user changed the tab, init matcher
@@ -234,7 +241,21 @@ public class FindReplace {
         }
         return true;
     }
-    public boolean findPrev() {
+    /**
+     * Finds the previous occurence of a find term. If first find term was reached, the index {@code findpos}
+     * is set to max amount of find terms and the last occurence is selected.
+     * 
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * @return {@code true} if any find terms have been found and selected, {@code false} if nothing found
+     * or search content was empty.
+     */
+    public boolean findPrev(boolean isRegEx, boolean wholeWord, boolean matchCase) {
+        // when we have no founds or when the user changed the tab, init matcher
+        if (findselections.isEmpty() || lastActiveTab!=activeTab) {
+            initmatcher(isRegEx, wholeWord, matchCase);
+        }
         // check whether we have any found at all
         if (findselections.size()>0) {
             // decrease our find-counter
