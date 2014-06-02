@@ -32,10 +32,12 @@ Relaunch64 3.1.0
 * UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
 * added apply-button to Other-tab of preference pane
 * many (code) improvements, code cleanup
+* slight modification of Popelganda color scheme
 
 ### Bug fixes
 * modified files, which should have been saved before compiling, were not checked if they really exist
 * remove-script-button (preference pane) was disabled in certain cases, where it should have been enabled - fixed
+* preference window could be resized, so apply-button was no longer visible. fixed, set minimum size to preference window to ensure apply-button is always visible
 
 Relaunch64 3.0.1
 ----------------
@@ -58,7 +60,7 @@ Relaunch64 3.0.1
 * added "script" comment-command (see help-file)
 * added new syntax highlighting color schemes
 * more file extensions are now accepted on drag'n'drop
-* slight modification of C64 scheme
+* slight modification of C64 color scheme
 
 ### Bug fixes
 * bug fix with "Jump to label" function with Kick Assembler
