@@ -330,7 +330,7 @@ public class ColorSchemes {
         case SCHEME_POPELGANDA:
             switch (tokentype) {
                 case COLOR_NORMAL: return new Color(185,185,180); 
-                case COLOR_COMMENT: return new Color(35,35,35);
+                case COLOR_COMMENT: return new Color(136,136,136);
                 case COLOR_STRING: return new Color(199,80,86);
                 case COLOR_NUMBER: return new Color(255,255,255);
                 case COLOR_HEX: return new Color(139,207,234);
@@ -377,7 +377,7 @@ public class ColorSchemes {
         case SCHEME_POPELGANDA_REDUCED:
             switch (tokentype) {
                 case COLOR_NORMAL: return new Color(185,185,180); 
-                case COLOR_COMMENT: return new Color(35,35,35);
+                case COLOR_COMMENT: return new Color(136,136,136);
                 case COLOR_STRING: return new Color(133,153,144);
                 case COLOR_NUMBER: return new Color(255,255,255);
                 case COLOR_HEX:
