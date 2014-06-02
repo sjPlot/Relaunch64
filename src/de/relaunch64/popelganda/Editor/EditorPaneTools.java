@@ -35,6 +35,7 @@ package de.relaunch64.popelganda.Editor;
 import de.relaunch64.popelganda.util.Tools;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import org.gjt.sp.jedit.textarea.Selection;
 
 /**
  *
@@ -46,6 +47,8 @@ public class EditorPaneTools {
         String selString = ep.getSelectedText();
         // if we have selection, add tab to each selected line
         if (selString!=null && !selString.isEmpty()) {
+            // get start offset of selection
+            int selstart = ep.getSelection(0).getStart();
             // retrieve lines
             String[] lines = selString.split("\n");
             // count new lines
@@ -77,7 +80,9 @@ public class EditorPaneTools {
             }
             // insert string
             ep.replaceSelection(sb.toString());
-            // TODO reselect replaced text
+            // reselect text
+            ep.setSelection(new Selection.Range(selstart, selstart+sb.length()));
+            ep.requestFocusInWindow();
         }
     }
     public static int findJumpToken(int direction, int currentLine, ArrayList<Integer> ln) {
