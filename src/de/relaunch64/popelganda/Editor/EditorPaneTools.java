@@ -42,6 +42,13 @@ import org.gjt.sp.jedit.textarea.Selection;
  * @author Daniel Luedecke
  */
 public class EditorPaneTools {
+    /**
+     * (Un-)comments currently selected text.
+     * 
+     * @param ep a reference to the current editor pane
+     * (instance of {@link de.relaunch64.popelganda.Editor.RL64TextArea RL64TextArea}).
+     * @param commentString the comment string from the current assembler.
+     */
     public static void commentLine(RL64TextArea ep, String commentString) {
         // check for text selection
         String selString = ep.getSelectedText();
@@ -85,6 +92,13 @@ public class EditorPaneTools {
             ep.requestFocusInWindow();
         }
     }
+    /**
+     * 
+     * @param direction
+     * @param currentLine
+     * @param ln
+     * @return 
+     */
     public static int findJumpToken(int direction, int currentLine, ArrayList<Integer> ln) {
         // check for valid values
         if (null==ln || ln.isEmpty()) return 0;

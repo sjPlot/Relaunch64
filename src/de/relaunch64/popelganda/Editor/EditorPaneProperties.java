@@ -35,7 +35,11 @@ package de.relaunch64.popelganda.Editor;
 import java.io.File;
 
 /**
- *
+ * Saves specific global properties of editor panes 
+ * ({@link de.relaunch64.popelganda.Editor.RL64TextArea RL64TextArea})
+ * which need quick access and are needed to handle multiple opened
+ * documents.
+ * 
  * @author Daniel Luedecke
  */
 public class EditorPaneProperties {

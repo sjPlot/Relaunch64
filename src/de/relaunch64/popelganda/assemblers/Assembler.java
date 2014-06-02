@@ -42,10 +42,38 @@ public interface Assembler
     static final String INPUT_FILE = "SOURCEFILE";
     static final String SOURCE_DIR = "SOURCEDIR";
     static final String OUTPUT_FILE = "OUTFILE";
+    /**
+     * A class with information on all extracted labels, functions and macros
+     * of a source code file. Information are saved as HashMaps with names
+     * and line numbers.
+     */
     static class labelList {
+        /**
+         * A linked HashMap with all label names and their line numbers
+         * from a source code.
+         */
          public final LinkedHashMap labels;
+        /**
+         * A linked HashMap with all function names and their line numbers
+         * from a source code.
+         */
          public final LinkedHashMap functions;
+        /**
+         * A linked HashMap with all macro names and their line numbers
+         * from a source code.
+         */
          public final LinkedHashMap macros;
+         /**
+          * Saves names and line numbers of labels, functions and macros of the current
+          * source code.
+          * 
+          * @param labels A linked HashMap with all label names and the line numbers
+          * where the labels are.
+          * @param functions A linked HashMap with all function names and the line numbers
+          * where the functions are.
+          * @param macros A linked HashMap with all macro names and the line numbers
+          * where the macros are.
+          */
          labelList(LinkedHashMap<String, Integer> labels, LinkedHashMap<String, Integer> functions, LinkedHashMap<String, Integer> macros) {
              this.labels = (labels != null) ? labels : new LinkedHashMap<String, Integer>();
              this.functions = (functions != null) ? functions : new LinkedHashMap<String, Integer>();
@@ -68,8 +96,23 @@ public interface Assembler
     String getIncludeBinaryDirective(String path);
     String[] getScriptKeywords();
     String getDefaultCommandLine(String fp);
+    /**
+     * Extracts all labels, functions and macros of a source code file. Information
+     * on names and linenumbers of labels, functions and macros are saved as linked
+     * hashmaps. Information can then be accessed via 
+     * {@link labelList#labels labelList.labels},
+     * {@link labelList#functions labelList.functions} and
+     * {@link labelList#macros labelList.macros}.
+     * 
+     * @param lineReader a LineNumberReader from the source code content, which is
+     * created in {@link de.relaunch64.popelganda.Editor.LabelExtractor#getLabels(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler, int) LabelExtractor.getLabels()}.
+     * @param line the line number, from where to start the search for labels/functions/macros.
+     * use 0 to extract all labels/functions/macros. use any specific line number to extract only
+     * global labels/functions/macros and local labels/functions/macros within scope.
+     * @return a {@link labelList labelList} 
+     * with information (names and line numbers) about all extracted labels/functions/macros.
+     */
     labelList getLabels(LineNumberReader lineReader, int line);
-
     /**
      * Returns the label name part before the cursor.
      * 
@@ -79,13 +122,14 @@ public interface Assembler
      * @return Label name part before the cursor.
      */
     String labelGetStart(String line, int pos);
-
     /**
-     * Returns error list
+     * Parses the error messages from the error log and adds the information
+     * to the {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo}.
      * 
-     * @param lineReader LineNumberReader for log
-     * 
-     * @return List of errors
+     * @param lineReader a LineNumberReader from the error log, which is created
+     * by {@link de.relaunch64.popelganda.assemblers.ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @return an ArrayList of {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo} for
+     * each logged error.
      */
     ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader);
 }

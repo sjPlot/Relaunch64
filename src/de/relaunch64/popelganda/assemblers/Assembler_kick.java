@@ -128,7 +128,22 @@ class Assembler_kick implements Assembler
     public String getDefaultCommandLine(String fp) {
         return "java -jar " + fp + " INPUT_FILE";
     }
-
+    /**
+     * Extracts all labels, functions and macros of a source code file. Information
+     * on names and linenumbers of labels, functions and macros are saved as linked
+     * hashmaps. Information can then be accessed via 
+     * {@link de.relaunch64.popelganda.assemblers.Assembler.labelList#labels labelList.labels},
+     * {@link de.relaunch64.popelganda.assemblers.Assembler.labelList#functions labelList.functions} and
+     * {@link de.relaunch64.popelganda.assemblers.Assembler.labelList#macros labelList.macros}.
+     * 
+     * @param lineReader a LineNumberReader from the source code content, which is
+     * created in {@link de.relaunch64.popelganda.Editor.LabelExtractor#getLabels(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler, int) LabelExtractor.getLabels()}.
+     * @param lineNumber the line number, from where to start the search for labels/functions/macros.
+     * use 0 to extract all labels/functions/macros. use any specific line number to extract only
+     * global labels/functions/macros and local labels/functions/macros within scope.
+     * @return a {@link de.relaunch64.popelganda.assemblers.Assembler.labelList labelList} 
+     * with information (names and line numbers) about all extracted labels/functions/macros.
+     */
     @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         labelList returnValue = new labelList(null, null, null);
@@ -158,7 +173,14 @@ class Assembler_kick implements Assembler
         }
         return returnValue;
     }
-
+    /**
+     * Returns the label name part before the cursor.
+     * 
+     * @param line Currect line content
+     * @param pos Caret position
+     * 
+     * @return Label name part before the cursor.
+     */
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
@@ -167,16 +189,27 @@ class Assembler_kick implements Assembler
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
     }
-
+    /**
+     * Parses the error messages from the error log and adds the information
+     * to the {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo}.
+     * 
+     * @param lineReader a LineNumberReader from the error log, which is created
+     * by {@link de.relaunch64.popelganda.assemblers.ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @return an ArrayList of {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo} for
+     * each logged error.
+     */
     @Override
     public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         String line;     // at line 2, column 1 in /tmp/j.asm
         Pattern p = Pattern.compile("^at line (?<line>\\d+), column (?<col>\\d+) in (?<file>.*)");
         try {
+            // read lines
             while ((line = lineReader.readLine()) != null) {
+                // check if error pattern was found
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
+                // if yes, extract information and add to ErrorInfo
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         Integer.parseInt(m.group("col")),

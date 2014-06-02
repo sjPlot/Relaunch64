@@ -87,6 +87,7 @@ public class LabelExtractor {
      * @param source
      * @param assembler
      * @param lineNumber
+     * 
      * @return All labels with their line numbers, or {@code null} if there are no labels
      * in the source code.
      */

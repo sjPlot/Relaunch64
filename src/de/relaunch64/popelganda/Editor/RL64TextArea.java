@@ -98,7 +98,7 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     private static final int SUGGESTION_FUNCTION_MACRO_SCRIPT = 5;
     /**
-     * Load key and editor settings on class creation. Oblogatory. Personal
+     * Load key and editor settings on class creation. Obligatory. Personal
      * settings may be changed via setProperty().
      */
     static {
@@ -156,7 +156,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * Processes key events. Default key handler of jEdit component, which should
      * work slightly faster than key listener
      * 
-     * @param evt 
+     * @param evt the KeyEvent
      */
     @Override
     public void processKeyEvent(KeyEvent evt) {
@@ -187,10 +187,14 @@ public class RL64TextArea extends StandaloneTextArea {
                 // show popup
                 showSuggestionPopup(suggestionType);
             }
+            // if popup is shown, either...
             if (suggestionPopup!=null) {
-                if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                // ...close popup on action or escape-key
+                if (evt.isActionKey() || evt.getKeyCode()==KeyEvent.VK_ESCAPE) {
                     hideSuggestion();
-                } else {
+                }
+                // or filter list by typing
+                else {
                     showSuggestionPopup(suggestionType);
                 }
             }
@@ -221,8 +225,11 @@ public class RL64TextArea extends StandaloneTextArea {
                 }
                 evt.consume();
             }
+            // when user opens suggestion list, no item is selected. the first, initial
+            // key down/up or page down/up key will select the first / last item in
+            // the suggestion list then.
             if (suggestionPopup != null) {
-                if (evt.isActionKey() || evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                if (evt.isActionKey() || evt.getKeyCode()==KeyEvent.VK_ESCAPE) {
                     switch (evt.getKeyCode()) {
                         case KeyEvent.VK_DOWN:
                         case KeyEvent.VK_PAGE_DOWN:
@@ -234,8 +241,8 @@ public class RL64TextArea extends StandaloneTextArea {
                         case KeyEvent.VK_PAGE_UP:
                             evt.consume();
                             suggestionList.requestFocusInWindow();
-                            suggestionList.setSelectedIndex(suggestionList.getModel().getSize() - 1);
-                            suggestionList.ensureIndexIsVisible(suggestionList.getModel().getSize() - 1);
+                            suggestionList.setSelectedIndex(suggestionList.getModel().getSize()-1);
+                            suggestionList.ensureIndexIsVisible(suggestionList.getModel().getSize()-1);
                             break;
                         default: break;
                     }
