@@ -120,7 +120,7 @@ public class ConstantsR64 {
     public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ASSEMBLER_START_ADDRESS+" "+ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ASSEMBLER_COMPRESSED_FILE;    
     public static final String DEFAULT_PUCRUNCH_PARAM = ASSEMBLER_UNCOMPRESSED_FILE+" "+ASSEMBLER_COMPRESSED_FILE+" -x"+ASSEMBLER_START_ADDRESS;
     
-    public static final String CB_GOTO_DEFAULT_STRING = "Goto ...";
+    public static final String CB_GOTO_DEFAULT_STRING = "(select Goto from Navigate menu)";
     public static final String CB_GOTO_SECTION_STRING = "Goto section ...";
     public static final String CB_GOTO_LABEL_STRING = "Goto label ...";
     public static final String CB_GOTO_FUNCTION_STRING = "Goto function ...";
