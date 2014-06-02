@@ -16,11 +16,11 @@
  */
 package de.relaunch64.popelganda.Editor;
 
+import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.Tools;
-import de.relaunch64.popelganda.assemblers.Assembler;
-import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -31,26 +31,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.BorderFactory;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.syntax.ModeProvider;
-import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.jedit.textarea.Gutter;
+import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.util.SyntaxUtilities;
 
 /**
@@ -499,7 +500,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // check for valid type
         if (-1==type) return false;
         // check if caret is visible. if not, location is NULL, i.e. exception thrown
-        if (!isCaretVisible()) {
+        if (getCaretLine()<getFirstLine() || getCaretLine()>getLastPhysicalLine()) {
             // scroll to caret
             scrollToCaret(true);
             SwingUtilities.invokeLater(new Runnable() {
@@ -513,7 +514,7 @@ public class RL64TextArea extends StandaloneTextArea {
         else {
             return showSuggestion(type);
         }
-        return false;
+        return true;
     }    
     /**
      * Create the auto-completion popup.
@@ -549,7 +550,6 @@ public class RL64TextArea extends StandaloneTextArea {
                 suggestionSubWord = getCaretString(false, macroPrefix);
             } else {
                 suggestionSubWord = getAssembler().labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
-                if (suggestionSubWord.length() == 0) return false;
             }
             // check for valid value
             if (null==suggestionSubWord) return false;
@@ -634,8 +634,15 @@ public class RL64TextArea extends StandaloneTextArea {
                 getBuffer().insert(getCaretPosition(), common);
                 suggestionSubWord = suggestionSubWord + common;
             }
-            // sort list
-            Collections.sort(labels);
+            // sort list...
+            if (settings.getSuggestionSortIgnoresCase()) {
+                // ...while ignoring case
+                Collections.sort(labels, new SortIgnoreCase());
+            }
+            else {
+                // ...or case-sensitive
+                Collections.sort(labels);
+            }
             // get location of caret as coordinate
             Point location = offsetToXY(getCaretPosition() - suggestionSubWord.length());
             // check if null
@@ -670,6 +677,17 @@ public class RL64TextArea extends StandaloneTextArea {
         }
         return true;
     }
+    /**
+     * A sorter for sorting arrays while ignoring case.
+     */
+    private class SortIgnoreCase implements Comparator<Object> {
+        @Override
+        public int compare(Object o1, Object o2) {
+            String s1 = (String) o1;
+            String s2 = (String) o2;
+            return s1.toLowerCase().compareTo(s2.toLowerCase());
+        }
+    }    
     /**
      * Closes the auto-suggestion popup.
      */
