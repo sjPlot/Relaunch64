@@ -62,6 +62,20 @@ public class ErrorHandler {
         public final int logline;
         public final int loglen;
         public final File file;
+        /**
+         * Info class that saves information about errors of a compiled
+         * source code.
+         * 
+         * @param line the line of the source code, which contains errors or warnings
+         * @param column the column of the source code, where an error or warning was found
+         * @param logline the line of the error message in the error log
+         * @param loglen the length of the error message in lines. most assemblers have 
+         * all error information in one line. however, KickAss for instance,
+         * uses two lines.
+         * @param file the source file where the error was found. can be used to
+         * open the file with errors (if not already opened), by using the
+         * {@link #getAbsoluteErrorFilePath()} method.
+         */
         public ErrorInfo(int line, int column, int logline, int loglen, String file) {
             this.line = line;
             this.column = column;
@@ -75,19 +89,42 @@ public class ErrorHandler {
     public ErrorHandler() {
         clearErrors();
     }
-    
-    public void setBasePath(String bp) {
-        basePath = bp;
+    /**
+     * Sets the base path of the currently compiled file. This
+     * path is used for include files that may have errors, so
+     * include files can be opened and the error line shown.
+     * 
+     * @param bp the currently compiled source file, which will be
+     * used to find other relative included asm files.
+     */
+    public void setBasePath(File bp) {
+        basePath = FileTools.getFilePath(bp);
     }
+    /**
+     * Returns the basepath, ie the file path of the currently compiled
+     * source code (w/o filename).
+     * 
+     * @return the file path of the currently compiled
+     * source code, w/o file name and extension.
+     */
     public String getBasePath() {
         return basePath;
     }
+    /**
+     * Parses the content of the error log and adds all extracted errors
+     * to the {@link #errors}-array, where information about errors are saved.
+     * 
+     * @param log the content of the error log
+     * @param assembler the assembler that was used to comipile the file, in order
+     * to correctly parse the error messages.
+     */
     public void readErrorLines(String log, Assembler assembler) {
         // create buffered reader, needed for line number reader
         StringReader sr = new StringReader(log);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
-
+        // find all errors, use assembler specific error parsing
+        // to detect line and column numbers of warnings and errors.
         errors.addAll(assembler.readErrorLines(lineReader));
     }
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
