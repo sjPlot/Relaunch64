@@ -208,6 +208,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     jButtonApplyScript.setText("Add script");
                 }
                 setModifiedTabScript(false);
+                setRemovePossible(true);
             }
         });
         try {
