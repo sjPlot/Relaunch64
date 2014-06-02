@@ -30,11 +30,12 @@ Relaunch64 3.1.0
 * jump to next/prev code fold function
 * Aqua Look'n'Feel on OS X by default
 * UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
-* Added apply-button to Other-tab of preference pane
+* added apply-button to Other-tab of preference pane
 * many (code) improvements, code cleanup
 
 ### Bug fixes
-* Modified files, which should have been saved before compiling, were not checked if they really exist.
+* modified files, which should have been saved before compiling, were not checked if they really exist
+* remove-script-button (preference pane) was disabled in certain cases, where it should have been enabled - fixed
 
 Relaunch64 3.0.1
 ----------------
