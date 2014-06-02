@@ -53,20 +53,37 @@ public class FindReplace {
     private int lastActiveTab = -1;
     private RL64TextArea editorPane = null;
     
-    /**
-     * 
-     * @param ft The find term as string
-     * @param rt The replace term as string
-     * @param cn The content (of the editor pane) that should be searched through
-     * @param at the currently active tab from which the search was startet
-     * @param ep the currently active editor pane from which the search was startet
-     */
     FindReplace() {
         resetValues();
     }
+    /**
+     * Initializes the values that are needed for the find-replace operation.
+     * 
+     * @param ft the find term
+     * @param rt the replace term. may be empty or {@code null} if no replace is requested.
+     * @param at the currently active tab from which the search was startet
+     * @param ep the currently active tab / editor pane (instance of RL64TextArea) from which the search was startet
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     */
     public void initValues(String ft, String rt, int at, RL64TextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase) {
         initValues(ft, rt, at, ep, isRegEx, wholeWord, matchCase, false);
     }
+    /**
+     * Initializes the values that are needed for the find-replace operation.
+     * 
+     * @param ft the find term
+     * @param rt the replace term. may be empty or {@code null} if no replace is requested.
+     * @param at the currently active tab from which the search was startet
+     * @param ep the currently active tab / editor pane (instance of RL64TextArea) from which the search was startet
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * @param forceInit by default, the values and find/replace matcher are only initiated when the find- or
+     * replace-term has changed. Use {@code true} to force the initialization of the find/replace-matcher (see
+     * {@link #initmatcher(boolean, boolean, boolean)}).
+     */
     public void initValues(String ft, String rt, int at, RL64TextArea ep, boolean isRegEx, boolean wholeWord, boolean matchCase, boolean forceInit) {
         boolean newFindTerm = ((ft!=null && findText!=null && !findText.equalsIgnoreCase(ft)) || 
                                (rt!=null && replaceText!=null && !replaceText.equalsIgnoreCase(rt)));
@@ -83,7 +100,7 @@ public class FindReplace {
         if (newFindTerm || forceInit) initmatcher(isRegEx, wholeWord, matchCase);
     }
     /**
-     * 
+     * Resets the find and replace terms.
      */
     public final void resetValues() {
         // init list where we store the start/end-positions of the found terms
@@ -94,8 +111,16 @@ public class FindReplace {
         replaceText = "";
     }
     /**
+     * Inits the matcher, ie finds all occurences of the find-term-pattern and saves
+     * the offsets of all occurrences in the array {@link #findselections}. The
+     * {@link #findpos} index is used to indicate the currently "selected" find term.
      * 
-     * @return 
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * 
+     * @return {@code true} if any terms have been found, {@code false} if nothing found
+     * or search content was empty.
      */
     private boolean initmatcher(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         Matcher findmatcher;

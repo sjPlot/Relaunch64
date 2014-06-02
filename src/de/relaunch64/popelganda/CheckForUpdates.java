@@ -54,7 +54,15 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         // to ImportFileTask fields, here.
         super(app);
     }
-
+    /**
+     * Opens and reads the file {@code updatetext} to get information about the latest
+     * releases.
+     * 
+     * @param updatetext an URL to the (text-)file containg the update information. See
+     * ConstantsR64.UPDATE_INFO_URI.
+     * 
+     * @return the content of the (text-)file
+     */
     protected String accessUpdateFile(URL updatetext) {
         // input stream that will read the update text
         InputStream is;
@@ -79,7 +87,13 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         }
         return updateinfo.toString();
     }
-
+    /**
+     * This thread accesses the update information file and checks whether new releases are
+     * available. f yes, an information will be shown in the log window.
+     * 
+     * @return always {@code null}.
+     * @throws IOException 
+     */
     @Override
     protected Object doInBackground() throws IOException {
         // Your Task's code here.  This method runs
