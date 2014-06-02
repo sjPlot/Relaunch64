@@ -167,7 +167,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init listeners and accelerator table
         initListeners();
         // set sys info
-        jTextAreaLog.setText(Tools.getSystemInformation()+System.getProperty("line.separator"));
+        jTextAreaLog.setText(Tools.getSystemInformation()+System.lineSeparator());
         // set application icon
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
@@ -247,7 +247,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
     // </editor-fold>
     }
-    
+    /**
+     * Init the comboboxes with default values.
+     */
     private void initComboBoxes() {
         jSplitPane2.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN));
         jSplitPane1.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG));
@@ -267,6 +269,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         catch (IllegalArgumentException ex) {
         }
     }
+    /**
+     * Adds available scripts to script-combobox.
+     */
     private void initScripts() {
         // init custom scripts
         jComboBoxRunScripts.removeAllItems();
@@ -280,9 +285,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             for (String sn : scriptNames) jComboBoxRunScripts.addItem(sn);
         }
     }
-    
     /**
-     * 
+     * Inits all relevant listeners.
      */
     private void initListeners() {
         // add an exit-listener, which offers saving etc. on
@@ -745,6 +749,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+    /**
+     * Parses input from the Goto-line-textfield. Used for quickly changing settings,
+     * may also be used for special debug-functions or information etc.
+     */
     private void specialFunctions() {
         String text = jTextFieldGotoLine.getText();
         switch (text) {
@@ -820,6 +828,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         setRecentDocumentMenuItem(recentAMenuItem,10);
     }
     /**
+     * Removes or adds a menu item for recently opened documents.
      * 
      * @param menuItem
      * @param recentDocNr 
@@ -1226,8 +1235,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             File outFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+".prg");
             // create compressed file
             File compressedFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+"-compressed.prg");
-            // select compiler log window
-            jTabbedPaneLogs.setSelectedIndex(1);
             // iterate script
             for (String cmd : lines) {
                 cmd = cmd.trim();
@@ -1269,20 +1276,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         // start process
                         p = pb.start();
                         // create scanner to receive compiler messages
-                        try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.getProperty("line.separator"))) {
+                        try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
                             // write output to string builder
                             while (sc.hasNextLine()) {
-                                compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
+                                compilerLog.append(System.lineSeparator()).append(sc.nextLine());
                             }
                         }
-                        try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.getProperty("line.separator"))) {
+                        try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
                             // write output to string builder
                             while (sc.hasNextLine()) {
-                                compilerLog.append(System.getProperty("line.separator")).append(sc.nextLine());
+                                compilerLog.append(System.lineSeparator()).append(sc.nextLine());
                             }
                         }
                         // finally, append new line
-                        compilerLog.append(System.getProperty("line.separator"));
+                        compilerLog.append(System.lineSeparator());
                         // print log to text area
                         jTextAreaCompilerOutput.append(compilerLog.toString());                            
                         // wait for other process to be finished
@@ -1302,12 +1309,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     }
                 }
             }
-            // select error log if we have errors
-            if (errorHandler.hasErrors()) {
+            // select assembler log if we have errors or any compiling information
+            // if we have no content in assembler log nor any errors, don't show assembler log
+            if (errorHandler.hasErrors() || !jTextAreaCompilerOutput.getText().trim().isEmpty()) {
                 // show error log
                 jTabbedPaneLogs.setSelectedIndex(1);
                 // show first error
-                errorHandler.gotoFirstError(editorPanes, jTextAreaCompilerOutput);
+                if (errorHandler.hasErrors()) errorHandler.gotoFirstError(editorPanes, jTextAreaCompilerOutput);
             }
         }
         else {
@@ -1339,7 +1347,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void clearLog1() {
         // set sys info
-        jTextAreaLog.setText(Tools.getSystemInformation()+System.getProperty("line.separator"));
+        jTextAreaLog.setText(Tools.getSystemInformation()+System.lineSeparator());
     }
     @Action
     public void clearLog2() {
@@ -1754,11 +1762,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         @Override
         public void flush() {
-            throw new UnsupportedOperationException("Not supported yet.");
         }
         @Override
         public void close() throws SecurityException {
-            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
     public void checkForUpdates() {
