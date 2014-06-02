@@ -74,6 +74,7 @@ public class Settings {
     private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
+    private static final String SETTING_SUGGEST_SORT_CASE = "suggestioncasesort";
     private static final String SETTING_ANTIALIAS = "antialias";
     private static final String SETTING_SCALE_FONT = "scalefont";
     private static final String REC_DOC_ASSEMBLER = "compiler";
@@ -236,6 +237,13 @@ public class Settings {
         if (null==root.getChild(SETTING_ALT_ASM_MODE)) {
             // create element
             Element el = new Element(SETTING_ALT_ASM_MODE);
+            el.setText("0");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_SUGGEST_SORT_CASE)) {
+            // create element
+            Element el = new Element(SETTING_SUGGEST_SORT_CASE);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
@@ -606,6 +614,19 @@ public class Settings {
         Element el = root.getChild(SETTING_ALT_ASM_MODE);
         if (null==el) {
             el = new Element(SETTING_ALT_ASM_MODE);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getSuggestionSortIgnoresCase() {
+        Element el = root.getChild(SETTING_SUGGEST_SORT_CASE);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setSuggestionSortIgnoresCase(boolean val)  {
+        Element el = root.getChild(SETTING_SUGGEST_SORT_CASE);
+        if (null==el) {
+            el = new Element(SETTING_SUGGEST_SORT_CASE);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

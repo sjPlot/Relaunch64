@@ -128,6 +128,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxReopenFiles.setSelected(settings.getReopenOnStartup());
         jCheckBoxNimbusOnOSX.setSelected(settings.getNimbusOnOSX());
         jCheckBoxScaleFonts.setSelected(settings.getScaleFont());
+        jCheckBoxSuggestCaseSort.setSelected(!settings.getSuggestionSortIgnoresCase());
         jCheckBoxAlternativeAssemblyMode.setSelected(settings.getAlternativeAssemblyMode());
         // init schemes
         initSchemes();
@@ -309,6 +310,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 setModifiedTabFont(true);
             }
         });
+        jCheckBoxSuggestCaseSort.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+            }
+        });
         jTextAreaUserScript.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
@@ -405,6 +412,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setPreferredAssembler(Assemblers.byID(jComboBoxPrefASM.getSelectedIndex()));
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         settings.setScaleFont(jCheckBoxScaleFonts.isSelected());
+        settings.setSuggestionSortIgnoresCase(!jCheckBoxSuggestCaseSort.isSelected());
         switch(jComboBoxLineNumberAlign.getSelectedIndex()) {
             case 0:
                 settings.setLineNumerAlignment(Gutter.RIGHT);
@@ -571,6 +579,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jComboBoxAntiAlias = new javax.swing.JComboBox();
         jCheckBoxScaleFonts = new javax.swing.JCheckBox();
         jLabelRestart = new javax.swing.JLabel();
+        jCheckBoxSuggestCaseSort = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
@@ -735,6 +744,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart.setText(resourceMap.getString("jLabelRestart.text")); // NOI18N
         jLabelRestart.setName("jLabelRestart"); // NOI18N
 
+        jCheckBoxSuggestCaseSort.setText(resourceMap.getString("jCheckBoxSuggestCaseSort.text")); // NOI18N
+        jCheckBoxSuggestCaseSort.setToolTipText(resourceMap.getString("jCheckBoxSuggestCaseSort.toolTipText")); // NOI18N
+        jCheckBoxSuggestCaseSort.setName("jCheckBoxSuggestCaseSort"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -767,7 +780,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                             .add(jPanel5Layout.createSequentialGroup()
                                 .add(jCheckBoxScaleFonts)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabelRestart)))
+                                .add(jLabelRestart))
+                            .add(jCheckBoxSuggestCaseSort))
                         .add(0, 196, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -779,27 +793,29 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jLabel10)
                     .add(jLabelFont)
                     .add(jButtonFont))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel11)
                     .add(jTextFieldTabWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel6)
                     .add(jComboBoxPrefASM, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(jComboBoxLineNumberAlign, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel3)
                     .add(jComboBoxAntiAlias, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jCheckBoxSuggestCaseSort)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jCheckBoxScaleFonts)
                     .add(jLabelRestart))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 51, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -906,13 +922,13 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jCheckBoxCheckUpdates)
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxSaveOnCompile)
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxReopenFiles)
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxNimbusOnOSX)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 161, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 179, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
                 .addContainerGap())
         );
@@ -954,6 +970,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxReopenFiles;
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
     private javax.swing.JCheckBox jCheckBoxScaleFonts;
+    private javax.swing.JCheckBox jCheckBoxSuggestCaseSort;
     private javax.swing.JComboBox jComboBoxAntiAlias;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;
