@@ -388,12 +388,14 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             mainfont = f;
             jLabelFont.setFont(f);
             jLabelFont.setText(f.getFontName());
-            setModifiedTabFont(true);
+            // save font in settings
+            settings.setMainfont(mainfont);
+            // apply font to editor panes
+            editorPanes.setFonts(settings.getMainFont());
         }
     }
     @Action(enabledProperty = "modifiedTabFont")
     public void applyFontTab() {
-        settings.setMainfont(mainfont);
         // get tab width
         try {
             settings.setTabWidth(Integer.parseInt(jTextFieldTabWidth.getText()));
@@ -426,7 +428,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 break;
         }
         setModifiedTabFont(false);
-        editorPanes.setFonts(settings.getMainFont());
         editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
         editorPanes.setTabs(settings.getTabWidth());
         editorPanes.setAntiAlias(settings.getAntiAlias());
@@ -586,6 +587,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
         setTitle(resourceMap.getString("FormSettings.title")); // NOI18N
+        setMinimumSize(new java.awt.Dimension(400, 380));
         setModal(true);
         setName("FormSettings"); // NOI18N
 
