@@ -17,11 +17,16 @@ Relaunch64 3.1.0
   - local labels outside the scope are not listed (only global labels and labels within scope)
   - filter suggestion list by typing
   - editor scrolls to suggestion popup when caret is not visible
+  - suggests all labels, constants, variables (these two go as labels, too), macros and functions.
+  - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
+* improved navigation (jump and goto functions):
+  - all labels, constants, variables (these two go as labels, too), macros and functions are extracted.
+  - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
 * added DASM support
 * added TMPx support
 * added code-folding support
 * added alternative syntax highlighting mode (see preferences)
-* improvements with goto error functions
+* improvements with goto error functions, error line parsing for all supported assemblers.
 * jump to next/prev code fold function
 * Aqua Look'n'Feel on OS X by default
 * UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
