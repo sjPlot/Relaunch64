@@ -51,7 +51,13 @@ public class InsertSinusTableDlg extends javax.swing.JDialog {
 
     private String bytetable = null;
     private final String byteToken;
-    
+    /**
+     * Computes a table with sinus curve data.
+     * 
+     * @param parent the parent frame of this dialog window
+     * @param assembler a reference to the Assembler-class, representing the assembler of the
+     * currently activated editor pane where the bytes should be inserted.
+     */
     public InsertSinusTableDlg(java.awt.Frame parent, Assembler assembler) {
         super(parent);
         byteToken = assembler.getByteDirective();

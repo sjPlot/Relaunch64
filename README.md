@@ -24,7 +24,8 @@ Relaunch64 3.1.0
 * improvements with goto error functions
 * jump to next/prev code fold function
 * Aqua Look'n'Feel on OS X by default
-* UI font scaling to better fit screen resolution (can be switched off via preferences)
+* UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
+* Added apply-button to Other-tab of preference pane
 * many (code) improvements, code cleanup
 
 ### Bug fixes

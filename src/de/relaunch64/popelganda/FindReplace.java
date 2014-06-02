@@ -283,6 +283,18 @@ public class FindReplace {
         }
         return true;
     }
+    /**
+     * Replaces the currently selected text with {@link #replaceText}. After successful replacement,
+     * the next find term, if any, is selected.
+     * 
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * 
+     * @return  {@code true} if the selected text was successfully replaced and a new find term could be
+     * selected. {@code false} if no text was selected for replacement, or if the last occurence of
+     * find term was replaced (and no more replacement can be done).
+     */
     public boolean replace(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         if (editorPane.getText()!=null) {
             if (editorPane.getSelectedText()!=null) {
@@ -302,6 +314,13 @@ public class FindReplace {
         }
         return true;
     }
+    /**
+     * Replaces all occurences of {@link #findText} with {@link #replaceText}.
+     * 
+     * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
+     * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
+     * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     */
     public void replaceAll(boolean isRegEx, boolean wholeWord, boolean matchCase) {
         if (initmatcher(isRegEx, wholeWord, matchCase)) {
             for (int cnt=findselections.size()-1;cnt>=0; cnt--) {
@@ -318,6 +337,9 @@ public class FindReplace {
             resetValues();
         }
     }
+    /**
+     * Updates the search content to the global field.
+     */
     private void updateContent() {
         // check for values
         if (editorPane.getText().length()>0) {

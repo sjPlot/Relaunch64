@@ -60,9 +60,11 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
     private final Settings settings;
     /**
      * Creates new form InsertByteFromFileDlg
-     * @param parent
-     * @param s
-     * @param assembler
+     * 
+     * @param parent the parent frame of this dialog window
+     * @param s a reference to the Settings class
+     * @param assembler a reference to the Assembler-class, representing the assembler of the
+     * currently activated editor pane where the bytes should be inserted.
      */
     public InsertByteFromFileDlg(java.awt.Frame parent, Settings s, Assembler assembler) {
         super(parent);
