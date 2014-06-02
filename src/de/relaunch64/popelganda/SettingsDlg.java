@@ -146,6 +146,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         setModifiedTabScript(false);
         setModifiedTabFont(false);
         setModifiedTabScheme(false);
+        setModifiedTabOther(false);
     }
     private void initSchemes() {
         jComboBoxSyntaxScheme.removeAllItems();
@@ -248,19 +249,19 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxCheckUpdates.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settings.setCheckForUpdates(jCheckBoxCheckUpdates.isSelected());
+                setModifiedTabOther(true);
             }
         });
         jCheckBoxSaveOnCompile.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settings.setSaveOnCompile(jCheckBoxSaveOnCompile.isSelected());
+                setModifiedTabOther(true);
             }
         });
         jCheckBoxNimbusOnOSX.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settings.setNimbusOnOSX(jCheckBoxNimbusOnOSX.isSelected());
+                setModifiedTabOther(true);
             }
         });
         jCheckBoxAlternativeAssemblyMode.addActionListener(new java.awt.event.ActionListener() {
@@ -272,7 +273,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxReopenFiles.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settings.setReopenOnStartup(jCheckBoxReopenFiles.isSelected());
+                setModifiedTabOther(true);
             }
         });
         jComboBoxPrefASM.addActionListener(new java.awt.event.ActionListener() {
@@ -466,6 +467,14 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         }
         setModifiedTabScript(false);
     }
+    @Action(enabledProperty = "modifiedTabOther")
+    public void applyOther() {
+        settings.setCheckForUpdates(jCheckBoxCheckUpdates.isSelected());
+        settings.setSaveOnCompile(jCheckBoxSaveOnCompile.isSelected());
+        settings.setNimbusOnOSX(jCheckBoxNimbusOnOSX.isSelected());
+        settings.setReopenOnStartup(jCheckBoxReopenFiles.isSelected());
+        setModifiedTabOther(false);
+    }
     @Action(enabledProperty = "removePossible")
     public void removeScript() {
         if (jComboBoxCustomScripts.getSelectedIndex()<0) return;
@@ -480,9 +489,6 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             });
         }
     }
-    /**
-     * 
-     */
     private boolean modifiedTabScript = false;
     public boolean isModifiedTabScript() {
         return modifiedTabScript;
@@ -491,6 +497,15 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         boolean old = isModifiedTabScript();
         this.modifiedTabScript = b;
         firePropertyChange("modifiedTabScript", old, isModifiedTabScript());
+    }
+    private boolean modifiedTabOther = false;
+    public boolean isModifiedTabOther() {
+        return modifiedTabOther;
+    }
+    public final void setModifiedTabOther(boolean b) {
+        boolean old = isModifiedTabOther();
+        this.modifiedTabOther = b;
+        firePropertyChange("modifiedTabOther", old, isModifiedTabOther());
     }
     private boolean modifiedTabFont = false;
     public boolean isModifiedTabFont() {
@@ -565,6 +580,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
         jCheckBoxReopenFiles = new javax.swing.JCheckBox();
         jCheckBoxNimbusOnOSX = new javax.swing.JCheckBox();
+        jButtonApplyOther = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -862,6 +878,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxNimbusOnOSX.setToolTipText(resourceMap.getString("jCheckBoxNimbusOnOSX.toolTipText")); // NOI18N
         jCheckBoxNimbusOnOSX.setName("jCheckBoxNimbusOnOSX"); // NOI18N
 
+        jButtonApplyOther.setAction(actionMap.get("applyOther")); // NOI18N
+        jButtonApplyOther.setName("jButtonApplyOther"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -874,6 +893,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jCheckBoxReopenFiles)
                     .add(jCheckBoxNimbusOnOSX))
                 .addContainerGap(433, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jButtonApplyOther)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -886,7 +909,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jCheckBoxReopenFiles)
                 .add(18, 18, 18)
                 .add(jCheckBoxNimbusOnOSX)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 161, Short.MAX_VALUE)
+                .add(jButtonApplyOther)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -912,6 +937,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonApplyOther;
     private javax.swing.JButton jButtonApplyScheme;
     private javax.swing.JButton jButtonApplyScript;
     private javax.swing.JButton jButtonApplyTabAndFont;

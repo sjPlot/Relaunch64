@@ -552,6 +552,11 @@
                       </Group>
                       <EmptySpace pref="433" max="32767" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jButtonApplyOther" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -565,7 +570,9 @@
                       <Component id="jCheckBoxReopenFiles" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jCheckBoxNimbusOnOSX" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="196" max="32767" attributes="0"/>
+                      <EmptySpace pref="161" max="32767" attributes="0"/>
+                      <Component id="jButtonApplyOther" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -597,6 +604,14 @@
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxNimbusOnOSX.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxNimbusOnOSX.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxNimbusOnOSX" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButtonApplyOther">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.SettingsDlg" id="applyOther" methodName="applyOther"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jButtonApplyOther" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>
