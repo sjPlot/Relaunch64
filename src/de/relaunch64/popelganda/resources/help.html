@@ -13,6 +13,7 @@
     code { font-family:monospace; color:#444444; background-color:#eeeeee; font-size:1em; }
     .highlight { background-color:#f2f2f2; padding:3px; }
   </style> 
+  <title>Help</title>
 </head>
 <body>
 
@@ -205,7 +206,7 @@ open /Applications/Vice64/x64.app OUTFILE</div>
     the auto-completion-feature to work.
 </p>
 
-<h2>Auto completion for labels</h2>
+<h2>Auto-completion for labels</h2>
 <p>
 	While typing, press <code>ctrl+space</code> to open a popup with a list of all labels that match
 	the previous chars to complete and insert a label name. If you did not already started typing before
@@ -213,12 +214,18 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 	or mouse click on a label to insert it or complete your input.
 </p>
 
-<p>
+<p class="highlight">
     Note that only those local labels within reachable scope will be shown in the popup. Furthermore, you can continue
     typing while the popup is visible. The list of labels will then be filtered.
 </p>
 
-<h2>Auto completion for functions, macros and script-commands</h2>
+<p>
+    If no matching label was found, <code>ctrl+space</code> then automatically tries to extract 
+    functions, macros and script-commands. However, you can directly start auto-completion for
+    functions, macros and script-commands with <code>ctrl+shift+space</code>.
+</p>
+
+<h2>Auto-completion for functions, macros and script-commands</h2>
 <p>
 	While typing, press <code>ctrl+shift+space</code> to open a popup with a list 
         of all functions, macros or scripting-language-commands that match

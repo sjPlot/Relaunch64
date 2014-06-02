@@ -179,7 +179,11 @@ public class RL64TextArea extends StandaloneTextArea {
             if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
                 suggestionType = SUGGESTION_LABEL;
                 // show popup
-                showSuggestionPopup(suggestionType);
+                if (!showSuggestionPopup(suggestionType)) {
+                    // if no label found, try to find functions and macros
+                    suggestionType = SUGGESTION_FUNCTION_MACRO_SCRIPT;
+                    showSuggestionPopup(suggestionType);
+                }
             }
             // ctrl+shift+space opens macro-function-auto-completion
             else if (evt.getKeyCode()==KeyEvent.VK_SPACE && evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown()) {
@@ -446,9 +450,9 @@ public class RL64TextArea extends StandaloneTextArea {
         // setup keylistener
         keyListener = new RL64KeyListener();
     }
-    protected void showSuggestionPopup(final int type) {
+    protected boolean showSuggestionPopup(final int type) {
         // check for valid type
-        if (-1==type) return;
+        if (-1==type) return false;
         // check if caret is visible. if not, location is NULL, i.e. exception thrown
         if (!isCaretVisible()) {
             // scroll to caret
@@ -462,8 +466,9 @@ public class RL64TextArea extends StandaloneTextArea {
             });
         }
         else {
-            showSuggestion(type);
+            return showSuggestion(type);
         }
+        return false;
     }    
     /**
      * Create the auto-completion popup.
@@ -475,8 +480,10 @@ public class RL64TextArea extends StandaloneTextArea {
      * and modified for own purposes.
      * 
      * @param type
+     * @return {@code true} if either auto-completion was performed or popup displayed. {@code false}
+     * if no labels have been found and no popup is displayed.
      */
-    protected void showSuggestion(int type) {
+    protected boolean showSuggestion(int type) {
         // hide old popup
         hideSuggestion();
         try {
@@ -486,10 +493,10 @@ public class RL64TextArea extends StandaloneTextArea {
                 suggestionSubWord = getCaretString(false, macroPrefix);
             } else {
                 suggestionSubWord = getAssembler().labelGetStart(getLineText(getCaretLine()), getCaretPosition()-getLineStartOffset(getCaretLine()));
-                if (suggestionSubWord.length() == 0) return;
+                if (suggestionSubWord.length() == 0) return false;
             }
             // check for valid value
-            if (null==suggestionSubWord) return;
+            if (null==suggestionSubWord) return false;
             // init variable
             ArrayList<String> labels = null;
             Assembler.labelList allLabels = LabelExtractor.getLabels(getBuffer().getText(), getAssembler(), getCaretLine() + 1);
@@ -524,11 +531,11 @@ public class RL64TextArea extends StandaloneTextArea {
                     break;
             }
             // check if we have any labels
-            if (labels == null || labels.size() < 1) return;
+            if (labels == null || labels.size() < 1) return false;
             if (labels.size() == 1) { // single suggestion, just type it in
                 final String selectedSuggestion = labels.get(0).substring(suggestionSubWord.length());
                 getBuffer().insert(getCaretPosition(), selectedSuggestion);
-                return;
+                return true;
             }
             { // insert longest prefix
                 int k = suggestionSubWord.length();
@@ -582,6 +589,7 @@ public class RL64TextArea extends StandaloneTextArea {
         }
         catch (IndexOutOfBoundsException ex) {
         }
+        return true;
     }
     /**
      * Closes the auto-suggestion popup.
