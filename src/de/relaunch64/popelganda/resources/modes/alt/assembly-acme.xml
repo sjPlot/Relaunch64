@@ -30,11 +30,7 @@
 			<END>"</END>
 		</SPAN>
 
-<<<<<<< HEAD
-                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(addr|address|align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
-=======
                 <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(address|addr|align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
->>>>>>> FETCH_HEAD
                 <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD4">!(08|16|24|32|8|binary|bin|byte|by|cbm|fill|pet|raw|scrxor|scr|text|tx|word|wo)\b</SEQ_REGEXP>
 
 		<KEYWORDS>
