@@ -121,7 +121,6 @@
                         <OPERATOR>lsl</OPERATOR>
                         <OPERATOR>not</OPERATOR>
                         <OPERATOR>mod</OPERATOR>
-                        <OPERATOR>and</OPERATOR>
                         <OPERATOR>xor</OPERATOR>
                         <OPERATOR>or</OPERATOR>
 <!--                    <OPERATOR>asl</OPERATOR>
