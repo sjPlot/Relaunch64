@@ -117,7 +117,8 @@
                         <OPERATOR>mod</OPERATOR>
                         <OPERATOR>xor</OPERATOR>
                         <OPERATOR>or</OPERATOR>
-<!--                    <OPERATOR>asl</OPERATOR>
+<!--                    <OPERATOR>and</OPERATOR>
+                        <OPERATOR>asl</OPERATOR>
                         <OPERATOR>arr</OPERATOR>
                         <OPERATOR>lsr</OPERATOR>-->
 
