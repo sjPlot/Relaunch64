@@ -305,7 +305,7 @@ public class FileTools {
         else if (null==dest && source!=null) return source.toString();
         else if (source!=null && dest!=null) {
             try {
-                Path fp = Paths.get(source.getAbsolutePath()).relativize(Paths.get(dest.getAbsolutePath()));
+                Path fp = Paths.get(getFilePath(source)).relativize(Paths.get(dest.getAbsolutePath()));
                 if (fp!=null) {
                     return fp.toString();
                 }

@@ -39,6 +39,7 @@ Relaunch64 3.1.0
 * modified files, which should have been saved before compiling, were not checked if they really exist
 * remove-script-button (preference pane) was disabled in certain cases, where it should have been enabled - fixed
 * preference window could be resized, so apply-button was no longer visible. fixed, set minimum size to preference window to ensure apply-button is always visible
+* relative paths, for instance when drag'n'dropping files, were not correctly extrtacted - fixed
 
 Relaunch64 3.0.1
 ----------------
