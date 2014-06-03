@@ -52,17 +52,17 @@ class Assembler_acme implements Assembler
         "BMI", "BNE", "BPL", "BRK", "BVC", "BVS", "CLC", "CLD", "CLI", "CLV",
         "CMP", "CPX", "CPY", "DCP", "DEC", "DEX", "DEY", "DOP", "EOR", "INC",
         "INX", "INY", "ISC", "JAM", "JMP", "JSR", "LAX", "LDA", "LDX", "LDY",
-        "LSR", "NOP", "ORA", "PHA", "PHP", "PLA", "PLP", "RLA", "ROL", "ROR",
-        "RRA", "RTI", "RTS", "SAX", "SBC", "SBX", "SEC", "SED", "SEI", "SLO",
-        "SRE", "STA", "STX", "STY", "TAX", "TAY", "TOP", "TSX", "TXA", "TXS",
-        "TYA"
+        "LSR", "LXA", "NOP", "ORA", "PHA", "PHP", "PLA", "PLP", "RLA", "ROL",
+        "ROR", "RRA", "RTI", "RTS", "SAX", "SBC", "SBX", "SEC", "SED", "SEI",
+        "SLO", "SRE", "STA", "STX", "STY", "TAX", "TAY", "TOP", "TSX", "TXA",
+        "TXS", "TYA"
     };
     /**
      * String array with Math functions and scripting language keywords, in
      * case the assembler supports this. Used for syntax highlighting keywords.
      */
     final static String[] scriptKeywords = {
-        "sin", "cos", "tan", "arcsin", "arccos", "arctan", "int", "float"
+        "sin", "cos", "tan", "arcsin", "arccos", "arctan", "int", "float", "addr"
     };
 
     @Override

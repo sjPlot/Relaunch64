@@ -30,7 +30,7 @@
 			<END>"</END>
 		</SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(addr|align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD3">!(address|addr|align|al|as|convtab|cpu|ct|do|endoffile|eof|error|fi|for|ifdef|ifndef|if|initmem|macro|pseudopc|realpc|rl|rs|serious|set|sl|source|src|subzone|sz|to|warn|zn|zone)\b</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="!" TYPE="KEYWORD4">!(08|16|24|32|8|binary|bin|byte|by|cbm|fill|pet|raw|scrxor|scr|text|tx|word|wo)\b</SEQ_REGEXP>
 
 		<KEYWORDS>
@@ -101,6 +101,7 @@
                         <KEYWORD2>isc</KEYWORD2>
                         <KEYWORD2>jam</KEYWORD2>
                         <KEYWORD2>lax</KEYWORD2>
+                        <KEYWORD2>lxa</KEYWORD2>
                         <KEYWORD2>rla</KEYWORD2>
                         <KEYWORD2>rra</KEYWORD2>
                         <KEYWORD2>sax</KEYWORD2>
@@ -133,6 +134,7 @@
                         <FUNCTION>arctan</FUNCTION>
                         <FUNCTION>float</FUNCTION>
                         <FUNCTION>int</FUNCTION>
+                        <FUNCTION>addr</FUNCTION>
 		</KEYWORDS>
 
                 <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z.][A-Za-z0-9_]*|[+-]</SEQ_REGEXP>
