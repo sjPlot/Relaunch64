@@ -24,6 +24,7 @@ Relaunch64 3.1.0
   - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
 * added DASM support
 * added TMPx support
+* syntax support for !addr pseudoop in ACME (since 0.95)
 * added code-folding support
 * added alternative syntax highlighting mode (see preferences)
 * improvements with goto error functions, error line parsing for all supported assemblers.
