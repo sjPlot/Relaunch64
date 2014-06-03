@@ -413,6 +413,11 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.multipleSelectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
         setProperty("view.caretColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
         setProperty("view.structureHighlightColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD));
+        // set code folding colors
+        setProperty("view.style.foldLine.1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL)+" bgColor:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION)+" style:b");
+        setProperty("view.style.foldLine.2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD)+" bgColor:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
+        setProperty("view.style.foldLine.3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD)+" bgColor:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
+        setProperty("view.gutter.foldColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
         // load color scheme
         Font mf = settings.getMainFont();
         // set for- and background color of text area

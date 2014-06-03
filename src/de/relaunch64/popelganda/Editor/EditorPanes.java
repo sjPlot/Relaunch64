@@ -231,6 +231,31 @@ public class EditorPanes {
             ep.scrollAndCenterCaret();
         }
     }
+    public void expandAllFolds() {
+        toggleFold(true);
+    }
+    public void collapseAllFolds() {
+        toggleFold(false);
+    }
+    protected void toggleFold(boolean expand) {
+        // get text area
+        RL64TextArea ep = getActiveEditorPane();
+        // set caret position to start of buffer
+        ep.goToBufferStart(false);
+        // remember caret offset
+        int oldcaret = ep.getCaretPosition();
+        int newcaret = -1;
+        // check if we cycled through all folds
+        while (oldcaret!=newcaret) {
+            // remember caret offset
+            oldcaret = ep.getCaretPosition();
+            // goto next fold
+            ep.goToNextFold(false);
+            newcaret = ep.getCaretPosition();;
+            // expand
+            if (expand) ep.expandFold(true); else ep.collapseFold();
+        }
+    }
     /**
      * Sets the input focus to the editor pane.
      * 

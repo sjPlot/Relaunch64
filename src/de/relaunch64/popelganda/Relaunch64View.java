@@ -788,6 +788,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setLineNumerAlignment(Gutter.RIGHT);
                 editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
                 break;
+            case "cf":
+                editorPanes.collapseAllFolds();
+                editorPanes.setFocus();
+                break;
+            case "ef":
+                editorPanes.expandAllFolds();
+                editorPanes.setFocus();
+                break;
         }
         try {
             if (text.startsWith("cs")) {
@@ -939,6 +947,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Action
     public void collapseFolds() {
         editorPanes.getActiveEditorPane().collapseFold();
+    }
+    @Action
+    public void expandAllFolds() {
+        editorPanes.expandAllFolds();
+        editorPanes.setFocus();
+    }
+    @Action
+    public void collapseAllFolds() {
+        editorPanes.collapseAllFolds();
+        editorPanes.setFocus();
     }
     /**
      * 
@@ -1913,7 +1931,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         jMenuItemSurroundFolds = new javax.swing.JMenuItem();
         jMenuItemExpandFold = new javax.swing.JMenuItem();
+        jMenuItemExpandAllFolds = new javax.swing.JMenuItem();
         jMenuItemCollapseFold = new javax.swing.JMenuItem();
+        jMenuItemCollapseAllFolds = new javax.swing.JMenuItem();
         jSeparator23 = new javax.swing.JPopupMenu.Separator();
         insertSectionMenuItem = new javax.swing.JMenuItem();
         insertSeparatorMenuItem = new javax.swing.JMenuItem();
@@ -2527,9 +2547,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jMenuItemExpandFold.setName("jMenuItemExpandFold"); // NOI18N
         sourceMenu.add(jMenuItemExpandFold);
 
+        jMenuItemExpandAllFolds.setAction(actionMap.get("expandAllFolds")); // NOI18N
+        jMenuItemExpandAllFolds.setName("jMenuItemExpandAllFolds"); // NOI18N
+        sourceMenu.add(jMenuItemExpandAllFolds);
+
         jMenuItemCollapseFold.setAction(actionMap.get("collapseFolds")); // NOI18N
         jMenuItemCollapseFold.setName("jMenuItemCollapseFold"); // NOI18N
         sourceMenu.add(jMenuItemCollapseFold);
+
+        jMenuItemCollapseAllFolds.setAction(actionMap.get("collapseAllFolds")); // NOI18N
+        jMenuItemCollapseAllFolds.setName("jMenuItemCollapseAllFolds"); // NOI18N
+        sourceMenu.add(jMenuItemCollapseAllFolds);
 
         jSeparator23.setName("jSeparator23"); // NOI18N
         sourceMenu.add(jSeparator23);
@@ -2772,7 +2800,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItemCollapseAllFolds;
     private javax.swing.JMenuItem jMenuItemCollapseFold;
+    private javax.swing.JMenuItem jMenuItemExpandAllFolds;
     private javax.swing.JMenuItem jMenuItemExpandFold;
     private javax.swing.JMenuItem jMenuItemNextFold;
     private javax.swing.JMenuItem jMenuItemPrevFold;
