@@ -33,14 +33,14 @@
 
 package de.relaunch64.popelganda;
 
-import de.relaunch64.popelganda.assemblers.ErrorHandler;
-import de.relaunch64.popelganda.assemblers.Assembler;
-import de.relaunch64.popelganda.assemblers.Assemblers;
 import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
+import de.relaunch64.popelganda.assemblers.Assembler;
+import de.relaunch64.popelganda.assemblers.Assemblers;
+import de.relaunch64.popelganda.assemblers.ErrorHandler;
 import de.relaunch64.popelganda.database.CustomScripts;
 import de.relaunch64.popelganda.database.FindTerms;
 import de.relaunch64.popelganda.database.Settings;
@@ -51,6 +51,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -60,7 +61,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,9 +70,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Scanner;
@@ -87,6 +87,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -499,6 +500,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //            findReplace.resetValues();
 //        });
         jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
+                    ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).cut();
+                    evt.consume();
+                }
+                else if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                    ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).copy();
+                    evt.consume();
+                }
+                else if (evt.getKeyCode()==KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
+                    ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).paste();
+                    evt.consume();
+                }
+            }
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
                 if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
@@ -523,6 +538,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         });
         jTextFieldReplace.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextFieldReplace.cut();
+                    evt.consume();
+                }
+                else if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextFieldReplace.copy();
+                    evt.consume();
+                }
+                else if (evt.getKeyCode()==KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextFieldReplace.paste();
+                    evt.consume();
+                }
+            }
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
                 if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
@@ -533,6 +562,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
+        
         jTextFieldGotoLine.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyReleased(java.awt.event.KeyEvent evt) {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
@@ -1475,7 +1505,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // make it visible
             jPanelReplace.setVisible(true);
             // and set input focus in it
-            if (sel!=null && sel.toString().isEmpty()) {
+            if (null==sel || sel.toString().isEmpty()) {
                 jComboBoxFind.requestFocusInWindow();
             }
             else {
