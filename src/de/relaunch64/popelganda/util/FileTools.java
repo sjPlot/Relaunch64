@@ -48,6 +48,8 @@ import javax.swing.filechooser.FileFilter;
  * @author Daniel Luedecke
  */
 public class FileTools {
+    public static final int FILE_TYPE_ASM = 1;
+    public static final int FILE_TYPE_INCLUDE = 2;
     /**
      * This method creates and shows a file chooser, depending on the operating system. In case the os is Windows or Linux,
      * the standard Swing-JFileChooser will be opened. In case the os is Mac OS X, the old awt-dialog is used, which
@@ -70,7 +72,7 @@ public class FileTools {
      */
     public static File chooseFile(java.awt.Frame parent, int dlgmode, int filemode, String initdir, String initfile, String title, final String[] acceptedext, final String desc) {
         // set current directory
-        File curdir = (null==initdir)?null:new File(initdir);
+        File curdir = (null==initdir) ? null : new File(initdir);
         // get the title for the file dialog and use it as function parameter
         JFileChooser fc = createFileChooser(title,filemode,curdir,acceptedext,desc);
         // show the dialog
@@ -178,10 +180,11 @@ public class FileTools {
         return null;
     }
     /**
+     * Sets a new file extension to the file {@code f}.
      * 
-     * @param f
-     * @param ext
-     * @return 
+     * @param f a file which extenstion should be changed
+     * @param ext the new file extension
+     * @return a new file, derived from {@code f}, with new file extension {@code ext}.
      */
     public static File setFileExtension(File f, String ext) {
         // check for valid parameter
@@ -198,11 +201,18 @@ public class FileTools {
         return f;
     }
     /**
+     * Checks whether a file has a "valid" file extension, ie if the file type
+     * is processable by Relaunch64.
      * 
-     * @param fp
-     * @return 
+     * @param fp a file which file type should be checked.
+     * @param fileType the kind of file type. either {@link #FILE_TYPE_ASM FILE_TYPE_ASM}
+     * for assembler / source code files, or {@link #FILE_TYPE_INCLUDE FILE_TYPE_INCLUDE}
+     * for any files that may be included into the source code.
+     * 
+     * @return {@code true} if the file {@code fp} is a supported file type
+     * as indicated by {@code fileType}.
      */
-    public static boolean hasValidFileExtension(File fp) {
+    public static boolean isSupportedFileType(File fp, int fileType) {
         // get file extension
         String ext = getFileExtension(fp);
         // check for valid value
@@ -211,26 +221,20 @@ public class FileTools {
         }
         // add period, since the above method returns extension without period
         ext = "."+ext;
-        // loop all valid extensions
-        for (String extensions : ConstantsR64.FILE_EXTENSIONS) {
-            // check each extension
-            if (ext.equalsIgnoreCase(extensions)) {
-                return true;
-            }
+        String[] supportedExtensions;
+        switch (fileType) {
+            case FILE_TYPE_ASM:
+                supportedExtensions = ConstantsR64.FILE_EXTENSIONS;
+                break;
+            case FILE_TYPE_INCLUDE:
+                supportedExtensions = ConstantsR64.FILE_EXTENSIONS_INCLUDES;
+                break;
+            default:
+                supportedExtensions = ConstantsR64.FILE_EXTENSIONS;
+                break;
         }
-        return false;
-    }
-    public static boolean hasValidIncludeFileExtension(File fp) {
-        // get file extension
-        String ext = getFileExtension(fp);
-        // check for valid value
-        if (null==ext || ext.isEmpty()) {
-            return false;
-        }
-        // add period, since the above method returns extension without period
-        ext = "."+ext;
         // loop all valid extensions
-        for (String extensions : ConstantsR64.FILE_EXTENSIONS_INCLUDES) {
+        for (String extensions : supportedExtensions) {
             // check each extension
             if (ext.equalsIgnoreCase(extensions)) {
                 return true;
@@ -265,9 +269,10 @@ public class FileTools {
         return null;
     }
     /**
+     * Creates the file pathes and directories for the settings-files.
      * 
-     * @param filename
-     * @return 
+     * @param filename the filename of the setting file.
+     * @return the created filepath, or {@code null} if path could not be created.
      */
     public static File createFilePath(String filename) {
         File sFile;

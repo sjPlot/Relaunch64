@@ -375,12 +375,12 @@ public class Tools {
                                 linkedfiles.add(file);
                             }
                             // if it's an asm, add it to asm file list
-                            else if (FileTools.hasValidFileExtension(file) && validDropLocation) {
+                            else if (FileTools.isSupportedFileType(file, FileTools.FILE_TYPE_ASM) && validDropLocation) {
                                 // if so, add it to list
                                 sourcefiles.add(file);
                             }
                             // if it's an include file, add it to include file list
-                            else if (FileTools.hasValidIncludeFileExtension(file) && validDropLocation) {
+                            else if (FileTools.isSupportedFileType(file, FileTools.FILE_TYPE_INCLUDE) && validDropLocation) {
                                 // if so, add it to list
                                 includefiles.add(file);
                             }
