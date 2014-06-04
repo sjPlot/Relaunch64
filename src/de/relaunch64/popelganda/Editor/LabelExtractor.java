@@ -43,17 +43,19 @@ import java.util.LinkedHashMap;
 /**
  *
  * @author Daniel Lüdecke
+ * @author Soci / Singular
  */
 public class LabelExtractor {
     /**
      * Retrieves a list of all labels from the current activated source code
-     * (see {@link #getActiveSourceCode()}) that start with the currently
-     * typed characters at the caret position (usually passed as parameter
+     * (see {@link de.relaunch64.popelganda.Editor.EditorPanes#getActiveSourceCode() getActiveSourceCode()})
+     * that start with the currently typed characters at the caret position (usually passed as parameter
      * {@code subWord}.
      * 
      * @param subWord A string which filters the list of labels. Only labels that start with
      * {@code subWord} will
-     * @param labels
+     * @param labels An array list of type String with all label names, which can be retrieved
+     * by {@link #getNames(java.util.LinkedHashMap) getNames()}.
      * 
      * @return An object array of sorted labels, where only those labels are returned that start with {@code subWord}.
      */
@@ -70,23 +72,29 @@ public class LabelExtractor {
         return labels;
     }
     /**
-     * Retrieves a list of all labels from the current activated source code
-     * (see {@link #getActiveSourceCode()}).
+     * Retrieves a list of all label names from the current activated source code
+     * (see {@link de.relaunch64.popelganda.Editor.EditorPanes#getActiveSourceCode() getActiveSourceCode()}).
      * 
-     * @param map
-     * @return An array list of all label names from the source code.
+     * @param map a linked hashmap, retrieved by {@link #getLabels(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler, int) getLabels()}.
+     * The hashmap is saved in {@link de.relaunch64.popelganda.assemblers.Assembler.labelList Assembler.labelList}.
+     * 
+     * @return An array list of type String with all label names from the source code.
      */
     public static ArrayList<String> getNames(LinkedHashMap<String, Integer> map) {
         return new ArrayList<>(map.keySet());
     }
     /**
      * This method retrieves all labels from the current activated source code
-     * (see {@link #getActiveSourceCode()}) and returns both line number of label
-     * and label name as linked HashMap.
+     * (see {@link de.relaunch64.popelganda.Editor.EditorPanes#getActiveSourceCode() getActiveSourceCode()})
+     * and returns both line number of labels and label names as linked HashMap.
+     * <br><br>
+     * The names only can be extracted with {@link #getNames(java.util.LinkedHashMap) getNames()}, 
+     * while line numbers can be accessed via {@link #getLineNumbers(java.util.LinkedHashMap) getLineNumbers()}.
      * 
-     * @param source
-     * @param assembler
-     * @param lineNumber
+     * @param source the source code from where labels should be extracted.
+     * @param assembler a reference to the {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}.
+     * @param lineNumber the line number from where to start the labels. To extract labels from the whole source,
+     * use 0. Else use the linenumbers where subzones start.
      * 
      * @return All labels with their line numbers, or {@code null} if there are no labels
      * in the source code.
@@ -97,7 +105,15 @@ public class LabelExtractor {
         LineNumberReader lineReader = new LineNumberReader(br);
         return assembler.getLabels(lineReader, lineNumber);
     }
-
+    /**
+     * Retrieves a list of all label line numbers from the current activated source code
+     * (see {@link de.relaunch64.popelganda.Editor.EditorPanes#getActiveSourceCode() getActiveSourceCode()}).
+     * 
+     * @param map a linked hashmap, retrieved by {@link #getLabels(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler, int) getLabels()}.
+     * The hashmap is saved in {@link de.relaunch64.popelganda.assemblers.Assembler.labelList Assembler.labelList}.
+     * 
+     * @return An array list of type Integer with all label line numbers from the source code.
+     */
     public static ArrayList<Integer> getLineNumbers(LinkedHashMap<String, Integer> map) {
         return new ArrayList<>(map.values());
     }

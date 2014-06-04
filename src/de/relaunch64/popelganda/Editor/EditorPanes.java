@@ -529,6 +529,9 @@ public class EditorPanes {
      * {@code editorPaneArray}, which is an array of {@link EditorPaneProperties}.
      * 
      * @param index the index number of the editor pane that should be retrieved.
+     * this index relates to the selected tab and equals the index of the 
+     * {@link de.relaunch64.popelganda.Editor.EditorPaneProperties EditorPaneProperties}
+     * in the {@link #editorPaneArray editorPaneArray}.
      * @return Returns the editor pane with the index number {@code index}, 
      * or {@code null} if an error occured or {@code index} is out of bounds.
      */
@@ -557,20 +560,38 @@ public class EditorPanes {
      * Returns the sourcecode, ie the content of the editor pane 
      * (instance of {@code RL64TextArea}) with the index number
      * {@code index}. The instances of RL64TextAreas are stored in the 
-     * {@code editorPaneArray}, which is an array of {@link EditorPaneProperties}.
+     * {@link #editorPaneArray}, which is an array of {@link EditorPaneProperties}
      * 
-     * @param index
+     * @param index the index of the tab whose source code should be returned. the index of
+     * the selected tab equals the index of the {@link EditorPaneProperties}
+     * in the {@link #editorPaneArray editorPaneArray}.
      * @return the source code (content) of the editor pane with the index number {@code index}.
      */
     public String getSourceCode(int index) {
         return getSourceCode(getEditorPane(index));
     }
+    /**
+     * Returns the sourcecode, ie the content of the editor pane 
+     * (instance of {@code RL64TextArea}) {@code ep}.
+     * 
+     * @param ep a reference to the {@link RL64TextArea}.
+     * @return the source code from the {@link RL64TextArea} {@code ep}.
+     */
     public String getSourceCode(RL64TextArea ep) {
         if (ep!=null) {
             return ep.getText();
         }
         return null;
     }
+    /**
+     * Sets (overwrites) the source code of the editor pane / tab at the index
+     * {@code index}.
+     * 
+     * @param index the index of the tab whose source code should be changed. the index of
+     * the selected tab equals the index of the {@link EditorPaneProperties}
+     * in the {@link #editorPaneArray editorPaneArray}.
+     * @param source the new content
+     */
     public void setSourceCode(int index, String source) {
         RL64TextArea ep = getEditorPane(index);
         if (ep!=null) {
@@ -581,13 +602,22 @@ public class EditorPanes {
         setSourceCode(tabbedPane.getSelectedIndex(), source);
     }
     /**
-     * 
-     * @return 
+     * Returns the assembler of the currently activated editor pane / tab.
+     * @return the assembler of the currently activated editor pane / tab.
      */
     public Assembler getActiveAssembler() {
         // get selected tab
         return getAssembler(tabbedPane.getSelectedIndex());
     }
+    /**
+     * Returns the assembler of the editor pane / tab at the index {@code index}.
+     * 
+     * @param index the index of the tab whose assembler should be returned. the index of
+     * the selected tab equals the index of the 
+     * {@link EditorPaneProperties}
+     * in the {@link #editorPaneArray editorPaneArray}.
+     * @return the assembler of the editor pane / tab at the index {@code index}.
+     */
     public Assembler getAssembler(int index) {
         try {
             // get editor pane
@@ -611,13 +641,21 @@ public class EditorPanes {
         }
     }
     /**
-     * 
-     * @return 
+     * Returns the filepath of the currently activated editor pane / tab.
+     * @return the filepath of the currently activated editor pane / tab.
      */
     public File getActiveFilePath() {
         // get selected tab
         return getFilePath(tabbedPane.getSelectedIndex());
     }
+    /**
+     * Returns the filepath of the editor pane / tab at the index {@code index}.
+     * 
+     * @param index the index of the tab whose filepath should be returned. the index of
+     * the selected tab equals the index of the {@link EditorPaneProperties}
+     * in the {@link #editorPaneArray editorPaneArray}.
+     * @return the filepath of the editor pane / tab at the index {@code index}.
+     */
     public File getFilePath(int index) {
         // get selected tab
         if (index != -1) {
@@ -638,6 +676,7 @@ public class EditorPanes {
     }
     /**
      * 
+     * 
      * @param selectedTab
      * @return 
      */
@@ -653,7 +692,7 @@ public class EditorPanes {
         }
     }
     /**
-     * 
+     * Requests the input focus for the currently activated editor pane.
      */
     public void setFocus() {
         // get active editor pane
@@ -665,8 +704,10 @@ public class EditorPanes {
        }
     }
     /**
+     * Sets the modified state for the currently activated editor pane.
+     * A modified tab is marked by an "*" infront of the name.
      * 
-     * @param m 
+     * @param m the modified state. use {@code true} if source code has unsaved changes.
      */
     private void setModified(boolean m) {
         // retrieve current tab
@@ -693,11 +734,14 @@ public class EditorPanes {
         }
     }
     /**
+     * Opens a file in a new tab.
      * 
-     * @param filepath 
-     * @param assembler 
-     * @param script 
-     * @return  
+     * @param filepath the filepath to the file that should be opened.
+     * @param assembler a reference to the {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}.
+     * @param script the user script that should initially be associated with the opened file
+     * 
+     * @return  {@code true} if a new file was opened, {@code false} if an error occured or file was
+     * already opened.
      */
     public boolean loadFile(File filepath, Assembler assembler, int script) {
         // check if file is already opened

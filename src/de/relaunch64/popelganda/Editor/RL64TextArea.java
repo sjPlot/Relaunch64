@@ -440,7 +440,6 @@ public class RL64TextArea extends StandaloneTextArea {
      * so we put this variable as a global field for this class.
      * 
      * @param assembler a reference to the {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}.
-     * 
      */
     public final void setAssembler(Assembler assembler) {
         this.assembler = assembler;

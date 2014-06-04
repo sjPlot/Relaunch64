@@ -45,7 +45,9 @@ public interface Assembler
     /**
      * A class with information on all extracted labels, functions and macros
      * of a source code file. Information are saved as HashMaps with names
-     * and line numbers.
+     * and line numbers ({@code HashMap<String, Integer>}).
+     * This static class has three hashmaps:
+     * {@code labels},  {@code functions} and {@code macros}.
      */
     static class labelList {
         /**
@@ -65,7 +67,10 @@ public interface Assembler
          public final LinkedHashMap macros;
          /**
           * Saves names and line numbers of labels, functions and macros of the current
-          * source code.
+          * source code. Information are saved as HashMaps with names
+          * and line numbers ({@code HashMap<String, Integer>}).
+          * This static class has three hashmaps:
+          * {@code labels},  {@code functions} and {@code macros}.
           * 
           * @param labels A linked HashMap with all label names and the line numbers
           * where the labels are.

@@ -132,16 +132,16 @@ class Assembler_kick implements Assembler
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked
      * hashmaps. Information can then be accessed via 
-     * {@link de.relaunch64.popelganda.assemblers.Assembler.labelList#labels labelList.labels},
-     * {@link de.relaunch64.popelganda.assemblers.Assembler.labelList#functions labelList.functions} and
-     * {@link de.relaunch64.popelganda.assemblers.Assembler.labelList#macros labelList.macros}.
+     * {@link Assembler.labelList#labels labelList.labels},
+     * {@link Assembler.labelList#functions labelList.functions} and
+     * {@link Assembler.labelList#macros labelList.macros}.
      * 
      * @param lineReader a LineNumberReader from the source code content, which is
      * created in {@link de.relaunch64.popelganda.Editor.LabelExtractor#getLabels(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler, int) LabelExtractor.getLabels()}.
      * @param lineNumber the line number, from where to start the search for labels/functions/macros.
      * use 0 to extract all labels/functions/macros. use any specific line number to extract only
      * global labels/functions/macros and local labels/functions/macros within scope.
-     * @return a {@link de.relaunch64.popelganda.assemblers.Assembler.labelList labelList} 
+     * @return a {@link Assembler.labelList labelList} 
      * with information (names and line numbers) about all extracted labels/functions/macros.
      */
     @Override
@@ -191,11 +191,11 @@ class Assembler_kick implements Assembler
     }
     /**
      * Parses the error messages from the error log and adds the information
-     * to the {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo}.
+     * to the {@link ErrorHandler.ErrorInfo}.
      * 
      * @param lineReader a LineNumberReader from the error log, which is created
-     * by {@link de.relaunch64.popelganda.assemblers.ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
-     * @return an ArrayList of {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo} for
+     * by {@link ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @return an ArrayList of {@link ErrorHandler.ErrorInfo} for
      * each logged error.
      */
     @Override
