@@ -518,7 +518,8 @@ public class Settings {
     }
     public File getLastUsedPath() {
         Element el = root.getChild(SETTING_LAST_USED_PATH);
-        return new File((el == null) ? "" : el.getText());
+        // changed to Yoda condition
+        return new File((null==el) ? "" : el.getText());
     }
     public void setLastUsedPath(File f) {
         Element el = root.getChild(SETTING_LAST_USED_PATH);
