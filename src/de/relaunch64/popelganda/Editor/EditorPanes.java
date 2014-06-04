@@ -251,7 +251,7 @@ public class EditorPanes {
             oldcaret = ep.getCaretPosition();
             // goto next fold
             ep.goToNextFold(false);
-            newcaret = ep.getCaretPosition();;
+            newcaret = ep.getCaretPosition();
             // expand
             if (expand) ep.expandFold(true); else ep.collapseFold();
         }
@@ -884,7 +884,7 @@ public class EditorPanes {
             // retrieve filename
             File fp = editorPaneArray.get(selectedTab).getFilePath();
             // init params
-            String fpath = "";
+            String fpath;
             String fname = "";
             // check for valid value
             if (null!=fp) {
@@ -899,7 +899,7 @@ public class EditorPanes {
             if (fileToSave!=null) {
                 // check whether the user entered a file extension. if not,
                 // add ".asm" as extension
-                if (!FileTools.hasValidFileExtension(fileToSave)) {
+                if (!FileTools.isSupportedFileType(fileToSave, FileTools.FILE_TYPE_ASM)) {
                     fileToSave = new File(fileToSave.getPath()+".asm");
                 }
                 // check whether file exists
