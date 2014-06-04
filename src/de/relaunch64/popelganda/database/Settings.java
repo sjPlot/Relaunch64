@@ -518,11 +518,7 @@ public class Settings {
     }
     public File getLastUsedPath() {
         Element el = root.getChild(SETTING_LAST_USED_PATH);
-        File value = null;
-        if (el!=null) {
-            value = new File(el.getText());
-        }
-        return value;
+        return new File((el == null) ? "" : el.getText());
     }
     public void setLastUsedPath(File f) {
         Element el = root.getChild(SETTING_LAST_USED_PATH);

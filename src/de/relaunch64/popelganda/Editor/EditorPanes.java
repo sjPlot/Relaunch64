@@ -890,6 +890,8 @@ public class EditorPanes {
             if (null!=fp) {
                 fpath = fp.getPath();
                 fname = fp.getName();
+            } else {
+                fpath = settings.getLastUsedPath().getAbsolutePath();
             }
             // choose file
             File fileToSave = FileTools.chooseFile(null, JFileChooser.SAVE_DIALOG, JFileChooser.FILES_ONLY, fpath, fname, "Save ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
