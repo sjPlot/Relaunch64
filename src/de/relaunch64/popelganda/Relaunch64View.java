@@ -61,6 +61,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -308,7 +311,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //                editorPanes.changeAssembler(jComboBoxCompilers.getSelectedIndex());
 //            }
 //        });
-        jComboBoxAssemblers.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxAssemblers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 if (editorPanes.checkIfSyntaxChangeRequired()) {
@@ -318,7 +321,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 updateRecentDoc();
             }
         });
-        jComboBoxRunScripts.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxRunScripts.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex()).setScript(jComboBoxRunScripts.getSelectedIndex());
@@ -499,8 +502,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //            // find-index-values are no longer valid
 //            findReplace.resetValues();
 //        });
-        jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
+        jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            @Override public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
                     ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).cut();
                     evt.consume();
@@ -514,7 +517,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     evt.consume();
                 }
             }
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override public void keyReleased(KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
                 if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
                     findCancel();
@@ -537,8 +540,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void popupMenuCanceled(PopupMenuEvent e) {
             }
         });
-        jTextFieldReplace.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyPressed(java.awt.event.KeyEvent evt) {
+        jTextFieldReplace.addKeyListener(new KeyAdapter() {
+            @Override public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
                     jTextFieldReplace.cut();
                     evt.consume();
@@ -552,7 +555,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     evt.consume();
                 }
             }
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override public void keyReleased(KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
                 if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
                     replaceCancel();
@@ -563,8 +566,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         });
         
-        jTextFieldGotoLine.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+        jTextFieldGotoLine.addKeyListener(new KeyAdapter() {
+            @Override public void keyReleased(KeyEvent evt) {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
                     try {
                         int line = Integer.parseInt(jTextFieldGotoLine.getText());
@@ -576,14 +579,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTabbedPane1.addMouseListener(new MouseAdapter() {
             @Override public void mousePressed(java.awt.event.MouseEvent evt) {
                 if (evt.getButton()==MouseEvent.BUTTON3) {
                     closeFile();
                 }
             }
         });
-        jTabbedPaneLogs.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTabbedPaneLogs.addMouseListener(new MouseAdapter() {
             @Override public void mousePressed(java.awt.event.MouseEvent evt) {
                 if (evt.getButton()==MouseEvent.BUTTON3) {
                     switch (jTabbedPaneLogs.getSelectedIndex()) {
@@ -593,18 +596,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        jTextFieldConvDez.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+        jTextFieldConvDez.addKeyListener(new KeyAdapter() {
+            @Override public void keyReleased(KeyEvent evt) {
                 convertNumber("dez");
             }
         });
-        jTextFieldConvHex.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+        jTextFieldConvHex.addKeyListener(new KeyAdapter() {
+            @Override public void keyReleased(KeyEvent evt) {
                 convertNumber("hex");
             }
         });
-        jTextFieldConvBin.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+        jTextFieldConvBin.addKeyListener(new KeyAdapter() {
+            @Override public void keyReleased(KeyEvent evt) {
                 convertNumber("bin");
             }
         });
@@ -624,7 +627,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void menuDeselected(javax.swing.event.MenuEvent evt) {}
             @Override public void menuCanceled(javax.swing.event.MenuEvent evt) {}
         });
-        recent1MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent1MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(1);
                 if (fp!=null && fp.exists()) {
@@ -632,7 +635,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
         }
         });
-        recent2MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent2MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(2);
                 if (fp!=null && fp.exists()) {
@@ -640,7 +643,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent3MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent3MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(3);
                 if (fp!=null && fp.exists()) {
@@ -648,7 +651,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent4MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent4MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(4);
                 if (fp!=null && fp.exists()) {
@@ -656,7 +659,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent5MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent5MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(5);
                 if (fp!=null && fp.exists()) {
@@ -664,7 +667,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent6MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent6MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(6);
                 if (fp!=null && fp.exists()) {
@@ -672,7 +675,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent7MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent7MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(7);
                 if (fp!=null && fp.exists()) {
@@ -680,7 +683,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent8MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent8MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(8);
                 if (fp!=null && fp.exists()) {
@@ -688,7 +691,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recent9MenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recent9MenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(9);
                 if (fp!=null && fp.exists()) {
@@ -696,7 +699,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        recentAMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        recentAMenuItem.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(10);
                 if (fp!=null && fp.exists()) {
@@ -778,7 +781,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         }
-        jTextAreaCompilerOutput.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTextAreaCompilerOutput.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() != MouseEvent.BUTTON1 || e.getClickCount() != 1) {
