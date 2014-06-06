@@ -79,15 +79,14 @@ public class EditorPanes {
     public static final int DIRECTION_PREV = 1;
 
     private class TabPanel extends JPanel { /* Draws a tab with close button */
-        private JLabel tabLabel;
+        private final JLabel tabLabel;
         java.awt.Component component;
         public TabPanel(String title) {
             super(new FlowLayout(FlowLayout.LEFT, 0, 0)); 
             super.setOpaque(false);
-            this.tabLabel = new JLabel("x"); 
-            int size = (int)this.tabLabel.getPreferredSize().getHeight();
-            JButton closeButton = new JButton("x"); 
-            closeButton.setPreferredSize(new java.awt.Dimension(size, size));
+            this.tabLabel = new JLabel(""); 
+            JButton closeButton = new JButton(""); 
+            closeButton.setIcon(ConstantsR64.tabcloseicon);
             closeButton.setMargin(new java.awt.Insets(0,0,0,0));
             closeButton.setBorder(null);
             closeButton.setRolloverEnabled(true);
@@ -103,8 +102,8 @@ public class EditorPanes {
             });
             setTitle(title);
         }
-        public void setTitle(String title) {
-            this.tabLabel.setText(title + " ");
+        public final void setTitle(String title) {
+            this.tabLabel.setText(title + "  ");
         }
         public void setTabComponent(java.awt.Component component) {
             this.component = component;

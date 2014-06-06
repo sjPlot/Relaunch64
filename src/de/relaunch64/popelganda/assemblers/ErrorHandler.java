@@ -117,6 +117,8 @@ public class ErrorHandler {
      * @param log the content of the error log
      * @param assembler the assembler that was used to comipile the file, in order
      * to correctly parse the error messages.
+     * @param offset
+     * @return 
      */
     public int readErrorLines(String log, Assembler assembler, int offset) {
         // create buffered reader, needed for line number reader
