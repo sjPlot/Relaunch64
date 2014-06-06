@@ -40,6 +40,7 @@ import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.dnd.DropTarget;
 import java.awt.Font;
+import java.awt.FlowLayout;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -54,6 +55,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -73,6 +77,39 @@ public class EditorPanes {
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     public static final int DIRECTION_NEXT = 0;
     public static final int DIRECTION_PREV = 1;
+
+    private class TabPanel extends JPanel { /* Draws a tab with close button */
+        private JLabel tabLabel;
+        java.awt.Component component;
+        public TabPanel(String title) {
+            super(new FlowLayout(FlowLayout.LEFT, 0, 0)); 
+            super.setOpaque(false);
+            this.tabLabel = new JLabel("x"); 
+            int size = (int)this.tabLabel.getPreferredSize().getHeight();
+            JButton closeButton = new JButton("x"); 
+            closeButton.setPreferredSize(new java.awt.Dimension(size, size));
+            closeButton.setMargin(new java.awt.Insets(0,0,0,0));
+            closeButton.setBorder(null);
+            closeButton.setRolloverEnabled(true);
+            super.add(this.tabLabel); 
+            super.add(closeButton); 
+            closeButton.addActionListener(new java.awt.event.ActionListener() { /* closes a tab */
+                @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    java.awt.Component oldtab = tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
+                    tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(component));
+                    mainFrame.closeFile();
+                    if (component != oldtab) tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(oldtab)); /* reselect old tab */
+                }
+            });
+            setTitle(title);
+        }
+        public void setTitle(String title) {
+            this.tabLabel.setText(title + " ");
+        }
+        public void setTabComponent(java.awt.Component component) {
+            this.component = component;
+        }
+    };
     /**
      * 
      * @param tp
@@ -115,6 +152,9 @@ public class EditorPanes {
         if (fp!=null && fp.exists()) {
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
         }
+        TabPanel tabPanel = new TabPanel(title);
+        tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, tabPanel);
+        tabPanel.setTabComponent(tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1));
         // set assembler syntax style
         editorPane.setAssembler(assembler);
         editorPane.setAssemblyMode();
@@ -718,6 +758,7 @@ public class EditorPanes {
                 if (!title.startsWith("*")) {
                     title = "* "+title;
                     tabbedPane.setTitleAt(selectedTab, title);
+                    ((TabPanel)tabbedPane.getTabComponentAt(selectedTab)).setTitle(title);
                 }
                 editorPaneArray.get(selectedTab).setModified(m);
             }
@@ -725,6 +766,7 @@ public class EditorPanes {
                 if (title.startsWith("* ")) {
                     title = title.substring(2);
                     tabbedPane.setTitleAt(selectedTab, title);
+                    ((TabPanel)tabbedPane.getTabComponentAt(selectedTab)).setTitle(title);
                 }
                 editorPaneArray.get(selectedTab).setModified(m);
             }
@@ -991,11 +1033,13 @@ public class EditorPanes {
         if (fn!=null) {
             // set file-name and app-name in title-bar
             tabbedPane.setTitleAt(index, fn);
+            ((TabPanel)tabbedPane.getTabComponentAt(index)).setTitle(fn);
             tabbedPane.setToolTipTextAt(index, fp.getPath());
         }
         // if we don't have any title from the file name, simply set the applications title
         else {
             tabbedPane.setTitleAt(index, "untitled");
+            ((TabPanel)tabbedPane.getTabComponentAt(index)).setTitle("untitled");
             tabbedPane.setToolTipTextAt(index, "");
         }
     }
