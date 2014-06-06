@@ -778,7 +778,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         }
-    }
+        jTextAreaCompilerOutput.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON1 || e.getClickCount() != 1) {
+                    return;
+                }
+
+                try {
+                    int offset = jTextAreaCompilerOutput.viewToModel(e.getPoint());
+                    int line = jTextAreaCompilerOutput.getLineOfOffset(offset);
+                    errorHandler.gotoErrorByClick(editorPanes, jTextAreaCompilerOutput, line + 1);
+                } catch (javax.swing.text.BadLocationException e2) {
+                }
+
+            }
+        });
+
+        }
     /**
      * Parses input from the Goto-line-textfield. Used for quickly changing settings,
      * may also be used for special debug-functions or information etc.

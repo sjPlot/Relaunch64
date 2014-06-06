@@ -151,6 +151,15 @@ public class ErrorHandler {
     public void gotoFirstError(EditorPanes editorPanes, JTextArea log) {
         gotoError(editorPanes, log, 0);
     }
+    public void gotoErrorByClick(EditorPanes editorPanes, JTextArea log, int line) {
+        for (int n = 0; n < errors.size(); n++) {
+            ErrorInfo e = errors.get(n);
+            if (e.logline <= line && e.logline + e.loglen > line) {
+                gotoError(editorPanes, log, n);
+                return;
+            }
+        }
+    }
     protected void gotoErrorLine(final EditorPanes editorPanes) {
         // goto error line
         SwingUtilities.invokeLater(new Runnable() {
