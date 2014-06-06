@@ -402,33 +402,40 @@ public class RL64TextArea extends StandaloneTextArea {
         setProperty("view.style.label", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_JUMP));
         setProperty("view.style.operator", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_OPERATOR));
         // syntax colors for line numbers
-        setProperty("view.gutter.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND));
-        setProperty("view.gutter.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR));
-        setProperty("view.gutter.highlightColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR));
-        setProperty("view.gutter.currentLineColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
-        setProperty("view.gutter.focusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
-        setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER));
+        setProperty("view.gutter.bgColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_BACKGROUND));
+        setProperty("view.gutter.fgColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_COLOR));
+        setProperty("view.gutter.highlightColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_COLOR));
+        setProperty("view.gutter.currentLineColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_HIGHLIGHT));
+        setProperty("view.gutter.focusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_BORDER));
+        setProperty("view.gutter.noFocusBorderColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_BORDER));
         // set text selection and caret color
         setProperty("view.selectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
         setProperty("view.multipleSelectionColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
         setProperty("view.caretColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL));
         setProperty("view.structureHighlightColor", ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD));
+        if (settings.getShowLineHightlight()) {
+            setProperty("view.lineHighlight", "true");
+            setProperty("view.lineHighlightColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
+        }
+        else {
+            setProperty("view.lineHighlight", "false");
+        }
         // set code folding colors
         setProperty("view.style.foldLine.1", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL)+" bgColor:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION)+" style:b");
         setProperty("view.style.foldLine.2", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_KEYWORD)+" bgColor:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
         setProperty("view.style.foldLine.3", "color:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_COMPILERKEYWORD)+" bgColor:"+ColorSchemes.getColor(scheme, ColorSchemes.COLOR_SELECTION));
-        setProperty("view.gutter.foldColor", ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT));
+        setProperty("view.gutter.foldColor", ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_HIGHLIGHT));
         // load color scheme
         Font mf = settings.getMainFont();
         // set for- and background color of text area
         getPainter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.BACKGROUND), Color.black));
         getPainter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.COLOR_NORMAL), Color.black));
         // set for- and background color of line numbers
-        getGutter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BACKGROUND), Color.black));
-        getGutter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR), Color.black));
-        getGutter().setHighlightedForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_COLOR), Color.black));
-        getGutter().setCurrentLineForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_HIGHLIGHT), Color.black));
-        Color bc = SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.LINE_BORDER), Color.black);
+        getGutter().setBackground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_BACKGROUND), Color.black));
+        getGutter().setForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_COLOR), Color.black));
+        getGutter().setHighlightedForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_COLOR), Color.black));
+        getGutter().setCurrentLineForeground(SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_HIGHLIGHT), Color.black));
+        Color bc = SyntaxUtilities.parseColor(ColorSchemes.getColor(scheme, ColorSchemes.GUTTER_BORDER), Color.black);
         getGutter().setBorder(1, bc, bc, bc);
         // or if there's a specific order?
         getPainter().setStyles(SyntaxUtilities.loadStyles(mf.getFontName(), mf.getSize()));

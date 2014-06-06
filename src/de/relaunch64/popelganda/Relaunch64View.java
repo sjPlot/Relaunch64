@@ -826,6 +826,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 editorPanes.expandAllFolds();
                 editorPanes.setFocus();
                 break;
+            case "slh":
+                settings.setShowLineHightlight(!settings.getShowLineHightlight());
+                editorPanes.updateColorScheme();
+                break;
         }
         try {
             if (text.startsWith("cs")) {

@@ -8,6 +8,7 @@ Relaunch64 3.1.0
 * completely new editor component with new features, such as:
   - increased performance
   - much faster syntax highlighting
+  - highlight current edit-line
   - rectangular text selection (ctrl+mouse)
   - code-folding
   - proper text anti-aliasing

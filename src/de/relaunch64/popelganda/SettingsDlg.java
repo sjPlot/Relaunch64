@@ -130,6 +130,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxScaleFonts.setSelected(settings.getScaleFont());
         jCheckBoxSuggestCaseSort.setSelected(!settings.getSuggestionSortIgnoresCase());
         jCheckBoxAlternativeAssemblyMode.setSelected(settings.getAlternativeAssemblyMode());
+        jCheckBoxShowLineHighlight.setSelected(settings.getShowLineHightlight());
         // init schemes
         initSchemes();
         // init user scripts, including combo box setting etc
@@ -267,6 +268,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             }
         });
         jCheckBoxAlternativeAssemblyMode.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabScheme(true);
+            }
+        });
+        jCheckBoxShowLineHighlight.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabScheme(true);
@@ -444,6 +451,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     public void applyColorScheme() {
         settings.setAlternativeAssemblyMode(jCheckBoxAlternativeAssemblyMode.isSelected());
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
+        settings.setShowLineHightlight(jCheckBoxShowLineHighlight.isSelected());
         setModifiedTabScheme(false);
         editorPanes.updateColorScheme();
         editorPanes.updateAssemblyMode();
@@ -586,6 +594,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jButtonApplyScheme = new javax.swing.JButton();
         jLabelSchemePreview = new javax.swing.JLabel();
         jCheckBoxAlternativeAssemblyMode = new javax.swing.JCheckBox();
+        jCheckBoxShowLineHighlight = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxCheckUpdates = new javax.swing.JCheckBox();
         jCheckBoxSaveOnCompile = new javax.swing.JCheckBox();
@@ -840,6 +849,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxAlternativeAssemblyMode.setToolTipText(resourceMap.getString("jCheckBoxAlternativeAssemblyMode.toolTipText")); // NOI18N
         jCheckBoxAlternativeAssemblyMode.setName("jCheckBoxAlternativeAssemblyMode"); // NOI18N
 
+        jCheckBoxShowLineHighlight.setText(resourceMap.getString("jCheckBoxShowLineHighlight.text")); // NOI18N
+        jCheckBoxShowLineHighlight.setToolTipText(resourceMap.getString("jCheckBoxShowLineHighlight.toolTipText")); // NOI18N
+        jCheckBoxShowLineHighlight.setName("jCheckBoxShowLineHighlight"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -857,7 +870,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(jLabelSchemePreview)
-                            .add(jCheckBoxAlternativeAssemblyMode))
+                            .add(jCheckBoxAlternativeAssemblyMode)
+                            .add(jCheckBoxShowLineHighlight))
                         .add(0, 423, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -872,7 +886,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jLabelSchemePreview)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxAlternativeAssemblyMode)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxShowLineHighlight)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 210, Short.MAX_VALUE)
                 .add(jButtonApplyScheme)
                 .addContainerGap())
         );
@@ -970,6 +986,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxReopenFiles;
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
     private javax.swing.JCheckBox jCheckBoxScaleFonts;
+    private javax.swing.JCheckBox jCheckBoxShowLineHighlight;
     private javax.swing.JCheckBox jCheckBoxSuggestCaseSort;
     private javax.swing.JComboBox jComboBoxAntiAlias;
     private javax.swing.JComboBox jComboBoxCustomScripts;

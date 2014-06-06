@@ -74,10 +74,11 @@ public class ColorSchemes {
     public static final int COLOR_SELECTION = 12;
     
     public static final int BACKGROUND = 99;
-    public static final int LINE_BACKGROUND = 98;
-    public static final int LINE_BORDER = 97;
-    public static final int LINE_COLOR = 96;
-    public static final int LINE_HIGHLIGHT = 95;
+    public static final int GUTTER_BACKGROUND = 98;
+    public static final int GUTTER_BORDER = 97;
+    public static final int GUTTER_COLOR = 96;
+    public static final int GUTTER_HIGHLIGHT = 95;
+    public static final int LINE_HIGHLIGHT = 94;
     
     public static String getColor(int scheme, int tokentype) {
         return SyntaxUtilities.getColorHexString(getColorValue(scheme, tokentype));
@@ -100,11 +101,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(128, 128, 0); // olive
                 case COLOR_ILLEGALOPCODE: return new Color(255, 69, 0); // orange red
                 case BACKGROUND: return new Color(255, 255, 255); // white
-                case LINE_BACKGROUND: return new Color(248, 248, 248); // light gray
-                case LINE_BORDER: return new Color(240, 240, 240); // light gray
-                case LINE_COLOR: return new Color(0,0,0); // black
-                case LINE_HIGHLIGHT: return new Color(220, 20, 60); // red
+                case GUTTER_BACKGROUND: return new Color(248, 248, 248); // light gray
+                case GUTTER_BORDER: return new Color(240, 240, 240); // light gray
+                case GUTTER_COLOR: return new Color(0,0,0); // black
+                case GUTTER_HIGHLIGHT: return new Color(220, 20, 60); // red
                 case COLOR_SELECTION: return new Color(204, 204, 204);
+                case LINE_HIGHLIGHT: return new Color(250, 250, 220);
             }
             break;
         case SCHEME_PAIRED:
@@ -122,11 +124,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(0,128,128);
                 case COLOR_ILLEGALOPCODE: return new Color(106,61,154);
                 case BACKGROUND: return new Color(252,252,252); // white
-                case LINE_BACKGROUND: return new Color(248, 248, 248); // light gray
-                case LINE_BORDER: return new Color(244, 244, 244); // light gray
-                case LINE_COLOR: return new Color(0,0,0); // black
-                case LINE_HIGHLIGHT: return new Color(220, 20, 60); // red
+                case GUTTER_BACKGROUND: return new Color(248, 248, 248); // light gray
+                case GUTTER_BORDER: return new Color(244, 244, 244); // light gray
+                case GUTTER_COLOR: return new Color(0,0,0); // black
+                case GUTTER_HIGHLIGHT: return new Color(220, 20, 60); // red
                 case COLOR_SELECTION: return new Color(201, 201, 201);
+                case LINE_HIGHLIGHT: return new Color(250, 250, 220);
              }
             break;
         case SCHEME_C64:
@@ -144,11 +147,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(96,255,255);
                 case COLOR_ILLEGALOPCODE: return new Color(224,64,64);
                 case BACKGROUND: return new Color(64,64,224);
-                case LINE_BACKGROUND: return new Color(160,160,255);
-                case LINE_BORDER: return new Color(160,160,255);
-                case LINE_COLOR: return new Color(64,64,224); 
-                case LINE_HIGHLIGHT: return new Color(255,255,255);
+                case GUTTER_BACKGROUND: return new Color(160,160,255);
+                case GUTTER_BORDER: return new Color(160,160,255);
+                case GUTTER_COLOR: return new Color(64,64,224); 
+                case GUTTER_HIGHLIGHT: return new Color(255,255,255);
                 case COLOR_SELECTION: return new Color(50, 50, 173);
+                case LINE_HIGHLIGHT: return new Color(74, 74, 255);
              }
             break;
         case SCHEME_HELLO_KITTY:
@@ -166,11 +170,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(221,160,221);
                 case COLOR_ILLEGALOPCODE: return new Color(255,99,71);
                 case BACKGROUND: return new Color(255,250,250);
-                case LINE_BACKGROUND: return new Color(255,240,245);
-                case LINE_BORDER: return new Color(255,182,193);
-                case LINE_COLOR: return new Color(255,182,193);
-                case LINE_HIGHLIGHT: return new Color(220,20,60);
+                case GUTTER_BACKGROUND: return new Color(255,240,245);
+                case GUTTER_BORDER: return new Color(255,182,193);
+                case GUTTER_COLOR: return new Color(255,182,193);
+                case GUTTER_HIGHLIGHT: return new Color(220,20,60);
                 case COLOR_SELECTION: return new Color(204, 200, 200);
+                case LINE_HIGHLIGHT: return new Color(242, 228, 233);
             }
             break;
         case SCHEME_DARK:
@@ -188,11 +193,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(143,188,143);
                 case COLOR_ILLEGALOPCODE: return new Color(255,192,203);
                 case BACKGROUND: return new Color(55,55,55);
-                case LINE_BACKGROUND: return new Color(48,48,48);
-                case LINE_BORDER: return new Color(48,48,48);
-                case LINE_COLOR: return new Color(128,128,128);
-                case LINE_HIGHLIGHT: return new Color(211,211,211);
+                case GUTTER_BACKGROUND: return new Color(48,48,48);
+                case GUTTER_BORDER: return new Color(48,48,48);
+                case GUTTER_COLOR: return new Color(128,128,128);
+                case GUTTER_HIGHLIGHT: return new Color(211,211,211);
                 case COLOR_SELECTION: return new Color(5, 5, 5);
+                case LINE_HIGHLIGHT: return new Color(77, 77, 77);
             }
             break;
         case SCHEME_BLUES:
@@ -210,11 +216,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(95,158,160);
                 case COLOR_ILLEGALOPCODE: return new Color(0,0,205);
                 case BACKGROUND: return new Color(248,248,255);
-                case LINE_BACKGROUND: return new Color(240,248,255);
-                case LINE_BORDER: return new Color(70,130,180);
-                case LINE_COLOR: return new Color(0,0,139);
-                case LINE_HIGHLIGHT: return new Color(199,21,133);
+                case GUTTER_BACKGROUND: return new Color(240,248,255);
+                case GUTTER_BORDER: return new Color(70,130,180);
+                case GUTTER_COLOR: return new Color(0,0,139);
+                case GUTTER_HIGHLIGHT: return new Color(199,21,133);
                 case COLOR_SELECTION: return new Color(198, 198, 204);
+                case LINE_HIGHLIGHT: return new Color(235, 235, 242);
             }
             break;
         case SCHEME_SOLAR_LIGHT:
@@ -232,11 +239,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(200,73,31);
                 case COLOR_ILLEGALOPCODE: return new Color(208,54,130);
                 case BACKGROUND: return new Color(253,246,229);
-                case LINE_BACKGROUND: return new Color(238,233,214); // 253,246,229
-                case LINE_BORDER: return new Color(238,233,214);
-                case LINE_COLOR: return new Color(148,162,162);
-                case LINE_HIGHLIGHT: return new Color(11,55,66);
+                case GUTTER_BACKGROUND: return new Color(238,233,214); // 253,246,229
+                case GUTTER_BORDER: return new Color(238,233,214);
+                case GUTTER_COLOR: return new Color(148,162,162);
+                case GUTTER_HIGHLIGHT: return new Color(11,55,66);
                 case COLOR_SELECTION: return new Color(186, 182, 168);
+                case LINE_HIGHLIGHT: return new Color(240, 233, 218);
             }
             break;
         case SCHEME_SOLAR_DARK:
@@ -254,11 +262,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(200,73,31);
                 case COLOR_ILLEGALOPCODE: return new Color(208,54,130);
                 case BACKGROUND: return new Color(11,55,66);
-                case LINE_BACKGROUND: return new Color(3,44,54); // 11,55,66
-                case LINE_BORDER: return new Color(3,44,54);
-                case LINE_COLOR: return new Color(132,139,151);
-                case LINE_HIGHLIGHT: return new Color(253,246,229);
+                case GUTTER_BACKGROUND: return new Color(3,44,54); // 11,55,66
+                case GUTTER_BORDER: return new Color(3,44,54);
+                case GUTTER_COLOR: return new Color(132,139,151);
+                case GUTTER_HIGHLIGHT: return new Color(253,246,229);
                 case COLOR_SELECTION: return new Color(3, 13, 15);
+                case LINE_HIGHLIGHT: return new Color(16, 76, 92);
             }
             break;
         case SCHEME_DARK2:
@@ -276,11 +285,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(199,116,68);
                 case COLOR_ILLEGALOPCODE: return new Color(4,136,174);
                 case BACKGROUND: return new Color(15,17,18);
-                case LINE_BACKGROUND: return new Color(10,11,12); // 11,55,66
-                case LINE_BORDER: return new Color(10,11,12);
-                case LINE_COLOR: return new Color(102,102,102);
-                case LINE_HIGHLIGHT: return new Color(4,136,174);
+                case GUTTER_BACKGROUND: return new Color(10,11,12); // 11,55,66
+                case GUTTER_BORDER: return new Color(10,11,12);
+                case GUTTER_COLOR: return new Color(102,102,102);
+                case GUTTER_HIGHLIGHT: return new Color(4,136,174);
                 case COLOR_SELECTION: return new Color(53, 59, 64);
+                case LINE_HIGHLIGHT: return new Color(36, 41, 43);
             }
             break;
         case SCHEME_GITHUB:
@@ -298,11 +308,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(231,93,67);
                 case COLOR_ILLEGALOPCODE: return new Color(216,23,69);
                 case BACKGROUND: return new Color(248,248,255);
-                case LINE_BACKGROUND: return new Color(236,236,236); // 11,55,66
-                case LINE_BORDER: return new Color(236,236,236);
-                case LINE_COLOR: return new Color(160,160,160);
-                case LINE_HIGHLIGHT: return new Color(10,10,10);
+                case GUTTER_BACKGROUND: return new Color(236,236,236); // 11,55,66
+                case GUTTER_BORDER: return new Color(236,236,236);
+                case GUTTER_COLOR: return new Color(160,160,160);
+                case GUTTER_HIGHLIGHT: return new Color(10,10,10);
                 case COLOR_SELECTION: return new Color(198, 198, 204);
+                case LINE_HIGHLIGHT: return new Color(235, 235, 242);
             }
             break;
         case SCHEME_GREENBERET:
@@ -320,11 +331,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(47,79,79);
                 case COLOR_ILLEGALOPCODE: return new Color(143,188,142);
                 case BACKGROUND: return new Color(216,230,216);
-                case LINE_BACKGROUND: return new Color(180,191,180); // 11,55,66
-                case LINE_BORDER: return new Color(180,191,180);
-                case LINE_COLOR: return new Color(139,69,19);
-                case LINE_HIGHLIGHT: return new Color(173,255,47);
+                case GUTTER_BACKGROUND: return new Color(180,191,180); // 11,55,66
+                case GUTTER_BORDER: return new Color(180,191,180);
+                case GUTTER_COLOR: return new Color(139,69,19);
+                case GUTTER_HIGHLIGHT: return new Color(173,255,47);
                 case COLOR_SELECTION: return new Color(168, 179, 168);
+                case LINE_HIGHLIGHT: return new Color(204, 217, 204);
             }
             break;
         case SCHEME_POPELGANDA:
@@ -342,11 +354,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(133,153,144);
                 case COLOR_ILLEGALOPCODE: return new Color(217,2,28);
                 case BACKGROUND: return new Color(77,77,77);
-                case LINE_BACKGROUND: return new Color(63,63,63); // 11,55,66
-                case LINE_BORDER: return new Color(63,63,63);
-                case LINE_COLOR: return new Color(185,185,180);
-                case LINE_HIGHLIGHT: return new Color(255,255,255);
+                case GUTTER_BACKGROUND: return new Color(63,63,63); // 11,55,66
+                case GUTTER_BORDER: return new Color(63,63,63);
+                case GUTTER_COLOR: return new Color(185,185,180);
+                case GUTTER_HIGHLIGHT: return new Color(255,255,255);
                 case COLOR_SELECTION: return new Color(25, 25, 25);
+                case LINE_HIGHLIGHT: return new Color(89, 89, 89);
              }
             break;
         case SCHEME_DEFAULT_REDUCED:
@@ -367,11 +380,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD:
                     return new Color(0, 0, 200); // dark blue
                 case BACKGROUND: return new Color(255, 255, 255); // white
-                case LINE_BACKGROUND: return new Color(248, 248, 248); // light gray
-                case LINE_BORDER: return new Color(240, 240, 240); // light gray
-                case LINE_COLOR: return new Color(0,0,0); // black
-                case LINE_HIGHLIGHT: return new Color(220, 20, 60); // red
+                case GUTTER_BACKGROUND: return new Color(248, 248, 248); // light gray
+                case GUTTER_BORDER: return new Color(240, 240, 240); // light gray
+                case GUTTER_COLOR: return new Color(0,0,0); // black
+                case GUTTER_HIGHLIGHT: return new Color(220, 20, 60); // red
                 case COLOR_SELECTION: return new Color(204, 204, 204);
+                case LINE_HIGHLIGHT: return new Color(250, 250, 220);
             }
             break;
         case SCHEME_POPELGANDA_REDUCED:
@@ -392,11 +406,12 @@ public class ColorSchemes {
                 case COLOR_ILLEGALOPCODE:
                     return new Color(175,217,229);
                 case BACKGROUND: return new Color(77,77,77);
-                case LINE_BACKGROUND: return new Color(63,63,63); // 11,55,66
-                case LINE_BORDER: return new Color(63,63,63);
-                case LINE_COLOR: return new Color(185,185,180);
-                case LINE_HIGHLIGHT: return new Color(255,255,255);
+                case GUTTER_BACKGROUND: return new Color(63,63,63); // 11,55,66
+                case GUTTER_BORDER: return new Color(63,63,63);
+                case GUTTER_COLOR: return new Color(185,185,180);
+                case GUTTER_HIGHLIGHT: return new Color(255,255,255);
                 case COLOR_SELECTION: return new Color(25, 25, 25);
+                case LINE_HIGHLIGHT: return new Color(89, 89, 89);
             }
             break;
         case SCHEME_C64_REDUCED:
@@ -417,11 +432,12 @@ public class ColorSchemes {
                 case COLOR_COMPILERKEYWORD: 
                     return new Color(255,255,64);
                 case BACKGROUND: return new Color(64,64,224);
-                case LINE_BACKGROUND: return new Color(160,160,255);
-                case LINE_BORDER: return new Color(160,160,255);
-                case LINE_COLOR: return new Color(64,64,224); 
-                case LINE_HIGHLIGHT: return new Color(255,255,255);
+                case GUTTER_BACKGROUND: return new Color(160,160,255);
+                case GUTTER_BORDER: return new Color(160,160,255);
+                case GUTTER_COLOR: return new Color(64,64,224); 
+                case GUTTER_HIGHLIGHT: return new Color(255,255,255);
                 case COLOR_SELECTION: return new Color(50, 50, 173);
+                case LINE_HIGHLIGHT: return new Color(74, 74, 255);
             }
             break;
         case SCHEME_GRAY:
@@ -439,11 +455,12 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD: return new Color(99,99,99);
                 case COLOR_ILLEGALOPCODE: return new Color(191,164,128);
                 case BACKGROUND: return new Color(245,245,245);
-                case LINE_BACKGROUND: return new Color(230,230,230); // 11,55,66
-                case LINE_BORDER: return new Color(230,230,230);
-                case LINE_COLOR: return new Color(149,149,149);
-                case LINE_HIGHLIGHT: return new Color(0,0,0);
+                case GUTTER_BACKGROUND: return new Color(230,230,230); // 11,55,66
+                case GUTTER_BORDER: return new Color(230,230,230);
+                case GUTTER_COLOR: return new Color(149,149,149);
+                case GUTTER_HIGHLIGHT: return new Color(0,0,0);
                 case COLOR_SELECTION: return new Color(194, 194, 194);
+                case LINE_HIGHLIGHT: return new Color(230, 230, 230);
             }
             break;
         }

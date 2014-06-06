@@ -236,7 +236,7 @@ view.bgColor=#ffffff
 view.fgColor=#000000
 
 # Line highlighting
-view.lineHighlight=false
+view.lineHighlight=true
 view.lineHighlightColor=#ffffe0
 
 # Bracket highlighting

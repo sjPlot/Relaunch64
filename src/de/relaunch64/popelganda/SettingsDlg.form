@@ -475,6 +475,7 @@
                                   </Group>
                                   <Component id="jLabelSchemePreview" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxAlternativeAssemblyMode" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowLineHighlight" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="423" max="32767" attributes="0"/>
                           </Group>
@@ -495,7 +496,9 @@
                       <Component id="jLabelSchemePreview" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jCheckBoxAlternativeAssemblyMode" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="239" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxShowLineHighlight" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="210" max="32767" attributes="0"/>
                       <Component id="jButtonApplyScheme" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -536,6 +539,13 @@
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxAlternativeAssemblyMode.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxAlternativeAssemblyMode.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxAlternativeAssemblyMode" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxShowLineHighlight">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowLineHighlight.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxShowLineHighlight.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxShowLineHighlight" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>
