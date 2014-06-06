@@ -1262,6 +1262,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         // valid script?
         if (script!=null && !script.isEmpty()) {
+            // log offset
+            int offset = 0;
             // clear old log
             clearLog1();
             clearLog2();
@@ -1331,24 +1333,22 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
                             // write output to string builder
                             while (sc.hasNextLine()) {
-                                compilerLog.append(System.lineSeparator()).append(sc.nextLine());
+                                compilerLog.append(sc.nextLine()).append(System.lineSeparator());
                             }
                         }
                         try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
                             // write output to string builder
                             while (sc.hasNextLine()) {
-                                compilerLog.append(System.lineSeparator()).append(sc.nextLine());
+                                compilerLog.append(sc.nextLine()).append(System.lineSeparator());
                             }
                         }
-                        // finally, append new line
-                        compilerLog.append(System.lineSeparator());
                         // print log to text area
-                        jTextAreaCompilerOutput.append(compilerLog.toString());                            
+                        jTextAreaCompilerOutput.append(compilerLog.toString());
                         // wait for other process to be finished
                         p.waitFor();
                         p.destroy();
                         // read and extract errors from log
-                        errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveAssembler());
+                        offset = errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveAssembler(), offset);
                         // break loop if we have any errors
                         if (errorHandler.hasErrors() || p.exitValue()!=0) break;
                     }

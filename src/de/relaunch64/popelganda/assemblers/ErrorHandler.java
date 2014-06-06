@@ -118,14 +118,16 @@ public class ErrorHandler {
      * @param assembler the assembler that was used to comipile the file, in order
      * to correctly parse the error messages.
      */
-    public void readErrorLines(String log, Assembler assembler) {
+    public int readErrorLines(String log, Assembler assembler, int offset) {
         // create buffered reader, needed for line number reader
         StringReader sr = new StringReader(log);
         BufferedReader br = new BufferedReader(sr);
         LineNumberReader lineReader = new LineNumberReader(br);
+        lineReader.setLineNumber(offset);
         // find all errors, use assembler specific error parsing
         // to detect line and column numbers of warnings and errors.
         errors.addAll(assembler.readErrorLines(lineReader));
+        return lineReader.getLineNumber();
     }
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
         if (hasErrors()) {
