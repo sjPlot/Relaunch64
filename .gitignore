@@ -6,4 +6,4 @@
 *.ear
 /dist/
 /store/
-/build/classes/
+/build/
