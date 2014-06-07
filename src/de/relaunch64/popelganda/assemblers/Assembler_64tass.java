@@ -179,7 +179,7 @@ class Assembler_64tass implements Assembler {
         LinkedList<lineInfo> labels = new LinkedList<>(), localLabels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm too old to understand it...
-        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu)\\b)?.*");
+        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -344,7 +344,7 @@ class Assembler_64tass implements Assembler {
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
-        Pattern p = Pattern.compile("(?i)([a-z0-9_.]*[a-z_]\\b)([^a-z0-9_.].*|$)");
+        Pattern p = Pattern.compile("([\\p{javaUnicodeIdentifierPart}_.]*[\\p{javaUnicodeIdentifierStart}_]\\b)([^\\p{javaUnicodeIdentifierPart}_.].*|$)");
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
