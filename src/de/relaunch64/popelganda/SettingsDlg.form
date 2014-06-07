@@ -263,6 +263,7 @@
                                       <Component id="jLabelRestart" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jCheckBoxSuggestCaseSort" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowCloseButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="196" max="32767" attributes="0"/>
                           </Group>
@@ -302,12 +303,14 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jCheckBoxSuggestCaseSort" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jCheckBoxScaleFonts" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelRestart" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="51" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxShowCloseButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="28" max="32767" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -440,6 +443,12 @@
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxSuggestCaseSort.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxSuggestCaseSort.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxSuggestCaseSort" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxShowCloseButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowCloseButton.text"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxShowCloseButton" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

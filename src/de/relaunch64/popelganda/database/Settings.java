@@ -75,6 +75,7 @@ public class Settings {
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_SHOW_LINEHIGLIGHT = "showlinehighlight";
+    private static final String SETTING_SHOW_CLOSEBUTTON = "showclosebutton";
     private static final String SETTING_SUGGEST_SORT_CASE = "suggestioncasesort";
     private static final String SETTING_ANTIALIAS = "antialias";
     private static final String SETTING_SCALE_FONT = "scalefont";
@@ -246,6 +247,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_SHOW_LINEHIGLIGHT);
             el.setText("0");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_SHOW_CLOSEBUTTON)) {
+            // create element
+            Element el = new Element(SETTING_SHOW_CLOSEBUTTON);
+            el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
@@ -632,6 +640,19 @@ public class Settings {
         Element el = root.getChild(SETTING_SHOW_LINEHIGLIGHT);
         if (null==el) {
             el = new Element(SETTING_SHOW_LINEHIGLIGHT);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getShowCloseButton() {
+        Element el = root.getChild(SETTING_SHOW_CLOSEBUTTON);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setShowCloseButton(boolean val)  {
+        Element el = root.getChild(SETTING_SHOW_CLOSEBUTTON);
+        if (null==el) {
+            el = new Element(SETTING_SHOW_CLOSEBUTTON);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

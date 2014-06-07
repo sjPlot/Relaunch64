@@ -850,6 +850,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setShowLineHightlight(!settings.getShowLineHightlight());
                 editorPanes.updateColorScheme();
                 break;
+            case "scb":
+                settings.setShowCloseButton(!settings.getShowCloseButton());
+                editorPanes.updateTabCloseButtons();
+                break;
         }
         try {
             if (text.startsWith("cs")) {

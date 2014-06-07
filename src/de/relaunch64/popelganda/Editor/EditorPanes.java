@@ -80,24 +80,30 @@ public class EditorPanes {
 
     private class TabPanel extends JPanel { /* Draws a tab with close button */
         private final JLabel tabLabel;
+        private final JButton closeButton;
+        private final Settings settings;
         java.awt.Component component;
-        public TabPanel(String title) {
+        public TabPanel(String title, Settings settings) {
             super(new FlowLayout(FlowLayout.LEFT, 0, 0)); 
             super.setOpaque(false);
+            this.settings = settings;
             // set text label for tab
-            this.tabLabel = new JLabel(title + "  "); 
-            JButton closeButton = new JButton(""); 
+            this.tabLabel = new JLabel(title + (this.settings.getShowCloseButton() ? "  " : "")); 
+            this.closeButton = new JButton(""); 
             // add close button
-            closeButton.setIcon(ConstantsR64.tabcloseicon);
+            this.closeButton.setIcon(ConstantsR64.tabcloseicon);
             // and roll-over button
-            closeButton.setRolloverEnabled(true);
-            closeButton.setRolloverIcon(ConstantsR64.tabclosehovericon);
-            closeButton.setMargin(new java.awt.Insets(0,0,0,0));
-            closeButton.setBorder(null);
+            this.closeButton.setRolloverEnabled(true);
+            this.closeButton.setRolloverIcon(ConstantsR64.tabclosehovericon);
+            this.closeButton.setMargin(new java.awt.Insets(0,0,0,0));
+            this.closeButton.setBorder(null);
+            // show or hide button
+            setCloseButtonVisible(this.settings.getShowCloseButton());
+            // add to component
             super.add(this.tabLabel); 
-            super.add(closeButton); 
+            super.add(this.closeButton); 
             // add action listener to close tabs on click
-            closeButton.addActionListener(new java.awt.event.ActionListener() { /* closes a tab */
+            this.closeButton.addActionListener(new java.awt.event.ActionListener() { /* closes a tab */
                 @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
                     java.awt.Component oldtab = tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
                     tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(component));
@@ -108,10 +114,17 @@ public class EditorPanes {
         }
         public final void setTitle(String title) {
             // put space between title and close-button
-            this.tabLabel.setText(title + "  ");
+            this.tabLabel.setText(title + (this.settings.getShowCloseButton() ? "  " : ""));
+        }
+        public final String getTitle() {
+            // put space between title and close-button
+            return this.tabLabel.getText().trim();
         }
         public void setTabComponent(java.awt.Component component) {
             this.component = component;
+        }
+        public final void setCloseButtonVisible(boolean visible) {
+            this.closeButton.setVisible(visible);
         }
     };
     /**
@@ -156,7 +169,7 @@ public class EditorPanes {
         if (fp!=null && fp.exists()) {
             tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
         }
-        TabPanel tabPanel = new TabPanel(title);
+        TabPanel tabPanel = new TabPanel(title, settings);
         tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, tabPanel);
         tabPanel.setTabComponent(tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1));
         // set assembler syntax style
@@ -479,6 +492,19 @@ public class EditorPanes {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
             editorpane.setSyntaxScheme();
+        }
+    }
+    /**
+     * Changes visibility of close buttons and adjusts titles of all tabs.
+     */
+    public void updateTabCloseButtons() {
+        for (int i=0; i<tabbedPane.getTabCount(); i++) {
+            // change close button visibility
+            ((TabPanel)tabbedPane.getTabComponentAt(i)).setCloseButtonVisible(settings.getShowCloseButton());
+            // adjust title
+            String title = ((TabPanel)tabbedPane.getTabComponentAt(i)).getTitle();
+            // whether spaces between label and title are needed depends on button visibility
+            ((TabPanel)tabbedPane.getTabComponentAt(i)).setTitle(title);
         }
     }
     /**
