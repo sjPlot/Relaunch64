@@ -84,15 +84,19 @@ public class EditorPanes {
         public TabPanel(String title) {
             super(new FlowLayout(FlowLayout.LEFT, 0, 0)); 
             super.setOpaque(false);
+            // set text label for tab
             this.tabLabel = new JLabel(title + "  "); 
             JButton closeButton = new JButton(""); 
+            // add close button
             closeButton.setIcon(ConstantsR64.tabcloseicon);
+            // and roll-over button
             closeButton.setRolloverEnabled(true);
             closeButton.setRolloverIcon(ConstantsR64.tabclosehovericon);
             closeButton.setMargin(new java.awt.Insets(0,0,0,0));
             closeButton.setBorder(null);
             super.add(this.tabLabel); 
             super.add(closeButton); 
+            // add action listener to close tabs on click
             closeButton.addActionListener(new java.awt.event.ActionListener() { /* closes a tab */
                 @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
                     java.awt.Component oldtab = tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
@@ -103,6 +107,7 @@ public class EditorPanes {
             });
         }
         public final void setTitle(String title) {
+            // put space between title and close-button
             this.tabLabel.setText(title + "  ");
         }
         public void setTabComponent(java.awt.Component component) {
