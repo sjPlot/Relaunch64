@@ -84,7 +84,7 @@ public class EditorPanes {
         public TabPanel(String title) {
             super(new FlowLayout(FlowLayout.LEFT, 0, 0)); 
             super.setOpaque(false);
-            this.tabLabel = new JLabel(""); 
+            this.tabLabel = new JLabel(title + "  "); 
             JButton closeButton = new JButton(""); 
             closeButton.setIcon(ConstantsR64.tabcloseicon);
             closeButton.setRolloverEnabled(true);
@@ -101,7 +101,6 @@ public class EditorPanes {
                     if (component != oldtab) tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(oldtab)); /* reselect old tab */
                 }
             });
-            setTitle(title);
         }
         public final void setTitle(String title) {
             this.tabLabel.setText(title + "  ");
