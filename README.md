@@ -33,6 +33,7 @@ Relaunch64 3.1.0
 * Aqua Look'n'Feel on OS X by default
 * UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
 * added apply-button to Other-tab of preference pane
+* added close-buttons to tabs
 * many (code) improvements, code cleanup
 * slight modification of Popelganda color scheme
 
