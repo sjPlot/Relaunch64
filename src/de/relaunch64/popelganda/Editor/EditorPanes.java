@@ -87,9 +87,10 @@ public class EditorPanes {
             this.tabLabel = new JLabel(""); 
             JButton closeButton = new JButton(""); 
             closeButton.setIcon(ConstantsR64.tabcloseicon);
+            closeButton.setRolloverEnabled(true);
+            closeButton.setRolloverIcon(ConstantsR64.tabclosehovericon);
             closeButton.setMargin(new java.awt.Insets(0,0,0,0));
             closeButton.setBorder(null);
-            closeButton.setRolloverEnabled(true);
             super.add(this.tabLabel); 
             super.add(closeButton); 
             closeButton.addActionListener(new java.awt.event.ActionListener() { /* closes a tab */

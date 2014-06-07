@@ -73,6 +73,7 @@ public class ConstantsR64 {
      */
     public static final ImageIcon r64icon = new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/icons/r64_16x16.png"));
     public static final ImageIcon tabcloseicon = new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/icons/close.png"));
+    public static final ImageIcon tabclosehovericon = new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/icons/close-hover.png"));
     public static final ImageIcon paydaylogo = new ImageIcon(ConstantsR64.class.getResource("/de/relaunch64/popelganda/resources/img/payday.gif"));
 
     public static final String[] colorpreviews = new String[] {
