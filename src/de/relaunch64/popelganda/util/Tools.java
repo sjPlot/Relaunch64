@@ -262,7 +262,7 @@ public class Tools {
     public static void insertBasicStart(EditorPanes editorPanes) {
         int dezaddress = 0;
         // open input  dialog
-        String startaddress = (String)JOptionPane.showInputDialog(null, "Enter start address:");
+        String startaddress = (String)JOptionPane.showInputDialog(null, "Enter start address:", "Insert Basic start", JOptionPane.PLAIN_MESSAGE, null, null, "2061");
         // check for return value / valid input
         if (startaddress!=null && !startaddress.trim().isEmpty()) {
             // remove whitespace
