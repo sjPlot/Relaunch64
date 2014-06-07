@@ -14,28 +14,37 @@ Relaunch64 3.1.0
   - proper text anti-aliasing
   - improved line number display and handling
   - changes on color scheme, font and tab size etc. immediately take effect
+
 * improved suggestion / auto-completion popup (ctrl+space and ctrl+shift+space):
   - local labels outside the scope are not listed (only global labels and labels within scope)
   - filter suggestion list by typing
   - editor scrolls to suggestion popup when caret is not visible
   - suggests all labels, constants, variables (these two go as labels, too), macros and functions.
   - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
+
 * improved navigation (jump and goto functions):
   - all labels, constants, variables (these two go as labels, too), macros and functions are extracted.
   - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
-* added DASM support
-* added TMPx support
-* syntax support for !addr pseudoop in ACME (since 0.95)
-* added code-folding support
-* added alternative syntax highlighting mode (see preferences)
-* improvements with goto error functions, error line parsing for all supported assemblers.
-* jump to next/prev code fold function
-* Aqua Look'n'Feel on OS X by default
-* UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
-* added apply-button to Other-tab of preference pane
-* added close-buttons to tabs
-* many (code) improvements, code cleanup
-* slight modification of Popelganda color scheme
+  - jump to next/prev code fold function
+
+* assembler and error handling support
+  - added DASM support
+  - added TMPx support
+  - syntax support for !addr pseudoop in ACME (since 0.95)
+  - improvements with goto error functions, error line parsing for all supported assemblers.
+  - highlight current error line in log
+  - goto error line in source when clicking on highlighted error line in log
+
+* GUI
+  - Aqua Look'n'Feel on OS X by default
+  - UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
+  - added apply-button to Other-tab of preference pane
+  - added close-buttons to tabs
+
+* various
+  - added alternative syntax highlighting mode (see preferences)
+  - many (code) improvements, code cleanup
+  - slight modification of Popelganda color scheme
 
 ### Bug fixes
 * modified files, which should have been saved before compiling, were not checked if they really exist
