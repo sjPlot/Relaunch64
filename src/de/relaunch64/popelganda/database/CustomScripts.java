@@ -112,7 +112,7 @@ public class CustomScripts {
         // check for valid values
         if (null==name || name.isEmpty() || null==content || content.isEmpty()) return false;
         // check if element exists
-        int pos = findScriptByName(name);
+        int pos = findScript(name);
         // script already exists, so update
         if (pos!=-1) {
             // retrieve element
@@ -138,9 +138,9 @@ public class CustomScripts {
         }
         return true;
     }
-    public String getScriptByName(String name) {
+    public String getScript(String name) {
         // check if element exists
-        int pos = findScriptByName(name);
+        int pos = findScript(name);
         // script already exists, so update
         if (pos!=-1) {
             // retrieve element
@@ -152,7 +152,7 @@ public class CustomScripts {
         }
         return null;
     }
-    protected String getScriptName(int pos) {
+    public String getScriptName(int pos) {
         // retrieve element
         Element el = retrieveElement(pos);
         // check for valid value
@@ -199,13 +199,10 @@ public class CustomScripts {
      * or -1 if no such script with the name {@code name} exists (or {@code name}
      * was {@code null} or empty).
      */
-    public int findScriptByName(String name) {
-        return findScript(name, ATTR_NAME);
-    }
-    protected int findScript(String value, String attr) {
-        if (null==value || value.trim().isEmpty()) return -1;
+    public int findScript(String name) {
+        if (null==name || name.trim().isEmpty()) return -1;
         // trim spaces
-        value = value.trim();
+        name = name.trim();
         // create a list of all author elements from the author xml file
         try {
             List<Element> scriptList = scriptFile.getRootElement().getChildren();
@@ -217,7 +214,7 @@ public class CustomScripts {
             while (iterator.hasNext()) {
                 Element script = iterator.next();
                 // if synonym-index-word matches the parameter string, return the position
-                if (value.equalsIgnoreCase(script.getAttributeValue(attr))) {
+                if (name.equalsIgnoreCase(script.getAttributeValue(ATTR_NAME))) {
                     return cnt;
                 }
                 // else increase counter
@@ -234,7 +231,7 @@ public class CustomScripts {
         return scriptFile.getRootElement().getContentSize();
     }
     public boolean removeScript(String name) {
-        int index = findScriptByName(name);
+        int index = findScript(name);
         return removeScript(index);
     }
     public boolean removeScript(int index) {

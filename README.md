@@ -5,7 +5,6 @@ Relaunch64 3.1.0
 ----------------
 
 ### New features
-
 * completely new editor component with new features, such as:
   - increased performance
   - much faster syntax highlighting

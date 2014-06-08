@@ -3,19 +3,43 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/licence.html</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/Settings.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/SettingsDlg.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help_userscripts.html</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPanes.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/FileTools.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/ErrorHandler.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/CheckForUpdates.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help.html</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Tools.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/CustomScripts.java</file>
-            <file>file:/C:/Users/Luedeke/Documents/Yavin4/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPaneProperties.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/ConstantsR64.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/FindTerms.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/RelaunchClipboard.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/ColorSchemes.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/jEdit.props</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_64tass.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/CustomScripts.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPanes.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assemblers.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_acme.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_kick.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPaneTools.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/SettingsDlg.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/FileTools.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_dreamass.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertSinusTableDlg.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_dasm.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/SectionExtractor.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/Settings.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_tmpx.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/InsertBreakPoint.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_ca65.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/README.md</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help_userscripts.html</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertByteFromFileDlg.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/LabelExtractor.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/licence.html</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Tools.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/CheckForUpdates.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPaneProperties.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/ErrorHandler.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/RL64TextArea.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help.html</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/QuickReferences.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_dummy.java</file>
         </group>
     </open-files>
 </project-private>

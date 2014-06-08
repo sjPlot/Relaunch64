@@ -267,7 +267,7 @@
                         <FUNCTION>trunc</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ_+-" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z_][A-Za-z0-9_.]*|[+-]</SEQ_REGEXP>
+                <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}_][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="-`~!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 </MODE>

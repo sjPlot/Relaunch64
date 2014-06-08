@@ -182,7 +182,7 @@ public class ErrorHandler {
             int errorTab = editorPanes.getOpenedFileTab(ef);
             // if not, open it
             if (-1==errorTab) {
-                editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), "");
+                editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), 0);
             }
             // if tab is opened, but not selected, select it
             else if (errorTab!=editorPanes.getSelectedTab()) {
