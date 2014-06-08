@@ -580,9 +580,13 @@
                           <Component id="jCheckBoxCheckUpdates" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBoxSaveOnCompile" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBoxReopenFiles" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jCheckBoxNimbusOnOSX" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jCheckBoxNimbusOnOSX" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabelRestart2" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="433" max="32767" attributes="0"/>
+                      <EmptySpace pref="247" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
@@ -601,7 +605,10 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jCheckBoxReopenFiles" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxNimbusOnOSX" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jCheckBoxNimbusOnOSX" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelRestart2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace pref="179" max="32767" attributes="0"/>
                       <Component id="jButtonApplyOther" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -644,6 +651,13 @@
                   <action class="de.relaunch64.popelganda.SettingsDlg" id="applyOther" methodName="applyOther"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jButtonApplyOther" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelRestart2">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" resourceKey="jLabelRestart2.foreground"/>
+                <Property name="text" type="java.lang.String" resourceKey="jLabelRestart2.text"/>
+                <Property name="name" type="java.lang.String" value="jLabelRestart2" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

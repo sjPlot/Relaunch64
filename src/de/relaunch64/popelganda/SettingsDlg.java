@@ -92,6 +92,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         editorPanes = ep;
         initComponents();
         jLabelRestart.setVisible(false);
+        jLabelRestart2.setVisible(false);
         // set font-preview for change-font-label
         mainfont = settings.getMainFont();
         jLabelFont.setText(mainfont.getFontName());
@@ -265,6 +266,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxNimbusOnOSX.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLabelRestart2.setVisible(true);
                 setModifiedTabOther(true);
             }
         });
@@ -611,6 +613,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxReopenFiles = new javax.swing.JCheckBox();
         jCheckBoxNimbusOnOSX = new javax.swing.JCheckBox();
         jButtonApplyOther = new javax.swing.JButton();
+        jLabelRestart2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -932,6 +935,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jButtonApplyOther.setAction(actionMap.get("applyOther")); // NOI18N
         jButtonApplyOther.setName("jButtonApplyOther"); // NOI18N
 
+        jLabelRestart2.setForeground(resourceMap.getColor("jLabelRestart2.foreground")); // NOI18N
+        jLabelRestart2.setText(resourceMap.getString("jLabelRestart2.text")); // NOI18N
+        jLabelRestart2.setName("jLabelRestart2"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -942,8 +949,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jCheckBoxCheckUpdates)
                     .add(jCheckBoxSaveOnCompile)
                     .add(jCheckBoxReopenFiles)
-                    .add(jCheckBoxNimbusOnOSX))
-                .addContainerGap(433, Short.MAX_VALUE))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jCheckBoxNimbusOnOSX)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabelRestart2)))
+                .addContainerGap(247, Short.MAX_VALUE))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
@@ -959,7 +969,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxReopenFiles)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jCheckBoxNimbusOnOSX)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jCheckBoxNimbusOnOSX)
+                    .add(jLabelRestart2))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 179, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
                 .addContainerGap())
@@ -1020,6 +1032,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelFont;
     private javax.swing.JLabel jLabelRestart;
+    private javax.swing.JLabel jLabelRestart2;
     private javax.swing.JLabel jLabelSchemePreview;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -84,7 +84,7 @@ public class EditorPanes {
         private final Settings settings;
         java.awt.Component component;
         public TabPanel(String title, Settings settings) {
-            super(new FlowLayout(FlowLayout.LEFT, 0, 0)); 
+            super(new FlowLayout(FlowLayout.LEFT, (ConstantsR64.IS_OSX) ? 2 : 0, (ConstantsR64.IS_OSX) ? 2 : 0)); 
             super.setOpaque(false);
             this.settings = settings;
             // set text label for tab

@@ -154,7 +154,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jSplitPane2.setBorder(null);
             jScrollPane2.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPane3.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
-            jPanel9.setBorder(new javax.swing.border.MatteBorder(15, 5, 5, 5, new Color(238,238,238)));
+            jPanel3.setBorder(null);
+            jPanel9.setBorder(new javax.swing.border.TitledBorder(UIManager.getBorder("TitledBorder.aquaVariant"), resourceMap.getString("jPanel9.border.title")));
         }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
@@ -2237,15 +2238,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButtonRunScript)
                     .add(jLabel2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1))
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
@@ -2284,9 +2286,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 469, Short.MAX_VALUE)
+            .add(0, 419, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
@@ -2307,7 +2309,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
@@ -2321,7 +2323,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
-                .add(jTabbedPaneLogs)
+                .add(jTabbedPaneLogs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .add(0, 0, 0))
         );
 
