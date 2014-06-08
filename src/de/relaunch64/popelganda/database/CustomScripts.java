@@ -69,6 +69,9 @@ public class CustomScripts {
         // create file path to script file
         filepath = FileTools.createFilePath("relaunch64-scripts.xml");
     }
+    /**
+     * Loads the scripts from an XML file
+     */
     public void loadScripts() {
         // if file exists, go on...
         if (filepath!=null && filepath.exists()) {
@@ -82,7 +85,7 @@ public class CustomScripts {
         }
     }
     /**
-     * Loads the settings file
+     * Saves the scripts to xml-file
      */
     public void saveScripts() {
         // if file exists, go on...
@@ -108,6 +111,13 @@ public class CustomScripts {
             }
         }
     }
+    /**
+     * Adds a new script.
+     * 
+     * @param name the name of the new script
+     * @param content the content of the new script
+     * @return {@code true} if script was successfully added.
+     */
     public boolean addScript(String name, String content) {
         // check for valid values
         if (null==name || name.isEmpty() || null==content || content.isEmpty()) return false;
@@ -138,6 +148,12 @@ public class CustomScripts {
         }
         return true;
     }
+    /**
+     * Returns the content of the script with the name {@code name}.
+     * 
+     * @param name the name of the script which content should be fetched
+     * @return the content of the script with the name {@code name}.
+     */
     public String getScript(String name) {
         // check if element exists
         int pos = findScript(name);
@@ -152,6 +168,12 @@ public class CustomScripts {
         }
         return null;
     }
+    /**
+     * Returns the script name from the script at the position {@code index}.
+     * 
+     * @param pos the index position of the script which name should be fetched
+     * @return the script name from the script at the position {@code index}
+     */
     public String getScriptName(int pos) {
         // retrieve element
         Element el = retrieveElement(pos);
@@ -161,6 +183,10 @@ public class CustomScripts {
         }
         return null;
     }
+    /**
+     * Returns a string array with all names of available scripts.
+     * @return all available script names
+     */
     public String[] getScriptNames() {
         ArrayList<String> snames = new ArrayList<>();
         for (int i=0; i<getCount(); i++) {
@@ -172,6 +198,13 @@ public class CustomScripts {
         if (snames.isEmpty()) return null;
         return snames.toArray(new String[snames.size()]);
     }
+    /**
+     * Retrieves an element from the XML-database at the position {@code pos}.
+     * 
+     * @param pos the position of the XML-element that should be fetched
+     * @return the {@code Element} at position {@code pos} or {@code null} if no
+     * such element exists or {@code pos} is out of bounds.
+     */
     private Element retrieveElement(int pos) {
         // check for valid values
         if (pos<0) return null;
@@ -227,13 +260,30 @@ public class CustomScripts {
             return -1;
         }
     }
+    /**
+     * Returns the number of edited scripts.
+     * @return the number of edited scripts
+     */
     public int getCount() {
         return scriptFile.getRootElement().getContentSize();
     }
+    /**
+     * Removes the script with the name {@code name}.
+     * 
+     * @param name the name of the script that should be removed.
+     * @return {@code true} if removal was successful
+     */
     public boolean removeScript(String name) {
         int index = findScript(name);
         return removeScript(index);
     }
+    /**
+     * Removes the script at the index {@code index}. Use {@link #findScript(java.lang.String) findScript()}
+     * to find the index of a script by name.
+     *  
+     * @param index the index of the script that should be removed
+     * @return {@code true} if removal was successful
+     */
     public boolean removeScript(int index) {
         List<Element> children = scriptFile.getRootElement().getChildren();
         try{
