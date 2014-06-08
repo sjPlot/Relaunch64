@@ -38,6 +38,7 @@ import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
+import de.relaunch64.popelganda.database.CustomScripts;
 import java.awt.dnd.DropTarget;
 import java.awt.Font;
 import java.awt.FlowLayout;
@@ -152,11 +153,11 @@ public class EditorPanes {
      * text in the editor pane
      * @param title Tab title
      * @param assembler the default assembler for this editor pane, so the correct syntax highlighting is applied
-     * @param script the current selected user script that will be associated with 
+     * @param scriptName the current selected user script that will be associated with 
      * this sourcecode on init
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addNewTab(File fp, String content, String title, Assembler assembler, int script) {
+    public int addNewTab(File fp, String content, String title, Assembler assembler, Object scriptName) {
         // create new editor pane
         final RL64TextArea editorPane = new RL64TextArea(settings);
         editorPane.setName("jEditorPaneMain");
@@ -227,7 +228,7 @@ public class EditorPanes {
         // set filepath
         editorPaneProperties.setFilePath(fp);
         // set script
-        editorPaneProperties.setScript(script);
+        editorPaneProperties.setScriptName((null==scriptName) ? "" : scriptName.toString());
         // set modified false
         editorPaneProperties.setModified(false);
         // add editorpane to list
@@ -699,15 +700,15 @@ public class EditorPanes {
             return Assemblers.ASM_KICKASSEMBLER;
         }
     }
-    public int getScript(int index) {
+    public String getScriptName(int index) {
         try {
             // get editor pane
             EditorPaneProperties ep = editorPaneArray.get(index);
             // get editor pane
-            return ep.getScript();
+            return ep.getScriptName();
         }
         catch (IndexOutOfBoundsException ex) {
-            return -1;
+            return "";
         }
     }
     /**
@@ -810,12 +811,12 @@ public class EditorPanes {
      * 
      * @param filepath the filepath to the file that should be opened.
      * @param assembler a reference to the {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}.
-     * @param script the user script that should initially be associated with the opened file
+     * @param scriptName the user script that should initially be associated with the opened file
      * 
      * @return  {@code true} if a new file was opened, {@code false} if an error occured or file was
      * already opened.
      */
-    public boolean loadFile(File filepath, Assembler assembler, int script) {
+    public boolean loadFile(File filepath, Assembler assembler, Object scriptName) {
         // check if file is already opened
         int opened = getOpenedFileTab(filepath);
         if (opened!=-1) {
@@ -843,7 +844,7 @@ public class EditorPanes {
                     if (CR) buf = buf.replaceAll("\r", "\n");
                     boolean LF = buf.contains("\n");
                     // if yes, add new tab
-                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script)-1;
+                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, scriptName)-1;
                     // set cursor
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     setCursor(epp.getEditorPane());
@@ -1077,8 +1078,9 @@ public class EditorPanes {
      * This method does not really do what the name might suggests. If another tab is
      * selected, this method updates the combo boxes for assembler and user scripts
      * whith the values that are associated with the selected editor pane (tab).
+     * @param customScripts
      */
-    public void updateTabbedPane() {
+    public void updateTabbedPane(CustomScripts customScripts) {
         // get selectect tab
         int selectedTab = tabbedPane.getSelectedIndex();
         // check for valid value
@@ -1087,7 +1089,7 @@ public class EditorPanes {
                 // select assembler, so we update the highlight, if necessary
                 jComboBoxAssembler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID());
                 // select user script
-                jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
+                jComboBoxScripts.setSelectedItem(editorPaneArray.get(selectedTab).getScriptName());
             }
             catch (IllegalArgumentException ex) {
             }

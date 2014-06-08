@@ -198,7 +198,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     jTextFieldScriptName.setText(scriptname);
                     // set content to text area
                     jTextAreaUserScript.setForeground(Color.black);
-                    jTextAreaUserScript.setText(scripts.getScript(scriptname));
+                    jTextAreaUserScript.setText(scripts.getScriptByName(scriptname));
                     // change button text to update
                     jButtonApplyScript.setText("Update script");
                 }
@@ -383,7 +383,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private void switchButtonLabel() {
         String name = jTextFieldScriptName.getText();
         String content = jTextAreaUserScript.getText();
-        if (name!=null) jButtonApplyScript.setText((scripts.findScript(name)!=-1) ? "Update script" : "Add script");
+        if (name!=null) jButtonApplyScript.setText((scripts.findScriptByName(name)!=-1) ? "Update script" : "Add script");
         jButtonApplyScript.setDisplayedMnemonicIndex(0);
         setModifiedTabScript(name!=null && !name.isEmpty() && !content.isEmpty() && !content.equals(quickHelpText));
     }

@@ -46,7 +46,7 @@ public class EditorPaneProperties {
     private RL64TextArea editorPane;
     private boolean modified;
     private File filePath;
-    private int script;
+    private String scriptName;
     private String lineEnd;
     
     public EditorPaneProperties() {
@@ -56,7 +56,7 @@ public class EditorPaneProperties {
         editorPane = null;
         modified = false;
         filePath = null;
-        script = 0;
+        scriptName = "";
         lineEnd = System.lineSeparator();
     }
     public RL64TextArea getEditorPane() {
@@ -77,11 +77,11 @@ public class EditorPaneProperties {
     public void setFilePath(File fp) {
         filePath = fp;
     }
-    public int getScript() {
-        return script;
+    public String getScriptName() {
+        return scriptName;
     }
-    public void setScript(int s) {
-        script = s;
+    public void setScriptName(Object n) {
+        scriptName = (n!=null) ? n.toString() : "";
     }
     public String getLineEnd() {
         return lineEnd;

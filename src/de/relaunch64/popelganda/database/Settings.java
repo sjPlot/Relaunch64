@@ -398,9 +398,9 @@ public class Settings {
      * @param nr
      * @return 
      */
-    public int getRecentDocScript(int nr) {
+    public String getRecentDocScriptName(int nr) {
         // checl for valid parameter
-        if (nr<0) return 0;
+        if (nr<0) return "";
         // retrieve element
         Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
         // if we have any valid document
@@ -410,15 +410,15 @@ public class Settings {
             // if we have any valid attribute
             if (comp!=null) {
                 try {
-                    return Integer.parseInt(comp.getValue());
+                    return comp.getValue();
                 }
                 catch (NumberFormatException ex) {
-                    return 0;
+                    return "";
                 }
             }
         }
         // else return null
-        return 0;
+        return "";
     }
     /**
      * 
@@ -454,9 +454,9 @@ public class Settings {
      * documents and rotates that list, if necessary.
      * @param fp the filepath to the document that should be added to the list of recent documents
      * @param assembler
-     * @param userScript
+     * @param userScriptName
      */
-    public void addToRecentDocs(String fp, Assembler assembler, int userScript) {
+    public void addToRecentDocs(String fp, Assembler assembler, Object userScriptName) {
         // check for valid parameter
         if (null==fp || fp.isEmpty()) {
             return;
@@ -471,17 +471,17 @@ public class Settings {
         // linked list for assemblers
         LinkedList<Assembler> recasms = new LinkedList<>();
         // linked list for scripts
-        LinkedList<Integer> recscripts = new LinkedList<>();
+        LinkedList<String> recscripts = new LinkedList<>();
         // add new filepath to linked list
         recdocs.add(fp);
         recasms.add(assembler);
-        recscripts.add(userScript);
+        recscripts.add((null==userScriptName) ? "" : userScriptName.toString());
         // iterate all current recent documents
         for (int cnt=1; cnt<=recentDocCount; cnt++) {
             // retrieve recent document
             String recentDoc = getRecentDocAsString(cnt);
             Assembler asm = getRecentDocAssembler(cnt);
-            int script = getRecentDocScript(cnt);
+            String scriptID = getRecentDocScriptName(cnt);
             // check whether the linked list already contains such a document
             if (recentDoc!=null && !recentDoc.isEmpty()) {
                 // check for existing file
@@ -489,7 +489,7 @@ public class Settings {
                 // if not, add it to the list
                 if (dummy.exists() && !recdocs.contains(recentDoc)) {
                     recasms.add(asm);
-                    recscripts.add(script);
+                    recscripts.add(scriptID);
                     recdocs.add(recentDoc);
                 }
             }
@@ -503,7 +503,7 @@ public class Settings {
             }
             // else fill remaining recent documents with empty strings
             else {
-                setRecentDoc(cnt, "", Assemblers.ASM_KICKASSEMBLER, -1);
+                setRecentDoc(cnt, "", Assemblers.ASM_KICKASSEMBLER, "");
             }
         }
     }
@@ -512,9 +512,9 @@ public class Settings {
      * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
      * @param fp the filepath to the recently used document as string
      * @param assembler
-     * @param userScript
+     * @param userScriptName
      */
-    public void setRecentDoc(int nr, String fp, Assembler assembler, int userScript) {
+    public void setRecentDoc(int nr, String fp, Assembler assembler, Object userScriptName) {
         // check for valid parameter
         if (null==fp || -1==nr) {
             return;
@@ -530,7 +530,7 @@ public class Settings {
         // add filepath
         el.setText(fp);
         el.setAttribute(REC_DOC_ASSEMBLER, String.valueOf(assembler.getID()));
-        el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
+        el.setAttribute(REC_DOC_SCRIPT, (null==userScriptName) ? "" : userScriptName.toString());
     }
     public File getLastUsedPath() {
         Element el = root.getChild(SETTING_LAST_USED_PATH);
@@ -729,22 +729,17 @@ public class Settings {
         }
         el.setText(String.valueOf(tabwidth));
     }
-    public int getLastUserScript() {
+    public String getLastUserScript() {
         Element el = root.getChild(SETTING_LAST_SCRIPT);
-        try {
-            if (el!=null) return Integer.parseInt(el.getText());
-        }
-        catch (NumberFormatException ex) {
-        }
-        return 0;
+        return (el!=null) ? el.getText() : "";
     }
-    public void setLastUserScript(int index) {
+    public void setLastUserScript(Object name) {
         Element el = root.getChild(SETTING_LAST_SCRIPT);
         if (null==el) {
             el = new Element(SETTING_LAST_SCRIPT);
             root.addContent(el);
         }
-        el.setText(String.valueOf(index));
+        el.setText((null==name)?"":name.toString());
     }
     /**
      * Retrieves settings for the mainfont (the font used for the main-entry-textfield).
@@ -866,18 +861,18 @@ public class Settings {
                 String attr_s = e.getAttributeValue(ATTR_SCRIPT);
                 // init defaults
                 Assembler assembler = Assemblers.ASM_KICKASSEMBLER;
-                int script = -1;
+                String scriptName = "";
                 // check if we have compiler value
                 try {
                     if (attr_c!=null) assembler = Assemblers.byID(Integer.parseInt(attr_c));
-                    if (attr_s!=null) script = Integer.parseInt(attr_s);
+                    if (attr_s!=null) scriptName = attr_s;
                 }
                 catch (NumberFormatException ex) {
                     assembler = Assemblers.ASM_KICKASSEMBLER;
-                    script = -1;
+                    scriptName = "";
                 }
                 // add compiler and filepath to return value
-                rofiles.add(new Object[]{f,assembler,script});
+                rofiles.add(new Object[]{f, assembler, scriptName});
             }
         }
         return rofiles;
@@ -895,7 +890,7 @@ public class Settings {
             // get file path and compiler settings of each file
             File fp = ep.getFilePath(i);
             int c = ep.getAssembler(i).getID();
-            int s = ep.getScript(i);
+            String s = ep.getScriptName(i);
             // save if exists
             if (fp!=null && fp.exists()) {
                 // create new child element
@@ -903,7 +898,7 @@ public class Settings {
                 // add path and compiler
                 child.setText(fp.getAbsolutePath());
                 child.setAttribute(ATTR_ASM, String.valueOf(c));
-                child.setAttribute(ATTR_SCRIPT, String.valueOf(s));
+                child.setAttribute(ATTR_SCRIPT, s);
                 // add to database
                 el.addContent(child);
             }
