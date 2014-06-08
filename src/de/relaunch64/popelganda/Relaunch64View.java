@@ -565,7 +565,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         });
-        
         jTextFieldGotoLine.addKeyListener(new KeyAdapter() {
             @Override public void keyReleased(KeyEvent evt) {
                 if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
@@ -797,8 +796,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
             }
         });
-
-        }
+        jTextAreaCompilerOutput.addKeyListener(new KeyAdapter() {
+            @Override public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextAreaCompilerOutput.copy();
+                    evt.consume();
+                }
+            }
+        });
+        jTextAreaLog.addKeyListener(new KeyAdapter() {
+            @Override public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                    jTextAreaLog.copy();
+                    evt.consume();
+                }
+            }
+        });
+    }
     /**
      * Parses input from the Goto-line-textfield. Used for quickly changing settings,
      * may also be used for special debug-functions or information etc.

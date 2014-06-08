@@ -40,6 +40,7 @@ Relaunch64 3.1.0
   - UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
   - added apply-button to Other-tab of preference pane
   - added close-buttons to tabs
+  - ctrl+c can now copy content of Relaunch64-log and assembler-log
 
 * various
   - added alternative syntax highlighting mode (see preferences)
@@ -51,6 +52,7 @@ Relaunch64 3.1.0
 * remove-script-button (preference pane) was disabled in certain cases, where it should have been enabled - fixed
 * preference window could be resized, so apply-button was no longer visible. fixed, set minimum size to preference window to ensure apply-button is always visible
 * relative paths, for instance when drag'n'dropping files, were not correctly extrtacted - fixed
+* adding new user scripts may have messed up script-assignment to recent opened files and tabs that are re-opened on startup - fixed
 
 Relaunch64 3.0.1
 ----------------
