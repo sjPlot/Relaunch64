@@ -1388,7 +1388,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
                     // replace placeholders
                     cmd = cmd.replace(Assembler.INPUT_FILE, sf);
+                    cmd = cmd.replace(Assembler.INPUT_FILENAME, FileTools.getFileName(sourceFile));
                     cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
+                    cmd = cmd.replace(Assembler.OUTPUT_FILENAME, FileTools.getFileName(outFile));
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, of);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
                     cmd = cmd.replace(Assembler.SOURCE_DIR, parentFile);

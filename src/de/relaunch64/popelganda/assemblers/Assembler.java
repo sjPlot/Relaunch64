@@ -42,6 +42,8 @@ public interface Assembler
     static final String INPUT_FILE = "SOURCEFILE";
     static final String SOURCE_DIR = "SOURCEDIR";
     static final String OUTPUT_FILE = "OUTFILE";
+    static final String INPUT_FILENAME = "SOURCENAME";
+    static final String OUTPUT_FILENAME = "OUTNAME";
     /**
      * A class with information on all extracted labels, functions and macros
      * of a source code file. Information are saved as HashMaps with names

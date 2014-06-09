@@ -243,10 +243,10 @@ public class FileTools {
         return false;
     }
     /**
-     * This method returns the file name of a given file-path which is passed as parameter.
+     * This method returns the file name (w/o path and extension) of a given file-path which is passed as parameter.
      * 
      * @param f the filepath of the file which file name should be retrieved
-     * @return the name of the given file, <b>excluding extension</b>, or {@code null} if an error occured.
+     * @return the name of the given file, <b>excluding path and extension</b>, or {@code null} if an error occured.
      */
     public static String getFileName(File f) {
         // check if we have any file
