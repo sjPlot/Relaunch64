@@ -978,6 +978,27 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
         }
     }
+    @Action
+    public void spacesToTabs() {
+        editorPanes.getActiveEditorPane().spacesToTabs();
+    }
+    @Action
+    public void allSpacesToTabs() {
+        for (int i=0; i<editorPanes.getCount(); i++) {
+            editorPanes.getEditorPane(i).spacesToTabs();
+        }
+    }
+    @Action
+    public void tabsToSpaces() {
+        editorPanes.getActiveEditorPane().tabsToSpaces();
+    }
+    @Action
+    public void allTabsToSpaces() {
+        for (int i=0; i<editorPanes.getCount(); i++) {
+            editorPanes.getEditorPane(i).tabsToSpaces();
+        }
+    }
+
     public void autoConvertNumbers(String selection) {
         // check for valid selection
         if (selection!=null && !selection.trim().isEmpty()) {
@@ -1987,6 +2008,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         pasteMenuItem = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         selectAllMenuItem = new javax.swing.JMenuItem();
+        jSeparator24 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemTabsToSpaces = new javax.swing.JMenuItem();
+        jMenuItemAllTabsToSpaces = new javax.swing.JMenuItem();
+        jSeparator25 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemSpaceToTab = new javax.swing.JMenuItem();
+        jMenuItemAllSpaceToTab = new javax.swing.JMenuItem();
         findMenu = new javax.swing.JMenu();
         findStartMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
@@ -2343,7 +2370,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
-                .add(jTabbedPaneLogs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                .add(jTabbedPaneLogs)
                 .add(0, 0, 0))
         );
 
@@ -2493,6 +2520,28 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         selectAllMenuItem.setAction(actionMap.get("selectAllText")); // NOI18N
         selectAllMenuItem.setName("selectAllMenuItem"); // NOI18N
         editMenu.add(selectAllMenuItem);
+
+        jSeparator24.setName("jSeparator24"); // NOI18N
+        editMenu.add(jSeparator24);
+
+        jMenuItemTabsToSpaces.setAction(actionMap.get("tabsToSpaces")); // NOI18N
+        jMenuItemTabsToSpaces.setName("jMenuItemTabsToSpaces"); // NOI18N
+        editMenu.add(jMenuItemTabsToSpaces);
+
+        jMenuItemAllTabsToSpaces.setAction(actionMap.get("allTabsToSpaces")); // NOI18N
+        jMenuItemAllTabsToSpaces.setName("jMenuItemAllTabsToSpaces"); // NOI18N
+        editMenu.add(jMenuItemAllTabsToSpaces);
+
+        jSeparator25.setName("jSeparator25"); // NOI18N
+        editMenu.add(jSeparator25);
+
+        jMenuItemSpaceToTab.setAction(actionMap.get("spacesToTabs")); // NOI18N
+        jMenuItemSpaceToTab.setName("jMenuItemSpaceToTab"); // NOI18N
+        editMenu.add(jMenuItemSpaceToTab);
+
+        jMenuItemAllSpaceToTab.setAction(actionMap.get("allSpacesToTabs")); // NOI18N
+        jMenuItemAllSpaceToTab.setName("jMenuItemAllSpaceToTab"); // NOI18N
+        editMenu.add(jMenuItemAllSpaceToTab);
 
         menuBar.add(editMenu);
 
@@ -2894,13 +2943,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItemAllSpaceToTab;
+    private javax.swing.JMenuItem jMenuItemAllTabsToSpaces;
     private javax.swing.JMenuItem jMenuItemCollapseAllFolds;
     private javax.swing.JMenuItem jMenuItemCollapseFold;
     private javax.swing.JMenuItem jMenuItemExpandAllFolds;
     private javax.swing.JMenuItem jMenuItemExpandFold;
     private javax.swing.JMenuItem jMenuItemNextFold;
     private javax.swing.JMenuItem jMenuItemPrevFold;
+    private javax.swing.JMenuItem jMenuItemSpaceToTab;
     private javax.swing.JMenuItem jMenuItemSurroundFolds;
+    private javax.swing.JMenuItem jMenuItemTabsToSpaces;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2928,6 +2981,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator22;
     private javax.swing.JPopupMenu.Separator jSeparator23;
+    private javax.swing.JPopupMenu.Separator jSeparator24;
+    private javax.swing.JPopupMenu.Separator jSeparator25;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
