@@ -137,12 +137,12 @@ class Assembler_acme implements Assembler
     public String getDefaultCommandLine(String fp) {
         return fp + " --outfile " + OUTPUT_FILE + " --format cbm " + INPUT_FILE;
     }
-    
+
     @Override
     public String getHelpCLI() {
         return "";
     }
-    
+
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked
@@ -258,5 +258,22 @@ class Assembler_acme implements Assembler
         catch (IOException ex) {
         }
         return errors;
+    }
+
+    // Simple { } folding (for subzones, if, etc.)
+    @Override
+    public int getFoldLevel(String line, int foldLevel) {
+        boolean quote = false;
+        boolean quote2 = false;
+        for (int i = 0; i < line.length(); i++) {
+            switch (line.charAt(i)) {
+            case '"': if (!quote2) quote = !quote; break;
+            case '\'': if (!quote) quote2 = !quote2; break;
+            case ';': if (!quote && !quote2) return foldLevel;
+            case '{': if (!quote && !quote2) foldLevel++; break;
+            case '}': if (!quote && !quote2) foldLevel--; break;
+            }
+        }
+        return foldLevel;
     }
 }

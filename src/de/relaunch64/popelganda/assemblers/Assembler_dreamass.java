@@ -141,12 +141,12 @@ class Assembler_dreamass implements Assembler
     public String getDefaultCommandLine(String fp) {
         return fp + " -I" + SOURCE_DIR + " -o " + OUTPUT_FILE + " " + INPUT_FILE;
     }
-    
+
     @Override
     public String getHelpCLI() {
         return " --help";
     }
-    
+
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked
@@ -256,5 +256,10 @@ class Assembler_dreamass implements Assembler
         catch (IOException ex) {
         }
         return errors;
+    }
+
+    @Override
+    public int getFoldLevel(String line, int foldLevel) {
+        return foldLevel;
     }
 }

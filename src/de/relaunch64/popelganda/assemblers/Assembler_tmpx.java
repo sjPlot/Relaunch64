@@ -131,12 +131,12 @@ class Assembler_tmpx implements Assembler
     public String getDefaultCommandLine(String fp) {
         return fp + " -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
     }
-    
+
     @Override
     public String getHelpCLI() {
         return "";
     }
-    
+
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked
@@ -252,5 +252,37 @@ class Assembler_tmpx implements Assembler
         catch (IOException ex) {
         }
         return errors;
+    }
+
+    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z][a-zA-Z0-9_]*\\b)?\\s*(?<directive>\\.[a-zA-Z]+\\b)?.*");
+
+    // folding according to compiler directives
+    @Override
+    public int getFoldLevel(String line, int foldLevel) {
+        Matcher m = directivePattern.matcher(line);
+
+        if (m.matches()) {
+            String directive = m.group("directive");
+            if (directive != null) {
+                switch (directive.toLowerCase()) {
+                case ".block":
+                case ".macro":
+                case ".segment":
+                case ".if":
+                case ".ifeq":
+                case ".ifne":
+                case ".ifpl":
+                case ".ifmi":
+                case ".ifdef":
+                case ".ifndef":
+                    return foldLevel + 1;
+                case ".bend":
+                case ".endm":
+                case ".endif":
+                    return foldLevel - 1;
+                }
+            }
+        }
+        return foldLevel;
     }
 }

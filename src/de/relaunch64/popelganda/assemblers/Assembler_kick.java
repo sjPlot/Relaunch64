@@ -128,12 +128,12 @@ class Assembler_kick implements Assembler
     public String getDefaultCommandLine(String fp) {
         return "java -jar " + fp + " INPUT_FILE";
     }
-    
+
     @Override
     public String getHelpCLI() {
         return "";
     }
-    
+
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked
@@ -228,5 +228,31 @@ class Assembler_kick implements Assembler
         catch (IOException ex) {
         }
         return errors;
+    }
+
+    // Simple { } and /* */ comment folding.
+    @Override
+    public int getFoldLevel(String line, int foldLevel) {
+        boolean quote = false;
+        boolean quote2 = false;
+        Character previous = ' ';
+        for (int i = 0; i < line.length(); i++) {
+            Character c = line.charAt(i);
+            switch (c) {
+            case '"': if (!quote2) quote = !quote; break;
+            case '\'': if (!quote) quote2 = !quote2; break;
+            case '/': 
+                if (!quote && !quote2) {
+                    if (previous == '/') return foldLevel;
+                    if (previous == '*') {foldLevel--; c = ' ';}
+                }
+                break;
+            case '*': if (previous == '/' && !quote && !quote2) {foldLevel++; c = ' ';} break;
+            case '{': if (!quote && !quote2) foldLevel++; break;
+            case '}': if (!quote && !quote2) foldLevel--; break;
+            }
+            previous = c;
+        }
+        return foldLevel;
     }
 }

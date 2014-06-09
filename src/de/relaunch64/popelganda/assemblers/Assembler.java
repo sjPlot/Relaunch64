@@ -140,4 +140,6 @@ public interface Assembler
      * each logged error.
      */
     ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader);
+    // Gets fold level compared to previous line
+    int getFoldLevel(String line, int foldLevel);
 }

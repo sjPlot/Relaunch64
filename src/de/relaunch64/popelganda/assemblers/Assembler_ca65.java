@@ -131,12 +131,12 @@ class Assembler_ca65 implements Assembler
     public String getDefaultCommandLine(String fp) {
         return fp + " -o " + OUTPUT_FILE;
     }
-    
+
     @Override
     public String getHelpCLI() {
         return "";
     }
-    
+
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked
@@ -318,5 +318,10 @@ class Assembler_ca65 implements Assembler
         catch (IOException ex) {
         }
         return errors;
+    }
+
+    @Override
+    public int getFoldLevel(String line, int foldLevel) {
+        return foldLevel;
     }
 }

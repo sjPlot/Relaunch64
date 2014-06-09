@@ -53,6 +53,8 @@ import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.util.SyntaxUtilities;
+import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
 
 /**
  * 
@@ -371,7 +373,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * Enables code-folding.
      */
     public final void setCodeFolding() {
-        setProperty("buffer.folding", "explicit");
+        setProperty("buffer.folding", "RL64assembler");
         // fire property change message
         propertiesChanged();
     }
@@ -496,6 +498,8 @@ public class RL64TextArea extends StandaloneTextArea {
         setTextAntiAlias(settings.getAntiAlias());
         // setup keylistener
         keyListener = new RL64KeyListener();
+        // register our own fold handler
+        ((DefaultFoldHandlerProvider)FoldHandler.foldHandlerProvider).addFoldHandler(new RL64FoldHandler(this));
     }
     /**
      * Checks whether the caret is visible and if not, scrolls editor to caret before opening

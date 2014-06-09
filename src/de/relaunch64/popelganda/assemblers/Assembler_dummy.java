@@ -113,6 +113,11 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
+    public String getHelpCLI() {
+        return "";
+    }
+
+    @Override
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         return new labelList(null, null, null);
     }
@@ -127,10 +132,9 @@ class Assembler_dummy implements Assembler
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         return errors;
     }
-    
+
     @Override
-    public String getHelpCLI() {
-        return "";
+    public int getFoldLevel(String line, int foldLevel) {
+        return foldLevel;
     }
-    
 }

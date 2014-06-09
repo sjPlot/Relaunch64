@@ -143,7 +143,7 @@ class Assembler_64tass implements Assembler {
     public String getDefaultCommandLine(String fp) {
         return fp + " -C -a -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
     }
-    
+
     @Override
     public String getHelpCLI() {
         return " --help";
@@ -184,7 +184,7 @@ class Assembler_64tass implements Assembler {
         LinkedList<lineInfo> labels = new LinkedList<>(), localLabels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm too old to understand it...
-        Pattern p = Pattern.compile("(?i)^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu)\\b)?.*");
+        Pattern p = Pattern.compile("(?i)^\\s*(?:(?<label>[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b):?)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -384,5 +384,55 @@ class Assembler_64tass implements Assembler {
         catch (IOException ex) {
         }
         return errors;
+    }
+
+    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b:?|[+-])?\\s*(?<directive>\\.[a-zA-Z]+\\b)?.*");
+
+    // folding according to compiler directives
+    @Override
+    public int getFoldLevel(String line, int foldLevel) {
+        Matcher m = directivePattern.matcher(line);
+
+        if (m.matches()) {
+            String directive = m.group("directive");
+            if (directive != null) {
+                switch (directive.toLowerCase()) {
+                case ".block":
+                case ".proc":
+                case ".function":
+                case ".macro":
+                case ".segment":
+                case ".struct":
+                case ".union":
+                case ".logical":
+                case ".weak":
+                case ".switch":
+                case ".if":
+                case ".ifeq":
+                case ".ifne":
+                case ".ifpl":
+                case ".ifmi":
+                case ".rept":
+                case ".for":
+                case ".section":
+                    return foldLevel + 1;
+                case ".bend":
+                case ".pend":
+                case ".endf":
+                case ".endm":
+                case ".ends":
+                case ".endu":
+                case ".here":
+                case ".endweak":
+                case ".endswitch":
+                case ".fi":
+                case ".endif":
+                case ".next":
+                case ".send":
+                    return foldLevel - 1;
+                }
+            }
+        }
+        return foldLevel;
     }
 }
