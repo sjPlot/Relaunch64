@@ -217,15 +217,24 @@ public class RL64TextArea extends StandaloneTextArea {
                 insertEnterAndIndent();
                 // check if we have any content in line
                 if (line!=null && !line.isEmpty()) {
-                    int tabcount = 0;
-                    // count tabs at line start
-                    while (tabcount<line.length() && line.charAt(tabcount)=='\t') {
-                        tabcount++;
-                    }
-                    // insert tabs according to prev line
-                    while (tabcount>0) {
-                        insertTabAndIndent();
-                        tabcount--;
+                    // check for following indent chars
+                    char[] indentchars = new char[] {'\t', ' '};
+                    for (char ic : indentchars) {
+                        // first, check for tab indention
+                        int tabcount = 0;
+                        // count tabs at line start
+                        while (tabcount<line.length() && line.charAt(tabcount)==ic) {
+                            tabcount++;
+                        }
+                        // found tabs?
+                        boolean tabfound = tabcount>0;
+                        // insert tabs according to prev line
+                        while (tabcount>0) {
+                            if ('\t'==ic) insertTabAndIndent(); else insert(" ", true);
+                            tabcount--;
+                        }
+                        // if we already indented tabs, leave
+                        if (tabfound) break;
                     }
                 }
                 evt.consume();

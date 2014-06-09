@@ -6,6 +6,7 @@ Relaunch64 3.1.1
 
 ### New features
 * optionally show file extension in tabs
+* automatic indention works for spaces now, too
 
 ### Bug fixes
 * tabs on OS X where a bit larger than planned - fixed
