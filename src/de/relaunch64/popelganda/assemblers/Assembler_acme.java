@@ -260,16 +260,39 @@ class Assembler_acme implements Assembler
         return errors;
     }
 
-    // Simple { } folding (for subzones, if, etc.)
+    // Simple { } folding (for subzones, if, etc.), plus manual folding
     @Override
     public int getFoldLevel(String line, int foldLevel) {
         boolean quote = false;
         boolean quote2 = false;
+        boolean comment = false;
+        int count = 0;
         for (int i = 0; i < line.length(); i++) {
+            if (comment) {
+                switch (line.charAt(i)) {
+                case '{': 
+                    if (count < 0) count = 0;
+                    count++;
+                    if (count == 3) {
+                        count = 0;
+                        foldLevel++;
+                    }
+                    break;
+                case '}': 
+                    if (count > 0) count = 0;
+                    count--;
+                    if (count == -3) {
+                        count = 0;
+                        foldLevel--;
+                    }
+                    break;
+                }
+                continue;
+            }
             switch (line.charAt(i)) {
             case '"': if (!quote2) quote = !quote; break;
             case '\'': if (!quote) quote2 = !quote2; break;
-            case ';': if (!quote && !quote2) return foldLevel;
+            case ';': if (!quote && !quote2) comment = true; break;
             case '{': if (!quote && !quote2) foldLevel++; break;
             case '}': if (!quote && !quote2) foldLevel--; break;
             }

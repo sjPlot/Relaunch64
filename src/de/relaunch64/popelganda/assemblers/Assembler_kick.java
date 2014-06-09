@@ -230,21 +230,44 @@ class Assembler_kick implements Assembler
         return errors;
     }
 
-    // Simple { } and /* */ comment folding.
+    // Simple { } and /* */ comment folding, plus manual folding
     @Override
     public int getFoldLevel(String line, int foldLevel) {
         boolean quote = false;
         boolean quote2 = false;
+        boolean comment = false;
+        int count = 0;
         Character previous = ' ';
         for (int i = 0; i < line.length(); i++) {
             Character c = line.charAt(i);
+            if (comment) {
+                switch (line.charAt(i)) {
+                case '{': 
+                    if (count < 0) count = 0;
+                    count++;
+                    if (count == 3) {
+                        count = 0;
+                        foldLevel++;
+                    }
+                    break;
+                case '}': 
+                    if (count > 0) count = 0;
+                    count--;
+                    if (count == -3) {
+                        count = 0;
+                        foldLevel--;
+                    }
+                    break;
+                }
+                continue;
+            }
             switch (c) {
             case '"': if (!quote2) quote = !quote; break;
             case '\'': if (!quote) quote2 = !quote2; break;
             case '/': 
                 if (!quote && !quote2) {
-                    if (previous == '/') return foldLevel;
-                    if (previous == '*') {foldLevel--; c = ' ';}
+                    if (previous == '/') comment = true;
+                    else if (previous == '*') {foldLevel--; c = ' ';}
                 }
                 break;
             case '*': if (previous == '/' && !quote && !quote2) {foldLevel++; c = ' ';} break;
