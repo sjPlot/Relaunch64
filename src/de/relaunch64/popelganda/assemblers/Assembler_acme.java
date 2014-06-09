@@ -137,6 +137,12 @@ class Assembler_acme implements Assembler
     public String getDefaultCommandLine(String fp) {
         return fp + " --outfile " + OUTPUT_FILE + " --format cbm " + INPUT_FILE;
     }
+    
+    @Override
+    public String getHelpCLI() {
+        return "";
+    }
+    
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked

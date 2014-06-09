@@ -118,6 +118,12 @@ class Assembler_dasm implements Assembler
     public String getDefaultCommandLine(String fp) {
         return fp + " " + INPUT_FILE + " -o" + OUTPUT_FILE;
     }
+    
+    @Override
+    public String getHelpCLI() {
+        return "";
+    }
+    
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked

@@ -885,6 +885,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             case "as2t":
                 allSpacesToTabs();
                 break;
+            case "ch":
+                String compilerHelp = customScripts.getCompilerHelp(jComboBoxRunScripts.getSelectedItem());
+                if (compilerHelp!=null) {
+                    jTextAreaLog.append(System.lineSeparator()+System.lineSeparator()+compilerHelp);
+                    jTabbedPaneLogs.setSelectedIndex(0);
+                }
+                break;
         }
         try {
             if (text.startsWith("cs")) {

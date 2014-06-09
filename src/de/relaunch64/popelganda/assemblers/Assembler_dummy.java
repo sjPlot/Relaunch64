@@ -127,4 +127,10 @@ class Assembler_dummy implements Assembler
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         return errors;
     }
+    
+    @Override
+    public String getHelpCLI() {
+        return "";
+    }
+    
 }

@@ -101,6 +101,7 @@ public interface Assembler
     String getIncludeBinaryDirective(String path);
     String[] getScriptKeywords();
     String getDefaultCommandLine(String fp);
+    String getHelpCLI();
     /**
      * Extracts all labels, functions and macros of a source code file. Information
      * on names and linenumbers of labels, functions and macros are saved as linked

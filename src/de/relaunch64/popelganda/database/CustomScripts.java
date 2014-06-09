@@ -33,6 +33,7 @@
 
 package de.relaunch64.popelganda.database;
 
+import de.relaunch64.popelganda.assemblers.Assemblers;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.io.File;
@@ -42,6 +43,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -300,5 +302,51 @@ public class CustomScripts {
             return false;
         }
         return false;
+    }
+    public String getCompilerHelp(Object scriptName) {
+        // ret value
+        String helpText = "";
+        if (null==scriptName) return null;
+        // iterate assemblers
+        for (int i=0; i<Assemblers.getCount(); i++) {
+            // get file name
+            String fn = Assemblers.byID(i).fileName();
+            // get script...
+            String script = getScript(scriptName.toString());
+            // ... and scriptlines
+            String[] scriptlines = script.split(System.lineSeparator());
+            // check whether assembler is in current script
+            for (String sl : scriptlines) {
+                // if yes, proceed
+                if (sl.contains(fn)) {
+                    try {
+                        // prepare command line
+                        String file = sl.substring(0, sl.indexOf(fn)+fn.length()).trim();
+                        String commandline = file + Assemblers.byID(i).getHelpCLI();
+                        ProcessBuilder pb;
+                        Process p;
+                        // Start ProcessBuilder
+                        pb = new ProcessBuilder(commandline.split(" "));
+                        // set parent directory to sourcecode fie
+                        pb = pb.directory(new File(file).getParentFile());
+                        pb = pb.redirectInput(ProcessBuilder.Redirect.PIPE);
+                        // start process
+                        p = pb.start();
+                        // create scanner to receive compiler messages
+                        try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
+                            // write output to string builder
+                            while (sc.hasNextLine()) {
+                                helpText = helpText+sc.nextLine()+System.lineSeparator();
+                            }
+                        }
+                    }
+                    catch (IOException ex) {
+                        return null;
+                    }
+                    return helpText;
+                }
+            }
+        }
+        return null;
     }
 }

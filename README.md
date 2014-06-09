@@ -7,6 +7,8 @@ Relaunch64 3.1.1 (development)
 ### New features
 * optionally show file extension in tabs
 * automatic indention works for spaces now, too
+* added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
+* added quick-access to compiler-help (type "ch" into text field on bottom left)
 
 ### Bug fixes
 * tabs on OS X where a bit larger than planned - fixed

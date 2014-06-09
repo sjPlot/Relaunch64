@@ -143,6 +143,11 @@ class Assembler_64tass implements Assembler {
     public String getDefaultCommandLine(String fp) {
         return fp + " -C -a -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
     }
+    
+    @Override
+    public String getHelpCLI() {
+        return " --help";
+    }
 
     private enum labelType {
         LABEL, FUNCTION, MACRO

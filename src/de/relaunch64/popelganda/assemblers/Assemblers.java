@@ -91,4 +91,8 @@ public class Assemblers {
         }
         return names.toArray(new String[names.size()]);
     }
+    
+    public static int getCount() {
+        return assemblers.length;
+    }
 }
