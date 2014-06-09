@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Relaunch64 3.1.1 (developmemt)
+Relaunch64 3.1.1 (development)
 ----------------
 
 ### New features
