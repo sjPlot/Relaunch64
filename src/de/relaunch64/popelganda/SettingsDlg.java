@@ -133,6 +133,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxAlternativeAssemblyMode.setSelected(settings.getAlternativeAssemblyMode());
         jCheckBoxShowLineHighlight.setSelected(settings.getShowLineHightlight());
         jCheckBoxShowCloseButton.setSelected(settings.getShowCloseButton());
+        jCheckBoxShowExtInTab.setSelected(settings.getShowExtensionInTab());
         // init schemes
         initSchemes();
         // init user scripts, including combo box setting etc
@@ -289,6 +290,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             }
         });
         jCheckBoxReopenFiles.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabOther(true);
+            }
+        });
+        jCheckBoxShowExtInTab.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabOther(true);
@@ -502,6 +509,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setSaveOnCompile(jCheckBoxSaveOnCompile.isSelected());
         settings.setNimbusOnOSX(jCheckBoxNimbusOnOSX.isSelected());
         settings.setReopenOnStartup(jCheckBoxReopenFiles.isSelected());
+        settings.setShowExtensionInTab(jCheckBoxShowExtInTab.isSelected());
+        editorPanes.updateTitles();
         setModifiedTabOther(false);
     }
     @Action(enabledProperty = "removePossible")
@@ -614,6 +623,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxNimbusOnOSX = new javax.swing.JCheckBox();
         jButtonApplyOther = new javax.swing.JButton();
         jLabelRestart2 = new javax.swing.JLabel();
+        jCheckBoxShowExtInTab = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -939,6 +949,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart2.setText(resourceMap.getString("jLabelRestart2.text")); // NOI18N
         jLabelRestart2.setName("jLabelRestart2"); // NOI18N
 
+        jCheckBoxShowExtInTab.setText(resourceMap.getString("jCheckBoxShowExtInTab.text")); // NOI18N
+        jCheckBoxShowExtInTab.setName("jCheckBoxShowExtInTab"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -946,17 +959,20 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jCheckBoxCheckUpdates)
-                    .add(jCheckBoxSaveOnCompile)
-                    .add(jCheckBoxReopenFiles)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(jButtonApplyOther))
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jCheckBoxNimbusOnOSX)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jLabelRestart2)))
-                .addContainerGap(247, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jButtonApplyOther)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jCheckBoxCheckUpdates)
+                            .add(jCheckBoxSaveOnCompile)
+                            .add(jCheckBoxReopenFiles)
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(jCheckBoxNimbusOnOSX)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jLabelRestart2))
+                            .add(jCheckBoxShowExtInTab))
+                        .add(0, 241, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -972,7 +988,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jCheckBoxNimbusOnOSX)
                     .add(jLabelRestart2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 179, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jCheckBoxShowExtInTab)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 144, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
                 .addContainerGap())
         );
@@ -1015,6 +1033,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
     private javax.swing.JCheckBox jCheckBoxScaleFonts;
     private javax.swing.JCheckBox jCheckBoxShowCloseButton;
+    private javax.swing.JCheckBox jCheckBoxShowExtInTab;
     private javax.swing.JCheckBox jCheckBoxShowLineHighlight;
     private javax.swing.JCheckBox jCheckBoxSuggestCaseSort;
     private javax.swing.JComboBox jComboBoxAntiAlias;

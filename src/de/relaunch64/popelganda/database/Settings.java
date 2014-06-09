@@ -75,6 +75,7 @@ public class Settings {
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_SHOW_LINEHIGLIGHT = "showlinehighlight";
+    private static final String SETTING_SHOW_EXT_IN_TAB = "showfileextintab";
     private static final String SETTING_SHOW_CLOSEBUTTON = "showclosebutton";
     private static final String SETTING_SUGGEST_SORT_CASE = "suggestioncasesort";
     private static final String SETTING_ANTIALIAS = "antialias";
@@ -246,6 +247,13 @@ public class Settings {
         if (null==root.getChild(SETTING_SHOW_LINEHIGLIGHT)) {
             // create element
             Element el = new Element(SETTING_SHOW_LINEHIGLIGHT);
+            el.setText("0");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_SHOW_EXT_IN_TAB)) {
+            // create element
+            Element el = new Element(SETTING_SHOW_EXT_IN_TAB);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
@@ -640,6 +648,19 @@ public class Settings {
         Element el = root.getChild(SETTING_SHOW_LINEHIGLIGHT);
         if (null==el) {
             el = new Element(SETTING_SHOW_LINEHIGLIGHT);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getShowExtensionInTab() {
+        Element el = root.getChild(SETTING_SHOW_EXT_IN_TAB);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setShowExtensionInTab(boolean val)  {
+        Element el = root.getChild(SETTING_SHOW_EXT_IN_TAB);
+        if (null==el) {
+            el = new Element(SETTING_SHOW_EXT_IN_TAB);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

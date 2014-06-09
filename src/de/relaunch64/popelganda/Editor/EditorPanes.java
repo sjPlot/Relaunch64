@@ -84,7 +84,7 @@ public class EditorPanes {
         private final Settings settings;
         java.awt.Component component;
         public TabPanel(String title, Settings settings) {
-            super(new FlowLayout(FlowLayout.LEFT, (ConstantsR64.IS_OSX) ? 2 : 0, (ConstantsR64.IS_OSX) ? 2 : 0)); 
+            super(new FlowLayout(FlowLayout.LEFT, (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) ? 2 : 0, (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) ? 2 : 0)); 
             super.setOpaque(false);
             this.settings = settings;
             // set text label for tab
@@ -163,6 +163,8 @@ public class EditorPanes {
         // enable drag&drop
         editorPane.setDragEnabled(true);
         DropTarget dropTarget = new DropTarget(editorPane, mainFrame);   
+        // check whether extenstion should be shown as well
+        if (settings.getShowExtensionInTab() && fp!=null) title = title+"."+FileTools.getFileExtension(fp);
         // get default tab title and add new tab to tabbed pane
         tabbedPane.addTab(title, editorPane);
         // check for file path and set it as tool tip
@@ -505,6 +507,11 @@ public class EditorPanes {
             String title = ((TabPanel)tabbedPane.getTabComponentAt(i)).getTitle();
             // whether spaces between label and title are needed depends on button visibility
             ((TabPanel)tabbedPane.getTabComponentAt(i)).setTitle(title);
+        }
+    }
+    public void updateTitles() {
+        for (int i=0; i<editorPaneArray.size(); i++) {
+            setTabTitle(i, editorPaneArray.get(i).getFilePath());
         }
     }
     /**
@@ -1061,6 +1068,8 @@ public class EditorPanes {
         String fn = FileTools.getFileName(fp);
         // check whether we have any valid filepath at all
         if (fn!=null) {
+            // check whether extenstion should be shown as well
+            if (settings.getShowExtensionInTab()) fn = fn+"."+FileTools.getFileExtension(fp);
             // set file-name and app-name in title-bar
             tabbedPane.setTitleAt(index, fn);
             ((TabPanel)tabbedPane.getTabComponentAt(index)).setTitle(fn);

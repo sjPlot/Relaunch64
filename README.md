@@ -1,6 +1,16 @@
 Changelog
 ================
 
+Relaunch64 3.1.1
+----------------
+
+### New features
+* optionally show file extension in tabs
+
+### Bug fixes
+* tabs on OS X where a bit larger than planned - fixed
+
+
 Relaunch64 3.1.0
 ----------------
 
