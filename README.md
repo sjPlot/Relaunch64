@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Relaunch64 3.1.1
+Relaunch64 3.1.1 (developmemt)
 ----------------
 
 ### New features
@@ -12,7 +12,7 @@ Relaunch64 3.1.1
 * tabs on OS X where a bit larger than planned - fixed
 
 
-Relaunch64 3.1.0
+Relaunch64 3.1.0 (current stable release)
 ----------------
 
 ### New features
@@ -65,7 +65,7 @@ Relaunch64 3.1.0
 * relative paths, for instance when drag'n'dropping files, were not correctly extrtacted - fixed
 * adding new user scripts may have messed up script-assignment to recent opened files and tabs that are re-opened on startup - fixed
 
-Relaunch64 3.0.1
+Relaunch64 3.0.1 (older stable relase)
 ----------------
 
 ### New features
