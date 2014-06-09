@@ -874,20 +874,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 editorPanes.updateTabCloseButtons();
                 break;
             case "t2s":
-                editorPanes.getActiveEditorPane().tabsToSpaces();
+                tabsToSpaces();
                 break;
             case "at2s":
-                for (int i=0; i<editorPanes.getCount(); i++) {
-                    editorPanes.getEditorPane(i).tabsToSpaces();
-                }
+                allTabsToSpaces();
                 break;
             case "s2t":
-                editorPanes.getActiveEditorPane().spacesToTabs();
+                spacesToTabs();
                 break;
             case "as2t":
-                for (int i=0; i<editorPanes.getCount(); i++) {
-                    editorPanes.getEditorPane(i).spacesToTabs();
-                }
+                allSpacesToTabs();
                 break;
         }
         try {
