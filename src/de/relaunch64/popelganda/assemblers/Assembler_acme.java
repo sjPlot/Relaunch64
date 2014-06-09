@@ -286,6 +286,7 @@ class Assembler_acme implements Assembler
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }

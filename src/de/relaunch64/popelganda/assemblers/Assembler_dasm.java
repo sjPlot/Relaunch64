@@ -263,6 +263,7 @@ class Assembler_dasm implements Assembler
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }

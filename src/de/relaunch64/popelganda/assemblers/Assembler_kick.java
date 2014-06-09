@@ -258,6 +258,7 @@ class Assembler_kick implements Assembler
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }

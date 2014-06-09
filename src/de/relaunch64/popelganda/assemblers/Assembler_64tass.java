@@ -458,6 +458,7 @@ class Assembler_64tass implements Assembler {
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }

@@ -346,6 +346,7 @@ class Assembler_ca65 implements Assembler
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }

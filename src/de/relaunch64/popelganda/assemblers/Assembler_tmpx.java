@@ -308,6 +308,7 @@ class Assembler_tmpx implements Assembler
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }

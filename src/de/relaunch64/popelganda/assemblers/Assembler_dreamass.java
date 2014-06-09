@@ -284,6 +284,7 @@ class Assembler_dreamass implements Assembler
                         foldLevel--;
                     }
                     break;
+                default: count = 0;
                 }
                 continue;
             }
