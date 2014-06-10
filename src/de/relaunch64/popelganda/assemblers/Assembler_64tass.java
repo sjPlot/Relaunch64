@@ -386,7 +386,7 @@ class Assembler_64tass implements Assembler {
         return errors;
     }
 
-    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b:?|[+-])?\\s*(?<directive>\\.[a-zA-Z]+\\b)?.*");
+    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b:?|[+-])?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
 
     // folding according to compiler directives, plus manual folding
     @Override

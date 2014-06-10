@@ -254,7 +254,7 @@ class Assembler_tmpx implements Assembler
         return errors;
     }
 
-    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z][a-zA-Z0-9_]*\\b)?\\s*(?<directive>\\.[a-zA-Z]+\\b)?.*");
+    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z][a-zA-Z0-9_]*\\b)?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
 
     // folding according to compiler directives, plus manual folding
     @Override

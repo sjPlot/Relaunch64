@@ -258,9 +258,34 @@ class Assembler_dreamass implements Assembler
         return errors;
     }
 
-    // plain manual folding only (so far)
+    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z_][a-zA-Z0-9_]*\\b)?\\s*(?<directive>(?:#(?:ifn?def|ifn?file|if|endif)\\b|\\.(?:[()]|pseudopc|realpc))).*");
+
+    // folding by directives, { } (macros), plus manual folding
     @Override
     public int getFoldLevel(String line, int foldLevel) {
+        Matcher m = directivePattern.matcher(line);
+
+        if (m.matches()) {
+            String directive = m.group("directive");
+            if (directive != null) {
+                switch (directive.toLowerCase()) {
+                case "#if":
+                case "#ifdef":
+                case "#ifndef":
+                case "#iffile":
+                case "#ifnfile":
+                case ".(":
+                case ".pseudopc":
+                    foldLevel++;
+                    break;
+                case "#endif":
+                case ".)":
+                case ".realpc":
+                    foldLevel--;
+                    break;
+                }
+            }
+        }
         boolean quote = false;
         boolean quote2 = false;
         boolean comment = false;
@@ -292,6 +317,8 @@ class Assembler_dreamass implements Assembler
             case '"': if (!quote2) quote = !quote; break;
             case '\'': if (!quote) quote2 = !quote2; break;
             case ';': if (!quote && !quote2) comment = true; break;
+            case '{': if (!quote && !quote2) foldLevel++; break;
+            case '}': if (!quote && !quote2) foldLevel--; break;
             }
         }
         return foldLevel;

@@ -237,9 +237,35 @@ class Assembler_dasm implements Assembler
         return errors;
     }
 
-    // plain manual folding only (so far)
+    private static final Pattern directivePattern = Pattern.compile("(?i)(?:^[a-z_.][a-z0-9_]*\\b)?\\s*(?<directive>[a-z0-9]+\\b).*"); // label always in first column
+
+    // folding by directives, plus manual folding
     @Override
     public int getFoldLevel(String line, int foldLevel) {
+        Matcher m = directivePattern.matcher(line);
+
+        if (m.matches()) {
+            String directive = m.group("directive");
+            if (directive != null) {
+                switch (directive.toLowerCase()) {
+                case "mac":
+                case "rorg":
+                case "ifconst":
+                case "ifnconst":
+                case "if":
+                case "repeat":
+                    foldLevel++;
+                    break;
+                case "endm":
+                case "rend":
+                case "endif":
+                case "eif":
+                case "repend":
+                    foldLevel--;
+                    break;
+                }
+            }
+        }
         boolean quote = false;
         boolean quote2 = false;
         boolean comment = false;

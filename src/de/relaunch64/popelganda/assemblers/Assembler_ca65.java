@@ -320,9 +320,51 @@ class Assembler_ca65 implements Assembler
         return errors;
     }
 
-    // plain manual folding only (so far)
+    private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z_@][a-zA-Z0-9_]*\\s*:)?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
+
+    // folding by directives, plus manual folding
     @Override
     public int getFoldLevel(String line, int foldLevel) {
+        Matcher m = directivePattern.matcher(line);
+
+        if (m.matches()) {
+            String directive = m.group("directive");
+            if (directive != null) {
+                switch (directive.toLowerCase()) {
+                case ".enum":
+                case ".mac":
+                case ".macro":
+                case ".proc":
+                case ".repeat":
+                case ".scope":
+                case ".struct":
+                case ".if":
+                case ".ifblank":
+                case ".ifnblank":
+                case ".ifconst":
+                case ".ifdef":
+                case ".ifndef":
+                case ".ifp02":
+                case ".ifp816":
+                case ".ifpc02":
+                case ".ifpsc02":
+                case ".ifref":
+                    foldLevel++;
+                    break;
+                case ".endenum":
+                case ".endstruct":
+                case ".endscope":
+                case ".endrep":
+                case ".endrepeat":
+                case ".endproc":
+                case ".endmac":
+                case ".endmacro":
+                case ".endif":
+                    foldLevel--;
+                    break;
+                }
+            }
+        }
         boolean quote = false;
         boolean quote2 = false;
         boolean comment = false;
