@@ -29,6 +29,7 @@ public class RL64FoldHandler extends FoldHandler
         this.textArea = textArea;
     }
 
+    @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, Segment seg) {
         if (lineIndex == 0) {
             return 0;
