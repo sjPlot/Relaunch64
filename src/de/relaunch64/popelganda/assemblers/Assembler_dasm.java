@@ -144,7 +144,7 @@ class Assembler_dasm implements Assembler
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("(?i)(?<label>^[a-z_.][a-z0-9_]*\\b)?(?:^\\s*(?<directive>(?:mac|endm)\\b)\\s*(?<name>[a-z_][a-z0-9_]*\\b))?.*"); // label always in first column
+        Pattern p = Pattern.compile("(?i)(?<label>^[a-z_.][a-z0-9_]*\\b)?(?:^\\s*(?<directive>(?:mac|endm)\\b)\\s*(?<name>[a-z_][a-z0-9_]*\\b)?)?(?:\\s*(?<subroutine>subroutine\\b))?.*"); // label always in first column
         String line;
         boolean macro = false;
         boolean scopeFound = false;
@@ -161,16 +161,18 @@ class Assembler_dasm implements Assembler
                             if (!scopeFound) localLabelValues.put(label, lineReader.getLineNumber());
                             continue;
                         } 
-                        if (lineNumber < lineReader.getLineNumber()) {
-                            scopeFound = true;
-                        } else {
-                            localLabelValues.clear();
-                        }
                     }
                     returnValue.labels.put(label, lineReader.getLineNumber());
                 }
 
                 String directive = m.group("directive");
+                if (lineNumber > 0 && directive == null && m.group("subroutine") != null) {
+                    if (lineNumber < lineReader.getLineNumber()) {
+                        scopeFound = true;
+                    } else {
+                        localLabelValues.clear();
+                    }
+                }
                 if (directive == null) continue;
                 switch (directive.toLowerCase()) {
                     case "mac":
