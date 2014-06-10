@@ -54,6 +54,7 @@ import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.util.SyntaxUtilities;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.buffer.DummyFoldHandler;
 import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
 
 /**
@@ -366,6 +367,8 @@ public class RL64TextArea extends StandaloneTextArea {
         ModeProvider.instance.addMode(mode);
         // add mode to buffer
         getBuffer().setMode(mode);
+        // just to change...
+        getBuffer().setFoldHandler(new DummyFoldHandler());
         // fire property change message
         propertiesChanged();
     }
