@@ -137,7 +137,7 @@
                         <FUNCTION>addr</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ+-_" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z._][A-Za-z0-9_]*|[+-]</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS=".ABCDEFGHIJKLMNOPQRSTUVWXYZ+-_" AT_LINE_START="TRUE" TYPE="LABEL">[A-Za-z._][A-Za-z0-9_]*|[+-]+</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="-!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 </MODE>
