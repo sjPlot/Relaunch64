@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.regex.Matcher;
@@ -260,13 +261,38 @@ class Assembler_acme implements Assembler
         return errors;
     }
 
-    // Simple { } folding (for subzones, if, etc.), plus manual folding
+    private static final Pattern labelPattern = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_]*\\b)\\s*(?<equal>=|!addr\\b|!address\\b)?.*");
+
+    // Simple { } folding (for subzones, if, etc.), label-to-label folding, plus manual folding
     @Override
-    public int getFoldLevel(String line, int foldLevel) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+        String line = buffer.getLineText(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex);
         boolean quote = false;
         boolean quote2 = false;
         boolean comment = false;
         int count = 0;
+
+        { // folding from real label to next real label
+            boolean label1 = false, label2 = false;
+            Matcher m = labelPattern.matcher(line);
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
+                }
+            }
+            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
+                }
+            }
+            if (label1 && !label2) foldLevel++;
+            if (!label1 && label2) foldLevel--;
+        }
+
         for (int i = 0; i < line.length(); i++) {
             if (comment) {
                 switch (line.charAt(i)) {

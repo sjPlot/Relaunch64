@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.regex.Matcher;
@@ -262,7 +263,9 @@ class Assembler_dreamass implements Assembler
 
     // folding by directives, { } (macros), plus manual folding
     @Override
-    public int getFoldLevel(String line, int foldLevel) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+        String line = buffer.getLineText(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex);
         Matcher m = directivePattern.matcher(line);
 
         if (m.matches()) {

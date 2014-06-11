@@ -32,8 +32,9 @@ public class RL64FoldHandler extends FoldHandler
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, Segment seg) {
         if (lineIndex == 0) {
-            return 0;
+            return 1;
         }
-        return Math.max(0, textArea.getAssembler().getFoldLevel(buffer.getLineText(lineIndex - 1), buffer.getFoldLevel(lineIndex - 1)));
+//        return Math.max(0, textArea.getAssembler().getFoldLevel(buffer.getLineText(lineIndex - 1), buffer.getFoldLevel(lineIndex - 1)));
+        return Math.max(0, textArea.getAssembler().getFoldLevel(buffer, lineIndex - 1));
     }
 }

@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import java.io.LineNumberReader;
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
@@ -141,5 +142,5 @@ public interface Assembler
      */
     ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader);
     // Gets fold level compared to previous line
-    int getFoldLevel(String line, int foldLevel);
+    int getFoldLevel(JEditBuffer buffer, int lineIndex);
 }

@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 
@@ -134,7 +135,7 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
-    public int getFoldLevel(String line, int foldLevel) {
-        return foldLevel;
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+        return buffer.getFoldLevel(lineIndex);
     }
 }
