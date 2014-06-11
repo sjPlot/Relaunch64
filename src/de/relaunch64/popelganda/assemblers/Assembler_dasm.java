@@ -145,10 +145,11 @@ class Assembler_dasm implements Assembler
     public labelList getLabels(LineNumberReader lineReader, int lineNumber) {
         labelList returnValue = new labelList(null, null, null);
         LinkedHashMap<String, Integer> localLabelValues = new LinkedHashMap<>();
-        Pattern p = Pattern.compile("(?i)(?<label>^[a-z_.][a-z0-9_]*\\b)?(?:^\\s*(?<directive>(?:mac|endm)\\b)\\s*(?<name>[a-z_][a-z0-9_]*\\b)?)?(?:\\s*(?<subroutine>subroutine\\b))?.*"); // label always in first column
+        LinkedHashMap<String, Integer> localLabelValues2 = new LinkedHashMap<>();
+        Pattern p = Pattern.compile("(?i)(?<label>^[a-z_.][a-z0-9_]*\\b\\$?)?(?:^\\s*(?<directive>(?:mac|endm)\\b)\\s*(?<name>[a-z_][a-z0-9_]*\\b)?)?(?:\\s*(?<subroutine>subroutine\\b))?.*"); // label always in first column
         String line;
         boolean macro = false;
-        boolean scopeFound = false;
+        boolean scopeFound = false, scopeFound2 = false;
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
@@ -156,12 +157,21 @@ class Assembler_dasm implements Assembler
                 if (!m.matches()) continue;
                 String label = m.group("label");
 
-                if (label != null && !macro) {
+                if (label != null) {
                     if (lineNumber > 0) {
                         if (label.charAt(0) == '.') { // local label
                             if (!scopeFound) localLabelValues.put(label, lineReader.getLineNumber());
                             continue;
                         } 
+                        if (label.charAt(label.length()-1) == '$') { // local $ label
+                            if (!scopeFound2) localLabelValues2.put(label, lineReader.getLineNumber());
+                            continue;
+                        } 
+                        if (lineNumber < lineReader.getLineNumber()) {
+                            scopeFound2 = true;
+                        } else {
+                            localLabelValues2.clear();
+                        }
                     }
                     returnValue.labels.put(label, lineReader.getLineNumber());
                 }
@@ -177,11 +187,25 @@ class Assembler_dasm implements Assembler
                 if (directive == null) continue;
                 switch (directive.toLowerCase()) {
                     case "mac":
+                        if (lineNumber < lineReader.getLineNumber()) {
+                            scopeFound = true;
+                            scopeFound2 = true;
+                        } else {
+                            localLabelValues.clear();
+                            localLabelValues2.clear();
+                        }
                         macro = true;
                         label = m.group("name");
                         if (label != null) returnValue.macros.put(label, lineReader.getLineNumber());
                         break;
                     case "endm":
+                        if (lineNumber < lineReader.getLineNumber()) {
+                            scopeFound = true;
+                            scopeFound2 = true;
+                        } else {
+                            localLabelValues.clear();
+                            localLabelValues2.clear();
+                        }
                         macro = false;
                         break;
                 }
@@ -190,6 +214,7 @@ class Assembler_dasm implements Assembler
         catch (IOException ex) {
         }
         returnValue.labels.putAll(localLabelValues);
+        returnValue.labels.putAll(localLabelValues2);
         return returnValue;
     }
     /**
@@ -203,7 +228,7 @@ class Assembler_dasm implements Assembler
     @Override
     public String labelGetStart(String line, int pos) {
         String line2 = new StringBuffer(line.substring(0, pos)).reverse().toString();
-        Pattern p = Pattern.compile("(?i)([a-z0-9_]*[a-z_.])([^a-z0-9_].*|$)");
+        Pattern p = Pattern.compile("(?i)(\\$?[a-z0-9_]*[a-z_.])([^a-z0-9_].*|$)");
         Matcher m = p.matcher(line2);
         if (!m.matches()) return "";
         return new StringBuffer(m.group(1)).reverse().toString();
@@ -240,7 +265,7 @@ class Assembler_dasm implements Assembler
         return errors;
     }
 
-    private static final Pattern directivePattern = Pattern.compile("(?i)(?:^[a-z_.][a-z0-9_]*\\b)?\\s*(?<directive>[a-z0-9]+\\b).*"); // label always in first column
+    private static final Pattern directivePattern = Pattern.compile("(?i)(?:^[a-z_.][a-z0-9_]*\\b\\$?)?\\s*(?<directive>[a-z0-9]+\\b).*"); // label always in first column
 
     // folding by directives, plus manual folding
     @Override
