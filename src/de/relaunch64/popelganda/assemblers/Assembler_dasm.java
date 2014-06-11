@@ -273,6 +273,7 @@ class Assembler_dasm implements Assembler
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         Matcher m = directivePattern.matcher(line);
+        boolean subroutine1 = false, subroutine2 = false;
 
         if (m.matches()) {
             String directive = m.group("directive");
@@ -286,6 +287,9 @@ class Assembler_dasm implements Assembler
                 case "repeat":
                     foldLevel++;
                     break;
+                case "subroutine": 
+                    subroutine1 = true; 
+                    break;
                 case "endm":
                 case "rend":
                 case "endif":
@@ -296,6 +300,16 @@ class Assembler_dasm implements Assembler
                 }
             }
         }
+        m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
+        if (m.matches()) {
+            String directive = m.group("directive");
+            if (directive != null) {
+                subroutine2 = (directive.toLowerCase().equals("subroutine"));
+            }
+        }
+        if (subroutine1 && !subroutine2) foldLevel++;
+        if (!subroutine1 && subroutine2) foldLevel--;
+
         boolean quote = false;
         boolean quote2 = false;
         boolean comment = false;
