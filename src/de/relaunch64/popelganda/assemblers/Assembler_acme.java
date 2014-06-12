@@ -273,25 +273,26 @@ class Assembler_acme implements Assembler
         boolean comment = false;
         int count = 0;
 
-        { // folding from real label to next real label
-            boolean label1 = false, label2 = false;
-            Matcher m = labelPattern.matcher(line);
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
-                }
+        // TODO label-to-label-folding does not seem to work
+        
+        // folding from real label to next real label
+        boolean label1 = false, label2 = false;
+        Matcher m = labelPattern.matcher(line);
+        if (m.matches()) {
+            String label = m.group("label");
+            if (label != null && m.group("equal") == null) {
+                if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
             }
-            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
-                }
-            }
-            if (label1 && !label2) foldLevel++;
-            if (!label1 && label2) foldLevel--;
         }
+        m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+        if (m.matches()) {
+            String label = m.group("label");
+            if (label != null && m.group("equal") == null) {
+                if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
+            }
+        }
+        if (label1 && !label2) foldLevel++;
+        if (!label1 && label2) foldLevel--;
 
         for (int i = 0; i < line.length(); i++) {
             if (comment) {

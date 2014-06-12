@@ -134,6 +134,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxShowLineHighlight.setSelected(settings.getShowLineHightlight());
         jCheckBoxShowCloseButton.setSelected(settings.getShowCloseButton());
         jCheckBoxShowExtInTab.setSelected(settings.getShowExtensionInTab());
+        jCheckBoxCodeFolding.setSelected(settings.getCodeFolding());
         // init schemes
         initSchemes();
         // init user scripts, including combo box setting etc
@@ -307,6 +308,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 setModifiedTabFont(true);
             }
         });
+        jCheckBoxCodeFolding.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+            }
+        });
         jComboBoxSyntaxScheme.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -436,6 +443,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setColorScheme(jComboBoxSyntaxScheme.getSelectedIndex());
         settings.setScaleFont(jCheckBoxScaleFonts.isSelected());
         settings.setSuggestionSortIgnoresCase(!jCheckBoxSuggestCaseSort.isSelected());
+        settings.setCodeFolding(jCheckBoxCodeFolding.isSelected());
         switch(jComboBoxLineNumberAlign.getSelectedIndex()) {
             case 0:
                 settings.setLineNumerAlignment(Gutter.RIGHT);
@@ -462,6 +470,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
         editorPanes.setTabs(settings.getTabWidth());
         editorPanes.setAntiAlias(settings.getAntiAlias());
+        editorPanes.updateCodeFolding();
     }
     @Action(enabledProperty = "modifiedTabScheme")
     public void applyColorScheme() {
@@ -609,6 +618,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart = new javax.swing.JLabel();
         jCheckBoxSuggestCaseSort = new javax.swing.JCheckBox();
         jCheckBoxShowCloseButton = new javax.swing.JCheckBox();
+        jCheckBoxCodeFolding = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
@@ -628,7 +638,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
         setTitle(resourceMap.getString("FormSettings.title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(400, 380));
+        setMinimumSize(new java.awt.Dimension(400, 400));
         setModal(true);
         setName("FormSettings"); // NOI18N
 
@@ -783,6 +793,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxShowCloseButton.setText(resourceMap.getString("jCheckBoxShowCloseButton.text")); // NOI18N
         jCheckBoxShowCloseButton.setName("jCheckBoxShowCloseButton"); // NOI18N
 
+        jCheckBoxCodeFolding.setText(resourceMap.getString("jCheckBoxCodeFolding.text")); // NOI18N
+        jCheckBoxCodeFolding.setToolTipText(resourceMap.getString("jCheckBoxCodeFolding.toolTipText")); // NOI18N
+        jCheckBoxCodeFolding.setName("jCheckBoxCodeFolding"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -795,6 +809,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .add(jButtonApplyTabAndFont))
                     .add(jPanel5Layout.createSequentialGroup()
                         .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jCheckBoxCodeFolding)
                             .add(jPanel5Layout.createSequentialGroup()
                                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jLabel6)
@@ -818,7 +833,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 .add(jLabelRestart))
                             .add(jCheckBoxSuggestCaseSort)
                             .add(jCheckBoxShowCloseButton))
-                        .add(0, 196, Short.MAX_VALUE)))
+                        .add(0, 247, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -845,7 +860,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel3)
                     .add(jComboBoxAntiAlias, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxCodeFolding)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxSuggestCaseSort)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -853,7 +870,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jLabelRestart))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxShowCloseButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 48, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -1028,6 +1045,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JButton jButtonScriptHelp;
     private javax.swing.JCheckBox jCheckBoxAlternativeAssemblyMode;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
+    private javax.swing.JCheckBox jCheckBoxCodeFolding;
     private javax.swing.JCheckBox jCheckBoxNimbusOnOSX;
     private javax.swing.JCheckBox jCheckBoxReopenFiles;
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;

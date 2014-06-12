@@ -73,6 +73,7 @@ public class Settings {
     private static final String SETTING_PREF_ASM = "preferredCompiler";
     private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
+    private static final String SETTING_CODE_FOLDING = "codefolding";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_SHOW_LINEHIGLIGHT = "showlinehighlight";
     private static final String SETTING_SHOW_EXT_IN_TAB = "showfileextintab";
@@ -220,6 +221,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_ANTIALIAS);
             el.setText(AntiAlias.SUBPIXEL);
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CODE_FOLDING)) {
+            // create element
+            Element el = new Element(SETTING_CODE_FOLDING);
+            el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
@@ -575,6 +583,19 @@ public class Settings {
         Element el = root.getChild(SETTING_SCALE_FONT);
         if (null==el) {
             el = new Element(SETTING_SCALE_FONT);
+            root.addContent(el);
+        }
+        el.setText(scale==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getCodeFolding() {
+        Element el = root.getChild(SETTING_CODE_FOLDING);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setCodeFolding(boolean scale) {
+        Element el = root.getChild(SETTING_CODE_FOLDING);
+        if (null==el) {
+            el = new Element(SETTING_CODE_FOLDING);
             root.addContent(el);
         }
         el.setText(scale==Boolean.TRUE ? "1":"0");

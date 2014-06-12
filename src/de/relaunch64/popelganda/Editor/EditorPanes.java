@@ -497,6 +497,16 @@ public class EditorPanes {
         }
     }
     /**
+     * Updates code folding options for all opened editor panes.
+     */
+    public void updateCodeFolding() {
+        for (EditorPaneProperties ea : editorPaneArray) {
+            // get editor pane
+            final RL64TextArea editorpane = ea.getEditorPane();
+            editorpane.setCodeFolding();
+        }
+    }
+    /**
      * Changes visibility of close buttons and adjusts titles of all tabs.
      */
     public void updateTabCloseButtons() {

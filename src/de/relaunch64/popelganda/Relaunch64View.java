@@ -873,17 +873,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 settings.setShowCloseButton(!settings.getShowCloseButton());
                 editorPanes.updateTabCloseButtons();
                 break;
-            case "t2s":
-                tabsToSpaces();
-                break;
-            case "at2s":
-                allTabsToSpaces();
-                break;
-            case "s2t":
-                spacesToTabs();
-                break;
-            case "as2t":
-                allSpacesToTabs();
+            case "scf":
+                settings.setCodeFolding(!settings.getCodeFolding());
+                editorPanes.updateCodeFolding();
                 break;
             case "ch":
                 String compilerHelp = customScripts.getCompilerHelp(jComboBoxRunScripts.getSelectedItem());

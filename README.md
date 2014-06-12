@@ -5,6 +5,7 @@ Relaunch64 3.1.1 (development)
 ----------------
 
 ### New features
+* added automatic code-folding for labels, (sub-)zones and braces
 * optionally show file extension in tabs
 * automatic indention works for spaces now, too
 * added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
@@ -13,6 +14,7 @@ Relaunch64 3.1.1 (development)
 
 ### Bug fixes
 * tabs on OS X where a bit larger than planned - fixed
+* fixed bug with syntax-highlighting, which, in some specific cases, did not recognize all labels
 
 
 Relaunch64 3.1.0 (current stable release)

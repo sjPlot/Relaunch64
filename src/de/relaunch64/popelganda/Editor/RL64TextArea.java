@@ -376,7 +376,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * Enables code-folding.
      */
     public final void setCodeFolding() {
-        setProperty("buffer.folding", "RL64assembler");
+        setProperty("buffer.folding", settings.getCodeFolding() ? "RL64assembler" : "none");
         // fire property change message
         propertiesChanged();
     }
@@ -485,8 +485,6 @@ public class RL64TextArea extends StandaloneTextArea {
         super(propertyManager);
         // save settings
         this.settings = settings;
-        // set explicit buffer folding
-        setCodeFolding();
         // set default compiler
         setAssembler(settings.getPreferredAssembler());
         // set syntaxscheme
@@ -501,6 +499,8 @@ public class RL64TextArea extends StandaloneTextArea {
         setTextAntiAlias(settings.getAntiAlias());
         // setup keylistener
         keyListener = new RL64KeyListener();
+        // set explicit buffer folding
+        setCodeFolding();
         // register our own fold handler
         ((DefaultFoldHandlerProvider)FoldHandler.foldHandlerProvider).addFoldHandler(new RL64FoldHandler(this));
     }
