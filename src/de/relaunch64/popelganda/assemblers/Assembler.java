@@ -141,6 +141,23 @@ public interface Assembler
      * each logged error.
      */
     ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader);
-    // Gets fold level compared to previous line
-    int getFoldLevel(JEditBuffer buffer, int lineIndex);
+    /**
+     * Gets fold level compared to previous line
+     * 
+     * @param buffer
+     * @param lineIndex
+     * @param foldtokens
+     * Access settings for foldtokens like this:<br>
+     * if ((foldtokens & Assemblers.CF_TOKEN_MANUAL)!=0) ...<br>
+     * valid constants are:<br>
+     * <ul>
+     * <li>CF_TOKEN_MANUAL</li>
+     * <li>CF_TOKEN_BRACES</li>
+     * <li>CF_TOKEN_LABELS</li>
+     * <li>CF_TOKEN_DIRECTIVES</li>
+     * <li>CF_TOKEN_STRUCTS</li>
+     * </ul>
+     * @return 
+     */
+    int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens);
 }

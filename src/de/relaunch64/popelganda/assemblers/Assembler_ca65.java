@@ -325,7 +325,7 @@ class Assembler_ca65 implements Assembler
 
     // folding by directives, plus manual folding
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         Matcher m = directivePattern.matcher(line);

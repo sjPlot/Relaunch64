@@ -135,7 +135,7 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         return buffer.getFoldLevel(lineIndex);
     }
 }

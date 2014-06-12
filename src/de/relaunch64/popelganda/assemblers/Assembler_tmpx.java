@@ -259,7 +259,7 @@ class Assembler_tmpx implements Assembler
 
     // folding according to compiler directives, plus manual folding
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         Matcher m = directivePattern.matcher(line);

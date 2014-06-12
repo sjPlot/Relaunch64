@@ -74,6 +74,11 @@ public class Settings {
     private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_CODE_FOLDING = "codefolding";
+    private static final String SETTING_CF_MANUAL = "codefolding_manual";
+    private static final String SETTING_CF_DIRECTIVES = "codefolding_directive";
+    private static final String SETTING_CF_STRUCTS = "codefolding_structural";
+    private static final String SETTING_CF_BRACES = "codefolding_braces";
+    private static final String SETTING_CF_LABELS = "codefolding_labels";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_SHOW_LINEHIGLIGHT = "showlinehighlight";
     private static final String SETTING_SHOW_EXT_IN_TAB = "showfileextintab";
@@ -227,6 +232,41 @@ public class Settings {
         if (null==root.getChild(SETTING_CODE_FOLDING)) {
             // create element
             Element el = new Element(SETTING_CODE_FOLDING);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CF_BRACES)) {
+            // create element
+            Element el = new Element(SETTING_CF_BRACES);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CF_DIRECTIVES)) {
+            // create element
+            Element el = new Element(SETTING_CF_DIRECTIVES);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CF_LABELS)) {
+            // create element
+            Element el = new Element(SETTING_CF_LABELS);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CF_MANUAL)) {
+            // create element
+            Element el = new Element(SETTING_CF_MANUAL);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CF_STRUCTS)) {
+            // create element
+            Element el = new Element(SETTING_CF_STRUCTS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
@@ -592,13 +632,59 @@ public class Settings {
         if (el!=null) return el.getText().equals("1");
         return true;
     }
-    public void setCodeFolding(boolean scale) {
+    public void setCodeFolding(boolean val) {
         Element el = root.getChild(SETTING_CODE_FOLDING);
         if (null==el) {
             el = new Element(SETTING_CODE_FOLDING);
             root.addContent(el);
         }
-        el.setText(scale==Boolean.TRUE ? "1":"0");
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public int getCodeFoldingTokens() {
+        int foldtokens = 0;
+        Element el = root.getChild(SETTING_CF_MANUAL);
+        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_MANUAL : 0);
+        el = root.getChild(SETTING_CF_BRACES);
+        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_BRACES : 0);
+        el = root.getChild(SETTING_CF_LABELS);
+        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_LABELS : 0);
+        el = root.getChild(SETTING_CF_DIRECTIVES);
+        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_DIRECTIVES : 0);
+        el = root.getChild(SETTING_CF_STRUCTS);
+        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_STRUCTS : 0);
+        return foldtokens;
+    }
+    public void setCodeFoldingTokens(int tokens) {
+        Element el = root.getChild(SETTING_CF_MANUAL);
+        if (null==el) {
+            el = new Element(SETTING_CF_MANUAL);
+            root.addContent(el);
+        }
+        el.setText(((tokens & Assemblers.CF_TOKEN_MANUAL)!=0) ? "1":"0");
+        el = root.getChild(SETTING_CF_BRACES);
+        if (null==el) {
+            el = new Element(SETTING_CF_BRACES);
+            root.addContent(el);
+        }
+        el.setText(((tokens & Assemblers.CF_TOKEN_BRACES)!=0) ? "1":"0");
+        el = root.getChild(SETTING_CF_LABELS);
+        if (null==el) {
+            el = new Element(SETTING_CF_LABELS);
+            root.addContent(el);
+        }
+        el.setText(((tokens & Assemblers.CF_TOKEN_LABELS)!=0) ? "1":"0");
+        el = root.getChild(SETTING_CF_DIRECTIVES);
+        if (null==el) {
+            el = new Element(SETTING_CF_DIRECTIVES);
+            root.addContent(el);
+        }
+        el.setText(((tokens & Assemblers.CF_TOKEN_DIRECTIVES)!=0) ? "1":"0");
+        el = root.getChild(SETTING_CF_STRUCTS);
+        if (null==el) {
+            el = new Element(SETTING_CF_STRUCTS);
+            root.addContent(el);
+        }
+        el.setText(((tokens & Assemblers.CF_TOKEN_STRUCTS)!=0) ? "1":"0");
     }
     public Assembler getPreferredAssembler() {
         Element el = root.getChild(SETTING_PREF_ASM);

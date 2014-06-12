@@ -35,6 +35,6 @@ public class RL64FoldHandler extends FoldHandler
             return 1;
         }
 //        return Math.max(0, textArea.getAssembler().getFoldLevel(buffer.getLineText(lineIndex - 1), buffer.getFoldLevel(lineIndex - 1)));
-        return Math.max(0, textArea.getAssembler().getFoldLevel(buffer, lineIndex - 1));
+        return Math.max(0, textArea.getAssembler().getFoldLevel(buffer, lineIndex - 1, textArea.getSettings().getCodeFoldingTokens()));
     }
 }

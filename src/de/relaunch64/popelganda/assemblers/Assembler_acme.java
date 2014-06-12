@@ -265,7 +265,7 @@ class Assembler_acme implements Assembler
 
     // Simple { } folding (for subzones, if, etc.), label-to-label folding, plus manual folding
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         boolean quote = false;

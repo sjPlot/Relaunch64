@@ -476,6 +476,15 @@ public class RL64TextArea extends StandaloneTextArea {
         return assembler;
     }
     /**
+     * Returns the reference to the settings class. Needed for the
+     * {@link RL64FoldHandler RL64FoldHandler}.
+     * 
+     * @return the reference to the settings class
+     */
+    public Settings getSettings() {
+        return settings;
+    }
+    /**
      * The StandaloneTextArea component of jEdit. Provides fast syntax highlighting and some other
      * useful features. Replaces the default Swing JEditorPane.
      * 

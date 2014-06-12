@@ -391,7 +391,18 @@ class Assembler_64tass implements Assembler {
 
     // folding according to compiler directives, plus manual folding
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
+        /**
+         * Access settings for foldtokens like this:
+         * if ((foldtokens & Assemblers.CF_TOKEN_MANUAL)!=0) ...
+         * 
+         * valid constants are:
+         * CF_TOKEN_MANUAL
+         * CF_TOKEN_BRACES
+         * CF_TOKEN_LABELS
+         * CF_TOKEN_DIRECTIVES
+         * CF_TOKEN_STRUCTS
+         */
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         Matcher m = directivePattern.matcher(line);

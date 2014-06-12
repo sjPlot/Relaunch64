@@ -233,7 +233,7 @@ class Assembler_kick implements Assembler
 
     // Simple { } and /* */ comment folding, plus manual folding
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         boolean quote = false;

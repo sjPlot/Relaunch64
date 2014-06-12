@@ -55,6 +55,12 @@ public class Assemblers {
     static final int ID_DASM = 5;
     static final int ID_TMPX = 6;
 
+    public static final int CF_TOKEN_MANUAL = 1<<1;
+    public static final int CF_TOKEN_BRACES = 1<<2;
+    public static final int CF_TOKEN_LABELS = 1<<3;
+    public static final int CF_TOKEN_DIRECTIVES = 1<<4;
+    public static final int CF_TOKEN_STRUCTS = 1<<5;
+    
     private static final Assembler assemblers[] = {
         ASM_KICKASSEMBLER,
         ASM_ACME,

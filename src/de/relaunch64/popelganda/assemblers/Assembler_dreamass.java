@@ -263,7 +263,7 @@ class Assembler_dreamass implements Assembler
 
     // folding by directives, { } (macros), plus manual folding
     @Override
-    public int getFoldLevel(JEditBuffer buffer, int lineIndex) {
+    public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
         Matcher m = directivePattern.matcher(line);
