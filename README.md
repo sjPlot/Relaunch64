@@ -5,12 +5,23 @@ Relaunch64 3.1.1 (development)
 ----------------
 
 ### New features
-* added automatic code-folding for labels, (sub-)zones and braces
-* optionally show file extension in tabs
-* automatic indention works for spaces now, too
-* added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
-* added quick-access to compiler-help (type "ch" into text field on bottom left)
-* added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
+* code-folding
+  - enable or disable code-folding
+  - added automatic code-folding for braces { and } (can be en-/disabled)
+  - added automatic code-folding for labels (can be en-/disabled)
+  - added automatic code-folding for conditional directives (can be en-/disabled)
+  - added automatic code-folding for structures (can be en-/disabled)
+
+* editor
+  - automatic indention works for spaces now, too
+  - added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
+
+* GUI
+  - optionally show file extension in tabs
+
+* various
+  - added quick-access to compiler-help (type "ch" into text field on bottom left)
+  - added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
 
 ### Bug fixes
 * tabs on OS X where a bit larger than planned - fixed
