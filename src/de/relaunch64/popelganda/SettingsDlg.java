@@ -323,11 +323,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabFont(true);
-                jCheckBoxCF_braces.setEnabled(settings.getCodeFolding());
-                jCheckBoxCF_manual.setEnabled(settings.getCodeFolding());
-                jCheckBoxCF_labels.setEnabled(settings.getCodeFolding());
-                jCheckBoxCF_directives.setEnabled(settings.getCodeFolding());
-                jCheckBoxCF_struct.setEnabled(settings.getCodeFolding());
+                jCheckBoxCF_braces.setEnabled(jCheckBoxCodeFolding.isSelected());
+                jCheckBoxCF_manual.setEnabled(jCheckBoxCodeFolding.isSelected());
+                jCheckBoxCF_labels.setEnabled(jCheckBoxCodeFolding.isSelected());
+                jCheckBoxCF_directives.setEnabled(jCheckBoxCodeFolding.isSelected());
+                jCheckBoxCF_struct.setEnabled(jCheckBoxCodeFolding.isSelected());
             }
         });
         jCheckBoxCF_manual.addActionListener(new java.awt.event.ActionListener() {
@@ -697,7 +697,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
         setTitle(resourceMap.getString("FormSettings.title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(500, 400));
+        setMinimumSize(new java.awt.Dimension(600, 400));
         setModal(true);
         setName("FormSettings"); // NOI18N
 
