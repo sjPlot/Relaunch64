@@ -268,61 +268,64 @@ class Assembler_acme implements Assembler
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
-        boolean quote = false;
-        boolean quote2 = false;
-        boolean comment = false;
-        int count = 0;
 
-        // TODO label-to-label-folding does not seem to work
-        
-        // folding from real label to next real label
-        boolean label1 = false, label2 = false;
-        Matcher m = labelPattern.matcher(line);
-        if (m.matches()) {
-            String label = m.group("label");
-            if (label != null && m.group("equal") == null) {
-                if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
-            }
-        }
-        m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
-        if (m.matches()) {
-            String label = m.group("label");
-            if (label != null && m.group("equal") == null) {
-                if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
-            }
-        }
-        if (label1 && !label2) foldLevel++;
-        if (!label1 && label2) foldLevel--;
-
-        for (int i = 0; i < line.length(); i++) {
-            if (comment) {
-                switch (line.charAt(i)) {
-                case '{': 
-                    if (count < 0) count = 0;
-                    count++;
-                    if (count == 3) {
-                        count = 0;
-                        foldLevel++;
-                    }
-                    break;
-                case '}': 
-                    if (count > 0) count = 0;
-                    count--;
-                    if (count == -3) {
-                        count = 0;
-                        foldLevel--;
-                    }
-                    break;
-                default: count = 0;
+        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
+            boolean label1 = false, label2 = false;
+            Matcher m = labelPattern.matcher(line);
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
                 }
-                continue;
             }
-            switch (line.charAt(i)) {
-            case '"': if (!quote2) quote = !quote; break;
-            case '\'': if (!quote) quote2 = !quote2; break;
-            case ';': if (!quote && !quote2) comment = true; break;
-            case '{': if (!quote && !quote2) foldLevel++; break;
-            case '}': if (!quote && !quote2) foldLevel--; break;
+            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
+                }
+            }
+            if (label1 && !label2) foldLevel++;
+            if (!label1 && label2) foldLevel--;
+        }
+
+        if ((foldtokens & (Assemblers.CF_TOKEN_MANUAL | Assemblers.CF_TOKEN_BRACES)) != 0) {
+            boolean quote = false;
+            boolean quote2 = false;
+            boolean comment = false;
+            int count = 0;
+
+            for (int i = 0; i < line.length(); i++) {
+                if (comment) {
+                    if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) == 0) break;
+                    switch (line.charAt(i)) {
+                        case '{': 
+                            if (count < 0) count = 0;
+                            count++;
+                            if (count == 3) {
+                                count = 0;
+                                foldLevel++;
+                            }
+                            break;
+                        case '}': 
+                            if (count > 0) count = 0;
+                            count--;
+                            if (count == -3) {
+                                count = 0;
+                                foldLevel--;
+                            }
+                            break;
+                        default: count = 0;
+                    }
+                    continue;
+                }
+                switch (line.charAt(i)) {
+                    case '"': if (!quote2) quote = !quote; break;
+                    case '\'': if (!quote) quote2 = !quote2; break;
+                    case ';': if (!quote && !quote2) comment = true; break;
+                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel++; break;
+                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel--; break;
+                }
             }
         }
         return foldLevel;

@@ -289,39 +289,43 @@ class Assembler_dreamass implements Assembler
                 }
             }
         }
-        boolean quote = false;
-        boolean quote2 = false;
-        boolean comment = false;
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (comment) {
-                switch (line.charAt(i)) {
-                case '{': 
-                    if (count < 0) count = 0;
-                    count++;
-                    if (count == 3) {
-                        count = 0;
-                        foldLevel++;
+
+        if ((foldtokens & (Assemblers.CF_TOKEN_MANUAL | Assemblers.CF_TOKEN_BRACES)) != 0) {
+            boolean quote = false;
+            boolean quote2 = false;
+            boolean comment = false;
+            int count = 0;
+            for (int i = 0; i < line.length(); i++) {
+                if (comment) {
+                    if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) == 0) break;
+                    switch (line.charAt(i)) {
+                        case '{': 
+                            if (count < 0) count = 0;
+                            count++;
+                            if (count == 3) {
+                                count = 0;
+                                foldLevel++;
+                            }
+                            break;
+                        case '}': 
+                            if (count > 0) count = 0;
+                            count--;
+                            if (count == -3) {
+                                count = 0;
+                                foldLevel--;
+                            }
+                            break;
+                        default: count = 0;
                     }
-                    break;
-                case '}': 
-                    if (count > 0) count = 0;
-                    count--;
-                    if (count == -3) {
-                        count = 0;
-                        foldLevel--;
-                    }
-                    break;
-                default: count = 0;
+                    continue;
                 }
-                continue;
-            }
-            switch (line.charAt(i)) {
-            case '"': if (!quote2) quote = !quote; break;
-            case '\'': if (!quote) quote2 = !quote2; break;
-            case ';': if (!quote && !quote2) comment = true; break;
-            case '{': if (!quote && !quote2) foldLevel++; break;
-            case '}': if (!quote && !quote2) foldLevel--; break;
+                switch (line.charAt(i)) {
+                    case '"': if (!quote2) quote = !quote; break;
+                    case '\'': if (!quote) quote2 = !quote2; break;
+                    case ';': if (!quote && !quote2) comment = true; break;
+                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel++; break;
+                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel--; break;
+                }
             }
         }
         return foldLevel;

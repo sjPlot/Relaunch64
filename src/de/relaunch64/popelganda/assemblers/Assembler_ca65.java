@@ -328,77 +328,86 @@ class Assembler_ca65 implements Assembler
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
-        Matcher m = directivePattern.matcher(line);
 
-        if (m.matches()) {
-            String directive = m.group("directive");
-            if (directive != null) {
-                switch (directive.toLowerCase()) {
-                case ".enum":
-                case ".mac":
-                case ".macro":
-                case ".proc":
-                case ".repeat":
-                case ".scope":
-                case ".struct":
-                case ".if":
-                case ".ifblank":
-                case ".ifnblank":
-                case ".ifconst":
-                case ".ifdef":
-                case ".ifndef":
-                case ".ifp02":
-                case ".ifp816":
-                case ".ifpc02":
-                case ".ifpsc02":
-                case ".ifref":
-                    foldLevel++;
-                    break;
-                case ".endenum":
-                case ".endstruct":
-                case ".endscope":
-                case ".endrep":
-                case ".endrepeat":
-                case ".endproc":
-                case ".endmac":
-                case ".endmacro":
-                case ".endif":
-                    foldLevel--;
-                    break;
+        if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
+            Matcher m = directivePattern.matcher(line);
+
+            if (m.matches()) {
+                String directive = m.group("directive");
+                if (directive != null) {
+                    switch (directive.toLowerCase()) {
+                        case ".if":
+                        case ".ifblank":
+                        case ".ifnblank":
+                        case ".ifconst":
+                        case ".ifdef":
+                        case ".ifndef":
+                        case ".ifp02":
+                        case ".ifp816":
+                        case ".ifpc02":
+                        case ".ifpsc02":
+                        case ".ifref":
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel++;
+                            break;
+                        case ".enum":
+                        case ".mac":
+                        case ".macro":
+                        case ".proc":
+                        case ".repeat":
+                        case ".scope":
+                        case ".struct":
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
+                            break;
+                        case ".endif":
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel--;
+                            break;
+                        case ".endenum":
+                        case ".endstruct":
+                        case ".endscope":
+                        case ".endrep":
+                        case ".endrepeat":
+                        case ".endproc":
+                        case ".endmac":
+                        case ".endmacro":
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--;
+                            break;
+                    }
                 }
             }
         }
-        boolean quote = false;
-        boolean quote2 = false;
-        boolean comment = false;
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (comment) {
-                switch (line.charAt(i)) {
-                case '{': 
-                    if (count < 0) count = 0;
-                    count++;
-                    if (count == 3) {
-                        count = 0;
-                        foldLevel++;
+        if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) != 0) {
+            boolean quote = false;
+            boolean quote2 = false;
+            boolean comment = false;
+            int count = 0;
+            for (int i = 0; i < line.length(); i++) {
+                if (comment) {
+                    switch (line.charAt(i)) {
+                        case '{': 
+                            if (count < 0) count = 0;
+                            count++;
+                            if (count == 3) {
+                                count = 0;
+                                foldLevel++;
+                            }
+                            break;
+                        case '}': 
+                            if (count > 0) count = 0;
+                            count--;
+                            if (count == -3) {
+                                count = 0;
+                                foldLevel--;
+                            }
+                            break;
+                        default: count = 0;
                     }
-                    break;
-                case '}': 
-                    if (count > 0) count = 0;
-                    count--;
-                    if (count == -3) {
-                        count = 0;
-                        foldLevel--;
-                    }
-                    break;
-                default: count = 0;
+                    continue;
                 }
-                continue;
-            }
-            switch (line.charAt(i)) {
-            case '"': if (!quote2) quote = !quote; break;
-            case '\'': if (!quote) quote2 = !quote2; break;
-            case ';': if (!quote && !quote2) comment = true; break;
+                switch (line.charAt(i)) {
+                    case '"': if (!quote2) quote = !quote; break;
+                    case '\'': if (!quote) quote2 = !quote2; break;
+                    case ';': if (!quote && !quote2) comment = true; break;
+                }
             }
         }
         return foldLevel;

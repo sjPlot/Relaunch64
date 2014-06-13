@@ -272,75 +272,86 @@ class Assembler_dasm implements Assembler
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
-        Matcher m = directivePattern.matcher(line);
-        boolean subroutine1 = false, subroutine2 = false;
 
-        if (m.matches()) {
-            String directive = m.group("directive");
-            if (directive != null) {
-                switch (directive.toLowerCase()) {
-                case "mac":
-                case "rorg":
-                case "ifconst":
-                case "ifnconst":
-                case "if":
-                case "repeat":
-                    foldLevel++;
-                    break;
-                case "subroutine": 
-                    subroutine1 = true; 
-                    break;
-                case "endm":
-                case "rend":
-                case "endif":
-                case "eif":
-                case "repend":
-                    foldLevel--;
-                    break;
+        if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
+            Matcher m = directivePattern.matcher(line);
+            boolean subroutine1 = false, subroutine2 = false;
+            if (m.matches()) {
+                String directive = m.group("directive");
+                if (directive != null) {
+                    switch (directive.toLowerCase()) {
+                        case "ifconst":
+                        case "ifnconst":
+                        case "if":
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel++;
+                            break;
+                        case "mac":
+                        case "rorg":
+                        case "repeat":
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
+                            break;
+                        case "subroutine": 
+                            subroutine1 = true; 
+                            break;
+                        case "endif":
+                        case "eif":
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel--;
+                            break;
+                        case "endm":
+                        case "rend":
+                        case "repend":
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--;
+                            break;
+                    }
                 }
             }
-        }
-        m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
-        if (m.matches()) {
-            String directive = m.group("directive");
-            if (directive != null) {
-                subroutine2 = (directive.toLowerCase().equals("subroutine"));
+            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) {
+                m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) {
+                    String directive = m.group("directive");
+                    if (directive != null) {
+                        subroutine2 = (directive.toLowerCase().equals("subroutine"));
+                    }
+                }
+                if (subroutine1 && !subroutine2) foldLevel++;
+                if (!subroutine1 && subroutine2) foldLevel--;
             }
         }
-        if (subroutine1 && !subroutine2) foldLevel++;
-        if (!subroutine1 && subroutine2) foldLevel--;
 
-        boolean quote = false;
-        boolean quote2 = false;
-        boolean comment = false;
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (comment) {
+        if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) != 0) {
+            boolean quote = false;
+            boolean quote2 = false;
+            boolean comment = false;
+            int count = 0;
+            for (int i = 0; i < line.length(); i++) {
+                if (comment) {
+                    if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) == 0) break;
+                    switch (line.charAt(i)) {
+                        case '{': 
+                            if (count < 0) count = 0;
+                            count++;
+                            if (count == 3) {
+                                count = 0;
+                                foldLevel++;
+                            }
+                            break;
+                        case '}': 
+                            if (count > 0) count = 0;
+                            count--;
+                            if (count == -3) {
+                                count = 0;
+                                foldLevel--;
+                            }
+                            break;
+                        default: count = 0;
+                    }
+                    continue;
+                }
                 switch (line.charAt(i)) {
-                case '{': 
-                    if (count < 0) count = 0;
-                    count++;
-                    if (count == 3) {
-                        count = 0;
-                        foldLevel++;
-                    }
-                    break;
-                case '}': 
-                    if (count > 0) count = 0;
-                    count--;
-                    if (count == -3) {
-                        count = 0;
-                        foldLevel--;
-                    }
-                    break;
-                default: count = 0;
+                    case '"': if (!quote2) quote = !quote; break;
+                    case '\'': if (!quote) quote2 = !quote2; break;
+                    case ';': if (!quote && !quote2) comment = true; break;
                 }
-                continue;
-            }
-            switch (line.charAt(i)) {
-            case '"': if (!quote2) quote = !quote; break;
-            case '\'': if (!quote) quote2 = !quote2; break;
-            case ';': if (!quote && !quote2) comment = true; break;
             }
         }
         return foldLevel;

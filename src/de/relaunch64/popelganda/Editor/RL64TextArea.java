@@ -54,7 +54,7 @@ import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.textarea.StandaloneTextArea;
 import org.gjt.sp.util.SyntaxUtilities;
 import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.jedit.buffer.DummyFoldHandler;
+import org.gjt.sp.jedit.buffer.ExplicitFoldHandler;
 import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
 
 /**
@@ -368,7 +368,7 @@ public class RL64TextArea extends StandaloneTextArea {
         // add mode to buffer
         getBuffer().setMode(mode);
         // just to change...
-        getBuffer().setFoldHandler(new DummyFoldHandler());
+        getBuffer().setFoldHandler(new ExplicitFoldHandler());
         // fire property change message
         propertiesChanged();
     }
@@ -377,6 +377,8 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     public final void setCodeFolding() {
         setProperty("buffer.folding", settings.getCodeFolding() ? "RL64assembler" : "none");
+        // just to change...
+        getBuffer().setFoldHandler(new ExplicitFoldHandler());
         // fire property change message
         propertiesChanged();
     }
@@ -508,10 +510,10 @@ public class RL64TextArea extends StandaloneTextArea {
         setTextAntiAlias(settings.getAntiAlias());
         // setup keylistener
         keyListener = new RL64KeyListener();
-        // set explicit buffer folding
-        setCodeFolding();
         // register our own fold handler
         ((DefaultFoldHandlerProvider)FoldHandler.foldHandlerProvider).addFoldHandler(new RL64FoldHandler(this));
+        // set explicit buffer folding
+        setCodeFolding();
     }
     /**
      * Checks whether the caret is visible and if not, scrolls editor to caret before opening

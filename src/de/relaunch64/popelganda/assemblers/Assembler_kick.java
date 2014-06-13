@@ -231,11 +231,24 @@ class Assembler_kick implements Assembler
         return errors;
     }
 
+    private static final Pattern labelPattern = Pattern.compile("^\\s*[a-zA-Z_][a-zA-Z0-9_]*:.*");
+
     // Simple { } and /* */ comment folding, plus manual folding
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
+
+        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
+            boolean label1 = false, label2 = false;
+            Matcher m = labelPattern.matcher(line);
+            label1 = m.matches();
+            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+            label2 = m.matches();
+            if (label1 && !label2) foldLevel++;
+            if (!label1 && label2) foldLevel--;
+        }
+
         boolean quote = false;
         boolean quote2 = false;
         boolean comment = false;
@@ -244,6 +257,7 @@ class Assembler_kick implements Assembler
         for (int i = 0; i < line.length(); i++) {
             Character c = line.charAt(i);
             if (comment) {
+                if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) == 0) break;
                 switch (line.charAt(i)) {
                 case '{': 
                     if (count < 0) count = 0;
@@ -271,12 +285,12 @@ class Assembler_kick implements Assembler
             case '/': 
                 if (!quote && !quote2) {
                     if (previous == '/') comment = true;
-                    else if (previous == '*') {foldLevel--; c = ' ';}
+                    else if (previous == '*') {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--; c = ' ';}
                 }
                 break;
-            case '*': if (previous == '/' && !quote && !quote2) {foldLevel++; c = ' ';} break;
-            case '{': if (!quote && !quote2) foldLevel++; break;
-            case '}': if (!quote && !quote2) foldLevel--; break;
+            case '*': if (previous == '/' && !quote && !quote2) {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++; c = ' ';} break;
+            case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel++; break;
+            case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel--; break;
             }
             previous = c;
         }
