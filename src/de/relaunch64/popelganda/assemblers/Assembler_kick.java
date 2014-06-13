@@ -240,7 +240,7 @@ class Assembler_kick implements Assembler
         int foldLevel = buffer.getFoldLevel(lineIndex);
 
         if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
-            boolean label1 = false, label2 = false;
+            boolean label1, label2;
             Matcher m = labelPattern.matcher(line);
             label1 = m.matches();
             m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
