@@ -323,6 +323,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabFont(true);
+                jCheckBoxCF_braces.setEnabled(settings.getCodeFolding());
+                jCheckBoxCF_manual.setEnabled(settings.getCodeFolding());
+                jCheckBoxCF_labels.setEnabled(settings.getCodeFolding());
+                jCheckBoxCF_directives.setEnabled(settings.getCodeFolding());
+                jCheckBoxCF_struct.setEnabled(settings.getCodeFolding());
             }
         });
         jCheckBoxCF_manual.addActionListener(new java.awt.event.ActionListener() {
