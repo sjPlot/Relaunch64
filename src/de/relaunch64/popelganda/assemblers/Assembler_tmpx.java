@@ -135,7 +135,7 @@ class Assembler_tmpx implements Assembler
 
     @Override
     public String getHelpCLI() {
-        return "";
+        return " -h";
     }
 
     /**
