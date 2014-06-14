@@ -213,24 +213,51 @@ public class RL64TextArea extends StandaloneTextArea {
             // insert indent on enter
             // we count tabs on current line, insert enter, and indent by same amount of
             // tabs as in previous line
-            if (evt.getKeyCode()==KeyEvent.VK_ENTER && !evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown()) {
+            if (evt.getKeyCode()==KeyEvent.VK_ENTER && !evt.isControlDown() && !evt.isShiftDown() && !evt.isAltDown() && !evt.isMetaDown()) {
                 // get text of current line
                 String line = getLineText(getCaretLine());
-                // insert enter
-                insertEnterAndIndent();
+                // get caret position in current line
+                int caretposInLine = getCaretPosition()-getLineStartOffset(getCaretLine());
                 // check if we have any content in line
                 if (line!=null && !line.isEmpty()) {
                     // check for following indent chars
                     char[] indentchars = new char[] {'\t', ' '};
+                    boolean alreadyentered = false;
                     for (char ic : indentchars) {
-                        // first, check for tab indention
-                        int tabcount = 0;
-                        // count tabs at line start
+                        // first, check for tabs/spaces after current caret
+                        int tabcount = caretposInLine;
+                        // count tabs/spaces from caret until next word, i.e. do we
+                        // have "enter" in between leading tabs/spaces?
                         while (tabcount<line.length() && line.charAt(tabcount)==ic) {
+                            tabcount++;
+                        }
+                        // if yes, "fill" current line with tabs/spaces according to prev line
+                        if (tabcount>caretposInLine) {
+                            while (tabcount>caretposInLine) {
+                                if ('\t'==ic) insertTabAndIndent(); else insert(" ", true);
+                                tabcount--;
+                            }
+                            // insert enter. we take any tabs/spaces behind caret into the next line
+                            if (!alreadyentered) {
+                                insertEnterAndIndent();
+                                alreadyentered = true;
+                            }
+                        }
+                        // first, check for tab indention
+                        tabcount = 0;
+                        // count tabs at line start, until caret position. all tabs/spaces
+                        // behin caret were taken from previous line with "enter" key.
+                        while (tabcount<caretposInLine && line.charAt(tabcount)==ic) {
                             tabcount++;
                         }
                         // found tabs?
                         boolean tabfound = tabcount>0;
+                        // check if we need to insert enter. may be if this is the second step of
+                        // the for-loop. we take any tabs/spaces behind caret into the next line
+                        if (!alreadyentered && tabfound) {
+                            insertEnterAndIndent();
+                            alreadyentered = true;
+                        }
                         // insert tabs according to prev line
                         while (tabcount>0) {
                             if ('\t'==ic) insertTabAndIndent(); else insert(" ", true);
@@ -239,6 +266,12 @@ public class RL64TextArea extends StandaloneTextArea {
                         // if we already indented tabs, leave
                         if (tabfound) break;
                     }
+                    // insert enter. applies, when caret is at line start and no indention was made
+                    if (!alreadyentered) insertEnterAndIndent();
+                }
+                else {
+                    // insert enter
+                    insertEnterAndIndent();
                 }
                 evt.consume();
             }

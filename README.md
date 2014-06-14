@@ -15,6 +15,7 @@ Relaunch64 3.1.1 (development)
 * editor
   - automatic indention works for spaces now, too
   - added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
+  - slightly changed automatic tab/space indention. if "enter" is hit in between leading tabs/spaces, the indention is adjusted to fit the previous lines.
 
 * user scripts
   - added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
@@ -30,6 +31,7 @@ Relaunch64 3.1.1 (development)
 * tabs on OS X where a bit larger than planned - fixed
 * fixed bug with syntax-highlighting, which, in some specific cases, did not recognize all labels
 * fixed typo in help (user scripts)
+* fixed bug with "insert section" command on OS X
 
 
 Relaunch64 3.1.0 (current stable release)

@@ -7,6 +7,7 @@
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/FindTerms.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/RelaunchClipboard.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/ColorSchemes.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/modes/assembly-tmpx.xml</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/jEdit.props</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_64tass.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/database/CustomScripts.java</file>
@@ -17,6 +18,7 @@
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPaneTools.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/SettingsDlg.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/modes/assembly-kick.xml</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/FileTools.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_dreamass.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertSinusTableDlg.java</file>
@@ -28,6 +30,7 @@
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_ca65.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/README.md</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help_userscripts.html</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/modes/assembly-acme.xml</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/InsertByteFromFileDlg.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/LabelExtractor.java</file>
