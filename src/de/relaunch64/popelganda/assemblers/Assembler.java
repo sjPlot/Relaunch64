@@ -41,8 +41,10 @@ import java.util.ArrayList;
 public interface Assembler 
 {
     static final String INPUT_FILE = "SOURCEFILE";
+    static final String INPUT_FILE_REL = "RSOURCEFILE";
     static final String SOURCE_DIR = "SOURCEDIR";
     static final String OUTPUT_FILE = "OUTFILE";
+    static final String OUTPUT_FILE_REL = "ROUTFILE";
     static final String INPUT_FILENAME = "SOURCENAME";
     static final String OUTPUT_FILENAME = "OUTNAME";
     /**

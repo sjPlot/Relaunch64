@@ -16,16 +16,20 @@ Relaunch64 3.1.1 (development)
   - automatic indention works for spaces now, too
   - added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
 
+* user scripts
+  - added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
+  - added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names.
+
 * GUI
   - optionally show file extension in tabs
 
 * various
   - added quick-access to compiler-help (type "ch" into text field on bottom left)
-  - added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
 
 ### Bug fixes
 * tabs on OS X where a bit larger than planned - fixed
 * fixed bug with syntax-highlighting, which, in some specific cases, did not recognize all labels
+* fixed typo in help (user scripts)
 
 
 Relaunch64 3.1.0 (current stable release)

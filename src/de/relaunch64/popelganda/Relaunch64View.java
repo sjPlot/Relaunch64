@@ -1378,13 +1378,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\""+of+"\"";
                     String cf = compressedFile.toString();
                     if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
+                    // check if we have relative paths
+                    boolean useRelativePath = cmd.contains(Assembler.OUTPUT_FILE_REL);
+                    // create relative paths of in- and output files
+                    String sf_rel = FileTools.getFileName(sourceFile)+"."+FileTools.getFileExtension(sourceFile);
+                    String of_rel = FileTools.getFileName(outFile)+"."+FileTools.getFileExtension(outFile);
+                    String cf_rel = FileTools.getFileName(compressedFile)+"."+FileTools.getFileExtension(compressedFile);
                     // replace placeholders
                     cmd = cmd.replace(Assembler.INPUT_FILE, sf);
+                    cmd = cmd.replace(Assembler.INPUT_FILE_REL, sf_rel);
                     cmd = cmd.replace(Assembler.INPUT_FILENAME, FileTools.getFileName(sourceFile));
                     cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
+                    cmd = cmd.replace(Assembler.OUTPUT_FILE_REL, of_rel);
                     cmd = cmd.replace(Assembler.OUTPUT_FILENAME, FileTools.getFileName(outFile));
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, of);
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, cf);
+                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, (useRelativePath) ? of_rel : of);
+                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, (useRelativePath) ? cf_rel : cf);
                     cmd = cmd.replace(Assembler.SOURCE_DIR, parentFile);
                     // check if we have a cruncher-starttoken
                     String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveAssembler().getLineComment());
