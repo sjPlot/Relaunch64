@@ -151,7 +151,7 @@ public class FileTools {
             return "";
         }
         // init extension string
-        String ext = null;
+        String ext = "";
         // get filename
         String s = f.getName();
         // look for the position where the extension of the file starts
@@ -262,11 +262,11 @@ public class FileTools {
                     return fname.substring(0,extpos);
                 }
                 catch (IndexOutOfBoundsException ex) {
-                    return null;
+                    return f.toString();
                 }
             }
         }
-        return null;
+        return "";
     }
     /**
      * Creates the file pathes and directories for the settings-files.
