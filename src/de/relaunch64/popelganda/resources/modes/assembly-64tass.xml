@@ -27,12 +27,12 @@
                 <!-- keyword4 are jump labels-->
                 <SEQ_REGEXP HASH_CHARS="_" AT_WORD_START="TRUE" TYPE="KEYWORD4">_[0-9a-zA-Z]*</SEQ_REGEXP>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING1">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" DELEGATE="STRING2">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
@@ -276,5 +276,97 @@
 
                 <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}_][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="-`~!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
+	</RULES>
+
+	<RULES SET="STRING1" HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="FALSE" DEFAULT="LITERAL1">
+            <IMPORT DELEGATE="STRINGS"/>
+	</RULES>
+	<RULES SET="STRING2" HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="FALSE" DEFAULT="LITERAL2">
+            <IMPORT DELEGATE="STRINGS"/>
+	</RULES>
+
+	<RULES SET="STRINGS" HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="FALSE">
+            <SEQ TYPE="DIGIT">{bell}</SEQ>
+            <SEQ TYPE="DIGIT">{black}</SEQ>
+            <SEQ TYPE="DIGIT">{blk}</SEQ>
+            <SEQ TYPE="DIGIT">{blue}</SEQ>
+            <SEQ TYPE="DIGIT">{blu}</SEQ>
+            <SEQ TYPE="DIGIT">{brn}</SEQ>
+            <SEQ TYPE="DIGIT">{brown}</SEQ>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{cbm-[-*+0-9@^a-z]\}</SEQ_REGEXP>
+            <SEQ TYPE="DIGIT">{cbm-pound}</SEQ>
+            <SEQ TYPE="DIGIT">{cbm-up arrow}</SEQ>
+            <SEQ TYPE="DIGIT">{clear}</SEQ>
+            <SEQ TYPE="DIGIT">{clr}</SEQ>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{control-[0-9:;=@a-z]\}</SEQ_REGEXP>
+            <SEQ TYPE="DIGIT">{control-left arrow}</SEQ>
+            <SEQ TYPE="DIGIT">{control-pound}</SEQ>
+            <SEQ TYPE="DIGIT">{control-up arrow}</SEQ>
+            <SEQ TYPE="DIGIT">{cr}</SEQ>
+            <SEQ TYPE="DIGIT">{cyan}</SEQ>
+            <SEQ TYPE="DIGIT">{cyn}</SEQ>
+            <SEQ TYPE="DIGIT">{delete}</SEQ>
+            <SEQ TYPE="DIGIT">{del}</SEQ>
+            <SEQ TYPE="DIGIT">{dish}</SEQ>
+            <SEQ TYPE="DIGIT">{down}</SEQ>
+            <SEQ TYPE="DIGIT">{ensh}</SEQ>
+            <SEQ TYPE="DIGIT">{esc}</SEQ>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{f1[0-2]\}</SEQ_REGEXP>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{f[1-9]\}</SEQ_REGEXP>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{gr[ae]y[1-3]\}</SEQ_REGEXP>
+            <SEQ TYPE="DIGIT">{green}</SEQ>
+            <SEQ TYPE="DIGIT">{grn}</SEQ>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{gry[1-3]\}</SEQ_REGEXP>
+            <SEQ TYPE="DIGIT">{help}</SEQ>
+            <SEQ TYPE="DIGIT">{home}</SEQ>
+            <SEQ TYPE="DIGIT">{insert}</SEQ>
+            <SEQ TYPE="DIGIT">{inst}</SEQ>
+            <SEQ TYPE="DIGIT">{lblu}</SEQ>
+            <SEQ TYPE="DIGIT">{left arrow}</SEQ>
+            <SEQ TYPE="DIGIT">{left}</SEQ>
+            <SEQ TYPE="DIGIT">{lf}</SEQ>
+            <SEQ TYPE="DIGIT">{lgrn}</SEQ>
+            <SEQ TYPE="DIGIT">{lower case}</SEQ>
+            <SEQ TYPE="DIGIT">{lred}</SEQ>
+            <SEQ TYPE="DIGIT">{lt blue}</SEQ>
+            <SEQ TYPE="DIGIT">{lt green}</SEQ>
+            <SEQ TYPE="DIGIT">{lt red}</SEQ>
+            <SEQ TYPE="DIGIT">{orange}</SEQ>
+            <SEQ TYPE="DIGIT">{orng}</SEQ>
+            <SEQ TYPE="DIGIT">{pi}</SEQ>
+            <SEQ TYPE="DIGIT">{pound}</SEQ>
+            <SEQ TYPE="DIGIT">{purple}</SEQ>
+            <SEQ TYPE="DIGIT">{pur}</SEQ>
+            <SEQ TYPE="DIGIT">{red}</SEQ>
+            <SEQ TYPE="DIGIT">{return}</SEQ>
+            <SEQ TYPE="DIGIT">{reverse off}</SEQ>
+            <SEQ TYPE="DIGIT">{reverse on}</SEQ>
+            <SEQ TYPE="DIGIT">{rght}</SEQ>
+            <SEQ TYPE="DIGIT">{right}</SEQ>
+            <SEQ TYPE="DIGIT">{run}</SEQ>
+            <SEQ TYPE="DIGIT">{rvof}</SEQ>
+            <SEQ TYPE="DIGIT">{rvon}</SEQ>
+            <SEQ TYPE="DIGIT">{rvs off}</SEQ>
+            <SEQ TYPE="DIGIT">{rvs on}</SEQ>
+            <SEQ TYPE="DIGIT">{shift return}</SEQ>
+            <SEQ_REGEXP HASH_CHARS="{" TYPE="DIGIT">\{shift-[-*+,./0-9:;@^a-z]\}</SEQ_REGEXP>
+            <SEQ TYPE="DIGIT">{shift-pound}</SEQ>
+            <SEQ TYPE="DIGIT">{shift-space}</SEQ>
+            <SEQ TYPE="DIGIT">{shift-up arrow}</SEQ>
+            <SEQ TYPE="DIGIT">{space}</SEQ>
+            <SEQ TYPE="DIGIT">{sret}</SEQ>
+            <SEQ TYPE="DIGIT">{stop}</SEQ>
+            <SEQ TYPE="DIGIT">{swlc}</SEQ>
+            <SEQ TYPE="DIGIT">{swuc}</SEQ>
+            <SEQ TYPE="DIGIT">{tab}</SEQ>
+            <SEQ TYPE="DIGIT">{up arrow}</SEQ>
+            <SEQ TYPE="DIGIT">{up/lo lock off}</SEQ>
+            <SEQ TYPE="DIGIT">{up/lo lock on}</SEQ>
+            <SEQ TYPE="DIGIT">{upper case}</SEQ>
+            <SEQ TYPE="DIGIT">{up}</SEQ>
+            <SEQ TYPE="DIGIT">{white}</SEQ>
+            <SEQ TYPE="DIGIT">{wht}</SEQ>
+            <SEQ TYPE="DIGIT">{yellow}</SEQ>
+            <SEQ TYPE="DIGIT">{yel}</SEQ>
 	</RULES>
 </MODE>
