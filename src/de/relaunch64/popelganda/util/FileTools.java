@@ -250,7 +250,7 @@ public class FileTools {
      */
     public static String getFileName(File f) {
         // check if we have any file
-        if (f!=null && f.exists()) {
+        if (f!=null && !f.getName().isEmpty()) {
             // get filename
             String fname = f.getName();
             // find file-extension
