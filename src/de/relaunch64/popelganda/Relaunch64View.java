@@ -1385,11 +1385,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     String of_rel = FileTools.getFileName(outFile)+"."+FileTools.getFileExtension(outFile);
                     String cf_rel = FileTools.getFileName(compressedFile)+"."+FileTools.getFileExtension(compressedFile);
                     // replace placeholders
-                    cmd = cmd.replace(Assembler.INPUT_FILE, sf);
                     cmd = cmd.replace(Assembler.INPUT_FILE_REL, sf_rel);
+                    cmd = cmd.replace(Assembler.INPUT_FILE, sf);
                     cmd = cmd.replace(Assembler.INPUT_FILENAME, FileTools.getFileName(sourceFile));
-                    cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
                     cmd = cmd.replace(Assembler.OUTPUT_FILE_REL, of_rel);
+                    cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
                     cmd = cmd.replace(Assembler.OUTPUT_FILENAME, FileTools.getFileName(outFile));
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, (useRelativePath) ? of_rel : of);
                     cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, (useRelativePath) ? cf_rel : cf);
