@@ -218,20 +218,28 @@ public class RL64TextArea extends StandaloneTextArea {
                 String line = getLineText(getCaretLine());
                 // get caret position in current line
                 int caretposInLine = getCaretPosition()-getLineStartOffset(getCaretLine());
-                // check if we have any content in line
-                if (line!=null && !line.isEmpty()) {
+                // check if we have any content in line, or if caret is not at start of line
+                // (if caret is at line start, simply insert new line and don't indent prev. line, 
+                // any tabs or spaces will be taken to next line via insert-new-line)
+                if (line!=null && !line.isEmpty() && caretposInLine>0) {
                     // check for following indent chars
                     char[] indentchars = new char[] {'\t', ' '};
+                    // marker to indicate whether new line was already inserted
+                    // (might be the case because for-loop has several passes)
                     boolean alreadyentered = false;
                     for (char ic : indentchars) {
                         // first, check for tabs/spaces after current caret
                         int tabcount = caretposInLine;
                         // count tabs/spaces from caret until next word, i.e. do we
                         // have "enter" in between leading tabs/spaces?
+                        // i.e. do we have tabs/spaced before and after caret? tabs/spaces
+                        // after caret will be moved to next line on enter.
                         while (tabcount<line.length() && line.charAt(tabcount)==ic) {
                             tabcount++;
                         }
                         // if yes, "fill" current line with tabs/spaces according to prev line
+                        // i.e. insert as many tabs/spaces into current line as will be moved to 
+                        // the next line due to enter.
                         if (tabcount>caretposInLine) {
                             while (tabcount>caretposInLine) {
                                 if ('\t'==ic) insertTabAndIndent(); else insert(" ", true);
@@ -273,6 +281,12 @@ public class RL64TextArea extends StandaloneTextArea {
                     // insert enter
                     insertEnterAndIndent();
                 }
+                evt.consume();
+            }
+            // shift+return allows new line without indention
+            else if (evt.getKeyCode()==KeyEvent.VK_ENTER && !evt.isControlDown() && evt.isShiftDown() && !evt.isAltDown() && !evt.isMetaDown()) {
+                // insert enter
+                insertEnterAndIndent();
                 evt.consume();
             }
             // when user opens suggestion list, no item is selected. the first, initial
