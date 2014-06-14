@@ -130,7 +130,7 @@ class Assembler_ca65 implements Assembler
 
     @Override
     public String getDefaultCommandLine(String fp) {
-        return fp + " -o " + OUTPUT_FILE;
+        return fp + " -o " + OUTPUT_FILE_REL;
     }
 
     @Override

@@ -127,7 +127,7 @@ class Assembler_kick implements Assembler
 
     @Override
     public String getDefaultCommandLine(String fp) {
-        return "java -jar " + fp + " INPUT_FILE";
+        return "java -jar " + fp + " "+INPUT_FILE_REL;
     }
 
     @Override

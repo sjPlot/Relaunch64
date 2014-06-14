@@ -136,7 +136,7 @@ class Assembler_acme implements Assembler
 
     @Override
     public String getDefaultCommandLine(String fp) {
-        return fp + " --outfile " + OUTPUT_FILE + " --format cbm " + INPUT_FILE;
+        return fp + " --outfile " + OUTPUT_FILE_REL + " --format cbm " + INPUT_FILE_REL;
     }
 
     @Override

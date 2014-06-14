@@ -1239,7 +1239,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                             String text = jTextAreaUserScript.getText();
                             // define output file. if we have a cruncher with "compressed file" placeholder,
                             // we assume that output file will be compressed.
-                            String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : Assembler.OUTPUT_FILE;
+                            String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : Assembler.OUTPUT_FILE_REL;
                             String insert = "";
                             Assembler assembler = Assemblers.byFileName(fp);
                             if (assembler != null) {

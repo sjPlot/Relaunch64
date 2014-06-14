@@ -140,7 +140,7 @@ class Assembler_dreamass implements Assembler
 
     @Override
     public String getDefaultCommandLine(String fp) {
-        return fp + " -I" + SOURCE_DIR + " -o " + OUTPUT_FILE + " " + INPUT_FILE;
+        return fp + " -I" + SOURCE_DIR + " -o " + OUTPUT_FILE_REL + " " + INPUT_FILE_REL;
     }
 
     @Override

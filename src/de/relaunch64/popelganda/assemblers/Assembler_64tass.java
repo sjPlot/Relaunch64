@@ -142,7 +142,7 @@ class Assembler_64tass implements Assembler {
 
     @Override
     public String getDefaultCommandLine(String fp) {
-        return fp + " -C -a -i " + INPUT_FILE + " -o " + OUTPUT_FILE;
+        return fp + " -C -a -i " + INPUT_FILE_REL + " -o " + OUTPUT_FILE_REL;
     }
 
     @Override

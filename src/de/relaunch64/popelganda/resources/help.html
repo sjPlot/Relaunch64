@@ -133,27 +133,27 @@
 	</p>
 	
 	<ul>
-            <li><strong>SOURCEFILE</strong> - The input file, typically the <strong>asm-file</strong>.</li>
+            <li><strong>SOURCEFILE</strong> - The input file, typically the <strong>asm-file</strong> (<code>/path/to/file.asm</code>).</li>
             <li>
                 <strong>RSOURCEFILE</strong> - The input file, typically the <strong>asm-file</strong>. The <em>relative path</em> is used. Since the
-                working directory is set to the source file path, only the file name is used, without path information.
+                working directory is set to the source file path, only the file name is used, without path information (<code>file.asm</code>).
             </li>
-            <li><strong>SOURCEDIR</strong> - The parent directory of the input file, i.e. the directory where the source <strong>asm-file</strong> is located.</li>
-            <li><strong>SOURCENAME</strong> - The input file name, <em>without path and file-extension</em> (alternative to SOURCEFILE).</li>
-            <li><strong>OUTFILE</strong> - The ouput file that will be compiled, typically the <strong>prg-file</strong>.</li>
+            <li><strong>SOURCEDIR</strong> - The parent directory of the input file, i.e. the directory where the source <strong>asm-file</strong> is located (<code>/path/to/</code>).</li>
+            <li><strong>SOURCENAME</strong> - The input file name, <em>without path and file-extension</em> (alternative to SOURCEFILE) (<code>file</code>).</li>
+            <li><strong>OUTFILE</strong> - The ouput file that will be compiled, typically the <strong>prg-file</strong> (<code>/path/to/file.prg</code>).</li>
             <li>
                 <strong>ROUTFILE</strong> - The ouput file that will be compiled, typically the <strong>prg-file</strong>. The <em>relative path</em> is used. Since the
-                working directory is set to the source file path, only the file name is used, without path information.
+                working directory is set to the source file path, only the file name is used, without path information (<code>file.prg</code>).
             </li>
-            <li><strong>OUTNAME</strong> - The ouput file that will be compiled, <em>without path and file-extension</em> (alternative to OUTPUT).</li>
+            <li><strong>OUTNAME</strong> - The ouput file that will be compiled, <em>without path and file-extension</em> (alternative to OUTPUT) (<code>file</code>).</li>
             <li><strong>START</strong> - The start address of the source code. This placeholder can be used for <strong>cruncher and packer</strong>.</li>
             <li>
-                <strong>UNCOMPFILE</strong> - The uncompressed file, used as input file for cruncher or packer. Mostly identical to OUTFILE.
-                <strong>Note:</strong> if OUTFILE is relative (i.e. if you use ROUTFILE), the relative filename will automatically be used for UNCOMPFILE.
+                <strong>UNCOMPFILE</strong> - The uncompressed file, used as input file for cruncher or packer. Mostly identical to OUTFILE (<code>/path/to/file.prg</code>).
+                <strong>Note:</strong> if OUTFILE is relative (i.e. if you use ROUTFILE), the relative filename will automatically be used for UNCOMPFILE (<code>file.prg</code>).
             </li> 
             <li>
-                <strong>COMPFILE</strong> - The compressed output file, used for cruncher or packer.
-                <strong>Note:</strong> if OUTFILE is relative (i.e. if you use ROUTFILE), the relative filename will automatically be used for COMPFILE.
+                <strong>COMPFILE</strong> - The compressed output file, used for cruncher or packer (<code>/path/to/file-compressed.prg</code>).
+                <strong>Note:</strong> if OUTFILE is relative (i.e. if you use ROUTFILE), the relative filename will automatically be used for COMPFILE (<code>file-compressed.prg</code>).
             </li>
 	</ul>
 

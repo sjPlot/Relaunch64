@@ -117,7 +117,7 @@ class Assembler_dasm implements Assembler
 
     @Override
     public String getDefaultCommandLine(String fp) {
-        return fp + " " + INPUT_FILE + " -o" + OUTPUT_FILE;
+        return fp + " " + INPUT_FILE_REL + " -o" + OUTPUT_FILE_REL;
     }
 
     @Override
