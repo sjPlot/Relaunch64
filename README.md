@@ -5,28 +5,29 @@ Relaunch64 3.1.1 (development)
 ----------------
 
 ### New features
-* code-folding
-  - enable or disable code-folding
-  - added automatic code-folding for braces { and } (can be en-/disabled)
-  - added automatic code-folding for labels (can be en-/disabled)
-  - added automatic code-folding for conditional directives (can be en-/disabled)
-  - added automatic code-folding for structures (can be en-/disabled)
 
-* editor
-  - automatic indention works for spaces now, too
-  - added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
-  - slightly changed automatic tab/space indention. if "enter" is hit in between leading tabs/spaces, the indention is adjusted to fit the previous lines.
-  - shift+enter now inserts new line without automatic indention
+#### code-folding
+* enable or disable code-folding
+* added automatic code-folding for braces { and } (can be en-/disabled)
+* added automatic code-folding for labels (can be en-/disabled)
+* added automatic code-folding for conditional directives (can be en-/disabled)
+* added automatic code-folding for structures (can be en-/disabled)
 
-* user scripts
-  - added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
-  - added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names.
+#### editor
+* automatic indention works for spaces now, too
+* added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
+* slightly changed automatic tab/space indention. if "enter" is hit in between leading tabs/spaces, the indention is adjusted to fit the previous lines.
+* shift+enter now inserts new line without automatic indention
 
-* GUI
-  - optionally show file extension in tabs
+#### user scripts
+* added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
+* added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names.
 
-* various
-  - added quick-access to compiler-help (type "ch" into text field on bottom left)
+#### GUI
+* optionally show file extension in tabs
+
+#### various
+* added quick-access to compiler-help (type "ch" into text field on bottom left)
 
 ### Bug fixes
 * tabs on OS X where a bit larger than planned - fixed
@@ -35,51 +36,53 @@ Relaunch64 3.1.1 (development)
 * fixed bug with "insert section" command on OS X
 
 
+
 Relaunch64 3.1.0 (current stable release)
 ----------------
 
 ### New features
-* completely new editor component with new features, such as:
-  - increased performance
-  - much faster syntax highlighting
-  - highlight current edit-line
-  - rectangular text selection (ctrl+mouse)
-  - code-folding
-  - proper text anti-aliasing
-  - improved line number display and handling
-  - changes on color scheme, font and tab size etc. immediately take effect
 
-* improved suggestion / auto-completion popup (ctrl+space and ctrl+shift+space):
-  - local labels outside the scope are not listed (only global labels and labels within scope)
-  - filter suggestion list by typing
-  - editor scrolls to suggestion popup when caret is not visible
-  - suggests all labels, constants, variables (these two go as labels, too), macros and functions.
-  - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
+#### completely new editor component with new features, such as:
+* increased performance
+* much faster syntax highlighting
+* highlight current edit-line
+* rectangular text selection (ctrl+mouse)
+* code-folding
+* proper text anti-aliasing
+* improved line number display and handling
+* changes on color scheme, font and tab size etc. immediately take effect
 
-* improved navigation (jump and goto functions):
-  - all labels, constants, variables (these two go as labels, too), macros and functions are extracted.
-  - hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
-  - jump to next/prev code fold function
+#### improved suggestion / auto-completion popup (ctrl+space and ctrl+shift+space):
+* local labels outside the scope are not listed (only global labels and labels within scope)
+* filter suggestion list by typing
+* editor scrolls to suggestion popup when caret is not visible
+* suggests all labels, constants, variables (these two go as labels, too), macros and functions.
+* hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
 
-* assembler and error handling support
-  - added DASM support
-  - added TMPx support
-  - syntax support for !addr pseudoop in ACME (since 0.95)
-  - improvements with goto error functions, error line parsing for all supported assemblers.
-  - highlight current error line in log
-  - goto error line in source when clicking on highlighted error line in log
+#### improved navigation (jump and goto functions):
+* all labels, constants, variables (these two go as labels, too), macros and functions are extracted.
+* hierarchical namespaces for 64tass, ca65, TMPx, DreamAss (also planned for ACME and KickAss)
+* jump to next/prev code fold function
 
-* GUI
-  - Aqua Look'n'Feel on OS X by default
-  - UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
-  - added apply-button to Other-tab of preference pane
-  - added close-buttons to tabs
-  - ctrl+c can now copy content of Relaunch64-log and assembler-log
+#### assembler and error handling support
+* added DASM support
+* added TMPx support
+* syntax support for !addr pseudoop in ACME (since 0.95)
+* improvements with goto error functions, error line parsing for all supported assemblers.
+* highlight current error line in log
+* goto error line in source when clicking on highlighted error line in log
 
-* various
-  - added alternative syntax highlighting mode (see preferences)
-  - many (code) improvements, code cleanup
-  - slight modification of Popelganda color scheme
+#### GUI
+* Aqua Look'n'Feel on OS X by default
+* UI font scaling to better fit screen resolution (can be switched off via preferences, not supoorted with Aqua-Look'n'Feel)
+* added apply-button to Other-tab of preference pane
+* added close-buttons to tabs
+* ctrl+c can now copy content of Relaunch64-log and assembler-log
+
+#### various
+* added alternative syntax highlighting mode (see preferences)
+* many (code) improvements, code cleanup
+* slight modification of Popelganda color scheme
 
 ### Bug fixes
 * modified files, which should have been saved before compiling, were not checked if they really exist
