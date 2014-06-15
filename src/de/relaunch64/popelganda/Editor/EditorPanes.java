@@ -50,6 +50,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -71,6 +72,7 @@ public class EditorPanes {
     private JTabbedPane tabbedPane = null;
     private JComboBox jComboBoxAssembler = null;
     private JComboBox jComboBoxScripts = null;
+    private JLabel jLabelBufferSize = null;
     private final Relaunch64View mainFrame;
     private final Settings settings;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
@@ -132,10 +134,11 @@ public class EditorPanes {
      * @param tp
      * @param cbc
      * @param cbs
+     * @param lbs
      * @param frame
      * @param set 
      */
-    public EditorPanes(JTabbedPane tp, JComboBox cbc, JComboBox cbs, Relaunch64View frame, Settings set) {
+    public EditorPanes(JTabbedPane tp, JComboBox cbc, JComboBox cbs, JLabel lbs, Relaunch64View frame, Settings set) {
         // reset editor list
         mainFrame = frame;
         settings = set;
@@ -143,6 +146,7 @@ public class EditorPanes {
         tabbedPane = tp;
         jComboBoxAssembler = cbc;
         jComboBoxScripts = cbs;
+        jLabelBufferSize = lbs;
     }
     /**
      * Adds a new editor pane to a new created tab of the tabbed pane.
@@ -207,9 +211,11 @@ public class EditorPanes {
             }
             @Override public void contentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
                 setModified(true);
+                updateLabelBufferSize();
             }
             @Override public void contentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
                 setModified(true);
+                updateLabelBufferSize();
             }
             @Override public void preContentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
             }
@@ -245,6 +251,15 @@ public class EditorPanes {
         });
         // return current count
         return editorPaneArray.size();
+    }
+    public void updateLabelBufferSize() {
+        if (!settings.getShowBufferSize()) {
+            jLabelBufferSize.setText("");
+            return;
+        }
+        int s = getActiveEditorPane().getBufferLength();
+        int l = getActiveEditorPane().getBuffer().getLineCount();
+        jLabelBufferSize.setText((s>0) ? String.format(Locale.ENGLISH, "(%d lines, %.2fKB)", l, (float)s/1024): "");
     }
     /**
      * Get the current column of the caret in 
@@ -1107,6 +1122,8 @@ public class EditorPanes {
                 jComboBoxAssembler.setSelectedIndex(editorPaneArray.get(selectedTab).getEditorPane().getAssembler().getID());
                 // select user script
                 jComboBoxScripts.setSelectedIndex(editorPaneArray.get(selectedTab).getScript());
+                // update kb-size
+                updateLabelBufferSize();
             }
             catch (IllegalArgumentException ex) {
             }

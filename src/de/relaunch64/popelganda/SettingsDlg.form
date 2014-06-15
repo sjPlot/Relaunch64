@@ -678,8 +678,9 @@
                                       <Component id="jLabelRestart2" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jCheckBoxShowExtInTab" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowBufferSize" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="241" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="292" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -702,7 +703,9 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jCheckBoxShowExtInTab" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="144" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxShowBufferSize" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="152" max="32767" attributes="0"/>
                       <Component id="jButtonApplyOther" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -757,6 +760,12 @@
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowExtInTab.text"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxShowExtInTab" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxShowBufferSize">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowBufferSize.text"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxShowBufferSize" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

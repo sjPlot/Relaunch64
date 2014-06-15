@@ -177,7 +177,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // init editorpane-dataclass
-        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, this, settings);
+        editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, jLabelBufferSize, this, settings);
         // check if we have any parmater
         if (params!=null && params.length>0) {
             for (String p : params) openFile(new File(p));
@@ -2095,6 +2095,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel9 = new javax.swing.JLabel();
         jTextFieldGotoLine = new javax.swing.JTextField();
         jComboBoxGoto = new javax.swing.JComboBox();
+        jLabelBufferSize = new javax.swing.JLabel();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2839,12 +2840,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel9.setDisplayedMnemonic('g');
         jLabel9.setLabelFor(jTextFieldGotoLine);
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setToolTipText(resourceMap.getString("jLabel9.toolTipText")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
 
         jTextFieldGotoLine.setColumns(5);
+        jTextFieldGotoLine.setToolTipText(resourceMap.getString("jTextFieldGotoLine.toolTipText")); // NOI18N
         jTextFieldGotoLine.setName("jTextFieldGotoLine"); // NOI18N
 
         jComboBoxGoto.setName("jComboBoxGoto"); // NOI18N
+
+        jLabelBufferSize.setName("jLabelBufferSize"); // NOI18N
 
         org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
@@ -2872,7 +2877,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jLabel8)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(281, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 140, Short.MAX_VALUE)
+                .add(jLabelBufferSize)
+                .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2886,7 +2893,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jTextFieldConvHex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel8)
                     .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxGoto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxGoto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabelBufferSize))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
@@ -2948,6 +2956,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelBufferSize;
     private javax.swing.JMenuItem jMenuItemAllSpaceToTab;
     private javax.swing.JMenuItem jMenuItemAllTabsToSpaces;
     private javax.swing.JMenuItem jMenuItemCollapseAllFolds;
