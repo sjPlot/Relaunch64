@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
  */
 public class RL64ListItem {
 
-    private String text;
+    private final String text;
     private final ImageIcon icon;
     private final int linenumber;
     private final File file;
@@ -42,9 +42,6 @@ public class RL64ListItem {
 
     public String getText() {
         return text;
-    }
-    public void setText(String text) {
-        this.text = text;
     }
     public ImageIcon getIcon() {
         return icon;

@@ -38,9 +38,13 @@ public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL6
     }
     @Override
     public Component getListCellRendererComponent(JList<? extends RL64ListItem> list, RL64ListItem value, int index, boolean isSelected, boolean cellHasFocus) {
+        // text of list item
         setText(value.getText());
+        // icon of list item, may be null if no item needed
         setIcon(value.getIcon());
+        // headings use bold font, normal entries plain
         setFont(settings.getMainFont().deriveFont(value.isHeader() ? Font.BOLD : Font.PLAIN));
+        // normal entries have small padding on left
         setBorder(value.isHeader() ? null : new MatteBorder(0, 10, 0, 0, Color.white));
         
         if (isSelected) {
