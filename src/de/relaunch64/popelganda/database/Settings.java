@@ -94,7 +94,6 @@ public class Settings {
     private static final String SETTING_SAVEONCOMPILE = "saveoncompile";
     private static final String SETTING_NIMBUS_ON_OSX = "nimbusonosx";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
-    private static final String SETTING_BOTHLOGRUNSPLITLAYOUT = "bothlogrubsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
     private static final String SETTING_LINE_NUMBER_ALIGNMENT = "linenumberalignment";
     private static final String SETTING_REOPEN_FILES_ON_STARTUP = "rofstartup";
@@ -107,10 +106,6 @@ public class Settings {
     private final File filepath;
     public static final int FONTNAME = 1;
     public static final int FONTSIZE = 2;
-
-    public static final int SPLITPANE_LOG = 1;
-    public static final int SPLITPANE_RUN = 2;
-    public static final int SPLITPANE_BOTHLOGRUN = 3;
 
     /**
      * XML-Document that stores the settings-information
@@ -374,13 +369,6 @@ public class Settings {
             // create a filepath-element
             Element el = new Element(SETTING_LOGSPLITLAYOUT);
             el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null==root.getChild(SETTING_BOTHLOGRUNSPLITLAYOUT)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_BOTHLOGRUNSPLITLAYOUT);
-            el.setText(String.valueOf(JSplitPane.VERTICAL_SPLIT));
             // and add it to the document
             root.addContent(el);
         }
@@ -934,18 +922,9 @@ public class Settings {
         el.setText(f.getName());
         el.setAttribute("size", String.valueOf(f.getSize()));
     }
-    public int getSearchFrameSplitLayout(int splitpane) {
-        String splitname = SETTING_LOGSPLITLAYOUT;
-        switch (splitpane) {
-            case SPLITPANE_LOG:
-                splitname = SETTING_LOGSPLITLAYOUT;
-                break;
-            case SPLITPANE_BOTHLOGRUN:
-                splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;
-                break;
-        }
+    public int getLogSplitLayout() {
         // get attribute which stores last used desktop number
-        Element el = root.getChild(splitname);
+        Element el = root.getChild(SETTING_LOGSPLITLAYOUT);
         // check for valid value
         if (el!=null) {
             try {
@@ -958,18 +937,10 @@ public class Settings {
         }
         return JSplitPane.HORIZONTAL_SPLIT;
     }
-    public void setSearchFrameSplitLayout(int val, int splitpane) {
-        String splitname = SETTING_LOGSPLITLAYOUT;
-        switch (splitpane) {
-            case SPLITPANE_LOG:
-                splitname = SETTING_LOGSPLITLAYOUT;
-                break;
-            case SPLITPANE_BOTHLOGRUN:
-                splitname = SETTING_BOTHLOGRUNSPLITLAYOUT;
-        }
-        Element el = root.getChild(splitname);
+    public void setLogSplitLayout(int val) {
+        Element el = root.getChild(SETTING_LOGSPLITLAYOUT);
         if (null==el) {
-            el = new Element(splitname);
+            el = new Element(SETTING_LOGSPLITLAYOUT);
             root.addContent(el);
         }
         el.setText(String.valueOf(val));

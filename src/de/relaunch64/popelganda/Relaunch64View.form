@@ -22,7 +22,8 @@
       <SubComponents>
         <Container class="javax.swing.JSplitPane" name="jSplitPane1">
           <Properties>
-            <Property name="dividerLocation" type="int" value="480"/>
+            <Property name="dividerLocation" type="int" value="350"/>
+            <Property name="orientation" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="jSplitPane1" noResource="true"/>
             <Property name="oneTouchExpandable" type="boolean" value="true"/>
           </Properties>
@@ -42,208 +43,340 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanelFind" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jPanelReplace" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jTabbedPane1" alignment="0" pref="479" max="32767" attributes="0"/>
+                      <Component id="jSplitPane3" alignment="1" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTabbedPane1" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jPanelFind" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jPanelReplace" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jSplitPane3" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+                <Container class="javax.swing.JSplitPane" name="jSplitPane3">
                   <Properties>
-                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[100, 100]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="jTabbedPane1" noResource="true"/>
-                  </Properties>
-                  <AccessibilityProperties>
-                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" resourceKey="jTabbedPane1.AccessibleContext.accessibleName"/>
-                  </AccessibilityProperties>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
-                </Container>
-                <Container class="javax.swing.JPanel" name="jPanelFind">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="jPanelFind" noResource="true"/>
+                    <Property name="dividerLocation" type="int" value="550"/>
+                    <Property name="name" type="java.lang.String" value="jSplitPane3" noResource="true"/>
+                    <Property name="oneTouchExpandable" type="boolean" value="true"/>
                   </Properties>
 
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
+                  <SubComponents>
+                    <Container class="javax.swing.JPanel" name="jPanel7">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jPanel7" noResource="true"/>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
+                          <JSplitPaneConstraints position="left"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace min="0" pref="549" max="32767" attributes="0"/>
+                              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                  <Component id="jTabbedPane1" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jPanelFind" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jPanelReplace" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace min="0" pref="347" max="32767" attributes="0"/>
+                              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jTabbedPane1" pref="242" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                                      <Component id="jPanelFind" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                                      <Component id="jPanelReplace" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+                          <Properties>
+                            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                              <Dimension value="[100, 100]"/>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="jTabbedPane1" noResource="true"/>
+                          </Properties>
+                          <AccessibilityProperties>
+                            <Property name="AccessibleContext.accessibleName" type="java.lang.String" resourceKey="jTabbedPane1.AccessibleContext.accessibleName"/>
+                          </AccessibilityProperties>
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+                        </Container>
+                        <Container class="javax.swing.JPanel" name="jPanelFind">
+                          <Properties>
+                            <Property name="name" type="java.lang.String" value="jPanelFind" noResource="true"/>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="jCheckBoxRegEx" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jCheckBoxWholeWord" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jCheckBoxMatchCase" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="jComboBoxFind" max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jButtonFindPrev" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jButtonFindNext" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="jCheckBoxRegEx" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="2" attributes="0">
+                                          <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jButtonFindPrev" alignment="2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jButtonFindNext" alignment="2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jComboBoxFind" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jCheckBoxWholeWord" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jCheckBoxMatchCase" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jCheckBoxRegEx" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jCheckBoxWholeWord" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jCheckBoxMatchCase" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="jComboBoxFind" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButtonFindPrev" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButtonFindNext" min="-2" max="-2" attributes="0"/>
-                                  </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButtonFindPrev" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButtonFindNext" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBoxFind" alignment="2" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jCheckBoxRegEx" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jCheckBoxWholeWord" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jCheckBoxMatchCase" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JButton" name="jButtonFindPrev">
-                      <Properties>
-                        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                          <action class="de.relaunch64.popelganda.Relaunch64View" id="findPrev" methodName="findPrev"/>
-                        </Property>
-                        <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonFindPrev.icon"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jButtonFindPrev.text"/>
-                        <Property name="name" type="java.lang.String" value="jButtonFindPrev" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="jButtonFindNext">
-                      <Properties>
-                        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                          <action class="de.relaunch64.popelganda.Relaunch64View" id="findNext" methodName="findNext"/>
-                        </Property>
-                        <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonFindNext.icon"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jButtonFindNext.text"/>
-                        <Property name="name" type="java.lang.String" value="jButtonFindNext" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel5">
-                      <Properties>
-                        <Property name="displayedMnemonic" type="int" value="105"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
-                        <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JCheckBox" name="jCheckBoxRegEx">
-                      <Properties>
-                        <Property name="mnemonic" type="int" value="120"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jCheckBoxRegEx.text"/>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxRegEx.toolTipText"/>
-                        <Property name="name" type="java.lang.String" value="jCheckBoxRegEx" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JCheckBox" name="jCheckBoxWholeWord">
-                      <Properties>
-                        <Property name="mnemonic" type="int" value="119"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jCheckBoxWholeWord.text"/>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxWholeWord.toolTipText"/>
-                        <Property name="name" type="java.lang.String" value="jCheckBoxWholeWord" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JCheckBox" name="jCheckBoxMatchCase">
-                      <Properties>
-                        <Property name="mnemonic" type="int" value="99"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jCheckBoxMatchCase.text"/>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxMatchCase.toolTipText"/>
-                        <Property name="name" type="java.lang.String" value="jCheckBoxMatchCase" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JComboBox" name="jComboBoxFind">
-                      <Properties>
-                        <Property name="editable" type="boolean" value="true"/>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxFind.toolTipText"/>
-                        <Property name="name" type="java.lang.String" value="jComboBoxFind" noResource="true"/>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="jPanelReplace">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="jPanelReplace" noResource="true"/>
-                  </Properties>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="javax.swing.JButton" name="jButtonFindPrev">
+                              <Properties>
+                                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                  <action class="de.relaunch64.popelganda.Relaunch64View" id="findPrev" methodName="findPrev"/>
+                                </Property>
+                                <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonFindPrev.icon"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jButtonFindPrev.text"/>
+                                <Property name="name" type="java.lang.String" value="jButtonFindPrev" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JButton" name="jButtonFindNext">
+                              <Properties>
+                                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                  <action class="de.relaunch64.popelganda.Relaunch64View" id="findNext" methodName="findNext"/>
+                                </Property>
+                                <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonFindNext.icon"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jButtonFindNext.text"/>
+                                <Property name="name" type="java.lang.String" value="jButtonFindNext" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="jLabel5">
+                              <Properties>
+                                <Property name="displayedMnemonic" type="int" value="105"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
+                                <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JCheckBox" name="jCheckBoxRegEx">
+                              <Properties>
+                                <Property name="mnemonic" type="int" value="120"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxRegEx.text"/>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxRegEx.toolTipText"/>
+                                <Property name="name" type="java.lang.String" value="jCheckBoxRegEx" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JCheckBox" name="jCheckBoxWholeWord">
+                              <Properties>
+                                <Property name="mnemonic" type="int" value="119"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxWholeWord.text"/>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxWholeWord.toolTipText"/>
+                                <Property name="name" type="java.lang.String" value="jCheckBoxWholeWord" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JCheckBox" name="jCheckBoxMatchCase">
+                              <Properties>
+                                <Property name="mnemonic" type="int" value="99"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxMatchCase.text"/>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxMatchCase.toolTipText"/>
+                                <Property name="name" type="java.lang.String" value="jCheckBoxMatchCase" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JComboBox" name="jComboBoxFind">
+                              <Properties>
+                                <Property name="editable" type="boolean" value="true"/>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxFind.toolTipText"/>
+                                <Property name="name" type="java.lang.String" value="jComboBoxFind" noResource="true"/>
+                              </Properties>
+                            </Component>
+                          </SubComponents>
+                        </Container>
+                        <Container class="javax.swing.JPanel" name="jPanelReplace">
+                          <Properties>
+                            <Property name="name" type="java.lang.String" value="jPanelReplace" noResource="true"/>
+                          </Properties>
 
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextFieldReplace" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButtonReplace" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jTextFieldReplace" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButtonReplace" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="2" attributes="0">
+                                      <Component id="jTextFieldReplace" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel4" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButtonReplace" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="javax.swing.JLabel" name="jLabel4">
+                              <Properties>
+                                <Property name="displayedMnemonic" type="int" value="82"/>
+                                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                  <ComponentRef name="jTextFieldReplace"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
+                                <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="jTextFieldReplace">
+                              <Properties>
+                                <Property name="toolTipText" type="java.lang.String" resourceKey="jTextFieldReplace.toolTipText"/>
+                                <Property name="name" type="java.lang.String" value="jTextFieldReplace" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JButton" name="jButtonReplace">
+                              <Properties>
+                                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                  <action class="de.relaunch64.popelganda.Relaunch64View" id="replaceTerm" methodName="replaceTerm"/>
+                                </Property>
+                                <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonReplace.icon"/>
+                                <Property name="text" type="java.lang.String" resourceKey="jButtonReplace.text"/>
+                                <Property name="name" type="java.lang.String" value="jButtonReplace" noResource="true"/>
+                              </Properties>
+                            </Component>
+                          </SubComponents>
+                        </Container>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="jPanel8">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jPanel8" noResource="true"/>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
+                          <JSplitPaneConstraints position="right"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane1" alignment="0" pref="172" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jTextFieldGoto" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jButtonRefreshGoto" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="2" attributes="0">
-                              <Component id="jTextFieldReplace" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel4" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButtonReplace" alignment="2" min="-2" max="-2" attributes="0"/>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jScrollPane1" pref="310" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jTextFieldGoto" max="32767" attributes="0"/>
+                                      <Component id="jButtonRefreshGoto" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JLabel" name="jLabel4">
-                      <Properties>
-                        <Property name="displayedMnemonic" type="int" value="82"/>
-                        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                          <ComponentRef name="jTextFieldReplace"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
-                        <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="jTextFieldReplace">
-                      <Properties>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="jTextFieldReplace.toolTipText"/>
-                        <Property name="name" type="java.lang.String" value="jTextFieldReplace" noResource="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="jButtonReplace">
-                      <Properties>
-                        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                          <action class="de.relaunch64.popelganda.Relaunch64View" id="replaceTerm" methodName="replaceTerm"/>
-                        </Property>
-                        <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonReplace.icon"/>
-                        <Property name="text" type="java.lang.String" resourceKey="jButtonReplace.text"/>
-                        <Property name="name" type="java.lang.String" value="jButtonReplace" noResource="true"/>
-                      </Properties>
-                    </Component>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+                          <Properties>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                                <MatteColorBorder bottom="1" left="0" right="0" top="1">
+                                  <Property name="color" resourceKey="jScrollPane1.border.matteColor"/>
+                                </MatteColorBorder>
+                              </Border>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                          </AuxValues>
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                          <SubComponents>
+                            <Component class="javax.swing.JList" name="jListGoto">
+                              <Properties>
+                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                    <TitledBorder title="&lt;User Code&gt;">
+                                      <Connection PropertyName="titleX" code="ConstantsR64.CB_GOTO_DEFAULT_STRING" type="code"/>
+                                    </TitledBorder>
+                                  </Border>
+                                </Property>
+                                <Property name="name" type="java.lang.String" value="jListGoto" noResource="true"/>
+                              </Properties>
+                            </Component>
+                          </SubComponents>
+                        </Container>
+                        <Component class="javax.swing.JTextField" name="jTextFieldGoto">
+                          <Properties>
+                            <Property name="toolTipText" type="java.lang.String" resourceKey="jTextFieldGoto.toolTipText"/>
+                            <Property name="name" type="java.lang.String" value="jTextFieldGoto" noResource="true"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="jButtonRefreshGoto">
+                          <Properties>
+                            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                              <action class="de.relaunch64.popelganda.Relaunch64View" id="refreshGotoList" methodName="refreshGotoList"/>
+                            </Property>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="null"/>
+                            </Property>
+                            <Property name="borderPainted" type="boolean" value="false"/>
+                            <Property name="contentAreaFilled" type="boolean" value="false"/>
+                            <Property name="name" type="java.lang.String" value="jButtonRefreshGoto" noResource="true"/>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
               </SubComponents>
@@ -261,275 +394,158 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="1" max="32767" attributes="0"/>
+                      <Component id="jTabbedPaneLogs" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jComboBoxRunScripts" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jTabbedPaneLogs" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxRunScripts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Container class="javax.swing.JSplitPane" name="jSplitPane2">
+                <Container class="javax.swing.JTabbedPane" name="jTabbedPaneLogs">
                   <Properties>
-                    <Property name="orientation" type="int" value="0"/>
-                    <Property name="name" type="java.lang.String" value="jSplitPane2" noResource="true"/>
-                    <Property name="oneTouchExpandable" type="boolean" value="true"/>
+                    <Property name="name" type="java.lang.String" value="jTabbedPaneLogs" noResource="true"/>
                   </Properties>
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                   <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jPanel3">
+                    <Container class="javax.swing.JPanel" name="jPanel6">
                       <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
+                        <Property name="name" type="java.lang.String" value="jPanel6" noResource="true"/>
                       </Properties>
                       <Constraints>
-                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
-                          <JSplitPaneConstraints position="top"/>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                          <JTabbedPaneConstraints tabName="Relaunch64 log">
+                            <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel6.TabConstraints.tabTitle"/>
+                          </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
 
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPanel9" alignment="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="723" max="32767" attributes="0"/>
+                              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane2" alignment="0" pref="723" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="82" max="32767" attributes="0"/>
+                              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane2" alignment="0" pref="82" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Container class="javax.swing.JPanel" name="jPanel9">
+                        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
                           <Properties>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                <TitledBorder title="Compile and Run">
-                                  <Property name="titleX" resourceKey="jPanel9.border.title"/>
-                                </TitledBorder>
+                              <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                                <MatteColorBorder bottom="1" left="0" right="0" top="0"/>
                               </Border>
                             </Property>
-                            <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
+                            <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
                           </Properties>
+                          <AuxValues>
+                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                          </AuxValues>
 
-                          <Layout>
-                            <DimensionLayout dim="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jComboBoxRunScripts" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jComboBoxAssemblers" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace pref="92" max="32767" attributes="0"/>
-                                      <Component id="jButtonRunScript" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                            </DimensionLayout>
-                            <DimensionLayout dim="1">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jComboBoxRunScripts" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButtonRunScript" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jComboBoxAssemblers" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                            </DimensionLayout>
-                          </Layout>
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JComboBox" name="jComboBoxRunScripts">
+                            <Component class="javax.swing.JTextArea" name="jTextAreaLog">
                               <Properties>
-                                <Property name="name" type="java.lang.String" value="jComboBoxRunScripts" noResource="true"/>
-                              </Properties>
-                            </Component>
-                            <Component class="javax.swing.JButton" name="jButtonRunScript">
-                              <Properties>
-                                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                                  <action class="de.relaunch64.popelganda.Relaunch64View" id="runScript" methodName="runScript"/>
-                                </Property>
-                                <Property name="name" type="java.lang.String" value="jButtonRunScript" noResource="true"/>
-                              </Properties>
-                            </Component>
-                            <Component class="javax.swing.JComboBox" name="jComboBoxAssemblers">
-                              <Properties>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                  <Connection code="new javax.swing.DefaultComboBoxModel(Assemblers.names())" type="code"/>
-                                </Property>
-                                <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxAssemblers.toolTipText"/>
-                                <Property name="name" type="java.lang.String" value="jComboBoxAssemblers" noResource="true"/>
-                              </Properties>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel1">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
-                                <Property name="toolTipText" type="java.lang.String" resourceKey="jLabel1.toolTipText"/>
-                                <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
-                              </Properties>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel2">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
-                                <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
+                                <Property name="editable" type="boolean" value="false"/>
+                                <Property name="wrapStyleWord" type="boolean" value="true"/>
+                                <Property name="name" type="java.lang.String" value="jTextAreaLog" noResource="true"/>
                               </Properties>
                             </Component>
                           </SubComponents>
                         </Container>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel4">
+                    <Container class="javax.swing.JPanel" name="jPanel5">
                       <Properties>
-                        <Property name="name" type="java.lang.String" value="jPanel4" noResource="true"/>
+                        <Property name="name" type="java.lang.String" value="jPanel5" noResource="true"/>
                       </Properties>
                       <Constraints>
-                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
-                          <JSplitPaneConstraints position="right"/>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                          <JTabbedPaneConstraints tabName="Assembler log">
+                            <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel5.TabConstraints.tabTitle"/>
+                          </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
 
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTabbedPaneLogs" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jScrollPane3" alignment="0" pref="723" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jTabbedPaneLogs" max="32767" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jScrollPane3" alignment="0" pref="82" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Container class="javax.swing.JTabbedPane" name="jTabbedPaneLogs">
+                        <Container class="javax.swing.JScrollPane" name="jScrollPane3">
                           <Properties>
-                            <Property name="name" type="java.lang.String" value="jTabbedPaneLogs" noResource="true"/>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                                <MatteColorBorder bottom="1" left="0" right="0" top="0"/>
+                              </Border>
+                            </Property>
+                            <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
                           </Properties>
+                          <AuxValues>
+                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                          </AuxValues>
 
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Container class="javax.swing.JPanel" name="jPanel6">
+                            <Component class="javax.swing.JTextArea" name="jTextAreaCompilerOutput">
                               <Properties>
-                                <Property name="name" type="java.lang.String" value="jPanel6" noResource="true"/>
+                                <Property name="editable" type="boolean" value="false"/>
+                                <Property name="name" type="java.lang.String" value="jTextAreaCompilerOutput" noResource="true"/>
                               </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                  <JTabbedPaneConstraints tabName="Relaunch64 log">
-                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel6.TabConstraints.tabTitle"/>
-                                  </JTabbedPaneConstraints>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="360" max="32767" attributes="0"/>
-                                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane2" alignment="0" pref="360" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="419" max="32767" attributes="0"/>
-                                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane2" alignment="0" pref="419" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                              </Layout>
-                              <SubComponents>
-                                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-                                  <Properties>
-                                    <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
-                                  </Properties>
-                                  <AuxValues>
-                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                                  </AuxValues>
-
-                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JTextArea" name="jTextAreaLog">
-                                      <Properties>
-                                        <Property name="editable" type="boolean" value="false"/>
-                                        <Property name="wrapStyleWord" type="boolean" value="true"/>
-                                        <Property name="name" type="java.lang.String" value="jTextAreaLog" noResource="true"/>
-                                      </Properties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                              </SubComponents>
-                            </Container>
-                            <Container class="javax.swing.JPanel" name="jPanel5">
-                              <Properties>
-                                <Property name="name" type="java.lang.String" value="jPanel5" noResource="true"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                  <JTabbedPaneConstraints tabName="Assembler log">
-                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel5.TabConstraints.tabTitle"/>
-                                  </JTabbedPaneConstraints>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" alignment="0" pref="360" max="32767" attributes="0"/>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" alignment="0" pref="419" max="32767" attributes="0"/>
-                                  </Group>
-                                </DimensionLayout>
-                              </Layout>
-                              <SubComponents>
-                                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
-                                  <Properties>
-                                    <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
-                                  </Properties>
-                                  <AuxValues>
-                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                                  </AuxValues>
-
-                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JTextArea" name="jTextAreaCompilerOutput">
-                                      <Properties>
-                                        <Property name="editable" type="boolean" value="false"/>
-                                        <Property name="name" type="java.lang.String" value="jTextAreaCompilerOutput" noResource="true"/>
-                                      </Properties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                              </SubComponents>
-                            </Container>
+                            </Component>
                           </SubComponents>
                         </Container>
                       </SubComponents>
                     </Container>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JComboBox" name="jComboBoxRunScripts">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jComboBoxRunScripts" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+                    <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -1220,15 +1236,6 @@
                 <Property name="name" type="java.lang.String" value="jSeparator19" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="switchBothMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="switchBothPosition" methodName="switchBothPosition"/>
-                </Property>
-                <Property name="toolTipText" type="java.lang.String" resourceKey="switchBothMenuItem.toolTipText"/>
-                <Property name="name" type="java.lang.String" value="switchBothMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="switchLogPosMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1316,17 +1323,15 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Component id="statusPanelSeparator" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
-              </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldGotoLine" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jComboBoxGoto" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="jComboBoxAssemblers" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -1339,7 +1344,7 @@
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldConvBin" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="140" max="32767" attributes="0"/>
+                  <EmptySpace pref="100" max="32767" attributes="0"/>
                   <Component id="jLabelBufferSize" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -1347,7 +1352,8 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
                       <Component id="jLabel9" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldGotoLine" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -1357,25 +1363,16 @@
                       <Component id="jTextFieldConvHex" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldConvBin" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="jComboBoxGoto" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabelBufferSize" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboBoxAssemblers" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="statusPanelSeparator" min="-2" pref="0" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JSeparator" name="statusPanelSeparator">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="statusPanelSeparator" noResource="true"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
@@ -1430,14 +1427,25 @@
             <Property name="name" type="java.lang.String" value="jTextFieldGotoLine" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBoxGoto">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="jComboBoxGoto" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabelBufferSize">
           <Properties>
             <Property name="name" type="java.lang.String" value="jLabelBufferSize" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jLabel1.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jComboBoxAssemblers">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(Assemblers.names())" type="code"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxAssemblers.toolTipText"/>
+            <Property name="name" type="java.lang.String" value="jComboBoxAssemblers" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -1464,6 +1472,6 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,124,0,0,3,85"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,38,0,0,2,-38"/>
   </AuxValues>
 </Form>

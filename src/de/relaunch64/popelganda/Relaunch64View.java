@@ -48,7 +48,6 @@ import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -57,13 +56,13 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -81,20 +80,22 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
@@ -114,13 +115,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final EditorPanes editorPanes;
     private final ErrorHandler errorHandler;
     private final FindReplace findReplace;
-    private final List<Integer> comboBoxHeadings = new ArrayList<>();
-    private final List<Integer> comboBoxHeadingsEditorPaneIndex = new ArrayList<>();
+    private final DefaultListModel<RL64ListItem> listGotoModel = new DefaultListModel<>();
+    private int listGotoIndex = -1;
     private final static int GOTO_LABEL = 1;
     private final static int GOTO_SECTION = 2;
     private final static int GOTO_FUNCTION = 3;
     private final static int GOTO_MACRO = 4;
-    private int comboBoxGotoIndex = -1;
     private final Settings settings;
     private final FindTerms findTerms;
     private final CustomScripts customScripts;
@@ -151,15 +151,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jTabbedPane1.setBorder(null);
             jTabbedPaneLogs.setBorder(null);
             jSplitPane1.setBorder(null);
-            jSplitPane2.setBorder(null);
+            jSplitPane3.setBorder(null);
             jScrollPane2.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPane3.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
-            jPanel3.setBorder(null);
-            jPanel9.setBorder(new javax.swing.border.TitledBorder(UIManager.getBorder("TitledBorder.aquaVariant"), resourceMap.getString("jPanel9.border.title")));
+            jScrollPane1.setBorder(new javax.swing.border.MatteBorder(0, 0, 1, 0, Color.lightGray));
+            jListGoto.setBorder(new javax.swing.border.TitledBorder(UIManager.getBorder("TitledBorder.aquaVariant"), ConstantsR64.CB_GOTO_DEFAULT_STRING));
         }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
+        jButtonRefreshGoto.setEnabled(false);            
         // set compiler log font to monospace
         javax.swing.UIDefaults uid = UIManager.getLookAndFeelDefaults();
         Object defaultFont = uid.get("defaultFont");
@@ -256,8 +257,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      * Init the comboboxes with default values.
      */
     private void initComboBoxes() {
-        jSplitPane2.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN));
-        jSplitPane1.setOrientation(settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG));
+        jSplitPane1.setOrientation(settings.getLogSplitLayout());
         try {
             // init scripts
             initScripts();
@@ -265,11 +265,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jComboBoxAssemblers.setSelectedIndex(settings.getPreferredAssembler().getID());
             // select last used script
             jComboBoxRunScripts.setSelectedIndex(settings.getLastUserScript());
-            // init goto comboboxes
-            jComboBoxGoto.removeAllItems();
-            jComboBoxGoto.addItem(ConstantsR64.CB_GOTO_DEFAULT_STRING);
-            jComboBoxGoto.setRenderer(new ComboBoxRenderer());
-            jComboBoxGoto.setMaximumRowCount(20);
+            // add custom renderer
+            jListGoto.setModel(listGotoModel);
+            jListGoto.getSelectionModel().addListSelectionListener(new SelectionListener(jListGoto));
+            jListGoto.setCellRenderer(new RL64ListCellRenderer(settings));
         }
         catch (IllegalArgumentException ex) {
         }
@@ -330,160 +329,49 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 updateRecentDoc();
             }
         });
-        jComboBoxGoto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            boolean cbCancelled = false;
-            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                jComboBoxGoto.removeAllItems();
-                String header = ConstantsR64.CB_GOTO_DEFAULT_STRING;
-                // add all names to combobox, depending on which menu item was selected
-                switch (comboBoxGotoIndex) {
-                    case GOTO_FUNCTION:
-                        header = ConstantsR64.CB_GOTO_FUNCTION_STRING;
-                        break;
-                    case GOTO_SECTION:
-                        header = ConstantsR64.CB_GOTO_SECTION_STRING;
-                        break;
-                    case GOTO_LABEL:
-                        header = ConstantsR64.CB_GOTO_LABEL_STRING;
-                        break;
-                    case GOTO_MACRO:
-                        header = ConstantsR64.CB_GOTO_MACRO_STRING;
-                        break;
+        jTextFieldGoto.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+                // if a navigation-key (arrows, page-down/up, home etc.) is pressed,
+                // we assume a new item-selection, so behave like on a mouse-click and
+                // filter the links
+                int selected = -1;
+                if (KeyEvent.VK_UP==evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex()-1;
+                    if (selected<0) selected = listGotoModel.getSize()-1;
                 }
-                // add first element as "title" of combo box
-                jComboBoxGoto.addItem(header);
-                // check if we have any valid goto-menu-call
-                if (comboBoxGotoIndex<1) return;
-                // create a list with index numbers of tabs
-                // (i.e. all index numbers of opened source code tabs)
-                ArrayList<Integer> eps = new ArrayList<>();
-                // here we store all items that should be added to the combo box
-                // we don't add items directly to the cb, because labels / section names
-                // may appear multiple times over all source codes, thus scrolling combo
-                // box with keys won't work. We check this array list before adding items,
-                // and if it is a multiple occurence, we add a suffix to avoid equal
-                // item names in cb.
-                ArrayList<String> completeComboBoxList = new ArrayList<>();
-                // add current activated source code index first
-                eps.add(jTabbedPane1.getSelectedIndex());
-                // than add indices of remaining tabs
-                for (int i=0; i<editorPanes.getCount(); i++) {
-                    if (!eps.contains(i)) eps.add(i);
+                else if (KeyEvent.VK_DOWN==evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex()+1;
+                    if (selected>=listGotoModel.getSize()) selected = 0;
                 }
-                // clear headings
-                comboBoxHeadings.clear();
-                // clear heading related editor pane indices
-                comboBoxHeadingsEditorPaneIndex.clear();
-                // go through all opened editorpanes
-                // eps.stream().forEach((epIndex) -> {
-                for (int epIndex : eps) {
-                    // extract and retrieve sections from each editor pane
-                    ArrayList<String> token;
-                    int doubleCounter = 2;
-                    switch (comboBoxGotoIndex) {
-                        case GOTO_SECTION:
-                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getActiveAssembler().getLineComment());
-                            break;
-                        case GOTO_LABEL:
-                            token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).labels);
-                            break;
-                        case GOTO_FUNCTION:
-                            token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).functions);
-                            break;
-                        case GOTO_MACRO:
-                            token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).macros);
-                            break;
-                        default:
-                            token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getActiveAssembler().getLineComment());
-                            break;
-                    }
-                    // check if anything found
-                    if (token!=null && !token.isEmpty()) {
-                        // add item index of header to list. we need this for the custom cell renderer
-                        comboBoxHeadings.add(completeComboBoxList.size()+1);
-                        // add index of related editor pane
-                        comboBoxHeadingsEditorPaneIndex.add(epIndex);
-                        // if yes, add file name of editor pane as "heading" for following sections
-                        completeComboBoxList.add(FileTools.getFileName(editorPanes.getEditorPaneProperties(epIndex).getFilePath()));
-                        // sort list
-                        Collections.sort(token);
-                        // add all found section strings to combo box
-                        for (String arg : token) {
-                            // items have a small margin, headings do not
-                            String item = "   "+arg;
-                            if (completeComboBoxList.contains(item)) {
-                                // we have found multiple occurence of equal item names,
-                                // so we add a suffix to it.
-                                item = item+" [#"+String.valueOf(doubleCounter)+"]";
-                                doubleCounter++;
-                            }
-                            // add item to list
-                            completeComboBoxList.add(item);
+                else if (KeyEvent.VK_HOME==evt.getKeyCode()) {
+                    selected = 0;
+                }
+                else if (KeyEvent.VK_END==evt.getKeyCode()) {
+                    selected = listGotoModel.getSize()-1;
+                }
+                else if (KeyEvent.VK_PAGE_DOWN==evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex() + (jListGoto.getLastVisibleIndex()-jListGoto.getFirstVisibleIndex());
+                    if (selected>=listGotoModel.getSize()) selected = listGotoModel.getSize()-1;
+                }
+                else if (KeyEvent.VK_PAGE_UP==evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex() - (jListGoto.getLastVisibleIndex()-jListGoto.getFirstVisibleIndex());
+                    if (selected<0) selected = 0;
+                }
+                else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                    String text = jTextFieldGoto.getText();
+                    for (int i=listGotoModel.getSize()-1; i>=0; i--) {
+                        RL64ListItem item = listGotoModel.get(i);
+                        if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader()) {
+                            listGotoModel.remove(i);
                         }
                     }
+                    jButtonRefreshGoto.setEnabled(true);
+                    evt.consume();
                 }
-                // finally, add all items to combo box
-                for (String arg : completeComboBoxList) jComboBoxGoto.addItem(arg);
-                /**
-                 * JDK 8 Lamda
-                 */
-//                completeComboBoxList.stream().forEach((arg) -> {
-//                    jComboBoxGoto.addItem(arg);
-//                });
-            }
-            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                // check if combo box was cancelled
-                if (cbCancelled) {
-                    // if yes, reset flag and return
-                    cbCancelled = false;
-                    return;
+                if (selected!=-1) {
+                    jListGoto.setSelectedIndex(selected);
                 }
-                // retrieve index of selected item
-                int selectedIndex = jComboBoxGoto.getSelectedIndex();
-                // check if > 0 and key was return
-                if (selectedIndex>0) {
-                    int index = 0;
-                    // retrieve index position of selectedIndex within combo box heading. by this, we 
-                    // get the source tab where the section is located
-                    for (int i : comboBoxHeadings) if (i<=selectedIndex) index++;
-                    // NOTE: The below line is the lamba-equivalent to the above line
-                    /**
-                     * JDK 8 Lamda
-                     */
-                    // index = comboBoxHeadings.stream().filter((i) -> (i<=selectedIndex)).map((_item) -> 1).reduce(index, Integer::sum);
-                    // select specific tab where selected section is
-                    jTabbedPane1.setSelectedIndex(comboBoxHeadingsEditorPaneIndex.get(index-1));
-                    // set focus
-                    editorPanes.setFocus();
-                    // retrieve values
-                    String item = jComboBoxGoto.getSelectedItem().toString().trim();
-                    int epIndex = comboBoxHeadingsEditorPaneIndex.get(index-1);
-                    // in case we have equal items multiple times (because they're spread
-                    // over different source tabs), we number them in order to let the combo box
-                    // work. Now we must remove this index.
-                    item = item.replaceAll(" \\[#\\d+\\]", "");
-                    // select where to go...
-                    switch (comboBoxGotoIndex) {
-                        case GOTO_FUNCTION:
-                            // goto function
-                            editorPanes.gotoFunction(item, epIndex);
-                            break;
-                        case GOTO_SECTION:
-                            // goto section
-                            editorPanes.gotoSection(item, epIndex);
-                            break;
-                        case GOTO_LABEL:
-                            // goto label
-                            editorPanes.gotoLabel(item, epIndex);
-                        case GOTO_MACRO:
-                            // goto label
-                            editorPanes.gotoMacro(item, epIndex);
-                            break;
-                    }
-                }
-            }
-            @Override public void popupMenuCanceled(PopupMenuEvent e) {
-                cbCancelled = true;
+                
             }
         });
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -814,6 +702,92 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         });
     }
+    private class SelectionListener implements ListSelectionListener {
+        JList list;
+        SelectionListener(JList list) {
+            this.list = list;
+        }
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            // get list selection model
+            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+            // set value-adjusting to true, so we don't fire multiple value-changed events...
+            lsm.setValueIsAdjusting(true);
+            // make selection visible
+            list.ensureIndexIsVisible(jListGoto.getSelectedIndex());
+            // goto token
+            gotoTokenFromList();
+        }
+    }
+    protected void updateListContent(int gotoIndex) {
+        updateListContent(gotoIndex, true);
+    }
+    public void updateListContent() {
+        updateListContent(listGotoIndex, false);
+    }
+    protected void updateListContent(int gotoIndex, boolean focusToTextfield) {
+        // save index for list listener
+        listGotoIndex = gotoIndex;
+        listGotoModel.clear();
+        // create a list with index numbers of tabs
+        // (i.e. all index numbers of opened source code tabs)
+        ArrayList<Integer> eps = new ArrayList<>();
+        // add current activated source code index first
+        eps.add(jTabbedPane1.getSelectedIndex());
+        // than add indices of remaining tabs
+        for (int i=0; i<editorPanes.getCount(); i++) {
+            if (!eps.contains(i)) eps.add(i);
+        }
+        // go through all opened editorpanes
+        // eps.stream().forEach((epIndex) -> {
+        for (int epIndex : eps) {
+            // extract and retrieve sections from each editor pane
+            ArrayList<String> token;
+            String borderTitle;
+            switch (gotoIndex) {
+                case GOTO_SECTION:
+                    token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getActiveAssembler().getLineComment());
+                    borderTitle = ConstantsR64.CB_GOTO_SECTION_STRING;
+                    break;
+                case GOTO_LABEL:
+                    token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).labels);
+                    borderTitle = ConstantsR64.CB_GOTO_LABEL_STRING;
+                    break;
+                case GOTO_FUNCTION:
+                    token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).functions);
+                    borderTitle = ConstantsR64.CB_GOTO_FUNCTION_STRING;
+                    break;
+                case GOTO_MACRO:
+                    token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).macros);
+                    borderTitle = ConstantsR64.CB_GOTO_MACRO_STRING;
+                    break;
+                default:
+                    listGotoIndex = GOTO_LABEL;
+                    token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).labels);
+                    borderTitle = ConstantsR64.CB_GOTO_LABEL_STRING;
+                    break;
+            }
+            // check if anything found
+            if (token!=null && !token.isEmpty()) {
+                // add header item
+                File fp = editorPanes.getFilePath(epIndex);
+                listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp), null, true, 0, fp));
+                // sort list
+                Collections.sort(token);
+                // add all found section strings to combo box
+                for (String arg : token) {
+                    // items have a small margin, headings do not
+                    listGotoModel.addElement(new RL64ListItem(arg, null, false, 0, fp));
+                }
+                // set border-title
+                TitledBorder tb = (TitledBorder) jListGoto.getBorder();
+                tb.setTitle(borderTitle);
+            }
+            // disable refresh button
+            jButtonRefreshGoto.setEnabled(false);            
+            if (focusToTextfield) jTextFieldGoto.requestFocusInWindow();
+        }
+    }
     /**
      * Parses input from the Goto-line-textfield. Used for quickly changing settings,
      * may also be used for special debug-functions or information etc.
@@ -973,6 +947,60 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
         }
     }
+    private void gotoTokenFromList() {
+        // retrieve index of selected item
+        Object selectedObject = jListGoto.getSelectedValue();
+        // check if > 0 and key was return
+        if (selectedObject!=null) {
+            // remembler focus owner
+            java.awt.Component c = this.getFrame().getFocusOwner();
+            final String compname = (c!=null) ? c.getName() : null;
+            // retrieve item information
+            RL64ListItem listItem = (RL64ListItem) selectedObject;
+            // retrieve opened tab
+            int epIndex = editorPanes.getOpenedFileTab(listItem.getFile());
+            // go on, if tab is opened and no heading is selected
+            if (epIndex!=-1 && !listItem.isHeader()) {
+                // select specific tab where selected section is
+                jTabbedPane1.setSelectedIndex(epIndex);
+                // select where to go...
+                switch (listGotoIndex) {
+                    case GOTO_FUNCTION:
+                        editorPanes.gotoFunction(listItem.getText(), epIndex);
+                        break;
+                    case GOTO_SECTION:
+                        editorPanes.gotoSection(listItem.getText(), epIndex);
+                        break;
+                    case GOTO_LABEL:
+                        editorPanes.gotoLabel(listItem.getText(), epIndex);
+                    case GOTO_MACRO:
+                        editorPanes.gotoMacro(listItem.getText(), epIndex);
+                        break;
+                }
+            }
+            // scrolling to caret sets focus to editor component,
+            // but we don't want that.
+            if (compname!=null) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (compname) {
+                            case "jListGoto":
+                                jListGoto.requestFocusInWindow();
+                                break;
+                            default:
+                                jTextFieldGoto.requestFocusInWindow();
+                                break;
+                        }
+                    }
+                });
+            }
+        }
+    }
+    @Action
+    public void refreshGotoList() {
+        updateListContent(listGotoIndex);
+    }
     @Action
     public void spacesToTabs() {
         editorPanes.getActiveEditorPane().spacesToTabs();
@@ -1118,27 +1146,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void gotoSection() {
-        comboBoxGotoIndex = GOTO_SECTION;
-        jComboBoxGoto.showPopup();
-        jComboBoxGoto.requestFocusInWindow();
+        updateListContent(GOTO_SECTION);
     }
     @Action
     public void gotoLabel() {
-        comboBoxGotoIndex = GOTO_LABEL;
-        jComboBoxGoto.showPopup();
-        jComboBoxGoto.requestFocusInWindow();
+        updateListContent(GOTO_LABEL);
     }
     @Action
     public void gotoFunction() {
-        comboBoxGotoIndex = GOTO_FUNCTION;
-        jComboBoxGoto.showPopup();
-        jComboBoxGoto.requestFocusInWindow();
+        updateListContent(GOTO_FUNCTION);
     }
     @Action
     public void gotoMacro() {
-        comboBoxGotoIndex = GOTO_MACRO;
-        jComboBoxGoto.showPopup();
-        jComboBoxGoto.requestFocusInWindow();
+        updateListContent(GOTO_MACRO);
     }
     @Action
     public void jumpToLabel() {
@@ -1469,17 +1489,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void switchLogPosition() {
-        int currentlayout = settings.getSearchFrameSplitLayout(Settings.SPLITPANE_LOG);
+        int currentlayout = settings.getLogSplitLayout();
         currentlayout = (JSplitPane.HORIZONTAL_SPLIT == currentlayout) ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT;
-        settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_LOG);
+        settings.setLogSplitLayout(currentlayout);
         jSplitPane1.setOrientation(currentlayout);
-    }
-    @Action
-    public void switchBothPosition() {
-        int currentlayout = settings.getSearchFrameSplitLayout(Settings.SPLITPANE_BOTHLOGRUN);
-        currentlayout = (JSplitPane.HORIZONTAL_SPLIT == currentlayout) ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT;
-        settings.setSearchFrameSplitLayout(currentlayout, Settings.SPLITPANE_BOTHLOGRUN);
-        jSplitPane2.setOrientation(currentlayout);
     }
     @Action
     public void clearLog1() {
@@ -1921,22 +1934,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public final Task checkForUpdate() {
         return new CheckForUpdates(org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class));
     }
-    private class ComboBoxRenderer implements ListCellRenderer {
-        protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            // get default renderer
-            Component renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            // check if current row is a combo box header
-            if (comboBoxHeadings!=null & !comboBoxHeadings.isEmpty() && comboBoxHeadings.contains(index)) {
-                // if yes, change font style
-                renderer.setFont(renderer.getFont().deriveFont(Font.BOLD));
-                renderer.setForeground(new Color(153, 51, 51));
-            }
-            // return renderer
-            return renderer;
-        }
-    }    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1949,6 +1946,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         mainPanel = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
+        jSplitPane3 = new javax.swing.JSplitPane();
+        jPanel7 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelFind = new javax.swing.JPanel();
         jButtonFindPrev = new javax.swing.JButton();
@@ -1962,16 +1961,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel4 = new javax.swing.JLabel();
         jTextFieldReplace = new javax.swing.JTextField();
         jButtonReplace = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListGoto = new javax.swing.JList();
+        jTextFieldGoto = new javax.swing.JTextField();
+        jButtonRefreshGoto = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jSplitPane2 = new javax.swing.JSplitPane();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        jComboBoxRunScripts = new javax.swing.JComboBox();
-        jButtonRunScript = new javax.swing.JButton();
-        jComboBoxAssemblers = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
         jTabbedPaneLogs = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -1979,6 +1974,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextAreaCompilerOutput = new javax.swing.JTextArea();
+        jComboBoxRunScripts = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         addTabMenuItem = new javax.swing.JMenuItem();
@@ -2074,7 +2071,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMenu = new javax.swing.JMenu();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
-        switchBothMenuItem = new javax.swing.JMenuItem();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
         jSeparator22 = new javax.swing.JPopupMenu.Separator();
         quickRefMenuItem = new javax.swing.JMenuItem();
@@ -2085,7 +2081,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator18 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldConvDez = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -2094,16 +2089,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldConvBin = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextFieldGotoLine = new javax.swing.JTextField();
-        jComboBoxGoto = new javax.swing.JComboBox();
         jLabelBufferSize = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxAssemblers = new javax.swing.JComboBox();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        jSplitPane1.setDividerLocation(480);
+        jSplitPane1.setDividerLocation(350);
+        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
         jSplitPane1.setOneTouchExpandable(true);
 
         jPanel1.setName("jPanel1"); // NOI18N
+
+        jSplitPane3.setDividerLocation(550);
+        jSplitPane3.setName("jSplitPane3"); // NOI18N
+        jSplitPane3.setOneTouchExpandable(true);
+
+        jPanel7.setName("jPanel7"); // NOI18N
 
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(100, 100));
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
@@ -2221,107 +2224,96 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jButtonReplace))
         );
 
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 549, Short.MAX_VALUE)
+            .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(org.jdesktop.layout.GroupLayout.TRAILING, jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanelFind, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanelReplace, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 347, Short.MAX_VALUE)
+            .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel7Layout.createSequentialGroup()
+                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(jPanelFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(jPanelReplace, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+
+        jTabbedPane1.getAccessibleContext().setAccessibleName(resourceMap.getString("jTabbedPane1.AccessibleContext.accessibleName")); // NOI18N
+
+        jSplitPane3.setLeftComponent(jPanel7);
+
+        jPanel8.setName("jPanel8"); // NOI18N
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, resourceMap.getColor("jScrollPane1.border.matteColor"))); // NOI18N
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jListGoto.setBorder(javax.swing.BorderFactory.createTitledBorder(ConstantsR64.CB_GOTO_DEFAULT_STRING));
+        jListGoto.setName("jListGoto"); // NOI18N
+        jScrollPane1.setViewportView(jListGoto);
+
+        jTextFieldGoto.setToolTipText(resourceMap.getString("jTextFieldGoto.toolTipText")); // NOI18N
+        jTextFieldGoto.setName("jTextFieldGoto"); // NOI18N
+
+        jButtonRefreshGoto.setAction(actionMap.get("refreshGotoList")); // NOI18N
+        jButtonRefreshGoto.setBorder(null);
+        jButtonRefreshGoto.setBorderPainted(false);
+        jButtonRefreshGoto.setContentAreaFilled(false);
+        jButtonRefreshGoto.setName("jButtonRefreshGoto"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+            .add(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jTextFieldGoto)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonRefreshGoto)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jTextFieldGoto)
+                    .add(jButtonRefreshGoto, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jSplitPane3.setRightComponent(jPanel8);
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelFind, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jPanelReplace, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPane3)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanelFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanelReplace, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .add(jSplitPane3)
         );
-
-        jTabbedPane1.getAccessibleContext().setAccessibleName(resourceMap.getString("jTabbedPane1.AccessibleContext.accessibleName")); // NOI18N
 
         jSplitPane1.setLeftComponent(jPanel1);
 
         jPanel2.setName("jPanel2"); // NOI18N
 
-        jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane2.setName("jSplitPane2"); // NOI18N
-        jSplitPane2.setOneTouchExpandable(true);
-
-        jPanel3.setName("jPanel3"); // NOI18N
-
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jPanel9.border.title"))); // NOI18N
-        jPanel9.setName("jPanel9"); // NOI18N
-
-        jComboBoxRunScripts.setName("jComboBoxRunScripts"); // NOI18N
-
-        jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
-        jButtonRunScript.setName("jButtonRunScript"); // NOI18N
-
-        jComboBoxAssemblers.setModel(new javax.swing.DefaultComboBoxModel(Assemblers.names()));
-        jComboBoxAssemblers.setToolTipText(resourceMap.getString("jComboBoxAssemblers.toolTipText")); // NOI18N
-        jComboBoxAssemblers.setName("jComboBoxAssemblers"); // NOI18N
-
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setToolTipText(resourceMap.getString("jLabel1.toolTipText")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel2)
-                    .add(jLabel1))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 92, Short.MAX_VALUE)
-                .add(jButtonRunScript)
-                .addContainerGap())
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButtonRunScript)
-                    .add(jLabel2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel1))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-        );
-
-        jSplitPane2.setTopComponent(jPanel3);
-
-        jPanel4.setName("jPanel4"); // NOI18N
-
         jTabbedPaneLogs.setName("jTabbedPaneLogs"); // NOI18N
 
         jPanel6.setName("jPanel6"); // NOI18N
 
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         jTextAreaLog.setEditable(false);
@@ -2333,21 +2325,22 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 360, Short.MAX_VALUE)
+            .add(0, 723, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 419, Short.MAX_VALUE)
+            .add(0, 82, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
 
         jPanel5.setName("jPanel5"); // NOI18N
 
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         jTextAreaCompilerOutput.setEditable(false);
@@ -2358,39 +2351,41 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
 
-        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPaneLogs)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .add(jTabbedPaneLogs)
-                .add(0, 0, 0))
-        );
+        jComboBoxRunScripts.setName("jComboBoxRunScripts"); // NOI18N
 
-        jSplitPane2.setRightComponent(jPanel4);
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPane2)
+            .add(jTabbedPaneLogs)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane2)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(jTabbedPaneLogs)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jSplitPane1.setRightComponent(jPanel2);
@@ -2770,11 +2765,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator19.setName("jSeparator19"); // NOI18N
         viewMenu.add(jSeparator19);
 
-        switchBothMenuItem.setAction(actionMap.get("switchBothPosition")); // NOI18N
-        switchBothMenuItem.setToolTipText(resourceMap.getString("switchBothMenuItem.toolTipText")); // NOI18N
-        switchBothMenuItem.setName("switchBothMenuItem"); // NOI18N
-        viewMenu.add(switchBothMenuItem);
-
         switchLogPosMenuItem.setAction(actionMap.get("switchLogPosition")); // NOI18N
         switchLogPosMenuItem.setToolTipText(resourceMap.getString("switchLogPosMenuItem.toolTipText")); // NOI18N
         switchLogPosMenuItem.setName("switchLogPosMenuItem"); // NOI18N
@@ -2817,8 +2807,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         statusPanel.setName("statusPanel"); // NOI18N
 
-        statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
-
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
@@ -2847,24 +2835,29 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldGotoLine.setToolTipText(resourceMap.getString("jTextFieldGotoLine.toolTipText")); // NOI18N
         jTextFieldGotoLine.setName("jTextFieldGotoLine"); // NOI18N
 
-        jComboBoxGoto.setName("jComboBoxGoto"); // NOI18N
-
         jLabelBufferSize.setName("jLabelBufferSize"); // NOI18N
+
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setToolTipText(resourceMap.getString("jLabel1.toolTipText")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        jComboBoxAssemblers.setModel(new javax.swing.DefaultComboBoxModel(Assemblers.names()));
+        jComboBoxAssemblers.setToolTipText(resourceMap.getString("jComboBoxAssemblers.toolTipText")); // NOI18N
+        jComboBoxAssemblers.setName("jComboBoxAssemblers"); // NOI18N
 
         org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(statusPanelLayout.createSequentialGroup()
-                .add(statusPanelSeparator)
-                .add(239, 239, 239))
-            .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel9)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldGotoLine, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBoxGoto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jLabel6)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -2877,13 +2870,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jLabel8)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 140, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 100, Short.MAX_VALUE)
                 .add(jLabelBufferSize)
                 .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelLayout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
                     .add(jLabel9)
                     .add(jTextFieldGotoLine, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -2893,10 +2887,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jTextFieldConvHex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel8)
                     .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jComboBoxGoto, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabelBufferSize))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jLabelBufferSize)
+                    .add(jLabel1)
+                    .add(jComboBoxAssemblers, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         setComponent(mainPanel);
@@ -2939,14 +2933,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem insertSinusMenuItem;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
+    private javax.swing.JButton jButtonRefreshGoto;
     private javax.swing.JButton jButtonReplace;
-    private javax.swing.JButton jButtonRunScript;
     private javax.swing.JCheckBox jCheckBoxMatchCase;
     private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JCheckBox jCheckBoxWholeWord;
     private javax.swing.JComboBox jComboBoxAssemblers;
     private javax.swing.JComboBox jComboBoxFind;
-    private javax.swing.JComboBox jComboBoxGoto;
     private javax.swing.JComboBox jComboBoxRunScripts;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -2957,6 +2950,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelBufferSize;
+    private javax.swing.JList jListGoto;
     private javax.swing.JMenuItem jMenuItemAllSpaceToTab;
     private javax.swing.JMenuItem jMenuItemAllTabsToSpaces;
     private javax.swing.JMenuItem jMenuItemCollapseAllFolds;
@@ -2970,13 +2964,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem jMenuItemTabsToSpaces;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -3005,7 +2999,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPaneLogs;
     private javax.swing.JTextArea jTextAreaCompilerOutput;
@@ -3013,6 +3007,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JTextField jTextFieldConvBin;
     private javax.swing.JTextField jTextFieldConvDez;
     private javax.swing.JTextField jTextFieldConvHex;
+    private javax.swing.JTextField jTextFieldGoto;
     private javax.swing.JTextField jTextFieldGotoLine;
     private javax.swing.JTextField jTextFieldReplace;
     private javax.swing.JMenuItem jumpToLabelMenuItem;
@@ -3044,7 +3039,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem settingsMenuItem;
     private javax.swing.JMenu sourceMenu;
     private javax.swing.JPanel statusPanel;
-    private javax.swing.JMenuItem switchBothMenuItem;
     private javax.swing.JMenuItem switchLogPosMenuItem;
     private javax.swing.JMenuItem undoMenuItem;
     private javax.swing.JMenuItem viewLog1MenuItem;

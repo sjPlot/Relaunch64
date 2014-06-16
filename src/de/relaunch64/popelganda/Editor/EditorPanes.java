@@ -880,6 +880,8 @@ public class EditorPanes {
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     setCursor(epp.getEditorPane());
                     epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.lineSeparator());
+                    // update labels, in case we have them shown
+                    mainFrame.updateListContent();
                     return true;
                 }
             }
@@ -899,6 +901,7 @@ public class EditorPanes {
      * -1 if {@code fp} is not opened in a tab yet.
      */
     public int getOpenedFileTab(File fp) {
+        if (null==fp) return -1;
         for (int i=0; i<tabbedPane.getTabCount(); i++) {
             File opened = editorPaneArray.get(i).getFilePath();
             if (opened!=null && opened.equals(fp)) return i;
@@ -1200,6 +1203,8 @@ public class EditorPanes {
             try {
                 // if save successful, remove data
                 editorPaneArray.remove(selectedTab);
+                // update labels, in case we have them shown
+                mainFrame.updateListContent();
                 // success
                 return true;
             }
