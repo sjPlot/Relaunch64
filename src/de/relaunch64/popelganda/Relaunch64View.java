@@ -368,7 +368,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     jButtonRefreshGoto.setEnabled(true);
                     evt.consume();
                 }
-                // TODO find by type, including regex?
+                else {
+                    String text = jTextFieldGoto.getText();
+                    for (int i=0; i<listGotoModel.getSize(); i++) {
+                        RL64ListItem item = listGotoModel.get(i);
+                        if (item.getText().toLowerCase().startsWith(text.toLowerCase()) && !item.isHeader()) {
+                            jListGoto.setSelectedIndex(i);
+                            return;
+                        }
+                    }
+                }
                 if (selected!=-1) {
                     jListGoto.setSelectedIndex(selected);
                 }
@@ -772,6 +781,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             if (token!=null && !token.isEmpty()) {
                 // add header item
                 File fp = editorPanes.getFilePath(epIndex);
+                // a list item has several properties now, which will be rendered:
+                // item text, icon, is header?, line number (not used), file path
                 listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp), null, true, 0, fp));
                 // sort list
                 Collections.sort(token);
@@ -991,6 +1002,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                 break;
                             default:
                                 jTextFieldGoto.requestFocusInWindow();
+                                // remove selection on focus, so prev. input
+                                // is not selected and deleted by typing
+                                SwingUtilities.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            jTextFieldGoto.setCaretPosition(jTextFieldGoto.getText().length());
+                                        }
+                                        catch (IllegalArgumentException ex) {
+                                        }
+                                    }
+                                });
                                 break;
                         }
                     }
