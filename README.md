@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Relaunch64 3.1.1 (development)
+Relaunch64 3.2 (development)
 ----------------
 
 ### New features
@@ -24,6 +24,10 @@ Relaunch64 3.1.1 (development)
 * added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names.
 
 #### GUI
+* the goto-popup-list was removed and replaced by a regular list. this allows "surfing" through the goto-destinations (labels, sections, functions...) etc.
+* find goto-token (label, macro, section...) by typing
+* filter goto-token-list (label, macro, section...)
+* "Compile and run" area was removed. Script-selection moved to log-area, assembler-syntax moved to bottom status bar (and is now part of the "source code information status bar")
 * optionally show file extension in tabs
 
 #### various

@@ -368,6 +368,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     jButtonRefreshGoto.setEnabled(true);
                     evt.consume();
                 }
+                // TODO find by type, including regex?
                 if (selected!=-1) {
                     jListGoto.setSelectedIndex(selected);
                 }
