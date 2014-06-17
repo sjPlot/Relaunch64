@@ -18,6 +18,7 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.database.Settings;
+import de.relaunch64.popelganda.util.ConstantsR64;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -41,11 +42,11 @@ public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL6
         // text of list item
         setText(value.getText());
         // icon of list item, may be null if no item needed
-        setIcon(value.getIcon());
+        setIcon(value.isHeader() ? ConstantsR64.r64listicon : value.getIcon());
         // headings use bold font, normal entries plain
         setFont(settings.getMainFont().deriveFont(value.isHeader() ? Font.BOLD : Font.PLAIN));
         // normal entries have small padding on left
-        setBorder(value.isHeader() ? null : new MatteBorder(0, 10, 0, 0, Color.white));
+        setBorder(value.isHeader() ? null : new MatteBorder(0, ConstantsR64.r64listicon.getIconWidth()+getIconTextGap(), 0, 0, Color.white));
         
         if (isSelected) {
             setBackground(list.getSelectionBackground());

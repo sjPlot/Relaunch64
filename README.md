@@ -29,6 +29,7 @@ Relaunch64 3.2 (development)
 * filter goto-token-list (label, macro, section...)
 * "Compile and run" area was removed. Script-selection moved to log-area, assembler-syntax moved to bottom status bar (and is now part of the "source code information status bar")
 * optionally show file extension in tabs
+* optionally hide "Select script" field (below logs). when selecting a new script, a hidden selection box is shown and hidden again after selecting a script.
 
 #### various
 * added quick-access to compiler-help (type "ch" into text field on bottom left)

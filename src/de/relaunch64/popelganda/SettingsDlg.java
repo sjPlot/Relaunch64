@@ -78,16 +78,19 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private final EditorPanes editorPanes;
     private Font mainfont;
     private static final String quickHelpText = "Enter command lines here or drag & drop executable files\n(first compiler, then cruncher (optional), finally emulator)\nfrom explorer window to automatically generate a script.\n\nPress help-button for more details and examples.";
+    private final Relaunch64View mainFrame;
     /**
      * Creates new form SettingsDlg
      * @param parent
+     * @param mf
      * @param s
      * @param scr
      * @param ep
      */
-    public SettingsDlg(java.awt.Frame parent, Settings s, CustomScripts scr, EditorPanes ep) {
+    public SettingsDlg(java.awt.Frame parent, Relaunch64View mf, Settings s, CustomScripts scr, EditorPanes ep) {
         super(parent);
         settings = s;
+        mainFrame = mf;
         scripts = scr;
         editorPanes = ep;
         initComponents();
@@ -135,6 +138,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxShowCloseButton.setSelected(settings.getShowCloseButton());
         jCheckBoxShowExtInTab.setSelected(settings.getShowExtensionInTab());
         jCheckBoxShowBufferSize.setSelected(settings.getShowBufferSize());
+        jCheckBoxScriptBox.setSelected(settings.getShowScriptBox());
         jCheckBoxCodeFolding.setSelected(settings.getCodeFolding());
         jCheckBoxCF_braces.setEnabled(settings.getCodeFolding());
         jCheckBoxCF_manual.setEnabled(settings.getCodeFolding());
@@ -315,6 +319,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             }
         });
         jCheckBoxShowExtInTab.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabOther(true);
+            }
+        });
+        jCheckBoxScriptBox.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabOther(true);
@@ -580,8 +590,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setReopenOnStartup(jCheckBoxReopenFiles.isSelected());
         settings.setShowExtensionInTab(jCheckBoxShowExtInTab.isSelected());
         settings.setShowBufferSize(jCheckBoxShowBufferSize.isSelected());
+        settings.setShowScriptBox(jCheckBoxScriptBox.isSelected());
         editorPanes.updateTitles();
         editorPanes.updateLabelBufferSize();
+        mainFrame.toggleScriptBoxVisibility();
         setModifiedTabOther(false);
     }
     @Action(enabledProperty = "removePossible")
@@ -703,6 +715,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart2 = new javax.swing.JLabel();
         jCheckBoxShowExtInTab = new javax.swing.JCheckBox();
         jCheckBoxShowBufferSize = new javax.swing.JCheckBox();
+        jCheckBoxScriptBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -1091,6 +1104,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxShowBufferSize.setText(resourceMap.getString("jCheckBoxShowBufferSize.text")); // NOI18N
         jCheckBoxShowBufferSize.setName("jCheckBoxShowBufferSize"); // NOI18N
 
+        jCheckBoxScriptBox.setText(resourceMap.getString("jCheckBoxScriptBox.text")); // NOI18N
+        jCheckBoxScriptBox.setToolTipText(resourceMap.getString("jCheckBoxScriptBox.toolTipText")); // NOI18N
+        jCheckBoxScriptBox.setName("jCheckBoxScriptBox"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1111,7 +1128,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jLabelRestart2))
                             .add(jCheckBoxShowExtInTab)
-                            .add(jCheckBoxShowBufferSize))
+                            .add(jCheckBoxShowBufferSize)
+                            .add(jCheckBoxScriptBox))
                         .add(0, 292, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1132,7 +1150,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jCheckBoxShowExtInTab)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxShowBufferSize)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 152, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jCheckBoxScriptBox)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 117, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
                 .addContainerGap())
         );
@@ -1180,6 +1200,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxReopenFiles;
     private javax.swing.JCheckBox jCheckBoxSaveOnCompile;
     private javax.swing.JCheckBox jCheckBoxScaleFonts;
+    private javax.swing.JCheckBox jCheckBoxScriptBox;
     private javax.swing.JCheckBox jCheckBoxShowBufferSize;
     private javax.swing.JCheckBox jCheckBoxShowCloseButton;
     private javax.swing.JCheckBox jCheckBoxShowExtInTab;

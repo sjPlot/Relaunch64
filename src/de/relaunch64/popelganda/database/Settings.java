@@ -82,6 +82,7 @@ public class Settings {
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
     private static final String SETTING_SHOW_LINEHIGLIGHT = "showlinehighlight";
     private static final String SETTING_SHOW_BUFFERSIZE = "showbuffersize";
+    private static final String SETTING_SHOW_SCRIPTBOX = "showscriptcombobox";
     private static final String SETTING_SHOW_EXT_IN_TAB = "showfileextintab";
     private static final String SETTING_SHOW_CLOSEBUTTON = "showclosebutton";
     private static final String SETTING_SUGGEST_SORT_CASE = "suggestioncasesort";
@@ -298,6 +299,13 @@ public class Settings {
         if (null==root.getChild(SETTING_SHOW_BUFFERSIZE)) {
             // create element
             Element el = new Element(SETTING_SHOW_BUFFERSIZE);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_SHOW_SCRIPTBOX)) {
+            // create element
+            Element el = new Element(SETTING_SHOW_SCRIPTBOX);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
@@ -764,6 +772,19 @@ public class Settings {
         Element el = root.getChild(SETTING_SHOW_BUFFERSIZE);
         if (null==el) {
             el = new Element(SETTING_SHOW_BUFFERSIZE);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getShowScriptBox() {
+        Element el = root.getChild(SETTING_SHOW_SCRIPTBOX);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setShowScriptBox(boolean val)  {
+        Element el = root.getChild(SETTING_SHOW_SCRIPTBOX);
+        if (null==el) {
+            el = new Element(SETTING_SHOW_SCRIPTBOX);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
