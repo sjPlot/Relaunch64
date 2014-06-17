@@ -27,6 +27,7 @@ Relaunch64 3.2 (development)
 * the goto-popup-list was removed and replaced by a regular list. this allows "surfing" through the goto-destinations (labels, sections, functions...) etc.
 * find goto-token (label, macro, section...) by typing
 * filter goto-token-list (label, macro, section...)
+* show/hide goto-list (see menu View)
 * "Compile and run" area was removed. Script-selection moved to log-area, assembler-syntax moved to bottom status bar (and is now part of the "source code information status bar")
 * optionally show file extension in tabs
 * optionally hide "Select script" field (below logs). when selecting a new script, a hidden selection box is shown and hidden again after selecting a script.
