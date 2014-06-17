@@ -350,6 +350,7 @@
                           <SubComponents>
                             <Component class="javax.swing.JList" name="jListGoto">
                               <Properties>
+                                <Property name="background" type="java.awt.Color" resourceKey="jListGoto.background"/>
                                 <Property name="name" type="java.lang.String" value="jListGoto" noResource="true"/>
                               </Properties>
                             </Component>

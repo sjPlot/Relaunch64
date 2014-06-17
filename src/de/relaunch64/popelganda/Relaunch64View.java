@@ -835,7 +835,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 File fp = editorPanes.getFilePath(epIndex);
                 // a list item has several properties now, which will be rendered:
                 // item text, icon, is header?, line number (not used), file path
-                listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp), null, true, false, 0, fp));
+                listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp).toUpperCase(), null, true, false, 0, fp));
                 // sort list
                 Collections.sort(token);
                 // add all found section strings to combo box
@@ -2407,6 +2407,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jScrollPaneSidebar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, resourceMap.getColor("jScrollPaneSidebar.border.matteColor"))); // NOI18N
         jScrollPaneSidebar.setName("jScrollPaneSidebar"); // NOI18N
 
+        jListGoto.setBackground(resourceMap.getColor("jListGoto.background")); // NOI18N
         jListGoto.setName("jListGoto"); // NOI18N
         jScrollPaneSidebar.setViewportView(jListGoto);
 
