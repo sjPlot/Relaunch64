@@ -39,22 +39,31 @@ public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL6
     }
     @Override
     public Component getListCellRendererComponent(JList<? extends RL64ListItem> list, RL64ListItem value, int index, boolean isSelected, boolean cellHasFocus) {
+        // define background highlightcolor for headers
+        Color headerHighlightColor = new Color(225,237,242); // new Color(176,196,222);
         // text of list item
         setText(value.getText());
         // icon of list item, may be null if no item needed
         setIcon(value.isHeader() ? ConstantsR64.r64listicon : value.getIcon());
         // headings use bold font, normal entries plain
-        setFont(settings.getMainFont().deriveFont(value.isHeader() ? Font.BOLD : Font.PLAIN));
+        setFont(settings.getMainFont().deriveFont(value.isTitle()? Font.BOLD : Font.PLAIN));
         // normal entries have small padding on left
-        setBorder(value.isHeader() ? null : new MatteBorder(0, ConstantsR64.r64listicon.getIconWidth()+getIconTextGap(), 0, 0, Color.white));
+        int leftMargin = (null==value.getIcon()) ? ConstantsR64.r64listicon.getIconWidth()+getIconTextGap()+2 : ConstantsR64.r64listicon.getIconWidth()-value.getIcon().getIconWidth()+2;
+        if (value.isTitle()) {
+            setBorder(new MatteBorder(1, 1, settings.getMainFont().getSize()/2, 1, Color.white));
+        }
+        else {
+            setBorder(value.isHeader() ? new MatteBorder(1, 2, 1, 0, headerHighlightColor)
+                                       : new MatteBorder(1, leftMargin, 1, 0, Color.white));
+        }
         
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
         }
         else {
-            setBackground(Color.WHITE);
-            setForeground(value.isHeader() ? new Color(153,51,0) : Color.BLACK);
+            setBackground(value.isHeader() ? headerHighlightColor : Color.WHITE);
+            setForeground(value.isHeader() ? new Color(85,95,102) : Color.BLACK);
         }
         return this;
     }

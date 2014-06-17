@@ -96,7 +96,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
@@ -160,14 +159,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         initComponents();
         // remove borders on OS X
         if (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) {
-            jTabbedPane1.setBorder(null);
-            jTabbedPaneLogs.setBorder(null);
-            jSplitPane1.setBorder(null);
-            jSplitPaneEditorList.setBorder(null);
             jScrollPane2.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPane3.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
-            jScrollPaneSidebar.setBorder(new javax.swing.border.MatteBorder(0, 0, 1, 0, Color.lightGray));
-            jListGoto.setBorder(new javax.swing.border.TitledBorder(UIManager.getBorder("TitledBorder.aquaVariant"), ConstantsR64.CB_GOTO_DEFAULT_STRING));
         }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
@@ -792,55 +785,71 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         for (int i=0; i<editorPanes.getCount(); i++) {
             if (!eps.contains(i)) eps.add(i);
         }
+        String borderTitle;
+        // set border-title
+        switch (gotoIndex) {
+            case GOTO_SECTION:
+                borderTitle = ConstantsR64.CB_GOTO_SECTION_STRING;
+                break;
+            case GOTO_LABEL:
+                borderTitle = ConstantsR64.CB_GOTO_LABEL_STRING;
+                break;
+            case GOTO_FUNCTION:
+                borderTitle = ConstantsR64.CB_GOTO_FUNCTION_STRING;
+                break;
+            case GOTO_MACRO:
+                borderTitle = ConstantsR64.CB_GOTO_MACRO_STRING;
+                break;
+            default:
+                borderTitle = ConstantsR64.CB_GOTO_LABEL_STRING;
+                break;
+        }
+        listGotoModel.addElement(new RL64ListItem(borderTitle, null, false, true, 0, null));
+        // indicates whether anything found
+        boolean tokensFound = false;
         // go through all opened editorpanes
-        // eps.stream().forEach((epIndex) -> {
         for (int epIndex : eps) {
             // extract and retrieve sections from each editor pane
             ArrayList<String> token;
-            String borderTitle;
             switch (gotoIndex) {
                 case GOTO_SECTION:
-                    token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getActiveAssembler().getLineComment());
-                    borderTitle = ConstantsR64.CB_GOTO_SECTION_STRING;
+                    token = SectionExtractor.getSectionNames(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex).getLineComment());
                     break;
                 case GOTO_LABEL:
                     token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).labels);
-                    borderTitle = ConstantsR64.CB_GOTO_LABEL_STRING;
                     break;
                 case GOTO_FUNCTION:
                     token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).functions);
-                    borderTitle = ConstantsR64.CB_GOTO_FUNCTION_STRING;
                     break;
                 case GOTO_MACRO:
                     token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).macros);
-                    borderTitle = ConstantsR64.CB_GOTO_MACRO_STRING;
                     break;
                 default:
                     listGotoIndex = GOTO_LABEL;
                     token = LabelExtractor.getNames(LabelExtractor.getLabels(editorPanes.getSourceCode(epIndex), editorPanes.getAssembler(epIndex), 0).labels);
-                    borderTitle = ConstantsR64.CB_GOTO_LABEL_STRING;
                     break;
             }
             // check if anything found
             if (token!=null && !token.isEmpty()) {
-                // make splitpane visible if necessary
-                toggleGotoListVisibility(false);
                 // add header item
                 File fp = editorPanes.getFilePath(epIndex);
                 // a list item has several properties now, which will be rendered:
                 // item text, icon, is header?, line number (not used), file path
-                listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp), null, true, 0, fp));
+                listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp), null, true, false, 0, fp));
                 // sort list
                 Collections.sort(token);
                 // add all found section strings to combo box
                 for (String arg : token) {
                     // items have a small margin, headings do not
-                    listGotoModel.addElement(new RL64ListItem(arg, null, false, 0, fp));
+                    listGotoModel.addElement(new RL64ListItem(arg, null, false, false, 0, fp));
                 }
-                // set border-title
-                TitledBorder tb = (TitledBorder) jListGoto.getBorder();
-                tb.setTitle(borderTitle);
+                tokensFound = true;
             }
+        }
+        // show sidebar and stuff only if we found anything
+        if (tokensFound) {
+            // make splitpane visible if necessary
+            toggleGotoListVisibility(false);
             // disable refresh button
             jButtonRefreshGoto.setEnabled(false);            
             // clear textfield
@@ -990,7 +999,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
             else if (text.startsWith("fs")) {
                 int size = Integer.parseInt(text.substring(2));
-                settings.setMainfont(new Font(settings.getMainfont(Settings.FONTNAME), Font.PLAIN, size));
+                settings.setMainFont(new Font(settings.getMainFont(Settings.FONTNAME), Font.PLAIN, size));
                 editorPanes.setFonts(settings.getMainFont());
             }
             else if (text.startsWith("ts")) {
@@ -2235,6 +2244,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         mainPanel.setName("mainPanel"); // NOI18N
 
+        jSplitPane1.setBorder(null);
         jSplitPane1.setDividerLocation(350);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
@@ -2242,6 +2252,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanel1.setName("jPanel1"); // NOI18N
 
+        jSplitPaneEditorList.setBorder(null);
         jSplitPaneEditorList.setDividerLocation(550);
         jSplitPaneEditorList.setName("jSplitPaneEditorList"); // NOI18N
         jSplitPaneEditorList.setOneTouchExpandable(true);
@@ -2376,10 +2387,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 347, Short.MAX_VALUE)
+            .add(0, 348, Short.MAX_VALUE)
             .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel7Layout.createSequentialGroup()
-                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(jPanelFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -2393,10 +2404,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        jScrollPaneSidebar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, resourceMap.getColor("jScrollPaneSidebar.border.matteColor"))); // NOI18N
+        jScrollPaneSidebar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, resourceMap.getColor("jScrollPaneSidebar.border.matteColor"))); // NOI18N
         jScrollPaneSidebar.setName("jScrollPaneSidebar"); // NOI18N
 
-        jListGoto.setBorder(javax.swing.BorderFactory.createTitledBorder(ConstantsR64.CB_GOTO_DEFAULT_STRING));
         jListGoto.setName("jListGoto"); // NOI18N
         jScrollPaneSidebar.setViewportView(jListGoto);
 
@@ -2413,7 +2423,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
             .add(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jTextFieldGoto)
@@ -2424,7 +2434,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jTextFieldGoto)
@@ -2438,7 +2448,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneEditorList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneEditorList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2465,15 +2475,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 775, Short.MAX_VALUE)
+            .add(0, 779, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 136, Short.MAX_VALUE)
+            .add(0, 140, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
@@ -2491,11 +2501,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
@@ -2553,7 +2563,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+            .add(jSplitPane1)
         );
 
         menuBar.setName("menuBar"); // NOI18N

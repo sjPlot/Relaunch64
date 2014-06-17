@@ -31,13 +31,24 @@ public class RL64ListItem {
     private final int linenumber;
     private final File file;
     private final boolean isHeader;
-
-    public RL64ListItem(String text, ImageIcon icon, boolean isHeader, int linenumber, File file) {
+    private final boolean isTitle;
+    /**
+     * User data for a list item of the Goto-sidebar.
+     * 
+     * @param text the item-text which will be displayed in the list
+     * @param icon an icon which is displayed on the left side of the item. optional, may be {@code null}.
+     * @param isHeader {@ode true} if item is a header (i.e. a new file name is indicating another editor pane in the list)
+     * @param isTitle {@code true} if item is the sidebar's title. should only apply to the very first item, which is used as "title item".
+     * @param linenumber the line number of the token (label, macro, section...). currently not used.
+     * @param file the file path of the file where the item belongs to. needed to switch between tabs on selecting new list items.
+     */
+    public RL64ListItem(String text, ImageIcon icon, boolean isHeader, boolean isTitle, int linenumber, File file) {
         this.text = text;
         this.icon = icon;
         this.linenumber = linenumber;
         this.file = file;
         this.isHeader = isHeader;
+        this.isTitle = isTitle;
     }
 
     public String getText() {
@@ -54,6 +65,9 @@ public class RL64ListItem {
     }
     public boolean isHeader() {
         return isHeader;
+    }
+    public boolean isTitle() {
+        return isTitle;
     }
     @Override
     public String toString() {

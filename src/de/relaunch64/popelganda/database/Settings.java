@@ -914,7 +914,7 @@ public class Settings {
      * - FONTWEIGHT<br>
      * @return the related font-information as string.
      */
-    public String getMainfont(int what) {
+    public String getMainFont(int what) {
         Element el = root.getChild(SETTING_MAINFONT);
         String retval = "";
         if (el!=null) {
@@ -934,7 +934,7 @@ public class Settings {
         int fsize = Integer.parseInt(el.getAttributeValue("size"));
         return new Font(el.getText(), Font.PLAIN, fsize);
     }
-    public void setMainfont(Font f) {
+    public void setMainFont(Font f) {
         Element el = root.getChild(SETTING_MAINFONT);
         if (null==el) {
             el = new Element(SETTING_MAINFONT);

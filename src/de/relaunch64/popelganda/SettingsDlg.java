@@ -489,7 +489,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             jLabelFont.setFont(f);
             jLabelFont.setText(f.getFontName());
             // save font in settings
-            settings.setMainfont(mainfont);
+            settings.setMainFont(mainfont);
             // apply font to editor panes
             editorPanes.setFonts(settings.getMainFont());
         }
