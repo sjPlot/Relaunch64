@@ -383,6 +383,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     jButtonRefreshGoto.setEnabled(true);
                     evt.consume();
                 }
+                else if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
+                    evt.consume();
+                    toggleGotoListVisibility(true);
+                    return;
+                }
                 else {
                     String text = jTextFieldGoto.getText();
                     for (int i=0; i<listGotoModel.getSize(); i++) {
@@ -795,19 +800,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // check if anything found
             if (token!=null && !token.isEmpty()) {
                 // make splitpane visible if necessary
-                if(0==jSplitPaneEditorList.getRightComponent().getWidth() && expandSplitPane) {
-                    try {
-                        Field buttonField = BasicSplitPaneDivider.class.getDeclaredField("leftButton");
-                        buttonField.setAccessible(true);
-                        javax.swing.JButton button = (javax.swing.JButton) buttonField.get(((BasicSplitPaneUI) jSplitPaneEditorList.getUI()).getDivider());
-                        button.doClick();
-                        jSplitPaneEditorList.updateUI();
-                        jSplitPaneEditorList.doLayout();
-                    }
-                    catch (NoSuchFieldException | NullPointerException | SecurityException | IllegalAccessException ex) {
-                        jSplitPaneEditorList.setDividerLocation((int)getFrame().getWidth()*3/4);
-                    }
-                }
+                toggleGotoListVisibility(false);
                 // add header item
                 File fp = editorPanes.getFilePath(epIndex);
                 // a list item has several properties now, which will be rendered:
@@ -827,6 +820,38 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // disable refresh button
             jButtonRefreshGoto.setEnabled(false);            
             if (focusToTextfield) jTextFieldGoto.requestFocusInWindow();
+        }
+    }
+    @Action
+    public void toggleGotoListVisibility() {
+        boolean collapse = jSplitPaneEditorList.getRightComponent().getWidth()>1;
+        toggleGotoListVisibility(collapse);
+        if (!collapse) jTextFieldGoto.requestFocusInWindow();
+    }
+    private void toggleGotoListVisibility(boolean collapse) {
+        String arrowButton = null;
+        int width = 0;
+        if(0==jSplitPaneEditorList.getRightComponent().getWidth() && !collapse) {
+            arrowButton = "leftButton";
+            width = (int)getFrame().getWidth()*3/4;
+        }
+        else if(jSplitPaneEditorList.getRightComponent().getWidth()>0 && collapse) {
+            arrowButton = "rightButton";
+            width = getFrame().getWidth();
+            editorPanes.setFocus();
+        }
+        if (arrowButton!=null) {
+            try {
+                Field buttonField = BasicSplitPaneDivider.class.getDeclaredField(arrowButton);
+                buttonField.setAccessible(true);
+                javax.swing.JButton button = (javax.swing.JButton) buttonField.get(((BasicSplitPaneUI) jSplitPaneEditorList.getUI()).getDivider());
+                button.doClick();
+                jSplitPaneEditorList.updateUI();
+                jSplitPaneEditorList.doLayout();
+            }
+            catch (NoSuchFieldException | NullPointerException | SecurityException | IllegalAccessException ex) {
+                jSplitPaneEditorList.setDividerLocation(width);
+            }
         }
     }
     /**
@@ -2128,6 +2153,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
         viewMainTabMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
+        jMenuItemShowHideGoto = new javax.swing.JMenuItem();
         viewLog1MenuItem = new javax.swing.JMenuItem();
         jSeparator19 = new javax.swing.JPopupMenu.Separator();
         switchLogPosMenuItem = new javax.swing.JMenuItem();
@@ -2831,6 +2857,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         viewMenu.setText(resourceMap.getString("viewMenu.text")); // NOI18N
         viewMenu.setName("viewMenu"); // NOI18N
 
+        jMenuItemShowHideGoto.setAction(actionMap.get("toggleGotoListVisibility")); // NOI18N
+        jMenuItemShowHideGoto.setName("jMenuItemShowHideGoto"); // NOI18N
+        viewMenu.add(jMenuItemShowHideGoto);
+
         viewLog1MenuItem.setAction(actionMap.get("selectLog")); // NOI18N
         viewLog1MenuItem.setMnemonic('R');
         viewLog1MenuItem.setName("viewLog1MenuItem"); // NOI18N
@@ -3033,6 +3063,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem jMenuItemExpandFold;
     private javax.swing.JMenuItem jMenuItemNextFold;
     private javax.swing.JMenuItem jMenuItemPrevFold;
+    private javax.swing.JMenuItem jMenuItemShowHideGoto;
     private javax.swing.JMenuItem jMenuItemSpaceToTab;
     private javax.swing.JMenuItem jMenuItemSurroundFolds;
     private javax.swing.JMenuItem jMenuItemTabsToSpaces;
