@@ -350,7 +350,9 @@
                           <SubComponents>
                             <Component class="javax.swing.JList" name="jListGoto">
                               <Properties>
-                                <Property name="background" type="java.awt.Color" resourceKey="jListGoto.background"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="ConstantsR64.OSX_BG_STYLE" type="code"/>
+                                </Property>
                                 <Property name="name" type="java.lang.String" value="jListGoto" noResource="true"/>
                               </Properties>
                             </Component>
@@ -433,7 +435,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <EmptySpace min="0" pref="779" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane2" alignment="0" pref="779" max="32767" attributes="0"/>
+                                  <Component id="jScrollPaneLog" alignment="0" pref="779" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -441,20 +443,20 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <EmptySpace min="0" pref="140" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane2" alignment="0" pref="140" max="32767" attributes="0"/>
+                                  <Component id="jScrollPaneLog" alignment="0" pref="140" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                        <Container class="javax.swing.JScrollPane" name="jScrollPaneLog">
                           <Properties>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                               <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
                                 <MatteColorBorder bottom="1" left="0" right="0" top="0"/>
                               </Border>
                             </Property>
-                            <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+                            <Property name="name" type="java.lang.String" value="jScrollPaneLog" noResource="true"/>
                           </Properties>
                           <AuxValues>
                             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -465,6 +467,9 @@
                             <Component class="javax.swing.JTextArea" name="jTextAreaLog">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="ConstantsR64.OSX_BG_STYLE" type="code"/>
+                                </Property>
                                 <Property name="wrapStyleWord" type="boolean" value="true"/>
                                 <Property name="name" type="java.lang.String" value="jTextAreaLog" noResource="true"/>
                               </Properties>
@@ -488,24 +493,24 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane3" alignment="0" pref="779" max="32767" attributes="0"/>
+                              <Component id="jScrollPaneErrorLog" alignment="0" pref="779" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane3" alignment="0" pref="140" max="32767" attributes="0"/>
+                              <Component id="jScrollPaneErrorLog" alignment="0" pref="140" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                        <Container class="javax.swing.JScrollPane" name="jScrollPaneErrorLog">
                           <Properties>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                               <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
                                 <MatteColorBorder bottom="1" left="0" right="0" top="0"/>
                               </Border>
                             </Property>
-                            <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
+                            <Property name="name" type="java.lang.String" value="jScrollPaneErrorLog" noResource="true"/>
                           </Properties>
                           <AuxValues>
                             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -516,6 +521,9 @@
                             <Component class="javax.swing.JTextArea" name="jTextAreaCompilerOutput">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="ConstantsR64.OSX_BG_STYLE" type="code"/>
+                                </Property>
                                 <Property name="name" type="java.lang.String" value="jTextAreaCompilerOutput" noResource="true"/>
                               </Properties>
                             </Component>

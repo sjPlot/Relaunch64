@@ -39,7 +39,7 @@ public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL6
     }
     @Override
     public Component getListCellRendererComponent(JList<? extends RL64ListItem> list, RL64ListItem value, int index, boolean isSelected, boolean cellHasFocus) {
-        Color backgroundColor = new Color(232,236,241);
+        int fontHeight = settings.getMainFont().getSize();
         // text of list item
         setText(value.getText());
         // icon of list item, may be null if no item needed
@@ -48,20 +48,16 @@ public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL6
         setFont(settings.getMainFont().deriveFont(value.isTitle()? Font.BOLD : Font.PLAIN));
         // normal entries have small padding on left
         int leftMargin = (null==value.getIcon()) ? ConstantsR64.r64listicon.getIconWidth()+getIconTextGap()+2 : ConstantsR64.r64listicon.getIconWidth()-value.getIcon().getIconWidth()+2;
-        if (value.isTitle()) {
-            setBorder(new MatteBorder(1, 1, settings.getMainFont().getSize()/2, 1, backgroundColor));
-        }
-        else {
-            setBorder(value.isHeader() ? new MatteBorder(1, 2, 1, 0, backgroundColor)
-                                       : new MatteBorder(1, leftMargin, 1, 0, backgroundColor));
-        }
+        setBorder(value.isHeader() ? new MatteBorder(fontHeight, 2, 1, 0, ConstantsR64.OSX_BG_STYLE)
+                                   : value.isTitle() ? new MatteBorder(1, 1, 1, 1, ConstantsR64.OSX_BG_STYLE)
+                                                     : new MatteBorder(1, leftMargin, 1, 0, ConstantsR64.OSX_BG_STYLE));
         
         if (isSelected) {
-            setBackground(new Color(97,166,221));
+            setBackground(ConstantsR64.OSX_HIGHLIGHT_STYLE);
             setForeground(Color.WHITE);
         }
         else {
-            setBackground(backgroundColor);
+            setBackground(ConstantsR64.OSX_BG_STYLE);
             setForeground(value.isHeader() ? new Color(113,126,140) : Color.BLACK);
         }
         return this;

@@ -33,6 +33,7 @@
 package de.relaunch64.popelganda.assemblers;
 
 import de.relaunch64.popelganda.Editor.EditorPanes;
+import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,7 +46,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.Highlighter.HighlightPainter;
 import javax.swing.text.DefaultHighlighter;
-import java.awt.Color;
 
 /**
  *
@@ -241,7 +241,7 @@ public class ErrorHandler {
                 start = caret;
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
-                HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
+                HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(ConstantsR64.OSX_HIGHLIGHT_STYLE);
                 ta.getHighlighter().removeAllHighlights();
                 ta.getHighlighter().addHighlight(start, end, painter);
             }

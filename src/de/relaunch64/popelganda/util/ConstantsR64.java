@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.2 (Build 20140617)";
+    public static final String BUILD_VERSION = "3.2 (Build 20140618)";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -119,6 +119,9 @@ public class ConstantsR64 {
     public static final String ASSEMBLER_START_ADDRESS = "START";
     public static final String ASSEMBLER_UNCOMPRESSED_FILE = "UNCOMPFILE";
     public static final String ASSEMBLER_COMPRESSED_FILE = "COMPFILE";
+    
+    public static final Color OSX_BG_STYLE = new Color(232,236,241);
+    public static final Color OSX_HIGHLIGHT_STYLE = new Color(97,166,221);
     
     public static final String DEFAULT_EXOMIZER_PARAM = "sfx "+ASSEMBLER_START_ADDRESS+" "+ASSEMBLER_UNCOMPRESSED_FILE+" -o "+ASSEMBLER_COMPRESSED_FILE;    
     public static final String DEFAULT_PUCRUNCH_PARAM = ASSEMBLER_UNCOMPRESSED_FILE+" "+ASSEMBLER_COMPRESSED_FILE+" -x"+ASSEMBLER_START_ADDRESS;

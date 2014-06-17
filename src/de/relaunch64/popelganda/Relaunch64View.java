@@ -159,8 +159,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         initComponents();
         // remove borders on OS X
         if (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) {
-            jScrollPane2.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
-            jScrollPane3.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
+            jScrollPaneLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
+            jScrollPaneErrorLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
         }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
@@ -2116,10 +2116,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel2 = new javax.swing.JPanel();
         jTabbedPaneLogs = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPaneLog = new javax.swing.JScrollPane();
         jTextAreaLog = new javax.swing.JTextArea();
         jPanel5 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPaneErrorLog = new javax.swing.JScrollPane();
         jTextAreaCompilerOutput = new javax.swing.JTextArea();
         jPanelSelectScript = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -2407,7 +2407,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jScrollPaneSidebar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, resourceMap.getColor("jScrollPaneSidebar.border.matteColor"))); // NOI18N
         jScrollPaneSidebar.setName("jScrollPaneSidebar"); // NOI18N
 
-        jListGoto.setBackground(resourceMap.getColor("jListGoto.background")); // NOI18N
+        jListGoto.setBackground(ConstantsR64.OSX_BG_STYLE);
         jListGoto.setName("jListGoto"); // NOI18N
         jScrollPaneSidebar.setViewportView(jListGoto);
 
@@ -2464,13 +2464,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanel6.setName("jPanel6"); // NOI18N
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
+        jScrollPaneLog.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jScrollPaneLog.setName("jScrollPaneLog"); // NOI18N
 
         jTextAreaLog.setEditable(false);
+        jTextAreaLog.setBackground(ConstantsR64.OSX_BG_STYLE);
         jTextAreaLog.setWrapStyleWord(true);
         jTextAreaLog.setName("jTextAreaLog"); // NOI18N
-        jScrollPane2.setViewportView(jTextAreaLog);
+        jScrollPaneLog.setViewportView(jTextAreaLog);
 
         org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -2478,35 +2479,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 779, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE))
+                .add(jScrollPaneLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 140, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .add(jScrollPaneLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
 
         jPanel5.setName("jPanel5"); // NOI18N
 
-        jScrollPane3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jScrollPane3.setName("jScrollPane3"); // NOI18N
+        jScrollPaneErrorLog.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jScrollPaneErrorLog.setName("jScrollPaneErrorLog"); // NOI18N
 
         jTextAreaCompilerOutput.setEditable(false);
+        jTextAreaCompilerOutput.setBackground(ConstantsR64.OSX_BG_STYLE);
         jTextAreaCompilerOutput.setName("jTextAreaCompilerOutput"); // NOI18N
-        jScrollPane3.setViewportView(jTextAreaCompilerOutput);
+        jScrollPaneErrorLog.setViewportView(jTextAreaCompilerOutput);
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+            .add(jScrollPaneErrorLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+            .add(jScrollPaneErrorLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
@@ -3142,8 +3144,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
     private javax.swing.JPanel jPanelSelectScript;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPaneErrorLog;
+    private javax.swing.JScrollPane jScrollPaneLog;
     private javax.swing.JScrollPane jScrollPaneSidebar;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
