@@ -39,9 +39,9 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jTabbedPane1" pref="367" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -116,7 +116,7 @@
                           <Component id="jTextFieldScriptName" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="218" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="233" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonApplyScript" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -259,9 +259,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jCheckBoxCodeFolding" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jCheckBoxScaleFonts" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxSuggestCaseSort" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jCheckBoxShowCloseButton" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="29" pref="29" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -270,7 +268,6 @@
                                           <Component id="jCheckBoxCF_labels" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jCheckBoxCF_directives" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jCheckBoxCF_struct" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabelRestart" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -285,7 +282,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -327,16 +324,10 @@
                               <Component id="jCheckBoxCF_struct" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jCheckBoxSuggestCaseSort" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jCheckBoxShowCloseButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jCheckBoxScaleFonts" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabelRestart" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jPanel4" max="32767" attributes="0"/>
+                          <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="73" max="32767" attributes="0"/>
+                      <EmptySpace pref="71" max="32767" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -450,31 +441,11 @@
                 <Property name="name" type="java.lang.String" value="jComboBoxAntiAlias" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="jCheckBoxScaleFonts">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxScaleFonts.text"/>
-                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxScaleFonts.toolTipText"/>
-                <Property name="name" type="java.lang.String" value="jCheckBoxScaleFonts" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabelRestart">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" resourceKey="jLabelRestart.foreground"/>
-                <Property name="text" type="java.lang.String" resourceKey="jLabelRestart.text"/>
-                <Property name="name" type="java.lang.String" value="jLabelRestart" noResource="true"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBoxSuggestCaseSort">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxSuggestCaseSort.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxSuggestCaseSort.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxSuggestCaseSort" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="jCheckBoxShowCloseButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowCloseButton.text"/>
-                <Property name="name" type="java.lang.String" value="jCheckBoxShowCloseButton" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBoxCodeFolding">
@@ -502,7 +473,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="219" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -593,7 +564,7 @@
                       <Component id="jCheckBoxAlternativeAssemblyMode" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCheckBoxShowLineHighlight" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="210" max="32767" attributes="0"/>
+                      <EmptySpace pref="215" max="32767" attributes="0"/>
                       <Component id="jButtonApplyScheme" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -680,8 +651,14 @@
                                   <Component id="jCheckBoxShowExtInTab" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxShowBufferSize" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxScriptBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowCloseButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jCheckBoxScaleFonts" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabelRestart" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace min="0" pref="292" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="258" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -708,7 +685,14 @@
                       <Component id="jCheckBoxShowBufferSize" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jCheckBoxScriptBox" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="117" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxShowCloseButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jCheckBoxScaleFonts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelRestart" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="67" max="32767" attributes="0"/>
                       <Component id="jButtonApplyOther" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -776,6 +760,26 @@
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxScriptBox.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxScriptBox.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxScriptBox" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxShowCloseButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowCloseButton.text"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxShowCloseButton" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxScaleFonts">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxScaleFonts.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxScaleFonts.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxScaleFonts" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelRestart">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" resourceKey="jLabelRestart.foreground"/>
+                <Property name="text" type="java.lang.String" resourceKey="jLabelRestart.text"/>
+                <Property name="name" type="java.lang.String" value="jLabelRestart" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

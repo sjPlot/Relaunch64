@@ -385,6 +385,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
                 else if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
                     evt.consume();
+                    jTextFieldGoto.setText("");
                     toggleGotoListVisibility(true);
                     return;
                 }
@@ -751,13 +752,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             gotoTokenFromList();
         }
     }
-    protected void updateListContent(int gotoIndex) {
-        updateListContent(gotoIndex, true, true);
+    private void updateListContent(int gotoIndex) {
+        updateListContent(gotoIndex, true);
     }
     public void updateListContent() {
-        updateListContent(listGotoIndex, false, false);
+        updateListContent(listGotoIndex, false);
     }
-    protected void updateListContent(int gotoIndex, boolean focusToTextfield, boolean expandSplitPane) {
+    /**
+     * Updates the list with Goto-tokens, when a Goto-command from
+     * the Navigation-menu is called. This method retrieves all requested
+     * tokens (labels, macros, sections...) and puts them into the JList.
+     * <br><br>
+     * For more information on cell-rendering, see
+     * {@link RL64ListCellRenderer RL64ListCellRenderer} and
+     * {@link RL64ListItem RL64ListItem}
+     * 
+     * @param gotoIndex indicates which Goto-command from the Navigate-menu
+     * was used. One of following values:
+     * <ul>
+     *  <li>{@link #GOTO_FUNCTION}</li>
+     *  <li>{@link #GOTO_LABEL}</li>
+     *  <li>{@link #GOTO_MACRO}</li>
+     *  <li>{@link #GOTO_SECTION}</li>
+     * </ul>
+     * @param focusToTextfield {@code true} if the textfield for the Goto-list should
+     * gain the input focus. Not useful in all cases, e.g. when opening new files, 
+     * the user does not expect the input focus to be outside the editor.
+     */
+    private void updateListContent(int gotoIndex, boolean focusToTextfield) {
         // save index for list listener
         listGotoIndex = gotoIndex;
         listGotoModel.clear();
@@ -821,33 +843,59 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
             // disable refresh button
             jButtonRefreshGoto.setEnabled(false);            
+            // clear textfield
+            jTextFieldGoto.setText("");
             if (focusToTextfield) jTextFieldGoto.requestFocusInWindow();
         }
     }
+    /**
+     * Toggles the visibility of the Goto-list, i.e. either collapses or
+     * expands the splitpane on demand.
+     */
     @Action
     public void toggleGotoListVisibility() {
         boolean collapse = jSplitPaneEditorList.getRightComponent().getWidth()>1;
         toggleGotoListVisibility(collapse);
         if (!collapse) jTextFieldGoto.requestFocusInWindow();
     }
+    /**
+     * Toggles the visibility of the Goto-list, i.e. either collapses or
+     * expands the splitpane on demand.
+     * 
+     * @param collapse {@code true} if splitpane should be collapsed (i.e.
+     * hide Goto-list), {@code false} if it should be expanded (i.e. made visible).
+     * If, for instance, {@code collapse} is {@code true} and splitpane already
+     * collapsed, nothing will happen.
+     */
     private void toggleGotoListVisibility(boolean collapse) {
+        // initial value, if nothing changes
         String arrowButton = null;
         int width = 0;
+        // check if splitpane is hidden (collapsed) and should be expanded
         if(0==jSplitPaneEditorList.getRightComponent().getWidth() && !collapse) {
+            // "click" on the left arrow button
             arrowButton = "leftButton";
+            // set default width for exception
             width = (int)getFrame().getWidth()*3/4;
         }
+        // check if goto-list is visible and should be collapsed
         else if(jSplitPaneEditorList.getRightComponent().getWidth()>0 && collapse) {
+            // "click" on the right arrow button
             arrowButton = "rightButton";
+            // set default width for exception
             width = getFrame().getWidth();
             editorPanes.setFocus();
         }
+        // check if we have any change for splitpane state
         if (arrowButton!=null) {
             try {
+                // get "arrow" buttons from oneTouchExpandable splitPane
                 Field buttonField = BasicSplitPaneDivider.class.getDeclaredField(arrowButton);
                 buttonField.setAccessible(true);
                 javax.swing.JButton button = (javax.swing.JButton) buttonField.get(((BasicSplitPaneUI) jSplitPaneEditorList.getUI()).getDivider());
+                // simulate button click
                 button.doClick();
+                // may have to update splitpane ui
                 jSplitPaneEditorList.updateUI();
                 jSplitPaneEditorList.doLayout();
             }
