@@ -94,6 +94,7 @@ public class Settings {
     private static final String SETTING_CHECKUPDATES = "checkupdates";
     private static final String SETTING_SAVEONCOMPILE = "saveoncompile";
     private static final String SETTING_NIMBUS_ON_OSX = "nimbusonosx";
+    private static final String SETTING_USE_SCROLL_TABS = "usescrolltabs";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
     private static final String SETTING_LINE_NUMBER_ALIGNMENT = "linenumberalignment";
@@ -348,6 +349,13 @@ public class Settings {
         if (null==root.getChild(SETTING_NIMBUS_ON_OSX)) {
             // create element
             Element el = new Element(SETTING_NIMBUS_ON_OSX);
+            el.setText("0");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_USE_SCROLL_TABS)) {
+            // create element
+            Element el = new Element(SETTING_USE_SCROLL_TABS);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
@@ -850,6 +858,19 @@ public class Settings {
         Element el = root.getChild(SETTING_NIMBUS_ON_OSX);
         if (null==el) {
             el = new Element(SETTING_NIMBUS_ON_OSX);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getUseScrollTabs() {
+        Element el = root.getChild(SETTING_USE_SCROLL_TABS);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setUseScrollTabs(boolean val)  {
+        Element el = root.getChild(SETTING_USE_SCROLL_TABS);
+        if (null==el) {
+            el = new Element(SETTING_USE_SCROLL_TABS);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

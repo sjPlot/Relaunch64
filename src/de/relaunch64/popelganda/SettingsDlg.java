@@ -139,6 +139,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxShowExtInTab.setSelected(settings.getShowExtensionInTab());
         jCheckBoxShowBufferSize.setSelected(settings.getShowBufferSize());
         jCheckBoxScriptBox.setSelected(settings.getShowScriptBox());
+        jCheckBoxUseScrollTabs.setSelected(!settings.getUseScrollTabs());
         jCheckBoxCodeFolding.setSelected(settings.getCodeFolding());
         jCheckBoxCF_braces.setEnabled(settings.getCodeFolding());
         jCheckBoxCF_manual.setEnabled(settings.getCodeFolding());
@@ -301,6 +302,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             }
         });
         jCheckBoxShowCloseButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabOther(true);
+            }
+        });
+        jCheckBoxUseScrollTabs.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabOther(true);
@@ -590,10 +597,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setShowScriptBox(jCheckBoxScriptBox.isSelected());
         settings.setScaleFont(jCheckBoxScaleFonts.isSelected());
         settings.setShowCloseButton(jCheckBoxShowCloseButton.isSelected());
+        settings.setUseScrollTabs(!jCheckBoxUseScrollTabs.isSelected());
         editorPanes.updateTabCloseButtons();
         editorPanes.updateTitles();
         editorPanes.updateLabelBufferSize();
         mainFrame.toggleScriptBoxVisibility();
+        mainFrame.toggleTabbedPaneScrollPolicy();
         setModifiedTabOther(false);
     }
     @Action(enabledProperty = "removePossible")
@@ -716,6 +725,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxShowCloseButton = new javax.swing.JCheckBox();
         jCheckBoxScaleFonts = new javax.swing.JCheckBox();
         jLabelRestart = new javax.swing.JLabel();
+        jCheckBoxUseScrollTabs = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -803,7 +813,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jLabel9)
                     .add(jTextFieldScriptName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonApplyScript)
@@ -982,7 +992,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jCheckBoxSuggestCaseSort))
                     .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 71, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 78, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -1046,7 +1056,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 .add(jCheckBoxAlternativeAssemblyMode)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxShowLineHighlight)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 215, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 204, Short.MAX_VALUE)
                 .add(jButtonApplyScheme)
                 .addContainerGap())
         );
@@ -1099,6 +1109,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jLabelRestart.setText(resourceMap.getString("jLabelRestart.text")); // NOI18N
         jLabelRestart.setName("jLabelRestart"); // NOI18N
 
+        jCheckBoxUseScrollTabs.setText(resourceMap.getString("jCheckBoxUseScrollTabs.text")); // NOI18N
+        jCheckBoxUseScrollTabs.setToolTipText(resourceMap.getString("jCheckBoxUseScrollTabs.toolTipText")); // NOI18N
+        jCheckBoxUseScrollTabs.setName("jCheckBoxUseScrollTabs"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1125,7 +1139,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jCheckBoxScaleFonts)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabelRestart)))
+                                .add(jLabelRestart))
+                            .add(jCheckBoxUseScrollTabs))
                         .add(0, 258, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1134,27 +1149,29 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jCheckBoxCheckUpdates)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxSaveOnCompile)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxReopenFiles)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jCheckBoxNimbusOnOSX)
                     .add(jLabelRestart2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxShowExtInTab)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxShowBufferSize)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxScriptBox)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxShowCloseButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jCheckBoxScaleFonts)
                     .add(jLabelRestart))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 67, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxUseScrollTabs)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 17, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
                 .addContainerGap())
         );
@@ -1174,7 +1191,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                .add(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -1208,6 +1225,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxShowExtInTab;
     private javax.swing.JCheckBox jCheckBoxShowLineHighlight;
     private javax.swing.JCheckBox jCheckBoxSuggestCaseSort;
+    private javax.swing.JCheckBox jCheckBoxUseScrollTabs;
     private javax.swing.JComboBox jComboBoxAntiAlias;
     private javax.swing.JComboBox jComboBoxCustomScripts;
     private javax.swing.JComboBox jComboBoxLineNumberAlign;

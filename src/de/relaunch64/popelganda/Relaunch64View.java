@@ -90,6 +90,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -161,12 +162,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) {
             jScrollPaneLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPaneErrorLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
+            jScrollPaneSidebar.setBorder(new javax.swing.border.MatteBorder(0, 1, 1, 0, Color.lightGray));
+            jTextFieldGoto.putClientProperty("JTextField.variant", "search");
         }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
         jButtonRefreshGoto.setEnabled(false);   
         jPanelSelectScript.setVisible(settings.getShowScriptBox());
+        jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
         // set compiler log font to monospace
         javax.swing.UIDefaults uid = UIManager.getLookAndFeelDefaults();
         Object defaultFont = uid.get("defaultFont");
@@ -1142,6 +1146,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void toggleScriptBoxVisibility() {
         jPanelSelectScript.setVisible(settings.getShowScriptBox());
     }
+    public void toggleTabbedPaneScrollPolicy() {
+        jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
+    }
     @Action
     public void refreshGotoList() {
         updateListContent(listGotoIndex);
@@ -1865,6 +1872,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (ConstantsR64.IS_OSX) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
             System.setProperty("apple.laf.useScreenMenuBar", "true");
+            // Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
         if (settings.getScaleFont()) {
