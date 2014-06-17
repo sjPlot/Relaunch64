@@ -166,7 +166,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jSplitPaneEditorList.setBorder(null);
             jScrollPane2.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPane3.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
-            jScrollPane1.setBorder(new javax.swing.border.MatteBorder(0, 0, 1, 0, Color.lightGray));
+            jScrollPaneSidebar.setBorder(new javax.swing.border.MatteBorder(0, 0, 1, 0, Color.lightGray));
             jListGoto.setBorder(new javax.swing.border.TitledBorder(UIManager.getBorder("TitledBorder.aquaVariant"), ConstantsR64.CB_GOTO_DEFAULT_STRING));
         }
         // hide find & replace textfield
@@ -846,6 +846,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // clear textfield
             jTextFieldGoto.setText("");
             if (focusToTextfield) jTextFieldGoto.requestFocusInWindow();
+            // reset scroll bars for sidebar
+            javax.swing.JScrollBar verticalScrollBar = jScrollPaneSidebar.getVerticalScrollBar();
+            javax.swing.JScrollBar horizontalScrollBar = jScrollPaneSidebar.getHorizontalScrollBar();
+            verticalScrollBar.setValue(verticalScrollBar.getMinimum());
+            horizontalScrollBar.setValue(horizontalScrollBar.getMinimum());
         }
     }
     /**
@@ -2095,7 +2100,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTextFieldReplace = new javax.swing.JTextField();
         jButtonReplace = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPaneSidebar = new javax.swing.JScrollPane();
         jListGoto = new javax.swing.JList();
         jTextFieldGoto = new javax.swing.JTextField();
         jButtonRefreshGoto = new javax.swing.JButton();
@@ -2388,12 +2393,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jPanel8.setName("jPanel8"); // NOI18N
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, resourceMap.getColor("jScrollPane1.border.matteColor"))); // NOI18N
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        jScrollPaneSidebar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, resourceMap.getColor("jScrollPaneSidebar.border.matteColor"))); // NOI18N
+        jScrollPaneSidebar.setName("jScrollPaneSidebar"); // NOI18N
 
         jListGoto.setBorder(javax.swing.BorderFactory.createTitledBorder(ConstantsR64.CB_GOTO_DEFAULT_STRING));
         jListGoto.setName("jListGoto"); // NOI18N
-        jScrollPane1.setViewportView(jListGoto);
+        jScrollPaneSidebar.setViewportView(jListGoto);
 
         jTextFieldGoto.setToolTipText(resourceMap.getString("jTextFieldGoto.toolTipText")); // NOI18N
         jTextFieldGoto.setName("jTextFieldGoto"); // NOI18N
@@ -2408,7 +2413,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
             .add(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jTextFieldGoto)
@@ -2419,7 +2424,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jTextFieldGoto)
@@ -3126,9 +3131,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
     private javax.swing.JPanel jPanelSelectScript;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPaneSidebar;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
