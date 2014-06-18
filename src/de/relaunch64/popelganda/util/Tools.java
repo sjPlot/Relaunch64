@@ -202,7 +202,7 @@ public class Tools {
      * start address was found.
      */
     public static String getCruncherStart(String source, String commentString) {
-        return getCommentedToken(source, commentString, "start=");
+        return getCommentedToken(source, commentString, "start=").split(" ")[0];
     }
     /**
      * This method searches the source code {@code source} for a script label

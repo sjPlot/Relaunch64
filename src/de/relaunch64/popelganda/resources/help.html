@@ -44,7 +44,7 @@
 		<li><a href="#filemenu">File menu</a></li>
 		<li><a href="#editmenu">Edit menu</a></li>
 		<li><a href="#findmenu">Find menu</a></li>
-		<li><a href="#navigatemenu">Navigate menu</a></li>
+		<li><a href="#navigatemenu">Navigate menu and Goto-Sidebar</a></li>
 		<li><a href="#sourcemenu">Source menu</a></li>
 		<li><a href="#viewmenu">View menu</a></li>
 	</ul>
@@ -52,7 +52,7 @@
 <h1><a name="syntax">Assembler setting</a></h1>
 
 <p>
-	In the <em>Compile and Run</em> area of the main window (upper right by default) you can select the 
+	In the <em>bottom status bar</em> of the main window you can select the 
 	assembler of the current active source code. It is recommended to do so for two reasons:
 </p>
 
@@ -85,7 +85,7 @@
         The comment line needs following syntax: &lt;comment sign&gt; script=&lt;script name&gt;, for instance:<br>
         <ul>
             <li>Kick Assembler:<br><code>// script=Kickass, Vice</code><br>(will run the script named &quot;Kickass, Vice&quot;)</li>
-            <li>Acme: <br><code>// script=Acme with PuCrunch</code><br>(will run the script named &quot;Acme with PuCrunch&quot;)</li>
+            <li>Acme: <br><code>; script=Acme with PuCrunch</code><br>(will run the script named &quot;Acme with PuCrunch&quot;)</li>
         </ul>
     </li>
 </ul>
@@ -366,21 +366,21 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 </p>
 
 
-<h2>The Goto-commands</h2>
+<h2>The Goto-commands / Sidebar</h2>
 
 <p>
-    Except for the <em>Goto line</em> command, each of the <em>goto</em> commands opens the
-    drop down list at the bottom of the window. The content of this list depends on the context,
+    Except for the <em>Goto line</em> command, each of the <em>goto</em> commands opens a
+    sidebar to the right of the editor window. The content of this list depends on the context,
     i.e. the command that opened this list. The <em>Goto label</em> command, for instance,
     extracts <strong>all labels</strong> from <strong>all currently opened</strong> files
-    and lists them in the drop down list. A red heading with the related file name indicates
+    and lists them in the drop down list. A gray, uppercased heading with the related file name indicates
     to which file the labels from this list belong. Selecting an item will choose the related
     file and scrolls the caret to the line containing the label.
 </p>
 
 <p>
     The <em>Goto function</em> or <em>Goto macro</em> command work in a similar way, just that
-    the drop down list contains all functions or macros found in all opened files.
+    the sidebar list contains all functions or macros found in all opened files.
 </p>
 
 <p>
@@ -392,6 +392,16 @@ open /Applications/Vice64/x64.app OUTFILE</div>
 <p>
     The <em>Goto line</em> command sets the input focus into the text field at the bottom left part,
     where you can enter any line number. Then the content will scroll to this line.
+</p>
+
+<br>
+
+<h3>The sidebar textfield</h3>
+
+<p>
+    Under the sidebar is a textfield where you can find entries by typing. Entries from the sidebar that
+    start with your input are automatically selected. To filter the sidebar-list, press <code>Enter</code>.
+    All list-items that contain the text input remain in the list, all other entries will be removed.
 </p>
 
 <br>

@@ -21,7 +21,8 @@ Relaunch64 3.2 (development)
 
 #### user scripts
 * added SOURCENAME and OUTNAME as additional placeholders for input and output file names, excluding path and extension
-* added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names.
+* added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names
+* the extraction of script- and start-comment-commands (see help) was improved
 
 #### GUI
 * the goto-popup-list was removed and replaced by a sidebar. this allows "surfing" through the goto-destinations (labels, sections, functions...) etc.
