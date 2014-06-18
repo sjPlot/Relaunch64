@@ -881,7 +881,13 @@ public class EditorPanes {
                     setCursor(epp.getEditorPane());
                     epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.lineSeparator());
                     // update labels, in case we have them shown
-                    mainFrame.updateListContent();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            // set cursor
+                            mainFrame.updateListContent();
+                        }
+                    });
                     return true;
                 }
             }
