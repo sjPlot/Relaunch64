@@ -260,14 +260,25 @@ class Assembler_dreamass implements Assembler
     }
 
     private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z_][a-zA-Z0-9_]*\\b)?\\s*(?<directive>(?:#(?:ifn?def|ifn?file|if|endif)\\b|\\.(?:[()]|pseudopc|realpc))).*");
+    private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
 
     // folding by directives, { } (macros), plus manual folding
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
-        Matcher m = directivePattern.matcher(line);
 
+        if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
+            boolean section1, section2;
+            Matcher m = sectionPattern.matcher(line);
+            section1 = m.matches();
+            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+            section2 = m.matches();
+            if (section1 && !section2) foldLevel++;
+            if (!section1 && section2) foldLevel--;
+        }
+        
+        Matcher m = directivePattern.matcher(line);
         if (m.matches()) {
             String directive = m.group("directive");
             if (directive != null) {

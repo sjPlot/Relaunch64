@@ -146,12 +146,14 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxCF_labels.setEnabled(settings.getCodeFolding());
         jCheckBoxCF_directives.setEnabled(settings.getCodeFolding());
         jCheckBoxCF_struct.setEnabled(settings.getCodeFolding());
+        jCheckBoxCF_section.setEnabled(settings.getCodeFolding());
         int foldtokens = settings.getCodeFoldingTokens();
         jCheckBoxCF_braces.setSelected((foldtokens & Assemblers.CF_TOKEN_BRACES)!=0);
         jCheckBoxCF_manual.setSelected((foldtokens & Assemblers.CF_TOKEN_MANUAL)!=0);
         jCheckBoxCF_labels.setSelected((foldtokens & Assemblers.CF_TOKEN_LABELS)!=0);
         jCheckBoxCF_directives.setSelected((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES)!=0);
         jCheckBoxCF_struct.setSelected((foldtokens & Assemblers.CF_TOKEN_STRUCTS)!=0);
+        jCheckBoxCF_section.setSelected((foldtokens & Assemblers.CF_TOKEN_SECTIONS)!=0);
         // init schemes
         initSchemes();
         // init user scripts, including combo box setting etc
@@ -352,6 +354,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 jCheckBoxCF_labels.setEnabled(jCheckBoxCodeFolding.isSelected());
                 jCheckBoxCF_directives.setEnabled(jCheckBoxCodeFolding.isSelected());
                 jCheckBoxCF_struct.setEnabled(jCheckBoxCodeFolding.isSelected());
+                jCheckBoxCF_section.setEnabled(jCheckBoxCodeFolding.isSelected());
             }
         });
         jCheckBoxCF_manual.addActionListener(new java.awt.event.ActionListener() {
@@ -361,6 +364,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             }
         });
         jCheckBoxCF_braces.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+            }
+        });
+        jCheckBoxCF_section.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setModifiedTabFont(true);
@@ -519,6 +528,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         foldtokens = foldtokens + (jCheckBoxCF_labels.isSelected() ? Assemblers.CF_TOKEN_LABELS : 0);
         foldtokens = foldtokens + (jCheckBoxCF_directives.isSelected() ? Assemblers.CF_TOKEN_DIRECTIVES : 0);
         foldtokens = foldtokens + (jCheckBoxCF_struct.isSelected() ? Assemblers.CF_TOKEN_STRUCTS : 0);
+        foldtokens = foldtokens + (jCheckBoxCF_section.isSelected() ? Assemblers.CF_TOKEN_SECTIONS : 0);
         settings.setCodeFoldingTokens(foldtokens);
         switch(jComboBoxLineNumberAlign.getSelectedIndex()) {
             case 0:
@@ -705,6 +715,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxCF_labels = new javax.swing.JCheckBox();
         jCheckBoxCF_directives = new javax.swing.JCheckBox();
         jCheckBoxCF_struct = new javax.swing.JCheckBox();
+        jCheckBoxCF_section = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
@@ -907,6 +918,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxCF_struct.setText(resourceMap.getString("jCheckBoxCF_struct.text")); // NOI18N
         jCheckBoxCF_struct.setName("jCheckBoxCF_struct"); // NOI18N
 
+        jCheckBoxCF_section.setText(resourceMap.getString("jCheckBoxCF_section.text")); // NOI18N
+        jCheckBoxCF_section.setName("jCheckBoxCF_section"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -947,7 +961,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                     .add(jCheckBoxCF_braces)
                                     .add(jCheckBoxCF_labels)
                                     .add(jCheckBoxCF_directives)
-                                    .add(jCheckBoxCF_struct))))
+                                    .add(jCheckBoxCF_struct)
+                                    .add(jCheckBoxCF_section))))
                         .add(0, 98, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -990,9 +1005,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jCheckBoxCF_struct)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jCheckBoxCF_section)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jCheckBoxSuggestCaseSort))
                     .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 75, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -1212,6 +1229,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxCF_directives;
     private javax.swing.JCheckBox jCheckBoxCF_labels;
     private javax.swing.JCheckBox jCheckBoxCF_manual;
+    private javax.swing.JCheckBox jCheckBoxCF_section;
     private javax.swing.JCheckBox jCheckBoxCF_struct;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
     private javax.swing.JCheckBox jCheckBoxCodeFolding;

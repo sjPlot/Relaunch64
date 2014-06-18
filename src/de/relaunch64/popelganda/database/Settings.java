@@ -77,6 +77,7 @@ public class Settings {
     private static final String SETTING_CF_MANUAL = "codefolding_manual";
     private static final String SETTING_CF_DIRECTIVES = "codefolding_directive";
     private static final String SETTING_CF_STRUCTS = "codefolding_structural";
+    private static final String SETTING_CF_SECTIONS = "codefolding_sections";
     private static final String SETTING_CF_BRACES = "codefolding_braces";
     private static final String SETTING_CF_LABELS = "codefolding_labels";
     private static final String SETTING_ALT_ASM_MODE = "alternativeAssemblyMode";
@@ -265,6 +266,13 @@ public class Settings {
         if (null==root.getChild(SETTING_CF_STRUCTS)) {
             // create element
             Element el = new Element(SETTING_CF_STRUCTS);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_CF_SECTIONS)) {
+            // create element
+            Element el = new Element(SETTING_CF_SECTIONS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
@@ -664,6 +672,8 @@ public class Settings {
         if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_DIRECTIVES : 0);
         el = root.getChild(SETTING_CF_STRUCTS);
         if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_STRUCTS : 0);
+        el = root.getChild(SETTING_CF_SECTIONS);
+        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_SECTIONS : 0);
         return foldtokens;
     }
     public void setCodeFoldingTokens(int tokens) {
@@ -697,6 +707,12 @@ public class Settings {
             root.addContent(el);
         }
         el.setText(((tokens & Assemblers.CF_TOKEN_STRUCTS)!=0) ? "1":"0");
+        el = root.getChild(SETTING_CF_SECTIONS);
+        if (null==el) {
+            el = new Element(SETTING_CF_SECTIONS);
+            root.addContent(el);
+        }
+        el.setText(((tokens & Assemblers.CF_TOKEN_SECTIONS)!=0) ? "1":"0");
     }
     public Assembler getPreferredAssembler() {
         Element el = root.getChild(SETTING_PREF_ASM);

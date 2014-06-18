@@ -60,6 +60,7 @@ public class Assemblers {
     public static final int CF_TOKEN_LABELS = 1<<3;
     public static final int CF_TOKEN_DIRECTIVES = 1<<4;
     public static final int CF_TOKEN_STRUCTS = 1<<5;
+    public static final int CF_TOKEN_SECTIONS = 1<<6;
     
     private static final Assembler assemblers[] = {
         ASM_KICKASSEMBLER,

@@ -12,6 +12,7 @@ Relaunch64 3.2 (development)
 * added automatic code-folding for labels (can be en-/disabled)
 * added automatic code-folding for conditional directives (can be en-/disabled)
 * added automatic code-folding for structures (can be en-/disabled)
+* added automatic code-folding for sections (can be en-/disabled)
 
 #### editor
 * automatic indention works for spaces now, too

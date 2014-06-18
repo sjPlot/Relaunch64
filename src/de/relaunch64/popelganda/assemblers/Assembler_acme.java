@@ -262,13 +262,24 @@ class Assembler_acme implements Assembler
     }
 
     private static final Pattern labelPattern = Pattern.compile("(?i)^\\s*(?<label>[a-z_][a-z0-9_]*\\b)\\s*(?<equal>=|!addr\\b|!address\\b)?.*");
-
+    private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
+    
     // Simple { } folding (for subzones, if, etc.), label-to-label folding, plus manual folding
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
 
+        if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
+            boolean section1, section2;
+            Matcher m = sectionPattern.matcher(line);
+            section1 = m.matches();
+            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+            section2 = m.matches();
+            if (section1 && !section2) foldLevel++;
+            if (!section1 && section2) foldLevel--;
+        }
+        
         if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
             boolean label1 = false, label2 = false;
             Matcher m = labelPattern.matcher(line);

@@ -266,6 +266,7 @@ class Assembler_dasm implements Assembler
     }
 
     private static final Pattern directivePattern = Pattern.compile("(?i)(?:^[a-z_.][a-z0-9_]*\\b\\$?)?\\s*(?<directive>[a-z0-9]+\\b).*"); // label always in first column
+    private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
 
     // folding by directives, plus manual folding
     @Override
@@ -273,6 +274,16 @@ class Assembler_dasm implements Assembler
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
 
+        if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
+            boolean section1, section2;
+            Matcher m = sectionPattern.matcher(line);
+            section1 = m.matches();
+            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+            section2 = m.matches();
+            if (section1 && !section2) foldLevel++;
+            if (!section1 && section2) foldLevel--;
+        }
+        
         if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
             Matcher m = directivePattern.matcher(line);
             boolean subroutine1 = false, subroutine2 = false;

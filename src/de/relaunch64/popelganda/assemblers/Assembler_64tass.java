@@ -389,6 +389,7 @@ class Assembler_64tass implements Assembler {
 
     private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b:?|[+-])?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
     private static final Pattern labelPattern = Pattern.compile("^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}][\\p{javaUnicodeIdentifierPart}_.]*\\b:?)\\s*(?<equal>=)?.*");
+    private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
 
     // folding according to compiler directives, plus manual folding
     @Override
@@ -396,6 +397,16 @@ class Assembler_64tass implements Assembler {
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
 
+        if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
+            boolean section1, section2;
+            Matcher m = sectionPattern.matcher(line);
+            section1 = m.matches();
+            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+            section2 = m.matches();
+            if (section1 && !section2) foldLevel++;
+            if (!section1 && section2) foldLevel--;
+        }
+        
         if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
             Matcher m = directivePattern.matcher(line);
 

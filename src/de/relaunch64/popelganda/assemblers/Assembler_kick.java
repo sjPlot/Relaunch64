@@ -232,6 +232,7 @@ class Assembler_kick implements Assembler
     }
 
     private static final Pattern labelPattern = Pattern.compile("^\\s*[a-zA-Z_][a-zA-Z0-9_]*:.*");
+    private static final Pattern sectionPattern = Pattern.compile("^\\s*//.*@(.*?)@.*");
 
     // Simple { } and /* */ comment folding, plus manual folding
     @Override
@@ -239,6 +240,16 @@ class Assembler_kick implements Assembler
         String line = buffer.getLineText(lineIndex);
         int foldLevel = buffer.getFoldLevel(lineIndex);
 
+        if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
+            boolean section1, section2;
+            Matcher m = sectionPattern.matcher(line);
+            section1 = m.matches();
+            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+            section2 = m.matches();
+            if (section1 && !section2) foldLevel++;
+            if (!section1 && section2) foldLevel--;
+        }
+        
         if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
             boolean label1, label2;
             Matcher m = labelPattern.matcher(line);

@@ -268,6 +268,7 @@
                                           <Component id="jCheckBoxCF_labels" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jCheckBoxCF_directives" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jCheckBoxCF_struct" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jCheckBoxCF_section" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -323,11 +324,13 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jCheckBoxCF_struct" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCheckBoxCF_section" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jCheckBoxSuggestCaseSort" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="78" max="32767" attributes="0"/>
+                      <EmptySpace pref="75" max="32767" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -506,6 +509,12 @@
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxCF_struct.text"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxCF_struct" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxCF_section">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxCF_section.text"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxCF_section" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>
