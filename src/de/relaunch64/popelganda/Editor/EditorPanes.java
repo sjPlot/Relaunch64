@@ -1204,7 +1204,13 @@ public class EditorPanes {
                 // if save successful, remove data
                 editorPaneArray.remove(selectedTab);
                 // update labels, in case we have them shown
-                mainFrame.updateListContent();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // set cursor
+                        mainFrame.updateListContent();
+                    }
+                });
                 // success
                 return true;
             }

@@ -373,7 +373,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     String text = jTextFieldGoto.getText();
                     for (int i=listGotoModel.getSize()-1; i>=0; i--) {
                         RL64ListItem item = listGotoModel.get(i);
-                        if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader()) {
+                        if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader() && !item.isTitle()) {
                             listGotoModel.remove(i);
                         }
                     }
