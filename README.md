@@ -24,13 +24,15 @@ Relaunch64 3.2 (development)
 * added RSOURCFILE and ROUTPUT as additional placeholders for the relative paths of input and output file names.
 
 #### GUI
-* the goto-popup-list was removed and replaced by a regular list. this allows "surfing" through the goto-destinations (labels, sections, functions...) etc.
-* find goto-token (label, macro, section...) by typing
-* filter goto-token-list (label, macro, section...)
-* show/hide goto-list (see menu View)
+* the goto-popup-list was removed and replaced by a sidebar. this allows "surfing" through the goto-destinations (labels, sections, functions...) etc.
+* find goto-token from sidebar (label, macro, section...) by typing
+* filter goto-token-list in sidebar (label, macro, section...)
+* show/hide goto-sidebar (see menu View)
 * "Compile and run" area was removed. Script-selection moved to log-area, assembler-syntax moved to bottom status bar (and is now part of the "source code information status bar")
 * optionally show file extension in tabs
 * optionally hide "Select script" field (below logs). when selecting a new script, a hidden selection box is shown and hidden again after selecting a script.
+* change colors/appearance of logs
+* tabs of open files may be shown in one row (scrollable)
 
 #### various
 * added quick-access to compiler-help (type "ch" into text field on bottom left)

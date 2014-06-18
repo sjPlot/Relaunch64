@@ -41,11 +41,16 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTargetDropEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -197,21 +202,7 @@ public class Tools {
      * start address was found.
      */
     public static String getCruncherStart(String source, String commentString) {
-        String cs = commentString + " start=";
-        // find start token
-        int position = source.toLowerCase().indexOf(cs);
-        // found?
-        if (position!=-1) {
-            // end of line?
-            int eol = source.indexOf("\n", position+cs.length());
-            // retrieve line
-            String start = source.substring(position+cs.length(), eol);
-            // remove white spaces
-            start = start.replace("\r", "").trim();
-            // return result
-            return start;
-        }
-        return null;
+        return getCommentedToken(source, commentString, "start=");
     }
     /**
      * This method searches the source code {@code source} for a script label
@@ -223,19 +214,33 @@ public class Tools {
      * script name was found.
      */
     public static String getCustomScriptName(String source, String commentString) {
-        String cs = commentString + " script=";
-        // find start token
-        int position = source.toLowerCase().indexOf(cs);
-        // found?
-        if (position!=-1) {
-            // end of line?
-            int eol = source.indexOf("\n", position+cs.length());
-            // retrieve line
-            String start = source.substring(position+cs.length(), eol);
-            // remove white spaces
-            start = start.replace("\r", "").trim();
-            // return result
-            return start;
+        return getCommentedToken(source, commentString, "script=");
+    }
+    /**
+     * 
+     * @param source
+     * @param commentString
+     * @param token
+     * @return 
+     */
+    protected static String getCommentedToken(String source, String commentString, String token) {
+        // create line reader to read line by line
+        StringReader sr = new StringReader(source);
+        BufferedReader br = new BufferedReader(sr);
+        LineNumberReader lineReader = new LineNumberReader(br);
+        String line;
+        // create regex pattern which extracts string behind commented "script="
+        Pattern p = Pattern.compile("^\\s*" + commentString + "\\s*("+Pattern.quote(token)+")(.*)");
+        // read line by line
+        try {
+            while ((line = lineReader.readLine())!=null) {
+                Matcher m = p.matcher(line);
+                if (!m.matches()) continue;
+                // if pattern found, return script name
+                return m.group(2);
+            }
+        }
+        catch (IOException ex) {
         }
         return null;
     }
