@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Relaunch64 3.2 (development)
+Relaunch64 3.2 (current stable release)
 ----------------
 
 ### New features
@@ -49,7 +49,7 @@ Relaunch64 3.2 (development)
 * fixed minor bugs with comment-commands
 
 
-Relaunch64 3.1.0 (current stable release)
+Relaunch64 3.1.0 (older stable release)
 ----------------
 
 ### New features

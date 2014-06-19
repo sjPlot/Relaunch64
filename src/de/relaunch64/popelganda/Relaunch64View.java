@@ -366,12 +366,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     if (selected<0) selected = 0;
                 }
                 else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                    // get input
                     String text = jTextFieldGoto.getText();
+                    // copy current list items into dummy list model
+                    DefaultListModel<RL64ListItem> dummy = new DefaultListModel<>();
+                    for (int i=0; i<listGotoModel.getSize(); i++) dummy.addElement(listGotoModel.get(i));
+                    // find items that can be removed
                     for (int i=listGotoModel.getSize()-1; i>=0; i--) {
                         RL64ListItem item = listGotoModel.get(i);
                         if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader() && !item.isTitle()) {
                             listGotoModel.remove(i);
                         }
+                    }
+                    // count items (excluding header and title) of list
+                    int itemCount = 0;
+                    for (int i=0; i<listGotoModel.getSize(); i++) {
+                        if (!listGotoModel.get(i).isHeader() && !listGotoModel.get(i).isTitle()) itemCount++;
+                    }
+                    // if we have no items, filtering was insufficient. hence, restore old
+                    // list by copying back from dummy
+                    if (0==itemCount) {
+                        listGotoModel.clear();
+                        for (int i=0; i<dummy.getSize(); i++) {
+                            listGotoModel.addElement(dummy.get(i));
+                        }
+                        // indicate "not found" with red color
+                        jTextFieldGoto.setForeground(new Color(160,40,40));
+                    }
+                    else {
+                        // matched filter-text, so black color
+                        jTextFieldGoto.setForeground(Color.black);
                     }
                     evt.consume();
                 }
