@@ -121,3 +121,8 @@ lda $DD00
 and #%11111100
 ora #%000000xx ;<- your desired VIC bank value, see above
 sta $DD00
+
+
+Color Ram
+-------------------------------------
+D800-DBFF (55296-56319)

@@ -63,7 +63,6 @@
                     </Property>
                     <Property name="dividerLocation" type="int" value="550"/>
                     <Property name="name" type="java.lang.String" value="jSplitPaneEditorList" noResource="true"/>
-                    <Property name="oneTouchExpandable" type="boolean" value="true"/>
                   </Properties>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>

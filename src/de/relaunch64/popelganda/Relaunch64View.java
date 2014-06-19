@@ -68,7 +68,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.ProcessBuilder.Redirect;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -100,8 +99,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
-import javax.swing.plaf.basic.BasicSplitPaneDivider;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
 import org.jdesktop.application.Action;
@@ -168,7 +165,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
-        jButtonRefreshGoto.setEnabled(false);   
         jPanelSelectScript.setVisible(settings.getShowScriptBox());
         jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
         // set compiler log font to monospace
@@ -377,7 +373,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             listGotoModel.remove(i);
                         }
                     }
-                    jButtonRefreshGoto.setEnabled(true);
                     evt.consume();
                 }
                 else if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
@@ -852,13 +847,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         // show sidebar and stuff only if we found anything
         if (tokensFound) {
-            // make splitpane visible if necessary
-            toggleGotoListVisibility(false);
-            // disable refresh button
-            jButtonRefreshGoto.setEnabled(false);            
             // clear textfield
             jTextFieldGoto.setText("");
-            if (focusToTextfield) jTextFieldGoto.requestFocusInWindow();
+            // check if focus is requested
+            if (focusToTextfield) {
+                // make splitpane visible if necessary
+                toggleGotoListVisibility(false);
+            }
             // reset scroll bars for sidebar
             javax.swing.JScrollBar verticalScrollBar = jScrollPaneSidebar.getVerticalScrollBar();
             javax.swing.JScrollBar horizontalScrollBar = jScrollPaneSidebar.getHorizontalScrollBar();
@@ -872,54 +867,29 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     @Action
     public void toggleGotoListVisibility() {
-        boolean collapse = jSplitPaneEditorList.getRightComponent().getWidth()>1;
-        toggleGotoListVisibility(collapse);
-        if (!collapse) jTextFieldGoto.requestFocusInWindow();
+        toggleGotoListVisibility(!settings.getSidebarIsHidden());
     }
     /**
      * Toggles the visibility of the Goto-list, i.e. either collapses or
      * expands the splitpane on demand.
      * 
-     * @param collapse {@code true} if splitpane should be collapsed (i.e.
+     * @param hide {@code true} if splitpane should be collapsed (i.e.
      * hide Goto-list), {@code false} if it should be expanded (i.e. made visible).
      * If, for instance, {@code collapse} is {@code true} and splitpane already
      * collapsed, nothing will happen.
      */
-    private void toggleGotoListVisibility(boolean collapse) {
-        // initial value, if nothing changes
-        String arrowButton = null;
-        int width = 0;
-        // check if splitpane is hidden (collapsed) and should be expanded
-        if(0==jSplitPaneEditorList.getRightComponent().getWidth() && !collapse) {
-            // "click" on the left arrow button
-            arrowButton = "leftButton";
-            // set default width for exception
-            width = (int)getFrame().getWidth()*3/4;
-        }
-        // check if goto-list is visible and should be collapsed
-        else if(jSplitPaneEditorList.getRightComponent().getWidth()>0 && collapse) {
-            // "click" on the right arrow button
-            arrowButton = "rightButton";
-            // set default width for exception
-            width = getFrame().getWidth();
+    private void toggleGotoListVisibility(boolean hide) {
+        settings.setSidebarIsHidden(hide);
+        if (hide) {
+            settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
+            jSplitPaneEditorList.setDividerLocation(1.0d);
             editorPanes.setFocus();
         }
-        // check if we have any change for splitpane state
-        if (arrowButton!=null) {
-            try {
-                // get "arrow" buttons from oneTouchExpandable splitPane
-                Field buttonField = BasicSplitPaneDivider.class.getDeclaredField(arrowButton);
-                buttonField.setAccessible(true);
-                javax.swing.JButton button = (javax.swing.JButton) buttonField.get(((BasicSplitPaneUI) jSplitPaneEditorList.getUI()).getDivider());
-                // simulate button click
-                button.doClick();
-                // may have to update splitpane ui
-                jSplitPaneEditorList.updateUI();
-                jSplitPaneEditorList.doLayout();
-            }
-            catch (NoSuchFieldException | NullPointerException | SecurityException | IllegalAccessException ex) {
-                jSplitPaneEditorList.setDividerLocation(width);
-            }
+        else {
+            int pos = settings.getDividerLocation();
+            if (-1==pos) pos = getFrame().getWidth()-ConstantsR64.MIN_SIDEBAR_SIZE;
+            jSplitPaneEditorList.setDividerLocation(pos);
+            jTextFieldGoto.requestFocusInWindow();
         }
     }
     /**
@@ -2263,7 +2233,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSplitPaneEditorList.setBorder(null);
         jSplitPaneEditorList.setDividerLocation(550);
         jSplitPaneEditorList.setName("jSplitPaneEditorList"); // NOI18N
-        jSplitPaneEditorList.setOneTouchExpandable(true);
 
         jPanel7.setName("jPanel7"); // NOI18N
 

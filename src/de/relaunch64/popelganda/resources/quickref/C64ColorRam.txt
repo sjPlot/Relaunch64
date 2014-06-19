@@ -1,7 +1,5 @@
-Color-Ram and CIA
+CIA
 
-
-D800-DBFF	55296-56319	Color RAM (Nybbles)
 
 DC00-DCFF	56320-56575	MOS 6526 Complex Interface Adapter (CIA) #1
 

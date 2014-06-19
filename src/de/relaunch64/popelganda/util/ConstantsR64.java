@@ -115,6 +115,8 @@ public class ConstantsR64 {
     public static final String DEFAULT_FONT = java.awt.Font.MONOSPACED;
     public static final int DEFAULT_FONT_SIZE = 13;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
+    public static final int MIN_SIDEBAR_COLLAPSE_SIZE = 50;
+    public static final int MIN_SIDEBAR_SIZE = 250;
     
     public static final String ASSEMBLER_START_ADDRESS = "START";
     public static final String ASSEMBLER_UNCOMPRESSED_FILE = "UNCOMPFILE";

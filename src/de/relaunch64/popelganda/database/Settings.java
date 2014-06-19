@@ -102,6 +102,8 @@ public class Settings {
     private static final String SETTING_REOPEN_FILES_ON_STARTUP = "rofstartup";
     private static final String SETTING_REOPEN_FILES = "reopenfiles";
     private static final String SETTING_REOPEN_FILES_CHILD = "rof";
+    private static final String SETTING_DIVIDER_LOCATION = "dividerlocation";
+    private static final String SETTING_SIDEBAR_ISHIDDEN = "dividerishidden";
 
     private static final String ATTR_ASM = "compiler";
     private static final String ATTR_SCRIPT = "script";
@@ -225,6 +227,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_ANTIALIAS);
             el.setText(AntiAlias.SUBPIXEL);
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_SIDEBAR_ISHIDDEN)) {
+            // create element
+            Element el = new Element(SETTING_SIDEBAR_ISHIDDEN);
+            el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
@@ -400,6 +409,13 @@ public class Settings {
             // create a filepath-element
             Element el = new Element(SETTING_TABWIDTH);
             el.setText("4");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_DIVIDER_LOCATION)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_DIVIDER_LOCATION);
+            el.setText("-1");
             // and add it to the document
             root.addContent(el);
         }
@@ -646,6 +662,19 @@ public class Settings {
             root.addContent(el);
         }
         el.setText(scale==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getSidebarIsHidden() {
+        Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setSidebarIsHidden(boolean val) {
+        Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
+        if (null==el) {
+            el = new Element(SETTING_SIDEBAR_ISHIDDEN);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
     }
     public boolean getCodeFolding() {
         Element el = root.getChild(SETTING_CODE_FOLDING);
@@ -923,6 +952,26 @@ public class Settings {
             root.addContent(el);
         }
         el.setText(String.valueOf(tabwidth));
+    }
+    public int getDividerLocation() {
+        Element el = root.getChild(SETTING_DIVIDER_LOCATION);
+        if (el!=null) {
+            try {
+                return Integer.parseInt(el.getText());
+            }
+            catch (NumberFormatException ex) {
+                return -1;
+            }
+        }
+        return 4;
+    }
+    public void setDividerLocation(int pos) {
+        Element el = root.getChild(SETTING_DIVIDER_LOCATION);
+        if (null==el) {
+            el = new Element(SETTING_DIVIDER_LOCATION);
+            root.addContent(el);
+        }
+        el.setText(String.valueOf(pos));
     }
     public int getLastUserScript() {
         Element el = root.getChild(SETTING_LAST_SCRIPT);
