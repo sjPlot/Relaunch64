@@ -1530,6 +1530,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             File outFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+".prg");
             // create compressed file
             File compressedFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+"-compressed.prg");
+            // check if we have relative paths
+            boolean useRelativePath = script.contains(Assembler.OUTPUT_FILE_REL);
             // iterate script
             for (String cmd : lines) {
                 cmd = cmd.trim();
@@ -1544,8 +1546,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\""+of+"\"";
                     String cf = compressedFile.toString();
                     if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
-                    // check if we have relative paths
-                    boolean useRelativePath = cmd.contains(Assembler.OUTPUT_FILE_REL);
                     // create relative paths of in- and output files
                     String sf_rel = FileTools.getFileName(sourceFile)+"."+FileTools.getFileExtension(sourceFile);
                     String of_rel = FileTools.getFileName(outFile)+"."+FileTools.getFileExtension(outFile);

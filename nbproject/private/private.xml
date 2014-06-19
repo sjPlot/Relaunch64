@@ -5,12 +5,16 @@
         <group>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/ConstantsR64.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/RL64ListCellRenderer.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_64tass.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/README.md</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/EditorPanes.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/help_userscripts.html</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler_acme.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/quickref/C64ColorRam.txt</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Relaunch64View.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/Editor/LabelExtractor.java</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/resources/licence.html</file>
+            <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/assemblers/Assembler.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/Tools.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/SettingsDlg.java</file>
             <file>file:/Users/danielludecke/Documents/SynologyCloud/NetBeans/Relaunch64/src/de/relaunch64/popelganda/util/FileTools.java</file>
