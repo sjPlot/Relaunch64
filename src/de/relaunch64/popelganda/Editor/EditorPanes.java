@@ -315,6 +315,8 @@ public class EditorPanes {
         RL64TextArea ep = getActiveEditorPane();
         // set caret position to start of buffer
         ep.goToBufferStart(false);
+        // expand or collapse first-line-fold
+        if (expand) ep.expandFold(true); else ep.collapseFold();
         // remember caret offset
         int oldcaret = ep.getCaretPosition();
         int newcaret = -1;
