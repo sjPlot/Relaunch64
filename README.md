@@ -6,7 +6,7 @@ Relaunch64 3.2 (development)
 
 ### New features
 
-#### code-folding
+#### code-folding (see preferences)
 * enable or disable code-folding
 * added automatic code-folding for braces { and } (can be en-/disabled)
 * added automatic code-folding for labels (can be en-/disabled)
@@ -17,6 +17,7 @@ Relaunch64 3.2 (development)
 #### editor
 * automatic indention works for spaces now, too
 * added commands to automatically convert spaces to tabs (and vice versa, see menu edit)
+* added preference to use spaces instead of tabs when pressing tab-key
 * slightly changed automatic tab/space indention. if "enter" is hit in between leading tabs/spaces, the indention is adjusted to fit the previous lines.
 * shift+enter now inserts new line without automatic indention
 
@@ -27,14 +28,15 @@ Relaunch64 3.2 (development)
 
 #### GUI
 * the goto-popup-list was removed and replaced by a sidebar. this allows "surfing" through the goto-destinations (labels, sections, functions...) etc.
-* find goto-token from sidebar (label, macro, section...) by typing
-* filter goto-token-list in sidebar (label, macro, section...)
+* new textfield under goto-sidebar to find goto-token from sidebar (label, macro, section...) by typing
+* new textfield under goto-sidebar to filter goto-token-list in sidebar when pressing enter-key (label, macro, section...)
 * show/hide goto-sidebar (see menu View)
 * "Compile and run" area was removed. Script-selection moved to log-area, assembler-syntax moved to bottom status bar (and is now part of the "source code information status bar")
-* optionally show file extension in tabs
-* optionally hide "Select script" field (below logs). when selecting a new script, a hidden selection box is shown and hidden again after selecting a script.
-* change colors/appearance of logs
-* tabs of open files may be shown in one row (scrollable)
+* optionally show file extension in tabs (see preferences)
+* optionally hide "Select script" field (below logs). when selecting a new script, the selection box is shown (when hidden) and hidden again after selecting a script (see preferences)
+* changed colors/appearance of logs
+* tabs of open files may be shown in one row (scrollable, see preferences)
+* by default, a monospaced font is used on all systems (Windows, OS X and Linux)
 
 #### various
 * added quick-access to compiler-help (type "ch" into text field on bottom left)
@@ -44,7 +46,7 @@ Relaunch64 3.2 (development)
 * fixed bug with syntax-highlighting, which, in some specific cases, did not recognize all labels
 * fixed typo in help (user scripts)
 * fixed bug with "insert section" command on OS X
-
+* fixed minor bugs with comment-commands
 
 
 Relaunch64 3.1.0 (current stable release)

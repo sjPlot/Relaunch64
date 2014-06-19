@@ -901,15 +901,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         switch (text) {
             case "aa":
                 settings.setAntiAlias(AntiAlias.STANDARD);
-                editorPanes.setAntiAlias(settings.getAntiAlias());
+                editorPanes.updateAntiAlias();
                 break;
             case "aas":
                 settings.setAntiAlias(AntiAlias.SUBPIXEL);
-                editorPanes.setAntiAlias(settings.getAntiAlias());
+                editorPanes.updateAntiAlias();
                 break;
             case "aan":
                 settings.setAntiAlias(AntiAlias.NONE);
-                editorPanes.setAntiAlias(settings.getAntiAlias());
+                editorPanes.updateAntiAlias();
                 break;
             case "cs":
                 settings.setAlternativeAssemblyMode(false);
@@ -921,15 +921,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
             case "lal":
                 settings.setLineNumerAlignment(Gutter.LEFT);
-                editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
+                editorPanes.updateLineNumberAlignment();
                 break;
             case "lac":
                 settings.setLineNumerAlignment(Gutter.CENTER);
-                editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
+                editorPanes.updateLineNumberAlignment();
                 break;
             case "lar":
                 settings.setLineNumerAlignment(Gutter.RIGHT);
-                editorPanes.setLineNumberAlignment(settings.getLineNumerAlignment());
+                editorPanes.updateLineNumberAlignment();
                 break;
             case "cf":
                 editorPanes.collapseAllFolds();
@@ -974,12 +974,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             else if (text.startsWith("fs")) {
                 int size = Integer.parseInt(text.substring(2));
                 settings.setMainFont(new Font(settings.getMainFont(Settings.FONTNAME), Font.PLAIN, size));
-                editorPanes.setFonts(settings.getMainFont());
+                editorPanes.updateFonts();
             }
             else if (text.startsWith("ts")) {
                 int size = Integer.parseInt(text.substring(2));
                 settings.setTabWidth(size);
-                editorPanes.setTabs(size);
+                editorPanes.updateTabs();
             }
         }
         catch(IndexOutOfBoundsException | NumberFormatException ex) {

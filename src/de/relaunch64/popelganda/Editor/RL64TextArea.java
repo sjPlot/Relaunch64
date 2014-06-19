@@ -334,10 +334,9 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     /**
      * Sets the font of the editor component and the gutter.
-     * 
-     * @param mf the new font
      */
-    public final void setFonts(Font mf) {
+    public final void setFonts() {
+        Font mf = settings.getMainFont();
         // set text font
         setProperty("view.font", mf.getFontName());
         setProperty("view.fontsize", String.valueOf(mf.getSize()));
@@ -355,8 +354,8 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     /**
      * Sets line number alignment inside gutter.
-     * 
-     * @param alignment the number alignment. Use one of following constants:
+     * <br><br>
+     * For number alignment, use one of following constants:
      * <ul>
      * <li>Gutter.LEFT</li>
      * <li>Gutter.CENTER</li>
@@ -364,9 +363,9 @@ public class RL64TextArea extends StandaloneTextArea {
      * </ul>
      * or use {@link de.relaunch64.popelganda.database.Settings#getLineNumerAlignment() getLineNumerAlignment()}.
      */
-    public final void setLineNumberAlignment(int alignment) {
+    public final void setLineNumberAlignment() {
         String align;
-        switch (alignment) {
+        switch (settings.getLineNumerAlignment()) {
             case Gutter.RIGHT: align = "right"; break;
             case Gutter.CENTER: align = "center"; break;
             default: align = "left"; break;
@@ -377,8 +376,8 @@ public class RL64TextArea extends StandaloneTextArea {
     }
     /**
      * Sets antialiasing for text.
-     * 
-     * @param antialias the alias style. Use one of following constants:
+     * <br><br>
+     * For alias style, use one of following constants:
      * <ul>
      * <li>AntiAlias.STANDARD</li>
      * <li>AntiAlias.SUBPIXEL</li>
@@ -386,18 +385,18 @@ public class RL64TextArea extends StandaloneTextArea {
      * </ul>
      * or use {@link de.relaunch64.popelganda.database.Settings#getAntiAlias() getAntiAlias()}.
      */
-    public final void setTextAntiAlias(String antialias) {
-        setProperty("view.antiAlias", antialias);
+    public final void setTextAntiAlias() {
+        setProperty("view.antiAlias", settings.getAntiAlias());
         // fire property change message
         propertiesChanged();
     }
     /**
-     * Sets tab-size for editor component.
-     * 
-     * @param tabSize the new indent size for tabs, measured in characters
+     * Sets tab-size for editor component and whether space or tabs should be
+     * used for tabs (latter is switched via {@link de.relaunch64.popelganda.database.Settings#getUseNoTabs() getUseNoTabs()}).
      */
-    public final void setTabs(int tabSize) {
-        setProperty("buffer.tabSize", String.valueOf(tabSize));
+    public final void setTabs() {
+        setProperty("buffer.tabSize", String.valueOf(settings.getTabWidth()));
+        setProperty("buffer.noTabs", settings.getUseNoTabs() ? "true" : "false");
         // fire property change message
         propertiesChanged();
     }
@@ -548,13 +547,13 @@ public class RL64TextArea extends StandaloneTextArea {
         // set syntaxscheme
         setSyntaxScheme();
         // set line number alignment
-        setLineNumberAlignment(settings.getLineNumerAlignment());
+        setLineNumberAlignment();
         // set tab width
-        setTabs(settings.getTabWidth());
+        setTabs();
         // set fonts
-        setFonts(settings.getMainFont());
+        setFonts();
         // set antialias
-        setTextAntiAlias(settings.getAntiAlias());
+        setTextAntiAlias();
         // setup keylistener
         keyListener = new RL64KeyListener();
         // register our own fold handler

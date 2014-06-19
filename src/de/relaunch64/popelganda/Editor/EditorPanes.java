@@ -39,7 +39,6 @@ import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
 import java.awt.dnd.DropTarget;
-import java.awt.Font;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.io.FileInputStream;
@@ -554,7 +553,7 @@ public class EditorPanes {
      * Updates line number alignment for gutters of all opened editor panes. Call this
      * method when user changes the line number alignment.
      * 
-     * @param alignment the number alignment. Use one of following constants:
+     * For number alignment, use one of following constants:
      * <ul>
      * <li>Gutter.LEFT</li>
      * <li>Gutter.CENTER</li>
@@ -562,18 +561,18 @@ public class EditorPanes {
      * </ul>
      * or use {@link de.relaunch64.popelganda.database.Settings#getLineNumerAlignment() getLineNumerAlignment()}.
      */
-    public void setLineNumberAlignment(int alignment) {
+    public void updateLineNumberAlignment() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setLineNumberAlignment(alignment);
+            editorpane.setLineNumberAlignment();
         }
     }
     /**
      * Updates anti aliasing for all opened editor panes. Call this
      * method when user changes the anti alias style.
-     * 
-     * @param antialias the alias style. Use one of following constants:
+     * <br><br>
+     * For alias style, use one of following constants:
      * <ul>
      * <li>AntiAlias.STANDARD</li>
      * <li>AntiAlias.SUBPIXEL</li>
@@ -581,38 +580,34 @@ public class EditorPanes {
      * </ul>
      * or use {@link de.relaunch64.popelganda.database.Settings#getAntiAlias() getAntiAlias()}.
      */    
-    public void setAntiAlias(String antialias) {
+    public void updateAntiAlias() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setTextAntiAlias(antialias);
+            editorpane.setTextAntiAlias();
         }
     }
     /**
      * Updates font settings for all opened editor panes. Call this
      * method when user changes font type or size.
-     * 
-     * @param mf the new font.
      */
-    public void setFonts(Font mf) {
+    public void updateFonts() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setFonts(mf);
+            editorpane.setFonts();
         }
     }
     /**
      * Updates the tab sizefor all opened editor panes. Call this
      * method when user changes tab size. This method takes immediately
      * effect and changes the indent size of all opened editor panes.
-     * 
-     * @param tabSize the new indent size for tabs, measured in characters
      */
-    public void setTabs(int tabSize) {
+    public void updateTabs() {
         for (EditorPaneProperties ea : editorPaneArray) {
             // get editor pane
             final RL64TextArea editorpane = ea.getEditorPane();
-            editorpane.setTabs(tabSize);
+            editorpane.setTabs();
         }
     }
     /**

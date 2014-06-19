@@ -104,6 +104,7 @@ public class Settings {
     private static final String SETTING_REOPEN_FILES_CHILD = "rof";
     private static final String SETTING_DIVIDER_LOCATION = "dividerlocation";
     private static final String SETTING_SIDEBAR_ISHIDDEN = "dividerishidden";
+    private static final String SETTING_USE_NOTABS = "usenotabs";
 
     private static final String ATTR_ASM = "compiler";
     private static final String ATTR_SCRIPT = "script";
@@ -178,20 +179,6 @@ public class Settings {
      */
     private void fillElements() {
         root = settingsFile.getRootElement();
-        // init standard font. on mac, it's helvetica
-        String font = "Helvetica";
-        // on older windows arial
-        if (ConstantsR64.IS_WINDOWS) {
-            font = "Arial";
-            // on new windows Calibri
-            if (ConstantsR64.IS_WINDOWS7 || ConstantsR64.IS_WINDOWS8) {
-                font="Calibri";
-            }
-        } 
-        // and on linux we take Nimbus Sans L Regular
-        else if (ConstantsR64.IS_LINUX) {
-            font = "Nimbus Sans L Regular";
-        }
         for (int cnt=0; cnt<recentDocCount; cnt++) {
             // create field-identifier
             String fi = SETTING_RECENT_DOC+String.valueOf(cnt+1);
@@ -213,8 +200,8 @@ public class Settings {
             // create element for font
             Element el = new Element(SETTING_MAINFONT);
             root.addContent(el);
-            el.setText(font);
-            el.setAttribute("size", "11");
+            el.setText(Font.MONOSPACED);
+            el.setAttribute("size", "12");
         }
         if (null==root.getChild(SETTING_LAST_USED_PATH)) {
             // create element
@@ -234,6 +221,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_SIDEBAR_ISHIDDEN);
             el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_USE_NOTABS)) {
+            // create element
+            Element el = new Element(SETTING_USE_NOTABS);
+            el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
@@ -672,6 +666,19 @@ public class Settings {
         Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
         if (null==el) {
             el = new Element(SETTING_SIDEBAR_ISHIDDEN);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getUseNoTabs() {
+        Element el = root.getChild(SETTING_USE_NOTABS);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setUseNoTabs(boolean val) {
+        Element el = root.getChild(SETTING_USE_NOTABS);
+        if (null==el) {
+            el = new Element(SETTING_USE_NOTABS);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
