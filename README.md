@@ -39,6 +39,7 @@ Relaunch64 3.2 (current stable release)
 * by default, a monospaced font is used on all systems (Windows, OS X and Linux)
 
 #### various
+* open included source-files in new tab (when include-directive and included source-file are in caret-line) (see menu file)
 * added quick-access to compiler-help (type "ch" into text field on bottom left)
 
 ### Bug fixes

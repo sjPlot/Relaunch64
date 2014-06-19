@@ -739,6 +739,9 @@ public class EditorPanes {
             return -1;
         }
     }
+    public int getActiveScript() {
+        return getScript(tabbedPane.getSelectedIndex());
+    }
     /**
      * Returns the filepath of the currently activated editor pane / tab.
      * @return the filepath of the currently activated editor pane / tab.

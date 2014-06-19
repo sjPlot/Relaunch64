@@ -178,15 +178,18 @@ public class ErrorHandler {
     protected void openErrorTab(EditorPanes editorPanes) {
         try {
             File ef = getAbsoluteErrorFilePath();
-            // is error file opened?
-            int errorTab = editorPanes.getOpenedFileTab(ef);
-            // if not, open it
-            if (-1==errorTab) {
-                editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), 0);
-            }
-            // if tab is opened, but not selected, select it
-            else if (errorTab!=editorPanes.getSelectedTab()) {
-                editorPanes.setSelectedTab(errorTab);
+            // check for null
+            if (ef!=null) {
+                // is error file opened?
+                int errorTab = editorPanes.getOpenedFileTab(ef);
+                // if not, open it
+                if (-1==errorTab) {
+                    editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), 0);
+                }
+                // if tab is opened, but not selected, select it
+                else if (errorTab!=editorPanes.getSelectedTab()) {
+                    editorPanes.setSelectedTab(errorTab);
+                }
             }
         }
         catch (IndexOutOfBoundsException ex) {

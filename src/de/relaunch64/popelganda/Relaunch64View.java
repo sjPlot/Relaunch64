@@ -37,6 +37,7 @@ import de.relaunch64.popelganda.Editor.ColorSchemes;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
+import de.relaunch64.popelganda.Editor.RL64TextArea;
 import de.relaunch64.popelganda.Editor.SectionExtractor;
 import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
@@ -82,6 +83,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -1364,6 +1367,24 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes.addNewTab(null, null, "untitled", settings.getPreferredAssembler(), jComboBoxRunScripts.getSelectedIndex());
     }
     @Action
+    public void openIncludeFile() {
+        // get current editor
+        RL64TextArea ep = editorPanes.getActiveEditorPane();
+        // get current line-text
+        String line = ep.getLineText(ep.getCaretLine());
+        // create pattern for include directive
+        String src =  "("+ep.getAssembler().getIncludeSourceDirective(")(.*?)");
+        Pattern p = Pattern.compile(src);
+        Matcher m = p.matcher(line);
+        // do we have two groups?
+        if (m.find() && m.groupCount()>=2) {
+            // 2nd group is file. retrieve full path of include file to source file
+            File f = FileTools.getAbsolutePath(editorPanes.getActiveFilePath(), new File(m.group(2)));
+            // if it exists, open it
+            if (f!=null && f.exists()) openFile(f, editorPanes.getActiveAssembler(), editorPanes.getActiveScript());
+        }
+    }
+    @Action
     public void openFile() {
         File fileToOpen = FileTools.chooseFile(getFrame(), JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, settings.getLastUsedPath().getAbsolutePath(), "", "Open ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
         openFile(fileToOpen);
@@ -2131,6 +2152,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         addTabMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         openFileMenuItem = new javax.swing.JMenuItem();
+        openIncludeFileMenuItem = new javax.swing.JMenuItem();
         recentDocsSubmenu = new javax.swing.JMenu();
         recent1MenuItem = new javax.swing.JMenuItem();
         recent2MenuItem = new javax.swing.JMenuItem();
@@ -2586,6 +2608,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openFileMenuItem.setAction(actionMap.get("openFile")); // NOI18N
         openFileMenuItem.setName("openFileMenuItem"); // NOI18N
         fileMenu.add(openFileMenuItem);
+
+        openIncludeFileMenuItem.setAction(actionMap.get("openIncludeFile")); // NOI18N
+        openIncludeFileMenuItem.setName("openIncludeFileMenuItem"); // NOI18N
+        fileMenu.add(openIncludeFileMenuItem);
 
         recentDocsSubmenu.setText(resourceMap.getString("recentDocsSubmenu.text")); // NOI18N
         recentDocsSubmenu.setName("recentDocsSubmenu"); // NOI18N
@@ -3189,6 +3215,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFileMenuItem;
+    private javax.swing.JMenuItem openIncludeFileMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem quickRefMenuItem;
     private javax.swing.JMenuItem recent1MenuItem;

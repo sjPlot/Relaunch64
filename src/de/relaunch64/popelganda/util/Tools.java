@@ -448,12 +448,6 @@ public class Tools {
                                 openRemainingFiles.add(f);
                             }
                         }
-                        /**
-                         * JDK 8 Lamda
-                         */
-//                        anyfiles.stream().forEach((f) -> {
-//                            openFile(f);
-//                        });
                     }
                 }
                 dtde.getDropTargetContext().dropComplete(true);
