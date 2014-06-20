@@ -728,6 +728,16 @@ public class EditorPanes {
             return Assemblers.ASM_KICKASSEMBLER;
         }
     }
+    /**
+     * returns the selected script which is associated with the sourcecode at
+     * the tab-index {@code index}.
+     * 
+     * @param index the index of the tab whose run-script should be returned. the index of
+     * the selected tab equals the index of the 
+     * {@link EditorPaneProperties}
+     * in the {@link #editorPaneArray editorPaneArray}.
+     * @return the run-script of the editor pane / tab at the index {@code index}.
+     */
     public int getScript(int index) {
         try {
             // get editor pane
@@ -739,6 +749,10 @@ public class EditorPanes {
             return -1;
         }
     }
+    /**
+     * Returns the run-script of the currently activated editor pane / tab.
+     * @return the run-script of the currently activated editor pane / tab.
+     */
     public int getActiveScript() {
         return getScript(tabbedPane.getSelectedIndex());
     }

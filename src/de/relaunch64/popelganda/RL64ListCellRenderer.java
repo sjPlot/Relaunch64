@@ -33,12 +33,31 @@ import javax.swing.border.MatteBorder;
  */
 public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL64ListItem> {
     private final Settings settings;
+    /**
+     * Creates a specific list cell renderer for the Goto-sidebar.
+     * 
+     * @param settings a reference to the {@link de.relaunch64.popelganda.database.Settings Settings}-class.
+     */
     RL64ListCellRenderer(Settings settings) {
         setOpaque(true);
         this.settings = settings;
     }
+    /**
+     * Overriden method of ListCellRendererComponent. Creates a special rendered label that 
+     * will be used for list items.
+     * 
+     * @param list the new rendered JList
+     * @param value a reference to the {@link RL64ListItem RL64ListItem} class with more information
+     * about the list item that should be rendered (e.g. is it a header item, which icon etc.)
+     * @param index not used (internally used only)
+     * @param isSelected (internally used only, if item is selected)
+     * @param cellHasFocus (internally used only, if item has focus)
+     * @return a rendered JLabel which will be used for the JList.
+     */
     @Override
     public Component getListCellRendererComponent(JList<? extends RL64ListItem> list, RL64ListItem value, int index, boolean isSelected, boolean cellHasFocus) {
+        // get font height. we determin border (margins from header items to normal items)
+        // proportional to font size
         int fontHeight = settings.getMainFont().getSize();
         // text of list item
         setText(value.getText());
@@ -46,8 +65,10 @@ public class RL64ListCellRenderer extends JLabel implements ListCellRenderer<RL6
         setIcon(value.isHeader() ? ConstantsR64.r64listicon : value.getIcon());
         // headings use bold font, normal entries plain
         setFont(settings.getMainFont().deriveFont(value.isTitle()? Font.BOLD : Font.PLAIN));
-        // normal entries have small padding on left
+        // normal entries have small padding on left, depending on whether they have an icon or not
         int leftMargin = (null==value.getIcon()) ? ConstantsR64.r64listicon.getIconWidth()+getIconTextGap()+2 : ConstantsR64.r64listicon.getIconWidth()-value.getIcon().getIconWidth()+2;
+        // set border to item. we use a matte border with background color, so border remains unvisible and
+        // is only used for item-margins.
         setBorder(value.isHeader() ? new MatteBorder(fontHeight, 2, 1, 0, ConstantsR64.OSX_BG_STYLE)
                                    : value.isTitle() ? new MatteBorder(1, 1, 1, 1, ConstantsR64.OSX_BG_STYLE)
                                                      : new MatteBorder(1, leftMargin, 1, 0, ConstantsR64.OSX_BG_STYLE));

@@ -300,6 +300,7 @@ public class Tools {
             }
         }
         if (dezaddress!=0) {
+            // if we have a valid decimal address, get assembler-specific basic-start 
             editorPanes.insertString(editorPanes.getActiveAssembler().getBasicStart(dezaddress));
         }
     }

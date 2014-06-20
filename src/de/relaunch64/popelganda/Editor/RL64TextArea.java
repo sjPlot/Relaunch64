@@ -73,7 +73,17 @@ public class RL64TextArea extends StandaloneTextArea {
     private JPopupMenu suggestionPopup = null;
     private int suggestionType = -1;
     private JList suggestionList;
+    /**
+     * the incompleted user input that should be auto-completed via the
+     * suggestion popup. This string is retrieved either via the
+     * {@link #getCaretString(boolean, java.lang.String) getCaretString()} method
+     * or the {@link de.relaunch64.popelganda.assemblers.Assembler#labelGetStart(java.lang.String, int) labelGetStart()} method.
+     */
     private String suggestionSubWord;
+    /**
+     * A copy of {@link #suggestionSubWord suggestionSubWord}, including more chars
+     * when the user continued typing.
+     */
     private String suggestionContinuedWord;
     private static final String sugListContainerName="sugListContainerName";
     /**

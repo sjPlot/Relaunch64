@@ -244,8 +244,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     handleMethod.invoke(event, new Object[] {val});
                 }
             });
-            // tell about success
-            ConstantsR64.r64logger.log(Level.INFO,"Apple Class Loader successfully initiated.");
             try {
                 // add application listener that listens to actions on the apple menu items
                 Method m = appc.getMethod("addApplicationListener", lc);
@@ -254,8 +252,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // but no pref-menu-item
                 Method enablePreferenceMethod = appc.getMethod("setEnabledPreferencesMenu", new Class[] {boolean.class});
                 enablePreferenceMethod.invoke(app, new Object[] {Boolean.TRUE});
-                // tell about success
-                ConstantsR64.r64logger.log(Level.INFO,"Apple Preference Menu successfully initiated.");
             } catch (NoSuchMethodException | SecurityException | InvocationTargetException ex) {
                 ConstantsR64.r64logger.log(Level.SEVERE,ex.getLocalizedMessage());
             }
@@ -1537,25 +1533,31 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     @Action
     public void runScript() {
+        String script = null;
         // check if user defined custom script
-        String script = Tools.getCustomScriptName(editorPanes.getActiveSourceCode(), editorPanes.getActiveAssembler().getLineComment());
+        String scriptName = Tools.getCustomScriptName(editorPanes.getActiveSourceCode(), editorPanes.getActiveAssembler().getLineComment());
         // init cb-item
         Object item;
         // if we found no custom script in source, or script name was not found,
         // select script from combo box
-        if (null==script || -1==customScripts.findScript(script)) {
+        if (null==scriptName || -1==customScripts.findScript(scriptName)) {
             // get selected item
             item = jComboBoxRunScripts.getSelectedItem();
             // valid selection?
             if (item!=null) {
+                // get scriptname from selection
+                scriptName = item.toString();
                 // get script
-                script = customScripts.getScript(item.toString());
+                script = customScripts.getScript(scriptName);
             }
         }
         else {
             // we have found a valid script name, so get script
-            script = customScripts.getScript(script);
+            script = customScripts.getScript(scriptName);
         }
+        // log scriptname
+        String log = "Executing script \""+scriptName+"\"";
+        ConstantsR64.r64logger.log(Level.INFO, log);
         // valid script?
         if (script!=null && !script.isEmpty()) {
             // log offset
@@ -1563,7 +1565,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // clear old log
             clearLog1();
             clearLog2();
-            // clesr error lines
+            // clear error lines
             errorHandler.clearErrors();
             // convert CRLF to LF (WIN)
             script = script.replaceAll("\r\n", "\n");
@@ -1592,7 +1594,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 cmd = cmd.trim();
                 if (!cmd.isEmpty()) {
                     // log process
-                    String log = "Processing script-line: "+cmd;
+                    log = "Processing script-line: "+cmd;
                     ConstantsR64.r64logger.log(Level.INFO, log);
                     // surround pathes with quotes, if necessary
                     String sf = sourceFile.toString();
