@@ -64,9 +64,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.InvocationHandler;
@@ -1367,6 +1370,37 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes.addNewTab(null, null, "untitled", settings.getPreferredAssembler(), jComboBoxRunScripts.getSelectedIndex());
     }
     @Action
+    public void openAllIncludeFiles() {
+        BufferedReader br = new BufferedReader(new StringReader(editorPanes.getActiveSourceCode()));
+        LineNumberReader lineReader = new LineNumberReader(br);
+        // get current editor
+        RL64TextArea ep = editorPanes.getActiveEditorPane();
+        // create pattern for include directive
+        String src =  "("+ep.getAssembler().getIncludeSourceDirective(")(.*?)");
+        Pattern p = Pattern.compile(src);
+        String line;
+        try {
+            // save values from source file
+            File sourceFile = editorPanes.getActiveFilePath();
+            Assembler asm = editorPanes.getActiveAssembler();
+            int script = editorPanes.getActiveScript();
+            String commentChar = asm.getLineComment();
+            // go through source and find includes
+            while ((line = lineReader.readLine()) != null) {
+                Matcher m = p.matcher(line);
+                // do we have two groups?
+                if (!line.startsWith(commentChar) && m.find() && m.groupCount()>=2) {
+                    // 2nd group is file. retrieve full path of include file to source file
+                    File f = FileTools.getAbsolutePath(sourceFile, new File(m.group(2)));
+                    // if it exists, open it
+                    if (f!=null && f.exists()) openFile(f, asm, script);
+                }
+            }
+        }
+        catch (IOException ex) {
+        }
+    }
+    @Action
     public void openIncludeFile() {
         // get current editor
         RL64TextArea ep = editorPanes.getActiveEditorPane();
@@ -1377,7 +1411,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         Pattern p = Pattern.compile(src);
         Matcher m = p.matcher(line);
         // do we have two groups?
-        if (m.find() && m.groupCount()>=2) {
+        if (!line.startsWith(editorPanes.getActiveAssembler().getLineComment()) && m.find() && m.groupCount()>=2) {
             // 2nd group is file. retrieve full path of include file to source file
             File f = FileTools.getAbsolutePath(editorPanes.getActiveFilePath(), new File(m.group(2)));
             // if it exists, open it
@@ -2152,7 +2186,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         addTabMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         openFileMenuItem = new javax.swing.JMenuItem();
-        openIncludeFileMenuItem = new javax.swing.JMenuItem();
         recentDocsSubmenu = new javax.swing.JMenu();
         recent1MenuItem = new javax.swing.JMenuItem();
         recent2MenuItem = new javax.swing.JMenuItem();
@@ -2164,6 +2197,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         recent8MenuItem = new javax.swing.JMenuItem();
         recent9MenuItem = new javax.swing.JMenuItem();
         recentAMenuItem = new javax.swing.JMenuItem();
+        jSeparator26 = new javax.swing.JPopupMenu.Separator();
+        openIncludeFileMenuItem = new javax.swing.JMenuItem();
+        openAllIncludedMenuItem = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
@@ -2609,10 +2645,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openFileMenuItem.setName("openFileMenuItem"); // NOI18N
         fileMenu.add(openFileMenuItem);
 
-        openIncludeFileMenuItem.setAction(actionMap.get("openIncludeFile")); // NOI18N
-        openIncludeFileMenuItem.setName("openIncludeFileMenuItem"); // NOI18N
-        fileMenu.add(openIncludeFileMenuItem);
-
         recentDocsSubmenu.setText(resourceMap.getString("recentDocsSubmenu.text")); // NOI18N
         recentDocsSubmenu.setName("recentDocsSubmenu"); // NOI18N
 
@@ -2647,6 +2679,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         recentDocsSubmenu.add(recentAMenuItem);
 
         fileMenu.add(recentDocsSubmenu);
+
+        jSeparator26.setName("jSeparator26"); // NOI18N
+        fileMenu.add(jSeparator26);
+
+        openIncludeFileMenuItem.setAction(actionMap.get("openIncludeFile")); // NOI18N
+        openIncludeFileMenuItem.setName("openIncludeFileMenuItem"); // NOI18N
+        fileMenu.add(openIncludeFileMenuItem);
+
+        openAllIncludedMenuItem.setAction(actionMap.get("openAllIncludeFiles")); // NOI18N
+        openAllIncludedMenuItem.setName("openAllIncludedMenuItem"); // NOI18N
+        fileMenu.add(openAllIncludedMenuItem);
 
         jSeparator7.setName("jSeparator7"); // NOI18N
         fileMenu.add(jSeparator7);
@@ -3192,6 +3235,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator24;
     private javax.swing.JPopupMenu.Separator jSeparator25;
+    private javax.swing.JPopupMenu.Separator jSeparator26;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
@@ -3214,6 +3258,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem jumpToLabelMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem openAllIncludedMenuItem;
     private javax.swing.JMenuItem openFileMenuItem;
     private javax.swing.JMenuItem openIncludeFileMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;

@@ -100,8 +100,7 @@ public class LabelExtractor {
      * in the source code.
      */
     public static Assembler.labelList getLabels(String source, Assembler assembler, int lineNumber) {
-        StringReader sr = new StringReader(source);
-        BufferedReader br = new BufferedReader(sr);
+        BufferedReader br = new BufferedReader(new StringReader(source));
         LineNumberReader lineReader = new LineNumberReader(br);
         return assembler.getLabels(lineReader, lineNumber);
     }

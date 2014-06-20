@@ -623,14 +623,6 @@
                 <Property name="name" type="java.lang.String" value="openFileMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="openIncludeFileMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="de.relaunch64.popelganda.Relaunch64View" id="openIncludeFile" methodName="openIncludeFile"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="openIncludeFileMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <Menu class="javax.swing.JMenu" name="recentDocsSubmenu">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="recentDocsSubmenu.text"/>
@@ -689,6 +681,27 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator26">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator26" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="openIncludeFileMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="openIncludeFile" methodName="openIncludeFile"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="openIncludeFileMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="openAllIncludedMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="openAllIncludeFiles" methodName="openAllIncludeFiles"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="openAllIncludedMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator7" noResource="true"/>
