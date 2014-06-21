@@ -131,7 +131,16 @@ public class ErrorHandler {
         errors.addAll(assembler.readErrorLines(lineReader));
         return lineReader.getLineNumber();
     }
+    /**
+     * Sets the caret to the error indicated by {@code index} and highlights
+     * the selected error line in the log.
+     * 
+     * @param editorPanes
+     * @param log
+     * @param index 
+     */
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
+        // check if any errors at all
         if (hasErrors()) {
             // index
             errorIndex = index % errors.size();
@@ -244,8 +253,10 @@ public class ErrorHandler {
                 start = caret;
                 // scroll rect to visible
                 ta.scrollRectToVisible(ta.modelToView(caret));
+                // create highlighter
                 HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(ConstantsR64.OSX_HIGHLIGHT_STYLE);
                 ta.getHighlighter().removeAllHighlights();
+                // highlight current error line
                 ta.getHighlighter().addHighlight(start, end, painter);
             }
         }

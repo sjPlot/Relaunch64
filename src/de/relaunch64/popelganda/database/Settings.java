@@ -98,6 +98,7 @@ public class Settings {
     private static final String SETTING_USE_SCROLL_TABS = "usescrolltabs";
     private static final String SETTING_LOGSPLITLAYOUT = "logsplitlayout";
     private static final String SETTING_TABWIDTH = "tabwidth";
+    private static final String SETTING_LISTGOTOINDEX = "listgotoindex";
     private static final String SETTING_LINE_NUMBER_ALIGNMENT = "linenumberalignment";
     private static final String SETTING_REOPEN_FILES_ON_STARTUP = "rofstartup";
     private static final String SETTING_REOPEN_FILES = "reopenfiles";
@@ -403,6 +404,13 @@ public class Settings {
             // create a filepath-element
             Element el = new Element(SETTING_TABWIDTH);
             el.setText("4");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_LISTGOTOINDEX)) {
+            // create a filepath-element
+            Element el = new Element(SETTING_LISTGOTOINDEX);
+            el.setText("-1");
             // and add it to the document
             root.addContent(el);
         }
@@ -956,6 +964,26 @@ public class Settings {
         Element el = root.getChild(SETTING_TABWIDTH);
         if (null==el) {
             el = new Element(SETTING_TABWIDTH);
+            root.addContent(el);
+        }
+        el.setText(String.valueOf(tabwidth));
+    }
+    public int getListGotoIndex() {
+        Element el = root.getChild(SETTING_LISTGOTOINDEX);
+        if (el!=null) {
+            try {
+                return Integer.parseInt(el.getText());
+            }
+            catch (NumberFormatException ex) {
+                return -1;
+            }
+        }
+        return -1;
+    }
+    public void setListGotoIndex(int tabwidth) {
+        Element el = root.getChild(SETTING_LISTGOTOINDEX);
+        if (null==el) {
+            el = new Element(SETTING_LISTGOTOINDEX);
             root.addContent(el);
         }
         el.setText(String.valueOf(tabwidth));

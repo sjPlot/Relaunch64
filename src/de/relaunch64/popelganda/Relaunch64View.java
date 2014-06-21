@@ -124,7 +124,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final ErrorHandler errorHandler;
     private final FindReplace findReplace;
     private final DefaultListModel<RL64ListItem> listGotoModel = new DefaultListModel<>();
-    private int listGotoIndex = -1;
+    public int listGotoIndex = -1;
     private final static int GOTO_LABEL = 1;
     private final static int GOTO_SECTION = 2;
     private final static int GOTO_FUNCTION = 3;
@@ -155,6 +155,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         errorHandler = new ErrorHandler();
         // load custom scripts
         customScripts.loadScripts();
+        listGotoIndex = settings.getListGotoIndex();
         // init default laf
         setDefaultLookAndFeel();
         // check for os x
@@ -886,6 +887,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             verticalScrollBar.setValue(verticalScrollBar.getMinimum());
             horizontalScrollBar.setValue(horizontalScrollBar.getMinimum());
         }
+        // save index
+        settings.setListGotoIndex(listGotoIndex);
     }
     /**
      * Toggles the visibility of the Goto-list, i.e. either collapses or
@@ -1105,6 +1108,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         editorPanes.gotoLabel(listItem.getText(), epIndex);
                     case GOTO_MACRO:
                         editorPanes.gotoMacro(listItem.getText(), epIndex);
+                        break;
+                    default:
+                        editorPanes.gotoLabel(listItem.getText(), epIndex);
                         break;
                 }
             }
