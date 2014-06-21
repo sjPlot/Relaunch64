@@ -758,7 +758,9 @@ public class EditorPanes {
     }
     /**
      * Returns the filepath of the currently activated editor pane / tab.
-     * @return the filepath of the currently activated editor pane / tab.
+     * @return the filepath of the currently activated editor pane / tab,
+     * or {@code null} if file does not exist (e.g. it's not yet saved) or
+     * {@code index} is not valid.
      */
     public File getActiveFilePath() {
         // get selected tab
@@ -770,15 +772,22 @@ public class EditorPanes {
      * @param index the index of the tab whose filepath should be returned. the index of
      * the selected tab equals the index of the {@link EditorPaneProperties}
      * in the {@link #editorPaneArray editorPaneArray}.
-     * @return the filepath of the editor pane / tab at the index {@code index}.
+     * @return the filepath of the editor pane / tab at the index {@code index}, 
+     * or {@code null} if file does not exist (e.g. it's not yet saved) or
+     * {@code index} is not valid.
      */
     public File getFilePath(int index) {
         // get selected tab
         if (index != -1) {
-            // get editor pane
-            EditorPaneProperties ep = editorPaneArray.get(index);
-            // get editor pane
-            return ep.getFilePath();
+            try {
+                // get editor pane
+                EditorPaneProperties ep = editorPaneArray.get(index);
+                // get editor pane
+                return ep.getFilePath();
+            }
+            catch (IndexOutOfBoundsException ex) {
+                return null;
+            }
         }
         return null;
     }

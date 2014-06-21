@@ -41,6 +41,7 @@ Relaunch64 3.2 (current stable release)
 #### various
 * open included source-file in new tab (when include-directive and included source-file are in caret-line) (see menu file)
 * open all included source-files in new tab (when include-directive and included source-file are in caret-line) (see menu file)
+* open folder of source file, to quickly open a source file's folder in a file explorer.
 * added quick-access to compiler-help (type "ch" into text field on bottom left)
 
 ### Bug fixes

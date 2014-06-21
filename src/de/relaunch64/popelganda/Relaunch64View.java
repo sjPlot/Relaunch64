@@ -49,6 +49,7 @@ import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -890,6 +891,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // save index
         settings.setListGotoIndex(listGotoIndex);
     }
+    @Action
+    public void openSourcefileFolder() {
+        File f = editorPanes.getActiveFilePath();
+        if (f!=null && f.exists() && Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().open(new File(f.getParent()));
+            } catch (IOException | NullPointerException | SecurityException | IllegalArgumentException | UnsupportedOperationException ex) {
+            }
+        }
+    }
     /**
      * Toggles the visibility of the Goto-list, i.e. either collapses or
      * expands the splitpane on demand.
@@ -983,6 +994,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             case "scf":
                 settings.setCodeFolding(!settings.getCodeFolding());
                 editorPanes.updateCodeFolding();
+                break;
+            case "of":
+                openSourcefileFolder();
                 break;
             case "ch":
                 String compilerHelp = customScripts.getCompilerHelp(jComboBoxRunScripts.getSelectedItem());
@@ -2208,6 +2222,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator26 = new javax.swing.JPopupMenu.Separator();
         openIncludeFileMenuItem = new javax.swing.JMenuItem();
         openAllIncludedMenuItem = new javax.swing.JMenuItem();
+        jSeparator27 = new javax.swing.JPopupMenu.Separator();
+        openFolderMenuItem = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
@@ -2698,6 +2714,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openAllIncludedMenuItem.setAction(actionMap.get("openAllIncludeFiles")); // NOI18N
         openAllIncludedMenuItem.setName("openAllIncludedMenuItem"); // NOI18N
         fileMenu.add(openAllIncludedMenuItem);
+
+        jSeparator27.setName("jSeparator27"); // NOI18N
+        fileMenu.add(jSeparator27);
+
+        openFolderMenuItem.setAction(actionMap.get("openSourcefileFolder")); // NOI18N
+        openFolderMenuItem.setName("openFolderMenuItem"); // NOI18N
+        fileMenu.add(openFolderMenuItem);
 
         jSeparator7.setName("jSeparator7"); // NOI18N
         fileMenu.add(jSeparator7);
@@ -3244,6 +3267,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator24;
     private javax.swing.JPopupMenu.Separator jSeparator25;
     private javax.swing.JPopupMenu.Separator jSeparator26;
+    private javax.swing.JPopupMenu.Separator jSeparator27;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
@@ -3268,6 +3292,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openAllIncludedMenuItem;
     private javax.swing.JMenuItem openFileMenuItem;
+    private javax.swing.JMenuItem openFolderMenuItem;
     private javax.swing.JMenuItem openIncludeFileMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem quickRefMenuItem;
