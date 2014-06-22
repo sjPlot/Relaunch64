@@ -203,6 +203,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (settings.getReopenOnStartup()) reopenFiles();
         // open empty if none present
         if (jTabbedPane1.getTabCount()<1) addNewTab();
+        // finally, check for updates
+        checkForUpdates();
     }
     /**
      * This is an application listener that is initialised when running the program
@@ -2145,7 +2147,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         public void close() throws SecurityException {
         }
     }
-    public void checkForUpdates() {
+    private void checkForUpdates() {
         // check if check should be checked
         if (!settings.getCheckForUpdates()) return;
         Task cfuT = checkForUpdate();
