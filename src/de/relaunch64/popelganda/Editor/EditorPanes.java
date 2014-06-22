@@ -1124,7 +1124,7 @@ public class EditorPanes {
         // get filename
         String fn = FileTools.getFileName(fp);
         // check whether we have any valid filepath at all
-        if (fn!=null) {
+        if (fn!=null && !fn.isEmpty()) {
             // check whether extenstion should be shown as well
             if (settings.getShowExtensionInTab()) fn = fn+"."+FileTools.getFileExtension(fp);
             // set file-name and app-name in title-bar

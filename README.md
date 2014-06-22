@@ -5,6 +5,7 @@ Relaunch64 3.2.x (development)
 ----------------
 ### Bug fixes
 * automatic update check did not work - fixed
+* Changing "Other" preferences did not apply immediatley - fixed.
 
 
 Relaunch64 3.2 (current stable release)
