@@ -195,7 +195,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, jLabelBufferSize, this, settings);
         // check if we have any parmater
         if (params!=null && params.length>0) {
-            for (String p : params) openFile(new File(p));
+            for (String p : params) {
+                openFile(new File(p));
+            }
         }
         // restore last opened files
         if (settings.getReopenOnStartup()) reopenFiles();
