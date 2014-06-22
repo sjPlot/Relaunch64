@@ -102,12 +102,8 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         updateBuildNr = accessUpdateFile(new URL(ConstantsR64.UPDATE_INFO_URI));
         // check for valid access
         if (null==updateBuildNr || updateBuildNr.isEmpty()) return null;
-        // retrieve start-index of the build-number within the version-string.
-        int substringindex = ConstantsR64.BUILD_VERSION.indexOf("(Build")+7;
-        // only copy buildinfo into string, other information of version-info are not needed
-        String curversion = ConstantsR64.BUILD_VERSION.substring(substringindex,substringindex+8);
         // check whether there's a newer version online
-        updateavailable = (curversion.compareTo(updateBuildNr)<0);
+        updateavailable = (ConstantsR64.BUILD_NUMBER.compareTo(updateBuildNr)<0);
         return null;  // return your result
     }
     @Override

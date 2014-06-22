@@ -44,9 +44,13 @@ import javax.swing.ImageIcon;
  */
 public class ConstantsR64 {
     /**
+     * This variable stores the current build version number
+     */
+    public static final String BUILD_NUMBER = "20140623";
+    /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.2 (Build 20140622)";
+    public static final String BUILD_VERSION = "3.2.1 (Build"+BUILD_NUMBER+")";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */

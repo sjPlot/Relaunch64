@@ -187,7 +187,7 @@ public class CustomScripts {
     }
     /**
      * Returns a string array with all names of available scripts.
-     * @return all available script names
+     * @return all available script names, or {@code null} if no scripts yet exits
      */
     public String[] getScriptNames() {
         ArrayList<String> snames = new ArrayList<>();

@@ -65,6 +65,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -83,8 +85,6 @@ import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.regex.Matcher;
@@ -133,13 +133,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final Settings settings;
     private final FindTerms findTerms;
     private final CustomScripts customScripts;
-    private Timer hidePanelTimer;
-    class HidePanelTimer extends TimerTask {
-        @Override public void run() {
-            toggleScriptBoxVisibility();
-            this.cancel();
-        }
-    }    
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
                                                                                                    .getContext().getResourceMap(Relaunch64View.class);
     
@@ -167,13 +160,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) {
             jScrollPaneLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPaneErrorLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
-            jScrollPaneSidebar.setBorder(new javax.swing.border.MatteBorder(0, 1, 1, 0, Color.lightGray));
+            jScrollPaneSidebar.setBorder(new javax.swing.border.MatteBorder(1, 0, 1, 0, Color.darkGray));
             jTextFieldGoto.putClientProperty("JTextField.variant", "search");
+            jSplitPane1.setBackground(new Color(128,128,128));
+            jSplitPaneEditorList.setBackground(new Color(128,128,128));
+            jSplitPane1.setDividerSize(2);
+            jSplitPaneEditorList.setDividerSize(2);
+            jSplitPane1.setOneTouchExpandable(false);
         }
         // hide find & replace textfield
         jPanelFind.setVisible(false);
         jPanelReplace.setVisible(false);
-        jPanelSelectScript.setVisible(settings.getShowScriptBox());
         jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
         // set compiler log font to monospace
         javax.swing.UIDefaults uid = UIManager.getLookAndFeelDefaults();
@@ -191,6 +188,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // set application icon
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
+        // show/hide toolbar
+        jToolBar.setVisible(settings.getShowToolbar());
+        
+        // TODO show/hide toolbar text
+        // TODO function to switch toolbar visibility after settings
+        
         // init editorpane-dataclass
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, jLabelBufferSize, this, settings);
         // check if we have any parmater
@@ -341,8 +344,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex()).setScript(jComboBoxRunScripts.getSelectedIndex());
                 // update recent doc
                 updateRecentDoc();
-                hidePanelTimer = new Timer();
-                hidePanelTimer.schedule(new HidePanelTimer(), 2000);
             }
         });
         jTextFieldGoto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -556,6 +557,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 convertNumber("bin");
             }
         });
+        jSplitPaneEditorList.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent pce) {
+                settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
+            }
+        });        
         recentDocsSubmenu.addMenuListener(new javax.swing.event.MenuListener() {
             @Override public void menuSelected(javax.swing.event.MenuEvent evt) {
                 setRecentDocumentMenuItem(recent1MenuItem,1);
@@ -1163,11 +1170,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
-    public void toggleScriptBoxVisibility() {
-        jPanelSelectScript.setVisible(settings.getShowScriptBox());
-    }
     public void toggleTabbedPaneScrollPolicy() {
         jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
+    }
+    public void toggleToolbar() {
+        // TODO toolbar text setzen/entfernen
+        jToolBar.setVisible(settings.getShowToolbar());
     }
     @Action
     public void refreshGotoList() {
@@ -1733,10 +1741,31 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
     @Action
     public void selectUserScripts() {
-        // show panel
-        jPanelSelectScript.setVisible(true);
-        jComboBoxRunScripts.showPopup();
-        jComboBoxRunScripts.requestFocusInWindow();
+        if (settings.getShowToolbar()) {
+            // show panel
+            jComboBoxRunScripts.showPopup();
+            jComboBoxRunScripts.requestFocusInWindow();
+        }
+        else {
+            // get script names
+            String[] sn = customScripts.getScriptNames();
+            // check for null
+            if (sn!=null && sn.length>0) {
+                // sort arary
+                Arrays.sort(sn);
+                // if toolbar is not visible, show option dialog instead
+                Object selection = JOptionPane.showInputDialog(getFrame(), "Select script:", "", JOptionPane.PLAIN_MESSAGE, null, sn, jComboBoxRunScripts.getSelectedItem());
+                // check if null
+                if (selection!=null) {
+                    // select script in cb
+                    jComboBoxRunScripts.setSelectedItem(selection);
+                    // change script for current file
+                    editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex()).setScript(customScripts.findScript(selection.toString()));
+                    // update recent doc
+                    updateRecentDoc();
+                }
+            }
+        }
     }
     @Action
     public void selectSyntax() {
@@ -1947,7 +1976,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         if (ConstantsR64.IS_OSX) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
             System.setProperty("apple.laf.useScreenMenuBar", "true");
-            // Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+            // aqua brushed look
+            Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
         if (settings.getScaleFont()) {
@@ -2204,9 +2234,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5 = new javax.swing.JPanel();
         jScrollPaneErrorLog = new javax.swing.JScrollPane();
         jTextAreaCompilerOutput = new javax.swing.JTextArea();
-        jPanelSelectScript = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBoxRunScripts = new javax.swing.JComboBox();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         addTabMenuItem = new javax.swing.JMenuItem();
@@ -2329,6 +2356,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabelBufferSize = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jComboBoxAssemblers = new javax.swing.JComboBox();
+        jToolBar = new javax.swing.JToolBar();
+        jButtonNew = new javax.swing.JButton();
+        jButtonFileOpen = new javax.swing.JButton();
+        jButtonSave = new javax.swing.JButton();
+        jSeparator28 = new javax.swing.JToolBar.Separator();
+        jButtonCut = new javax.swing.JButton();
+        jButtonCopy = new javax.swing.JButton();
+        jButtonPaste = new javax.swing.JButton();
+        jSeparator29 = new javax.swing.JToolBar.Separator();
+        jComboBoxRunScripts = new javax.swing.JComboBox();
+        jButtonRunScript = new javax.swing.JButton();
+        jButtonPreferences = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2570,9 +2609,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 140, Short.MAX_VALUE)
+            .add(0, 145, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPaneLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .add(jScrollPaneLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
@@ -2595,52 +2634,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPaneErrorLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+            .add(jScrollPaneErrorLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
         );
 
         jTabbedPaneLogs.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
-
-        jPanelSelectScript.setName("jPanelSelectScript"); // NOI18N
-
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
-        jComboBoxRunScripts.setName("jComboBoxRunScripts"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanelSelectScriptLayout = new org.jdesktop.layout.GroupLayout(jPanelSelectScript);
-        jPanelSelectScript.setLayout(jPanelSelectScriptLayout);
-        jPanelSelectScriptLayout.setHorizontalGroup(
-            jPanelSelectScriptLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelSelectScriptLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel2)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanelSelectScriptLayout.setVerticalGroup(
-            jPanelSelectScriptLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelSelectScriptLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanelSelectScriptLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel2)
-                    .add(jComboBoxRunScripts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jTabbedPaneLogs)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelSelectScript, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
-                .add(jTabbedPaneLogs)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanelSelectScript, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(jTabbedPaneLogs)
         );
 
         jSplitPane1.setRightComponent(jPanel2);
@@ -2653,7 +2660,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane1)
+            .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -3170,9 +3177,92 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .addContainerGap())
         );
 
+        jToolBar.setBorder(null);
+        jToolBar.setFloatable(false);
+        jToolBar.setRollover(true);
+        jToolBar.setName("jToolBar"); // NOI18N
+
+        jButtonNew.setAction(actionMap.get("addNewTab")); // NOI18N
+        jButtonNew.setText(resourceMap.getString("jButtonNew.text")); // NOI18N
+        jButtonNew.setBorderPainted(false);
+        jButtonNew.setFocusable(false);
+        jButtonNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonNew.setName("jButtonNew"); // NOI18N
+        jButtonNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonNew);
+
+        jButtonFileOpen.setAction(actionMap.get("openFile")); // NOI18N
+        jButtonFileOpen.setText(resourceMap.getString("jButtonFileOpen.text")); // NOI18N
+        jButtonFileOpen.setBorderPainted(false);
+        jButtonFileOpen.setFocusable(false);
+        jButtonFileOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonFileOpen.setName("jButtonFileOpen"); // NOI18N
+        jButtonFileOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonFileOpen);
+
+        jButtonSave.setAction(actionMap.get("saveFile")); // NOI18N
+        jButtonSave.setText(resourceMap.getString("jButtonSave.text")); // NOI18N
+        jButtonSave.setBorderPainted(false);
+        jButtonSave.setFocusable(false);
+        jButtonSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonSave.setName("jButtonSave"); // NOI18N
+        jButtonSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonSave);
+
+        jSeparator28.setName("jSeparator28"); // NOI18N
+        jToolBar.add(jSeparator28);
+
+        jButtonCut.setAction(actionMap.get("cutAction")); // NOI18N
+        jButtonCut.setBorderPainted(false);
+        jButtonCut.setFocusable(false);
+        jButtonCut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonCut.setName("jButtonCut"); // NOI18N
+        jButtonCut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonCut);
+
+        jButtonCopy.setAction(actionMap.get("copyAction")); // NOI18N
+        jButtonCopy.setBorderPainted(false);
+        jButtonCopy.setFocusable(false);
+        jButtonCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonCopy.setName("jButtonCopy"); // NOI18N
+        jButtonCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonCopy);
+
+        jButtonPaste.setAction(actionMap.get("pasteAction")); // NOI18N
+        jButtonPaste.setBorderPainted(false);
+        jButtonPaste.setFocusable(false);
+        jButtonPaste.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonPaste.setName("jButtonPaste"); // NOI18N
+        jButtonPaste.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonPaste);
+
+        jSeparator29.setName("jSeparator29"); // NOI18N
+        jToolBar.add(jSeparator29);
+
+        jComboBoxRunScripts.setName("jComboBoxRunScripts"); // NOI18N
+        jToolBar.add(jComboBoxRunScripts);
+
+        jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
+        jButtonRunScript.setBorderPainted(false);
+        jButtonRunScript.setFocusable(false);
+        jButtonRunScript.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonRunScript.setName("jButtonRunScript"); // NOI18N
+        jButtonRunScript.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonRunScript);
+
+        jButtonPreferences.setAction(actionMap.get("settingsWindow")); // NOI18N
+        jButtonPreferences.setText(resourceMap.getString("jButtonPreferences.text")); // NOI18N
+        jButtonPreferences.setBorderPainted(false);
+        jButtonPreferences.setFocusable(false);
+        jButtonPreferences.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonPreferences.setName("jButtonPreferences"); // NOI18N
+        jButtonPreferences.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonPreferences);
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
+        setToolBar(jToolBar);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3208,10 +3298,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
     private javax.swing.JMenuItem insertSinusMenuItem;
+    private javax.swing.JButton jButtonCopy;
+    private javax.swing.JButton jButtonCut;
+    private javax.swing.JButton jButtonFileOpen;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
+    private javax.swing.JButton jButtonNew;
+    private javax.swing.JButton jButtonPaste;
+    private javax.swing.JButton jButtonPreferences;
     private javax.swing.JButton jButtonRefreshGoto;
     private javax.swing.JButton jButtonReplace;
+    private javax.swing.JButton jButtonRunScript;
+    private javax.swing.JButton jButtonSave;
     private javax.swing.JCheckBox jCheckBoxMatchCase;
     private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JCheckBox jCheckBoxWholeWord;
@@ -3219,7 +3317,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxRunScripts;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -3248,7 +3345,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelFind;
     private javax.swing.JPanel jPanelReplace;
-    private javax.swing.JPanel jPanelSelectScript;
     private javax.swing.JScrollPane jScrollPaneErrorLog;
     private javax.swing.JScrollPane jScrollPaneLog;
     private javax.swing.JScrollPane jScrollPaneSidebar;
@@ -3272,6 +3368,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator25;
     private javax.swing.JPopupMenu.Separator jSeparator26;
     private javax.swing.JPopupMenu.Separator jSeparator27;
+    private javax.swing.JToolBar.Separator jSeparator28;
+    private javax.swing.JToolBar.Separator jSeparator29;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
@@ -3291,6 +3389,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JTextField jTextFieldGoto;
     private javax.swing.JTextField jTextFieldGotoLine;
     private javax.swing.JTextField jTextFieldReplace;
+    private javax.swing.JToolBar jToolBar;
     private javax.swing.JMenuItem jumpToLabelMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
