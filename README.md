@@ -3,6 +3,15 @@ Changelog
 
 Relaunch64 3.2.x (development)
 ----------------
+### New features
+
+#### GUI
+* added toolbar with common functions
+* "Select script" was removed from logged area and moved to the toolbar. if toolbar is hidden, a selection popup appears to select scripts.
+
+#### various
+* added preference that hitting enter-key in find-textfield keeps focus in find textfield, so multiple enter will find next searchterm.
+
 ### Bug fixes
 * automatic update check did not work - fixed
 * Changing "Other" preferences did not apply immediatley - fixed.

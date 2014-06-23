@@ -94,6 +94,7 @@ public class Settings {
     private static final String REC_DOC_SCRIPT = "script";
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_CHECKUPDATES = "checkupdates";
+    private static final String SETTING_FINDFIELDFOCUS = "findfieldfocus";
     private static final String SETTING_SAVEONCOMPILE = "saveoncompile";
     private static final String SETTING_NIMBUS_ON_OSX = "nimbusonosx";
     private static final String SETTING_USE_SCROLL_TABS = "usescrolltabs";
@@ -293,6 +294,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_CHECKUPDATES);
             el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_FINDFIELDFOCUS)) {
+            // create element
+            Element el = new Element(SETTING_FINDFIELDFOCUS);
+            el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
@@ -809,6 +817,19 @@ public class Settings {
         Element el = root.getChild(SETTING_CHECKUPDATES);
         if (null==el) {
             el = new Element(SETTING_CHECKUPDATES);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getFindFieldFocus() {
+        Element el = root.getChild(SETTING_FINDFIELDFOCUS);
+        if (el!=null) return el.getText().equals("1");
+        return true;
+    }
+    public void setFindFieldFocus(boolean val)  {
+        Element el = root.getChild(SETTING_FINDFIELDFOCUS);
+        if (null==el) {
+            el = new Element(SETTING_FINDFIELDFOCUS);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");

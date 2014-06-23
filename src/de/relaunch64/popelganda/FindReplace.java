@@ -186,14 +186,16 @@ public class FindReplace {
     }
     /**
      * Selects the find term with the index {@code findpos}.
+     * @param focusToFindField {@code true} when input focus should be set to
+     * editor component. else, find text field keeps focus
      */
-    protected void selectFindTerm() {
+    protected void selectFindTerm(boolean focusToFindField) {
         // set caret
         editorPane.setCaretPosition(findselections.get(findpos)[0]);
         editorPane.scrollToCaret(true);
         // select next occurence of find term
         editorPane.setSelection(new Selection.Range(findselections.get(findpos)[0], findselections.get(findpos)[1]));
-        editorPane.requestFocusInWindow();
+        if (!focusToFindField) editorPane.requestFocusInWindow();
     }
     /**
      * Finds the next occurence of a find term. If last find term was reached, the index {@code findpos}
@@ -202,10 +204,12 @@ public class FindReplace {
      * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
      * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
      * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * @param focusToFindField {@code true} when input focus should be set to
+     * editor component. else, find text field keeps focus
      * @return {@code true} if any find terms have been found and selected, {@code false} if nothing found
      * or search content was empty.
      */
-    public boolean findNext(boolean isRegEx, boolean wholeWord, boolean matchCase) {
+    public boolean findNext(boolean isRegEx, boolean wholeWord, boolean matchCase, boolean focusToFindField) {
         // when we have no founds or when the user changed the tab, init matcher
         if (findselections.isEmpty() || lastActiveTab!=activeTab) {
             initmatcher(isRegEx, wholeWord, matchCase);
@@ -228,7 +232,7 @@ public class FindReplace {
                     findpos=0;
                 }
                 // select next occurence of find term
-                selectFindTerm();
+                selectFindTerm(focusToFindField);
             }
             catch (IllegalArgumentException ex) {
             }
@@ -248,10 +252,12 @@ public class FindReplace {
      * @param isRegEx {@code true} if regular-expression checkbox was ticked and find term is a regular expression
      * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
      * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
+     * @param focusToFindField {@code true} when input focus should be set to
+     * editor component. else, find text field keeps focus
      * @return {@code true} if any find terms have been found and selected, {@code false} if nothing found
      * or search content was empty.
      */
-    public boolean findPrev(boolean isRegEx, boolean wholeWord, boolean matchCase) {
+    public boolean findPrev(boolean isRegEx, boolean wholeWord, boolean matchCase, boolean focusToFindField) {
         // when we have no founds or when the user changed the tab, init matcher
         if (findselections.isEmpty() || lastActiveTab!=activeTab) {
             initmatcher(isRegEx, wholeWord, matchCase);
@@ -275,7 +281,7 @@ public class FindReplace {
                 findpos = findselections.size()-1;
             }
             // select next occurence of find term
-            selectFindTerm();
+            selectFindTerm(focusToFindField);
         }
         else {
             resetValues();
@@ -291,17 +297,19 @@ public class FindReplace {
      * @param wholeWord {@code true} if whole-word checkbox was ticked and find term is considered as whole word
      * @param matchCase {@code true} if match-case checkbox was ticked and search should be case sensitive
      * 
+     * @param focusToFindField {@code true} when input focus should be set to
+     * editor component. else, find text field keeps focus
      * @return  {@code true} if the selected text was successfully replaced and a new find term could be
      * selected. {@code false} if no text was selected for replacement, or if the last occurence of
      * find term was replaced (and no more replacement can be done).
      */
-    public boolean replace(boolean isRegEx, boolean wholeWord, boolean matchCase) {
+    public boolean replace(boolean isRegEx, boolean wholeWord, boolean matchCase, boolean focusToFindField) {
         if (editorPane.getText()!=null) {
             if (editorPane.getSelectedText()!=null) {
                 editorPane.replaceSelection(replaceText);
             }
             if (initmatcher(isRegEx, wholeWord, matchCase)) {
-                findNext(isRegEx, wholeWord, matchCase);
+                findNext(isRegEx, wholeWord, matchCase, focusToFindField);
             }
             else {
                 resetValues();

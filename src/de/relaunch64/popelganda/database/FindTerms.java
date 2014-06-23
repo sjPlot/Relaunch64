@@ -42,19 +42,25 @@ import java.util.Collections;
 public class FindTerms {
     private final ArrayList<String> findTerms = new ArrayList<>();
     private static final int MAX_LEN = 15;
+    private String currentFindTerm = null;
     
     public FindTerms() {
         clear();
     }
     public final void clear() {
         findTerms.clear();
+        currentFindTerm = null;
     }
     public void addFindTerm(String ft, boolean ww, boolean mc) {
         if (!findTerms.contains(ft)) {
             if (findTerms.size()>=MAX_LEN) findTerms.remove(0);
             findTerms.add(ft);
             Collections.sort(findTerms);
+            currentFindTerm = ft;
         }
+    }
+    public String getCurrentFindTerm() {
+        return currentFindTerm;
     }
     public ArrayList<String> getFindTerms() {
         return findTerms;

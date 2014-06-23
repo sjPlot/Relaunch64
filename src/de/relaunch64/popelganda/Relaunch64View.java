@@ -190,10 +190,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // show/hide toolbar
         jToolBar.setVisible(settings.getShowToolbar());
-        
-        // TODO show/hide toolbar text
-        // TODO function to switch toolbar visibility after settings
-        
         // init editorpane-dataclass
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, jLabelBufferSize, this, settings);
         // check if we have any parmater
@@ -1174,7 +1170,6 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
     }
     public void toggleToolbar() {
-        // TODO toolbar text setzen/entfernen
         jToolBar.setVisible(settings.getShowToolbar());
     }
     @Action
@@ -1788,6 +1783,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // make it visible
             jPanelFind.setVisible(true);
         }
+        else {
+            // get findterm
+            Object ft = jComboBoxFind.getSelectedItem();
+            // if textfield is visible and textfield has focus
+            if (ft!=null && jComboBoxFind.isFocusOwner()) {
+                String findTerm = ft.toString();
+                // if find term has not changed, calling "find" will find next search term
+                if (findTerms.getCurrentFindTerm().equalsIgnoreCase(findTerm)) {
+                    findNext();
+                    return;
+                }
+            }
+        }
         jComboBoxFind.requestFocusInWindow();
     }
     @Action
@@ -1805,7 +1813,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                    jCheckBoxMatchCase.isSelected());
             jComboBoxFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), 
                                                              jCheckBoxWholeWord.isSelected(), 
-                                                             jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+                                                             jCheckBoxMatchCase.isSelected(),
+                                                             settings.getFindFieldFocus()) ? Color.black : Color.red);
         }
     }
     @Action
@@ -1823,7 +1832,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                    jCheckBoxMatchCase.isSelected());
             jComboBoxFind.setForeground(findReplace.findPrev(jCheckBoxRegEx.isSelected(), 
                                                              jCheckBoxWholeWord.isSelected(), 
-                                                             jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+                                                             jCheckBoxMatchCase.isSelected(),
+                                                             settings.getFindFieldFocus()) ? Color.black : Color.red);
         }
     }
     private void findCancel() {
@@ -1850,7 +1860,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                    jCheckBoxWholeWord.isSelected(),
                                    jCheckBoxMatchCase.isSelected());
             int findCounter = 0;
-            while (findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected())) findCounter++;
+            while (findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected(), settings.getFindFieldFocus())) findCounter++;
             JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter)+" occurences were replaced.");
         }
     }
@@ -1882,7 +1892,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                        jCheckBoxRegEx.isSelected(),
                                        jCheckBoxWholeWord.isSelected(),
                                        jCheckBoxMatchCase.isSelected());
-                jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected()) ? Color.black : Color.red);
+                jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected(), settings.getFindFieldFocus()) ? Color.black : Color.red);
             }
         }
     }
@@ -2365,9 +2375,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonCopy = new javax.swing.JButton();
         jButtonPaste = new javax.swing.JButton();
         jSeparator29 = new javax.swing.JToolBar.Separator();
+        jButtonFind = new javax.swing.JButton();
+        jButtonToolbarReplace = new javax.swing.JButton();
+        jSeparator30 = new javax.swing.JToolBar.Separator();
         jComboBoxRunScripts = new javax.swing.JComboBox();
         jButtonRunScript = new javax.swing.JButton();
+        jSeparator31 = new javax.swing.JToolBar.Separator();
         jButtonPreferences = new javax.swing.JButton();
+        jButtonHelp = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2516,7 +2531,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             .add(0, 348, Short.MAX_VALUE)
             .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel7Layout.createSequentialGroup()
-                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(jPanelFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -2550,7 +2565,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
             .add(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jTextFieldGoto)
@@ -2561,7 +2576,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jTextFieldGoto)
@@ -3239,6 +3254,26 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator29.setName("jSeparator29"); // NOI18N
         jToolBar.add(jSeparator29);
 
+        jButtonFind.setAction(actionMap.get("findStart")); // NOI18N
+        jButtonFind.setText(resourceMap.getString("jButtonFind.text")); // NOI18N
+        jButtonFind.setBorderPainted(false);
+        jButtonFind.setFocusable(false);
+        jButtonFind.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonFind.setName("jButtonFind"); // NOI18N
+        jButtonFind.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonFind);
+
+        jButtonToolbarReplace.setAction(actionMap.get("replaceTerm")); // NOI18N
+        jButtonToolbarReplace.setBorderPainted(false);
+        jButtonToolbarReplace.setFocusable(false);
+        jButtonToolbarReplace.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonToolbarReplace.setName("jButtonToolbarReplace"); // NOI18N
+        jButtonToolbarReplace.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonToolbarReplace);
+
+        jSeparator30.setName("jSeparator30"); // NOI18N
+        jToolBar.add(jSeparator30);
+
         jComboBoxRunScripts.setName("jComboBoxRunScripts"); // NOI18N
         jToolBar.add(jComboBoxRunScripts);
 
@@ -3250,6 +3285,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRunScript.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar.add(jButtonRunScript);
 
+        jSeparator31.setName("jSeparator31"); // NOI18N
+        jToolBar.add(jSeparator31);
+
         jButtonPreferences.setAction(actionMap.get("settingsWindow")); // NOI18N
         jButtonPreferences.setText(resourceMap.getString("jButtonPreferences.text")); // NOI18N
         jButtonPreferences.setBorderPainted(false);
@@ -3258,6 +3296,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonPreferences.setName("jButtonPreferences"); // NOI18N
         jButtonPreferences.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar.add(jButtonPreferences);
+
+        jButtonHelp.setAction(actionMap.get("showHelp")); // NOI18N
+        jButtonHelp.setText(resourceMap.getString("jButtonHelp.text")); // NOI18N
+        jButtonHelp.setBorderPainted(false);
+        jButtonHelp.setFocusable(false);
+        jButtonHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonHelp.setName("jButtonHelp"); // NOI18N
+        jButtonHelp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(jButtonHelp);
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -3301,8 +3348,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JButton jButtonCopy;
     private javax.swing.JButton jButtonCut;
     private javax.swing.JButton jButtonFileOpen;
+    private javax.swing.JButton jButtonFind;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
+    private javax.swing.JButton jButtonHelp;
     private javax.swing.JButton jButtonNew;
     private javax.swing.JButton jButtonPaste;
     private javax.swing.JButton jButtonPreferences;
@@ -3310,6 +3359,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JButton jButtonReplace;
     private javax.swing.JButton jButtonRunScript;
     private javax.swing.JButton jButtonSave;
+    private javax.swing.JButton jButtonToolbarReplace;
     private javax.swing.JCheckBox jCheckBoxMatchCase;
     private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JCheckBox jCheckBoxWholeWord;
@@ -3371,6 +3421,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JToolBar.Separator jSeparator28;
     private javax.swing.JToolBar.Separator jSeparator29;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator30;
+    private javax.swing.JToolBar.Separator jSeparator31;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;

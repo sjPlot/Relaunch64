@@ -93,7 +93,7 @@
                               <EmptySpace min="0" pref="348" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jTabbedPane1" pref="239" max="32767" attributes="0"/>
+                                      <Component id="jTabbedPane1" pref="245" max="32767" attributes="0"/>
                                       <EmptySpace min="-2" max="-2" attributes="0"/>
                                       <Component id="jPanelFind" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -305,7 +305,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPaneSidebar" alignment="0" pref="243" max="32767" attributes="0"/>
+                              <Component id="jScrollPaneSidebar" alignment="0" pref="245" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jTextFieldGoto" max="32767" attributes="0"/>
@@ -318,7 +318,7 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jScrollPaneSidebar" pref="308" max="32767" attributes="0"/>
+                                  <Component id="jScrollPaneSidebar" pref="313" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="jTextFieldGoto" max="32767" attributes="0"/>
@@ -1570,6 +1570,36 @@
             <Property name="name" type="java.lang.String" value="jSeparator29" noResource="true"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JButton" name="jButtonFind">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="findStart" methodName="findStart"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonFind.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonFind" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonToolbarReplace">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="replaceTerm" methodName="replaceTerm"/>
+            </Property>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonToolbarReplace" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator30">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator30" noResource="true"/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JComboBox" name="jComboBoxRunScripts">
           <Properties>
             <Property name="name" type="java.lang.String" value="jComboBoxRunScripts" noResource="true"/>
@@ -1587,6 +1617,11 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator31">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator31" noResource="true"/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JButton" name="jButtonPreferences">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1597,6 +1632,19 @@
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="jButtonPreferences" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonHelp">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="showHelp" methodName="showHelp"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonHelp.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonHelp" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
