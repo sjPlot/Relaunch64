@@ -47,6 +47,7 @@ import de.relaunch64.popelganda.database.FindTerms;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
+import de.relaunch64.popelganda.util.IgnoreCaseComparator;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
 import java.awt.Component;
@@ -281,6 +282,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jComboBoxAssemblers.setSelectedIndex(settings.getPreferredAssembler().getID());
             // select last used script
             jComboBoxRunScripts.setSelectedIndex(settings.getLastUserScript());
+            // default sorting of sidebar
+            jComboBoxSortSidebar.setSelectedIndex(settings.getSidebarSort());
             // add custom renderer
             jListGoto.setModel(listGotoModel);
             jListGoto.getSelectionModel().addListSelectionListener(new SelectionListener(jListGoto));
@@ -343,6 +346,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex()).setScript(jComboBoxRunScripts.getSelectedIndex());
                 // update recent doc
                 updateRecentDoc();
+            }
+        });
+        jComboBoxSortSidebar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                settings.setSidebarSort(jComboBoxSortSidebar.getSelectedIndex());
+                updateListContent(listGotoIndex);
             }
         });
         jTextFieldGoto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -879,7 +889,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // item text, icon, is header?, line number (not used), file path
                 listGotoModel.addElement(new RL64ListItem(FileTools.getFileName(fp).toUpperCase(), null, true, false, 0, fp));
                 // sort list
-                Collections.sort(token);
+                switch (settings.getSidebarSort()) {
+                    case Settings.SORT_NONCASE:
+                        Collections.sort(token, new IgnoreCaseComparator());
+                        break;
+                    case Settings.SORT_CASE:
+                        Collections.sort(token);
+                        break;
+                    default:
+                        break;
+                }
                 // add all found section strings to combo box
                 for (String arg : token) {
                     // items have a small margin, headings do not
@@ -2253,6 +2272,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jListGoto = new javax.swing.JList();
         jTextFieldGoto = new javax.swing.JTextField();
         jButtonRefreshGoto = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBoxSortSidebar = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
         jTabbedPaneLogs = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
@@ -2588,24 +2609,39 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jButtonRefreshGoto.setContentAreaFilled(false);
         jButtonRefreshGoto.setName("jButtonRefreshGoto"); // NOI18N
 
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        jComboBoxSortSidebar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "order of appearance", "case-sensitive", "non-case-sensitive" }));
+        jComboBoxSortSidebar.setName("jComboBoxSortSidebar"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
             .add(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTextFieldGoto)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonRefreshGoto)
+                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel8Layout.createSequentialGroup()
+                        .add(jTextFieldGoto)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonRefreshGoto))
+                    .add(jPanel8Layout.createSequentialGroup()
+                        .add(jLabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jComboBoxSortSidebar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .add(jPanel8Layout.createSequentialGroup()
-                .add(jScrollPaneSidebar)
-                .add(0, 0, 0))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jComboBoxSortSidebar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jTextFieldGoto, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -2619,7 +2655,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneEditorList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneEditorList)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -3460,7 +3496,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JComboBox jComboBoxAssemblers;
     private javax.swing.JComboBox jComboBoxFind;
     private javax.swing.JComboBox jComboBoxRunScripts;
+    private javax.swing.JComboBox jComboBoxSortSidebar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

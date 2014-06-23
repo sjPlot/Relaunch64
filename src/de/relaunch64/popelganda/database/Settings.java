@@ -71,6 +71,7 @@ public class Settings {
     private static final String SETTING_RECENT_DOC = "recentDoc";
     private static final String SETTING_LAST_USED_PATH = "lastusedpath";
     private static final String SETTING_PREF_ASM = "preferredCompiler";
+    private static final String SETTING_SIDEBAR_SORT = "sidebarsort";
     private static final String SETTING_SYNTAX_SCHEME = "syntaxscheme";
     private static final String SETTING_LAST_SCRIPT = "lastUserScript";
     private static final String SETTING_CODE_FOLDING = "codefolding";
@@ -115,6 +116,10 @@ public class Settings {
     private final File filepath;
     public static final int FONTNAME = 1;
     public static final int FONTSIZE = 2;
+    
+    public static final int SORT_ORDER = 0;
+    public static final int SORT_CASE = 1;
+    public static final int SORT_NONCASE = 2;
 
     /**
      * XML-Document that stores the settings-information
@@ -392,6 +397,13 @@ public class Settings {
             // create element
             Element el = new Element(SETTING_PREF_ASM);
             el.setText(String.valueOf(Assemblers.ASM_KICKASSEMBLER.getID()));
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_SIDEBAR_SORT)) {
+            // create element
+            Element el = new Element(SETTING_SIDEBAR_SORT);
+            el.setText(String.valueOf(SORT_CASE));
             // and add it to the document
             root.addContent(el);
         }
@@ -790,6 +802,23 @@ public class Settings {
             root.addContent(el);
         }
         el.setText(String.valueOf(assembler.getID()));
+    }
+    public int getSidebarSort() {
+        Element el = root.getChild(SETTING_SIDEBAR_SORT);
+        try {
+            if (el!=null) return Integer.parseInt(el.getText());
+        }
+        catch (NumberFormatException ex) {
+        }
+        return SORT_CASE;
+    }
+    public void setSidebarSort(int sortstyle) {
+        Element el = root.getChild(SETTING_SIDEBAR_SORT);
+        if (null==el) {
+            el = new Element(SETTING_SIDEBAR_SORT);
+            root.addContent(el);
+        }
+        el.setText(String.valueOf(sortstyle));
     }
     public int getColorScheme() {
         Element el = root.getChild(SETTING_SYNTAX_SCHEME);

@@ -20,6 +20,7 @@ import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
 import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
+import de.relaunch64.popelganda.util.IgnoreCaseComparator;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
 import java.awt.Font;
@@ -34,7 +35,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -731,7 +731,7 @@ public class RL64TextArea extends StandaloneTextArea {
             // sort list...
             if (settings.getSuggestionSortIgnoresCase()) {
                 // ...while ignoring case
-                Collections.sort(labels, new SortIgnoreCase());
+                Collections.sort(labels, new IgnoreCaseComparator());
             }
             else {
                 // ...or case-sensitive
@@ -771,17 +771,6 @@ public class RL64TextArea extends StandaloneTextArea {
         }
         return true;
     }
-    /**
-     * A sorter for sorting arrays while ignoring case.
-     */
-    private class SortIgnoreCase implements Comparator<Object> {
-        @Override
-        public int compare(Object o1, Object o2) {
-            String s1 = (String) o1;
-            String s2 = (String) o2;
-            return s1.toLowerCase().compareTo(s2.toLowerCase());
-        }
-    }    
     /**
      * Closes the auto-suggestion popup.
      */
