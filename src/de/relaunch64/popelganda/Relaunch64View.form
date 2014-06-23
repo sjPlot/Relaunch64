@@ -46,7 +46,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPaneEditorList" alignment="1" pref="800" max="32767" attributes="0"/>
+                      <Component id="jSplitPaneEditorList" alignment="1" pref="890" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -61,7 +61,7 @@
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="null"/>
                     </Property>
-                    <Property name="dividerLocation" type="int" value="550"/>
+                    <Property name="dividerLocation" type="int" value="575"/>
                     <Property name="name" type="java.lang.String" value="jSplitPaneEditorList" noResource="true"/>
                   </Properties>
 
@@ -80,7 +80,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="549" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="575" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                                   <Component id="jTabbedPane1" alignment="1" max="32767" attributes="0"/>
                                   <Component id="jPanelFind" alignment="0" max="32767" attributes="0"/>
@@ -305,7 +305,6 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPaneSidebar" alignment="0" pref="245" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jTextFieldGoto" max="32767" attributes="0"/>
@@ -313,15 +312,19 @@
                                   <Component id="jButtonRefreshGoto" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jScrollPaneSidebar" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jScrollPaneSidebar" pref="313" max="32767" attributes="0"/>
+                                  <Component id="jScrollPaneSidebar" pref="310" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jTextFieldGoto" max="32767" attributes="0"/>
+                                      <Component id="jTextFieldGoto" max="-2" attributes="0"/>
                                       <Component id="jButtonRefreshGoto" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -427,9 +430,9 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="779" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="869" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPaneLog" alignment="0" pref="779" max="32767" attributes="0"/>
+                                  <Component id="jScrollPaneLog" alignment="0" pref="869" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -487,7 +490,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPaneErrorLog" alignment="0" pref="779" max="32767" attributes="0"/>
+                              <Component id="jScrollPaneErrorLog" alignment="0" pref="869" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -1367,7 +1370,7 @@
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldConvBin" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="170" max="32767" attributes="0"/>
+                  <EmptySpace pref="260" max="32767" attributes="0"/>
                   <Component id="jLabelBufferSize" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -1485,42 +1488,55 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButtonNew">
+        <Component class="javax.swing.JButton" name="tbNew">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="addNewTab" methodName="addNewTab"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButtonNew.text"/>
+            <Property name="text" type="java.lang.String" resourceKey="tbNew.text"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonNew" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbNew" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonFileOpen">
+        <Component class="javax.swing.JButton" name="tbFileOpen">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="openFile" methodName="openFile"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButtonFileOpen.text"/>
+            <Property name="text" type="java.lang.String" resourceKey="tbFileOpen.text"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonFileOpen" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbFileOpen" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonSave">
+        <Component class="javax.swing.JButton" name="tbSave">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="saveFile" methodName="saveFile"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButtonSave.text"/>
+            <Property name="text" type="java.lang.String" resourceKey="tbSave.text"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonSave" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbSave" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbSaveAll">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="saveAllFiles" methodName="saveAllFiles"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="tbSaveAll.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbSaveAll" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
@@ -1529,7 +1545,36 @@
             <Property name="name" type="java.lang.String" value="jSeparator28" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonCut">
+        <Component class="javax.swing.JButton" name="tbUndo">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="undoAction" methodName="undoAction"/>
+            </Property>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbUndo" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbRedo">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="redoAction" methodName="redoAction"/>
+            </Property>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbRedo" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator33">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator33" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbCut">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="cutAction" methodName="cutAction"/>
@@ -1537,11 +1582,11 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonCut" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbCut" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonCopy">
+        <Component class="javax.swing.JButton" name="tbCopy">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="copyAction" methodName="copyAction"/>
@@ -1549,11 +1594,11 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonCopy" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbCopy" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonPaste">
+        <Component class="javax.swing.JButton" name="tbPaste">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="pasteAction" methodName="pasteAction"/>
@@ -1561,7 +1606,7 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonPaste" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbPaste" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
@@ -1570,20 +1615,33 @@
             <Property name="name" type="java.lang.String" value="jSeparator29" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonFind">
+        <Component class="javax.swing.JButton" name="tbFind">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="findStart" methodName="findStart"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButtonFind.text"/>
+            <Property name="text" type="java.lang.String" resourceKey="tbFind.text"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonFind" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbFind" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonToolbarReplace">
+        <Component class="javax.swing.JButton" name="tbFindNext">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="findNext" methodName="findNext"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="tbFindNext.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbFindNext" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbReplace">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="replaceTerm" methodName="replaceTerm"/>
@@ -1591,7 +1649,7 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonToolbarReplace" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbReplace" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
@@ -1605,7 +1663,7 @@
             <Property name="name" type="java.lang.String" value="jComboBoxRunScripts" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonRunScript">
+        <Component class="javax.swing.JButton" name="tbRunScript">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="runScript" methodName="runScript"/>
@@ -1613,7 +1671,64 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonRunScript" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbRunScript" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbPrevError">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoPrevError" methodName="gotoPrevError"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="tbPrevError.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbPrevError" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbNextError">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="gotoNextError" methodName="gotoNextError"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="tbNextError.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbNextError" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator32">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator32" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbCodeFold">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="surroundFolds" methodName="surroundFolds"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="tbCodeFold.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbCodeFold" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="tbInsertSection">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="de.relaunch64.popelganda.Relaunch64View" id="insertSection" methodName="insertSection"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="tbInsertSection.text"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="tbInsertSection" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
@@ -1622,29 +1737,29 @@
             <Property name="name" type="java.lang.String" value="jSeparator31" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonPreferences">
+        <Component class="javax.swing.JButton" name="tbPreferences">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="settingsWindow" methodName="settingsWindow"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButtonPreferences.text"/>
+            <Property name="text" type="java.lang.String" resourceKey="tbPreferences.text"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonPreferences" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbPreferences" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonHelp">
+        <Component class="javax.swing.JButton" name="tbHelp">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="de.relaunch64.popelganda.Relaunch64View" id="showHelp" methodName="showHelp"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButtonHelp.text"/>
+            <Property name="text" type="java.lang.String" resourceKey="tbHelp.text"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="jButtonHelp" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="tbHelp" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
@@ -1675,6 +1790,6 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-118,0,0,3,32"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-118,0,0,3,122"/>
   </AuxValues>
 </Form>

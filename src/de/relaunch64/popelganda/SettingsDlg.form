@@ -116,7 +116,7 @@
                           <Component id="jTextFieldScriptName" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="244" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="273" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonApplyScript" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -600,7 +600,7 @@
                       <Component id="jCheckBoxAlternativeAssemblyMode" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCheckBoxShowLineHighlight" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="222" max="32767" attributes="0"/>
+                      <EmptySpace pref="251" max="32767" attributes="0"/>
                       <Component id="jButtonApplyScheme" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -700,6 +700,11 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxTbText" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -721,6 +726,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCheckBoxShowToolbar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxTbText" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCheckBoxShowBufferSize" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCheckBoxShowCloseButton" min="-2" max="-2" attributes="0"/>
@@ -731,7 +738,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCheckBoxUseScrollTabs" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="35" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jButtonApplyOther" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -825,6 +832,12 @@
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxShowToolbar.text"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxShowToolbar" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxTbText">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxTbText.text"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxTbText" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

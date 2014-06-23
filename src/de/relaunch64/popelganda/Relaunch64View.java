@@ -49,6 +49,7 @@ import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.util.FileTools;
 import de.relaunch64.popelganda.util.Tools;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.HeadlessException;
@@ -90,6 +91,7 @@ import java.util.logging.LogRecord;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -130,6 +132,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final static int GOTO_SECTION = 2;
     private final static int GOTO_FUNCTION = 3;
     private final static int GOTO_MACRO = 4;
+    private boolean dontSaveDividerLocation = false;
     private final Settings settings;
     private final FindTerms findTerms;
     private final CustomScripts customScripts;
@@ -189,7 +192,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
         // show/hide toolbar
-        jToolBar.setVisible(settings.getShowToolbar());
+        toggleToolbar();
         // init editorpane-dataclass
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, jLabelBufferSize, this, settings);
         // check if we have any parmater
@@ -556,7 +559,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSplitPaneEditorList.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent pce) {
-                settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
+                if (dontSaveDividerLocation) {
+                    dontSaveDividerLocation = false;
+                }
+                else {
+                    settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
+                }
             }
         });        
         recentDocsSubmenu.addMenuListener(new javax.swing.event.MenuListener() {
@@ -927,6 +935,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     private void toggleGotoListVisibility(boolean hide) {
         settings.setSidebarIsHidden(hide);
+        dontSaveDividerLocation = true;
         if (hide) {
             settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
             jSplitPaneEditorList.setDividerLocation(1.0d);
@@ -1169,8 +1178,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void toggleTabbedPaneScrollPolicy() {
         jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
     }
-    public void toggleToolbar() {
+    public final void toggleToolbar() {
         jToolBar.setVisible(settings.getShowToolbar());
+        int count = 0;
+        for (int i=0; i<jToolBar.getComponentCount(); i++) {
+            Component c = jToolBar.getComponentAtIndex(i);
+            if (c!=null && c instanceof JButton) {
+                ((JButton)c).setText(settings.getShowToolbarText() ? ConstantsR64.toolbarNames[count] : "");
+                count++;
+            }
+        }
     }
     @Action
     public void refreshGotoList() {
@@ -1987,7 +2004,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             // aqua brushed look
-            Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+            if (!settings.getNimbusOnOSX()) Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
         if (settings.getScaleFont()) {
@@ -2367,22 +2384,32 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jLabel1 = new javax.swing.JLabel();
         jComboBoxAssemblers = new javax.swing.JComboBox();
         jToolBar = new javax.swing.JToolBar();
-        jButtonNew = new javax.swing.JButton();
-        jButtonFileOpen = new javax.swing.JButton();
-        jButtonSave = new javax.swing.JButton();
+        tbNew = new javax.swing.JButton();
+        tbFileOpen = new javax.swing.JButton();
+        tbSave = new javax.swing.JButton();
+        tbSaveAll = new javax.swing.JButton();
         jSeparator28 = new javax.swing.JToolBar.Separator();
-        jButtonCut = new javax.swing.JButton();
-        jButtonCopy = new javax.swing.JButton();
-        jButtonPaste = new javax.swing.JButton();
+        tbUndo = new javax.swing.JButton();
+        tbRedo = new javax.swing.JButton();
+        jSeparator33 = new javax.swing.JToolBar.Separator();
+        tbCut = new javax.swing.JButton();
+        tbCopy = new javax.swing.JButton();
+        tbPaste = new javax.swing.JButton();
         jSeparator29 = new javax.swing.JToolBar.Separator();
-        jButtonFind = new javax.swing.JButton();
-        jButtonToolbarReplace = new javax.swing.JButton();
+        tbFind = new javax.swing.JButton();
+        tbFindNext = new javax.swing.JButton();
+        tbReplace = new javax.swing.JButton();
         jSeparator30 = new javax.swing.JToolBar.Separator();
         jComboBoxRunScripts = new javax.swing.JComboBox();
-        jButtonRunScript = new javax.swing.JButton();
+        tbRunScript = new javax.swing.JButton();
+        tbPrevError = new javax.swing.JButton();
+        tbNextError = new javax.swing.JButton();
+        jSeparator32 = new javax.swing.JToolBar.Separator();
+        tbCodeFold = new javax.swing.JButton();
+        tbInsertSection = new javax.swing.JButton();
         jSeparator31 = new javax.swing.JToolBar.Separator();
-        jButtonPreferences = new javax.swing.JButton();
-        jButtonHelp = new javax.swing.JButton();
+        tbPreferences = new javax.swing.JButton();
+        tbHelp = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2395,7 +2422,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1.setName("jPanel1"); // NOI18N
 
         jSplitPaneEditorList.setBorder(null);
-        jSplitPaneEditorList.setDividerLocation(550);
+        jSplitPaneEditorList.setDividerLocation(575);
         jSplitPaneEditorList.setName("jSplitPaneEditorList"); // NOI18N
 
         jPanel7.setName("jPanel7"); // NOI18N
@@ -2520,7 +2547,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 549, Short.MAX_VALUE)
+            .add(0, 575, Short.MAX_VALUE)
             .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(org.jdesktop.layout.GroupLayout.TRAILING, jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jPanelFind, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2565,21 +2592,23 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
             .add(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jTextFieldGoto)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonRefreshGoto)
                 .addContainerGap())
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(jScrollPaneSidebar)
+                .add(0, 0, 0))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                .add(jScrollPaneSidebar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jTextFieldGoto)
+                    .add(jTextFieldGoto, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButtonRefreshGoto, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -2590,7 +2619,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneEditorList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSplitPaneEditorList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2618,9 +2647,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 779, Short.MAX_VALUE)
+            .add(0, 869, Short.MAX_VALUE)
             .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jScrollPaneLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE))
+                .add(jScrollPaneLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2645,7 +2674,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jScrollPaneErrorLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+            .add(jScrollPaneErrorLog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -3169,7 +3198,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 .add(jLabel8)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldConvBin, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 170, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 260, Short.MAX_VALUE)
                 .add(jLabelBufferSize)
                 .addContainerGap())
         );
@@ -3197,79 +3226,116 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jToolBar.setRollover(true);
         jToolBar.setName("jToolBar"); // NOI18N
 
-        jButtonNew.setAction(actionMap.get("addNewTab")); // NOI18N
-        jButtonNew.setText(resourceMap.getString("jButtonNew.text")); // NOI18N
-        jButtonNew.setBorderPainted(false);
-        jButtonNew.setFocusable(false);
-        jButtonNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonNew.setName("jButtonNew"); // NOI18N
-        jButtonNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonNew);
+        tbNew.setAction(actionMap.get("addNewTab")); // NOI18N
+        tbNew.setText(resourceMap.getString("tbNew.text")); // NOI18N
+        tbNew.setBorderPainted(false);
+        tbNew.setFocusable(false);
+        tbNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbNew.setName("tbNew"); // NOI18N
+        tbNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbNew);
 
-        jButtonFileOpen.setAction(actionMap.get("openFile")); // NOI18N
-        jButtonFileOpen.setText(resourceMap.getString("jButtonFileOpen.text")); // NOI18N
-        jButtonFileOpen.setBorderPainted(false);
-        jButtonFileOpen.setFocusable(false);
-        jButtonFileOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonFileOpen.setName("jButtonFileOpen"); // NOI18N
-        jButtonFileOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonFileOpen);
+        tbFileOpen.setAction(actionMap.get("openFile")); // NOI18N
+        tbFileOpen.setText(resourceMap.getString("tbFileOpen.text")); // NOI18N
+        tbFileOpen.setBorderPainted(false);
+        tbFileOpen.setFocusable(false);
+        tbFileOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbFileOpen.setName("tbFileOpen"); // NOI18N
+        tbFileOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbFileOpen);
 
-        jButtonSave.setAction(actionMap.get("saveFile")); // NOI18N
-        jButtonSave.setText(resourceMap.getString("jButtonSave.text")); // NOI18N
-        jButtonSave.setBorderPainted(false);
-        jButtonSave.setFocusable(false);
-        jButtonSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonSave.setName("jButtonSave"); // NOI18N
-        jButtonSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonSave);
+        tbSave.setAction(actionMap.get("saveFile")); // NOI18N
+        tbSave.setText(resourceMap.getString("tbSave.text")); // NOI18N
+        tbSave.setBorderPainted(false);
+        tbSave.setFocusable(false);
+        tbSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbSave.setName("tbSave"); // NOI18N
+        tbSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbSave);
+
+        tbSaveAll.setAction(actionMap.get("saveAllFiles")); // NOI18N
+        tbSaveAll.setText(resourceMap.getString("tbSaveAll.text")); // NOI18N
+        tbSaveAll.setBorderPainted(false);
+        tbSaveAll.setFocusable(false);
+        tbSaveAll.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbSaveAll.setName("tbSaveAll"); // NOI18N
+        tbSaveAll.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbSaveAll);
 
         jSeparator28.setName("jSeparator28"); // NOI18N
         jToolBar.add(jSeparator28);
 
-        jButtonCut.setAction(actionMap.get("cutAction")); // NOI18N
-        jButtonCut.setBorderPainted(false);
-        jButtonCut.setFocusable(false);
-        jButtonCut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonCut.setName("jButtonCut"); // NOI18N
-        jButtonCut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonCut);
+        tbUndo.setAction(actionMap.get("undoAction")); // NOI18N
+        tbUndo.setBorderPainted(false);
+        tbUndo.setFocusable(false);
+        tbUndo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbUndo.setName("tbUndo"); // NOI18N
+        tbUndo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbUndo);
 
-        jButtonCopy.setAction(actionMap.get("copyAction")); // NOI18N
-        jButtonCopy.setBorderPainted(false);
-        jButtonCopy.setFocusable(false);
-        jButtonCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonCopy.setName("jButtonCopy"); // NOI18N
-        jButtonCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonCopy);
+        tbRedo.setAction(actionMap.get("redoAction")); // NOI18N
+        tbRedo.setBorderPainted(false);
+        tbRedo.setFocusable(false);
+        tbRedo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbRedo.setName("tbRedo"); // NOI18N
+        tbRedo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbRedo);
 
-        jButtonPaste.setAction(actionMap.get("pasteAction")); // NOI18N
-        jButtonPaste.setBorderPainted(false);
-        jButtonPaste.setFocusable(false);
-        jButtonPaste.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonPaste.setName("jButtonPaste"); // NOI18N
-        jButtonPaste.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonPaste);
+        jSeparator33.setName("jSeparator33"); // NOI18N
+        jToolBar.add(jSeparator33);
+
+        tbCut.setAction(actionMap.get("cutAction")); // NOI18N
+        tbCut.setBorderPainted(false);
+        tbCut.setFocusable(false);
+        tbCut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbCut.setName("tbCut"); // NOI18N
+        tbCut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbCut);
+
+        tbCopy.setAction(actionMap.get("copyAction")); // NOI18N
+        tbCopy.setBorderPainted(false);
+        tbCopy.setFocusable(false);
+        tbCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbCopy.setName("tbCopy"); // NOI18N
+        tbCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbCopy);
+
+        tbPaste.setAction(actionMap.get("pasteAction")); // NOI18N
+        tbPaste.setBorderPainted(false);
+        tbPaste.setFocusable(false);
+        tbPaste.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbPaste.setName("tbPaste"); // NOI18N
+        tbPaste.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbPaste);
 
         jSeparator29.setName("jSeparator29"); // NOI18N
         jToolBar.add(jSeparator29);
 
-        jButtonFind.setAction(actionMap.get("findStart")); // NOI18N
-        jButtonFind.setText(resourceMap.getString("jButtonFind.text")); // NOI18N
-        jButtonFind.setBorderPainted(false);
-        jButtonFind.setFocusable(false);
-        jButtonFind.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonFind.setName("jButtonFind"); // NOI18N
-        jButtonFind.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonFind);
+        tbFind.setAction(actionMap.get("findStart")); // NOI18N
+        tbFind.setText(resourceMap.getString("tbFind.text")); // NOI18N
+        tbFind.setBorderPainted(false);
+        tbFind.setFocusable(false);
+        tbFind.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbFind.setName("tbFind"); // NOI18N
+        tbFind.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbFind);
 
-        jButtonToolbarReplace.setAction(actionMap.get("replaceTerm")); // NOI18N
-        jButtonToolbarReplace.setBorderPainted(false);
-        jButtonToolbarReplace.setFocusable(false);
-        jButtonToolbarReplace.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonToolbarReplace.setName("jButtonToolbarReplace"); // NOI18N
-        jButtonToolbarReplace.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonToolbarReplace);
+        tbFindNext.setAction(actionMap.get("findNext")); // NOI18N
+        tbFindNext.setText(resourceMap.getString("tbFindNext.text")); // NOI18N
+        tbFindNext.setBorderPainted(false);
+        tbFindNext.setFocusable(false);
+        tbFindNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbFindNext.setName("tbFindNext"); // NOI18N
+        tbFindNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbFindNext);
+
+        tbReplace.setAction(actionMap.get("replaceTerm")); // NOI18N
+        tbReplace.setBorderPainted(false);
+        tbReplace.setFocusable(false);
+        tbReplace.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbReplace.setName("tbReplace"); // NOI18N
+        tbReplace.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbReplace);
 
         jSeparator30.setName("jSeparator30"); // NOI18N
         jToolBar.add(jSeparator30);
@@ -3277,34 +3343,73 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxRunScripts.setName("jComboBoxRunScripts"); // NOI18N
         jToolBar.add(jComboBoxRunScripts);
 
-        jButtonRunScript.setAction(actionMap.get("runScript")); // NOI18N
-        jButtonRunScript.setBorderPainted(false);
-        jButtonRunScript.setFocusable(false);
-        jButtonRunScript.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonRunScript.setName("jButtonRunScript"); // NOI18N
-        jButtonRunScript.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonRunScript);
+        tbRunScript.setAction(actionMap.get("runScript")); // NOI18N
+        tbRunScript.setBorderPainted(false);
+        tbRunScript.setFocusable(false);
+        tbRunScript.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbRunScript.setName("tbRunScript"); // NOI18N
+        tbRunScript.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbRunScript);
+
+        tbPrevError.setAction(actionMap.get("gotoPrevError")); // NOI18N
+        tbPrevError.setText(resourceMap.getString("tbPrevError.text")); // NOI18N
+        tbPrevError.setBorderPainted(false);
+        tbPrevError.setFocusable(false);
+        tbPrevError.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbPrevError.setName("tbPrevError"); // NOI18N
+        tbPrevError.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbPrevError);
+
+        tbNextError.setAction(actionMap.get("gotoNextError")); // NOI18N
+        tbNextError.setText(resourceMap.getString("tbNextError.text")); // NOI18N
+        tbNextError.setBorderPainted(false);
+        tbNextError.setFocusable(false);
+        tbNextError.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbNextError.setName("tbNextError"); // NOI18N
+        tbNextError.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbNextError);
+
+        jSeparator32.setName("jSeparator32"); // NOI18N
+        jToolBar.add(jSeparator32);
+
+        tbCodeFold.setAction(actionMap.get("surroundFolds")); // NOI18N
+        tbCodeFold.setText(resourceMap.getString("tbCodeFold.text")); // NOI18N
+        tbCodeFold.setBorderPainted(false);
+        tbCodeFold.setFocusable(false);
+        tbCodeFold.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbCodeFold.setName("tbCodeFold"); // NOI18N
+        tbCodeFold.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbCodeFold);
+
+        tbInsertSection.setAction(actionMap.get("insertSection")); // NOI18N
+        tbInsertSection.setText(resourceMap.getString("tbInsertSection.text")); // NOI18N
+        tbInsertSection.setBorderPainted(false);
+        tbInsertSection.setFocusable(false);
+        tbInsertSection.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbInsertSection.setName("tbInsertSection"); // NOI18N
+        tbInsertSection.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbInsertSection);
 
         jSeparator31.setName("jSeparator31"); // NOI18N
         jToolBar.add(jSeparator31);
 
-        jButtonPreferences.setAction(actionMap.get("settingsWindow")); // NOI18N
-        jButtonPreferences.setText(resourceMap.getString("jButtonPreferences.text")); // NOI18N
-        jButtonPreferences.setBorderPainted(false);
-        jButtonPreferences.setFocusable(false);
-        jButtonPreferences.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonPreferences.setName("jButtonPreferences"); // NOI18N
-        jButtonPreferences.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonPreferences);
+        tbPreferences.setAction(actionMap.get("settingsWindow")); // NOI18N
+        tbPreferences.setText(resourceMap.getString("tbPreferences.text")); // NOI18N
+        tbPreferences.setBorderPainted(false);
+        tbPreferences.setFocusable(false);
+        tbPreferences.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbPreferences.setName("tbPreferences"); // NOI18N
+        tbPreferences.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbPreferences);
 
-        jButtonHelp.setAction(actionMap.get("showHelp")); // NOI18N
-        jButtonHelp.setText(resourceMap.getString("jButtonHelp.text")); // NOI18N
-        jButtonHelp.setBorderPainted(false);
-        jButtonHelp.setFocusable(false);
-        jButtonHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonHelp.setName("jButtonHelp"); // NOI18N
-        jButtonHelp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar.add(jButtonHelp);
+        tbHelp.setAction(actionMap.get("showHelp")); // NOI18N
+        tbHelp.setText(resourceMap.getString("tbHelp.text")); // NOI18N
+        tbHelp.setBorderPainted(false);
+        tbHelp.setFocusable(false);
+        tbHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbHelp.setName("tbHelp"); // NOI18N
+        tbHelp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar.add(tbHelp);
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -3345,21 +3450,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
     private javax.swing.JMenuItem insertSinusMenuItem;
-    private javax.swing.JButton jButtonCopy;
-    private javax.swing.JButton jButtonCut;
-    private javax.swing.JButton jButtonFileOpen;
-    private javax.swing.JButton jButtonFind;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
-    private javax.swing.JButton jButtonHelp;
-    private javax.swing.JButton jButtonNew;
-    private javax.swing.JButton jButtonPaste;
-    private javax.swing.JButton jButtonPreferences;
     private javax.swing.JButton jButtonRefreshGoto;
     private javax.swing.JButton jButtonReplace;
-    private javax.swing.JButton jButtonRunScript;
-    private javax.swing.JButton jButtonSave;
-    private javax.swing.JButton jButtonToolbarReplace;
     private javax.swing.JCheckBox jCheckBoxMatchCase;
     private javax.swing.JCheckBox jCheckBoxRegEx;
     private javax.swing.JCheckBox jCheckBoxWholeWord;
@@ -3423,6 +3517,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator30;
     private javax.swing.JToolBar.Separator jSeparator31;
+    private javax.swing.JToolBar.Separator jSeparator32;
+    private javax.swing.JToolBar.Separator jSeparator33;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
@@ -3475,6 +3571,25 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenu sourceMenu;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JMenuItem switchLogPosMenuItem;
+    private javax.swing.JButton tbCodeFold;
+    private javax.swing.JButton tbCopy;
+    private javax.swing.JButton tbCut;
+    private javax.swing.JButton tbFileOpen;
+    private javax.swing.JButton tbFind;
+    private javax.swing.JButton tbFindNext;
+    private javax.swing.JButton tbHelp;
+    private javax.swing.JButton tbInsertSection;
+    private javax.swing.JButton tbNew;
+    private javax.swing.JButton tbNextError;
+    private javax.swing.JButton tbPaste;
+    private javax.swing.JButton tbPreferences;
+    private javax.swing.JButton tbPrevError;
+    private javax.swing.JButton tbRedo;
+    private javax.swing.JButton tbReplace;
+    private javax.swing.JButton tbRunScript;
+    private javax.swing.JButton tbSave;
+    private javax.swing.JButton tbSaveAll;
+    private javax.swing.JButton tbUndo;
     private javax.swing.JMenuItem undoMenuItem;
     private javax.swing.JMenuItem viewLog1MenuItem;
     private javax.swing.JMenuItem viewMainTabMenuItem;

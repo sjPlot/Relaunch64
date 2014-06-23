@@ -141,6 +141,8 @@ public class ConstantsR64 {
     public static final String[] FILE_EXTENSIONS = new String[] {".a", ".asm", ".src", ".s"};
     public static final String[] FILE_EXTENSIONS_INCLUDES = new String[] {".bin", ".c64", ".txt", ".koa", ".prg", ".pck", ".sid", ".raw", ".iff", ".fli", ".afli", ".ifli"};
     
+    public static final String[] toolbarNames = new String[] { "New", "Open", "Save", "Save all", "Undo", "Redo", "Cut", "Copy", "Paste", "Find", "Next", "Replace", "Run", "Prev", "Next", "Fold", "Section", "Prefs", "Help"};
+    
     // check os
     public static boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");
     public static boolean IS_OSX = System.getProperty("os.name").toLowerCase().startsWith("mac os");
