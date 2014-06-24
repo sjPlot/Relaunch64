@@ -1371,6 +1371,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void gotoMacro() {
         updateListContent(GOTO_MACRO);
     }
+    // TODO jump back and forth between labels? how to deal with local scope?
     @Action
     public void jumpToLabel() {
         // get word under caret
