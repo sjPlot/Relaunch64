@@ -48,6 +48,8 @@ public class EditorPaneProperties {
     private File filePath;
     private int script;
     private String lineEnd;
+    private int labelSourcePosition;
+    private int labelDefinitionPosition;
     
     public EditorPaneProperties() {
         resetEditorPanesProperties();
@@ -61,6 +63,18 @@ public class EditorPaneProperties {
     }
     public RL64TextArea getEditorPane() {
         return editorPane;
+    }
+    public void setLabelSourcePosition(int caretPosition) {
+        labelSourcePosition = caretPosition;
+    }
+    public int getLabelSourcePosition() {
+        return labelSourcePosition;
+    }
+    public void setLabelDefintionPosition(int caretPosition) {
+        labelDefinitionPosition = caretPosition;
+    }
+    public int getLabelDefintionPosition() {
+        return labelDefinitionPosition;
     }
     public void setEditorPane(RL64TextArea ep) {
         editorPane = ep;

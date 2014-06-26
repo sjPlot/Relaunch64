@@ -879,7 +879,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * @param specialDelimiter a list of additional delimiters that have to be considered beyond the
      * default delimiter list from {@link de.relaunch64.popelganda.util.Tools#isDelimiter(java.lang.Character, java.lang.String) isDelimiter()}.
      * 
-     * @return the string under the caret.
+     * @return the string under the caret, an empty string if nothing found or {@code null} if an error occured.
      */
     public String getCaretString(boolean wholeWord, String specialDelimiter) {
         // get caret position in line offset

@@ -1371,11 +1371,28 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void gotoMacro() {
         updateListContent(GOTO_MACRO);
     }
-    // TODO jump back and forth between labels? how to deal with local scope?
     @Action
     public void jumpToLabel() {
         // get word under caret
-        editorPanes.gotoLabel(editorPanes.getActiveEditorPane().getCaretString(true, ""));
+        String caretWord = editorPanes.getActiveEditorPane().getCaretString(true, "");
+        // check if anything
+        if (caretWord!=null && !caretWord.isEmpty()) {
+            // remember cursor
+            int caret = editorPanes.getActiveEditorPane().getCaretPosition();
+            int line = editorPanes.getActiveEditorPane().getCaretLine();
+            // jump to label
+            editorPanes.gotoLabel(caretWord);
+            // check if line changed. if not, we don't want to "overwrite" 
+            // old caret positions
+            if (editorPanes.getActiveEditorPane().getCaretLine()!=line) {
+                // remember cursor
+                editorPanes.saveLabelSourcePosition(caret);
+            }
+        }
+    }
+    @Action
+    public void jumpBackToLabelSource() {
+        editorPanes.gotoLabelSourcePosition();
     }
     @Action
     public void insertSection() {
@@ -2344,6 +2361,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         gotoSectionMenuItem = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
         jumpToLabelMenuItem = new javax.swing.JMenuItem();
+        jumpBackToLabelMenuItem = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         gotoNextLabel = new javax.swing.JMenuItem();
         gotoPrevLabel = new javax.swing.JMenuItem();
@@ -2970,6 +2988,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jumpToLabelMenuItem.setName("jumpToLabelMenuItem"); // NOI18N
         gotoMenu.add(jumpToLabelMenuItem);
 
+        jumpBackToLabelMenuItem.setAction(actionMap.get("jumpBackToLabelSource")); // NOI18N
+        jumpBackToLabelMenuItem.setName("jumpBackToLabelMenuItem"); // NOI18N
+        gotoMenu.add(jumpBackToLabelMenuItem);
+
         jSeparator13.setName("jSeparator13"); // NOI18N
         gotoMenu.add(jSeparator13);
 
@@ -3577,6 +3599,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JTextField jTextFieldGotoLine;
     private javax.swing.JTextField jTextFieldReplace;
     private javax.swing.JToolBar jToolBar;
+    private javax.swing.JMenuItem jumpBackToLabelMenuItem;
     private javax.swing.JMenuItem jumpToLabelMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;

@@ -5,6 +5,10 @@ Relaunch64 3.2.x (development)
 ----------------
 ### New features
 
+#### Code navigation
+* jump back and forth between label source and label definition (see menu navigation)
+* re-mapped menu-shortcut for "Jump to label" command, which was also renamed to "Jump to label-definition"
+
 #### GUI
 * added toolbar with common functions
 * added sorting-options for sidebar

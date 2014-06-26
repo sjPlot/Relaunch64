@@ -1401,4 +1401,19 @@ public class EditorPanes {
             buffer.redo(ep);
         }
     }
+    public void saveLabelSourcePosition(int caret) {
+        getActiveEditorPaneProperties().setLabelSourcePosition(caret);
+    }
+    public void gotoLabelSourcePosition() {
+        // get text area
+        RL64TextArea ep = getActiveEditorPane();
+        int caret = getActiveEditorPaneProperties().getLabelSourcePosition();
+        // check for value
+        if (caret>=0) {
+            // set caret position
+            ep.setCaretPosition(caret);
+            // scroll and center caret position
+            ep.scrollAndCenterCaret();
+        }
+    }
 }
