@@ -117,13 +117,8 @@ public class RL64TextArea extends StandaloneTextArea {
      */
     static {
         props = new Properties();
-        if (ConstantsR64.IS_OSX) {
-            props.putAll(loadProperties("/de/relaunch64/popelganda/resources/Mac_OS_X_keys.props"));
-        }
-        else {
-            props.putAll(loadProperties("/de/relaunch64/popelganda/resources/jEdit_keys.props"));
-        }
-        props.putAll(loadProperties("/de/relaunch64/popelganda/resources/jEdit.props"));
+        propertiesFromFile(ConstantsR64.IS_OSX ? "Mac_OS_X_keys.props" : "jEdit_keys.props");
+        propertiesFromFile("jEdit.props");
         propertyManager = new IPropertyManager() {
             @Override
             public String getProperty(String name) {
@@ -145,7 +140,7 @@ public class RL64TextArea extends StandaloneTextArea {
      * Loads properties from an internal XML file.
      * @param fileName 
      */
-    public void propertiesFromFile(String fileName) {
+    public static void propertiesFromFile(String fileName) {
         props.putAll(loadProperties("/de/relaunch64/popelganda/resources/" + fileName));
     }
     private static Properties loadProperties(String fileName) {
@@ -176,7 +171,8 @@ public class RL64TextArea extends StandaloneTextArea {
     public void processKeyEvent(KeyEvent evt) {
         if (evt.getID() == KeyEvent.KEY_RELEASED) {
             keyListener.keyReleased(evt);
-        } else if (evt.getID() == KeyEvent.KEY_PRESSED) {
+        }
+        else if (evt.getID() == KeyEvent.KEY_PRESSED) {
             keyListener.keyPressed(evt);
         }
         if (!evt.isConsumed()) {
