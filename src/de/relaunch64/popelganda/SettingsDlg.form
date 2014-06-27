@@ -280,6 +280,7 @@
                                       </Group>
                                   </Group>
                                   <Component id="jCheckBoxFindFieldFocus" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxFindByType" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="150" max="32767" attributes="0"/>
                           </Group>
@@ -343,7 +344,9 @@
                           </Group>
                           <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxFindByType" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="64" max="32767" attributes="0"/>
                       <Component id="jButtonApplyTabAndFont" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -542,6 +545,13 @@
                 <Property name="text" type="java.lang.String" resourceKey="jCheckBoxFindFieldFocus.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxFindFieldFocus.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="jCheckBoxFindFieldFocus" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxFindByType">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jCheckBoxFindByType.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jCheckBoxFindByType.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jCheckBoxFindByType" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

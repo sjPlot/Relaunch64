@@ -111,6 +111,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
+import org.gjt.sp.jedit.textarea.Selection;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
@@ -496,6 +497,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override public void popupMenuCanceled(PopupMenuEvent e) {
             }
         });
+        jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            @Override public void keyReleased(KeyEvent evt) {
+                if (!settings.getFindByType()) return;
+                if (!evt.isActionKey()) {
+                    // get textfield component
+                    JTextField tf = (JTextField)jComboBoxFind.getEditor().getEditorComponent();
+                    // get find text
+                    String text = tf.getText();
+                    if (text!=null && !text.isEmpty()) {
+                        // get editor pane
+                        RL64TextArea editorPane = editorPanes.getActiveEditorPane();
+                        // get source code
+                        String content = editorPane.getBuffer().getText();
+                        // create ignore-case pattern for findtext
+                        Pattern p = Pattern.compile("(?i)"+Pattern.quote(text));
+                        // find pattern
+                        Matcher m = p.matcher(content);
+                        // any occurences?
+                        if (m.find()) {
+                            // if yes, select first occurence in source code
+                            editorPane.setCaretPosition(m.start());
+                            editorPane.scrollToCaret(true);
+                            editorPane.setSelection(new Selection.Range(m.start(), m.end()));
+                        }
+                    }
+                }
+                
+            }
+        });
+
         jTextFieldReplace.addKeyListener(new KeyAdapter() {
             @Override public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
@@ -1850,7 +1881,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 }
             }
         }
+        // set focus to textfield
         jComboBoxFind.requestFocusInWindow();
+        // retrieve editor component
+        JTextField tf = (JTextField)jComboBoxFind.getEditor().getEditorComponent();
+        // select item, if any, so user does not need to delete
+        // before entering a new search term
+        tf.setSelectionStart(0);
+        tf.setSelectionEnd(tf.getText().length());
     }
     @Action
     public void findNext() {

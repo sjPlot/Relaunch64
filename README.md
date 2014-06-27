@@ -9,13 +9,16 @@ Relaunch64 3.2.x (development)
 * jump back and forth between label source and label definition (see menu navigation)
 * re-mapped menu-shortcut for "Jump to label" command, which was also renamed to "Jump to label-definition"
 
+#### Editor
+* added find-by-typing option for search textfield (can be en-/disabled via preferences)
+
 #### GUI
 * added toolbar with common functions
 * added sorting-options for sidebar
-* "Select script" was removed from log-area and moved to the toolbar. if toolbar is hidden, a selection popup appears to select scripts.
+* "Select script" was removed from log-area and moved to the toolbar. if toolbar is hidden, a selection popup appears to select scripts
 
 #### various
-* added preference that hitting enter-key in find-textfield keeps focus in find textfield, so multiple enter will find next searchterm.
+* added preference that hitting enter-key in find-textfield keeps focus in find textfield, so multiple enter will find next searchterm
 
 ### Bug fixes
 * automatic update check did not work - fixed

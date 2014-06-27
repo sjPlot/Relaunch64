@@ -144,6 +144,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxTbText.setSelected(settings.getShowToolbarText());
         jCheckBoxCodeFolding.setSelected(settings.getCodeFolding());
         jCheckBoxFindFieldFocus.setSelected(settings.getFindFieldFocus());
+        jCheckBoxFindByType.setSelected(settings.getFindByType());
         jCheckBoxTbText.setEnabled(settings.getShowToolbar());
         jCheckBoxCF_braces.setEnabled(settings.getCodeFolding());
         jCheckBoxCF_manual.setEnabled(settings.getCodeFolding());
@@ -362,6 +363,12 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                 setModifiedTabFont(true);
             }
         });
+        jCheckBoxFindByType.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setModifiedTabFont(true);
+            }
+        });
         jCheckBoxCodeFolding.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -546,6 +553,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setSuggestionSortIgnoresCase(!jCheckBoxSuggestCaseSort.isSelected());
         settings.setUseNoTabs(jCheckBoxNoTabs.isSelected());
         settings.setFindFieldFocus(jCheckBoxFindFieldFocus.isSelected());
+        settings.setFindByType(jCheckBoxFindByType.isSelected());
         settings.setCodeFolding(jCheckBoxCodeFolding.isSelected());
         int foldtokens = 0;
         foldtokens = foldtokens + (jCheckBoxCF_manual.isSelected() ? Assemblers.CF_TOKEN_MANUAL : 0);
@@ -744,6 +752,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxCF_section = new javax.swing.JCheckBox();
         jCheckBoxNoTabs = new javax.swing.JCheckBox();
         jCheckBoxFindFieldFocus = new javax.swing.JCheckBox();
+        jCheckBoxFindByType = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxSyntaxScheme = new javax.swing.JComboBox();
@@ -958,6 +967,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxFindFieldFocus.setToolTipText(resourceMap.getString("jCheckBoxFindFieldFocus.toolTipText")); // NOI18N
         jCheckBoxFindFieldFocus.setName("jCheckBoxFindFieldFocus"); // NOI18N
 
+        jCheckBoxFindByType.setText(resourceMap.getString("jCheckBoxFindByType.text")); // NOI18N
+        jCheckBoxFindByType.setToolTipText(resourceMap.getString("jCheckBoxFindByType.toolTipText")); // NOI18N
+        jCheckBoxFindByType.setName("jCheckBoxFindByType"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -1005,7 +1018,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                                     .add(jCheckBoxCF_directives)
                                     .add(jCheckBoxCF_struct)
                                     .add(jCheckBoxCF_section)))
-                            .add(jCheckBoxFindFieldFocus))
+                            .add(jCheckBoxFindFieldFocus)
+                            .add(jCheckBoxFindByType))
                         .add(0, 150, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1056,7 +1070,9 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jCheckBoxFindFieldFocus))
                     .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxFindByType)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 64, Short.MAX_VALUE)
                 .add(jButtonApplyTabAndFont)
                 .addContainerGap())
         );
@@ -1288,6 +1304,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JCheckBox jCheckBoxCF_struct;
     private javax.swing.JCheckBox jCheckBoxCheckUpdates;
     private javax.swing.JCheckBox jCheckBoxCodeFolding;
+    private javax.swing.JCheckBox jCheckBoxFindByType;
     private javax.swing.JCheckBox jCheckBoxFindFieldFocus;
     private javax.swing.JCheckBox jCheckBoxNimbusOnOSX;
     private javax.swing.JCheckBox jCheckBoxNoTabs;
