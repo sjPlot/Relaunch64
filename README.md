@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Relaunch64 3.2.x (development)
+Relaunch64 3.3 (development)
 ----------------
 ### New features
 
@@ -11,11 +11,14 @@ Relaunch64 3.2.x (development)
 
 #### Editor
 * added find-by-typing option for search textfield (can be en-/disabled via preferences)
+* added feature to convert selection to lower/upper case (see menu edit)
 
 #### GUI
 * added toolbar with common functions
 * added sorting-options for sidebar
 * "Select script" was removed from log-area and moved to the toolbar. if toolbar is hidden, a selection popup appears to select scripts
+* added close-button to find-/replace-textfield
+* added more shortcuts to menu-commands
 
 #### various
 * added preference that hitting enter-key in find-textfield keeps focus in find textfield, so multiple enter will find next searchterm

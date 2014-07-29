@@ -1263,6 +1263,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             editorPanes.getEditorPane(i).tabsToSpaces();
         }
     }
+    @Action
+    public void selectionToLowercase() {
+        editorPanes.getActiveEditorPane().toLowerCase();
+    }
+    @Action
+    public void selectionToUppercase() {
+        editorPanes.getActiveEditorPane().toUpperCase();
+    }
+    
 
     public void autoConvertNumbers(String selection) {
         // check for valid selection
@@ -1928,7 +1937,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                                              settings.getFindFieldFocus()) ? Color.black : Color.red);
         }
     }
-    private void findCancel() {
+    @Action
+    public void findCancel() {
         // cancel replace
         replaceCancel();
         // reset values
@@ -2319,6 +2329,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jCheckBoxWholeWord = new javax.swing.JCheckBox();
         jCheckBoxMatchCase = new javax.swing.JCheckBox();
         jComboBoxFind = new javax.swing.JComboBox();
+        jButtonCloseFind = new javax.swing.JButton();
         jPanelReplace = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldReplace = new javax.swing.JTextField();
@@ -2378,6 +2389,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         selectAllMenuItem = new javax.swing.JMenuItem();
         jSeparator24 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemToLowercase = new javax.swing.JMenuItem();
+        jMenuItemToUppercase = new javax.swing.JMenuItem();
+        jSeparator34 = new javax.swing.JPopupMenu.Separator();
         jMenuItemTabsToSpaces = new javax.swing.JMenuItem();
         jMenuItemAllTabsToSpaces = new javax.swing.JMenuItem();
         jSeparator25 = new javax.swing.JPopupMenu.Separator();
@@ -2545,6 +2559,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxFind.setToolTipText(resourceMap.getString("jComboBoxFind.toolTipText")); // NOI18N
         jComboBoxFind.setName("jComboBoxFind"); // NOI18N
 
+        jButtonCloseFind.setAction(actionMap.get("findCancel")); // NOI18N
+        jButtonCloseFind.setBorderPainted(false);
+        jButtonCloseFind.setContentAreaFilled(false);
+        jButtonCloseFind.setName("jButtonCloseFind"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanelFindLayout = new org.jdesktop.layout.GroupLayout(jPanelFind);
         jPanelFind.setLayout(jPanelFindLayout);
         jPanelFindLayout.setHorizontalGroup(
@@ -2566,8 +2585,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonFindPrev)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButtonFindNext)))
-                .addContainerGap())
+                        .add(jButtonFindNext)
+                        .add(0, 0, 0)
+                        .add(jButtonCloseFind)))
+                .add(0, 0, 0))
         );
         jPanelFindLayout.setVerticalGroup(
             jPanelFindLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2576,7 +2597,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     .add(jLabel5)
                     .add(jButtonFindPrev)
                     .add(jButtonFindNext)
-                    .add(jComboBoxFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBoxFind, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonCloseFind))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanelFindLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jCheckBoxRegEx)
@@ -2941,6 +2963,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
         jSeparator24.setName("jSeparator24"); // NOI18N
         editMenu.add(jSeparator24);
+
+        jMenuItemToLowercase.setAction(actionMap.get("selectionToLowercase")); // NOI18N
+        jMenuItemToLowercase.setName("jMenuItemToLowercase"); // NOI18N
+        editMenu.add(jMenuItemToLowercase);
+
+        jMenuItemToUppercase.setAction(actionMap.get("selectionToUppercase")); // NOI18N
+        jMenuItemToUppercase.setName("jMenuItemToUppercase"); // NOI18N
+        editMenu.add(jMenuItemToUppercase);
+
+        jSeparator34.setName("jSeparator34"); // NOI18N
+        editMenu.add(jSeparator34);
 
         jMenuItemTabsToSpaces.setAction(actionMap.get("tabsToSpaces")); // NOI18N
         jMenuItemTabsToSpaces.setName("jMenuItemTabsToSpaces"); // NOI18N
@@ -3547,6 +3580,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem insertSectionMenuItem;
     private javax.swing.JMenuItem insertSeparatorMenuItem;
     private javax.swing.JMenuItem insertSinusMenuItem;
+    private javax.swing.JButton jButtonCloseFind;
     private javax.swing.JButton jButtonFindNext;
     private javax.swing.JButton jButtonFindPrev;
     private javax.swing.JButton jButtonRefreshGoto;
@@ -3580,6 +3614,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem jMenuItemSpaceToTab;
     private javax.swing.JMenuItem jMenuItemSurroundFolds;
     private javax.swing.JMenuItem jMenuItemTabsToSpaces;
+    private javax.swing.JMenuItem jMenuItemToLowercase;
+    private javax.swing.JMenuItem jMenuItemToUppercase;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
@@ -3618,6 +3654,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JToolBar.Separator jSeparator31;
     private javax.swing.JToolBar.Separator jSeparator32;
     private javax.swing.JToolBar.Separator jSeparator33;
+    private javax.swing.JPopupMenu.Separator jSeparator34;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;

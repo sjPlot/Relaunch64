@@ -145,9 +145,11 @@
                                               <Component id="jButtonFindPrev" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jButtonFindNext" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                              <Component id="jButtonCloseFind" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -159,6 +161,7 @@
                                           <Component id="jButtonFindPrev" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButtonFindNext" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jComboBoxFind" alignment="2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jButtonCloseFind" alignment="2" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
@@ -228,6 +231,16 @@
                                 <Property name="editable" type="boolean" value="true"/>
                                 <Property name="toolTipText" type="java.lang.String" resourceKey="jComboBoxFind.toolTipText"/>
                                 <Property name="name" type="java.lang.String" value="jComboBoxFind" noResource="true"/>
+                              </Properties>
+                            </Component>
+                            <Component class="javax.swing.JButton" name="jButtonCloseFind">
+                              <Properties>
+                                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                                  <action class="de.relaunch64.popelganda.Relaunch64View" id="findCancel" methodName="findCancel"/>
+                                </Property>
+                                <Property name="borderPainted" type="boolean" value="false"/>
+                                <Property name="contentAreaFilled" type="boolean" value="false"/>
+                                <Property name="name" type="java.lang.String" value="jButtonCloseFind" noResource="true"/>
                               </Properties>
                             </Component>
                           </SubComponents>
@@ -836,6 +849,27 @@
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator24">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator24" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemToLowercase">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectionToLowercase" methodName="selectionToLowercase"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jMenuItemToLowercase" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemToUppercase">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectionToUppercase" methodName="selectionToUppercase"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jMenuItemToUppercase" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator34">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator34" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemTabsToSpaces">
