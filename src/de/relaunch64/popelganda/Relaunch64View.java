@@ -1717,6 +1717,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // log process
                     log = "Processing script-line: "+cmd;
                     ConstantsR64.r64logger.log(Level.INFO, log);
+                    // check if we have last process in script. needed below to check whether
+                    // Relaunch64 should wait for lasr process to be finished or not
+                    boolean isLastLine = cmd.equalsIgnoreCase(lines[lines.length-1]);
                     // surround pathes with quotes, if necessary
                     String sf = sourceFile.toString();
                     if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) sf = "\""+sf+"\"";
@@ -1773,9 +1776,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         }
                         // print log to text area
                         jTextAreaCompilerOutput.append(compilerLog.toString());
-                        // wait for other process to be finished
-                        p.waitFor();
-                        p.destroy();
+                        // if we don't have last script line, or if each process should be waited
+                        // for, wait for process to be finished
+                        if (!isLastLine || (isLastLine && settings.getWaitForProcess())) {
+                            // wait for other process to be finished
+                            p.waitFor();
+                            p.destroy();
+                        }
                         // read and extract errors from log
                         offset = errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveAssembler(), offset);
                         // break loop if we have any errors

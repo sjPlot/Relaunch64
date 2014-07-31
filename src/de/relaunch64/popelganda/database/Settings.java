@@ -110,6 +110,7 @@ public class Settings {
     private static final String SETTING_SIDEBAR_ISHIDDEN = "dividerishidden";
     private static final String SETTING_USE_NOTABS = "usenotabs";
     private static final String SETTING_FINDBYTYPE = "findbytype";
+    private static final String SETTING_WAITFORPROCESS = "waitforprocess";
 
     private static final String ATTR_ASM = "compiler";
     private static final String ATTR_SCRIPT = "script";
@@ -243,6 +244,13 @@ public class Settings {
         if (null==root.getChild(SETTING_FINDBYTYPE)) {
             // create element
             Element el = new Element(SETTING_FINDBYTYPE);
+            el.setText("1");
+            // and add it to the document
+            root.addContent(el);
+        }
+        if (null==root.getChild(SETTING_WAITFORPROCESS)) {
+            // create element
+            Element el = new Element(SETTING_WAITFORPROCESS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
@@ -736,6 +744,19 @@ public class Settings {
         Element el = root.getChild(SETTING_FINDBYTYPE);
         if (null==el) {
             el = new Element(SETTING_FINDBYTYPE);
+            root.addContent(el);
+        }
+        el.setText(val==Boolean.TRUE ? "1":"0");
+    }
+    public boolean getWaitForProcess() {
+        Element el = root.getChild(SETTING_WAITFORPROCESS);
+        if (el!=null) return el.getText().equals("1");
+        return false;
+    }
+    public void setWaitForProcess(boolean val) {
+        Element el = root.getChild(SETTING_WAITFORPROCESS);
+        if (null==el) {
+            el = new Element(SETTING_WAITFORPROCESS);
             root.addContent(el);
         }
         el.setText(val==Boolean.TRUE ? "1":"0");
