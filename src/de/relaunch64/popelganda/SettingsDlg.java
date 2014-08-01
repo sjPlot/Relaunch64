@@ -145,7 +145,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxCodeFolding.setSelected(settings.getCodeFolding());
         jCheckBoxFindFieldFocus.setSelected(settings.getFindFieldFocus());
         jCheckBoxFindByType.setSelected(settings.getFindByType());
-        jCheckBoxProcessWait.setSelected(settings.getWaitForProcess());
+        jCheckBoxProcessWait.setSelected(!settings.getWaitForProcess());
         jCheckBoxTbText.setEnabled(settings.getShowToolbar());
         jCheckBoxCF_braces.setEnabled(settings.getCodeFolding());
         jCheckBoxCF_manual.setEnabled(settings.getCodeFolding());

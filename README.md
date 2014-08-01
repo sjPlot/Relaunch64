@@ -1,8 +1,15 @@
 Changelog
 ================
 
-Relaunch64 3.3 (development)
+Relaunch64 3.3.1 (development)
 ----------------
+### Bug fixes
+* en-/disabled-status of 'dont wait for process' preference was reversed - fixed
+* preference 'Enter" key keeps focus in find field' did not find next search term when 'find by typing' was enabled - fixed
+
+
+Relaunch64 3.3 (current stable release)
+--------------
 ### New features
 
 #### Code navigation
@@ -22,6 +29,7 @@ Relaunch64 3.3 (development)
 
 #### various
 * added preference that hitting enter-key in find-textfield keeps focus in find textfield, so multiple enter will find next searchterm
+* added preference to not wait for the last process (e.g. emulator run) when running a script (instead, editing is possible immediately after last process is being executed) 
 
 ### Bug fixes
 * automatic update check did not work - fixed
@@ -29,8 +37,8 @@ Relaunch64 3.3 (development)
 * sidebar width changed when refreshing the sidebar-list or creating a new Goto-list - fixed
 
 
-Relaunch64 3.2 (current stable release)
-----------------
+Relaunch64 3.2
+--------------
 
 ### New features
 
@@ -80,7 +88,7 @@ Relaunch64 3.2 (current stable release)
 * fixed minor bugs with comment-commands
 
 
-Relaunch64 3.1.0 (older stable release)
+Relaunch64 3.1.0
 ----------------
 
 ### New features
@@ -134,7 +142,7 @@ Relaunch64 3.1.0 (older stable release)
 * relative paths, for instance when drag'n'dropping files, were not correctly extrtacted - fixed
 * adding new user scripts may have messed up script-assignment to recent opened files and tabs that are re-opened on startup - fixed
 
-Relaunch64 3.0.1 (older stable relase)
+Relaunch64 3.0.1
 ----------------
 
 ### New features

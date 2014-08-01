@@ -46,11 +46,11 @@ public class ConstantsR64 {
     /**
      * This variable stores the current build version number
      */
-    public static final String BUILD_NUMBER = "20140731";
+    public static final String BUILD_NUMBER = "20140801";
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.3 (Build "+BUILD_NUMBER+")";
+    public static final String BUILD_VERSION = "3.3.1 (Build "+BUILD_NUMBER+")";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
@@ -59,7 +59,7 @@ public class ConstantsR64 {
      * This variable stores the application title that appears in the main window
      * Add "Release Candidate" or "Beta" to this title
      */
-    public static final String APPLICATION_TITLE = APPLICATION_SHORT_TITLE+" (development snapshot)";
+    public static final String APPLICATION_TITLE = APPLICATION_SHORT_TITLE;
     /**
      * This constants stores the website-address where the app can be downloaded
      */

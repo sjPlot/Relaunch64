@@ -459,6 +459,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //            // find-index-values are no longer valid
 //            findReplace.resetValues();
 //        });
+        jComboBoxFind.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                jComboBoxFind.removeAllItems();
+                ArrayList<String> ft = findTerms.getFindTerms();
+                if (ft!=null && !ft.isEmpty()) {
+                    for (String i : ft) jComboBoxFind.addItem(i);
+                }
+            }
+            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+            @Override public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+        });
         jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
@@ -478,29 +491,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // when the user presses the escape-key, hide panel
                 if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
                     findCancel();
+                    return;
                 }
-                else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
-                    findNext();
+                if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                    if (!settings.getFindByType()) {
+                        findNext();
+                    }
+                    else {
+                        editorPanes.getActiveEditorPane().requestFocusInWindow();
+                    }
+                    return;
                 }
-            }
-        });
-        jComboBoxFind.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                jComboBoxFind.removeAllItems();
-                ArrayList<String> ft = findTerms.getFindTerms();
-                if (ft!=null && !ft.isEmpty()) {
-                    for (String i : ft) jComboBoxFind.addItem(i);
-                }
-            }
-            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            }
-            @Override public void popupMenuCanceled(PopupMenuEvent e) {
-            }
-        });
-        jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            @Override public void keyReleased(KeyEvent evt) {
-                if (!settings.getFindByType()) return;
-                if (!evt.isActionKey()) {
+                if (settings.getFindByType() && !evt.isActionKey()) {
                     // get textfield component
                     JTextField tf = (JTextField)jComboBoxFind.getEditor().getEditorComponent();
                     // get find text
