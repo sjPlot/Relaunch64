@@ -1,14 +1,14 @@
 Changelog
 ================
 
-Relaunch64 3.3.1 (development)
+Relaunch64 3.3.1 (current stable release)
 ----------------
 ### Bug fixes
 * en-/disabled-status of 'dont wait for process' preference was reversed - fixed
 * preference 'Enter" key keeps focus in find field' did not find next search term when 'find by typing' was enabled - fixed
 
 
-Relaunch64 3.3 (current stable release)
+Relaunch64 3.3
 --------------
 ### New features
 
