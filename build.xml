@@ -74,14 +74,15 @@
     
     <!-- See http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/packagingAppsForMac.html -->
     
-    <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="appbundler-1.0.jar" />
+    <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="appbundler-1.0ea.jar" />
 
     <target name="Bundle OS X .app">
         <bundleapp outputdirectory="store"
             name="Relaunch64"
+            executableName="Relaunch64"
             icon="r64large.icns"
             displayname="Relaunch64"
-            copyright="(c) 2003-2014 by Payday"
+            copyright="(c) 2003-2015 by Payday"
             identifier="de.relaunch64.popelganda.Relaunch64App"
             mainclassname="de.relaunch64.popelganda.Relaunch64App">
             
