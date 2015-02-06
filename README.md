@@ -1,7 +1,13 @@
 Changelog
 ================
 
-Relaunch64 3.3.1 (current stable release)
+Relaunch64 3.3.2 (current stable release)
+----------------
+### Changes
+* Retina-Displays are now supported.
+
+
+Relaunch64 3.3.1
 ----------------
 ### Bug fixes
 * en-/disabled-status of 'dont wait for process' preference was reversed - fixed
