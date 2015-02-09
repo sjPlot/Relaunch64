@@ -107,6 +107,7 @@
                         <KEYWORD3>.xl</KEYWORD3>
                         <KEYWORD3>.xs</KEYWORD3>
 
+                        <KEYWORD4>.addr</KEYWORD4>
                         <KEYWORD4>.binary</KEYWORD4>
                         <KEYWORD4>.byte</KEYWORD4>
                         <KEYWORD4>.char</KEYWORD4>
