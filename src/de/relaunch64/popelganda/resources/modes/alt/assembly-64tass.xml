@@ -231,25 +231,32 @@
 			<!-- Functions -->
                         <FUNCTION>abs</FUNCTION>
                         <FUNCTION>acos</FUNCTION>
+                        <FUNCTION>address</FUNCTION>
                         <FUNCTION>all</FUNCTION>
                         <FUNCTION>any</FUNCTION>
                         <FUNCTION>asin</FUNCTION>
                         <FUNCTION>atan</FUNCTION>
                         <FUNCTION>atan2</FUNCTION>
+                        <FUNCTION>bits</FUNCTION>
                         <FUNCTION>bool</FUNCTION>
+                        <FUNCTION>bytes</FUNCTION>
                         <FUNCTION>cbrt</FUNCTION>
                         <FUNCTION>ceil</FUNCTION>
+                        <FUNCTION>code</FUNCTION>
                         <FUNCTION>cos</FUNCTION>
                         <FUNCTION>cosh</FUNCTION>
                         <FUNCTION>deg</FUNCTION>
+                        <FUNCTION>dict</FUNCTION>
                         <FUNCTION>exp</FUNCTION>
                         <FUNCTION>float</FUNCTION>
                         <FUNCTION>floor</FUNCTION>
                         <FUNCTION>format</FUNCTION>
                         <FUNCTION>frac</FUNCTION>
+                        <FUNCTION>gap</FUNCTION>
                         <FUNCTION>hypot</FUNCTION>
                         <FUNCTION>int</FUNCTION>
                         <FUNCTION>len</FUNCTION>
+                        <FUNCTION>list</FUNCTION>
                         <FUNCTION>log</FUNCTION>
                         <FUNCTION>log10</FUNCTION>
                         <FUNCTION>pow</FUNCTION>
@@ -266,6 +273,8 @@
                         <FUNCTION>tan</FUNCTION>
                         <FUNCTION>tanh</FUNCTION>
                         <FUNCTION>trunc</FUNCTION>
+                        <FUNCTION>tuple</FUNCTION>
+                        <FUNCTION>type<FUNCTION>
 		</KEYWORDS>
 
                 <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}_][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
