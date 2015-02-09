@@ -274,7 +274,7 @@
                         <FUNCTION>tanh</FUNCTION>
                         <FUNCTION>trunc</FUNCTION>
                         <FUNCTION>tuple</FUNCTION>
-                        <FUNCTION>type<FUNCTION>
+                        <FUNCTION>type</FUNCTION>
 		</KEYWORDS>
 
                 <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}_][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
