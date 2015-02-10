@@ -3,6 +3,9 @@ Changelog
 
 Relaunch64 3.3.3 (development snapshot)
 ----------------
+### Changes
+* updated support for 64tass to meet changes of latest 64tass version (added new keywords etc.)
+
 ### Bug fixes
 * preference 'Enter" key keeps focus in find field' did not find next search term when 'find by typing' was enabled - now really fixed
 
