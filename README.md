@@ -3,13 +3,13 @@ Changelog
 
 Relaunch64 3.3.3 (development snapshot)
 ----------------
+Download current development-snapshot [at sourcefourge](https://sourceforge.net/projects/relaunch64/files/devel/).
+
 ### Changes
 * updated support for 64tass to meet changes of latest 64tass version (added new keywords etc.)
 
 ### Bug fixes
 * preference 'Enter" key keeps focus in find field' did not find next search term when 'find by typing' was enabled - now really fixed
-
-Download current development-snapshot [at sourcefourge](https://sourceforge.net/projects/relaunch64/files/devel/)
 
 
 Relaunch64 3.3.2 (current stable release)
