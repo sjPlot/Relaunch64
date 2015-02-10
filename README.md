@@ -9,6 +9,8 @@ Relaunch64 3.3.3 (development snapshot)
 ### Bug fixes
 * preference 'Enter" key keeps focus in find field' did not find next search term when 'find by typing' was enabled - now really fixed
 
+Download current development-snapshot [at sourcefourge](https://sourceforge.net/projects/relaunch64/files/devel/)
+
 
 Relaunch64 3.3.2 (current stable release)
 ----------------
