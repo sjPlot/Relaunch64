@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\Luedeke\Documents\Yavin4\NetBeans\Relaunch64\store\Relaunch64.jar</jar>
+  <jar>C:\Users\Luedeke\Dropbox\NetBeans\Relaunch64\store\Relaunch64.jar</jar>
   <outfile>C:\Users\Luedeke\Desktop\Relaunch64.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
@@ -11,8 +11,9 @@
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl></supportUrl>
   <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\Users\Luedeke\Documents\Yavin4\NetBeans\Relaunch64\r64.ico</icon>
+  <icon>C:\Users\Luedeke\Dropbox\NetBeans\Relaunch64\r64.ico</icon>
   <singleInstance>
     <mutexName>Relaunch64_V3</mutexName>
     <windowTitle></windowTitle>
@@ -20,24 +21,25 @@
   <jre>
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion>1.7.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
   </jre>
   <splash>
-    <file>C:\Users\Luedeke\Documents\Yavin4\NetBeans\Relaunch64\R64splash.bmp</file>
+    <file>C:\Users\Luedeke\Dropbox\NetBeans\Relaunch64\R64splash.bmp</file>
     <waitForWindow>true</waitForWindow>
     <timeout>60</timeout>
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>3.0.0.0</fileVersion>
-    <txtFileVersion>Relaunch64 RC3</txtFileVersion>
+    <fileVersion>3.3.3.0</fileVersion>
+    <txtFileVersion>Relaunch64</txtFileVersion>
     <fileDescription>A C64-crossdevelopment editor</fileDescription>
-    <copyright>2003-2014 by Payday</copyright>
-    <productVersion>3.0.0.0</productVersion>
-    <txtProductVersion>Relaunch64 RC3</txtProductVersion>
+    <copyright>2003-2015 by Payday</copyright>
+    <productVersion>3.3.3.0</productVersion>
+    <txtProductVersion>Relaunch64</txtProductVersion>
     <productName>Relaunch64</productName>
     <companyName>Payday</companyName>
     <internalName>R64</internalName>

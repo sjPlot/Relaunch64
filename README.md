@@ -7,6 +7,8 @@ Download current development-snapshot [at sourcefourge](https://sourceforge.net/
 
 ### Changes
 * updated support for 64tass to meet changes of latest 64tass version (added new keywords etc.)
+* updated editor component
+* hidden goto-sidebar is not expanded after resize (fixes [#11](https://github.com/sjPlot/Relaunch64/issues/11))
 
 ### Bug fixes
 * preference 'Enter" key keeps focus in find field' did not find next search term when 'find by typing' was enabled - now really fixed

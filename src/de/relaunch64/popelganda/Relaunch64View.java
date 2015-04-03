@@ -61,6 +61,8 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -104,6 +106,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
@@ -135,6 +138,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final static int GOTO_FUNCTION = 3;
     private final static int GOTO_MACRO = 4;
     private boolean dontSaveDividerLocation = false;
+    private Timer resizeTimer = null;
     private final Settings settings;
     private final FindTerms findTerms;
     private final CustomScripts customScripts;
@@ -320,8 +324,42 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // upper right cross on Windows OS, quits the application. Instead, it just makes
         // the frame disapear, but does not quit, so it looks like the application was quit
         // but asking for changes took place. So, we simply add a windows-listener additionally
-        Relaunch64View.super.getFrame().addWindowListener(this);
-        Relaunch64View.super.getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        JFrame r64frame = Relaunch64View.super.getFrame();
+        r64frame.addWindowListener(this);
+        r64frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        // create resize timer. when goto-sidebar is hidden and window
+        // is being resized, the split pane expands. the timer tracks the
+        // resizing and hides the sidebar, if necessary
+        resizeTimer = new Timer(20, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (settings.getSidebarIsHidden()) {
+                    toggleGotoListVisibility(settings.getSidebarIsHidden());
+                }
+                resizeTimer.stop();
+            }
+        });
+        // resize listener to hide goto-sidebar if necessray
+        r64frame.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (resizeTimer.isRunning()) {
+                    resizeTimer.restart();
+                }
+                else {
+                    resizeTimer.start();
+                }
+            }
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
         // init actionlistener
         /**
          * JDK 8 Lamda
