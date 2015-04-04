@@ -330,7 +330,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // create resize timer. when goto-sidebar is hidden and window
         // is being resized, the split pane expands. the timer tracks the
         // resizing and hides the sidebar, if necessary
-        resizeTimer = new Timer(20, new ActionListener() {
+        resizeTimer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (settings.getSidebarIsHidden()) {
