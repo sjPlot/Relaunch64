@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current build version number
      */
-    public static final String BUILD_NUMBER = "20150403";
+    public static final String BUILD_NUMBER = "20150416";
     /**
      * This variable stores the current programme and build version number
      */
@@ -59,7 +59,7 @@ public class ConstantsR64 {
      * This variable stores the application title that appears in the main window
      * Add "Release Candidate" or "Beta" to this title
      */
-    public static final String APPLICATION_TITLE = APPLICATION_SHORT_TITLE + " (development snapshot)";
+    public static final String APPLICATION_TITLE = APPLICATION_SHORT_TITLE; // + " (development snapshot)";
     /**
      * This constants stores the website-address where the app can be downloaded
      */
