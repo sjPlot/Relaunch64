@@ -37,6 +37,7 @@
                         <KEYWORD3>.align</KEYWORD3>
                         <KEYWORD3>.as</KEYWORD3>
                         <KEYWORD3>.assert</KEYWORD3>
+                        <KEYWORD3>.autsiz</KEYWORD3>
                         <KEYWORD3>.bend</KEYWORD3>
                         <KEYWORD3>.binclude</KEYWORD3>
                         <KEYWORD3>.block</KEYWORD3>
@@ -85,6 +86,7 @@
                         <KEYWORD3>.lint</KEYWORD3>
                         <KEYWORD3>.logical</KEYWORD3>
                         <KEYWORD3>.macro</KEYWORD3>
+                        <KEYWORD3>.mansiz</KEYWORD3>
                         <KEYWORD3>.next</KEYWORD3>
                         <KEYWORD3>.offs</KEYWORD3>
                         <KEYWORD3>.option</KEYWORD3>
