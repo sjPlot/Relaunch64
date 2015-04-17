@@ -95,6 +95,7 @@
                         <KEYWORD3>.pron</KEYWORD3>
                         <KEYWORD3>.rept</KEYWORD3>
                         <KEYWORD3>.section</KEYWORD3>
+                        <KEYWORD3>.seed</KEYWORD3>
                         <KEYWORD3>.segment</KEYWORD3>
                         <KEYWORD3>.send</KEYWORD3>
                         <KEYWORD3>.showmac</KEYWORD3>
@@ -261,6 +262,7 @@
                         <FUNCTION>log10</FUNCTION>
                         <FUNCTION>pow</FUNCTION>
                         <FUNCTION>rad</FUNCTION>
+                        <FUNCTION>random</FUNCTION>
                         <FUNCTION>range</FUNCTION>
                         <FUNCTION>repr</FUNCTION>
                         <FUNCTION>round</FUNCTION>
