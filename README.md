@@ -1,6 +1,12 @@
 Changelog
 ================
 
+Relaunch64 3.3.4 (current devel release)
+----------------
+### Changes
+* updated support for latest 64tass to meet changes of latest 64tass version (added new keywords etc.)
+
+
 Relaunch64 3.3.3 (current stable release)
 ----------------
 ### Changes
