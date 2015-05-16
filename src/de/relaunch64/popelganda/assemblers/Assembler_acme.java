@@ -235,18 +235,20 @@ class Assembler_acme implements Assembler
      * 
      * @param lineReader a LineNumberReader from the error log, which is created
      * by {@link ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @param ignore_warnings weather to ignore warnings or not
      * @return an ArrayList of {@link ErrorHandler.ErrorInfo} for
      * each logged error.
      */
     @Override
-    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         String line;     // Error - File j.asm, line 4 (Zone <untitled>): Value not defined.
-        Pattern p = Pattern.compile("^(?:Error|Warning|Serious error) - File (?<file>.*?), line (?<line>\\d+) .*");
+        Pattern p = Pattern.compile("^(?<type>Error|Warning|Serious error) - File (?<file>.*?), line (?<line>\\d+) .*");
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
+                if (ignore_warnings && m.group("type").equals("Warning")) continue;
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         1,

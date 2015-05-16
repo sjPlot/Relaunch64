@@ -202,19 +202,29 @@ class Assembler_kick implements Assembler
      * 
      * @param lineReader a LineNumberReader from the error log, which is created
      * by {@link ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @param ignore_warnings weather to ignore warnings or not
      * @return an ArrayList of {@link ErrorHandler.ErrorInfo} for
      * each logged error.
      */
     @Override
-    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
-        String line;     // at line 2, column 1 in /tmp/j.asm
+        String line, type = "";     // at line 2, column 1 in /tmp/j.asm
         Pattern p = Pattern.compile("^at line (?<line>\\d+), column (?<col>\\d+) in (?<file>.*)");
+        Pattern p2 = Pattern.compile("^(?<type>Error|Warning): .*");
         try {
             // read lines
             while ((line = lineReader.readLine()) != null) {
                 // check if error pattern was found
-                Matcher m = p.matcher(line);
+                Matcher m = p2.matcher(line);
+                if (m.matches()) {
+                    type = m.group("type");
+                    continue;
+                }
+                if (type.equals("")) continue;
+                if (ignore_warnings && type.equals("Warning")) { type = ""; continue; }
+                type = "";
+                m = p.matcher(line);
                 if (!m.matches()) continue;
                 // if yes, extract information and add to ErrorInfo
                 ErrorInfo e = new ErrorInfo(

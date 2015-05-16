@@ -129,7 +129,7 @@ class Assembler_dummy implements Assembler
     }
 
     @Override
-    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         return errors;
     }

@@ -239,18 +239,20 @@ class Assembler_dasm implements Assembler
      * 
      * @param lineReader a LineNumberReader from the error log, which is created
      * by {@link ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @param ignore_warnings weather to ignore warnings or not
      * @return an ArrayList of {@link ErrorHandler.ErrorInfo} for
      * each logged error.
      */
     @Override
-    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         String line;     // a.asm (5): error: Syntax Error 'o o'.
-        Pattern p = Pattern.compile("^(?<file>.*?) \\((?<line>\\d+)\\): (?:error|warning|fatal): .*");
+        Pattern p = Pattern.compile("^(?<file>.*?) \\((?<line>\\d+)\\): (?<type>error|warning|fatal): .*");
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
+                if (ignore_warnings && m.group("type").equals("warning")) continue;
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         1,

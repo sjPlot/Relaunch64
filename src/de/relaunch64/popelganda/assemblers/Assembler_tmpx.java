@@ -229,18 +229,20 @@ class Assembler_tmpx implements Assembler
      * 
      * @param lineReader a LineNumberReader from the error log, which is created
      * by {@link ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @param ignore_warnings weather to ignore warnings or not
      * @return an ArrayList of {@link ErrorHandler.ErrorInfo} for
      * each logged error.
      */
     @Override
-    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader) {
+    public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         String line;     //a.asm(4) : error 30: undefined label; 'i' //a.asm(4) : error 3: illegal mnemonic at col 14
-        Pattern p = Pattern.compile("^(?<file>.*?)\\((?<line>\\d+)\\) : error \\d+: .*?( at col (?<col>\\d+))?");
+        Pattern p = Pattern.compile("^(?<file>.*?)\\((?<line>\\d+)\\) : (?<type>error) \\d+: .*?( at col (?<col>\\d+))?");
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
+                //if (ignore_warnings && m.group("type").equals("warning")) continue;
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         (m.group("col") == null) ? 1 : Integer.parseInt(m.group("col")),

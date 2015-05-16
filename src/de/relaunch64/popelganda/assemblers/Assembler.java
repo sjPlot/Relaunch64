@@ -139,10 +139,11 @@ public interface Assembler
      * 
      * @param lineReader a LineNumberReader from the error log, which is created
      * by {@link de.relaunch64.popelganda.assemblers.ErrorHandler#readErrorLines(java.lang.String, de.relaunch64.popelganda.assemblers.Assembler) readErrorLines()}.
+     * @param ignore_warnings weather to ignore warnings or not
      * @return an ArrayList of {@link de.relaunch64.popelganda.assemblers.ErrorHandler.ErrorInfo} for
      * each logged error.
      */
-    ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader);
+    ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings);
     /**
      * Gets fold level compared to previous line
      * 

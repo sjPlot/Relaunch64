@@ -128,7 +128,7 @@ public class ErrorHandler {
         lineReader.setLineNumber(offset);
         // find all errors, use assembler specific error parsing
         // to detect line and column numbers of warnings and errors.
-        errors.addAll(assembler.readErrorLines(lineReader));
+        errors.addAll(assembler.readErrorLines(lineReader, false));
         return lineReader.getLineNumber();
     }
     /**
