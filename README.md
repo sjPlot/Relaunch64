@@ -6,6 +6,8 @@ Relaunch64 3.3.4 (current devel release)
 ### Changes
 * updated support for latest 64tass to meet changes of latest 64tass version (added new keywords etc.)
 
+_Download devel-snapshot from [Sourceforge](http://sourceforge.net/projects/relaunch64/files/devel/)._
+
 
 Relaunch64 3.3.3 (current stable release)
 ----------------
