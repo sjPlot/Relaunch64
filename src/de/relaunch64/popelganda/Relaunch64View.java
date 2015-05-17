@@ -1701,11 +1701,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         Object item;
         // if we found no custom script in source, or script name was not found,
         // select script from combo box
-        if (null==scriptName || -1==customScripts.findScript(scriptName)) {
+        if (null == scriptName || -1 == customScripts.findScript(scriptName)) {
             // get selected item
             item = jComboBoxRunScripts.getSelectedItem();
             // valid selection?
-            if (item!=null) {
+            if (item != null) {
                 // get scriptname from selection
                 scriptName = item.toString();
                 // get script
@@ -1717,10 +1717,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             script = customScripts.getScript(scriptName);
         }
         // log scriptname
-        String log = "Executing script \""+scriptName+"\"";
+        String log = "Executing script \"" + scriptName + "\"";
         ConstantsR64.r64logger.log(Level.INFO, log);
         // valid script?
-        if (script!=null && !script.isEmpty()) {
+        if (script != null && !script.isEmpty()) {
             // log offset
             int offset = 0;
             // clear old log
@@ -1743,96 +1743,135 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // set base path for relative paths
             errorHandler.setBasePath(sourceFile);
             // retrieve parent file. needed to construct output file paths
-            String parentFile = (null==sourceFile.getParentFile()) ? sourceFile.toString() : sourceFile.getParentFile().toString();
+            String parentFile = (null == sourceFile.getParentFile()) ? sourceFile.toString() : sourceFile.getParentFile().toString();
             // create Output file
-            File outFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+".prg");
+            File outFile = new File(parentFile + File.separator + FileTools.getFileName(sourceFile) + ".prg");
             // create compressed file
-            File compressedFile = new File(parentFile+File.separator+FileTools.getFileName(sourceFile)+"-compressed.prg");
+            File compressedFile = new File(parentFile + File.separator + FileTools.getFileName(sourceFile) + "-compressed.prg");
             // check if we have relative paths
             boolean useRelativePath = script.contains(Assembler.OUTPUT_FILE_REL);
+            // set up Relaunch64 commandline-options
+            boolean option_ignore_warnings = false;
+            boolean option_wait_for_process = settings.getWaitForProcess();
             // iterate script
             for (String cmd : lines) {
                 cmd = cmd.trim();
                 if (!cmd.isEmpty()) {
                     // log process
-                    log = "Processing script-line: "+cmd;
+                    log = "Processing script-line: " + cmd;
                     ConstantsR64.r64logger.log(Level.INFO, log);
                     // check if we have last process in script. needed below to check whether
-                    // Relaunch64 should wait for lasr process to be finished or not
-                    boolean isLastLine = cmd.equalsIgnoreCase(lines[lines.length-1]);
-                    // surround pathes with quotes, if necessary
-                    String sf = sourceFile.toString();
-                    if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) sf = "\""+sf+"\"";
-                    String of = outFile.toString();
-                    if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\""+of+"\"";
-                    String cf = compressedFile.toString();
-                    if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\""+cf+"\"";
-                    // create relative paths of in- and output files
-                    String sf_rel = FileTools.getFileName(sourceFile)+"."+FileTools.getFileExtension(sourceFile);
-                    String of_rel = FileTools.getFileName(outFile)+"."+FileTools.getFileExtension(outFile);
-                    String cf_rel = FileTools.getFileName(compressedFile)+"."+FileTools.getFileExtension(compressedFile);
-                    // replace placeholders
-                    cmd = cmd.replace(Assembler.INPUT_FILE_REL, sf_rel);
-                    cmd = cmd.replace(Assembler.INPUT_FILE, sf);
-                    cmd = cmd.replace(Assembler.INPUT_FILENAME, FileTools.getFileName(sourceFile));
-                    cmd = cmd.replace(Assembler.OUTPUT_FILE_REL, of_rel);
-                    cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
-                    cmd = cmd.replace(Assembler.OUTPUT_FILENAME, FileTools.getFileName(outFile));
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, (useRelativePath) ? of_rel : of);
-                    cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, (useRelativePath) ? cf_rel : cf);
-                    cmd = cmd.replace(Assembler.SOURCE_DIR, parentFile);
-                    // check if we have a cruncher-starttoken
-                    String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), editorPanes.getActiveAssembler().getLineComment());
-                    // if we found cruncher-starttoken, replace placeholder 
-                    if (cruncherStart!=null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
-                    try {
-                        // log process
-                        log = "Converted script-line: "+cmd;
+                    // Relaunch64 should wait for last process to be finished or not
+                    boolean isLastLine = cmd.equalsIgnoreCase(lines[lines.length - 1]);
+                    // check if we have Relaunch64 command-line options, like 
+                    // ignore warnings etc.
+                    if (cmd.startsWith("R64")) {
+                        // log-string
+                        log = "Compile options:";
+                        // get options
+                        String[] cmd_options = cmd.split("-");
+                        // check all options
+                        for (String cmd_op : cmd_options) {
+                            // options only in lower case
+                            cmd_op = cmd_op.trim().toLowerCase();
+                            // set options
+                            switch (cmd_op) {
+                                case "iw": 
+                                    option_ignore_warnings = true; 
+                                    log = log + " ignore warnings;";
+                                    break;
+                                case "wait": 
+                                    option_wait_for_process = true; 
+                                    log = log + " wait for script;";
+                                    break;
+                                case "nowait": 
+                                    option_wait_for_process = false; 
+                                    log = log + " don't wait for script;";
+                                    break;
+                            }
+                        }
+                        // log compiler options
                         ConstantsR64.r64logger.log(Level.INFO, log);
-                        // write output to string builder. we need output both for printing
-                        // it to the text area log, and to examine the string for possible errors.
-                        StringBuilder compilerLog = new StringBuilder("");
-                        ProcessBuilder pb;
-                        Process p;
-                        // Start ProcessBuilder
-                        pb = new ProcessBuilder(cmd.split(" "));
-                        // set parent directory to sourcecode fie
-                        pb = pb.directory(sourceFile.getParentFile());
-                        pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
-                        // start process
-                        p = pb.start();
-                        // create scanner to receive compiler messages
-                        try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
-                            // write output to string builder
-                            while (sc.hasNextLine()) {
-                                compilerLog.append(sc.nextLine()).append(System.lineSeparator());
-                            }
-                        }
-                        try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
-                            // write output to string builder
-                            while (sc.hasNextLine()) {
-                                compilerLog.append(sc.nextLine()).append(System.lineSeparator());
-                            }
-                        }
-                        // print log to text area
-                        jTextAreaCompilerOutput.append(compilerLog.toString());
-                        // if we don't have last script line, or if each process should be waited
-                        // for, wait for process to be finished
-                        if (!isLastLine || (isLastLine && settings.getWaitForProcess())) {
-                            // wait for other process to be finished
-                            p.waitFor();
-                            p.destroy();
-                        }
-                        // read and extract errors from log
-                        offset = errorHandler.readErrorLines(compilerLog.toString(), editorPanes.getActiveAssembler(), offset);
-                        // break loop if we have any errors
-                        if (errorHandler.hasErrors() || p.exitValue()!=0) break;
                     }
-                    catch (IOException | InterruptedException | SecurityException ex) {
-                        ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-                        // check if permission denied
-                        if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
-                            ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
+                    else {
+                        // surround pathes with quotes, if necessary
+                        String sf = sourceFile.toString();
+                        if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) sf = "\"" + sf + "\"";
+                        String of = outFile.toString();
+                        if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\"" + of + "\"";
+                        String cf = compressedFile.toString();
+                        if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\"" + cf + "\"";
+                        // create relative paths of in- and output files
+                        String sf_rel = FileTools.getFileName(sourceFile) + "." + FileTools.getFileExtension(sourceFile);
+                        String of_rel = FileTools.getFileName(outFile) + "." + FileTools.getFileExtension(outFile);
+                        String cf_rel = FileTools.getFileName(compressedFile) + "." + FileTools.getFileExtension(compressedFile);
+                        // replace placeholders
+                        cmd = cmd.replace(Assembler.INPUT_FILE_REL, sf_rel);
+                        cmd = cmd.replace(Assembler.INPUT_FILE, sf);
+                        cmd = cmd.replace(Assembler.INPUT_FILENAME, FileTools.getFileName(sourceFile));
+                        cmd = cmd.replace(Assembler.OUTPUT_FILE_REL, of_rel);
+                        cmd = cmd.replace(Assembler.OUTPUT_FILE, of);
+                        cmd = cmd.replace(Assembler.OUTPUT_FILENAME, FileTools.getFileName(outFile));
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_UNCOMPRESSED_FILE, (useRelativePath) ? of_rel : of);
+                        cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, (useRelativePath) ? cf_rel : cf);
+                        cmd = cmd.replace(Assembler.SOURCE_DIR, parentFile);
+                        // check if we have a cruncher-starttoken
+                        String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), 
+                                                                      editorPanes.getActiveAssembler().getLineComment());
+                        // if we found cruncher-starttoken, replace placeholder 
+                        if (cruncherStart != null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
+                        try {
+                            // log process
+                            log = "Converted script-line: "+cmd;
+                            ConstantsR64.r64logger.log(Level.INFO, log);
+                            // write output to string builder. we need output both for printing
+                            // it to the text area log, and to examine the string for possible errors.
+                            StringBuilder compilerLog = new StringBuilder("");
+                            ProcessBuilder pb;
+                            Process p;
+                            // Start ProcessBuilder
+                            pb = new ProcessBuilder(cmd.split(" "));
+                            // set parent directory to sourcecode fie
+                            pb = pb.directory(sourceFile.getParentFile());
+                            pb = pb.redirectInput(Redirect.PIPE).redirectError(Redirect.PIPE);
+                            // start process
+                            p = pb.start();
+                            // create scanner to receive compiler messages
+                            try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
+                                // write output to string builder
+                                while (sc.hasNextLine()) {
+                                    compilerLog.append(sc.nextLine()).append(System.lineSeparator());
+                                }
+                            }
+                            try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
+                                // write output to string builder
+                                while (sc.hasNextLine()) {
+                                    compilerLog.append(sc.nextLine()).append(System.lineSeparator());
+                                }
+                            }
+                            // print log to text area
+                            jTextAreaCompilerOutput.append(compilerLog.toString());
+                            // if we don't have last script line, or if each process should be waited
+                            // for, wait for process to be finished
+                            if (!isLastLine || (isLastLine && option_wait_for_process)) {
+                                // wait for other process to be finished
+                                p.waitFor();
+                                p.destroy();
+                            }
+                            // read and extract errors from log
+                            offset = errorHandler.readErrorLines(compilerLog.toString(), 
+                                                                 editorPanes.getActiveAssembler(), 
+                                                                 offset,
+                                                                 option_ignore_warnings);
+                            // break loop if we have any errors
+                            if (errorHandler.hasErrors() || p.exitValue() != 0) break;
+                        }
+                        catch (IOException | InterruptedException | SecurityException ex) {
+                            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                            // check if permission denied
+                            if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
+                                ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
+                            }
                         }
                     }
                 }

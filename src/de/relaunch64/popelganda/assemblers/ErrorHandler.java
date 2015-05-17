@@ -118,9 +118,10 @@ public class ErrorHandler {
      * @param assembler the assembler that was used to comipile the file, in order
      * to correctly parse the error messages.
      * @param offset
+     * @param ignore_warnings weather to ignore warnings or not
      * @return 
      */
-    public int readErrorLines(String log, Assembler assembler, int offset) {
+    public int readErrorLines(String log, Assembler assembler, int offset, boolean ignore_warnings) {
         // create buffered reader, needed for line number reader
         StringReader sr = new StringReader(log);
         BufferedReader br = new BufferedReader(sr);
@@ -128,7 +129,7 @@ public class ErrorHandler {
         lineReader.setLineNumber(offset);
         // find all errors, use assembler specific error parsing
         // to detect line and column numbers of warnings and errors.
-        errors.addAll(assembler.readErrorLines(lineReader, false));
+        errors.addAll(assembler.readErrorLines(lineReader, ignore_warnings));
         return lineReader.getLineNumber();
     }
     /**

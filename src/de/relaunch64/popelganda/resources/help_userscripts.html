@@ -50,6 +50,32 @@
 		clicking on the button <em>Update script</em>.
 	</p>
 	
+<h1>Relaunch64 options</h1>
+
+	<p>
+		To set a specific behaviour of Relaunch64 when compiling scripts, use a command line starting
+                with <span class="pcode">R64</span>, followed by one of these switches:
+	</p>
+	
+	<ul>
+            <li><strong>-iw</strong> - ignore warnings; assembler warnings will be ignored and do not stop the compile process.</li>
+            <li>
+                <strong>-wait</strong> - wait for script execution to be finished; Same as unchecking the option &quot;Don't
+                wait when running scripts&quot; in the preferences. Using this switch means that you will first have
+                to wait for compiling to be done and emulators have to be closed before you can continue editing
+                in Relaunch64. Overrides the setting in the preferences.
+            </li>
+            <li>
+                <strong>-nowait</strong> - don't wait for script execution to be finished; Same as the option &quot;Don't
+                wait when running scripts&quot; in the preferences. Using this switch means that you can continue editing
+                in Relaunch64, while any emulator with a compiled script is still running. Overrides the setting in the preferences.
+            </li>
+	</ul>
+
+<p>
+	<strong>Note:</strong> See user script examples below.
+</p>
+ 
 <h1>Placeholders</h1>
 
 	<p>
@@ -117,12 +143,22 @@ open /Applications/Vice/x64.app OUTFILE</div>
 <div class="pcode">acme -v4 RSOURCEFILE<br>
 x64 ROUTFILE</div>
 
+<h3>Using ACME, ignore assembler warnings, don't wait for script</h3>
+<div class="pcode">R64 -iw -nowait
+C:\Users\&lt;username&gt;\Documents\C64\acme.exe --outfile ROUTFILE --format cbm RSOURCEFILE<br>
+C:\Users\&lt;username&gt;\Documents\C64\WinVICE-2.4\x64.exe COMPFILE</div>
+
 <h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
 <div class="pcode">acme --outfile ROUTFILE --format cbm RSOURCEFILE<br>
 &quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; ROUTFILE</div>
 
 <h3>64tass on OS X</h3>
 <div class="pcode">/usr/local/bin/64tass -C -a -i SOURCEFILE -o OUTFILE<br>
+open /Applications/Vice64/x64.app OUTFILE</div>
+
+<h3>64tass on OS X, ignore assembler warnings</h3>
+<div class="pcode">R64 -iw<br>
+/usr/local/bin/64tass -C -a -i SOURCEFILE -o OUTFILE<br>
 open /Applications/Vice64/x64.app OUTFILE</div>
 
 <h3>Using KickAss and Vice on Windows</h3>
