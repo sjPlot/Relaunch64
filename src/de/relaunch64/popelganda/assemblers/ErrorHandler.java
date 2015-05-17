@@ -210,7 +210,7 @@ public class ErrorHandler {
     }
     protected File getAbsoluteErrorFilePath(int fileindex) {
         // check index bounds
-        if (fileindex<0 || fileindex>=errors.size()) fileindex = 0;
+        if (fileindex < 0 || fileindex >= errors.size()) fileindex = 0;
         // does path exist, or is it relative?
         return FileTools.getAbsolutePath(new File(basePath), errors.get(fileindex).file);
     }
@@ -220,7 +220,7 @@ public class ErrorHandler {
         basePath = "";
     }
     public boolean hasErrors() {
-        return (errors!=null && !errors.isEmpty());
+        return (errors != null && !errors.isEmpty());
     }
     public File getErrorFile() {
         if (hasErrors()) {

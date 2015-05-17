@@ -1864,7 +1864,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                                                  offset,
                                                                  option_ignore_warnings);
                             // break loop if we have any errors
-                            if (errorHandler.hasErrors() || p.exitValue() != 0) break;
+                            try {
+                                if (errorHandler.hasErrors() || p.exitValue() != 0) break;
+                            }
+                            catch (IllegalThreadStateException ex) {
+                                // thread has not been terminated correctly, so log warning
+                                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                                // destroy thread
+                                p.destroy();
+                                // and leave
+                                if (errorHandler.hasErrors()) break;
+                            }
                         }
                         catch (IOException | InterruptedException | SecurityException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
