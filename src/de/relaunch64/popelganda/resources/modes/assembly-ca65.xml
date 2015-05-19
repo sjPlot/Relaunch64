@@ -71,6 +71,7 @@
                         <KEYWORD3>.endrepeat</KEYWORD3>
                         <KEYWORD3>.endscope</KEYWORD3>
                         <KEYWORD3>.endstruct</KEYWORD3>
+                        <KEYWORD3>.endunion</KEYWORD3>
                         <KEYWORD3>.enum</KEYWORD3>
                         <KEYWORD3>.error</KEYWORD3>
                         <KEYWORD3>.exitmac</KEYWORD3>
@@ -130,12 +131,14 @@
                         <KEYWORD3>.rodata</KEYWORD3>
                         <KEYWORD3>.scope</KEYWORD3>
                         <KEYWORD3>.segment</KEYWORD3>
+                        <KEYWORD3>.set</KEYWORD3>
                         <KEYWORD3>.setcpu</KEYWORD3>
                         <KEYWORD3>.smart</KEYWORD3>
                         <KEYWORD3>.struct</KEYWORD3>
                         <KEYWORD3>.sunplus</KEYWORD3>
                         <KEYWORD3>.undef</KEYWORD3>
                         <KEYWORD3>.undefine</KEYWORD3>
+                        <KEYWORD3>.union</KEYWORD3>
                         <KEYWORD3>.warning</KEYWORD3>
                         <KEYWORD3>.zeropage</KEYWORD3>
 
@@ -232,6 +235,8 @@
                         <OPERATOR>.version</OPERATOR>
 
 			<!-- Functions -->
+                        <FUNCTION>.addrsize</FUNCTION>
+                        <FUNCTION>.bank</FUNCTION>
                         <FUNCTION>.bankbyte</FUNCTION>
                         <FUNCTION>.blank</FUNCTION>
                         <FUNCTION>.concat</FUNCTION>
@@ -243,13 +248,15 @@
                         <FUNCTION>.lobyte</FUNCTION>
                         <FUNCTION>.loword</FUNCTION>
                         <FUNCTION>.match</FUNCTION>
+                        <FUNCTION>.max</FUNCTION>
                         <FUNCTION>.mid</FUNCTION>
+                        <FUNCTION>.min</FUNCTION>
                         <FUNCTION>.ref</FUNCTION>
                         <FUNCTION>.referenced</FUNCTION>
                         <FUNCTION>.right</FUNCTION>
                         <FUNCTION>.sizeof</FUNCTION>
-                        <FUNCTION>.strat</FUNCTION>
                         <FUNCTION>.sprintf</FUNCTION>
+                        <FUNCTION>.strat</FUNCTION>
                         <FUNCTION>.string</FUNCTION>
                         <FUNCTION>.strlen</FUNCTION>
                         <FUNCTION>.tcount</FUNCTION>
