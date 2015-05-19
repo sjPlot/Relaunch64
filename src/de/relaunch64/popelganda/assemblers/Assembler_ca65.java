@@ -57,7 +57,7 @@ class Assembler_ca65 implements Assembler
         ".addrsize", ".and", ".bank", ".bankbyte", ".bitand", ".bitnot",
         ".bitor", ".bitxor", ".blank", ".concat", ".const", ".hibyte",
         ".hiword", ".ident", ".left", ".lobyte", ".loword", ".match", ".max",
-        ".mid", ".min", ".mod", ".not", ".or" ".ref", ".referenced", ".right",
+        ".mid", ".min", ".mod", ".not", ".or", ".ref", ".referenced", ".right",
         ".shl", ".shr", ".sizeof", ".sprintf", ".strat", ".string", ".strlen",
         ".tcount", ".xor", ".xmatch"
     };
