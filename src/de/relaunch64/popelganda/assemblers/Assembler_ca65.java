@@ -54,10 +54,12 @@ class Assembler_ca65 implements Assembler
      * case the assembler supports this. Used for syntax highlighting keywords.
      */
     final static String[] scriptKeywords = {
-        ".bankbyte", ".blank", ".concat", ".const", ".hibyte", ".hiword",
-        ".ident", ".left", ".lobyte", ".loword", ".match", ".mid", ".ref",
-        ".referenced", ".right", ".sizeof", ".sprintf", ".strat", ".string",
-        ".strlen", ".tcount", ".xmatch"
+        ".addrsize", ".and", ".bank", ".bankbyte", ".bitand", ".bitnot",
+        ".bitor", ".bitxor", ".blank", ".concat", ".const", ".hibyte",
+        ".hiword", ".ident", ".left", ".lobyte", ".loword", ".match", ".max",
+        ".mid", ".min", ".mod", ".not", ".or" ".ref", ".referenced", ".right",
+        ".shl", ".shr", ".sizeof", ".sprintf", ".strat", ".string", ".strlen",
+        ".tcount", ".xor", ".xmatch"
     };
 
     @Override
@@ -369,6 +371,7 @@ class Assembler_ca65 implements Assembler
                         case ".repeat":
                         case ".scope":
                         case ".struct":
+                        case ".union":
                             if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
                             break;
                         case ".endif":
@@ -376,6 +379,7 @@ class Assembler_ca65 implements Assembler
                             break;
                         case ".endenum":
                         case ".endstruct":
+                        case ".endunion":
                         case ".endscope":
                         case ".endrep":
                         case ".endrepeat":

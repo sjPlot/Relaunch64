@@ -236,8 +236,13 @@
 
 			<!-- Functions -->
                         <FUNCTION>.addrsize</FUNCTION>
+                        <FUNCTION>.and</FUNCTION>
                         <FUNCTION>.bank</FUNCTION>
                         <FUNCTION>.bankbyte</FUNCTION>
+                        <FUNCTION>.bitand</FUNCTION>
+                        <FUNCTION>.bitnot</FUNCTION>
+                        <FUNCTION>.bitor</FUNCTION>
+                        <FUNCTION>.bitxor</FUNCTION>
                         <FUNCTION>.blank</FUNCTION>
                         <FUNCTION>.concat</FUNCTION>
                         <FUNCTION>.const</FUNCTION>
@@ -251,15 +256,21 @@
                         <FUNCTION>.max</FUNCTION>
                         <FUNCTION>.mid</FUNCTION>
                         <FUNCTION>.min</FUNCTION>
+                        <FUNCTION>.mod</FUNCTION>
+                        <FUNCTION>.not</FUNCTION>
+                        <FUNCTION>.or</FUNCTION>
                         <FUNCTION>.ref</FUNCTION>
                         <FUNCTION>.referenced</FUNCTION>
                         <FUNCTION>.right</FUNCTION>
+                        <FUNCTION>.shl</FUNCTION>
+                        <FUNCTION>.shr</FUNCTION>
                         <FUNCTION>.sizeof</FUNCTION>
                         <FUNCTION>.sprintf</FUNCTION>
                         <FUNCTION>.strat</FUNCTION>
                         <FUNCTION>.string</FUNCTION>
                         <FUNCTION>.strlen</FUNCTION>
                         <FUNCTION>.tcount</FUNCTION>
+                        <FUNCTION>.xor</FUNCTION>
                         <FUNCTION>.xmatch</FUNCTION>
 		</KEYWORDS>
 
