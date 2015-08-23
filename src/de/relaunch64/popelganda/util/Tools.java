@@ -482,55 +482,55 @@ public class Tools {
         final int WITHIN_TOKEN = 1;
         final int WITHIN_QUOTE = 2;
         final int WITHIN_ESCAPE = 4;
-        
+
         int state = BETWEEN_TOKENS;
-        StringBuilder token = null;
-        ArrayList<String> tokens = new ArrayList<String>();
+        StringBuilder token = new StringBuilder();
+        ArrayList<String> tokens = new ArrayList<>();
         for (char character : command.toCharArray()) {
             if (state == BETWEEN_TOKENS) {
-                if (character == ' ' || character == '\t')
+                if (character == ' ' || character == '\t') {
                     continue;
+                }
 
                 if (character == '"') {
                     token = new StringBuilder();
                     state = WITHIN_TOKEN | WITHIN_QUOTE;
                     continue;
                 }
-
+                
                 token = new StringBuilder();
                 token.append(character);
                 state = WITHIN_TOKEN;
                 continue;
             }
-            
+
             // then within a token of some kind, i.e. state & WITHIN_TOKEN
-            
             if ((state & WITHIN_ESCAPE) != 0) {
-                if (character != '"' && character == '\\')
-                    ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\" + character);
-                
+                if (character != '"' && character == '\\') {
+                    ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\{0}", character);
+                }
+
                 token.append(character);
                 state ^= WITHIN_ESCAPE;
                 continue;
             }
-            
+
             if ((state & WITHIN_QUOTE) != 0) {
                 if (character == '\\') {
                     state |= WITHIN_ESCAPE;
                     continue;
                 }
-                
+
                 if (character == '"') {
                     state ^= WITHIN_QUOTE;
                     continue;
                 }
-            }
-            else {
+            } else {
                 if (character == '"') {
                     state |= WITHIN_QUOTE;
                     continue;
                 }
-                
+
                 if (character == ' ' || character == '\t') {
                     tokens.add(token.toString());
                     token = null;
@@ -538,17 +538,18 @@ public class Tools {
                     continue;
                 }
             }
-            
+
             token.append(character);
         }
-        
+
         if ((state & WITHIN_TOKEN) != 0) {
-            if ((state & WITHIN_QUOTE) != 0)
-                ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: " + token.toString());
-            
+            if ((state & WITHIN_QUOTE) != 0) {
+                ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: {0}", token.toString());
+            }
+
             tokens.add(token.toString());
         }
-        
+
         return tokens.toArray(new String[tokens.size()]);
     }
 }
