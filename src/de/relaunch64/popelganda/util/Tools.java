@@ -464,4 +464,91 @@ public class Tools {
         // return remaining files that should be opened in a new tab
         return openRemainingFiles;
     }
+    /**
+     * Splits a command line string into separate tokens.
+     * This supports " delimited tokens potentially containing a space.
+     * Within a quoted token, a literal " or \ can be expressed by prefixing it
+     * with a backslash. Escaping is not enabled outside of a quoted token, 
+     * as this would break existing user scripts for Windows users. Because of
+     * this, the only possible way to express a literal " is to do so within a
+     * a quoted token. Tokens not separated by whitespace are merged, i.e.
+     * f"oo b"ar will result in a single token containing "foo bar".
+     * 
+     * @param command A String containing a full command line.
+     * @return An Array of String command tokens suitable for passing to a ProcessBuilder.
+     */
+    public static String[] tokeniseCommandLine(String command) {
+        final int BETWEEN_TOKENS = 0;
+        final int WITHIN_TOKEN = 1;
+        final int WITHIN_QUOTE = 2;
+        final int WITHIN_ESCAPE = 4;
+        
+        int state = BETWEEN_TOKENS;
+        StringBuilder token = null;
+        ArrayList<String> tokens = new ArrayList<String>();
+        for (char character : command.toCharArray()) {
+            if (state == BETWEEN_TOKENS) {
+                if (character == ' ' || character == '\t')
+                    continue;
+
+                if (character == '"') {
+                    token = new StringBuilder();
+                    state = WITHIN_TOKEN | WITHIN_QUOTE;
+                    continue;
+                }
+
+                token = new StringBuilder();
+                token.append(character);
+                state = WITHIN_TOKEN;
+                continue;
+            }
+            
+            // then within a token of some kind, i.e. state & WITHIN_TOKEN
+            
+            if ((state & WITHIN_ESCAPE) != 0) {
+                if (character != '"' && character == '\\')
+                    ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\" + character);
+                
+                token.append(character);
+                state ^= WITHIN_ESCAPE;
+                continue;
+            }
+            
+            if ((state & WITHIN_QUOTE) != 0) {
+                if (character == '\\') {
+                    state |= WITHIN_ESCAPE;
+                    continue;
+                }
+                
+                if (character == '"') {
+                    state ^= WITHIN_QUOTE;
+                    continue;
+                }
+            }
+            else {
+                if (character == '"') {
+                    state |= WITHIN_QUOTE;
+                    continue;
+                }
+                
+                if (character == ' ' || character == '\t') {
+                    tokens.add(token.toString());
+                    token = null;
+                    state = BETWEEN_TOKENS;
+                    continue;
+                }
+            }
+            
+            token.append(character);
+        }
+        
+        if ((state & WITHIN_TOKEN) != 0) {
+            if ((state & WITHIN_QUOTE) != 0)
+                ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: " + token.toString());
+            
+            tokens.add(token.toString());
+        }
+        
+        return tokens.toArray(new String[tokens.size()]);
+    }
 }
