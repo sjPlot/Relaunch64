@@ -478,63 +478,70 @@ public class Tools {
      * @return An Array of String command tokens suitable for passing to a ProcessBuilder.
      */
     public static String[] tokeniseCommandLine(String command) {
-        final int BETWEEN_TOKENS = 0;
-        final int WITHIN_TOKEN = 1;
-        final int WITHIN_QUOTE = 2;
-        final int WITHIN_ESCAPE = 4;
+        final int NONE = 0;
+        final int WITHIN_QUOTE = 1;
+        final int WITHIN_ESCAPE = 2;
 
-        int state = BETWEEN_TOKENS;
+        int flags = NONE;
         StringBuilder token = null;
         ArrayList<String> tokens = new ArrayList<>();
         for (char character : command.toCharArray()) {
-            if (state == BETWEEN_TOKENS) {
+            if (token == null) {
                 if (character == ' ' || character == '\t') {
                     continue;
                 }
 
                 if (character == '"') {
                     token = new StringBuilder();
-                    state = WITHIN_TOKEN | WITHIN_QUOTE;
+                    flags = WITHIN_QUOTE;
                     continue;
                 }
                 
                 token = new StringBuilder();
                 token.append(character);
-                state = WITHIN_TOKEN;
                 continue;
             }
 
-            // then within a token of some kind, i.e. state & WITHIN_TOKEN
-            if ((state & WITHIN_ESCAPE) != 0) {
-                if (character != '"' && character != '\\') {
-                    ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\{0}", character);
+            if ((flags & WITHIN_ESCAPE) != 0) {
+                switch (character)
+                {
+                    case '"':
+                    case '\\':
+                        token.append(character);
+                        break;
+                    
+                    default:
+                        ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\{0}", character);
                 }
 
-                token.append(character);
-                state ^= WITHIN_ESCAPE;
+                flags ^= WITHIN_ESCAPE;
                 continue;
             }
 
-            if ((state & WITHIN_QUOTE) != 0) {
+            if ((flags & WITHIN_QUOTE) != 0) {
                 if (character == '\\') {
-                    state |= WITHIN_ESCAPE;
+                    // beginning of escaped character within quoted section
+                    flags |= WITHIN_ESCAPE;
                     continue;
                 }
 
                 if (character == '"') {
-                    state ^= WITHIN_QUOTE;
+                    // end of quoted section of token (possibly not end of token itself)
+                    flags ^= WITHIN_QUOTE;
                     continue;
                 }
             } else {
                 if (character == '"') {
-                    state |= WITHIN_QUOTE;
+                    // beginning of quoted section of token
+                    flags |= WITHIN_QUOTE;
                     continue;
                 }
 
                 if (character == ' ' || character == '\t') {
+                    // end of token
                     tokens.add(token.toString());
                     token = null;
-                    state = BETWEEN_TOKENS;
+                    flags = NONE;
                     continue;
                 }
             }
@@ -542,9 +549,12 @@ public class Tools {
             token.append(character);
         }
 
-        if ((state & WITHIN_TOKEN) != 0) {
-            if ((state & WITHIN_QUOTE) != 0) {
+        if (token != null) {
+            if ((flags & WITHIN_QUOTE) != 0) {
                 ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: {0}", token.toString());
+            }
+            if ((flags & WITHIN_ESCAPE) != 0) {
+                ConstantsR64.r64logger.log(Level.WARNING, "Incomplete escape sequence in token: {0}", token.toString());
             }
 
             tokens.add(token.toString());
