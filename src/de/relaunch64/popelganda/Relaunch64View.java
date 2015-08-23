@@ -2350,7 +2350,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     /**
      * 
      */
-    public class TextAreaHandler extends java.util.logging.Handler {
+    public class TextAreaHandler extends java.util.logging.StreamHandler {
         @Override
         public void publish(final LogRecord record) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -2359,7 +2359,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     StringWriter text = new StringWriter();
                     PrintWriter out = new PrintWriter(text);
                     out.println(jTextAreaLog.getText());
-                    out.printf("[%s] %s", record.getLevel(), record.getMessage());
+                    out.printf("[%s] %s", record.getLevel(), getFormatter().formatMessage(record));
                     jTextAreaLog.setText(text.toString());
                 }
             });
