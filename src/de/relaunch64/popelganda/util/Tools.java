@@ -484,7 +484,7 @@ public class Tools {
         final int WITHIN_ESCAPE = 4;
 
         int state = BETWEEN_TOKENS;
-        StringBuilder token = null;
+        StringBuilder token = new StringBuilder();
         ArrayList<String> tokens = new ArrayList<>();
         for (char character : command.toCharArray()) {
             if (state == BETWEEN_TOKENS) {
