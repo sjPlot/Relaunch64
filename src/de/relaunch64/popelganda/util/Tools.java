@@ -484,7 +484,7 @@ public class Tools {
         final int WITHIN_ESCAPE = 4;
 
         int state = BETWEEN_TOKENS;
-        StringBuilder token = new StringBuilder();
+        StringBuilder token = null;
         ArrayList<String> tokens = new ArrayList<>();
         for (char character : command.toCharArray()) {
             if (state == BETWEEN_TOKENS) {
@@ -506,7 +506,7 @@ public class Tools {
 
             // then within a token of some kind, i.e. state & WITHIN_TOKEN
             if ((state & WITHIN_ESCAPE) != 0) {
-                if (character != '"' && character == '\\') {
+                if (character != '"' && character != '\\') {
                     ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\{0}", character);
                 }
 
