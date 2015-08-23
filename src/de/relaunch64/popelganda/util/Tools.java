@@ -499,6 +499,7 @@ public class Tools {
                 
                 token = new StringBuilder();
                 token.append(character);
+                flags = NONE;
                 continue;
             }
 
@@ -541,7 +542,6 @@ public class Tools {
                     // end of token
                     tokens.add(token.toString());
                     token = null;
-                    flags = NONE;
                     continue;
                 }
             }
