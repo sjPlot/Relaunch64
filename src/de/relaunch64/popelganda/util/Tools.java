@@ -506,8 +506,8 @@ public class Tools {
             // then within a token of some kind, i.e. state & WITHIN_TOKEN
             
             if ((state & WITHIN_ESCAPE) != 0) {
-                if (character != '"' && character == '\\')
-                    ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\" + character);
+                if (character != '"' && character != '\\')
+                    ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\{0}", character);
                 
                 token.append(character);
                 state ^= WITHIN_ESCAPE;
@@ -544,7 +544,7 @@ public class Tools {
         
         if ((state & WITHIN_TOKEN) != 0) {
             if ((state & WITHIN_QUOTE) != 0)
-                ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: " + token.toString());
+                ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: {0}", token.toString());
             
             tokens.add(token.toString());
         }
