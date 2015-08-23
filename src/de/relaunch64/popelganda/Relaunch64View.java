@@ -1830,6 +1830,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             ProcessBuilder pb;
                             Process p;
                             // Start ProcessBuilder
+                            // pb = new ProcessBuilder(cmd.split(" "));
                             pb = new ProcessBuilder(Tools.tokeniseCommandLine(cmd));
                             // set parent directory to sourcecode fie
                             pb = pb.directory(sourceFile.getParentFile());
