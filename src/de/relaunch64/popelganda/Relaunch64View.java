@@ -1733,7 +1733,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // convert CR to LF (MAC)
             script = script.replaceAll("\r", "\n");
             // retrieve script lines
-            String[] lines = script.split("\n");
+            String[] lines = Tools.extractCommandLines(script);
             // check if source file needs to be saved and auto save is active
             if (editorPanes.getActiveFilePath() == null || (settings.getSaveOnCompile() && editorPanes.isModified())) editorPanes.saveFile();
             // retrieve ASM-Source file
