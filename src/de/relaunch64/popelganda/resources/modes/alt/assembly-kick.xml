@@ -16,7 +16,7 @@
                 <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/^&amp;*" />
 	</PROPS>
 
-	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
+	<RULES HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="FALSE">
 
             <EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
 
@@ -25,7 +25,7 @@
                     <END>*/</END>
 		</SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$%" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$%0123456789" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*|\d+\.\d+|\d+</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
 			<BEGIN>'</BEGIN>
