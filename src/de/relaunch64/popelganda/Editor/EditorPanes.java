@@ -930,10 +930,18 @@ public class EditorPanes {
      * -1 if {@code fp} is not opened in a tab yet.
      */
     public int getOpenedFileTab(File fp) {
-        if (null==fp) return -1;
-        for (int i=0; i<tabbedPane.getTabCount(); i++) {
+        // if fp null, we have no tab with file opend
+        if (null == fp) {
+            return -1;
+        }
+        // iterate all tabs
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            // get associated file path for each tab
             File opened = editorPaneArray.get(i).getFilePath();
-            if (opened!=null && opened.equals(fp)) return i;
+            // if we found filename, return tab-index
+            if (opened != null && opened.equals(fp)) {
+                return i;
+            }
         }
         return -1;
     }

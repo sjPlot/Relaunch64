@@ -1711,8 +1711,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // get script
                 script = customScripts.getScript(scriptName);
             }
-        }
-        else {
+        } else {
             // we have found a valid script name, so get script
             script = customScripts.getScript(scriptName);
         }
@@ -1736,11 +1735,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // String[] lines = script.split("\n");
             String[] lines = Tools.extractCommandLines(script);
             // check if source file needs to be saved and auto save is active
-            if (editorPanes.getActiveFilePath() == null || (settings.getSaveOnCompile() && editorPanes.isModified())) editorPanes.saveFile();
+            if (editorPanes.getActiveFilePath() == null || (settings.getSaveOnCompile() && editorPanes.isModified())) {
+                editorPanes.saveFile();
+            }
             // retrieve ASM-Source file
             File sourceFile = editorPanes.getActiveFilePath();
             // no file :(
-            if (sourceFile == null) return;
+            if (sourceFile == null) {
+                return;
+            }
             // set base path for relative paths
             errorHandler.setBasePath(sourceFile);
             // retrieve parent file. needed to construct output file paths
@@ -1777,31 +1780,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             cmd_op = cmd_op.trim().toLowerCase();
                             // set options
                             switch (cmd_op) {
-                                case "iw": 
-                                    option_ignore_warnings = true; 
+                                case "iw":
+                                    option_ignore_warnings = true;
                                     log = log + " ignore warnings;";
                                     break;
-                                case "wait": 
-                                    option_wait_for_process = true; 
+                                case "wait":
+                                    option_wait_for_process = true;
                                     log = log + " wait for script;";
                                     break;
-                                case "nowait": 
-                                    option_wait_for_process = false; 
+                                case "nowait":
+                                    option_wait_for_process = false;
                                     log = log + " don't wait for script;";
                                     break;
                             }
                         }
                         // log compiler options
                         ConstantsR64.r64logger.log(Level.INFO, log);
-                    }
-                    else {
+                    } else {
                         // surround pathes with quotes, if necessary
                         String sf = sourceFile.toString();
-                        if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) sf = "\"" + sf + "\"";
+                        if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) {
+                            sf = "\"" + sf + "\"";
+                        }
                         String of = outFile.toString();
-                        if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) of = "\"" + of + "\"";
+                        if (of.contains(" ") && !of.startsWith("\"") && !of.startsWith("'")) {
+                            of = "\"" + of + "\"";
+                        }
                         String cf = compressedFile.toString();
-                        if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) cf = "\"" + cf + "\"";
+                        if (cf.contains(" ") && !cf.startsWith("\"") && !cf.startsWith("'")) {
+                            cf = "\"" + cf + "\"";
+                        }
                         // create relative paths of in- and output files
                         String sf_rel = FileTools.getFileName(sourceFile) + "." + FileTools.getFileExtension(sourceFile);
                         String of_rel = FileTools.getFileName(outFile) + "." + FileTools.getFileExtension(outFile);
@@ -1817,13 +1825,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         cmd = cmd.replace(ConstantsR64.ASSEMBLER_COMPRESSED_FILE, (useRelativePath) ? cf_rel : cf);
                         cmd = cmd.replace(Assembler.SOURCE_DIR, parentFile);
                         // check if we have a cruncher-starttoken
-                        String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(), 
-                                                                      editorPanes.getActiveAssembler().getLineComment());
+                        String cruncherStart = Tools.getCruncherStart(editorPanes.getActiveSourceCode(),
+                                editorPanes.getActiveAssembler().getLineComment());
                         // if we found cruncher-starttoken, replace placeholder 
-                        if (cruncherStart != null) cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
+                        if (cruncherStart != null) {
+                            cmd = cmd.replace(ConstantsR64.ASSEMBLER_START_ADDRESS, cruncherStart);
+                        }
                         try {
                             // log process
-                            log = "Converted script-line: "+cmd;
+                            log = "Converted script-line: " + cmd;
                             ConstantsR64.r64logger.log(Level.INFO, log);
                             // write output to string builder. we need output both for printing
                             // it to the text area log, and to examine the string for possible errors.
@@ -1861,25 +1871,27 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                 p.destroy();
                             }
                             // read and extract errors from log
-                            offset = errorHandler.readErrorLines(compilerLog.toString(), 
-                                                                 editorPanes.getActiveAssembler(), 
-                                                                 offset,
-                                                                 option_ignore_warnings);
+                            offset = errorHandler.readErrorLines(compilerLog.toString(),
+                                    editorPanes.getActiveAssembler(),
+                                    offset,
+                                    option_ignore_warnings);
                             // break loop if we have any errors
                             try {
-                                if (errorHandler.hasErrors() || p.exitValue() != 0) break;
-                            }
-                            catch (IllegalThreadStateException ex) {
+                                if (errorHandler.hasErrors() || p.exitValue() != 0) {
+                                    break;
+                                }
+                            } catch (IllegalThreadStateException ex) {
                                 // thread has not been terminated correctly, so log warning
-                                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                                ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                                 // destroy thread
                                 p.destroy();
                                 // and leave
-                                if (errorHandler.hasErrors()) break;
+                                if (errorHandler.hasErrors()) {
+                                    break;
+                                }
                             }
-                        }
-                        catch (IOException | InterruptedException | SecurityException ex) {
-                            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                        } catch (IOException | InterruptedException | SecurityException ex) {
+                            ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                             // check if permission denied
                             if (ex.getLocalizedMessage().toLowerCase().contains("permission denied")) {
                                 ConstantsR64.r64logger.log(Level.INFO, "Permission denied. Try to define user scripts in the preferences and use \"open\" or \"/bin/sh\" as parameters (see Help on Preference pane tab)!");
@@ -1894,21 +1906,25 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // show error log
                 jTabbedPaneLogs.setSelectedIndex(1);
                 // show first error
-                if (errorHandler.hasErrors()) errorHandler.gotoFirstError(editorPanes, jTextAreaCompilerOutput);
+                if (errorHandler.hasErrors()) {
+                    errorHandler.gotoFirstError(editorPanes, jTextAreaCompilerOutput);
+                }
             }
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(getFrame(), "Please open preferences and add a 'compile and run' script first!");
         }
     }
+
     @Action
     public void gotoNextFold() {
         editorPanes.getActiveEditorPane().goToNextFold(false);
     }
+
     @Action
     public void gotoPrevFold() {
         editorPanes.getActiveEditorPane().goToPrevFold(false);
     }
+
     @Action
     public void switchLogPosition() {
         int currentlayout = settings.getLogSplitLayout();
@@ -1916,34 +1932,36 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         settings.setLogSplitLayout(currentlayout);
         jSplitPane1.setOrientation(currentlayout);
     }
+
     @Action
     public void clearLog1() {
         // set sys info
-        jTextAreaLog.setText(Tools.getSystemInformation()+System.lineSeparator());
+        jTextAreaLog.setText(Tools.getSystemInformation() + System.lineSeparator());
     }
+
     @Action
     public void clearLog2() {
         // set sys info
         jTextAreaCompilerOutput.setText("");
     }
+
     @Action
     public void selectUserScripts() {
         if (settings.getShowToolbar()) {
             // show panel
             jComboBoxRunScripts.showPopup();
             jComboBoxRunScripts.requestFocusInWindow();
-        }
-        else {
+        } else {
             // get script names
             String[] sn = customScripts.getScriptNames();
             // check for null
-            if (sn!=null && sn.length>0) {
+            if (sn != null && sn.length > 0) {
                 // sort arary
                 Arrays.sort(sn);
                 // if toolbar is not visible, show option dialog instead
                 Object selection = JOptionPane.showInputDialog(getFrame(), "Select script:", "", JOptionPane.PLAIN_MESSAGE, null, sn, jComboBoxRunScripts.getSelectedItem());
                 // check if null
-                if (selection!=null) {
+                if (selection != null) {
                     // select script in cb
                     jComboBoxRunScripts.setSelectedItem(selection);
                     // change script for current file
