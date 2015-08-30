@@ -18,11 +18,11 @@
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$" AT_WORD_START="TRUE" TYPE="DIGIT">\$\.(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])+(p[+-]?((\d_+)+\d|\d)+)?|\$(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])+p[+-]?((\d_+)+\d|\d)+|\$(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])+\.(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])*(p[+-]?((\d_+)+\d|\d)+)?|\$(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])*</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="DIGIT">%\.(([01]_+)+[01]|[01])+([ep][+-]?((\d_+)+\d|\d)+)?|%(([01]_+)+[01]|[01])+[ep][+-]?((\d_+)+\d|\d)+|%(([01]_+)+[01]|[01])+\.(([01]_+)+[01]|[01])*([ep][+-]?((\d_+)+\d|\d)+)?|%(([01]_+)+[01]|[01])*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$" AT_WORD_START="TRUE" TYPE="DIGIT">\$\.(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])+(p[+-]?(([0-9]_+)+[0-9]|[0-9])+)?|\$(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])+p[+-]?(([0-9]_+)+[0-9]|[0-9])+|\$(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])+\.(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])*(p[+-]?(([0-9]_+)+[0-9]|[0-9])+)?|\$(([0-9a-fA-F]_+)+[0-9a-fA-F]|[0-9a-fA-F])*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="DIGIT">%\.(([01]_+)+[01]|[01])+([ep][+-]?(([0-9]_+)+[0-9]|[0-9])+)?|%(([01]_+)+[01]|[01])+[ep][+-]?(([0-9]_+)+[0-9]|[0-9])+|%(([01]_+)+[01]|[01])+\.(([01]_+)+[01]|[01])*([ep][+-]?(([0-9]_+)+[0-9]|[0-9])+)?|%(([01]_+)+[01]|[01])*</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="?" AT_WORD_START="TRUE" TYPE="DIGIT">\?</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="." AT_WORD_START="TRUE" TYPE="DIGIT">\.((\d_+)+\d|\d)+([ep][+-]?((\d_+)+\d|\d)+)?</SEQ_REGEXP>
-                <SEQ_REGEXP HASH_CHARS="0123456789" AT_WORD_START="TRUE" TYPE="DIGIT">((\d_+)+\d|\d)+[ep][+-]?((\d_+)+\d|\d)+|((\d_+)+\d|\d)+\.((\d_+)+\d|\d)*([ep][+-]?((\d_+)+\d|\d)+)?|((\d_+)+\d|\d)+</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="." AT_WORD_START="TRUE" TYPE="DIGIT">\.(([0-9]_+)+[0-9]|[0-9])+([ep][+-]?(([0-9]_+)+[0-9]|[0-9])+)?</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="0123456789" AT_WORD_START="TRUE" TYPE="DIGIT">(([0-9]_+)+[0-9]|[0-9])+[ep][+-]?(([0-9]_+)+[0-9]|[0-9])+|(([0-9]_+)+[0-9]|[0-9])+\.(([0-9]_+)+[0-9]|[0-9])*([ep][+-]?(([0-9]_+)+[0-9]|[0-9])+)?|(([0-9]_+)+[0-9]|[0-9])+</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" DELEGATE="STRINGS">
 			<BEGIN>'</BEGIN>
@@ -285,7 +285,7 @@
                         <FUNCTION>type</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}_][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
+                <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}][\p{javaUnicodeIdentifierPart}_.]*|_[\p{javaUnicodeIdentifierPart}][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="-`~!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 
