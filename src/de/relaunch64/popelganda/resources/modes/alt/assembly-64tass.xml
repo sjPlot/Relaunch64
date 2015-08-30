@@ -14,11 +14,11 @@
                 <PROPERTY NAME="wordBreakChars" VALUE=".,+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 
-	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
+	<RULES HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="TRUE">
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
-                <SEQ_REGEXP HASH_CHARS="$%?" AT_WORD_START="TRUE" TYPE="DIGIT">\$[0-9a-fA-F]*|%[01]*|\?</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$%?0123456789" AT_WORD_START="TRUE" TYPE="DIGIT">\$([0-9a-fA-F]_+[0-9a-fA-F]|[0-9a-fA-F])*|%([01]_+[01]|[01])*|\?|([0-9]_+[0-9]|[0-9])+</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" DELEGATE="STRINGS">
 			<BEGIN>'</BEGIN>

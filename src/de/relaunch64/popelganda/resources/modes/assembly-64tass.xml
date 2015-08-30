@@ -19,13 +19,13 @@
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 
                 <!-- Literal3 are binary numbers -->
-                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="LITERAL3">%[01]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="%" AT_WORD_START="TRUE" TYPE="LITERAL3">%([01]_+[01]|[01])*</SEQ_REGEXP>
                 <!-- Literal4 are ram-addresses -->
-                <SEQ_REGEXP HASH_CHARS="$0123456789" AT_WORD_START="TRUE" TYPE="LITERAL4">\$[0-9a-fA-F]*|[0-9]+</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="$0123456789" AT_WORD_START="TRUE" TYPE="LITERAL4">\$([0-9a-fA-F]_+[0-9a-fA-F]|[0-9a-fA-F])*|([0-9]_+[0-9]|[0-9])+</SEQ_REGEXP>
                 <!-- digit are numbers -->
-                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">#[&lt;&gt;`]?(\$[0-9a-fA-F]*|%[01]*|[0-9]+|[a-zA-Z_][a-zA-Z0-9_]*|".?"|'.*?')</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="#" AT_WORD_START="TRUE" TYPE="DIGIT">#[&lt;&gt;`]?(\$([0-9a-fA-F]_+[0-9a-fA-F]|[0-9a-fA-F])*|%([01]_+[01]|[01])*|([0-9]_+[0-9]|[0-9])+|[a-zA-Z_][a-zA-Z0-9_]*|".*?"|'.*?')</SEQ_REGEXP>
                 <!-- keyword4 are jump labels-->
-                <SEQ_REGEXP HASH_CHARS="_" AT_WORD_START="TRUE" TYPE="KEYWORD4">_[0-9a-zA-Z]*</SEQ_REGEXP>
+                <SEQ_REGEXP HASH_CHARS="_" AT_WORD_START="TRUE" TYPE="KEYWORD4">_[\p{javaUnicodeIdentifierStart}][\p{javaUnicodeIdentifierPart}_]*</SEQ_REGEXP>
 
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING1">
 			<BEGIN>'</BEGIN>
@@ -288,7 +288,7 @@
                         <FUNCTION>type</FUNCTION>
 		</KEYWORDS>
 
-                <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}_][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
+                <SEQ_REGEXP AT_LINE_START="TRUE" TYPE="LABEL">[\p{javaUnicodeIdentifierStart}][\p{javaUnicodeIdentifierPart}_.]*|[+-]</SEQ_REGEXP>
                 <SEQ_REGEXP HASH_CHARS="-`~!^*/%+&lt;&gt;=&amp;|" TYPE="OPERATOR">.</SEQ_REGEXP>
 	</RULES>
 
