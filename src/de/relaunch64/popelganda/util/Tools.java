@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -561,5 +562,42 @@ public class Tools {
         }
 
         return tokens.toArray(new String[tokens.size()]);
+    }
+    /**
+     * Splits a script string into separate lines.
+     * Lines ending in a backslash character are joined with the
+     * following line.
+     * 
+     * @param script A String containing command lines.
+     * @return An Array of String command lines
+     */
+    public static String[] extractCommandLines(String script) {
+        ArrayList<String> commandLines = new ArrayList<>();
+        // match line ending with whitespace followed by backslash
+        Pattern continuationPattern = Pattern.compile("\\s*(.*?)\\s+\\\\");
+        String[] lines = script.split("\n");
+        StringBuilder commandLine = new StringBuilder();
+        
+        for (String line : lines) {
+            Matcher joiningMatcher = continuationPattern.matcher(line);
+            
+            if (joiningMatcher.matches()) {
+                commandLine.append(joiningMatcher.group(1));
+                commandLine.append(' ');
+            } else {
+                commandLine.append(line.trim());
+                
+                if (commandLine.length() > 0) {
+                    commandLines.add(commandLine.toString());
+                    commandLine = new StringBuilder();
+                }
+            }
+        }
+        
+        if (commandLine.length() > 0) {
+            commandLines.add(commandLine.toString());
+        }
+        
+        return commandLines.toArray(new String[commandLines.size()]);
     }
 }
