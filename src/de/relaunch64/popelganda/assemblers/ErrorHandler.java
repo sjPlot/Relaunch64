@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
@@ -188,21 +189,21 @@ public class ErrorHandler {
     protected void openErrorTab(EditorPanes editorPanes) {
         try {
             File ef = getAbsoluteErrorFilePath();
+            // TODO remove after debug
+            ConstantsR64.r64logger.log(Level.INFO, "DEBUG-INFO: file path is {0}", ef.toString());
             // check for null
-            if (ef!=null) {
+            if (ef != null) {
                 // is error file opened?
                 int errorTab = editorPanes.getOpenedFileTab(ef);
                 // if not, open it
-                if (-1==errorTab) {
+                if (-1 == errorTab) {
                     editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), 0);
-                }
-                // if tab is opened, but not selected, select it
-                else if (errorTab!=editorPanes.getSelectedTab()) {
+                } // if tab is opened, but not selected, select it
+                else if (errorTab != editorPanes.getSelectedTab()) {
                     editorPanes.setSelectedTab(errorTab);
                 }
             }
-        }
-        catch (IndexOutOfBoundsException ex) {
+        } catch (IndexOutOfBoundsException ex) {
         }
     }
     protected File getAbsoluteErrorFilePath() {

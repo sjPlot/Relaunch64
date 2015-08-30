@@ -938,6 +938,8 @@ public class EditorPanes {
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             // get associated file path for each tab
             File opened = editorPaneArray.get(i).getFilePath();
+            // TODO remove after debug
+            ConstantsR64.r64logger.log(Level.INFO, "DEBUG-INFO: file path is {0}", opened.toString());
             // if we found filename, return tab-index
             if (opened != null && opened.equals(fp)) {
                 return i;
