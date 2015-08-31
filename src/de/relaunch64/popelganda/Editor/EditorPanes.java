@@ -80,50 +80,60 @@ public class EditorPanes {
     public static final int DIRECTION_PREV = 1;
 
     private class TabPanel extends JPanel { /* Draws a tab with close button */
+
         private final JLabel tabLabel;
         private final JButton closeButton;
         private final Settings settings;
         java.awt.Component component;
+
         public TabPanel(String title, Settings settings) {
-            super(new FlowLayout(FlowLayout.LEFT, (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) ? 2 : 0, (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) ? 2 : 0)); 
+            super(new FlowLayout(FlowLayout.LEFT, (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) ? 2 : 0, (ConstantsR64.IS_OSX && !settings.getNimbusOnOSX()) ? 2 : 0));
             super.setOpaque(false);
             this.settings = settings;
             // set text label for tab
-            this.tabLabel = new JLabel(title + (this.settings.getShowCloseButton() ? "  " : "")); 
-            this.closeButton = new JButton(""); 
+            this.tabLabel = new JLabel(title + (this.settings.getShowCloseButton() ? "  " : ""));
+            this.closeButton = new JButton("");
             // add close button
             this.closeButton.setIcon(ConstantsR64.tabcloseicon);
             // and roll-over button
             this.closeButton.setRolloverEnabled(true);
             this.closeButton.setRolloverIcon(ConstantsR64.tabclosehovericon);
-            this.closeButton.setMargin(new java.awt.Insets(0,0,0,0));
+            this.closeButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
             this.closeButton.setBorder(null);
             // show or hide button
             setCloseButtonVisible(this.settings.getShowCloseButton());
             // add to component
-            super.add(this.tabLabel); 
-            super.add(this.closeButton); 
+            super.add(this.tabLabel);
+            super.add(this.closeButton);
             // add action listener to close tabs on click
             this.closeButton.addActionListener(new java.awt.event.ActionListener() { /* closes a tab */
-                @Override public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
                     java.awt.Component oldtab = tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
                     tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(component));
                     mainFrame.closeFile();
-                    if (component != oldtab) tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(oldtab)); /* reselect old tab */
+                    if (component != oldtab) {
+                        tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(oldtab)); /* reselect old tab */
+                    }
                 }
             });
         }
+
         public final void setTitle(String title) {
             // put space between title and close-button
             this.tabLabel.setText(title + (this.settings.getShowCloseButton() ? "  " : ""));
         }
+
         public final String getTitle() {
             // put space between title and close-button
             return this.tabLabel.getText().trim();
         }
+
         public void setTabComponent(java.awt.Component component) {
             this.component = component;
         }
+
         public final void setCloseButtonVisible(boolean visible) {
             this.closeButton.setVisible(visible);
         }
@@ -165,18 +175,20 @@ public class EditorPanes {
         editorPane.setName("jEditorPaneMain");
         // enable drag&drop
         editorPane.setDragEnabled(true);
-        DropTarget dropTarget = new DropTarget(editorPane, mainFrame);   
+        DropTarget dropTarget = new DropTarget(editorPane, mainFrame);
         // check whether extenstion should be shown as well
-        if (settings.getShowExtensionInTab() && fp!=null) title = title+"."+FileTools.getFileExtension(fp);
+        if (settings.getShowExtensionInTab() && fp != null) {
+            title = title + "." + FileTools.getFileExtension(fp);
+        }
         // get default tab title and add new tab to tabbed pane
         tabbedPane.addTab(title, editorPane);
         // check for file path and set it as tool tip
-        if (fp!=null && fp.exists()) {
-            tabbedPane.setToolTipTextAt(tabbedPane.getTabCount()-1, fp.getPath());
+        if (fp != null && fp.exists()) {
+            tabbedPane.setToolTipTextAt(tabbedPane.getTabCount() - 1, fp.getPath());
         }
         TabPanel tabPanel = new TabPanel(title, settings);
-        tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, tabPanel);
-        tabPanel.setTabComponent(tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1));
+        tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabPanel);
+        tabPanel.setTabComponent(tabbedPane.getTabComponentAt(tabbedPane.getTabCount() - 1));
         // set assembler syntax style
         editorPane.setAssembler(assembler);
         editorPane.setAssemblyMode();
@@ -185,20 +197,20 @@ public class EditorPanes {
         // limit undo, so initial text setting will not be undoable
         buffer.setUndoLimit(0); // haha, cheater! ;-)
         // set content, if available
-        if (content!= null && !content.isEmpty()) {
+        if (content != null && !content.isEmpty()) {
             editorPane.setText(content);
-        }
-        else {
+        } else {
             editorPane.setText("");
         }
         buffer.setUndoLimit(100);
         // add caret listener
         editorPane.addCaretListener(new javax.swing.event.CaretListener() {
-            @Override public void caretUpdate(javax.swing.event.CaretEvent e) {
+            @Override
+            public void caretUpdate(javax.swing.event.CaretEvent e) {
                 // retrieve selection
-                int selection = e.getMark()-e.getDot();
+                int selection = e.getMark() - e.getDot();
                 // here we have selected text
-                if (selection!=0) {
+                if (selection != 0) {
                     // convert numbers and show in textfields
                     mainFrame.autoConvertNumbers(getActiveEditorPane().getSelectedText());
                 }
@@ -206,25 +218,40 @@ public class EditorPanes {
         });
         // add buffer listener. the jEdit editor component has no document listener
         buffer.addBufferListener(new BufferListener() {
-            @Override public void foldLevelChanged(JEditBuffer jeb, int i, int i1) {
+            @Override
+            public void foldLevelChanged(JEditBuffer jeb, int i, int i1) {
             }
-            @Override public void contentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+
+            @Override
+            public void contentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
                 setModified(true);
                 updateLabelBufferSize();
             }
-            @Override public void contentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+
+            @Override
+            public void contentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
                 setModified(true);
                 updateLabelBufferSize();
             }
-            @Override public void preContentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+
+            @Override
+            public void preContentInserted(JEditBuffer jeb, int i, int i1, int i2, int i3) {
             }
-            @Override public void preContentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
+
+            @Override
+            public void preContentRemoved(JEditBuffer jeb, int i, int i1, int i2, int i3) {
             }
-            @Override public void transactionComplete(JEditBuffer jeb) {
+
+            @Override
+            public void transactionComplete(JEditBuffer jeb) {
             }
-            @Override public void foldHandlerChanged(JEditBuffer jeb) {
+
+            @Override
+            public void foldHandlerChanged(JEditBuffer jeb) {
             }
-            @Override public void bufferLoaded(JEditBuffer jeb) {
+
+            @Override
+            public void bufferLoaded(JEditBuffer jeb) {
             }
         });
         // configure propeties of editor pane
@@ -240,7 +267,7 @@ public class EditorPanes {
         // add editorpane to list
         editorPaneArray.add(editorPaneProperties);
         // select tab
-        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -251,6 +278,7 @@ public class EditorPanes {
         // return current count
         return editorPaneArray.size();
     }
+
     public void updateLabelBufferSize() {
         if (!settings.getShowBufferSize()) {
             jLabelBufferSize.setText("");
@@ -258,7 +286,7 @@ public class EditorPanes {
         }
         int s = getActiveEditorPane().getBufferLength();
         int l = getActiveEditorPane().getBuffer().getLineCount();
-        jLabelBufferSize.setText((s>0) ? String.format(Locale.ENGLISH, "(%d lines, %.2fKB)", l, (float)s/1024): "");
+        jLabelBufferSize.setText((s > 0) ? String.format(Locale.ENGLISH, "(%d lines, %.2fKB)", l, (float) s / 1024) : "");
     }
     /**
      * Get the current column of the caret in 
@@ -316,19 +344,27 @@ public class EditorPanes {
         // set caret position to start of buffer
         ep.goToBufferStart(false);
         // expand or collapse first-line-fold
-        if (expand) ep.expandFold(true); else ep.collapseFold();
+        if (expand) {
+            ep.expandFold(true);
+        } else {
+            ep.collapseFold();
+        }
         // remember caret offset
         int oldcaret = ep.getCaretPosition();
         int newcaret = -1;
         // check if we cycled through all folds
-        while (oldcaret!=newcaret) {
+        while (oldcaret != newcaret) {
             // remember caret offset
             oldcaret = ep.getCaretPosition();
             // goto next fold
             ep.goToNextFold(false);
             newcaret = ep.getCaretPosition();
             // expand
-            if (expand) ep.expandFold(true); else ep.collapseFold();
+            if (expand) {
+                ep.expandFold(true);
+            } else {
+                ep.collapseFold();
+            }
         }
     }
     /**
@@ -378,14 +414,13 @@ public class EditorPanes {
         RL64TextArea ep = getActiveEditorPane();
         // retrieve selected text
         String selection = ep.getSelectedText();
-        if (selection!=null && !selection.isEmpty()) {
+        if (selection != null && !selection.isEmpty()) {
             // set up section name
             String insertString = getActiveAssembler().getLineComment() + " {{{\n" + selection + getActiveAssembler().getLineComment() + " }}}\n";
             // insert string
             ep.replaceSelection(insertString);
-        }
-        else {
-            ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");            
+        } else {
+            ConstantsR64.r64logger.log(Level.WARNING, "Section name already exists. Could not insert section.");
         }
     }
     /**
@@ -934,12 +969,14 @@ public class EditorPanes {
         if (null == fp) {
             return -1;
         }
+        // do we have relative path? try to get absolute path
+        if (fp.isAbsolute()) {
+            fp = fp.getAbsoluteFile();
+        }
         // iterate all tabs
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             // get associated file path for each tab
             File opened = editorPaneArray.get(i).getFilePath();
-            // TODO remove after debug
-            ConstantsR64.r64logger.log(Level.INFO, "DEBUG-INFO: file path is {0}", opened.toString());
             // if we found filename, return tab-index
             if (opened != null && opened.equals(fp)) {
                 return i;

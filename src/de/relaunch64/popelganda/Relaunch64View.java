@@ -1204,16 +1204,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // retrieve index of selected item
         Object selectedObject = jListGoto.getSelectedValue();
         // check if > 0 and key was return
-        if (selectedObject!=null) {
+        if (selectedObject != null) {
             // remembler focus owner
             java.awt.Component c = this.getFrame().getFocusOwner();
-            final String compname = (c!=null) ? c.getName() : null;
+            final String compname = (c != null) ? c.getName() : null;
             // retrieve item information
             RL64ListItem listItem = (RL64ListItem) selectedObject;
             // retrieve opened tab
             int epIndex = editorPanes.getOpenedFileTab(listItem.getFile());
             // go on, if tab is opened and no heading is selected
-            if (epIndex!=-1 && !listItem.isHeader()) {
+            if (epIndex != -1 && !listItem.isHeader()) {
                 // select specific tab where selected section is
                 jTabbedPane1.setSelectedIndex(epIndex);
                 // select where to go...
@@ -1236,7 +1236,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
             // scrolling to caret sets focus to editor component,
             // but we don't want that.
-            if (compname!=null) {
+            if (compname != null) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -1253,8 +1253,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                                     public void run() {
                                         try {
                                             jTextFieldGoto.setCaretPosition(jTextFieldGoto.getText().length());
-                                        }
-                                        catch (IllegalArgumentException ex) {
+                                        } catch (IllegalArgumentException ex) {
                                         }
                                     }
                                 });
@@ -1265,16 +1264,18 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+
     public void toggleTabbedPaneScrollPolicy() {
         jTabbedPane1.setTabLayoutPolicy(settings.getUseScrollTabs() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT);
     }
+
     public final void toggleToolbar() {
         jToolBar.setVisible(settings.getShowToolbar());
         int count = 0;
-        for (int i=0; i<jToolBar.getComponentCount(); i++) {
+        for (int i = 0; i < jToolBar.getComponentCount(); i++) {
             Component c = jToolBar.getComponentAtIndex(i);
-            if (c!=null && c instanceof JButton) {
-                ((JButton)c).setText(settings.getShowToolbarText() ? ConstantsR64.toolbarNames[count] : "");
+            if (c != null && c instanceof JButton) {
+                ((JButton) c).setText(settings.getShowToolbarText() ? ConstantsR64.toolbarNames[count] : "");
                 count++;
             }
         }
@@ -1977,27 +1978,29 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jComboBoxAssemblers.showPopup();
         jComboBoxAssemblers.requestFocusInWindow();
     }
+
     @Action
     public void selectLog() {
         int selected = jTabbedPaneLogs.getSelectedIndex();
-        jTabbedPaneLogs.setSelectedIndex((0==selected) ? 1 : 0);
+        jTabbedPaneLogs.setSelectedIndex((0 == selected) ? 1 : 0);
     }
+
     @Action
     public void selectAllText() {
         editorPanes.getActiveEditorPane().selectAll();
     }
+
     @Action
     public void findStart() {
         // check whether textfield is visible
         if (!jPanelFind.isVisible()) {
             // make it visible
             jPanelFind.setVisible(true);
-        }
-        else {
+        } else {
             // get findterm
             Object ft = jComboBoxFind.getSelectedItem();
             // if textfield is visible and textfield has focus
-            if (ft!=null && jComboBoxFind.isFocusOwner()) {
+            if (ft != null && jComboBoxFind.isFocusOwner()) {
                 String findTerm = ft.toString();
                 // if find term has not changed, calling "find" will find next search term
                 if (findTerms.getCurrentFindTerm().equalsIgnoreCase(findTerm)) {
@@ -2009,50 +2012,53 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // set focus to textfield
         jComboBoxFind.requestFocusInWindow();
         // retrieve editor component
-        JTextField tf = (JTextField)jComboBoxFind.getEditor().getEditorComponent();
+        JTextField tf = (JTextField) jComboBoxFind.getEditor().getEditorComponent();
         // select item, if any, so user does not need to delete
         // before entering a new search term
         tf.setSelectionStart(0);
         tf.setSelectionEnd(tf.getText().length());
     }
+
     @Action
     public void findNext() {
         Object ft = jComboBoxFind.getSelectedItem();
-        if (ft!=null) {
+        if (ft != null) {
             String findTerm = ft.toString();
             findTerms.addFindTerm(findTerm, jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected());
-            findReplace.initValues(findTerm, 
-                                   jTextFieldReplace.getText(), 
-                                   jTabbedPane1.getSelectedIndex(), 
-                                   editorPanes.getActiveEditorPane(), 
-                                   jCheckBoxRegEx.isSelected(), 
-                                   jCheckBoxWholeWord.isSelected(),
-                                   jCheckBoxMatchCase.isSelected());
-            jComboBoxFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(), 
-                                                             jCheckBoxWholeWord.isSelected(), 
-                                                             jCheckBoxMatchCase.isSelected(),
-                                                             settings.getFindFieldFocus()) ? Color.black : Color.red);
+            findReplace.initValues(findTerm,
+                    jTextFieldReplace.getText(),
+                    jTabbedPane1.getSelectedIndex(),
+                    editorPanes.getActiveEditorPane(),
+                    jCheckBoxRegEx.isSelected(),
+                    jCheckBoxWholeWord.isSelected(),
+                    jCheckBoxMatchCase.isSelected());
+            jComboBoxFind.setForeground(findReplace.findNext(jCheckBoxRegEx.isSelected(),
+                    jCheckBoxWholeWord.isSelected(),
+                    jCheckBoxMatchCase.isSelected(),
+                    settings.getFindFieldFocus()) ? Color.black : Color.red);
         }
     }
+
     @Action
     public void findPrev() {
         Object ft = jComboBoxFind.getSelectedItem();
-        if (ft!=null) {
+        if (ft != null) {
             String findTerm = ft.toString();
             findTerms.addFindTerm(findTerm, jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected());
-            findReplace.initValues(findTerm, 
-                                   jTextFieldReplace.getText(), 
-                                   jTabbedPane1.getSelectedIndex(), 
-                                   editorPanes.getActiveEditorPane(), 
-                                   jCheckBoxRegEx.isSelected(),
-                                   jCheckBoxWholeWord.isSelected(),
-                                   jCheckBoxMatchCase.isSelected());
-            jComboBoxFind.setForeground(findReplace.findPrev(jCheckBoxRegEx.isSelected(), 
-                                                             jCheckBoxWholeWord.isSelected(), 
-                                                             jCheckBoxMatchCase.isSelected(),
-                                                             settings.getFindFieldFocus()) ? Color.black : Color.red);
+            findReplace.initValues(findTerm,
+                    jTextFieldReplace.getText(),
+                    jTabbedPane1.getSelectedIndex(),
+                    editorPanes.getActiveEditorPane(),
+                    jCheckBoxRegEx.isSelected(),
+                    jCheckBoxWholeWord.isSelected(),
+                    jCheckBoxMatchCase.isSelected());
+            jComboBoxFind.setForeground(findReplace.findPrev(jCheckBoxRegEx.isSelected(),
+                    jCheckBoxWholeWord.isSelected(),
+                    jCheckBoxMatchCase.isSelected(),
+                    settings.getFindFieldFocus()) ? Color.black : Color.red);
         }
     }
+
     @Action
     public void findCancel() {
         // cancel replace
@@ -2065,23 +2071,27 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // set input focus in main textfield
         editorPanes.setFocus();
     }
+
     @Action
     public void replaceAll() {
         // check if we have selection
         Object sel = jComboBoxFind.getSelectedItem();
-        if (sel!=null) {
+        if (sel != null) {
             findReplace.initValues(jComboBoxFind.getSelectedItem().toString(),
-                                   jTextFieldReplace.getText(), 
-                                   jTabbedPane1.getSelectedIndex(), 
-                                   editorPanes.getActiveEditorPane(),
-                                   jCheckBoxRegEx.isSelected(),
-                                   jCheckBoxWholeWord.isSelected(),
-                                   jCheckBoxMatchCase.isSelected());
+                    jTextFieldReplace.getText(),
+                    jTabbedPane1.getSelectedIndex(),
+                    editorPanes.getActiveEditorPane(),
+                    jCheckBoxRegEx.isSelected(),
+                    jCheckBoxWholeWord.isSelected(),
+                    jCheckBoxMatchCase.isSelected());
             int findCounter = 0;
-            while (findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected(), settings.getFindFieldFocus())) findCounter++;
-            JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter)+" occurences were replaced.");
+            while (findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected(), settings.getFindFieldFocus())) {
+                findCounter++;
+            }
+            JOptionPane.showMessageDialog(getFrame(), String.valueOf(findCounter) + " occurences were replaced.");
         }
     }
+
     @Action
     public void replaceTerm() {
         // make it visible
@@ -2093,27 +2103,26 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // make it visible
             jPanelReplace.setVisible(true);
             // and set input focus in it
-            if (null==sel || sel.toString().isEmpty()) {
+            if (null == sel || sel.toString().isEmpty()) {
                 jComboBoxFind.requestFocusInWindow();
-            }
-            else {
+            } else {
                 jTextFieldReplace.requestFocusInWindow();
             }
-        }
-        // if textfield is already visible, replace term
+        } // if textfield is already visible, replace term
         else {
-            if (sel!=null) {
-                findReplace.initValues(jComboBoxFind.getSelectedItem().toString(), 
-                                       jTextFieldReplace.getText(), 
-                                       jTabbedPane1.getSelectedIndex(), 
-                                       editorPanes.getActiveEditorPane(),
-                                       jCheckBoxRegEx.isSelected(),
-                                       jCheckBoxWholeWord.isSelected(),
-                                       jCheckBoxMatchCase.isSelected());
+            if (sel != null) {
+                findReplace.initValues(jComboBoxFind.getSelectedItem().toString(),
+                        jTextFieldReplace.getText(),
+                        jTabbedPane1.getSelectedIndex(),
+                        editorPanes.getActiveEditorPane(),
+                        jCheckBoxRegEx.isSelected(),
+                        jCheckBoxWholeWord.isSelected(),
+                        jCheckBoxMatchCase.isSelected());
                 jTextFieldReplace.setForeground(findReplace.replace(jCheckBoxRegEx.isSelected(), jCheckBoxWholeWord.isSelected(), jCheckBoxMatchCase.isSelected(), settings.getFindFieldFocus()) ? Color.black : Color.red);
             }
         }
     }
+
     private void replaceCancel() {
         jTextFieldReplace.setForeground(Color.black);
         // hide replace textfield
@@ -2122,10 +2131,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // set input focus in main textfield
         editorPanes.setFocus();
     }
+
     @Action
     public void insertBytesFromFile() {
         // open dialog
-        if (null==insertByteFromFileDlg) {
+        if (null == insertByteFromFileDlg) {
             insertByteFromFileDlg = new InsertByteFromFileDlg(getFrame(), settings, editorPanes.getActiveAssembler());
             insertByteFromFileDlg.setLocationRelativeTo(getFrame());
         }
@@ -2133,27 +2143,31 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // check for valid return value
         String bytetable = insertByteFromFileDlg.getByteTable();
         // insert bytes to source code
-        if (bytetable!=null && !bytetable.isEmpty()) {
+        if (bytetable != null && !bytetable.isEmpty()) {
             editorPanes.insertString(bytetable);
         }
         insertByteFromFileDlg = null;
     }
+
     @Action
     public void insertBasicStart() {
         Tools.insertBasicStart(editorPanes);
     }
+
     @Action
     public void insertBreakPoint() {
         InsertBreakPoint.insertBreakPoint(editorPanes);
     }
+
     @Action
     public void removeAllBreakPoints() {
         InsertBreakPoint.removeBreakPoints(editorPanes);
     }
+
     @Action
     public void insertSinusTable() {
         // open dialog
-        if (null==insertSinusTableDlg) {
+        if (null == insertSinusTableDlg) {
             insertSinusTableDlg = new InsertSinusTableDlg(getFrame(), editorPanes.getActiveAssembler());
             insertSinusTableDlg.setLocationRelativeTo(getFrame());
         }
@@ -2161,7 +2175,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // check for valid return value
         String bytetable = insertSinusTableDlg.getByteTable();
         // insert bytes to source code
-        if (bytetable!=null && !bytetable.isEmpty()) {
+        if (bytetable != null && !bytetable.isEmpty()) {
             editorPanes.insertString(bytetable);
         }
         insertSinusTableDlg = null;
@@ -2190,36 +2204,38 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // check which laf was found and set appropriate default value 
             if (!aquaclassname.isEmpty() && !settings.getNimbusOnOSX()) {
                 UIManager.setLookAndFeel(aquaclassname);
-            }
-            // check which laf was found and set appropriate default value 
+            } // check which laf was found and set appropriate default value 
             else if (!nimbusclassname.isEmpty()) {
                 UIManager.setLookAndFeel(nimbusclassname);
-            }
-            else {
+            } else {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             }
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+            ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
         }
         if (ConstantsR64.IS_OSX) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", ConstantsR64.APPLICATION_SHORT_TITLE);
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             // aqua brushed look
-            if (!settings.getNimbusOnOSX()) Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+            if (!settings.getNimbusOnOSX()) {
+                Relaunch64View.super.getFrame().getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+            }
         }
         // System.setProperty("awt.useSystemAAFontSettings", "on");
         if (settings.getScaleFont()) {
             try { // Try to scale default font size according to screen resolution.
-                Font fm = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
+                Font fm = (Font) UIManager.getLookAndFeelDefaults().get("defaultFont");
                 // check if laf supports default font
-                if (fm!=null) {
+                if (fm != null) {
                     UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
                 }
-            } catch (HeadlessException e) { }
+            } catch (HeadlessException e) {
+            }
         }
     }
+
     /**
-     * 
+     *
      */
     private void saveSettings() {
         settings.setLastUserScript(jComboBoxRunScripts.getSelectedIndex());

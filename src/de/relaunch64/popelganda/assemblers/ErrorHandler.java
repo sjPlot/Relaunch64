@@ -189,8 +189,6 @@ public class ErrorHandler {
     protected void openErrorTab(EditorPanes editorPanes) {
         try {
             File ef = getAbsoluteErrorFilePath();
-            // TODO remove after debug
-            ConstantsR64.r64logger.log(Level.INFO, "DEBUG-INFO: file path is {0}", ef.toString());
             // check for null
             if (ef != null) {
                 // is error file opened?
