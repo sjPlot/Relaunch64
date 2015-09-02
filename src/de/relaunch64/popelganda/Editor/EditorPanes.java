@@ -908,32 +908,34 @@ public class EditorPanes {
     public boolean loadFile(File filepath, Assembler assembler, int script) {
         // check if file is already opened
         int opened = getOpenedFileTab(filepath);
-        if (opened!=-1) {
+        if (opened != -1) {
             // if yes, select opened tab and do not open it twice
             tabbedPane.setSelectedIndex(opened);
             return false;
         }
         try {
             // check for valid value
-            if (filepath!=null && filepath.exists()) {
+            if (filepath != null && filepath.exists()) {
                 // read file
                 byte[] buffer = new byte[(int) filepath.length()];
                 try (InputStream in = new FileInputStream(filepath)) {
                     in.read(buffer);
-                }
-                catch (IOException ex) {
-                    ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                } catch (IOException ex) {
+                    ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                     return false;
-                }
-                finally {
+                } finally {
                     String buf = new String(buffer);
                     boolean CRLF = buf.contains("\r\n");
-                    if (CRLF) buf = buf.replaceAll("\r\n", "\n");
+                    if (CRLF) {
+                        buf = buf.replaceAll("\r\n", "\n");
+                    }
                     boolean CR = buf.contains("\r");
-                    if (CR) buf = buf.replaceAll("\r", "\n");
+                    if (CR) {
+                        buf = buf.replaceAll("\r", "\n");
+                    }
                     boolean LF = buf.contains("\n");
                     // if yes, add new tab
-                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script)-1;
+                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script) - 1;
                     // set cursor
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     setCursor(epp.getEditorPane());
@@ -949,9 +951,8 @@ public class EditorPanes {
                     return true;
                 }
             }
-        }
-        catch (IndexOutOfBoundsException ex) {
-            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+        } catch (IndexOutOfBoundsException ex) {
+            ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
             return false;
         }
         return false;
