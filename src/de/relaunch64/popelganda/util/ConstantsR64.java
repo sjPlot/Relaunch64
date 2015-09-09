@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current build version number
      */
-    public static final String BUILD_NUMBER = "20150830";
+    public static final String BUILD_NUMBER = "20150909";
     /**
      * This variable stores the current programme and build version number
      */
@@ -54,7 +54,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
-    public static final String APPLICATION_SHORT_TITLE = "Relaunch64 (devel)";
+    public static final String APPLICATION_SHORT_TITLE = "Relaunch64";
     /**
      * This variable stores the application title that appears in the main window
      * Add "Release Candidate" or "Beta" to this title
