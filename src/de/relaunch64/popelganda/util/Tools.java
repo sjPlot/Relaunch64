@@ -480,52 +480,32 @@ public class Tools {
     public static String[] tokeniseCommandLine(String command) {
         final int NONE = 0;
         final int WITHIN_QUOTE = 1;
-        final int WITHIN_ESCAPE = 2;
 
         int flags = NONE;
         StringBuilder token = null;
         ArrayList<String> tokens = new ArrayList<>();
         for (char character : command.toCharArray()) {
+            // start of new token. "token" is null
             if (token == null) {
+                // white space, assuming a new token, so skip here
                 if (character == ' ' || character == '\t') {
                     continue;
                 }
-
+                // start of quoted token here
                 if (character == '"') {
                     token = new StringBuilder();
                     flags = WITHIN_QUOTE;
                     continue;
                 }
-                
+                // new token found, so init stringbuilder
                 token = new StringBuilder();
                 token.append(character);
                 flags = NONE;
                 continue;
             }
-
-            if ((flags & WITHIN_ESCAPE) != 0) {
-                switch (character)
-                {
-                    case '"':
-                    case '\\':
-                        token.append(character);
-                        break;
-                    
-                    default:
-                        ConstantsR64.r64logger.log(Level.WARNING, "Undefined escape sequence: \\{0}", character);
-                }
-
-                flags ^= WITHIN_ESCAPE;
-                continue;
-            }
-
+            // proceed token. check whether end of quoted
+            // token was found
             if ((flags & WITHIN_QUOTE) != 0) {
-                if (character == '\\') {
-                    // beginning of escaped character within quoted section
-                    flags |= WITHIN_ESCAPE;
-                    continue;
-                }
-
                 if (character == '"') {
                     // end of quoted section of token (possibly not end of token itself)
                     flags ^= WITHIN_QUOTE;
@@ -537,7 +517,9 @@ public class Tools {
                     flags |= WITHIN_QUOTE;
                     continue;
                 }
-
+                // if we are not inside a quoted token, 
+                // white space indicates end of currently
+                // proceeded token
                 if (character == ' ' || character == '\t') {
                     // end of token
                     tokens.add(token.toString());
@@ -553,10 +535,6 @@ public class Tools {
             if ((flags & WITHIN_QUOTE) != 0) {
                 ConstantsR64.r64logger.log(Level.WARNING, "Unclosed quoted token: {0}", token.toString());
             }
-            if ((flags & WITHIN_ESCAPE) != 0) {
-                ConstantsR64.r64logger.log(Level.WARNING, "Incomplete escape sequence in token: {0}", token.toString());
-            }
-
             tokens.add(token.toString());
         }
 
