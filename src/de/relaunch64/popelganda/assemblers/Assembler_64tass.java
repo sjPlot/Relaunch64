@@ -265,6 +265,22 @@ class Assembler_64tass implements Assembler {
         catch (IOException ex) {
         }
         for (lineInfo label : localLabels) {
+            String fullLabel;
+            StringBuilder kbuild = new StringBuilder();
+            boolean first = false, anon = false;
+
+            for (String name : label.name) { // build full name
+                if (name.length() == 0) {
+                    anon = true;
+                    break;
+                }
+                if (first) kbuild.append('.');
+                kbuild.append(name);
+                first = true;
+            }
+            if (anon) continue;
+
+            fullLabel = kbuild.toString();
             LinkedHashMap map;
             switch (label.type) {
                 default:
@@ -272,7 +288,7 @@ class Assembler_64tass implements Assembler {
                 case FUNCTION: map = returnValue.functions; break;
                 case MACRO: map = returnValue.macros; break;
             }
-            map.put(label.name, label.line);
+            map.put(fullLabel, label.line);
         }
         // Simple global scope
         if (myscope.isEmpty() || lineNumber < 1) {
