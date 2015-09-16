@@ -292,12 +292,12 @@ class Assembler_dreamass implements Assembler
                 case "#ifnfile":
                 case ".(":
                 case ".pseudopc":
-                    foldLevel++;
+                    foldLevel+=2;
                     break;
                 case "#endif":
                 case ".)":
                 case ".realpc":
-                    foldLevel--;
+                    foldLevel-=2;
                     break;
                 }
             }
@@ -317,7 +317,7 @@ class Assembler_dreamass implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel++;
+                                foldLevel+=2;
                             }
                             break;
                         case '}': 
@@ -325,7 +325,7 @@ class Assembler_dreamass implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel--;
+                                foldLevel-=2;
                             }
                             break;
                         default: count = 0;
@@ -336,8 +336,8 @@ class Assembler_dreamass implements Assembler
                     case '"': if (!quote2) quote = !quote; break;
                     case '\'': if (!quote) quote2 = !quote2; break;
                     case ';': if (!quote && !quote2) comment = true; break;
-                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel++; break;
-                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel--; break;
+                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel+=2; break;
+                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel-=2; break;
                 }
             }
         }

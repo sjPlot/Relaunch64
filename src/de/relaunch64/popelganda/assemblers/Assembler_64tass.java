@@ -407,7 +407,7 @@ class Assembler_64tass implements Assembler {
     }
 
     private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b:?|[+-])?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
-    private static final Pattern labelPattern = Pattern.compile("^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}][\\p{javaUnicodeIdentifierPart}_.]*\\b:?)\\s*(?<equal>=)?.*");
+    private static final Pattern labelPattern = Pattern.compile("^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}][\\p{javaUnicodeIdentifierPart}_.]*\\b:?)\\s*(?<equal>[-+/*%^|&x:]=|\\*\\*=|<<=|>>=|\\.\\.=|\\.var\\b)?.*");
     private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
 
     // folding according to compiler directives, plus manual folding
@@ -439,7 +439,7 @@ class Assembler_64tass implements Assembler {
                         case ".ifne":
                         case ".ifpl":
                         case ".ifmi":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
                             break;
                         case ".block":
                         case ".proc":
@@ -453,12 +453,12 @@ class Assembler_64tass implements Assembler {
                         case ".rept":
                         case ".for":
                         case ".section":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
                             break;
                         case ".endswitch":
                         case ".fi":
                         case ".endif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
                             break;
                         case ".bend":
                         case ".pend":
@@ -470,7 +470,7 @@ class Assembler_64tass implements Assembler {
                         case ".endweak":
                         case ".next":
                         case ".send":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
                             break;
                     }
                 }
@@ -483,14 +483,14 @@ class Assembler_64tass implements Assembler {
             if (m.matches()) {
                 String label = m.group("label");
                 if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
+                    label1 = label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0;
                 }
             }
             m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
             if (m.matches()) {
                 String label = m.group("label");
                 if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
+                    label2 = label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0;
                 }
             }
             if (label1 && !label2) foldLevel++;
@@ -510,7 +510,7 @@ class Assembler_64tass implements Assembler {
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel++;
+                                foldLevel+=2;
                             }
                             break;
                         case '}': 
@@ -518,7 +518,7 @@ class Assembler_64tass implements Assembler {
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel--;
+                                foldLevel-=2;
                             }
                             break;
                         default: count = 0;

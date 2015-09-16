@@ -296,24 +296,24 @@ class Assembler_dasm implements Assembler
                         case "ifconst":
                         case "ifnconst":
                         case "if":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
                             break;
                         case "mac":
                         case "rorg":
                         case "repeat":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
                             break;
                         case "subroutine": 
                             subroutine1 = true; 
                             break;
                         case "endif":
                         case "eif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
                             break;
                         case "endm":
                         case "rend":
                         case "repend":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
                             break;
                     }
                 }
@@ -345,7 +345,7 @@ class Assembler_dasm implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel++;
+                                foldLevel+=2;
                             }
                             break;
                         case '}': 
@@ -353,7 +353,7 @@ class Assembler_dasm implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel--;
+                                foldLevel-=2;
                             }
                             break;
                         default: count = 0;

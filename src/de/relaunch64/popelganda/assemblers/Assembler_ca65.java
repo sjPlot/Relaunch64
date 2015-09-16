@@ -362,7 +362,7 @@ class Assembler_ca65 implements Assembler
                         case ".ifpc02":
                         case ".ifpsc02":
                         case ".ifref":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
                             break;
                         case ".enum":
                         case ".mac":
@@ -372,10 +372,10 @@ class Assembler_ca65 implements Assembler
                         case ".scope":
                         case ".struct":
                         case ".union":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
                             break;
                         case ".endif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
                             break;
                         case ".endenum":
                         case ".endstruct":
@@ -386,7 +386,7 @@ class Assembler_ca65 implements Assembler
                         case ".endproc":
                         case ".endmac":
                         case ".endmacro":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
                             break;
                     }
                 }
@@ -405,7 +405,7 @@ class Assembler_ca65 implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel++;
+                                foldLevel+=2;
                             }
                             break;
                         case '}': 
@@ -413,7 +413,7 @@ class Assembler_ca65 implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel--;
+                                foldLevel-=2;
                             }
                             break;
                         default: count = 0;

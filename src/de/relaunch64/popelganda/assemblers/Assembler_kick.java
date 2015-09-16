@@ -285,7 +285,7 @@ class Assembler_kick implements Assembler
                     count++;
                     if (count == 3) {
                         count = 0;
-                        foldLevel++;
+                        foldLevel+=2;
                     }
                     break;
                 case '}': 
@@ -293,7 +293,7 @@ class Assembler_kick implements Assembler
                     count--;
                     if (count == -3) {
                         count = 0;
-                        foldLevel--;
+                        foldLevel-=2;
                     }
                     break;
                 default: count = 0;
@@ -306,12 +306,12 @@ class Assembler_kick implements Assembler
             case '/': 
                 if (!quote && !quote2) {
                     if (previous == '/') comment = true;
-                    else if (previous == '*') {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--; c = ' ';}
+                    else if (previous == '*') {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2; c = ' ';}
                 }
                 break;
-            case '*': if (previous == '/' && !quote && !quote2) {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++; c = ' ';} break;
-            case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel++; break;
-            case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel--; break;
+            case '*': if (previous == '/' && !quote && !quote2) {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2; c = ' ';} break;
+            case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel+=2; break;
+            case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel-=2; break;
             }
             previous = c;
         }

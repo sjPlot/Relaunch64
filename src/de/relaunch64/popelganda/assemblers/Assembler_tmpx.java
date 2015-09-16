@@ -291,19 +291,19 @@ class Assembler_tmpx implements Assembler
                         case ".ifmi":
                         case ".ifdef":
                         case ".ifndef":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
                             break;
                         case ".block":
                         case ".macro":
                         case ".segment":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel++;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
                             break;
                         case ".endif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
                             break;
                         case ".bend":
                         case ".endm":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel--;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
                             break;
                     }
                 }
@@ -343,7 +343,7 @@ class Assembler_tmpx implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel++;
+                                foldLevel+=2;
                             }
                             break;
                         case '}': 
@@ -351,7 +351,7 @@ class Assembler_tmpx implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel--;
+                                foldLevel-=2;
                             }
                             break;
                         default: count = 0;
