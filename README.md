@@ -1,13 +1,10 @@
 Changelog
 ================
 
-Relaunch64 3.3.4 (current devel release)
+Relaunch64 3.3.4-1 (patch-release)
 ----------------
-### Changes
-* added compile-options via scripts. compile-options are triggered with a command-line, starting with `R64` followed by the specific option-switches (see help).
-* updated support for latest 64tass to meet changes of latest 64tass version (added new keywords etc.)
-* added support for `"` delimited arguments in user scripts [#13](https://github.com/sjPlot/Relaunch64/pull/13)
-* added support for logging parameters [#14](https://github.com/sjPlot/Relaunch64/pull/14)
-* Script command lines can now be split over multiple lines [#19](https://github.com/sjPlot/Relaunch64/pull/19)
+### Bug fixes
+* Fixed single backslashes were eaten on windows ([#20](https://github.com/sjPlot/Relaunch64/issues/20)).
+* Fixed local labels broke autocomplete ([#21](https://github.com/sjPlot/Relaunch64/issues/21)).
 
 _Download devel-snapshot from [Sourceforge](http://sourceforge.net/projects/relaunch64/files/devel/)._

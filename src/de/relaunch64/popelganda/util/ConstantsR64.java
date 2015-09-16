@@ -46,11 +46,11 @@ public class ConstantsR64 {
     /**
      * This variable stores the current build version number
      */
-    public static final String BUILD_NUMBER = "20150909";
+    public static final String BUILD_NUMBER = "20150915";
     /**
      * This variable stores the current programme and build version number
      */
-    public static final String BUILD_VERSION = "3.3.4 (Build "+BUILD_NUMBER+")";
+    public static final String BUILD_VERSION = "3.3.4-1 (Build "+BUILD_NUMBER+")";
     /**
      * This variable stores the application title that appears in the menu bar or log
      */
