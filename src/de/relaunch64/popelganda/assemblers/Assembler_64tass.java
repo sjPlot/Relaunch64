@@ -407,25 +407,42 @@ class Assembler_64tass implements Assembler {
     }
 
     private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b:?|[+-])?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
-    private static final Pattern labelPattern = Pattern.compile("^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}][\\p{javaUnicodeIdentifierPart}_.]*\\b:?)\\s*(?<equal>[-+/*%^|&x:]=|\\*\\*=|<<=|>>=|\\.\\.=|\\.var\\b)?.*");
+    private static final Pattern labelPattern = Pattern.compile("^\\s*(?<label>[\\p{javaUnicodeIdentifierStart}][\\p{javaUnicodeIdentifierPart}_.]*\\b:?)\\s*(?<equal>[-+/*%^|&x:]=|\\*\\*=|<<=|>>=|\\.\\.=|=|\\.var\\b)?.*");
     private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
 
     // folding according to compiler directives, plus manual folding
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
         }
         
+        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
+            Matcher m = labelPattern.matcher(line);
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) foldLevel |= 1;
+                }
+            } else {
+                m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) {
+                    String label = m.group("label");
+                    if (label != null && m.group("equal") == null) {
+                        if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) foldLevel &= ~1;
+                    }
+                }
+            }
+        }
+
         if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
             Matcher m = directivePattern.matcher(line);
 
@@ -439,7 +456,7 @@ class Assembler_64tass implements Assembler {
                         case ".ifne":
                         case ".ifpl":
                         case ".ifmi":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case ".block":
                         case ".proc":
@@ -453,12 +470,12 @@ class Assembler_64tass implements Assembler {
                         case ".rept":
                         case ".for":
                         case ".section":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case ".endswitch":
                         case ".fi":
                         case ".endif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                         case ".bend":
                         case ".pend":
@@ -470,31 +487,56 @@ class Assembler_64tass implements Assembler {
                         case ".endweak":
                         case ".next":
                         case ".send":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                     }
                 }
-            }
-        }
+            } else if ((foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
+                m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
 
-        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
-            boolean label1 = false, label2 = false;
-            Matcher m = labelPattern.matcher(line);
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    label1 = label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0;
+                if (m.matches()) {
+                    String directive = m.group("directive");
+                    if (directive != null) {
+                        switch (directive.toLowerCase()) {
+                            case ".switch":
+                            case ".if":
+                            case ".ifeq":
+                            case ".ifne":
+                            case ".ifpl":
+                            case ".ifmi":
+                            case ".endswitch":
+                            case ".fi":
+                            case ".endif":
+                                if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel &= ~1;
+                                break;
+                            case ".block":
+                            case ".proc":
+                            case ".function":
+                            case ".macro":
+                            case ".segment":
+                            case ".struct":
+                            case ".union":
+                            case ".logical":
+                            case ".weak":
+                            case ".rept":
+                            case ".for":
+                            case ".section":
+                            case ".bend":
+                            case ".pend":
+                            case ".endf":
+                            case ".endm":
+                            case ".ends":
+                            case ".endu":
+                            case ".here":
+                            case ".endweak":
+                            case ".next":
+                            case ".send":
+                                if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel &= ~1;
+                                break;
+                        }
+                    }
                 }
             }
-            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    label2 = label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0;
-                }
-            }
-            if (label1 && !label2) foldLevel++;
-            if (!label1 && label2) foldLevel--;
         }
 
         if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) != 0) {
@@ -510,7 +552,7 @@ class Assembler_64tass implements Assembler {
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel+=2;
+                                foldLevel += 2;
                             }
                             break;
                         case '}': 
@@ -518,7 +560,7 @@ class Assembler_64tass implements Assembler {
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel-=2;
+                                foldLevel -= 2;
                             }
                             break;
                         default: count = 0;
@@ -532,6 +574,6 @@ class Assembler_64tass implements Assembler {
                 }
             }
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }
