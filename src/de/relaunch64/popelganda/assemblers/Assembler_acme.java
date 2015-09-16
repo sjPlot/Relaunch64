@@ -270,36 +270,38 @@ class Assembler_acme implements Assembler
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
         }
         
         if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
-            boolean label1 = false, label2 = false;
             Matcher m = labelPattern.matcher(line);
+            boolean check = (foldLevel & 1) == 1;
             if (m.matches()) {
                 String label = m.group("label");
                 if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) {
+                        foldLevel |= 1;
+                        check = false;
+                    }
                 }
             }
-            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
+            if (check) {
+                m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) {
+                    String label = m.group("label");
+                    if (label != null && m.group("equal") == null) {
+                        if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) foldLevel &= ~1;
+                    }
                 }
             }
-            if (label1 && !label2) foldLevel++;
-            if (!label1 && label2) foldLevel--;
         }
 
         if ((foldtokens & (Assemblers.CF_TOKEN_MANUAL | Assemblers.CF_TOKEN_BRACES)) != 0) {
@@ -317,7 +319,7 @@ class Assembler_acme implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel+=2;
+                                foldLevel += 2;
                             }
                             break;
                         case '}': 
@@ -325,7 +327,7 @@ class Assembler_acme implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel-=2;
+                                foldLevel -= 2;
                             }
                             break;
                         default: count = 0;
@@ -336,11 +338,32 @@ class Assembler_acme implements Assembler
                     case '"': if (!quote2) quote = !quote; break;
                     case '\'': if (!quote) quote2 = !quote2; break;
                     case ';': if (!quote && !quote2) comment = true; break;
-                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel+=2; break;
-                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel-=2; break;
+                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel = (foldLevel & ~1) + 2; break;
+                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel = (foldLevel & ~1) - 2; break;
+                }
+            }
+
+            if ((foldLevel & 1) == 1 && (foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
+                String line2 = buffer.getLineText(lineIndex + 1);
+                quote = false;
+                quote2 = false;
+                comment = false;
+                count = 0;
+
+                for (int i = 0; i < line2.length() && (foldLevel & 1) == 1; i++) {
+                    if (comment) {
+                        break;
+                    }
+                    switch (line2.charAt(i)) {
+                        case '"': if (!quote2) quote = !quote; break;
+                        case '\'': if (!quote) quote2 = !quote2; break;
+                        case ';': if (!quote && !quote2) comment = true; break;
+                        case '{':
+                        case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel &= ~1; break;
+                    }
                 }
             }
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }

@@ -419,7 +419,7 @@ class Assembler_64tass implements Assembler {
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
             Matcher m = sectionPattern.matcher(line);
             if (m.matches()) foldLevel |= 1;
-            else {
+            else if ((foldLevel & 1) == 1) {
                 m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
                 if (m.matches()) foldLevel &= ~1;
             }
@@ -427,12 +427,17 @@ class Assembler_64tass implements Assembler {
         
         if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
             Matcher m = labelPattern.matcher(line);
+            boolean check = (foldLevel & 1) == 1;
             if (m.matches()) {
                 String label = m.group("label");
                 if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) foldLevel |= 1;
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) {
+                        foldLevel |= 1;
+                        check = false;
+                    }
                 }
-            } else {
+            }
+            if (check) {
                 m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
                 if (m.matches()) {
                     String label = m.group("label");
@@ -491,7 +496,8 @@ class Assembler_64tass implements Assembler {
                             break;
                     }
                 }
-            } else if ((foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
+            }
+            if ((foldLevel & 1) == 1 && (foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
                 m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
 
                 if (m.matches()) {
