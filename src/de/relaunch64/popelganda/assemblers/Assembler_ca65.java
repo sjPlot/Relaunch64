@@ -326,22 +326,43 @@ class Assembler_ca65 implements Assembler
     }
 
     private static final Pattern directivePattern = Pattern.compile("^\\s*(?:[a-zA-Z_@][a-zA-Z0-9_]*:)?\\s*(?<directive>\\.[a-zA-Z0-9_]+\\b).*");
+    private static final Pattern labelPattern = Pattern.compile("^\\s*(?<label>[a-zA-Z_@][a-zA-Z0-9_]*)(?::|\\s*(?==))\\s*(?<equal>=)?.*");
     private static final Pattern sectionPattern = Pattern.compile("^\\s*;.*@(.*?)@.*");
 
     // folding by directives, plus manual folding
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
+        }
+
+        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
+            Matcher m = labelPattern.matcher(line);
+            boolean check = (foldLevel & 1) == 1;
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    foldLevel |= 1;
+                    check = false;
+                }
+            }
+            if (check) {
+                m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) {
+                    String label = m.group("label");
+                    if (label != null && m.group("equal") == null) {
+                        foldLevel &= ~1;
+                    }
+                }
+            }
         }
         
         if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
@@ -362,7 +383,7 @@ class Assembler_ca65 implements Assembler
                         case ".ifpc02":
                         case ".ifpsc02":
                         case ".ifref":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case ".enum":
                         case ".mac":
@@ -372,10 +393,10 @@ class Assembler_ca65 implements Assembler
                         case ".scope":
                         case ".struct":
                         case ".union":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case ".endif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                         case ".endenum":
                         case ".endstruct":
@@ -386,12 +407,57 @@ class Assembler_ca65 implements Assembler
                         case ".endproc":
                         case ".endmac":
                         case ".endmacro":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                     }
                 }
             }
+            if ((foldLevel & 1) == 1 && (foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
+                m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
+
+                if (m.matches()) {
+                    String directive = m.group("directive");
+                    if (directive != null) {
+                        switch (directive.toLowerCase()) {
+                            case ".if":
+                            case ".ifblank":
+                            case ".ifnblank":
+                            case ".ifconst":
+                            case ".ifdef":
+                            case ".ifndef":
+                            case ".ifp02":
+                            case ".ifp816":
+                            case ".ifpc02":
+                            case ".ifpsc02":
+                            case ".ifref":
+                            case ".endif":
+                                if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel &= ~1;
+                                break;
+                            case ".enum":
+                            case ".mac":
+                            case ".macro":
+                            case ".proc":
+                            case ".repeat":
+                            case ".scope":
+                            case ".struct":
+                            case ".union":
+                            case ".endenum":
+                            case ".endstruct":
+                            case ".endunion":
+                            case ".endscope":
+                            case ".endrep":
+                            case ".endrepeat":
+                            case ".endproc":
+                            case ".endmac":
+                            case ".endmacro":
+                                if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel &= ~1;
+                                break;
+                        }
+                    }
+                }
+            }
         }
+
         if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) != 0) {
             boolean quote = false;
             boolean quote2 = false;
@@ -405,7 +471,7 @@ class Assembler_ca65 implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel+=2;
+                                foldLevel += 2;
                             }
                             break;
                         case '}': 
@@ -413,7 +479,7 @@ class Assembler_ca65 implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel-=2;
+                                foldLevel -= 2;
                             }
                             break;
                         default: count = 0;
@@ -427,6 +493,6 @@ class Assembler_ca65 implements Assembler
                 }
             }
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }

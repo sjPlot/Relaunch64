@@ -268,37 +268,42 @@ class Assembler_dreamass implements Assembler
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
         }
-        
-        Matcher m = directivePattern.matcher(line);
-        if (m.matches()) {
-            String directive = m.group("directive");
-            if (directive != null) {
-                switch (directive.toLowerCase()) {
-                case "#if":
-                case "#ifdef":
-                case "#ifndef":
-                case "#iffile":
-                case "#ifnfile":
-                case ".(":
-                case ".pseudopc":
-                    foldLevel+=2;
-                    break;
-                case "#endif":
-                case ".)":
-                case ".realpc":
-                    foldLevel-=2;
-                    break;
+            
+        if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
+            Matcher m = directivePattern.matcher(line);
+            if (m.matches()) {
+                String directive = m.group("directive");
+                if (directive != null) {
+                    switch (directive.toLowerCase()) {
+                        case "#if":
+                        case "#ifdef":
+                        case "#ifndef":
+                        case "#iffile":
+                        case "#ifnfile":
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) + 2;
+                            break;
+                        case ".(":
+                        case ".pseudopc":
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2;
+                            break;
+                        case "#endif":
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) - 2;
+                            break;
+                        case ".)":
+                        case ".realpc":
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) - 2;
+                            break;
+                    }
                 }
             }
         }
@@ -317,7 +322,7 @@ class Assembler_dreamass implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel+=2;
+                                foldLevel += 2;
                             }
                             break;
                         case '}': 
@@ -325,7 +330,7 @@ class Assembler_dreamass implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel-=2;
+                                foldLevel -= 2;
                             }
                             break;
                         default: count = 0;
@@ -336,11 +341,31 @@ class Assembler_dreamass implements Assembler
                     case '"': if (!quote2) quote = !quote; break;
                     case '\'': if (!quote) quote2 = !quote2; break;
                     case ';': if (!quote && !quote2) comment = true; break;
-                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel+=2; break;
-                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel-=2; break;
+                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel = (foldLevel & ~1) + 2; break;
+                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel = (foldLevel & ~1) - 2; break;
+                }
+            }
+            if ((foldLevel & 1) == 1 && (foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
+                String line2 = buffer.getLineText(lineIndex + 1);
+                quote = false;
+                quote2 = false;
+                comment = false;
+                count = 0;
+
+                for (int i = 0; i < line2.length() && (foldLevel & 1) == 1; i++) {
+                    if (comment) {
+                        break;
+                    }
+                    switch (line2.charAt(i)) {
+                        case '"': if (!quote2) quote = !quote; break;
+                        case '\'': if (!quote) quote2 = !quote2; break;
+                        case ';': if (!quote && !quote2) comment = true; break;
+                        case '{':
+                        case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel &= ~1; break;
+                    }
                 }
             }
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }

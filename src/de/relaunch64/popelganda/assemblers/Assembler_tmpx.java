@@ -265,16 +265,38 @@ class Assembler_tmpx implements Assembler
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
+        }
+
+        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
+            Matcher m = labelPattern.matcher(line);
+            boolean check = (foldLevel & 1) == 1;
+            if (m.matches()) {
+                String label = m.group("label");
+                if (label != null && m.group("equal") == null) {
+                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) {
+                        foldLevel |= 1;
+                        check = false;
+                    }
+                }
+            }
+            if (check) {
+                m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) {
+                    String label = m.group("label");
+                    if (label != null && m.group("equal") == null) {
+                        if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) foldLevel &= ~1;
+                    }
+                }
+            }
         }
         
         if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
@@ -291,43 +313,51 @@ class Assembler_tmpx implements Assembler
                         case ".ifmi":
                         case ".ifdef":
                         case ".ifndef":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case ".block":
                         case ".macro":
                         case ".segment":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case ".endif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                         case ".bend":
                         case ".endm":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                     }
                 }
             }
-        }
+            if ((foldLevel & 1) == 1 && (foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
+                m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
 
-        if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
-            boolean label1 = false, label2 = false;
-            Matcher m = labelPattern.matcher(line);
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label1 = true;
+                if (m.matches()) {
+                    String directive = m.group("directive");
+                    if (directive != null) {
+                        switch (directive.toLowerCase()) {
+                            case ".if":
+                            case ".ifeq":
+                            case ".ifne":
+                            case ".ifpl":
+                            case ".ifmi":
+                            case ".ifdef":
+                            case ".ifndef":
+                            case ".endif":
+                                if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel &= ~1;
+                                break;
+                            case ".block":
+                            case ".macro":
+                            case ".segment":
+                            case ".bend":
+                            case ".endm":
+                                if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel &= ~1;
+                                break;
+                        }
+                    }
                 }
             }
-            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
-            if (m.matches()) {
-                String label = m.group("label");
-                if (label != null && m.group("equal") == null) {
-                    if (label.length() != 3 || Arrays.binarySearch(opcodes, label.toUpperCase()) < 0) label2 = true;
-                }
-            }
-            if (label1 && !label2) foldLevel++;
-            if (!label1 && label2) foldLevel--;
         }
 
         if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) != 0) {
@@ -343,7 +373,7 @@ class Assembler_tmpx implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel+=2;
+                                foldLevel += 2;
                             }
                             break;
                         case '}': 
@@ -351,7 +381,7 @@ class Assembler_tmpx implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel-=2;
+                                foldLevel -= 2;
                             }
                             break;
                         default: count = 0;
@@ -365,6 +395,6 @@ class Assembler_tmpx implements Assembler
                 }
             }
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }

@@ -248,73 +248,101 @@ class Assembler_kick implements Assembler
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
         }
         
         if ((foldtokens & Assemblers.CF_TOKEN_LABELS) != 0) {
-            boolean label1, label2;
             Matcher m = labelPattern.matcher(line);
-            label1 = m.matches();
-            m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
-            label2 = m.matches();
-            if (label1 && !label2) foldLevel++;
-            if (!label1 && label2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = labelPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
         }
 
-        boolean quote = false;
-        boolean quote2 = false;
-        boolean comment = false;
-        int count = 0;
-        Character previous = ' ';
-        for (int i = 0; i < line.length(); i++) {
-            Character c = line.charAt(i);
-            if (comment) {
-                if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) == 0) break;
-                switch (line.charAt(i)) {
-                case '{': 
-                    if (count < 0) count = 0;
-                    count++;
-                    if (count == 3) {
-                        count = 0;
-                        foldLevel+=2;
+        if ((foldtokens & (Assemblers.CF_TOKEN_MANUAL | Assemblers.CF_TOKEN_BRACES)) != 0) {
+            boolean quote = false;
+            boolean quote2 = false;
+            boolean comment = false;
+            int count = 0;
+            Character previous = ' ';
+            for (int i = 0; i < line.length(); i++) {
+                Character c = line.charAt(i);
+                if (comment) {
+                    if ((foldtokens & Assemblers.CF_TOKEN_MANUAL) == 0) break;
+                    switch (line.charAt(i)) {
+                        case '{': 
+                            if (count < 0) count = 0;
+                            count++;
+                            if (count == 3) {
+                                count = 0;
+                                foldLevel+=2;
+                            }
+                            break;
+                        case '}': 
+                            if (count > 0) count = 0;
+                            count--;
+                            if (count == -3) {
+                                count = 0;
+                                foldLevel-=2;
+                            }
+                            break;
+                        default: count = 0;
                     }
-                    break;
-                case '}': 
-                    if (count > 0) count = 0;
-                    count--;
-                    if (count == -3) {
-                        count = 0;
-                        foldLevel-=2;
+                    continue;
+                }
+                switch (c) {
+                    case '"': if (!quote2) quote = !quote; break;
+                    case '\'': if (!quote) quote2 = !quote2; break;
+                    case '/': 
+                        if (!quote && !quote2) {
+                            if (previous == '/') comment = true;
+                            else if (previous == '*') {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) - 2; c = ' ';}
+                        }
+                        break;
+                    case '*': if (previous == '/' && !quote && !quote2) {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2; c = ' ';} break;
+                    case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel = (foldLevel & ~1) + 2; break;
+                    case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel = (foldLevel & ~1) - 2; break;
+                }
+                previous = c;
+            }
+            if ((foldLevel & 1) == 1 && (foldtokens & (Assemblers.CF_TOKEN_SECTIONS | Assemblers.CF_TOKEN_LABELS)) != 0) {
+                String line2 = buffer.getLineText(lineIndex + 1);
+                quote = false;
+                quote2 = false;
+                comment = false;
+                count = 0;
+                previous = ' ';
+                for (int i = 0; i < line2.length() && (foldLevel & 1) == 1; i++) {
+                    Character c = line2.charAt(i);
+                    if (comment) {
+                        break;
                     }
-                    break;
-                default: count = 0;
+                    switch (c) {
+                        case '"': if (!quote2) quote = !quote; break;
+                        case '\'': if (!quote) quote2 = !quote2; break;
+                        case '/': 
+                            if (!quote && !quote2) {
+                                if (previous == '/') comment = true;
+                                else if (previous == '*') {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel &= ~1; c = ' ';}
+                            }
+                            break;
+                        case '*': if (previous == '/' && !quote && !quote2) {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2; c = ' ';} break;
+                        case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel &= ~1; break;
+                        case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel &= ~1; break;
+                    }
+                    previous = c;
                 }
-                continue;
             }
-            switch (c) {
-            case '"': if (!quote2) quote = !quote; break;
-            case '\'': if (!quote) quote2 = !quote2; break;
-            case '/': 
-                if (!quote && !quote2) {
-                    if (previous == '/') comment = true;
-                    else if (previous == '*') {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2; c = ' ';}
-                }
-                break;
-            case '*': if (previous == '/' && !quote && !quote2) {if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2; c = ' ';} break;
-            case '{': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel+=2; break;
-            case '}': if (!quote && !quote2 && ((foldtokens & Assemblers.CF_TOKEN_BRACES) != 0)) foldLevel-=2; break;
-            }
-            previous = c;
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }

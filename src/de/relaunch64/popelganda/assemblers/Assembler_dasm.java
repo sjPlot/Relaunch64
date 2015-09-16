@@ -274,21 +274,41 @@ class Assembler_dasm implements Assembler
     @Override
     public int getFoldLevel(JEditBuffer buffer, int lineIndex, int foldtokens) {
         String line = buffer.getLineText(lineIndex);
-        int foldLevel = buffer.getFoldLevel(lineIndex);
+        int foldLevel = buffer.getFoldLevel(lineIndex) - 1;
 
         if ((foldtokens & Assemblers.CF_TOKEN_SECTIONS) != 0) {
-            boolean section1, section2;
             Matcher m = sectionPattern.matcher(line);
-            section1 = m.matches();
-            m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
-            section2 = m.matches();
-            if (section1 && !section2) foldLevel++;
-            if (!section1 && section2) foldLevel--;
+            if (m.matches()) foldLevel |= 1;
+            else if ((foldLevel & 1) == 1) {
+                m = sectionPattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) foldLevel &= ~1;
+            }
+        }
+        if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) {
+            Matcher m = directivePattern.matcher(line);
+            boolean check = (foldLevel & 1) == 1;
+            if (m.matches()) {
+                String directive = m.group("directive");
+                if (directive != null) {
+                    if (directive.toLowerCase().equals("subroutine")) {
+                        foldLevel |= 1;
+                        check = false;
+                    }
+                }
+            }
+            if (check) {
+                m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
+                if (m.matches()) {
+                    String directive = m.group("directive");
+                    if (directive != null) {
+                        if (directive.toLowerCase().equals("subroutine")) foldLevel &= ~1;
+                    }
+                }
+            }
         }
         
         if ((foldtokens & (Assemblers.CF_TOKEN_DIRECTIVES | Assemblers.CF_TOKEN_STRUCTS)) != 0) {
             Matcher m = directivePattern.matcher(line);
-            boolean subroutine1 = false, subroutine2 = false;
             if (m.matches()) {
                 String directive = m.group("directive");
                 if (directive != null) {
@@ -296,38 +316,55 @@ class Assembler_dasm implements Assembler
                         case "ifconst":
                         case "ifnconst":
                         case "if":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
                         case "mac":
                         case "rorg":
                         case "repeat":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel+=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
-                        case "subroutine": 
-                            subroutine1 = true; 
+                        case "subroutine":
+                            foldLevel |= 1;
                             break;
                         case "endif":
                         case "eif":
-                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                         case "endm":
                         case "rend":
                         case "repend":
-                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel-=2;
+                            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) - 2;
                             break;
                     }
                 }
             }
-            if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) {
+            if ((foldLevel & 1) == 1) {
                 m = directivePattern.matcher(buffer.getLineText(lineIndex + 1));
                 if (m.matches()) {
                     String directive = m.group("directive");
                     if (directive != null) {
-                        subroutine2 = (directive.toLowerCase().equals("subroutine"));
+                        switch (directive.toLowerCase()) {
+                            case "subroutine":
+                                foldLevel &= ~1;
+                                break;
+                            case "ifconst":
+                            case "ifnconst":
+                            case "if":
+                            case "endif":
+                            case "eif":
+                                if ((foldtokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) foldLevel &= ~1;
+                                break;
+                            case "mac":
+                            case "rorg":
+                            case "repeat":
+                            case "endm":
+                            case "rend":
+                            case "repend":
+                                if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel &= ~1;
+                                break;
+                        }
                     }
                 }
-                if (subroutine1 && !subroutine2) foldLevel++;
-                if (!subroutine1 && subroutine2) foldLevel--;
             }
         }
 
@@ -345,7 +382,7 @@ class Assembler_dasm implements Assembler
                             count++;
                             if (count == 3) {
                                 count = 0;
-                                foldLevel+=2;
+                                foldLevel += 2;
                             }
                             break;
                         case '}': 
@@ -353,7 +390,7 @@ class Assembler_dasm implements Assembler
                             count--;
                             if (count == -3) {
                                 count = 0;
-                                foldLevel-=2;
+                                foldLevel -= 2;
                             }
                             break;
                         default: count = 0;
@@ -367,6 +404,6 @@ class Assembler_dasm implements Assembler
                 }
             }
         }
-        return foldLevel;
+        return foldLevel + 1;
     }
 }
