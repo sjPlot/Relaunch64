@@ -319,7 +319,6 @@ class Assembler_kick implements Assembler
                 quote = false;
                 quote2 = false;
                 comment = false;
-                count = 0;
                 previous = ' ';
                 for (int i = 0; i < line2.length() && (foldLevel & 1) == 1; i++) {
                     Character c = line2.charAt(i);

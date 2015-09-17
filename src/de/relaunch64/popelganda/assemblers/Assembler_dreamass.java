@@ -350,7 +350,6 @@ class Assembler_dreamass implements Assembler
                 quote = false;
                 quote2 = false;
                 comment = false;
-                count = 0;
 
                 for (int i = 0; i < line2.length() && (foldLevel & 1) == 1; i++) {
                     if (comment) {
