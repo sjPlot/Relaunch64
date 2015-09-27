@@ -63,11 +63,12 @@ import org.jdom2.output.XMLOutputter;
  * @author Daniel Luedecke
  */
 public class Settings {
+
     /**
      * Amount of stored recent documents
      */
     private static final int recentDocCount = 10;
-    
+
     private static final String SETTING_RECENT_DOC = "recentDoc";
     private static final String SETTING_LAST_USED_PATH = "lastusedpath";
     private static final String SETTING_PREF_ASM = "preferredCompiler";
@@ -118,7 +119,7 @@ public class Settings {
     private final File filepath;
     public static final int FONTNAME = 1;
     public static final int FONTSIZE = 2;
-    
+
     public static final int SORT_ORDER = 0;
     public static final int SORT_CASE = 1;
     public static final int SORT_NONCASE = 2;
@@ -137,63 +138,62 @@ public class Settings {
         // now fill the initoal elements
         fillElements();
     }
+
     /**
      * Loads the settings file
      */
     public void loadSettings() {
         // if file exists, go on...
-        if (filepath!=null && filepath.exists()) {
+        if (filepath != null && filepath.exists()) {
             try {
                 SAXBuilder builder = new SAXBuilder();
                 settingsFile = builder.build(filepath);
-            }
-            catch (JDOMException | IOException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+            } catch (JDOMException | IOException ex) {
+                ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
             }
         }
         fillElements();
     }
+
     /**
      * Loads the settings file
      */
     public void saveSettings() {
         // if file exists, go on...
-        if (filepath!=null) {
+        if (filepath != null) {
             OutputStream dest = null;
             try {
                 XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
                 dest = new FileOutputStream(filepath);
                 out.output(settingsFile, dest);
-            }
-            catch (IOException ex) {
-                ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
-            }
-            finally {
-                if (dest!=null) {
+            } catch (IOException ex) {
+                ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
+            } finally {
+                if (dest != null) {
                     try {
                         dest.close();
-                    }
-                    catch (IOException ex) {
-                        ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                    } catch (IOException ex) {
+                        ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                     }
                 }
             }
         }
     }
+
     /**
-     * This method creates all the settings-child-elements, but only, if they don't
-     * already exist. We do this because when loading older settings-xml-document-structures,
-     * we might have new elements that would not be initialised. but now we can call this 
-     * method after loading the xml-document, and create elements and default values for all
-     * new elements. This ensures compatibility to older/news settings-file-versions.
+     * This method creates all the settings-child-elements, but only, if they don't already exist.
+     * We do this because when loading older settings-xml-document-structures, we might have new
+     * elements that would not be initialised. but now we can call this method after loading the
+     * xml-document, and create elements and default values for all new elements. This ensures
+     * compatibility to older/news settings-file-versions.
      */
     private void fillElements() {
         root = settingsFile.getRootElement();
-        for (int cnt=0; cnt<recentDocCount; cnt++) {
+        for (int cnt = 0; cnt < recentDocCount; cnt++) {
             // create field-identifier
-            String fi = SETTING_RECENT_DOC+String.valueOf(cnt+1);
+            String fi = SETTING_RECENT_DOC + String.valueOf(cnt + 1);
             // retrieve content
-            if (null==root.getChild(fi)) {
+            if (null == root.getChild(fi)) {
                 // create a filepath-element
                 Element el = new Element(fi);
                 el.setText("");
@@ -201,271 +201,271 @@ public class Settings {
                 root.addContent(el);
             }
         }
-        if (null==root.getChild(SETTING_REOPEN_FILES)) {
+        if (null == root.getChild(SETTING_REOPEN_FILES)) {
             // create element for font
             Element el = new Element(SETTING_REOPEN_FILES);
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_MAINFONT)) {
+        if (null == root.getChild(SETTING_MAINFONT)) {
             // create element for font
             Element el = new Element(SETTING_MAINFONT);
             root.addContent(el);
             el.setText(Font.MONOSPACED);
             el.setAttribute("size", "12");
         }
-        if (null==root.getChild(SETTING_LAST_USED_PATH)) {
+        if (null == root.getChild(SETTING_LAST_USED_PATH)) {
             // create element
             Element el = new Element(SETTING_LAST_USED_PATH);
             el.setText("");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_ANTIALIAS)) {
+        if (null == root.getChild(SETTING_ANTIALIAS)) {
             // create element
             Element el = new Element(SETTING_ANTIALIAS);
             el.setText(AntiAlias.SUBPIXEL);
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SIDEBAR_ISHIDDEN)) {
+        if (null == root.getChild(SETTING_SIDEBAR_ISHIDDEN)) {
             // create element
             Element el = new Element(SETTING_SIDEBAR_ISHIDDEN);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_USE_NOTABS)) {
+        if (null == root.getChild(SETTING_USE_NOTABS)) {
             // create element
             Element el = new Element(SETTING_USE_NOTABS);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_FINDBYTYPE)) {
+        if (null == root.getChild(SETTING_FINDBYTYPE)) {
             // create element
             Element el = new Element(SETTING_FINDBYTYPE);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_WAITFORPROCESS)) {
+        if (null == root.getChild(SETTING_WAITFORPROCESS)) {
             // create element
             Element el = new Element(SETTING_WAITFORPROCESS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CODE_FOLDING)) {
+        if (null == root.getChild(SETTING_CODE_FOLDING)) {
             // create element
             Element el = new Element(SETTING_CODE_FOLDING);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CF_BRACES)) {
+        if (null == root.getChild(SETTING_CF_BRACES)) {
             // create element
             Element el = new Element(SETTING_CF_BRACES);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CF_DIRECTIVES)) {
+        if (null == root.getChild(SETTING_CF_DIRECTIVES)) {
             // create element
             Element el = new Element(SETTING_CF_DIRECTIVES);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CF_LABELS)) {
+        if (null == root.getChild(SETTING_CF_LABELS)) {
             // create element
             Element el = new Element(SETTING_CF_LABELS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CF_MANUAL)) {
+        if (null == root.getChild(SETTING_CF_MANUAL)) {
             // create element
             Element el = new Element(SETTING_CF_MANUAL);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CF_STRUCTS)) {
+        if (null == root.getChild(SETTING_CF_STRUCTS)) {
             // create element
             Element el = new Element(SETTING_CF_STRUCTS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CF_SECTIONS)) {
+        if (null == root.getChild(SETTING_CF_SECTIONS)) {
             // create element
             Element el = new Element(SETTING_CF_SECTIONS);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SCALE_FONT)) {
+        if (null == root.getChild(SETTING_SCALE_FONT)) {
             // create element
             Element el = new Element(SETTING_SCALE_FONT);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_CHECKUPDATES)) {
+        if (null == root.getChild(SETTING_CHECKUPDATES)) {
             // create element
             Element el = new Element(SETTING_CHECKUPDATES);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_FINDFIELDFOCUS)) {
+        if (null == root.getChild(SETTING_FINDFIELDFOCUS)) {
             // create element
             Element el = new Element(SETTING_FINDFIELDFOCUS);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_ALT_ASM_MODE)) {
+        if (null == root.getChild(SETTING_ALT_ASM_MODE)) {
             // create element
             Element el = new Element(SETTING_ALT_ASM_MODE);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SHOW_LINEHIGLIGHT)) {
+        if (null == root.getChild(SETTING_SHOW_LINEHIGLIGHT)) {
             // create element
             Element el = new Element(SETTING_SHOW_LINEHIGLIGHT);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SHOW_BUFFERSIZE)) {
+        if (null == root.getChild(SETTING_SHOW_BUFFERSIZE)) {
             // create element
             Element el = new Element(SETTING_SHOW_BUFFERSIZE);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SHOW_EXT_IN_TAB)) {
+        if (null == root.getChild(SETTING_SHOW_EXT_IN_TAB)) {
             // create element
             Element el = new Element(SETTING_SHOW_EXT_IN_TAB);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SHOW_CLOSEBUTTON)) {
+        if (null == root.getChild(SETTING_SHOW_CLOSEBUTTON)) {
             // create element
             Element el = new Element(SETTING_SHOW_CLOSEBUTTON);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SHOW_TOOLBAR)) {
+        if (null == root.getChild(SETTING_SHOW_TOOLBAR)) {
             // create element
             Element el = new Element(SETTING_SHOW_TOOLBAR);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SHOW_TOOLBARTEXT)) {
+        if (null == root.getChild(SETTING_SHOW_TOOLBARTEXT)) {
             // create element
             Element el = new Element(SETTING_SHOW_TOOLBARTEXT);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SUGGEST_SORT_CASE)) {
+        if (null == root.getChild(SETTING_SUGGEST_SORT_CASE)) {
             // create element
             Element el = new Element(SETTING_SUGGEST_SORT_CASE);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_REOPEN_FILES_ON_STARTUP)) {
+        if (null == root.getChild(SETTING_REOPEN_FILES_ON_STARTUP)) {
             // create element
             Element el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SAVEONCOMPILE)) {
+        if (null == root.getChild(SETTING_SAVEONCOMPILE)) {
             // create element
             Element el = new Element(SETTING_SAVEONCOMPILE);
             el.setText("1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_NIMBUS_ON_OSX)) {
+        if (null == root.getChild(SETTING_NIMBUS_ON_OSX)) {
             // create element
             Element el = new Element(SETTING_NIMBUS_ON_OSX);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_USE_SCROLL_TABS)) {
+        if (null == root.getChild(SETTING_USE_SCROLL_TABS)) {
             // create element
             Element el = new Element(SETTING_USE_SCROLL_TABS);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_PREF_ASM)) {
+        if (null == root.getChild(SETTING_PREF_ASM)) {
             // create element
             Element el = new Element(SETTING_PREF_ASM);
             el.setText(String.valueOf(Assemblers.ASM_KICKASSEMBLER.getID()));
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SIDEBAR_SORT)) {
+        if (null == root.getChild(SETTING_SIDEBAR_SORT)) {
             // create element
             Element el = new Element(SETTING_SIDEBAR_SORT);
             el.setText(String.valueOf(SORT_CASE));
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_SYNTAX_SCHEME)) {
+        if (null == root.getChild(SETTING_SYNTAX_SCHEME)) {
             // create element
             Element el = new Element(SETTING_SYNTAX_SCHEME);
             el.setText(String.valueOf(ColorSchemes.SCHEME_DEFAULT));
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_LAST_SCRIPT)) {
+        if (null == root.getChild(SETTING_LAST_SCRIPT)) {
             // create element
             Element el = new Element(SETTING_LAST_SCRIPT);
             el.setText("0");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_LOGSPLITLAYOUT)) {
+        if (null == root.getChild(SETTING_LOGSPLITLAYOUT)) {
             // create a filepath-element
             Element el = new Element(SETTING_LOGSPLITLAYOUT);
             el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_TABWIDTH)) {
+        if (null == root.getChild(SETTING_TABWIDTH)) {
             // create a filepath-element
             Element el = new Element(SETTING_TABWIDTH);
             el.setText("4");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_LISTGOTOINDEX)) {
+        if (null == root.getChild(SETTING_LISTGOTOINDEX)) {
             // create a filepath-element
             Element el = new Element(SETTING_LISTGOTOINDEX);
             el.setText("-1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_DIVIDER_LOCATION)) {
+        if (null == root.getChild(SETTING_DIVIDER_LOCATION)) {
             // create a filepath-element
             Element el = new Element(SETTING_DIVIDER_LOCATION);
             el.setText("-1");
             // and add it to the document
             root.addContent(el);
         }
-        if (null==root.getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
+        if (null == root.getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
             // create a filepath-element
             Element el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
             el.setText(String.valueOf(Gutter.RIGHT));
@@ -473,19 +473,25 @@ public class Settings {
             root.addContent(el);
         }
     }
+
     /**
-     * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent document
-     * does not exist or is empty
-     * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
-     * @return the recent document (the file path) as string, or {@code null} if no such element or path exists.
+     * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent
+     * document does not exist or is empty
+     *
+     * @param nr the number of the requested recent document. use a value from 1 to
+     * {@link #recentDocCount recentDocCount}.
+     * @return the recent document (the file path) as string, or {@code null} if no such element or
+     * path exists.
      */
     public File getRecentDoc(int nr) {
         // checl for valid parameter
-        if (nr<0) return null;
+        if (nr < 0) {
+            return null;
+        }
         // retrieve element
-        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC + String.valueOf(nr));
         // if we have any valid document
-        if (el!=null) {
+        if (el != null) {
             // check whether its value is empty
             String retval = el.getText();
             // and if not, return in
@@ -496,34 +502,41 @@ public class Settings {
         // else return null
         return null;
     }
+
     public int findRecentDoc(File f) {
-        if (null==f) return -1;
-        for (int i=0; i<recentDocCount; i++) {
+        if (null == f) {
+            return -1;
+        }
+        for (int i = 0; i < recentDocCount; i++) {
             File rf = getRecentDoc(i);
-            if (rf!=null && f.equals(rf)) return i;
+            if (rf != null && f.equals(rf)) {
+                return i;
+            }
         }
         return -1;
     }
+
     /**
-     * 
+     *
      * @param nr
-     * @return 
+     * @return
      */
     public Assembler getRecentDocAssembler(int nr) {
         // checl for valid parameter
-        if (nr<0) return Assemblers.ASM_KICKASSEMBLER;
+        if (nr < 0) {
+            return Assemblers.ASM_KICKASSEMBLER;
+        }
         // retrieve element
-        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC + String.valueOf(nr));
         // if we have any valid document
-        if (el!=null) {
+        if (el != null) {
             // retrieve compiler attribute
             Attribute comp = el.getAttribute(REC_DOC_ASSEMBLER);
             // if we have any valid attribute
-            if (comp!=null) {
+            if (comp != null) {
                 try {
                     return Assemblers.byID(Integer.parseInt(comp.getValue()));
-                }
-                catch (NumberFormatException ex) {
+                } catch (NumberFormatException ex) {
                     return Assemblers.ASM_KICKASSEMBLER;
                 }
             }
@@ -531,26 +544,28 @@ public class Settings {
         // else return null
         return Assemblers.ASM_KICKASSEMBLER;
     }
+
     /**
-     * 
+     *
      * @param nr
-     * @return 
+     * @return
      */
     public int getRecentDocScript(int nr) {
         // checl for valid parameter
-        if (nr<0) return 0;
+        if (nr < 0) {
+            return 0;
+        }
         // retrieve element
-        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC + String.valueOf(nr));
         // if we have any valid document
-        if (el!=null) {
+        if (el != null) {
             // retrieve compiler attribute
             Attribute comp = el.getAttribute(REC_DOC_SCRIPT);
             // if we have any valid attribute
-            if (comp!=null) {
+            if (comp != null) {
                 try {
                     return Integer.parseInt(comp.getValue());
-                }
-                catch (NumberFormatException ex) {
+                } catch (NumberFormatException ex) {
                     return 0;
                 }
             }
@@ -558,45 +573,56 @@ public class Settings {
         // else return null
         return 0;
     }
+
     /**
-     * 
+     *
      * @param doc
-     * @return 
+     * @return
      */
     public int findRecentDoc(String doc) {
-        if (null==doc || doc.isEmpty()) return -1;
+        if (null == doc || doc.isEmpty()) {
+            return -1;
+        }
         // iterate all current recent documents
-        for (int cnt=1; cnt<=recentDocCount; cnt++) {
-            if (getRecentDoc(cnt).getPath().equals(doc)) return cnt;
+        for (int cnt = 1; cnt <= recentDocCount; cnt++) {
+            if (getRecentDoc(cnt).getPath().equals(doc)) {
+                return cnt;
+            }
         }
         return -1;
     }
+
     /**
-     * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent document
-     * does not exist or is empty
-     * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
-     * @return the recent document (the file path) as string, or {@code null} if no such element or path exists.
+     * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent
+     * document does not exist or is empty
+     *
+     * @param nr the number of the requested recent document. use a value from 1 to
+     * {@link #recentDocCount recentDocCount}.
+     * @return the recent document (the file path) as string, or {@code null} if no such element or
+     * path exists.
      */
     private String getRecentDocAsString(int nr) {
         // retrieve element
         File rd = getRecentDoc(nr);
         // check for valid value
-        if (rd!=null) {
+        if (rd != null) {
             return rd.toString();
         }
         // else return null
         return null;
     }
+
     /**
-     * This method adds the file from the filepath {@code fp} to the list of recent
-     * documents and rotates that list, if necessary.
+     * This method adds the file from the filepath {@code fp} to the list of recent documents and
+     * rotates that list, if necessary.
+     *
      * @param fp the filepath to the document that should be added to the list of recent documents
      * @param assembler
      * @param userScript
      */
     public void addToRecentDocs(String fp, Assembler assembler, int userScript) {
         // check for valid parameter
-        if (null==fp || fp.isEmpty()) {
+        if (null == fp || fp.isEmpty()) {
             return;
         }
         // check whether file exists
@@ -615,13 +641,13 @@ public class Settings {
         recasms.add(assembler);
         recscripts.add(userScript);
         // iterate all current recent documents
-        for (int cnt=1; cnt<=recentDocCount; cnt++) {
+        for (int cnt = 1; cnt <= recentDocCount; cnt++) {
             // retrieve recent document
             String recentDoc = getRecentDocAsString(cnt);
             Assembler asm = getRecentDocAssembler(cnt);
             int script = getRecentDocScript(cnt);
             // check whether the linked list already contains such a document
-            if (recentDoc!=null && !recentDoc.isEmpty()) {
+            if (recentDoc != null && !recentDoc.isEmpty()) {
                 // check for existing file
                 dummy = new File(recentDoc);
                 // if not, add it to the list
@@ -633,35 +659,37 @@ public class Settings {
             }
         }
         // iterate all current recent documents again
-        for (int cnt=1; cnt<=recentDocCount; cnt++) {
+        for (int cnt = 1; cnt <= recentDocCount; cnt++) {
             // check for valid bounds of linked list
-            if (recdocs.size()>=cnt) {
+            if (recdocs.size() >= cnt) {
                 // and set recent document
-                setRecentDoc(cnt, recdocs.get(cnt-1), recasms.get(cnt-1), recscripts.get(cnt-1));
-            }
-            // else fill remaining recent documents with empty strings
+                setRecentDoc(cnt, recdocs.get(cnt - 1), recasms.get(cnt - 1), recscripts.get(cnt - 1));
+            } // else fill remaining recent documents with empty strings
             else {
                 setRecentDoc(cnt, "", Assemblers.ASM_KICKASSEMBLER, -1);
             }
         }
     }
+
     /**
      * Add a new recent document to the position {@code nr} in the list of recent documents.
-     * @param nr the number of the requested recent document. use a value from 1 to {@link #recentDocCount recentDocCount}.
+     *
+     * @param nr the number of the requested recent document. use a value from 1 to
+     * {@link #recentDocCount recentDocCount}.
      * @param fp the filepath to the recently used document as string
      * @param assembler
      * @param userScript
      */
     public void setRecentDoc(int nr, String fp, Assembler assembler, int userScript) {
         // check for valid parameter
-        if (null==fp || -1==nr) {
+        if (null == fp || -1 == nr) {
             return;
         }
         // retrieve element
-        Element el = root.getChild(SETTING_RECENT_DOC+String.valueOf(nr));
+        Element el = root.getChild(SETTING_RECENT_DOC + String.valueOf(nr));
         // if element does not exist, create new...
-        if (null==el) {
-            el = new Element(SETTING_RECENT_DOC+String.valueOf(nr));
+        if (null == el) {
+            el = new Element(SETTING_RECENT_DOC + String.valueOf(nr));
             // and add it to the document
             root.addContent(el);
         }
@@ -670,477 +698,595 @@ public class Settings {
         el.setAttribute(REC_DOC_ASSEMBLER, String.valueOf(assembler.getID()));
         el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
     }
+
     public File getLastUsedPath() {
         Element el = root.getChild(SETTING_LAST_USED_PATH);
         // changed to Yoda condition
-        return new File((null==el) ? "" : el.getText());
+        return new File((null == el) ? "" : el.getText());
     }
+
     public void setLastUsedPath(File f) {
         Element el = root.getChild(SETTING_LAST_USED_PATH);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_LAST_USED_PATH);
             root.addContent(el);
         }
         el.setText(f.getAbsolutePath());
     }
+
     public String getAntiAlias() {
         Element el = root.getChild(SETTING_ANTIALIAS);
-        if (el!=null) return el.getText();
+        if (el != null) {
+            return el.getText();
+        }
         return AntiAlias.SUBPIXEL;
     }
+
     public void setAntiAlias(String aa) {
         Element el = root.getChild(SETTING_ANTIALIAS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_ANTIALIAS);
             root.addContent(el);
         }
         el.setText(aa);
     }
+
     public boolean getScaleFont() {
         Element el = root.getChild(SETTING_SCALE_FONT);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
+
     public void setScaleFont(boolean scale) {
         Element el = root.getChild(SETTING_SCALE_FONT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SCALE_FONT);
             root.addContent(el);
         }
-        el.setText(scale==Boolean.TRUE ? "1":"0");
+        el.setText(scale == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getSidebarIsHidden() {
         Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
+
     public void setSidebarIsHidden(boolean val) {
         Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SIDEBAR_ISHIDDEN);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getUseNoTabs() {
         Element el = root.getChild(SETTING_USE_NOTABS);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
+
     public void setUseNoTabs(boolean val) {
         Element el = root.getChild(SETTING_USE_NOTABS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_USE_NOTABS);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getFindByType() {
         Element el = root.getChild(SETTING_FINDBYTYPE);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
+
     public void setFindByType(boolean val) {
         Element el = root.getChild(SETTING_FINDBYTYPE);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_FINDBYTYPE);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getWaitForProcess() {
         Element el = root.getChild(SETTING_WAITFORPROCESS);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
+
     public void setWaitForProcess(boolean val) {
         Element el = root.getChild(SETTING_WAITFORPROCESS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_WAITFORPROCESS);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getCodeFolding() {
         Element el = root.getChild(SETTING_CODE_FOLDING);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
+
     public void setCodeFolding(boolean val) {
         Element el = root.getChild(SETTING_CODE_FOLDING);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CODE_FOLDING);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public int getCodeFoldingTokens() {
         int foldtokens = 0;
         Element el = root.getChild(SETTING_CF_MANUAL);
-        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_MANUAL : 0);
+        if (el != null) {
+            foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_MANUAL : 0);
+        }
         el = root.getChild(SETTING_CF_BRACES);
-        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_BRACES : 0);
+        if (el != null) {
+            foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_BRACES : 0);
+        }
         el = root.getChild(SETTING_CF_LABELS);
-        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_LABELS : 0);
+        if (el != null) {
+            foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_LABELS : 0);
+        }
         el = root.getChild(SETTING_CF_DIRECTIVES);
-        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_DIRECTIVES : 0);
+        if (el != null) {
+            foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_DIRECTIVES : 0);
+        }
         el = root.getChild(SETTING_CF_STRUCTS);
-        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_STRUCTS : 0);
+        if (el != null) {
+            foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_STRUCTS : 0);
+        }
         el = root.getChild(SETTING_CF_SECTIONS);
-        if (el!=null) foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_SECTIONS : 0);
+        if (el != null) {
+            foldtokens = foldtokens + (el.getText().equals("1") ? Assemblers.CF_TOKEN_SECTIONS : 0);
+        }
         return foldtokens;
     }
+
     public void setCodeFoldingTokens(int tokens) {
         Element el = root.getChild(SETTING_CF_MANUAL);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CF_MANUAL);
             root.addContent(el);
         }
-        el.setText(((tokens & Assemblers.CF_TOKEN_MANUAL)!=0) ? "1":"0");
+        el.setText(((tokens & Assemblers.CF_TOKEN_MANUAL) != 0) ? "1" : "0");
         el = root.getChild(SETTING_CF_BRACES);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CF_BRACES);
             root.addContent(el);
         }
-        el.setText(((tokens & Assemblers.CF_TOKEN_BRACES)!=0) ? "1":"0");
+        el.setText(((tokens & Assemblers.CF_TOKEN_BRACES) != 0) ? "1" : "0");
         el = root.getChild(SETTING_CF_LABELS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CF_LABELS);
             root.addContent(el);
         }
-        el.setText(((tokens & Assemblers.CF_TOKEN_LABELS)!=0) ? "1":"0");
+        el.setText(((tokens & Assemblers.CF_TOKEN_LABELS) != 0) ? "1" : "0");
         el = root.getChild(SETTING_CF_DIRECTIVES);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CF_DIRECTIVES);
             root.addContent(el);
         }
-        el.setText(((tokens & Assemblers.CF_TOKEN_DIRECTIVES)!=0) ? "1":"0");
+        el.setText(((tokens & Assemblers.CF_TOKEN_DIRECTIVES) != 0) ? "1" : "0");
         el = root.getChild(SETTING_CF_STRUCTS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CF_STRUCTS);
             root.addContent(el);
         }
-        el.setText(((tokens & Assemblers.CF_TOKEN_STRUCTS)!=0) ? "1":"0");
+        el.setText(((tokens & Assemblers.CF_TOKEN_STRUCTS) != 0) ? "1" : "0");
         el = root.getChild(SETTING_CF_SECTIONS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CF_SECTIONS);
             root.addContent(el);
         }
-        el.setText(((tokens & Assemblers.CF_TOKEN_SECTIONS)!=0) ? "1":"0");
+        el.setText(((tokens & Assemblers.CF_TOKEN_SECTIONS) != 0) ? "1" : "0");
     }
+
     public Assembler getPreferredAssembler() {
         Element el = root.getChild(SETTING_PREF_ASM);
         try {
-            if (el!=null) return Assemblers.byID(Integer.parseInt(el.getText()));
-        }
-        catch (NumberFormatException ex) {
+            if (el != null) {
+                return Assemblers.byID(Integer.parseInt(el.getText()));
+            }
+        } catch (NumberFormatException ex) {
         }
         return Assemblers.ASM_KICKASSEMBLER;
     }
+
     public void setPreferredAssembler(Assembler assembler) {
         Element el = root.getChild(SETTING_PREF_ASM);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_PREF_ASM);
             root.addContent(el);
         }
         el.setText(String.valueOf(assembler.getID()));
     }
+
     public int getSidebarSort() {
         Element el = root.getChild(SETTING_SIDEBAR_SORT);
         try {
-            if (el!=null) return Integer.parseInt(el.getText());
-        }
-        catch (NumberFormatException ex) {
+            if (el != null) {
+                return Integer.parseInt(el.getText());
+            }
+        } catch (NumberFormatException ex) {
         }
         return SORT_CASE;
     }
+
     public void setSidebarSort(int sortstyle) {
         Element el = root.getChild(SETTING_SIDEBAR_SORT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SIDEBAR_SORT);
             root.addContent(el);
         }
         el.setText(String.valueOf(sortstyle));
     }
+
     public int getColorScheme() {
         Element el = root.getChild(SETTING_SYNTAX_SCHEME);
         try {
-            if (el!=null) return Integer.parseInt(el.getText());
-        }
-        catch (NumberFormatException ex) {
+            if (el != null) {
+                return Integer.parseInt(el.getText());
+            }
+        } catch (NumberFormatException ex) {
         }
         return ColorSchemes.SCHEME_DEFAULT;
     }
+
     public void setColorScheme(int scheme) {
         Element el = root.getChild(SETTING_SYNTAX_SCHEME);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SYNTAX_SCHEME);
             root.addContent(el);
         }
         el.setText(String.valueOf(scheme));
     }
+
     public boolean getCheckForUpdates() {
         Element el = root.getChild(SETTING_CHECKUPDATES);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
-    public void setCheckForUpdates(boolean val)  {
+
+    public void setCheckForUpdates(boolean val) {
         Element el = root.getChild(SETTING_CHECKUPDATES);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_CHECKUPDATES);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getFindFieldFocus() {
         Element el = root.getChild(SETTING_FINDFIELDFOCUS);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
-    public void setFindFieldFocus(boolean val)  {
+
+    public void setFindFieldFocus(boolean val) {
         Element el = root.getChild(SETTING_FINDFIELDFOCUS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_FINDFIELDFOCUS);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getAlternativeAssemblyMode() {
         Element el = root.getChild(SETTING_ALT_ASM_MODE);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setAlternativeAssemblyMode(boolean val)  {
+
+    public void setAlternativeAssemblyMode(boolean val) {
         Element el = root.getChild(SETTING_ALT_ASM_MODE);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_ALT_ASM_MODE);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getShowLineHightlight() {
         Element el = root.getChild(SETTING_SHOW_LINEHIGLIGHT);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setShowLineHightlight(boolean val)  {
+
+    public void setShowLineHightlight(boolean val) {
         Element el = root.getChild(SETTING_SHOW_LINEHIGLIGHT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SHOW_LINEHIGLIGHT);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getShowBufferSize() {
         Element el = root.getChild(SETTING_SHOW_BUFFERSIZE);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setShowBufferSize(boolean val)  {
+
+    public void setShowBufferSize(boolean val) {
         Element el = root.getChild(SETTING_SHOW_BUFFERSIZE);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SHOW_BUFFERSIZE);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getShowExtensionInTab() {
         Element el = root.getChild(SETTING_SHOW_EXT_IN_TAB);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setShowExtensionInTab(boolean val)  {
+
+    public void setShowExtensionInTab(boolean val) {
         Element el = root.getChild(SETTING_SHOW_EXT_IN_TAB);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SHOW_EXT_IN_TAB);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getShowCloseButton() {
         Element el = root.getChild(SETTING_SHOW_CLOSEBUTTON);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setShowCloseButton(boolean val)  {
+
+    public void setShowCloseButton(boolean val) {
         Element el = root.getChild(SETTING_SHOW_CLOSEBUTTON);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SHOW_CLOSEBUTTON);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getShowToolbar() {
         Element el = root.getChild(SETTING_SHOW_TOOLBAR);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setShowToolbar(boolean val)  {
+
+    public void setShowToolbar(boolean val) {
         Element el = root.getChild(SETTING_SHOW_TOOLBAR);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SHOW_TOOLBAR);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getShowToolbarText() {
         Element el = root.getChild(SETTING_SHOW_TOOLBARTEXT);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setShowToolbarText(boolean val)  {
+
+    public void setShowToolbarText(boolean val) {
         Element el = root.getChild(SETTING_SHOW_TOOLBARTEXT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SHOW_TOOLBARTEXT);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getSuggestionSortIgnoresCase() {
         Element el = root.getChild(SETTING_SUGGEST_SORT_CASE);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setSuggestionSortIgnoresCase(boolean val)  {
+
+    public void setSuggestionSortIgnoresCase(boolean val) {
         Element el = root.getChild(SETTING_SUGGEST_SORT_CASE);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SUGGEST_SORT_CASE);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getSaveOnCompile() {
         Element el = root.getChild(SETTING_SAVEONCOMPILE);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
-    public void setSaveOnCompile(boolean val)  {
+
+    public void setSaveOnCompile(boolean val) {
         Element el = root.getChild(SETTING_SAVEONCOMPILE);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_SAVEONCOMPILE);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getNimbusOnOSX() {
         Element el = root.getChild(SETTING_NIMBUS_ON_OSX);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setNimbusOnOSX(boolean val)  {
+
+    public void setNimbusOnOSX(boolean val) {
         Element el = root.getChild(SETTING_NIMBUS_ON_OSX);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_NIMBUS_ON_OSX);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getUseScrollTabs() {
         Element el = root.getChild(SETTING_USE_SCROLL_TABS);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return false;
     }
-    public void setUseScrollTabs(boolean val)  {
+
+    public void setUseScrollTabs(boolean val) {
         Element el = root.getChild(SETTING_USE_SCROLL_TABS);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_USE_SCROLL_TABS);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public boolean getReopenOnStartup() {
         Element el = root.getChild(SETTING_REOPEN_FILES_ON_STARTUP);
-        if (el!=null) return el.getText().equals("1");
+        if (el != null) {
+            return el.getText().equals("1");
+        }
         return true;
     }
-    public void setReopenOnStartup(boolean val)  {
+
+    public void setReopenOnStartup(boolean val) {
         Element el = root.getChild(SETTING_REOPEN_FILES_ON_STARTUP);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
             root.addContent(el);
         }
-        el.setText(val==Boolean.TRUE ? "1":"0");
+        el.setText(val == Boolean.TRUE ? "1" : "0");
     }
+
     public int getTabWidth() {
         Element el = root.getChild(SETTING_TABWIDTH);
-        if (el!=null) {
+        if (el != null) {
             try {
                 return Integer.parseInt(el.getText());
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 return 4;
             }
         }
         return 4;
     }
+
     public void setTabWidth(int tabwidth) {
         Element el = root.getChild(SETTING_TABWIDTH);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_TABWIDTH);
             root.addContent(el);
         }
         el.setText(String.valueOf(tabwidth));
     }
+
     public int getListGotoIndex() {
         Element el = root.getChild(SETTING_LISTGOTOINDEX);
-        if (el!=null) {
+        if (el != null) {
             try {
                 return Integer.parseInt(el.getText());
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 return -1;
             }
         }
         return -1;
     }
+
     public void setListGotoIndex(int tabwidth) {
         Element el = root.getChild(SETTING_LISTGOTOINDEX);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_LISTGOTOINDEX);
             root.addContent(el);
         }
         el.setText(String.valueOf(tabwidth));
     }
+
     public int getDividerLocation() {
         Element el = root.getChild(SETTING_DIVIDER_LOCATION);
-        if (el!=null) {
+        if (el != null) {
             try {
                 return Integer.parseInt(el.getText());
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 return -1;
             }
         }
         return 4;
     }
+
     public void setDividerLocation(int pos) {
         Element el = root.getChild(SETTING_DIVIDER_LOCATION);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_DIVIDER_LOCATION);
             root.addContent(el);
         }
         el.setText(String.valueOf(pos));
     }
+
     public int getLastUserScript() {
         Element el = root.getChild(SETTING_LAST_SCRIPT);
         try {
-            if (el!=null) return Integer.parseInt(el.getText());
-        }
-        catch (NumberFormatException ex) {
+            if (el != null) {
+                return Integer.parseInt(el.getText());
+            }
+        } catch (NumberFormatException ex) {
         }
         return 0;
     }
+
     public void setLastUserScript(int index) {
         Element el = root.getChild(SETTING_LAST_SCRIPT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_LAST_SCRIPT);
             root.addContent(el);
         }
         el.setText(String.valueOf(index));
     }
+
     /**
      * Retrieves settings for the mainfont (the font used for the main-entry-textfield).
-     * @param what (indicates, which font-characteristic we want to have. use following constants:<br>
+     *
+     * @param what (indicates, which font-characteristic we want to have. use following
+     * constants:<br>
      * - FONTNAME<br>
      * - FONTSIZE<br>
      * - FONTCOLOR<br>
@@ -1151,16 +1297,22 @@ public class Settings {
     public String getMainFont(int what) {
         Element el = root.getChild(SETTING_MAINFONT);
         String retval = "";
-        if (el!=null) {
+        if (el != null) {
             switch (what) {
-                case FONTNAME: retval = el.getText(); break;
-                case FONTSIZE: retval = el.getAttributeValue("size"); break;
+                case FONTNAME:
+                    retval = el.getText();
+                    break;
+                case FONTSIZE:
+                    retval = el.getAttributeValue("size");
+                    break;
             }
         }
         return retval;
     }
+
     /**
      * Retrieves the main font as font-object.
+     *
      * @return the main-font as {@code Font} variable.
      */
     public Font getMainFont() {
@@ -1168,63 +1320,69 @@ public class Settings {
         int fsize = Integer.parseInt(el.getAttributeValue("size"));
         return new Font(el.getText(), Font.PLAIN, fsize);
     }
+
     public void setMainFont(Font f) {
         Element el = root.getChild(SETTING_MAINFONT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_MAINFONT);
             root.addContent(el);
         }
         el.setText(f.getName());
         el.setAttribute("size", String.valueOf(f.getSize()));
     }
+
     public int getLogSplitLayout() {
         // get attribute which stores last used desktop number
         Element el = root.getChild(SETTING_LOGSPLITLAYOUT);
         // check for valid value
-        if (el!=null) {
+        if (el != null) {
             try {
                 // retrieve value
                 return Integer.parseInt(el.getText());
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return JSplitPane.HORIZONTAL_SPLIT;
             }
         }
         return JSplitPane.HORIZONTAL_SPLIT;
     }
+
     public void setLogSplitLayout(int val) {
         Element el = root.getChild(SETTING_LOGSPLITLAYOUT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_LOGSPLITLAYOUT);
             root.addContent(el);
         }
         el.setText(String.valueOf(val));
     }
+
     public int getLineNumerAlignment() {
         Element el = root.getChild(SETTING_LINE_NUMBER_ALIGNMENT);
-        if (el!=null) {
+        if (el != null) {
             try {
                 return Integer.parseInt(el.getText());
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 return Gutter.RIGHT;
             }
         }
         return Gutter.RIGHT;
     }
+
     public void setLineNumerAlignment(int align) {
         Element el = root.getChild(SETTING_LINE_NUMBER_ALIGNMENT);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
             root.addContent(el);
         }
         el.setText(String.valueOf(align));
     }
+
     public ArrayList<Object[]> getReopenFiles() {
         // get reopen files
         Element el = root.getChild(SETTING_REOPEN_FILES);
         // check if we have any
-        if (null==el) return null;
+        if (null == el) {
+            return null;
+        }
         // create return value
         ArrayList<Object[]> rofiles = new ArrayList<>();
         // retrieve all children, each element representing one
@@ -1244,35 +1402,39 @@ public class Settings {
                 int script = -1;
                 // check if we have compiler value
                 try {
-                    if (attr_c!=null) assembler = Assemblers.byID(Integer.parseInt(attr_c));
-                    if (attr_s!=null) script = Integer.parseInt(attr_s);
-                }
-                catch (NumberFormatException ex) {
+                    if (attr_c != null) {
+                        assembler = Assemblers.byID(Integer.parseInt(attr_c));
+                    }
+                    if (attr_s != null) {
+                        script = Integer.parseInt(attr_s);
+                    }
+                } catch (NumberFormatException ex) {
                     assembler = Assemblers.ASM_KICKASSEMBLER;
                     script = -1;
                 }
                 // add compiler and filepath to return value
-                rofiles.add(new Object[]{f,assembler,script});
+                rofiles.add(new Object[]{f, assembler, script});
             }
         }
         return rofiles;
     }
+
     public void setReopenFiles(EditorPanes ep) {
         Element el = root.getChild(SETTING_REOPEN_FILES);
-        if (null==el) {
+        if (null == el) {
             el = new Element(SETTING_REOPEN_FILES);
             root.addContent(el);
         }
         // remove existing content
         el.removeContent();
         // iterate all editorpanes and store file pathes
-        for (int i=0; i<ep.getCount(); i++) {
+        for (int i = 0; i < ep.getCount(); i++) {
             // get file path and compiler settings of each file
             File fp = ep.getFilePath(i);
             int c = ep.getAssembler(i).getID();
             int s = ep.getScript(i);
             // save if exists
-            if (fp!=null && fp.exists()) {
+            if (fp != null && fp.exists()) {
                 // create new child element
                 Element child = new Element(SETTING_REOPEN_FILES_CHILD);
                 // add path and compiler

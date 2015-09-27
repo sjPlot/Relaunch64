@@ -40,35 +40,45 @@ import java.util.Collections;
  * @author Daniel Luedecke
  */
 public class FindTerms {
+
     private final ArrayList<String> findTerms = new ArrayList<>();
     private static final int MAX_LEN = 15;
     private String currentFindTerm = null;
-    
+
     public FindTerms() {
         clear();
     }
+
     public final void clear() {
         findTerms.clear();
         currentFindTerm = null;
     }
+
     public void addFindTerm(String ft, boolean ww, boolean mc) {
         if (!findTerms.contains(ft)) {
-            if (findTerms.size()>=MAX_LEN) findTerms.remove(0);
+            if (findTerms.size() >= MAX_LEN) {
+                findTerms.remove(0);
+            }
             findTerms.add(ft);
             Collections.sort(findTerms);
             currentFindTerm = ft;
         }
     }
+
     public String getCurrentFindTerm() {
         return currentFindTerm;
     }
+
     public ArrayList<String> getFindTerms() {
         return findTerms;
     }
+
     public int getFindTermIndex(String ft) {
-        if (findTerms!=null && !findTerms.isEmpty()) {
-            for (int i=0; i<findTerms.size(); i++) {
-                if (findTerms.get(i).equals(ft)) return i;
+        if (findTerms != null && !findTerms.isEmpty()) {
+            for (int i = 0; i < findTerms.size(); i++) {
+                if (findTerms.get(i).equals(ft)) {
+                    return i;
+                }
             }
         }
         return -1;

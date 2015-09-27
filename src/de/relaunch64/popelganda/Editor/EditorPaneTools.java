@@ -42,18 +42,19 @@ import org.gjt.sp.jedit.textarea.Selection;
  * @author Daniel Luedecke
  */
 public class EditorPaneTools {
+
     /**
      * (Un-)comments currently selected text.
-     * 
-     * @param ep a reference to the current editor pane
-     * (instance of {@link de.relaunch64.popelganda.Editor.RL64TextArea RL64TextArea}).
+     *
+     * @param ep a reference to the current editor pane (instance of
+     * {@link de.relaunch64.popelganda.Editor.RL64TextArea RL64TextArea}).
      * @param commentString the comment string from the current assembler.
      */
     public static void commentLine(RL64TextArea ep, String commentString) {
         // check for text selection
         String selString = ep.getSelectedText();
         // if we have selection, add tab to each selected line
-        if (selString!=null && !selString.isEmpty()) {
+        if (selString != null && !selString.isEmpty()) {
             // get start offset of selection
             int selstart = ep.getSelection(0).getStart();
             // retrieve lines
@@ -72,36 +73,40 @@ public class EditorPaneTools {
                 if (l.trim().startsWith(commentString)) {
                     // remove comment char
                     l = l.replaceFirst(Pattern.quote(commentString), "");
-                    chardiff = chardiff-commentString.length();
-                }
-                else {
+                    chardiff = chardiff - commentString.length();
+                } else {
                     // else add comment string
-                    l = commentString+l;
-                    chardiff = chardiff+commentString.length();
+                    l = commentString + l;
+                    chardiff = chardiff + commentString.length();
                 }
                 // append fixed line
                 sb.append(l);
                 // append new line, if needed
-                if (countNewLines>0) sb.append("\n");
+                if (countNewLines > 0) {
+                    sb.append("\n");
+                }
                 countNewLines--;
             }
             // insert string
             ep.replaceSelection(sb.toString());
             // reselect text
-            ep.setSelection(new Selection.Range(selstart, selstart+sb.length()));
+            ep.setSelection(new Selection.Range(selstart, selstart + sb.length()));
             ep.requestFocusInWindow();
         }
     }
+
     /**
-     * 
+     *
      * @param direction
      * @param currentLine
      * @param ln
-     * @return 
+     * @return
      */
     public static int findJumpToken(int direction, int currentLine, ArrayList<Integer> ln) {
         // check for valid values
-        if (null==ln || ln.isEmpty()) return 0;
+        if (null == ln || ln.isEmpty()) {
+            return 0;
+        }
         // check if we found anything
         switch (direction) {
             case EditorPanes.DIRECTION_NEXT:
@@ -115,14 +120,14 @@ public class EditorPaneTools {
                 return ln.get(0);
             case EditorPanes.DIRECTION_PREV:
                 // iterate all line numbers
-                for (int i=ln.size()-1; i>=0; i--) {
+                for (int i = ln.size() - 1; i >= 0; i--) {
                     // if we found a line number smaller than current
                     // line, we found the previous label from caret position
-                    if (ln.get(i)<currentLine) {
+                    if (ln.get(i) < currentLine) {
                         return ln.get(i);
                     }
                 }
-                return ln.get(ln.size()-1);
+                return ln.get(ln.size() - 1);
             default:
                 return 0;
         }

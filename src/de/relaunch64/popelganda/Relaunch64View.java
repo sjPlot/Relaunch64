@@ -128,6 +128,7 @@ import org.jdesktop.application.TaskService;
  * The application's main frame.
  */
 public class Relaunch64View extends FrameView implements WindowListener, DropTargetListener {
+
     private final EditorPanes editorPanes;
     private final ErrorHandler errorHandler;
     private final FindReplace findReplace;
@@ -143,8 +144,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private final FindTerms findTerms;
     private final CustomScripts customScripts;
     private final org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class)
-                                                                                                   .getContext().getResourceMap(Relaunch64View.class);
-    
+            .getContext().getResourceMap(Relaunch64View.class);
+
     public Relaunch64View(SingleFrameApplication app, Settings set, String[] params) {
         super(app);
         ConstantsR64.r64logger.addHandler(new TextAreaHandler());
@@ -162,7 +163,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init default laf
         setDefaultLookAndFeel();
         // check for os x
-        if (ConstantsR64.IS_OSX) setupMacOSXApplicationListener();
+        if (ConstantsR64.IS_OSX) {
+            setupMacOSXApplicationListener();
+        }
         // init swing components
         initComponents();
         // remove borders on OS X
@@ -171,8 +174,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jScrollPaneErrorLog.setBorder(new javax.swing.border.MatteBorder(1, 0, 0, 0, Color.lightGray));
             jScrollPaneSidebar.setBorder(new javax.swing.border.MatteBorder(1, 0, 1, 0, Color.darkGray));
             jTextFieldGoto.putClientProperty("JTextField.variant", "search");
-            jSplitPane1.setBackground(new Color(128,128,128));
-            jSplitPaneEditorList.setBackground(new Color(128,128,128));
+            jSplitPane1.setBackground(new Color(128, 128, 128));
+            jSplitPaneEditorList.setBackground(new Color(128, 128, 128));
             jSplitPane1.setDividerSize(2);
             jSplitPaneEditorList.setDividerSize(2);
             jSplitPane1.setOneTouchExpandable(false);
@@ -185,15 +188,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         javax.swing.UIDefaults uid = UIManager.getLookAndFeelDefaults();
         Object defaultFont = uid.get("defaultFont");
         // check if LaF supports default font
-        if (defaultFont!=null) {
-            jTextAreaCompilerOutput.setFont(new Font(Font.MONOSPACED, Font.PLAIN, ((Font)defaultFont).getSize()));
+        if (defaultFont != null) {
+            jTextAreaCompilerOutput.setFont(new Font(Font.MONOSPACED, Font.PLAIN, ((Font) defaultFont).getSize()));
         }
         // init combo boxes
         initComboBoxes();
         // init listeners and accelerator table
         initListeners();
         // set sys info
-        jTextAreaLog.setText(Tools.getSystemInformation()+System.lineSeparator());
+        jTextAreaLog.setText(Tools.getSystemInformation() + System.lineSeparator());
         // set application icon
         getFrame().setIconImage(ConstantsR64.r64icon.getImage());
         getFrame().setTitle(ConstantsR64.APPLICATION_TITLE);
@@ -202,25 +205,30 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // init editorpane-dataclass
         editorPanes = new EditorPanes(jTabbedPane1, jComboBoxAssemblers, jComboBoxRunScripts, jLabelBufferSize, this, settings);
         // check if we have any parmater
-        if (params!=null && params.length>0) {
+        if (params != null && params.length > 0) {
             for (String p : params) {
                 openFile(new File(p));
             }
         }
         // restore last opened files
-        if (settings.getReopenOnStartup()) reopenFiles();
+        if (settings.getReopenOnStartup()) {
+            reopenFiles();
+        }
         // open empty if none present
-        if (jTabbedPane1.getTabCount()<1) addNewTab();
+        if (jTabbedPane1.getTabCount() < 1) {
+            addNewTab();
+        }
         // finally, check for updates
         checkForUpdates();
     }
+
     /**
-     * This is an application listener that is initialised when running the program
-     * on mac os x. by using this appListener, we can use the typical apple-menu bar
-     * which provides own about, preferences and quit-menu-items.
+     * This is an application listener that is initialised when running the program on mac os x. by
+     * using this appListener, we can use the typical apple-menu bar which provides own about,
+     * preferences and quit-menu-items.
      */
     private void setupMacOSXApplicationListener() {
-    // <editor-fold defaultstate="collapsed" desc="Application-listener initiating the stuff for the Apple-menu.">
+        // <editor-fold defaultstate="collapsed" desc="Application-listener initiating the stuff for the Apple-menu.">
         try {
             // get mac os-x application class
             Class appc = Class.forName("com.apple.eawt.Application");
@@ -228,9 +236,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             Object app = appc.newInstance();
             // get the application-listener class. here we can set our action to the apple menu
             Class lc = Class.forName("com.apple.eawt.ApplicationListener");
-            Object listener = Proxy.newProxyInstance(lc.getClassLoader(), new Class[] { lc }, new InvocationHandler() {
+            Object listener = Proxy.newProxyInstance(lc.getClassLoader(), new Class[]{lc}, new InvocationHandler() {
                 @Override
-                public Object invoke(Object proxy,Method method,Object[] args) {
+                public Object invoke(Object proxy, Method method, Object[] args) {
                     if (method.getName().equals("handleQuit")) {
                         // call the general exit-handler from the desktop-application-api
                         // here we do all the stuff we need when exiting the application
@@ -248,14 +256,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             // if we leave this out, a second, system-own aboutbox would be displayed
                             setHandled(args[0], Boolean.TRUE);
                         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-                            ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                            ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                         }
                     }
                     return null;
                 }
+
                 private void setHandled(Object event, Boolean val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-                    Method handleMethod = event.getClass().getMethod("setHandled", new Class[] {boolean.class});
-                    handleMethod.invoke(event, new Object[] {val});
+                    Method handleMethod = event.getClass().getMethod("setHandled", new Class[]{boolean.class});
+                    handleMethod.invoke(event, new Object[]{val});
                 }
             });
             try {
@@ -264,17 +273,17 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 m.invoke(app, listener);
                 // register that we want that Preferences menu. by default, only the about box is shown
                 // but no pref-menu-item
-                Method enablePreferenceMethod = appc.getMethod("setEnabledPreferencesMenu", new Class[] {boolean.class});
-                enablePreferenceMethod.invoke(app, new Object[] {Boolean.TRUE});
+                Method enablePreferenceMethod = appc.getMethod("setEnabledPreferencesMenu", new Class[]{boolean.class});
+                enablePreferenceMethod.invoke(app, new Object[]{Boolean.TRUE});
             } catch (NoSuchMethodException | SecurityException | InvocationTargetException ex) {
-                ConstantsR64.r64logger.log(Level.SEVERE,ex.getLocalizedMessage());
+                ConstantsR64.r64logger.log(Level.SEVERE, ex.getLocalizedMessage());
             }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            ConstantsR64.r64logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
-        catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            ConstantsR64.r64logger.log(Level.SEVERE,e.getLocalizedMessage());
-        }
-    // </editor-fold>
+        // </editor-fold>
     }
+
     /**
      * Init the comboboxes with default values.
      */
@@ -293,10 +302,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             jListGoto.setModel(listGotoModel);
             jListGoto.getSelectionModel().addListSelectionListener(new SelectionListener(jListGoto));
             jListGoto.setCellRenderer(new RL64ListCellRenderer(settings));
-        }
-        catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
         }
     }
+
     /**
      * Adds available scripts to script-combobox.
      */
@@ -306,13 +315,16 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // retrieve all script names
         String[] scriptNames = customScripts.getScriptNames();
         // check if we have any
-        if (scriptNames!=null && scriptNames.length>0) {
+        if (scriptNames != null && scriptNames.length > 0) {
             // sort
             Arrays.sort(scriptNames);
             // add item to cb
-            for (String sn : scriptNames) jComboBoxRunScripts.addItem(sn);
+            for (String sn : scriptNames) {
+                jComboBoxRunScripts.addItem(sn);
+            }
         }
     }
+
     /**
      * Inits all relevant listeners.
      */
@@ -345,17 +357,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void componentResized(ComponentEvent e) {
                 if (resizeTimer.isRunning()) {
                     resizeTimer.restart();
-                }
-                else {
+                } else {
                     resizeTimer.start();
                 }
             }
+
             @Override
             public void componentMoved(ComponentEvent e) {
             }
+
             @Override
             public void componentShown(ComponentEvent e) {
             }
+
             @Override
             public void componentHidden(ComponentEvent e) {
             }
@@ -395,41 +409,46 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         });
         jTextFieldGoto.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 // if a navigation-key (arrows, page-down/up, home etc.) is pressed,
                 // we assume a new item-selection, so behave like on a mouse-click and
                 // filter the links
                 int selected = -1;
-                if (KeyEvent.VK_UP==evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex()-1;
-                    if (selected<0) selected = listGotoModel.getSize()-1;
-                }
-                else if (KeyEvent.VK_DOWN==evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex()+1;
-                    if (selected>=listGotoModel.getSize()) selected = 0;
-                }
-                else if (KeyEvent.VK_HOME==evt.getKeyCode()) {
+                if (KeyEvent.VK_UP == evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex() - 1;
+                    if (selected < 0) {
+                        selected = listGotoModel.getSize() - 1;
+                    }
+                } else if (KeyEvent.VK_DOWN == evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex() + 1;
+                    if (selected >= listGotoModel.getSize()) {
+                        selected = 0;
+                    }
+                } else if (KeyEvent.VK_HOME == evt.getKeyCode()) {
                     selected = 0;
-                }
-                else if (KeyEvent.VK_END==evt.getKeyCode()) {
-                    selected = listGotoModel.getSize()-1;
-                }
-                else if (KeyEvent.VK_PAGE_DOWN==evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex() + (jListGoto.getLastVisibleIndex()-jListGoto.getFirstVisibleIndex());
-                    if (selected>=listGotoModel.getSize()) selected = listGotoModel.getSize()-1;
-                }
-                else if (KeyEvent.VK_PAGE_UP==evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex() - (jListGoto.getLastVisibleIndex()-jListGoto.getFirstVisibleIndex());
-                    if (selected<0) selected = 0;
-                }
-                else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                } else if (KeyEvent.VK_END == evt.getKeyCode()) {
+                    selected = listGotoModel.getSize() - 1;
+                } else if (KeyEvent.VK_PAGE_DOWN == evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex() + (jListGoto.getLastVisibleIndex() - jListGoto.getFirstVisibleIndex());
+                    if (selected >= listGotoModel.getSize()) {
+                        selected = listGotoModel.getSize() - 1;
+                    }
+                } else if (KeyEvent.VK_PAGE_UP == evt.getKeyCode()) {
+                    selected = jListGoto.getSelectedIndex() - (jListGoto.getLastVisibleIndex() - jListGoto.getFirstVisibleIndex());
+                    if (selected < 0) {
+                        selected = 0;
+                    }
+                } else if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
                     // get input
                     String text = jTextFieldGoto.getText();
                     // copy current list items into dummy list model
                     DefaultListModel<RL64ListItem> dummy = new DefaultListModel<>();
-                    for (int i=0; i<listGotoModel.getSize(); i++) dummy.addElement(listGotoModel.get(i));
+                    for (int i = 0; i < listGotoModel.getSize(); i++) {
+                        dummy.addElement(listGotoModel.get(i));
+                    }
                     // find items that can be removed
-                    for (int i=listGotoModel.getSize()-1; i>=0; i--) {
+                    for (int i = listGotoModel.getSize() - 1; i >= 0; i--) {
                         RL64ListItem item = listGotoModel.get(i);
                         if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader() && !item.isTitle()) {
                             listGotoModel.remove(i);
@@ -437,35 +456,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     }
                     // count items (excluding header and title) of list
                     int itemCount = 0;
-                    for (int i=0; i<listGotoModel.getSize(); i++) {
-                        if (!listGotoModel.get(i).isHeader() && !listGotoModel.get(i).isTitle()) itemCount++;
+                    for (int i = 0; i < listGotoModel.getSize(); i++) {
+                        if (!listGotoModel.get(i).isHeader() && !listGotoModel.get(i).isTitle()) {
+                            itemCount++;
+                        }
                     }
                     // if we have no items, filtering was insufficient. hence, restore old
                     // list by copying back from dummy
-                    if (0==itemCount) {
+                    if (0 == itemCount) {
                         listGotoModel.clear();
-                        for (int i=0; i<dummy.getSize(); i++) {
+                        for (int i = 0; i < dummy.getSize(); i++) {
                             listGotoModel.addElement(dummy.get(i));
                         }
                         // indicate "not found" with red color
-                        jTextFieldGoto.setForeground(new Color(160,40,40));
-                    }
-                    else {
+                        jTextFieldGoto.setForeground(new Color(160, 40, 40));
+                    } else {
                         // matched filter-text, so black color
                         jTextFieldGoto.setForeground(Color.black);
                     }
                     evt.consume();
-                }
-                else if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
+                } else if (KeyEvent.VK_ESCAPE == evt.getKeyCode()) {
                     evt.consume();
                     jTextFieldGoto.setText("");
                     toggleGotoListVisibility(true);
                     return;
-                }
-                else {
+                } else {
                     String text = jTextFieldGoto.getText();
                     if (!text.trim().isEmpty()) {
-                        for (int i=0; i<listGotoModel.getSize(); i++) {
+                        for (int i = 0; i < listGotoModel.getSize(); i++) {
                             RL64ListItem item = listGotoModel.get(i);
                             if (item.getText().toLowerCase().startsWith(text.toLowerCase()) && !item.isHeader()) {
                                 jListGoto.setSelectedIndex(i);
@@ -474,14 +492,15 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         }
                     }
                 }
-                if (selected!=-1) {
+                if (selected != -1) {
                     jListGoto.setSelectedIndex(selected);
                 }
-                
+
             }
         });
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
-            @Override public void stateChanged(javax.swing.event.ChangeEvent e) {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
                 editorPanes.updateTabbedPane();
                 // and reset find/replace values, because the content has changed and former
                 // find-index-values are no longer valid
@@ -498,60 +517,67 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 //            findReplace.resetValues();
 //        });
         jComboBoxFind.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 jComboBoxFind.removeAllItems();
                 ArrayList<String> ft = findTerms.getFindTerms();
-                if (ft!=null && !ft.isEmpty()) {
-                    for (String i : ft) jComboBoxFind.addItem(i);
+                if (ft != null && !ft.isEmpty()) {
+                    for (String i : ft) {
+                        jComboBoxFind.addItem(i);
+                    }
                 }
             }
-            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
             }
-            @Override public void popupMenuCanceled(PopupMenuEvent e) {
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
             }
         });
         jComboBoxFind.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            @Override public void keyPressed(KeyEvent evt) {
-                if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
-                    ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).cut();
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
+                    ((JTextField) jComboBoxFind.getEditor().getEditorComponent()).cut();
                     evt.consume();
-                }
-                else if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
-                    ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).copy();
+                } else if (evt.getKeyCode() == KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                    ((JTextField) jComboBoxFind.getEditor().getEditorComponent()).copy();
                     evt.consume();
-                }
-                else if (evt.getKeyCode()==KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
-                    ((JTextField)jComboBoxFind.getEditor().getEditorComponent()).paste();
+                } else if (evt.getKeyCode() == KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
+                    ((JTextField) jComboBoxFind.getEditor().getEditorComponent()).paste();
                     evt.consume();
                 }
             }
-            @Override public void keyReleased(KeyEvent evt) {
+
+            @Override
+            public void keyReleased(KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
-                if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
+                if (KeyEvent.VK_ESCAPE == evt.getKeyCode()) {
                     findCancel();
                     return;
                 }
-                if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
                     if (!settings.getFindByType() || settings.getFindFieldFocus()) {
                         findNext();
-                    }
-                    else {
+                    } else {
                         editorPanes.getActiveEditorPane().requestFocusInWindow();
                     }
                     return;
                 }
                 if (settings.getFindByType() && !evt.isActionKey()) {
                     // get textfield component
-                    JTextField tf = (JTextField)jComboBoxFind.getEditor().getEditorComponent();
+                    JTextField tf = (JTextField) jComboBoxFind.getEditor().getEditorComponent();
                     // get find text
                     String text = tf.getText();
-                    if (text!=null && !text.isEmpty()) {
+                    if (text != null && !text.isEmpty()) {
                         // get editor pane
                         RL64TextArea editorPane = editorPanes.getActiveEditorPane();
                         // get source code
                         String content = editorPane.getBuffer().getText();
                         // create ignore-case pattern for findtext
-                        Pattern p = Pattern.compile("(?i)"+Pattern.quote(text));
+                        Pattern p = Pattern.compile("(?i)" + Pattern.quote(text));
                         // find pattern
                         Matcher m = p.matcher(content);
                         // any occurences?
@@ -563,77 +589,86 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         }
                     }
                 }
-                
+
             }
         });
 
         jTextFieldReplace.addKeyListener(new KeyAdapter() {
-            @Override public void keyPressed(KeyEvent evt) {
-                if (evt.getKeyCode()==KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_X && (evt.isControlDown() || evt.isMetaDown())) {
                     jTextFieldReplace.cut();
                     evt.consume();
-                }
-                else if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+                } else if (evt.getKeyCode() == KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
                     jTextFieldReplace.copy();
                     evt.consume();
-                }
-                else if (evt.getKeyCode()==KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
+                } else if (evt.getKeyCode() == KeyEvent.VK_V && (evt.isControlDown() || evt.isMetaDown())) {
                     jTextFieldReplace.paste();
                     evt.consume();
                 }
             }
-            @Override public void keyReleased(KeyEvent evt) {
+
+            @Override
+            public void keyReleased(KeyEvent evt) {
                 // when the user presses the escape-key, hide panel
-                if (KeyEvent.VK_ESCAPE==evt.getKeyCode()) {
+                if (KeyEvent.VK_ESCAPE == evt.getKeyCode()) {
                     replaceCancel();
-                }
-                else if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+                } else if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
                     replaceTerm();
                 }
             }
         });
         jTextFieldGotoLine.addKeyListener(new KeyAdapter() {
-            @Override public void keyReleased(KeyEvent evt) {
-                if (KeyEvent.VK_ENTER==evt.getKeyCode()) {
+            @Override
+            public void keyReleased(KeyEvent evt) {
+                if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
                     try {
                         int line = Integer.parseInt(jTextFieldGotoLine.getText());
                         editorPanes.gotoLine(line, 1);
-                    }
-                    catch (NumberFormatException ex) {
+                    } catch (NumberFormatException ex) {
                         specialFunctions();
                     }
                 }
             }
         });
         jTabbedPane1.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(java.awt.event.MouseEvent evt) {
-                if (evt.getButton()==MouseEvent.BUTTON3) {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getButton() == MouseEvent.BUTTON3) {
                     closeFile();
                 }
             }
         });
         jTabbedPaneLogs.addMouseListener(new MouseAdapter() {
-            @Override public void mousePressed(java.awt.event.MouseEvent evt) {
-                if (evt.getButton()==MouseEvent.BUTTON3) {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getButton() == MouseEvent.BUTTON3) {
                     switch (jTabbedPaneLogs.getSelectedIndex()) {
-                        case 0: clearLog1(); break;
-                        case 1: clearLog2(); break;
+                        case 0:
+                            clearLog1();
+                            break;
+                        case 1:
+                            clearLog2();
+                            break;
                     }
                 }
             }
         });
         jTextFieldConvDez.addKeyListener(new KeyAdapter() {
-            @Override public void keyReleased(KeyEvent evt) {
+            @Override
+            public void keyReleased(KeyEvent evt) {
                 convertNumber("dez");
             }
         });
         jTextFieldConvHex.addKeyListener(new KeyAdapter() {
-            @Override public void keyReleased(KeyEvent evt) {
+            @Override
+            public void keyReleased(KeyEvent evt) {
                 convertNumber("hex");
             }
         });
         jTextFieldConvBin.addKeyListener(new KeyAdapter() {
-            @Override public void keyReleased(KeyEvent evt) {
+            @Override
+            public void keyReleased(KeyEvent evt) {
                 convertNumber("bin");
             }
         });
@@ -642,104 +677,120 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void propertyChange(PropertyChangeEvent pce) {
                 if (dontSaveDividerLocation) {
                     dontSaveDividerLocation = false;
-                }
-                else {
+                } else {
                     settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
                 }
             }
-        });        
+        });
         recentDocsSubmenu.addMenuListener(new javax.swing.event.MenuListener() {
-            @Override public void menuSelected(javax.swing.event.MenuEvent evt) {
-                setRecentDocumentMenuItem(recent1MenuItem,1);
-                setRecentDocumentMenuItem(recent2MenuItem,2);
-                setRecentDocumentMenuItem(recent3MenuItem,3);
-                setRecentDocumentMenuItem(recent4MenuItem,4);
-                setRecentDocumentMenuItem(recent5MenuItem,5);
-                setRecentDocumentMenuItem(recent6MenuItem,6);
-                setRecentDocumentMenuItem(recent7MenuItem,7);
-                setRecentDocumentMenuItem(recent8MenuItem,8);
-                setRecentDocumentMenuItem(recent9MenuItem,9);
-                setRecentDocumentMenuItem(recentAMenuItem,10);
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                setRecentDocumentMenuItem(recent1MenuItem, 1);
+                setRecentDocumentMenuItem(recent2MenuItem, 2);
+                setRecentDocumentMenuItem(recent3MenuItem, 3);
+                setRecentDocumentMenuItem(recent4MenuItem, 4);
+                setRecentDocumentMenuItem(recent5MenuItem, 5);
+                setRecentDocumentMenuItem(recent6MenuItem, 6);
+                setRecentDocumentMenuItem(recent7MenuItem, 7);
+                setRecentDocumentMenuItem(recent8MenuItem, 8);
+                setRecentDocumentMenuItem(recent9MenuItem, 9);
+                setRecentDocumentMenuItem(recentAMenuItem, 10);
             }
-            @Override public void menuDeselected(javax.swing.event.MenuEvent evt) {}
-            @Override public void menuCanceled(javax.swing.event.MenuEvent evt) {}
+
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
         });
         recent1MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(1);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(1), settings.getRecentDocScript(1));
                 }
-        }
+            }
         });
         recent2MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(2);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(2), settings.getRecentDocScript(2));
                 }
             }
         });
         recent3MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(3);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(3), settings.getRecentDocScript(3));
                 }
             }
         });
         recent4MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(4);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(4), settings.getRecentDocScript(4));
                 }
             }
         });
         recent5MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(5);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(5), settings.getRecentDocScript(5));
                 }
             }
         });
         recent6MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(6);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(6), settings.getRecentDocScript(6));
                 }
             }
         });
         recent7MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(7);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(7), settings.getRecentDocScript(7));
                 }
             }
         });
         recent8MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(8);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(8), settings.getRecentDocScript(8));
                 }
             }
         });
         recent9MenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(9);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(9), settings.getRecentDocScript(9));
                 }
             }
         });
         recentAMenuItem.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(10);
-                if (fp!=null && fp.exists()) {
+                if (fp != null && fp.exists()) {
                     openFile(fp, settings.getRecentDocAssembler(10), settings.getRecentDocScript(10));
                 }
             }
@@ -806,7 +857,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             for (Object o : keys) {
                 // get accelerator key for action
                 Object accob = actionMap.get(o).getValue(javax.swing.Action.ACCELERATOR_KEY);
-                if (accob!=null) {
+                if (accob != null) {
                     String acckey = accob.toString();
                     // check if it contains "meta"
                     if (acckey.contains("meta")) {
@@ -835,31 +886,37 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         });
         jTextAreaCompilerOutput.addKeyListener(new KeyAdapter() {
-            @Override public void keyPressed(KeyEvent evt) {
-                if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
                     jTextAreaCompilerOutput.copy();
                     evt.consume();
                 }
             }
         });
         jTextAreaLog.addKeyListener(new KeyAdapter() {
-            @Override public void keyPressed(KeyEvent evt) {
-                if (evt.getKeyCode()==KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_C && (evt.isControlDown() || evt.isMetaDown())) {
                     jTextAreaLog.copy();
                     evt.consume();
                 }
             }
         });
     }
+
     private class SelectionListener implements ListSelectionListener {
+
         JList list;
+
         SelectionListener(JList list) {
             this.list = list;
         }
+
         @Override
         public void valueChanged(ListSelectionEvent e) {
             // get list selection model
-            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
             // set value-adjusting to true, so we don't fire multiple value-changed events...
             lsm.setValueIsAdjusting(true);
             // make selection visible
@@ -868,32 +925,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             gotoTokenFromList();
         }
     }
+
     private void updateListContent(int gotoIndex) {
         updateListContent(gotoIndex, true);
     }
+
     public void updateListContent() {
         updateListContent(listGotoIndex, false);
     }
+
     /**
-     * Updates the list with Goto-tokens, when a Goto-command from
-     * the Navigation-menu is called. This method retrieves all requested
-     * tokens (labels, macros, sections...) and puts them into the JList.
+     * Updates the list with Goto-tokens, when a Goto-command from the Navigation-menu is called.
+     * This method retrieves all requested tokens (labels, macros, sections...) and puts them into
+     * the JList.
      * <br><br>
-     * For more information on cell-rendering, see
-     * {@link RL64ListCellRenderer RL64ListCellRenderer} and
-     * {@link RL64ListItem RL64ListItem}
-     * 
-     * @param gotoIndex indicates which Goto-command from the Navigate-menu
-     * was used. One of following values:
+     * For more information on cell-rendering, see {@link RL64ListCellRenderer RL64ListCellRenderer}
+     * and {@link RL64ListItem RL64ListItem}
+     *
+     * @param gotoIndex indicates which Goto-command from the Navigate-menu was used. One of
+     * following values:
      * <ul>
-     *  <li>{@link #GOTO_FUNCTION}</li>
-     *  <li>{@link #GOTO_LABEL}</li>
-     *  <li>{@link #GOTO_MACRO}</li>
-     *  <li>{@link #GOTO_SECTION}</li>
+     * <li>{@link #GOTO_FUNCTION}</li>
+     * <li>{@link #GOTO_LABEL}</li>
+     * <li>{@link #GOTO_MACRO}</li>
+     * <li>{@link #GOTO_SECTION}</li>
      * </ul>
-     * @param focusToTextfield {@code true} if the textfield for the Goto-list should
-     * gain the input focus. Not useful in all cases, e.g. when opening new files, 
-     * the user does not expect the input focus to be outside the editor.
+     * @param focusToTextfield {@code true} if the textfield for the Goto-list should gain the input
+     * focus. Not useful in all cases, e.g. when opening new files, the user does not expect the
+     * input focus to be outside the editor.
      */
     private void updateListContent(int gotoIndex, boolean focusToTextfield) {
         // save index for list listener
@@ -905,8 +964,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // add current activated source code index first
         eps.add(jTabbedPane1.getSelectedIndex());
         // than add indices of remaining tabs
-        for (int i=0; i<editorPanes.getCount(); i++) {
-            if (!eps.contains(i)) eps.add(i);
+        for (int i = 0; i < editorPanes.getCount(); i++) {
+            if (!eps.contains(i)) {
+                eps.add(i);
+            }
         }
         String borderTitle;
         // set border-title
@@ -953,7 +1014,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     break;
             }
             // check if anything found
-            if (token!=null && !token.isEmpty()) {
+            if (token != null && !token.isEmpty()) {
                 // add header item
                 File fp = editorPanes.getFilePath(epIndex);
                 // a list item has several properties now, which will be rendered:
@@ -996,32 +1057,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // save index
         settings.setListGotoIndex(listGotoIndex);
     }
+
     @Action
     public void openSourcefileFolder() {
         File f = editorPanes.getActiveFilePath();
-        if (f!=null && f.exists() && Desktop.isDesktopSupported()) {
+        if (f != null && f.exists() && Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().open(new File(f.getParent()));
             } catch (IOException | NullPointerException | SecurityException | IllegalArgumentException | UnsupportedOperationException ex) {
             }
         }
     }
+
     /**
-     * Toggles the visibility of the Goto-list, i.e. either collapses or
-     * expands the splitpane on demand.
+     * Toggles the visibility of the Goto-list, i.e. either collapses or expands the splitpane on
+     * demand.
      */
     @Action
     public void toggleGotoListVisibility() {
         toggleGotoListVisibility(!settings.getSidebarIsHidden());
     }
+
     /**
-     * Toggles the visibility of the Goto-list, i.e. either collapses or
-     * expands the splitpane on demand.
-     * 
-     * @param hide {@code true} if splitpane should be collapsed (i.e.
-     * hide Goto-list), {@code false} if it should be expanded (i.e. made visible).
-     * If, for instance, {@code collapse} is {@code true} and splitpane already
-     * collapsed, nothing will happen.
+     * Toggles the visibility of the Goto-list, i.e. either collapses or expands the splitpane on
+     * demand.
+     *
+     * @param hide {@code true} if splitpane should be collapsed (i.e. hide Goto-list),
+     * {@code false} if it should be expanded (i.e. made visible). If, for instance,
+     * {@code collapse} is {@code true} and splitpane already collapsed, nothing will happen.
      */
     private void toggleGotoListVisibility(boolean hide) {
         settings.setSidebarIsHidden(hide);
@@ -1030,17 +1093,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             settings.setDividerLocation(jSplitPaneEditorList.getDividerLocation());
             jSplitPaneEditorList.setDividerLocation(1.0d);
             editorPanes.setFocus();
-        }
-        else {
+        } else {
             int pos = settings.getDividerLocation();
-            if (-1==pos) pos = getFrame().getWidth()-ConstantsR64.MIN_SIDEBAR_SIZE;
+            if (-1 == pos) {
+                pos = getFrame().getWidth() - ConstantsR64.MIN_SIDEBAR_SIZE;
+            }
             jSplitPaneEditorList.setDividerLocation(pos);
             jTextFieldGoto.requestFocusInWindow();
         }
     }
+
     /**
-     * Parses input from the Goto-line-textfield. Used for quickly changing settings,
-     * may also be used for special debug-functions or information etc.
+     * Parses input from the Goto-line-textfield. Used for quickly changing settings, may also be
+     * used for special debug-functions or information etc.
      */
     private void specialFunctions() {
         String text = jTextFieldGotoLine.getText();
@@ -1106,8 +1171,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 break;
             case "ch":
                 String compilerHelp = customScripts.getCompilerHelp(jComboBoxRunScripts.getSelectedItem());
-                if (compilerHelp!=null) {
-                    jTextAreaLog.append(System.lineSeparator()+System.lineSeparator()+compilerHelp);
+                if (compilerHelp != null) {
+                    jTextAreaLog.append(System.lineSeparator() + System.lineSeparator() + compilerHelp);
                     jTabbedPaneLogs.setSelectedIndex(0);
                 }
                 break;
@@ -1115,46 +1180,45 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         try {
             if (text.startsWith("cs")) {
                 int nr = Integer.parseInt(text.substring(2));
-                if (nr>=1 && nr<=ColorSchemes.SCHEME_NAMES.length) {
-                    settings.setColorScheme(nr-1);
+                if (nr >= 1 && nr <= ColorSchemes.SCHEME_NAMES.length) {
+                    settings.setColorScheme(nr - 1);
                     editorPanes.updateColorScheme();
                 }
-            }
-            else if (text.startsWith("fs")) {
+            } else if (text.startsWith("fs")) {
                 int size = Integer.parseInt(text.substring(2));
                 settings.setMainFont(new Font(settings.getMainFont(Settings.FONTNAME), Font.PLAIN, size));
                 editorPanes.updateFonts();
-            }
-            else if (text.startsWith("ts")) {
+            } else if (text.startsWith("ts")) {
                 int size = Integer.parseInt(text.substring(2));
                 settings.setTabWidth(size);
                 editorPanes.updateTabs();
             }
-        }
-        catch(IndexOutOfBoundsException | NumberFormatException ex) {
+        } catch (IndexOutOfBoundsException | NumberFormatException ex) {
         }
         jTextFieldGotoLine.setText("");
     }
+
     /**
      * This method updates the menu-items with the recent documents
      */
     private void setRecentDocuments() {
-        setRecentDocumentMenuItem(recent1MenuItem,1);
-        setRecentDocumentMenuItem(recent2MenuItem,2);
-        setRecentDocumentMenuItem(recent3MenuItem,3);
-        setRecentDocumentMenuItem(recent4MenuItem,4);
-        setRecentDocumentMenuItem(recent5MenuItem,5);
-        setRecentDocumentMenuItem(recent6MenuItem,6);
-        setRecentDocumentMenuItem(recent7MenuItem,7);
-        setRecentDocumentMenuItem(recent8MenuItem,8);
-        setRecentDocumentMenuItem(recent9MenuItem,9);
-        setRecentDocumentMenuItem(recentAMenuItem,10);
+        setRecentDocumentMenuItem(recent1MenuItem, 1);
+        setRecentDocumentMenuItem(recent2MenuItem, 2);
+        setRecentDocumentMenuItem(recent3MenuItem, 3);
+        setRecentDocumentMenuItem(recent4MenuItem, 4);
+        setRecentDocumentMenuItem(recent5MenuItem, 5);
+        setRecentDocumentMenuItem(recent6MenuItem, 6);
+        setRecentDocumentMenuItem(recent7MenuItem, 7);
+        setRecentDocumentMenuItem(recent8MenuItem, 8);
+        setRecentDocumentMenuItem(recent9MenuItem, 9);
+        setRecentDocumentMenuItem(recentAMenuItem, 10);
     }
+
     /**
      * Removes or adds a menu item for recently opened documents.
-     * 
+     *
      * @param menuItem
-     * @param recentDocNr 
+     * @param recentDocNr
      */
     private void setRecentDocumentMenuItem(javax.swing.JMenuItem menuItem, int recentDocNr) {
         // first, hide all menu-items
@@ -1162,44 +1226,46 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // retrieve recent document
         File recDoc = settings.getRecentDoc(recentDocNr);
         // check whether we have any valid value
-        if (recDoc!=null && recDoc.exists()) {
+        if (recDoc != null && recDoc.exists()) {
             // make menu visible, if recent document is valid
             menuItem.setVisible(true);
             // set filename as text
             menuItem.setText(FileTools.getFileName(recDoc));
             menuItem.setToolTipText(recDoc.getPath());
         }
-    }  
+    }
+
     private void convertNumber(String format) {
         String input;
-        switch(format) {
+        switch (format) {
             case "hex":
                 input = jTextFieldConvHex.getText();
                 try {
                     jTextFieldConvDez.setText(String.valueOf(Integer.parseInt(input, 16)));
                     jTextFieldConvBin.setText(Integer.toBinaryString(Integer.parseInt(input, 16)));
+                } catch (NumberFormatException ex) {
                 }
-                catch(NumberFormatException ex) {}
                 break;
             case "bin":
                 input = jTextFieldConvBin.getText();
                 try {
                     jTextFieldConvDez.setText(String.valueOf(Integer.parseInt(input, 2)));
                     jTextFieldConvHex.setText(Integer.toHexString(Integer.parseInt(input, 2)));
+                } catch (NumberFormatException ex) {
                 }
-                catch(NumberFormatException ex) {}
                 break;
-            case "dez": 
-            case "dec": 
+            case "dez":
+            case "dec":
                 input = jTextFieldConvDez.getText();
                 try {
                     jTextFieldConvHex.setText(Integer.toHexString(Integer.parseInt(input)));
                     jTextFieldConvBin.setText(Integer.toBinaryString(Integer.parseInt(input)));
+                } catch (NumberFormatException ex) {
                 }
-                catch(NumberFormatException ex) {}
                 break;
         }
     }
+
     private void gotoTokenFromList() {
         // retrieve index of selected item
         Object selectedObject = jListGoto.getSelectedValue();
@@ -1280,43 +1346,49 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+
     @Action
     public void refreshGotoList() {
         updateListContent(listGotoIndex);
     }
+
     @Action
     public void spacesToTabs() {
         editorPanes.getActiveEditorPane().spacesToTabs();
     }
+
     @Action
     public void allSpacesToTabs() {
-        for (int i=0; i<editorPanes.getCount(); i++) {
+        for (int i = 0; i < editorPanes.getCount(); i++) {
             editorPanes.getEditorPane(i).spacesToTabs();
         }
     }
+
     @Action
     public void tabsToSpaces() {
         editorPanes.getActiveEditorPane().tabsToSpaces();
     }
+
     @Action
     public void allTabsToSpaces() {
-        for (int i=0; i<editorPanes.getCount(); i++) {
+        for (int i = 0; i < editorPanes.getCount(); i++) {
             editorPanes.getEditorPane(i).tabsToSpaces();
         }
     }
+
     @Action
     public void selectionToLowercase() {
         editorPanes.getActiveEditorPane().toLowerCase();
     }
+
     @Action
     public void selectionToUppercase() {
         editorPanes.getActiveEditorPane().toUpperCase();
     }
-    
 
     public void autoConvertNumbers(String selection) {
         // check for valid selection
-        if (selection!=null && !selection.trim().isEmpty()) {
+        if (selection != null && !selection.trim().isEmpty()) {
             // trim
             selection = selection.trim();
             // init finders
@@ -1327,74 +1399,72 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             if (selection.startsWith("#$")) {
                 selection = selection.substring(2);
                 isHex = selection.matches("^[0-9A-Fa-f]+$");
-            }
-            else if (selection.startsWith("$")) {
+            } else if (selection.startsWith("$")) {
                 selection = selection.substring(1);
                 isHex = selection.matches("^[0-9A-Fa-f]+$");
-            }
-            else if (selection.startsWith("#%")) {
+            } else if (selection.startsWith("#%")) {
                 selection = selection.substring(2);
                 isBin = selection.matches("[0-1]+");
-            }
-            else if (selection.startsWith("%")) {
+            } else if (selection.startsWith("%")) {
                 selection = selection.substring(1);
                 isBin = selection.matches("[0-1]+");
-            }
-            else if (selection.startsWith("#")) {
+            } else if (selection.startsWith("#")) {
                 selection = selection.substring(1);
                 isDez = selection.matches("[0-9]+");
-            }
-            else if (selection.matches("[0-9]+")) {
+            } else if (selection.matches("[0-9]+")) {
                 isDez = true;
-            }
-            else {
+            } else {
                 isHex = selection.matches("^[0-9A-Fa-f]+$");
             }
             // is hex?
             if (isHex) {
                 jTextFieldConvHex.setText(selection);
                 convertNumber("hex");
-            }
-            else if (isDez) {
+            } else if (isDez) {
                 jTextFieldConvDez.setText(selection);
                 convertNumber("dez");
-            }
-            else if (isBin) {
+            } else if (isBin) {
                 jTextFieldConvBin.setText(selection);
                 convertNumber("bin");
             }
         }
     }
+
     @Action
     public void surroundFolds() {
         editorPanes.insertFolds();
     }
+
     @Action
     public void expandFolds() {
         editorPanes.getActiveEditorPane().expandFold(true);
     }
+
     @Action
     public void collapseFolds() {
         editorPanes.getActiveEditorPane().collapseFold();
     }
+
     @Action
     public void expandAllFolds() {
         editorPanes.expandAllFolds();
         editorPanes.setFocus();
     }
+
     @Action
     public void collapseAllFolds() {
         editorPanes.collapseAllFolds();
         editorPanes.setFocus();
     }
+
     /**
-     * 
+     *
      */
     @Action
     public void settingsWindow() {
         // retrieve last selected script name
         Object o = jComboBoxRunScripts.getSelectedItem();
-        String selectedScriptName = (o!=null) ? o.toString() : null;
+        String selectedScriptName = (o != null) ? o.toString() : null;
         // open settings window
         if (null == settingsDlg) {
             settingsDlg = new SettingsDlg(getFrame(), this, settings, customScripts, editorPanes);
@@ -1404,60 +1474,74 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // update custom scripta
         initScripts();
         // select previous script
-        if (customScripts.findScript(selectedScriptName)!=-1) jComboBoxRunScripts.setSelectedItem(selectedScriptName);
+        if (customScripts.findScript(selectedScriptName) != -1) {
+            jComboBoxRunScripts.setSelectedItem(selectedScriptName);
+        }
         // save the settings
         saveSettings();
     }
+
     @Action
     public void commentLine() {
         editorPanes.commentLine();
     }
+
     @Action
     public void undoAction() {
         editorPanes.undo();
     }
+
     @Action
     public void redoAction() {
         editorPanes.redo();
     }
+
     @Action
     public void cutAction() {
         editorPanes.getActiveEditorPane().cutText();
     }
+
     @Action
     public void copyAction() {
         editorPanes.getActiveEditorPane().copyText();
     }
+
     @Action
     public void pasteAction() {
         editorPanes.getActiveEditorPane().pasteText();
     }
+
     @Action
     public void gotoLine() {
         jTextFieldGotoLine.requestFocusInWindow();
     }
+
     @Action
     public void gotoSection() {
         updateListContent(GOTO_SECTION);
     }
+
     @Action
     public void gotoLabel() {
         updateListContent(GOTO_LABEL);
     }
+
     @Action
     public void gotoFunction() {
         updateListContent(GOTO_FUNCTION);
     }
+
     @Action
     public void gotoMacro() {
         updateListContent(GOTO_MACRO);
     }
+
     @Action
     public void jumpToLabel() {
         // get word under caret
         String caretWord = editorPanes.getActiveEditorPane().getCaretString(true, "");
         // check if anything
-        if (caretWord!=null && !caretWord.isEmpty()) {
+        if (caretWord != null && !caretWord.isEmpty()) {
             // remember cursor
             int caret = editorPanes.getActiveEditorPane().getCaretPosition();
             int line = editorPanes.getActiveEditorPane().getCaretLine();
@@ -1465,68 +1549,80 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             editorPanes.gotoLabel(caretWord);
             // check if line changed. if not, we don't want to "overwrite" 
             // old caret positions
-            if (editorPanes.getActiveEditorPane().getCaretLine()!=line) {
+            if (editorPanes.getActiveEditorPane().getCaretLine() != line) {
                 // remember cursor
                 editorPanes.saveLabelSourcePosition(caret);
             }
         }
     }
+
     @Action
     public void jumpBackToLabelSource() {
         editorPanes.gotoLabelSourcePosition();
     }
+
     @Action
     public void insertSection() {
         // open an input-dialog
-        String sectionName = (String)JOptionPane.showInputDialog(getFrame(),"Section name:", "Insert section", JOptionPane.PLAIN_MESSAGE);
+        String sectionName = (String) JOptionPane.showInputDialog(getFrame(), "Section name:", "Insert section", JOptionPane.PLAIN_MESSAGE);
         // check
-        if (sectionName!=null && !sectionName.isEmpty()) {
+        if (sectionName != null && !sectionName.isEmpty()) {
             editorPanes.insertSection(sectionName);
         }
     }
+
     @Action
     public void insertSeparatorLine() {
         editorPanes.insertSeparatorLine();
     }
+
     @Action
     public void gotoNextSection() {
         // goto next section
         editorPanes.gotoNextSection();
     }
+
     @Action
     public void gotoPrevSection() {
         // goto previous section
         editorPanes.gotoPrevSection();
     }
+
     @Action
     public void gotoNextError() {
         errorHandler.gotoNextError(editorPanes, jTextAreaCompilerOutput);
     }
+
     @Action
     public void gotoPrevError() {
         errorHandler.gotoPrevError(editorPanes, jTextAreaCompilerOutput);
     }
+
     @Action
     public void gotoNextLabel() {
         // goto next label
         editorPanes.gotoNextLabel();
     }
+
     @Action
     public void gotoPrevLabel() {
         // goto previous label
         editorPanes.gotoPrevLabel();
     }
+
     @Action
     public void setFocusToSource() {
         editorPanes.setFocus();
     }
+
     /**
-     * 
+     *
      */
     @Action
     public final void addNewTab() {
         editorPanes.addNewTab(null, null, "untitled", settings.getPreferredAssembler(), jComboBoxRunScripts.getSelectedIndex());
     }
+
     @Action
     public void openAllIncludeFiles() {
         BufferedReader br = new BufferedReader(new StringReader(editorPanes.getActiveSourceCode()));
@@ -1534,7 +1630,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current editor
         RL64TextArea ep = editorPanes.getActiveEditorPane();
         // create pattern for include directive
-        String src =  "("+ep.getAssembler().getIncludeSourceDirective(")(.*?)");
+        String src = "(" + ep.getAssembler().getIncludeSourceDirective(")(.*?)");
         Pattern p = Pattern.compile(src);
         String line;
         try {
@@ -1547,17 +1643,19 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 // do we have two groups?
-                if (!line.startsWith(commentChar) && m.find() && m.groupCount()>=2) {
+                if (!line.startsWith(commentChar) && m.find() && m.groupCount() >= 2) {
                     // 2nd group is file. retrieve full path of include file to source file
                     File f = FileTools.getAbsolutePath(sourceFile, new File(m.group(2)));
                     // if it exists, open it
-                    if (f!=null && f.exists()) openFile(f, asm, script);
+                    if (f != null && f.exists()) {
+                        openFile(f, asm, script);
+                    }
                 }
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
         }
     }
+
     @Action
     public void openIncludeFile() {
         // get current editor
@@ -1565,28 +1663,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current line-text
         String line = ep.getLineText(ep.getCaretLine());
         // create pattern for include directive
-        String src =  "("+ep.getAssembler().getIncludeSourceDirective(")(.*?)");
+        String src = "(" + ep.getAssembler().getIncludeSourceDirective(")(.*?)");
         Pattern p = Pattern.compile(src);
         Matcher m = p.matcher(line);
         // do we have two groups?
-        if (!line.startsWith(editorPanes.getActiveAssembler().getLineComment()) && m.find() && m.groupCount()>=2) {
+        if (!line.startsWith(editorPanes.getActiveAssembler().getLineComment()) && m.find() && m.groupCount() >= 2) {
             // 2nd group is file. retrieve full path of include file to source file
             File f = FileTools.getAbsolutePath(editorPanes.getActiveFilePath(), new File(m.group(2)));
             // if it exists, open it
-            if (f!=null && f.exists()) openFile(f, editorPanes.getActiveAssembler(), editorPanes.getActiveScript());
+            if (f != null && f.exists()) {
+                openFile(f, editorPanes.getActiveAssembler(), editorPanes.getActiveScript());
+            }
         }
     }
+
     @Action
     public void openFile() {
         File fileToOpen = FileTools.chooseFile(getFrame(), JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, settings.getLastUsedPath().getAbsolutePath(), "", "Open ASM File", ConstantsR64.FILE_EXTENSIONS, "ASM-Files");
         openFile(fileToOpen);
     }
+
     private void openFile(File fileToOpen) {
         openFile(fileToOpen, settings.getPreferredAssembler());
     }
+
     private void openFile(File fileToOpen, Assembler assembler) {
         openFile(fileToOpen, assembler, jComboBoxRunScripts.getSelectedIndex());
     }
+
     private void openFile(File fileToOpen, Assembler assembler, int script) {
         // check if file could be opened
         if (editorPanes.loadFile(fileToOpen, assembler, script)) {
@@ -1600,32 +1704,33 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             try {
                 jComboBoxAssemblers.setSelectedIndex(assembler.getID());
                 jComboBoxRunScripts.setSelectedIndex(script);
+            } catch (IllegalArgumentException ex) {
             }
-            catch (IllegalArgumentException ex) {
-            }
-        } 
+        }
     }
+
     private void updateRecentDoc() {
         // find current file
         File cf = editorPanes.getActiveFilePath();
         // find doc associated with current document
         int rd = settings.findRecentDoc(cf);
         // if we have valid values, update recent doc
-        if (rd!=-1 && cf!=null) {
+        if (rd != -1 && cf != null) {
             settings.setRecentDoc(rd, cf.toString(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
         }
     }
+
     private void reopenFiles() {
         // get reopen files
         ArrayList<Object[]> files = settings.getReopenFiles();
         // check if we have any
-        if (files!=null && !files.isEmpty()) {
+        if (files != null && !files.isEmpty()) {
             // retrieve set
             for (Object[] o : files) {
                 // retrieve data: file path
                 File fp = new File(o[0].toString());
                 // retrieve data: assembler
-                Assembler assembler = (Assembler)o[1];
+                Assembler assembler = (Assembler) o[1];
                 // retrieve data: script
                 int script = Integer.parseInt(o[2].toString());
                 // open file
@@ -1633,6 +1738,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+
     @Action
     public void saveFile() {
         if (editorPanes.saveFile()) {
@@ -1642,28 +1748,32 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             setRecentDocuments();
         }
     }
+
     @Action
     public void saveAllFiles() {
         editorPanes.saveAllFiles();
     }
+
     @Action
     public void closeFile() {
         if (editorPanes.closeFile()) {
             // check how many tabs are still open
-            if (jTabbedPane1.getTabCount()>0) {
+            if (jTabbedPane1.getTabCount() > 0) {
                 // retrieve selected file
                 int selectedTab = jTabbedPane1.getSelectedIndex();
                 try {
                     // close tab
                     jTabbedPane1.remove(selectedTab);
-                }
-                catch (IndexOutOfBoundsException ex) {
-                    ConstantsR64.r64logger.log(Level.WARNING,ex.getLocalizedMessage());
+                } catch (IndexOutOfBoundsException ex) {
+                    ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                 }
             }
-            if (jTabbedPane1.getTabCount()<1) addNewTab();
+            if (jTabbedPane1.getTabCount() < 1) {
+                addNewTab();
+            }
         }
     }
+
     /**
      * Closes all opened tabs
      */
@@ -1672,10 +1782,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // get current amount of tabes
         int count = jTabbedPane1.getTabCount();
         // and close file as often as we have tabs
-        for (int cnt=0; cnt<count; cnt++) {
+        for (int cnt = 0; cnt < count; cnt++) {
             closeFile();
         }
     }
+
     /**
      * Saves a file under a new file name / path.
      */
@@ -1688,10 +1799,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             setRecentDocuments();
         }
     }
+
     /**
-     * Runs the currently selected user script and - depending on the script - compiles the source code
-     * and start the compiled source in an emulator. If errors occur during the compile process,
-     * the error log is shown and the caret jumps to the related position in the source.
+     * Runs the currently selected user script and - depending on the script - compiles the source
+     * code and start the compiled source in an emulator. If errors occur during the compile
+     * process, the error log is shown and the caret jumps to the related position in the source.
      */
     @Action
     public void runScript() {
@@ -1973,6 +2085,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             }
         }
     }
+
     @Action
     public void selectSyntax() {
         jComboBoxAssemblers.showPopup();
@@ -2180,8 +2293,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         insertSinusTableDlg = null;
     }
+
     /**
-     * 
+     *
      */
     private void setDefaultLookAndFeel() {
         // retrieve all installed Look and Feels
@@ -2244,6 +2358,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         settings.saveSettings();
         customScripts.saveScripts();
     }
+
     @Action
     public void showHelp() {
         if (aboutBox == null) {
@@ -2255,6 +2370,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         aboutBox.dispose();
         aboutBox = null;
     }
+
     @Action
     public void showQuickReference() {
         if (quickReferenceDlg == null) {
@@ -2264,8 +2380,9 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         }
         Relaunch64App.getApplication().show(quickReferenceDlg);
     }
+
     /**
-     * 
+     *
      */
     @Action
     public void showAboutBox() {
@@ -2298,39 +2415,50 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     @Override
     public void drop(DropTargetDropEvent dtde) {
         List<File> filesToOpen = Tools.drop(dtde, editorPanes);
-        if (filesToOpen!=null && !filesToOpen.isEmpty()) {
-            for (File f : filesToOpen) openFile(f);
+        if (filesToOpen != null && !filesToOpen.isEmpty()) {
+            for (File f : filesToOpen) {
+                openFile(f);
+            }
         }
     }
+
     @Override
     public void windowOpened(WindowEvent e) {
     }
+
     @Override
     public void windowClosing(WindowEvent e) {
         // call the general exit-handler from the desktop-application-api
         // here we do all the stuff we need when exiting the application
         Relaunch64App.getApplication().exit();
     }
+
     @Override
     public void windowClosed(WindowEvent e) {
     }
+
     @Override
     public void windowIconified(WindowEvent e) {
     }
+
     @Override
     public void windowDeiconified(WindowEvent e) {
     }
+
     @Override
     public void windowActivated(WindowEvent e) {
     }
+
     @Override
     public void windowDeactivated(WindowEvent e) {
     }
+
     /**
-     * This is the Exit-Listener. Here we put in all the things which should be done
-     * before closing the window and exiting the program 
+     * This is the Exit-Listener. Here we put in all the things which should be done before closing
+     * the window and exiting the program
      */
     private class ConfirmExit implements Application.ExitListener {
+
         @Override
         public boolean canExit(EventObject e) {
             // save the settings
@@ -2338,43 +2466,47 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // return true to say "yes, we can", or false if exiting should be cancelled
             return askForSaveChanges();
         }
+
         @Override
         public void willExit(EventObject e) {
         }
     }
+
     /**
      * This method checks whether there are unsaved changes in the data-files (maindata, bookmarks,
      * searchrequests, desktop-data...) and prepares a msg to save these changes. Usually, this
-     * method is called when there are modifications in one of the above mentioned datafiles, and
-     * a new data-file is to be imported or opened, or when the application
-     * is about to quit.
+     * method is called when there are modifications in one of the above mentioned datafiles, and a
+     * new data-file is to be imported or opened, or when the application is about to quit.
      *
-     * @param title the title of the message box, e.g. if the changes should be saved because the user
-     * wants to quit the application of to open another data file
-     * @return <i>true</i> if the changes have been successfully saved or if the user did not want to save anything, and
-     * the program can go on. <i>false</i> if the user cancelled the dialog and the program should <i>not</i> go on
-     * or not quit.
+     * @param title the title of the message box, e.g. if the changes should be saved because the
+     * user wants to quit the application of to open another data file
+     * @return <i>true</i> if the changes have been successfully saved or if the user did not want
+     * to save anything, and the program can go on. <i>false</i> if the user cancelled the dialog
+     * and the program should <i>not</i> go on or not quit.
      */
     private boolean askForSaveChanges() {
         boolean changes = false;
         int count = editorPanes.getCount();
         // check whether we have any changes at all
-        for (int i=0; i<count; i++) {
-            if (editorPanes.isModified(i)) changes = true;
+        for (int i = 0; i < count; i++) {
+            if (editorPanes.isModified(i)) {
+                changes = true;
+            }
         }
         // ask for save
         if (changes) {
             // open a confirm dialog
             int option = JOptionPane.showConfirmDialog(getFrame(), resourceMap.getString("msgSaveChangesOnExit"), resourceMap.getString("msgSaveChangesOnExitTitle"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             // if action is cancelled, return to the program
-            if (JOptionPane.CANCEL_OPTION==option || JOptionPane.CLOSED_OPTION==option /* User pressed cancel key */) {
+            if (JOptionPane.CANCEL_OPTION == option || JOptionPane.CLOSED_OPTION == option /* User pressed cancel key */) {
                 return false;
-            }
-            else if (JOptionPane.YES_OPTION == option) {
+            } else if (JOptionPane.YES_OPTION == option) {
                 boolean saveok = true;
-                for (int i=0; i<count; i++) {
+                for (int i = 0; i < count; i++) {
                     if (editorPanes.isModified(i)) {
-                        if (!editorPanes.saveFile()) saveok=false;
+                        if (!editorPanes.saveFile()) {
+                            saveok = false;
+                        }
                     }
                 }
                 return saveok;
@@ -2383,10 +2515,12 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         // no changes, so everything is ok
         return true;
     }
+
     /**
-     * 
+     *
      */
     public class TextAreaHandler extends java.util.logging.StreamHandler {
+
         @Override
         public void publish(final LogRecord record) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -2414,16 +2548,21 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         public JTextArea getTextArea() {
             return jTextAreaLog;
         }
+
         @Override
         public void flush() {
         }
+
         @Override
         public void close() throws SecurityException {
         }
     }
+
     private void checkForUpdates() {
         // check if check should be checked
-        if (!settings.getCheckForUpdates()) return;
+        if (!settings.getCheckForUpdates()) {
+            return;
+        }
         Task cfuT = checkForUpdate();
         // get the application's context...
         ApplicationContext appC = Application.getInstance().getContext();
@@ -2435,6 +2574,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         tS.execute(cfuT);
         tM.setForegroundTask(cfuT);
     }
+
     public final Task checkForUpdate() {
         return new CheckForUpdates(org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class));
     }

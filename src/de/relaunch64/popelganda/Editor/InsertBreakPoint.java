@@ -30,7 +30,6 @@
  * Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm 
  * erhalten haben. Falls nicht, siehe <http://www.gnu.org/licenses/>.
  */
-
 package de.relaunch64.popelganda.Editor;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
@@ -44,28 +43,31 @@ import javax.swing.JOptionPane;
  * @author Daniel Lüdecke
  */
 public class InsertBreakPoint {
-    public static final String breakPointMacro = 
-            "\n//----------------------------------------------------------\n"+ 
-            "// Breakpoint Macro\n"+ 
-            "//----------------------------------------------------------\n"+ 
-            ".var _createDebugFiles = debug && cmdLineVars.get(\"afo\") == \"true\"\n"+ 
-            ".print \"File creation \" + [_createDebugFiles\n"+ 
-            "    ? \"enabled (creating breakpoint file)\"\n"+ 
-            "    : \"disabled (no breakpoint file created)\"]\n"+ 
-            ".var brkFile\n"+ 
-            ".if(_createDebugFiles) {\n"+ 
-            "    .eval brkFile = createFile(\"breakpoints.txt\")\n"+ 
-            "    }\n"+ 
-            ".macro break() {\n"+ 
-            ".if(_createDebugFiles) {\n"+ 
-            "    .eval brkFile.writeln(\"break \" + toHexString(*))\n"+ 
-            "    }\n"+ 
-            "}\n"+ 
-            "//------------------------------------------------------\n";
-    
+
+    public static final String breakPointMacro
+            = "\n//----------------------------------------------------------\n"
+            + "// Breakpoint Macro\n"
+            + "//----------------------------------------------------------\n"
+            + ".var _createDebugFiles = debug && cmdLineVars.get(\"afo\") == \"true\"\n"
+            + ".print \"File creation \" + [_createDebugFiles\n"
+            + "    ? \"enabled (creating breakpoint file)\"\n"
+            + "    : \"disabled (no breakpoint file created)\"]\n"
+            + ".var brkFile\n"
+            + ".if(_createDebugFiles) {\n"
+            + "    .eval brkFile = createFile(\"breakpoints.txt\")\n"
+            + "    }\n"
+            + ".macro break() {\n"
+            + ".if(_createDebugFiles) {\n"
+            + "    .eval brkFile.writeln(\"break \" + toHexString(*))\n"
+            + "    }\n"
+            + "}\n"
+            + "//------------------------------------------------------\n";
+
     public static void insertBreakPoint(EditorPanes editorPane) {
         // check for valid value
-        if (null==editorPane) return;
+        if (null == editorPane) {
+            return;
+        }
         // check for KickAss
         if (editorPane.getActiveAssembler() != Assemblers.ASM_KICKASSEMBLER) {
             JOptionPane.showMessageDialog(null, "Breakpoints are currently only supported under KickAssembler!");
@@ -77,9 +79,13 @@ public class InsertBreakPoint {
             // ask if macro should be added
             int option = JOptionPane.showConfirmDialog(null, "The breakpoint function requires a macro to be added to the source.\nWithout this macro, breakpoints won't work.\n\nDo you want to add this macro now to the end of the source?", "Insert Breakpoint", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             // check if user cancelled
-            if (option==JOptionPane.CANCEL_OPTION) return;
+            if (option == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
             // check if macro should be added
-            if (option==JOptionPane.YES_OPTION) addMacro = true;
+            if (option == JOptionPane.YES_OPTION) {
+                addMacro = true;
+            }
         }
         // insert breakpoint
         editorPane.insertBreakPoint();
@@ -90,15 +96,19 @@ public class InsertBreakPoint {
             editorPane.insertString(breakPointMacro, endpos);
         }
     }
+
     public static boolean sourceHasBreakpointMacro(String source, Assembler assembler) {
         if (assembler == Assemblers.ASM_KICKASSEMBLER) {
-            return (source!=null && source.contains(".macro break()"));
+            return (source != null && source.contains(".macro break()"));
         }
         return false;
     }
+
     public static void removeBreakPoints(EditorPanes editorPane) {
         // check for valid value
-        if (null==editorPane) return;
+        if (null == editorPane) {
+            return;
+        }
         // get current source
         String source = editorPane.getActiveSourceCode();
         // create replace string

@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.relaunch64.popelganda.Editor;
 
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import javax.swing.text.Segment;
 
-public class RL64FoldHandler extends FoldHandler
-{
+public class RL64FoldHandler extends FoldHandler {
+
     private final RL64TextArea textArea;
+
     public RL64FoldHandler(RL64TextArea textArea) {
         super("RL64assembler");
         this.textArea = textArea;

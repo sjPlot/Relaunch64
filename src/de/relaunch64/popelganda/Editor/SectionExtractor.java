@@ -30,7 +30,6 @@
  * Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm 
  * erhalten haben. Falls nicht, siehe <http://www.gnu.org/licenses/>.
  */
-
 package de.relaunch64.popelganda.Editor;
 
 import java.io.BufferedReader;
@@ -47,12 +46,13 @@ import java.util.regex.Pattern;
  * @author Daniel Lüdecke
  */
 public class SectionExtractor {
+
     public static LinkedHashMap getSections(String source, String assemblerComment) {
         // prepare return values
         LinkedHashMap<String, Integer> sectionValues = new LinkedHashMap<>();
         String line;
         // go if not null
-        if (source!=null) {
+        if (source != null) {
             // create buffered reader, needed for line number reader
             BufferedReader br = new BufferedReader(new StringReader(source));
             LineNumberReader lineReader = new LineNumberReader(br);
@@ -60,22 +60,25 @@ public class SectionExtractor {
             Pattern p = Pattern.compile("^\\s*" + assemblerComment + ".*@(.*?)@.*");
             // read line by line
             try {
-                while ((line = lineReader.readLine())!=null) {
+                while ((line = lineReader.readLine()) != null) {
                     Matcher m = p.matcher(line);
-                    if (!m.matches()) continue;
+                    if (!m.matches()) {
+                        continue;
+                    }
                     sectionValues.put(m.group(1), lineReader.getLineNumber());
                 }
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
             }
         }
         return sectionValues;
     }
+
     public static ArrayList getSectionLineNumbers(String source, String assemblerComment) {
         return new ArrayList<>(getSections(source, assemblerComment).values());
     }
+
     public static ArrayList getSectionNames(String source, String assemblerComment) {
         return new ArrayList<>(getSections(source, assemblerComment).keySet());
     }
-    
+
 }
