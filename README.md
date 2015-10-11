@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Relaunch64 3.3.4-1 (patch-release)
+Relaunch64 3.3.5 (patch-release)
 ----------------
 ### Changes
 * Improved proper nesting of nested folds vs. splitted ones.
