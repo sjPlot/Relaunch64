@@ -63,7 +63,7 @@ public class ConstantsR64 {
     /**
      * This constants stores the website-address where the app can be downloaded
      */
-    public static final String UPDATE_URI = "http://sourceforge.net/projects/relaunch64/files/";
+    public static final String UPDATE_URI = "https://github.com/sjPlot/Relaunch64/releases";
     /**
      * This constants stores the address of the file that contains update information for the current app version
      */

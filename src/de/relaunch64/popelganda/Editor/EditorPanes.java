@@ -954,7 +954,9 @@ public class EditorPanes {
             if (filepath != null && filepath.exists()) {
                 // read file
                 byte[] buffer = new byte[(int) filepath.length()];
-                try (InputStream in = new FileInputStream(filepath)) {
+                InputStream in = null;
+                try {
+                    in = new FileInputStream(filepath);                    
                     in.read(buffer);
                 } catch (IOException ex) {
                     ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
@@ -984,6 +986,14 @@ public class EditorPanes {
                             mainFrame.updateListContent();
                         }
                     });
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (IOException e) {
+                        ConstantsR64.r64logger.log(Level.WARNING, e.getLocalizedMessage());
+                        return false;
+                    }
                     return true;
                 }
             }

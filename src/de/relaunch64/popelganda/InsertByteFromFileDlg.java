@@ -30,7 +30,6 @@
  * Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm 
  * erhalten haben. Falls nicht, siehe <http://www.gnu.org/licenses/>.
  */
-
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
@@ -58,13 +57,15 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
     private String bytetable = null;
     private final Assembler assembler;
     private final Settings settings;
+
     /**
      * Creates new form InsertByteFromFileDlg
-     * 
+     *
      * @param parent the parent frame of this dialog window
      * @param s a reference to the Settings class
-     * @param assembler a reference to the Assembler-class, representing the assembler of the
-     * currently activated editor pane where the bytes should be inserted.
+     * @param assembler a reference to the Assembler-class, representing the
+     * assembler of the currently activated editor pane where the bytes should
+     * be inserted.
      */
     public InsertByteFromFileDlg(java.awt.Frame parent, Settings s, Assembler assembler) {
         super(parent);
@@ -80,7 +81,8 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
         // presses the cancel button...
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         ActionListener cancelAction = new java.awt.event.ActionListener() {
-            @Override public void actionPerformed(ActionEvent evt) {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
                 cancel();
             }
         };
@@ -90,8 +92,9 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
     @Action
     public void browseFile() {
         fileToOpen = FileTools.chooseFile(null, JFileChooser.OPEN_DIALOG, JFileChooser.FILES_ONLY, settings.getLastUsedPath().getAbsolutePath(), "", "Open binary File", null, "All files");
-        jTextFieldFile.setText((fileToOpen!=null && fileToOpen.exists()) ? fileToOpen.toString() : "");
+        jTextFieldFile.setText((fileToOpen != null && fileToOpen.exists()) ? fileToOpen.toString() : "");
     }
+
     @Action
     public void apply() {
         try {
@@ -100,35 +103,34 @@ public class InsertByteFromFileDlg extends javax.swing.JDialog {
             int end = Integer.parseInt(jTextFieldEndOffset.getText());
             int bpl = Integer.parseInt(jTextFieldBytesPerLine.getText());
             // check for valid bounds 
-            if (start>=0 && (start<end || -1==end) && bpl>0) {
+            if (start >= 0 && (start < end || -1 == end) && bpl > 0) {
                 // check for valid file
-                if (fileToOpen!=null && fileToOpen.exists()) {
+                if (fileToOpen != null && fileToOpen.exists()) {
                     // retrieve byte table from file
                     bytetable = Tools.getByteTableFromFile(fileToOpen, start, end, assembler, bpl);
                     // update last used directory
                     settings.setLastUsedPath(fileToOpen);
                     setVisible(false);
                     dispose();
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null, "File not found or no valid file name specified!");
                     jTextFieldFile.setText("");
                 }
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Invalid values for offsets or bytes per line!");
             }
-        }
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Invalid values for offsets or bytes per line!");
         }
     }
+
     @Action
     public void cancel() {
         bytetable = null;
         setVisible(false);
         dispose();
     }
+
     public String getByteTable() {
         return bytetable;
     }

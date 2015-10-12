@@ -30,7 +30,6 @@
  * Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm 
  * erhalten haben. Falls nicht, siehe <http://www.gnu.org/licenses/>.
  */
-
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.util.ConstantsR64;
@@ -44,7 +43,9 @@ import java.util.logging.Level;
  * @author Daniel Lüdecke
  */
 public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void> {
+
     // indicates whether the zettelkasten has updates or not.
+
     boolean updateavailable = false;
     String updateBuildNr = null;
 
@@ -54,18 +55,19 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         // to ImportFileTask fields, here.
         super(app);
     }
+
     /**
-     * Opens and reads the file {@code updatetext} to get information about the latest
-     * releases.
-     * 
-     * @param updatetext an URL to the (text-)file containg the update information. See
-     * ConstantsR64.UPDATE_INFO_URI.
-     * 
+     * Opens and reads the file {@code updatetext} to get information about the
+     * latest releases.
+     *
+     * @param updatetext an URL to the (text-)file containg the update
+     * information. See ConstantsR64.UPDATE_INFO_URI.
+     *
      * @return the content of the (text-)file
      */
     protected String accessUpdateFile(URL updatetext) {
         // input stream that will read the update text
-        InputStream is;
+        InputStream is = null;
         // stringbuilder that will contain the content of the update-file
         StringBuilder updateinfo = new StringBuilder("");
         try {
@@ -74,25 +76,38 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
             // buffer for stream
             int buff = 0;
             // read update-file and copy content to string builder
-            while (buff!=-1) {
+            while (buff != -1) {
                 buff = is.read();
-                if (buff!=-1) updateinfo.append((char)buff);
+                if (buff != -1) {
+                    updateinfo.append((char) buff);
+                }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // tell about fail
-            ConstantsR64.r64logger.log(Level.INFO,"No access to Relaunch64-Website. Automatic update-check failed.");
+            ConstantsR64.r64logger.log(Level.INFO, "No access to Relaunch64-Website. Automatic update-check failed.");
             updateavailable = false;
             return null;
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+            }
         }
-        return updateinfo.toString();
+        return updateinfo.toString()
+                .replace("\n", "")
+                .replace("\r", "")
+                .trim();
     }
+
     /**
-     * This thread accesses the update information file and checks whether new releases are
-     * available. f yes, an information will be shown in the log window.
-     * 
+     * This thread accesses the update information file and checks whether new
+     * releases are available. f yes, an information will be shown in the log
+     * window.
+     *
      * @return always {@code null}.
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     protected Object doInBackground() throws IOException {
@@ -101,25 +116,30 @@ public class CheckForUpdates extends org.jdesktop.application.Task<Object, Void>
         // the Swing GUI from here.
         updateBuildNr = accessUpdateFile(new URL(ConstantsR64.UPDATE_INFO_URI));
         // check for valid access
-        if (null==updateBuildNr || updateBuildNr.isEmpty()) return null;
+        if (null == updateBuildNr || updateBuildNr.isEmpty()) {
+            return null;
+        }
         // check whether there's a newer version online
-        updateavailable = (ConstantsR64.BUILD_NUMBER.compareTo(updateBuildNr)<0);
+        updateavailable = (ConstantsR64.BUILD_NUMBER.compareTo(updateBuildNr) < 0);
         return null;  // return your result
     }
+
     @Override
     protected void succeeded(Object result) {
         // Runs on the EDT.  Update the GUI based on
         // the result computed by doInBackground().
     }
+
     @Override
     protected void finished() {
         if (updateavailable) {
             //log info
-            ConstantsR64.r64logger.log(Level.INFO,("A new version of Relaunch64 is available!"+System.lineSeparator()+"Download from "+ConstantsR64.UPDATE_URI));
-        }
-        else {
+            ConstantsR64.r64logger.log(Level.INFO, ("A new version of Relaunch64 is available!" + System.lineSeparator() + "Download from " + ConstantsR64.UPDATE_URI));
+        } else {
             // log latest available build
-            if (updateBuildNr!=null) ConstantsR64.r64logger.log(Level.INFO, ("Latest stable Relaunch64-build: "+updateBuildNr));
+            if (updateBuildNr != null) {
+                ConstantsR64.r64logger.log(Level.INFO, ("Latest stable Relaunch64-build: " + updateBuildNr));
+            }
         }
     }
 }
