@@ -1,14 +1,12 @@
 Changelog
 ================
 
-Relaunch64 3.3.5 (patch-release)
+Relaunch64 3.3.6
 ----------------
 ### Changes
-* Improved proper nesting of nested folds vs. splitted ones.
-* Improved performance of code folding.
+* Expand folded lines or sections on jump from Goto-Sidebar ([#25](https://github.com/sjPlot/Relaunch64/issues/25)).
+* More robust load and save operations.
 
 ### Bug fixes
-* Fixed single backslashes were eaten on windows ([#20](https://github.com/sjPlot/Relaunch64/issues/20)).
-* Fixed local labels broke autocomplete ([#21](https://github.com/sjPlot/Relaunch64/issues/21)).
 
 _Download devel-snapshot from [Sourceforge](http://sourceforge.net/projects/relaunch64/files/devel/)._

@@ -338,6 +338,8 @@ public class EditorPanes {
             ep.setCaretPosition(ep.getLineStartOffset(line - 1) + column - 1);
             // scroll and center caret position
             ep.scrollAndCenterCaret();
+            // expand folds, if any
+            ep.expandFold(true);
         }
     }
 
@@ -994,14 +996,13 @@ public class EditorPanes {
                         ConstantsR64.r64logger.log(Level.WARNING, e.getLocalizedMessage());
                         return false;
                     }
-                    return true;
                 }
             }
         } catch (IndexOutOfBoundsException ex) {
             ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
             return false;
         }
-        return false;
+        return true;
     }
 
     /**
