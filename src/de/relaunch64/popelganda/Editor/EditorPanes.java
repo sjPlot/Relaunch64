@@ -925,7 +925,7 @@ public class EditorPanes {
      *
      * @param m the modified state. use {@code true} if source code has unsaved changes.
      */
-    private void setModified(boolean m) {
+    public void setModified(boolean m) {
         // retrieve current tab
         int selectedTab = tabbedPane.getSelectedIndex();
         try {

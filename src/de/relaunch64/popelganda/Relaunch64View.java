@@ -1710,6 +1710,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 if (JOptionPane.CANCEL_OPTION == option || JOptionPane.NO_OPTION == option || JOptionPane.CLOSED_OPTION == option /* User pressed cancel key */) {
                     // reset modified state
                     ep.setLastModified(ep.getFilePath().lastModified());
+                    // set file as modified
+                    editorPanes.setModified(true);
                 } else if (JOptionPane.YES_OPTION == option) {
                     // reload current file
                     editorPanes.reloadFile();

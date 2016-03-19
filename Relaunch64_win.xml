@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>/Users/danielludecke/Dropbox/NetBeans/Relaunch64/r64.ico</icon>
+  <icon>/Users/danielludecke/Documents/Coding/NetBeans/Relaunch64/r64.ico</icon>
   <singleInstance>
     <mutexName>Relaunch64_V3</mutexName>
     <windowTitle></windowTitle>
@@ -28,7 +28,7 @@
     <runtimeBits>64/32</runtimeBits>
   </jre>
   <splash>
-    <file>/Users/danielludecke/Dropbox/NetBeans/Relaunch64/R64splash.bmp</file>
+    <file>/Users/danielludecke/Documents/Coding/NetBeans/Relaunch64/R64splash.bmp</file>
     <waitForWindow>true</waitForWindow>
     <timeout>60</timeout>
     <timeoutErr>true</timeoutErr>
@@ -37,7 +37,7 @@
     <fileVersion>3.3.6.0</fileVersion>
     <txtFileVersion>Relaunch64 V3</txtFileVersion>
     <fileDescription>A C64/65xx cross development IDE</fileDescription>
-    <copyright>2003-2015 by Payday</copyright>
+    <copyright>2003-2016 by Payday</copyright>
     <productVersion>3.3.6.0</productVersion>
     <txtProductVersion>Relaunch64 V3</txtProductVersion>
     <productName>Relaunch64</productName>
