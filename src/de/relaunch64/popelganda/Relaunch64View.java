@@ -34,6 +34,7 @@
 package de.relaunch64.popelganda;
 
 import de.relaunch64.popelganda.Editor.ColorSchemes;
+import de.relaunch64.popelganda.Editor.EditorPaneProperties;
 import de.relaunch64.popelganda.Editor.EditorPanes;
 import de.relaunch64.popelganda.Editor.InsertBreakPoint;
 import de.relaunch64.popelganda.Editor.LabelExtractor;
@@ -415,82 +416,86 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // we assume a new item-selection, so behave like on a mouse-click and
                 // filter the links
                 int selected = -1;
-                if (KeyEvent.VK_UP == evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex() - 1;
-                    if (selected < 0) {
-                        selected = listGotoModel.getSize() - 1;
-                    }
-                } else if (KeyEvent.VK_DOWN == evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex() + 1;
-                    if (selected >= listGotoModel.getSize()) {
+                switch (evt.getKeyCode()) {
+                    case KeyEvent.VK_UP:
+                        selected = jListGoto.getSelectedIndex() - 1;
+                        if (selected < 0) {
+                            selected = listGotoModel.getSize() - 1;
+                        }   break;
+                    case KeyEvent.VK_DOWN:
+                        selected = jListGoto.getSelectedIndex() + 1;
+                        if (selected >= listGotoModel.getSize()) {
+                            selected = 0;
+                        }   break;
+                    case KeyEvent.VK_HOME:
                         selected = 0;
-                    }
-                } else if (KeyEvent.VK_HOME == evt.getKeyCode()) {
-                    selected = 0;
-                } else if (KeyEvent.VK_END == evt.getKeyCode()) {
-                    selected = listGotoModel.getSize() - 1;
-                } else if (KeyEvent.VK_PAGE_DOWN == evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex() + (jListGoto.getLastVisibleIndex() - jListGoto.getFirstVisibleIndex());
-                    if (selected >= listGotoModel.getSize()) {
+                        break;
+                    case KeyEvent.VK_END:
                         selected = listGotoModel.getSize() - 1;
-                    }
-                } else if (KeyEvent.VK_PAGE_UP == evt.getKeyCode()) {
-                    selected = jListGoto.getSelectedIndex() - (jListGoto.getLastVisibleIndex() - jListGoto.getFirstVisibleIndex());
-                    if (selected < 0) {
-                        selected = 0;
-                    }
-                } else if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
-                    // get input
-                    String text = jTextFieldGoto.getText();
-                    // copy current list items into dummy list model
-                    DefaultListModel<RL64ListItem> dummy = new DefaultListModel<>();
-                    for (int i = 0; i < listGotoModel.getSize(); i++) {
-                        dummy.addElement(listGotoModel.get(i));
-                    }
-                    // find items that can be removed
-                    for (int i = listGotoModel.getSize() - 1; i >= 0; i--) {
-                        RL64ListItem item = listGotoModel.get(i);
-                        if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader() && !item.isTitle()) {
-                            listGotoModel.remove(i);
+                        break;
+                    case KeyEvent.VK_PAGE_DOWN:
+                        selected = jListGoto.getSelectedIndex() + (jListGoto.getLastVisibleIndex() - jListGoto.getFirstVisibleIndex());
+                        if (selected >= listGotoModel.getSize()) {
+                            selected = listGotoModel.getSize() - 1;
+                        }   break;
+                    case KeyEvent.VK_PAGE_UP:
+                        selected = jListGoto.getSelectedIndex() - (jListGoto.getLastVisibleIndex() - jListGoto.getFirstVisibleIndex());
+                        if (selected < 0) {
+                            selected = 0;
+                        }   break;
+                    case KeyEvent.VK_ENTER:
+                        {
+                            // get input
+                            String text = jTextFieldGoto.getText();
+                            // copy current list items into dummy list model
+                            DefaultListModel<RL64ListItem> dummy = new DefaultListModel<>();
+                            for (int i = 0; i < listGotoModel.getSize(); i++) {
+                                dummy.addElement(listGotoModel.get(i));
+                            }       // find items that can be removed
+                            for (int i = listGotoModel.getSize() - 1; i >= 0; i--) {
+                                RL64ListItem item = listGotoModel.get(i);
+                                if (!item.getText().toLowerCase().contains(text.toLowerCase()) && !item.isHeader() && !item.isTitle()) {
+                                    listGotoModel.remove(i);
+                                }
+                            }       // count items (excluding header and title) of list
+                            int itemCount = 0;
+                            for (int i = 0; i < listGotoModel.getSize(); i++) {
+                                if (!listGotoModel.get(i).isHeader() && !listGotoModel.get(i).isTitle()) {
+                                    itemCount++;
+                                }
+                            }       // if we have no items, filtering was insufficient. hence, restore old
+                            // list by copying back from dummy
+                            if (0 == itemCount) {
+                                listGotoModel.clear();
+                                for (int i = 0; i < dummy.getSize(); i++) {
+                                    listGotoModel.addElement(dummy.get(i));
+                                }
+                                // indicate "not found" with red color
+                                jTextFieldGoto.setForeground(new Color(160, 40, 40));
+                            } else {
+                                // matched filter-text, so black color
+                                jTextFieldGoto.setForeground(Color.black);
+                            }       evt.consume();
+                            break;
                         }
-                    }
-                    // count items (excluding header and title) of list
-                    int itemCount = 0;
-                    for (int i = 0; i < listGotoModel.getSize(); i++) {
-                        if (!listGotoModel.get(i).isHeader() && !listGotoModel.get(i).isTitle()) {
-                            itemCount++;
+                    case KeyEvent.VK_ESCAPE:
+                        evt.consume();
+                        jTextFieldGoto.setText("");
+                        toggleGotoListVisibility(true);
+                        return;
+                    default:
+                        {
+                            String text = jTextFieldGoto.getText();
+                            if (!text.trim().isEmpty()) {
+                                for (int i = 0; i < listGotoModel.getSize(); i++) {
+                                    RL64ListItem item = listGotoModel.get(i);
+                                    if (item.getText().toLowerCase().startsWith(text.toLowerCase()) && !item.isHeader()) {
+                                        jListGoto.setSelectedIndex(i);
+                                        return;
+                                    }
+                                }
+                            }       break;
                         }
-                    }
-                    // if we have no items, filtering was insufficient. hence, restore old
-                    // list by copying back from dummy
-                    if (0 == itemCount) {
-                        listGotoModel.clear();
-                        for (int i = 0; i < dummy.getSize(); i++) {
-                            listGotoModel.addElement(dummy.get(i));
-                        }
-                        // indicate "not found" with red color
-                        jTextFieldGoto.setForeground(new Color(160, 40, 40));
-                    } else {
-                        // matched filter-text, so black color
-                        jTextFieldGoto.setForeground(Color.black);
-                    }
-                    evt.consume();
-                } else if (KeyEvent.VK_ESCAPE == evt.getKeyCode()) {
-                    evt.consume();
-                    jTextFieldGoto.setText("");
-                    toggleGotoListVisibility(true);
-                    return;
-                } else {
-                    String text = jTextFieldGoto.getText();
-                    if (!text.trim().isEmpty()) {
-                        for (int i = 0; i < listGotoModel.getSize(); i++) {
-                            RL64ListItem item = listGotoModel.get(i);
-                            if (item.getText().toLowerCase().startsWith(text.toLowerCase()) && !item.isHeader()) {
-                                jListGoto.setSelectedIndex(i);
-                                return;
-                            }
-                        }
-                    }
                 }
                 if (selected != -1) {
                     jListGoto.setSelectedIndex(selected);
@@ -505,6 +510,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 // and reset find/replace values, because the content has changed and former
                 // find-index-values are no longer valid
                 findReplace.resetValues();
+                // check for external changes
+                checkExternalFileChange();
             }
         });
         /**
@@ -1683,6 +1690,34 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         openFile(fileToOpen);
     }
 
+    
+    /**
+     * Check whether the currently active file has been externally changed.
+     */
+    private void checkExternalFileChange() {
+        if (editorPanes != null) {
+            // get current activated editor pane
+            EditorPaneProperties ep = editorPanes.getActiveEditorPaneProperties();
+            // is file changed?
+            if (ep != null && ep.isFileModified()) {
+                // open a confirm dialog
+                int option = JOptionPane.showConfirmDialog(getFrame(), 
+                        resourceMap.getString("externalChangesMsg"), 
+                        resourceMap.getString("externalChangesTitle"), 
+                        JOptionPane.YES_NO_CANCEL_OPTION, 
+                        JOptionPane.PLAIN_MESSAGE);
+                // if action is cancelled, return to the program
+                if (JOptionPane.CANCEL_OPTION == option || JOptionPane.NO_OPTION == option || JOptionPane.CLOSED_OPTION == option /* User pressed cancel key */) {
+                    // reset modified state
+                    ep.setLastModified(ep.getFilePath().lastModified());
+                } else if (JOptionPane.YES_OPTION == option) {
+                    // reload current file
+                    editorPanes.reloadFile();
+                }
+            } 
+        }
+    }
+    
     private void openFile(File fileToOpen) {
         openFile(fileToOpen, settings.getPreferredAssembler());
     }
@@ -2447,6 +2482,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
 
     @Override
     public void windowActivated(WindowEvent e) {
+        checkExternalFileChange();
     }
 
     @Override

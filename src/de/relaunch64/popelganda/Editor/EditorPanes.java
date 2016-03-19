@@ -398,6 +398,24 @@ public class EditorPanes {
     }
 
     /**
+     * Sets the input focus to the editor pane and positions the cursor
+     * at {@code pos}.
+     *
+     * @param editorPane
+     * @param pos the new cursor position
+     */
+    private void setCursor(RL64TextArea editorPane, int pos) {
+        // request input focus
+        editorPane.requestFocusInWindow();
+        try {
+            editorPane.setCaretPosition(pos);
+            // scroll and center caret position
+            editorPane.scrollToCaret(false);
+        } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
+        }
+    }
+
+    /**
      * Inserts a (commented) section line into the source code. Sections are specific commented line
      * which may be used for source code navigation.
      *
@@ -976,10 +994,14 @@ public class EditorPanes {
                     boolean LF = buf.contains("\n");
                     // if yes, add new tab
                     int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script) - 1;
-                    // set cursor
+                    // get editor pane properties
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
+                    // set cursor
                     setCursor(epp.getEditorPane());
+                    // set line endings
                     epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.lineSeparator());
+                    // save modifed date
+                    epp.setLastModified(filepath.lastModified());
                     // update labels, in case we have them shown
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
@@ -1005,6 +1027,78 @@ public class EditorPanes {
         return true;
     }
 
+    /**
+     * Reloads a file after external changes. Loads in the content of the file that is associated with
+     * the currently selected tab and then sets the text to the editor pane.
+     * 
+     * @return 
+     */
+    public boolean reloadFile() {
+        // get filepath of active tab
+        File filepath = getActiveFilePath();
+        try {
+            // check for valid value
+            if (filepath != null && filepath.exists()) {
+                // read file
+                byte[] buffer = new byte[(int) filepath.length()];
+                InputStream in = null;
+                try {
+                    in = new FileInputStream(filepath);                    
+                    in.read(buffer);
+                } catch (IOException ex) {
+                    ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
+                    return false;
+                } finally {
+                    String buf = new String(buffer);
+                    boolean CRLF = buf.contains("\r\n");
+                    if (CRLF) {
+                        buf = buf.replaceAll("\r\n", "\n");
+                    }
+                    boolean CR = buf.contains("\r");
+                    if (CR) {
+                        buf = buf.replaceAll("\r", "\n");
+                    }
+                    boolean LF = buf.contains("\n");
+                    // get current editor pane properties
+                    EditorPaneProperties epp = getActiveEditorPaneProperties();
+                    // get cursor
+                    int cursorpos = epp.getEditorPane().getCaretPosition();
+                    // set text
+                    epp.getEditorPane().setText(buf);
+                    // set cursor
+                    setCursor(epp.getEditorPane(), cursorpos);
+                    epp.setLineEnd(LF ? (CRLF ? "\r\n" : (CR ? "\r" : "\n")) : System.lineSeparator());
+                    // update labels, in case we have them shown
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            // set cursor
+                            mainFrame.updateListContent();
+                        }
+                    });
+                    // don't set modified state after refresh
+                    epp.setModified(false);
+                    // reset modified state
+                    epp.setLastModified(filepath.lastModified());
+                    // set tab modified false
+                    setModified(false);
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (IOException e) {
+                        ConstantsR64.r64logger.log(Level.WARNING, e.getLocalizedMessage());
+                        return false;
+                    }
+                }
+            }
+        } catch (IndexOutOfBoundsException ex) {
+            ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * Returns the index of the tab with the file {@code fp}.
      *

@@ -50,6 +50,7 @@ public class EditorPaneProperties {
     private String lineEnd;
     private int labelSourcePosition;
     private int labelDefinitionPosition;
+    private long lastModified;
     
     public EditorPaneProperties() {
         resetEditorPanesProperties();
@@ -59,6 +60,7 @@ public class EditorPaneProperties {
         modified = false;
         filePath = null;
         script = 0;
+        lastModified = 0L;
         lineEnd = System.lineSeparator();
     }
     public RL64TextArea getEditorPane() {
@@ -78,6 +80,22 @@ public class EditorPaneProperties {
     }
     public void setEditorPane(RL64TextArea ep) {
         editorPane = ep;
+    }
+    public long getLastModified() {
+        return lastModified;
+    }
+    public void setLastModified(long m) {
+        lastModified = m;
+    }
+    public boolean isFileModified() {
+        // first check for valid file path
+        if (filePath != null && filePath.exists()) {
+            // then check for modification date
+            if (lastModified != 0L) {
+                return lastModified != filePath.lastModified();
+            }
+        }
+        return false;
     }
     public boolean isModified() {
         return modified;
