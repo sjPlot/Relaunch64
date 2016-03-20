@@ -1179,6 +1179,8 @@ public class EditorPanes {
                             setTabTitle(selectedTab, filepath);
                             // set file path
                             editorPaneArray.get(selectedTab).setFilePath(filepath);
+                            // set last modified
+                            editorPaneArray.get(selectedTab).setLastModified(filepath.lastModified());
                         } catch (IOException ex) {
                             ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
                             return false;

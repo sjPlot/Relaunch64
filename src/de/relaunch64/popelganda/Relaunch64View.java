@@ -1622,6 +1622,47 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         editorPanes.setFocus();
     }
 
+    @Action
+    public void openInExternalEditor() {
+        // check if source file needs to be saved and auto save is active
+        if (editorPanes.getActiveFilePath() == null || editorPanes.isModified()) {
+            editorPanes.saveFile();
+        }
+        // retrieve ASM-Source file
+        File sourceFile = editorPanes.getActiveFilePath();
+        // no file :(
+        if (sourceFile == null) {
+            return;
+        }
+        // get external editor path
+        String ee = settings.getExternalEditorPath();
+        // no editor :(
+        if (ee == null || ee.isEmpty()) {
+            return;
+        }
+        // surround pathes with quotes, if necessary
+        String sf = sourceFile.toString();
+        if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) {
+            sf = "\"" + sf + "\"";
+        }
+        // replace placeholders
+        ee = ee.replace(Assembler.INPUT_FILE, sf);
+        // tonkenize command line
+        ProcessBuilder pb;
+        // Start ProcessBuilder
+        // pb = new ProcessBuilder(cmd.split(" "));
+        pb = new ProcessBuilder(Tools.tokeniseCommandLine(ee));
+        try {
+            // start process
+            pb.start();
+            // log process
+            ConstantsR64.r64logger.log(Level.INFO, "Open in external editor: {0}", ee);
+        } catch (IOException ex) {
+            // thread has not been terminated correctly, so log warning
+            ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
+        }
+    }
+    
     /**
      *
      */
@@ -2707,6 +2748,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jSeparator25 = new javax.swing.JPopupMenu.Separator();
         jMenuItemSpaceToTab = new javax.swing.JMenuItem();
         jMenuItemAllSpaceToTab = new javax.swing.JMenuItem();
+        jSeparator35 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemExternEditor = new javax.swing.JMenuItem();
         findMenu = new javax.swing.JMenu();
         findStartMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
@@ -3303,6 +3346,13 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jMenuItemAllSpaceToTab.setAction(actionMap.get("allSpacesToTabs")); // NOI18N
         jMenuItemAllSpaceToTab.setName("jMenuItemAllSpaceToTab"); // NOI18N
         editMenu.add(jMenuItemAllSpaceToTab);
+
+        jSeparator35.setName("jSeparator35"); // NOI18N
+        editMenu.add(jSeparator35);
+
+        jMenuItemExternEditor.setAction(actionMap.get("openInExternalEditor")); // NOI18N
+        jMenuItemExternEditor.setName("jMenuItemExternEditor"); // NOI18N
+        editMenu.add(jMenuItemExternEditor);
 
         menuBar.add(editMenu);
 
@@ -3918,6 +3968,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem jMenuItemCollapseFold;
     private javax.swing.JMenuItem jMenuItemExpandAllFolds;
     private javax.swing.JMenuItem jMenuItemExpandFold;
+    private javax.swing.JMenuItem jMenuItemExternEditor;
     private javax.swing.JMenuItem jMenuItemNextFold;
     private javax.swing.JMenuItem jMenuItemPrevFold;
     private javax.swing.JMenuItem jMenuItemShowHideGoto;
@@ -3965,6 +4016,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JToolBar.Separator jSeparator32;
     private javax.swing.JToolBar.Separator jSeparator33;
     private javax.swing.JPopupMenu.Separator jSeparator34;
+    private javax.swing.JPopupMenu.Separator jSeparator35;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;

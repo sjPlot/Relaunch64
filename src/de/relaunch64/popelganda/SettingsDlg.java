@@ -39,7 +39,9 @@ import de.relaunch64.popelganda.database.Settings;
 import de.relaunch64.popelganda.util.ConstantsR64;
 import de.relaunch64.popelganda.assemblers.Assembler;
 import de.relaunch64.popelganda.assemblers.Assemblers;
+import de.relaunch64.popelganda.util.FileTools;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -78,6 +80,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private final EditorPanes editorPanes;
     private Font mainfont;
     private static final String quickHelpText = "Enter command lines here or drag & drop executable files\n(first compiler, then cruncher (optional), finally emulator)\nfrom explorer window to automatically generate a script.\n\nPress help-button for more details and examples.";
+    private static final String quickHelpTextEE = "Enter command line or drag & drop executable file";
     private final Relaunch64View mainFrame;
     /**
      * Creates new form SettingsDlg
@@ -164,6 +167,15 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         initSchemes();
         // init user scripts, including combo box setting etc
         initScripts();
+        // init textfield external editor
+        String fpee = settings.getExternalEditorPath();
+        if (fpee != null && !fpee.isEmpty()) {
+            jTextFieldExternalEditor.setForeground(Color.black);            
+            jTextFieldExternalEditor.setText(fpee);
+        } else {
+            jTextFieldExternalEditor.setForeground(Color.lightGray);            
+            jTextFieldExternalEditor.setText(quickHelpTextEE);
+        }
         // init listeners afterwards, because script-init fires events
         initListeners();
         // get tab char
@@ -493,6 +505,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             @Override public void insertUpdate(DocumentEvent e) { setModifiedTabFont(true); }
             @Override public void removeUpdate(DocumentEvent e) { setModifiedTabFont(true); }
         });
+        jTextFieldExternalEditor.getDocument().addDocumentListener(new DocumentListener() {
+            @Override public void changedUpdate(DocumentEvent e) { setModifiedTabOther(true); }
+            @Override public void insertUpdate(DocumentEvent e) { setModifiedTabOther(true); }
+            @Override public void removeUpdate(DocumentEvent e) { setModifiedTabOther(true); }
+        });
         jTextAreaUserScript.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override public void focusGained(java.awt.event.FocusEvent evt) {
                 String content = jTextAreaUserScript.getText();
@@ -511,7 +528,27 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         });
         jTextAreaUserScript.setDragEnabled(true);
         DropTarget dropTarget = new DropTarget(jTextAreaUserScript, this);   
+        jTextFieldExternalEditor.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override public void focusGained(java.awt.event.FocusEvent evt) {
+                String content = jTextFieldExternalEditor.getText();
+                if (content.equalsIgnoreCase(quickHelpTextEE)) {
+                    jTextFieldExternalEditor.setText("");
+                    jTextFieldExternalEditor.setForeground(Color.black);
+                }
+            }
+            @Override public void focusLost(java.awt.event.FocusEvent evt) {
+                String content = jTextFieldExternalEditor.getText();
+                if (content.isEmpty()) {
+                    jTextFieldExternalEditor.setText(quickHelpTextEE);
+                    jTextFieldExternalEditor.setForeground(Color.lightGray);
+                }
+            }
+        });
+        jTextFieldExternalEditor.setDragEnabled(true);
+        DropTarget dropTargetEE = new DropTarget(jTextFieldExternalEditor, this);   
     }
+    
+    
     private void switchButtonLabel() {
         String name = jTextFieldScriptName.getText();
         String content = jTextAreaUserScript.getText();
@@ -650,6 +687,11 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         settings.setUseScrollTabs(!jCheckBoxUseScrollTabs.isSelected());
         settings.setShowToolbar(jCheckBoxShowToolbar.isSelected());
         settings.setShowToolbarText(jCheckBoxTbText.isSelected());
+        String fpee = jTextFieldExternalEditor.getText();
+        if (fpee.equals(quickHelpTextEE)) {
+            fpee = "";
+        }
+        settings.setExternalEditorPath(fpee);
         editorPanes.updateTabCloseButtons();
         editorPanes.updateTitles();
         editorPanes.updateLabelBufferSize();
@@ -784,6 +826,8 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxUseScrollTabs = new javax.swing.JCheckBox();
         jCheckBoxShowToolbar = new javax.swing.JCheckBox();
         jCheckBoxTbText = new javax.swing.JCheckBox();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldExternalEditor = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(de.relaunch64.popelganda.Relaunch64App.class).getContext().getResourceMap(SettingsDlg.class);
@@ -843,7 +887,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                         .add(jButtonRemoveScript)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonApplyScript))
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
                     .add(jPanel3Layout.createSequentialGroup()
                         .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel8)
@@ -1034,7 +1078,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                             .add(jCheckBoxFindFieldFocus)
                             .add(jCheckBoxFindByType)
                             .add(jCheckBoxProcessWait))
-                        .add(0, 153, Short.MAX_VALUE)))
+                        .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -1126,19 +1170,17 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
-                        .add(jButtonApplyScheme))
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanel2Layout.createSequentialGroup()
-                                .add(jLabel2)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jLabelSchemePreview)
-                            .add(jCheckBoxAlternativeAssemblyMode)
-                            .add(jCheckBoxShowLineHighlight))
-                        .add(0, 423, Short.MAX_VALUE)))
+                        .add(jLabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jComboBoxSyntaxScheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jLabelSchemePreview)
+                    .add(jCheckBoxAlternativeAssemblyMode)
+                    .add(jCheckBoxShowLineHighlight))
+                .add(0, 377, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jButtonApplyScheme)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -1213,40 +1255,52 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
         jCheckBoxTbText.setText(resourceMap.getString("jCheckBoxTbText.text")); // NOI18N
         jCheckBoxTbText.setName("jCheckBoxTbText"); // NOI18N
 
+        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        jTextFieldExternalEditor.setName("jTextFieldExternalEditor"); // NOI18N
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
-                        .add(jButtonApplyOther))
                     .add(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jCheckBoxCheckUpdates)
-                            .add(jCheckBoxSaveOnCompile)
-                            .add(jCheckBoxReopenFiles)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .add(0, 0, Short.MAX_VALUE)
+                                .add(jButtonApplyOther))
                             .add(jPanel1Layout.createSequentialGroup()
-                                .add(jCheckBoxNimbusOnOSX)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabelRestart2))
-                            .add(jCheckBoxShowExtInTab)
-                            .add(jCheckBoxShowBufferSize)
-                            .add(jCheckBoxShowCloseButton)
-                            .add(jPanel1Layout.createSequentialGroup()
-                                .add(jCheckBoxScaleFonts)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabelRestart))
-                            .add(jCheckBoxUseScrollTabs)
-                            .add(jCheckBoxShowToolbar))
-                        .add(0, 291, Short.MAX_VALUE)))
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jCheckBoxCheckUpdates)
+                                    .add(jCheckBoxSaveOnCompile)
+                                    .add(jCheckBoxReopenFiles)
+                                    .add(jPanel1Layout.createSequentialGroup()
+                                        .add(jCheckBoxNimbusOnOSX)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                        .add(jLabelRestart2))
+                                    .add(jCheckBoxShowExtInTab)
+                                    .add(jCheckBoxShowBufferSize)
+                                    .add(jCheckBoxShowCloseButton)
+                                    .add(jPanel1Layout.createSequentialGroup()
+                                        .add(jCheckBoxScaleFonts)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                        .add(jLabelRestart))
+                                    .add(jCheckBoxUseScrollTabs)
+                                    .add(jCheckBoxShowToolbar))
+                                .add(0, 144, Short.MAX_VALUE))))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(33, 33, 33)
+                        .add(jCheckBoxTbText)
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel4)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jTextFieldExternalEditor)))
                 .addContainerGap())
-            .add(jPanel1Layout.createSequentialGroup()
-                .add(33, 33, 33)
-                .add(jCheckBoxTbText)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1277,6 +1331,10 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     .add(jLabelRestart))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxUseScrollTabs)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel4)
+                    .add(jTextFieldExternalEditor, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jButtonApplyOther)
                 .addContainerGap())
@@ -1348,6 +1406,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1363,6 +1422,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextAreaUserScript;
+    private javax.swing.JTextField jTextFieldExternalEditor;
     private javax.swing.JTextField jTextFieldScriptName;
     private javax.swing.JTextField jTextFieldTabWidth;
     // End of variables declaration//GEN-END:variables
@@ -1385,6 +1445,7 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
     public void drop(DropTargetDropEvent dtde) {
         // get transferable
         Transferable tr = dtde.getTransferable();
+        Component c = dtde.getDropTargetContext().getDropTarget().getComponent();
         try {
             // check whether we have files dropped into textarea
             if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
@@ -1399,51 +1460,64 @@ public class SettingsDlg extends javax.swing.JDialog implements DropTargetListen
                     for (Object file1 : files) {
                         // get each single object from droplist
                         file = (File) file1;
+                        String ext = FileTools.getFileExtension(file);
                         // check whether it is a file
-                        if (file.isFile()) {
+                        if (file.isFile() || ext.equalsIgnoreCase("app") || ext.equalsIgnoreCase("exe")) {
                             // retrieve complete path as string
                             String fp = file.getAbsolutePath();
                             // check if we have white spaces- if yes, enquote
-                            if (fp.contains(" ")) fp = "\""+fp+"\"";
-                            // retrieve current content
-                            String text = jTextAreaUserScript.getText();
-                            // define output file. if we have a cruncher with "compressed file" placeholder,
-                            // we assume that output file will be compressed.
-                            String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : Assembler.OUTPUT_FILE_REL;
-                            String insert = "";
-                            Assembler assembler = Assemblers.byFileName(fp);
-                            if (assembler != null) {
-                                insert = assembler.getDefaultCommandLine(fp);
+                            if (fp.contains(" ")) fp = "\"" + fp + "\"";
+                            // drop location?
+                            if ("jTextAreaUserScript".equals(c.getName())) {
+                                // retrieve current content
+                                String text = jTextAreaUserScript.getText();
+                                // define output file. if we have a cruncher with "compressed file" placeholder,
+                                // we assume that output file will be compressed.
+                                String outputfile = (text.contains(ConstantsR64.ASSEMBLER_COMPRESSED_FILE)) ? ConstantsR64.ASSEMBLER_COMPRESSED_FILE : Assembler.OUTPUT_FILE_REL;
+                                String insert = "";
+                                Assembler assembler = Assemblers.byFileName(fp);
+                                if (assembler != null) {
+                                    insert = assembler.getDefaultCommandLine(fp);
+                                }
+                                else if (fp.toLowerCase().contains("exomizer")) {
+                                    insert = fp + " " + ConstantsR64.DEFAULT_EXOMIZER_PARAM;
+                                }
+                                else if (fp.toLowerCase().contains("pucrunch")) {
+                                    insert = fp + " " + ConstantsR64.DEFAULT_PUCRUNCH_PARAM;
+                                }
+                                else if (fp.toLowerCase().contains("x64")) {
+                                    insert = fp + " " + outputfile;
+                                }
+                                else if (fp.toLowerCase().contains("emu64")) {
+                                    insert = fp + " " + outputfile;
+                                }
+                                else if (fp.toLowerCase().contains("ccs64")) {
+                                    insert = fp + " " + outputfile;
+                                }
+                                // on OS X, check for Applications folder
+                                if (ConstantsR64.IS_OSX && fp.toLowerCase().contains("/applications/") && !insert.startsWith("java")) insert = "open "+insert;
+                                // black color
+                                jTextAreaUserScript.setForeground(Color.black);
+                                // if text field is not empty and is not the default
+                                // quick help text, insert new line
+                                if (!text.isEmpty() && !text.equalsIgnoreCase(quickHelpText)) {
+                                    jTextAreaUserScript.append(System.lineSeparator());
+                                }
+                                else {
+                                    jTextAreaUserScript.setText("");
+                                }
+                                // insert string in textfield
+                                jTextAreaUserScript.append(insert);
+                            } else if ("jTextFieldExternalEditor".equals(c.getName())) {
+                                // create default string
+                                String insert = fp + " " + Assembler.INPUT_FILE;
+                                // on OS X, check for Applications folder
+                                if (ConstantsR64.IS_OSX && fp.toLowerCase().contains("/applications/") && !insert.startsWith("java")) insert = "open " + insert;
+                                // black color
+                                jTextFieldExternalEditor.setForeground(Color.black);
+                                // insert string in textfield
+                                jTextFieldExternalEditor.setText(insert);
                             }
-                            else if (fp.toLowerCase().contains("exomizer")) {
-                                insert = fp+" "+ConstantsR64.DEFAULT_EXOMIZER_PARAM;
-                            }
-                            else if (fp.toLowerCase().contains("pucrunch")) {
-                                insert = fp+" "+ConstantsR64.DEFAULT_PUCRUNCH_PARAM;
-                            }
-                            else if (fp.toLowerCase().contains("x64")) {
-                                insert = fp+" "+outputfile;
-                            }
-                            else if (fp.toLowerCase().contains("emu64")) {
-                                insert = fp+" "+outputfile;
-                            }
-                            else if (fp.toLowerCase().contains("ccs64")) {
-                                insert = fp+" "+outputfile;
-                            }
-                            // on OS X, check for Applications folder
-                            if (ConstantsR64.IS_OSX && fp.toLowerCase().contains("/Applications/") && !insert.startsWith("java")) insert = "open "+insert;
-                            // black color
-                            jTextAreaUserScript.setForeground(Color.black);
-                            // if text field is not empty and is not the default
-                            // quick help text, insert new line
-                            if (!text.isEmpty() && !text.equalsIgnoreCase(quickHelpText)) {
-                                jTextAreaUserScript.append(System.lineSeparator());
-                            }
-                            else {
-                                jTextAreaUserScript.setText("");
-                            }
-                            // insert string in textfield
-                            jTextAreaUserScript.append(insert);
                         }
                     }
                 }

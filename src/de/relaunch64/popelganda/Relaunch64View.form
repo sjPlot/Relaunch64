@@ -909,6 +909,19 @@
                 <Property name="name" type="java.lang.String" value="jMenuItemAllSpaceToTab" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator35">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator35" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemExternEditor">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="openInExternalEditor" methodName="openInExternalEditor"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jMenuItemExternEditor" noResource="true"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="findMenu">

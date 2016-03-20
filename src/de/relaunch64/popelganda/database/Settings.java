@@ -112,6 +112,7 @@ public class Settings {
     private static final String SETTING_USE_NOTABS = "usenotabs";
     private static final String SETTING_FINDBYTYPE = "findbytype";
     private static final String SETTING_WAITFORPROCESS = "waitforprocess";
+    private static final String SETTING_EXTERNALEDITOR = "externaleditor";
 
     private static final String ATTR_ASM = "compiler";
     private static final String ATTR_SCRIPT = "script";
@@ -213,267 +214,57 @@ public class Settings {
             el.setText(Font.MONOSPACED);
             el.setAttribute("size", "12");
         }
-        if (null == root.getChild(SETTING_LAST_USED_PATH)) {
-            // create element
-            Element el = new Element(SETTING_LAST_USED_PATH);
-            el.setText("");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_ANTIALIAS)) {
-            // create element
-            Element el = new Element(SETTING_ANTIALIAS);
-            el.setText(AntiAlias.SUBPIXEL);
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SIDEBAR_ISHIDDEN)) {
-            // create element
-            Element el = new Element(SETTING_SIDEBAR_ISHIDDEN);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_USE_NOTABS)) {
-            // create element
-            Element el = new Element(SETTING_USE_NOTABS);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_FINDBYTYPE)) {
-            // create element
-            Element el = new Element(SETTING_FINDBYTYPE);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_WAITFORPROCESS)) {
-            // create element
-            Element el = new Element(SETTING_WAITFORPROCESS);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CODE_FOLDING)) {
-            // create element
-            Element el = new Element(SETTING_CODE_FOLDING);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CF_BRACES)) {
-            // create element
-            Element el = new Element(SETTING_CF_BRACES);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CF_DIRECTIVES)) {
-            // create element
-            Element el = new Element(SETTING_CF_DIRECTIVES);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CF_LABELS)) {
-            // create element
-            Element el = new Element(SETTING_CF_LABELS);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CF_MANUAL)) {
-            // create element
-            Element el = new Element(SETTING_CF_MANUAL);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CF_STRUCTS)) {
-            // create element
-            Element el = new Element(SETTING_CF_STRUCTS);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CF_SECTIONS)) {
-            // create element
-            Element el = new Element(SETTING_CF_SECTIONS);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SCALE_FONT)) {
-            // create element
-            Element el = new Element(SETTING_SCALE_FONT);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_CHECKUPDATES)) {
-            // create element
-            Element el = new Element(SETTING_CHECKUPDATES);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_FINDFIELDFOCUS)) {
-            // create element
-            Element el = new Element(SETTING_FINDFIELDFOCUS);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_ALT_ASM_MODE)) {
-            // create element
-            Element el = new Element(SETTING_ALT_ASM_MODE);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SHOW_LINEHIGLIGHT)) {
-            // create element
-            Element el = new Element(SETTING_SHOW_LINEHIGLIGHT);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SHOW_BUFFERSIZE)) {
-            // create element
-            Element el = new Element(SETTING_SHOW_BUFFERSIZE);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SHOW_EXT_IN_TAB)) {
-            // create element
-            Element el = new Element(SETTING_SHOW_EXT_IN_TAB);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SHOW_CLOSEBUTTON)) {
-            // create element
-            Element el = new Element(SETTING_SHOW_CLOSEBUTTON);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SHOW_TOOLBAR)) {
-            // create element
-            Element el = new Element(SETTING_SHOW_TOOLBAR);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SHOW_TOOLBARTEXT)) {
-            // create element
-            Element el = new Element(SETTING_SHOW_TOOLBARTEXT);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SUGGEST_SORT_CASE)) {
-            // create element
-            Element el = new Element(SETTING_SUGGEST_SORT_CASE);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_REOPEN_FILES_ON_STARTUP)) {
-            // create element
-            Element el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SAVEONCOMPILE)) {
-            // create element
-            Element el = new Element(SETTING_SAVEONCOMPILE);
-            el.setText("1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_NIMBUS_ON_OSX)) {
-            // create element
-            Element el = new Element(SETTING_NIMBUS_ON_OSX);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_USE_SCROLL_TABS)) {
-            // create element
-            Element el = new Element(SETTING_USE_SCROLL_TABS);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_PREF_ASM)) {
-            // create element
-            Element el = new Element(SETTING_PREF_ASM);
-            el.setText(String.valueOf(Assemblers.ASM_KICKASSEMBLER.getID()));
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SIDEBAR_SORT)) {
-            // create element
-            Element el = new Element(SETTING_SIDEBAR_SORT);
-            el.setText(String.valueOf(SORT_CASE));
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_SYNTAX_SCHEME)) {
-            // create element
-            Element el = new Element(SETTING_SYNTAX_SCHEME);
-            el.setText(String.valueOf(ColorSchemes.SCHEME_DEFAULT));
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_LAST_SCRIPT)) {
-            // create element
-            Element el = new Element(SETTING_LAST_SCRIPT);
-            el.setText("0");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_LOGSPLITLAYOUT)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_LOGSPLITLAYOUT);
-            el.setText(String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_TABWIDTH)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_TABWIDTH);
-            el.setText("4");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_LISTGOTOINDEX)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_LISTGOTOINDEX);
-            el.setText("-1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_DIVIDER_LOCATION)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_DIVIDER_LOCATION);
-            el.setText("-1");
-            // and add it to the document
-            root.addContent(el);
-        }
-        if (null == root.getChild(SETTING_LINE_NUMBER_ALIGNMENT)) {
-            // create a filepath-element
-            Element el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
-            el.setText(String.valueOf(Gutter.RIGHT));
-            // and add it to the document
-            root.addContent(el);
-        }
+        
+        genericElementInit(SETTING_LAST_USED_PATH, "");
+        genericElementInit(SETTING_EXTERNALEDITOR, "");
+        genericElementInit(SETTING_ANTIALIAS, AntiAlias.SUBPIXEL);
+        genericElementInit(SETTING_SIDEBAR_ISHIDDEN, "1");
+        genericElementInit(SETTING_USE_NOTABS, "0");
+        genericElementInit(SETTING_FINDBYTYPE, "1");
+        genericElementInit(SETTING_WAITFORPROCESS, "1");
+        genericElementInit(SETTING_CODE_FOLDING, "1");
+        genericElementInit(SETTING_CF_BRACES, "1");
+        genericElementInit(SETTING_CF_DIRECTIVES, "1");
+        genericElementInit(SETTING_CF_LABELS, "1");
+        genericElementInit(SETTING_CF_MANUAL, "1");
+        genericElementInit(SETTING_CF_STRUCTS, "1");
+        genericElementInit(SETTING_CF_SECTIONS, "1");
+        genericElementInit(SETTING_SCALE_FONT, "1");
+        genericElementInit(SETTING_CHECKUPDATES, "1");
+        genericElementInit(SETTING_FINDFIELDFOCUS, "0");
+        genericElementInit(SETTING_ALT_ASM_MODE, "0");
+        genericElementInit(SETTING_SHOW_LINEHIGLIGHT, "0");
+        genericElementInit(SETTING_SHOW_BUFFERSIZE, "1");
+        genericElementInit(SETTING_SHOW_EXT_IN_TAB, "0");
+        genericElementInit(SETTING_SHOW_CLOSEBUTTON, "1");
+        genericElementInit(SETTING_SHOW_TOOLBAR, "1");
+        genericElementInit(SETTING_SHOW_TOOLBARTEXT, "1");
+        genericElementInit(SETTING_SUGGEST_SORT_CASE, "0");
+        genericElementInit(SETTING_REOPEN_FILES_ON_STARTUP, "1");
+        genericElementInit(SETTING_SAVEONCOMPILE, "1");
+        genericElementInit(SETTING_NIMBUS_ON_OSX, "0");
+        genericElementInit(SETTING_USE_SCROLL_TABS, "0");
+        genericElementInit(SETTING_PREF_ASM, String.valueOf(Assemblers.ASM_KICKASSEMBLER.getID()));
+        genericElementInit(SETTING_SIDEBAR_SORT, String.valueOf(SORT_CASE));
+        genericElementInit(SETTING_SYNTAX_SCHEME, String.valueOf(ColorSchemes.SCHEME_DEFAULT));
+        genericElementInit(SETTING_LAST_SCRIPT, "0");
+        genericElementInit(SETTING_LOGSPLITLAYOUT, String.valueOf(JSplitPane.HORIZONTAL_SPLIT));
+        genericElementInit(SETTING_TABWIDTH, "4");
+        genericElementInit(SETTING_LISTGOTOINDEX, "1");
+        genericElementInit(SETTING_DIVIDER_LOCATION, "-1");
+        genericElementInit(SETTING_LINE_NUMBER_ALIGNMENT, String.valueOf(Gutter.RIGHT));
     }
 
+    private void genericElementInit(String attr, String value) {
+        if (null == settingsFile.getRootElement().getChild(attr)) {
+            // create a filepath-element
+            Element el = new Element(attr);
+            el.setText(value);
+            // and add it to the document
+            settingsFile.getRootElement().addContent(el);
+        }
+    }
+    
     /**
      * Retrieves the recent document at the position {@code nr}. Returns {@code null} if recent
      * document does not exist or is empty
@@ -715,54 +506,27 @@ public class Settings {
     }
 
     public String getAntiAlias() {
-        Element el = root.getChild(SETTING_ANTIALIAS);
-        if (el != null) {
-            return el.getText();
-        }
-        return AntiAlias.SUBPIXEL;
+        return genericStringGetter(SETTING_ANTIALIAS, AntiAlias.SUBPIXEL);
     }
 
     public void setAntiAlias(String aa) {
-        Element el = root.getChild(SETTING_ANTIALIAS);
-        if (null == el) {
-            el = new Element(SETTING_ANTIALIAS);
-            root.addContent(el);
-        }
-        el.setText(aa);
+        genericStringSetter(SETTING_ANTIALIAS, aa);
     }
 
     public boolean getScaleFont() {
-        Element el = root.getChild(SETTING_SCALE_FONT);
-        if (el != null) {
-            return el.getText().equals("1");
-        }
-        return true;
+        return genericBooleanGetter(SETTING_SCALE_FONT);
     }
 
     public void setScaleFont(boolean scale) {
-        Element el = root.getChild(SETTING_SCALE_FONT);
-        if (null == el) {
-            el = new Element(SETTING_SCALE_FONT);
-            root.addContent(el);
-        }
-        el.setText(scale == Boolean.TRUE ? "1" : "0");
+        genericBooleanSetter(SETTING_SCALE_FONT, scale);
     }
 
     public boolean getSidebarIsHidden() {
-        Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
-        if (el != null) {
-            return el.getText().equals("1");
-        }
-        return true;
+        return genericBooleanGetter(SETTING_SIDEBAR_ISHIDDEN);
     }
 
     public void setSidebarIsHidden(boolean val) {
-        Element el = root.getChild(SETTING_SIDEBAR_ISHIDDEN);
-        if (null == el) {
-            el = new Element(SETTING_SIDEBAR_ISHIDDEN);
-            root.addContent(el);
-        }
-        el.setText(val == Boolean.TRUE ? "1" : "0");
+        genericBooleanSetter(SETTING_SIDEBAR_ISHIDDEN, val);
     }
 
     public boolean getUseNoTabs() {
@@ -1241,25 +1005,20 @@ public class Settings {
         el.setText(String.valueOf(tabwidth));
     }
 
+    public String getExternalEditorPath() {
+        return genericStringGetter(SETTING_EXTERNALEDITOR, "");
+    }
+    
+    public void setExternalEditorPath(String path) {
+        genericStringSetter(SETTING_EXTERNALEDITOR, path);
+    }
+    
     public int getDividerLocation() {
-        Element el = root.getChild(SETTING_DIVIDER_LOCATION);
-        if (el != null) {
-            try {
-                return Integer.parseInt(el.getText());
-            } catch (NumberFormatException ex) {
-                return -1;
-            }
-        }
-        return 4;
+        return genericIntGetter(SETTING_DIVIDER_LOCATION, 4);
     }
 
     public void setDividerLocation(int pos) {
-        Element el = root.getChild(SETTING_DIVIDER_LOCATION);
-        if (null == el) {
-            el = new Element(SETTING_DIVIDER_LOCATION);
-            root.addContent(el);
-        }
-        el.setText(String.valueOf(pos));
+        genericIntSetter(SETTING_DIVIDER_LOCATION, pos);
     }
 
     public int getLastUserScript() {
@@ -1332,48 +1091,19 @@ public class Settings {
     }
 
     public int getLogSplitLayout() {
-        // get attribute which stores last used desktop number
-        Element el = root.getChild(SETTING_LOGSPLITLAYOUT);
-        // check for valid value
-        if (el != null) {
-            try {
-                // retrieve value
-                return Integer.parseInt(el.getText());
-            } catch (NumberFormatException e) {
-                return JSplitPane.HORIZONTAL_SPLIT;
-            }
-        }
-        return JSplitPane.HORIZONTAL_SPLIT;
+        return genericIntGetter(SETTING_LOGSPLITLAYOUT, JSplitPane.HORIZONTAL_SPLIT);
     }
 
     public void setLogSplitLayout(int val) {
-        Element el = root.getChild(SETTING_LOGSPLITLAYOUT);
-        if (null == el) {
-            el = new Element(SETTING_LOGSPLITLAYOUT);
-            root.addContent(el);
-        }
-        el.setText(String.valueOf(val));
+        genericIntSetter(SETTING_LOGSPLITLAYOUT, val);
     }
 
     public int getLineNumerAlignment() {
-        Element el = root.getChild(SETTING_LINE_NUMBER_ALIGNMENT);
-        if (el != null) {
-            try {
-                return Integer.parseInt(el.getText());
-            } catch (NumberFormatException ex) {
-                return Gutter.RIGHT;
-            }
-        }
-        return Gutter.RIGHT;
+        return genericIntGetter(SETTING_LINE_NUMBER_ALIGNMENT, Gutter.RIGHT);
     }
 
     public void setLineNumerAlignment(int align) {
-        Element el = root.getChild(SETTING_LINE_NUMBER_ALIGNMENT);
-        if (null == el) {
-            el = new Element(SETTING_LINE_NUMBER_ALIGNMENT);
-            root.addContent(el);
-        }
-        el.setText(String.valueOf(align));
+        genericIntSetter(SETTING_LINE_NUMBER_ALIGNMENT, align);
     }
 
     public ArrayList<Object[]> getReopenFiles() {
@@ -1444,6 +1174,72 @@ public class Settings {
                 // add to database
                 el.addContent(child);
             }
+        }
+    }
+
+    private boolean genericBooleanGetter(String key) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (el != null) {
+            return el.getText().equals("1");
+        }
+        return false;
+    }
+    private void genericBooleanSetter(String key, boolean val) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (null == el) {
+            el = new Element(key);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText((val) ? "1" : "0");
+    }
+    
+    /**
+     * Returns the setting (saved value) for integer values. Return
+     * the argument {@code defaultValue} if element does not exist
+     * in the settings file.
+     * 
+     * @param key the key of the specific settings
+     * @param defaultValue a default value that will be returned in case the 
+     * setting {@code key} does not exist.
+     * @return the saved setting for {@code key} as integer value.
+     */
+    private int genericIntGetter(String key, int defaultValue) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (el != null) {
+            try {
+                return Integer.parseInt(el.getText());
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+    private void genericIntSetter(String key, int val) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (null == el) {
+            el = new Element(key);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(val));
+    }
+    private String genericStringGetter(String key, String defaultValue) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        String retval = defaultValue;
+        if (el != null) {
+            retval = el.getText();
+        }
+        return retval;
+    }
+    private void genericStringSetter(String key, String val) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (null == el) {
+            el = new Element(key);
+            settingsFile.getRootElement().addContent(el);
+        }
+        if (val != null && !val.isEmpty()) {
+            el.setText(val);
+        } else {
+            el.setText("");
         }
     }
 }
