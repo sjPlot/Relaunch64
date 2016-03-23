@@ -353,9 +353,9 @@ public class ColorSchemes {
                 case COLOR_COMPILERKEYWORD: return new Color(136,179,136);
                 case COLOR_SCRIPTKEYWORD: return new Color(133,153,144);
                 case COLOR_ILLEGALOPCODE: return new Color(217,2,28);
-                case BACKGROUND: return new Color(77,77,77);
-                case GUTTER_BACKGROUND: return new Color(63,63,63); // 11,55,66
-                case GUTTER_BORDER: return new Color(63,63,63);
+                case BACKGROUND: return new Color(63,63,63);
+                case GUTTER_BACKGROUND: return new Color(55,55,55); // 11,55,66
+                case GUTTER_BORDER: return new Color(55,55,55);
                 case GUTTER_COLOR: return new Color(185,185,180);
                 case GUTTER_HIGHLIGHT: return new Color(255,255,255);
                 case COLOR_SELECTION: return new Color(25, 25, 25);
@@ -405,9 +405,9 @@ public class ColorSchemes {
                 case COLOR_SCRIPTKEYWORD:
                 case COLOR_ILLEGALOPCODE:
                     return new Color(175,217,229);
-                case BACKGROUND: return new Color(77,77,77);
-                case GUTTER_BACKGROUND: return new Color(63,63,63); // 11,55,66
-                case GUTTER_BORDER: return new Color(63,63,63);
+                case BACKGROUND: return new Color(63,63,63);
+                case GUTTER_BACKGROUND: return new Color(55,55,55); // 11,55,66
+                case GUTTER_BORDER: return new Color(55,55,55);
                 case GUTTER_COLOR: return new Color(185,185,180);
                 case GUTTER_HIGHLIGHT: return new Color(255,255,255);
                 case COLOR_SELECTION: return new Color(25, 25, 25);
