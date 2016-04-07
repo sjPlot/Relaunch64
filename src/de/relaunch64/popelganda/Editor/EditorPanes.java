@@ -1019,6 +1019,8 @@ public class EditorPanes {
                         return false;
                     }
                 }
+            } else {
+                return false;
             }
         } catch (IndexOutOfBoundsException ex) {
             ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
