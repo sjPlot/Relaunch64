@@ -123,7 +123,7 @@
                         <KEYWORD4>.dunion</KEYWORD4>
                         <KEYWORD4>.dword</KEYWORD4>
                         <KEYWORD4>.fill</KEYWORD4>
-                        <KEYWORD4>.int</KEYWORD4>
+                        <KEYWORD4>.sint</KEYWORD4>
                         <KEYWORD4>.long</KEYWORD4>
                         <KEYWORD4>.null</KEYWORD4>
                         <KEYWORD4>.ptext</KEYWORD4>

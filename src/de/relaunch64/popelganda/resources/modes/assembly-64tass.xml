@@ -129,7 +129,7 @@
                         <KEYWORD3>.dunion</KEYWORD3>
                         <KEYWORD3>.dword</KEYWORD3>
                         <KEYWORD3>.fill</KEYWORD3>
-                        <KEYWORD3>.int</KEYWORD3>
+                        <KEYWORD3>.sint</KEYWORD3>
                         <KEYWORD3>.long</KEYWORD3>
                         <KEYWORD3>.null</KEYWORD3>
                         <KEYWORD3>.ptext</KEYWORD3>
