@@ -386,16 +386,16 @@ class Assembler_64tass implements Assembler {
     public ArrayList<ErrorInfo> readErrorLines(LineNumberReader lineReader, boolean ignore_warnings) {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         String line;     // j.asm:4:5: error: not defined 'i'
-        Pattern p = Pattern.compile("^(?<file>.*?):(?<line>\\d+):(?<col>\\d+): (?<type>fatal error|error|warning):.*");
+        Pattern p = Pattern.compile("^(?<file>.*?):(?<line>\\d+):(?<col>\\d+): (?<type>fatal error|error|warning|note):.*");
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
-                if (ignore_warnings && m.group("type").equals("warning")) continue;
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         Integer.parseInt(m.group("col")),
                         lineReader.getLineNumber(), 1,
+                        (ignore_warnings && m.group("type").equals("warning")) || m.group("type").equals("note"),
                         m.group("file")
                         );
                 errors.add(e);

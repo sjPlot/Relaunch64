@@ -242,11 +242,11 @@ class Assembler_tmpx implements Assembler
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
-                //if (ignore_warnings && m.group("type").equals("warning")) continue;
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         (m.group("col") == null) ? 1 : Integer.parseInt(m.group("col")),
                         lineReader.getLineNumber(), 1,
+                        false, //ignore_warnings && m.group("type").equals("warning"),
                         m.group("file")
                         );
                 errors.add(e);

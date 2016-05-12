@@ -62,6 +62,7 @@ public class ErrorHandler {
         public final int column;
         public final int logline;
         public final int loglen;
+        public final boolean info_only;
         public final File file;
         /**
          * Info class that saves information about errors of a compiled
@@ -77,15 +78,17 @@ public class ErrorHandler {
          * open the file with errors (if not already opened), by using the
          * {@link #getAbsoluteErrorFilePath()} method.
          */
-        public ErrorInfo(int line, int column, int logline, int loglen, String file) {
+        public ErrorInfo(int line, int column, int logline, int loglen, boolean info_only, String file) {
             this.line = line;
             this.column = column;
             this.logline = logline;
             this.loglen = loglen;
+            this.info_only = info_only;
             this.file = new File(file);
         }
     }
     private final ArrayList<ErrorInfo> errors = new ArrayList<>();
+    private final ArrayList<ErrorInfo> infos = new ArrayList<>();
 
     public ErrorHandler() {
         clearErrors();
@@ -130,7 +133,15 @@ public class ErrorHandler {
         lineReader.setLineNumber(offset);
         // find all errors, use assembler specific error parsing
         // to detect line and column numbers of warnings and errors.
-        errors.addAll(assembler.readErrorLines(lineReader, ignore_warnings));
+        ArrayList<ErrorInfo> newerrors = assembler.readErrorLines(lineReader, ignore_warnings);
+        for (int n = 0; n < newerrors.size(); n++) {
+            ErrorInfo e = newerrors.get(n);
+            if (e.info_only) {
+                infos.add(e);
+            } else {
+                errors.add(e);
+            }
+        }
         return lineReader.getLineNumber();
     }
     /**
@@ -144,15 +155,17 @@ public class ErrorHandler {
     protected void gotoError(EditorPanes editorPanes, JTextArea log, int index) {
         // check if any errors at all
         if (hasErrors()) {
+            ErrorInfo e;
             // index
             errorIndex = index % errors.size();
             if (errorIndex < 0) errorIndex += errors.size();
+            e = errors.get(errorIndex);
             // scroll log
-            scrollToErrorInLog(log);
+            scrollToErrorInLog(log, e);
             // open error tab
-            openErrorTab(editorPanes);
+            openErrorTab(editorPanes, e);
             // goto error line
-            gotoErrorLine(editorPanes);
+            gotoErrorLine(editorPanes, e);
         }
     }
     public void gotoPrevError(EditorPanes editorPanes, JTextArea log) {
@@ -172,13 +185,25 @@ public class ErrorHandler {
                 return;
             }
         }
+        for (int n = 0; n < infos.size(); n++) {
+            ErrorInfo e = infos.get(n);
+            if (e.logline <= line && e.logline + e.loglen > line) {
+                // scroll log
+                scrollToErrorInLog(log, e);
+                // open error tab
+                openErrorTab(editorPanes, e);
+                // goto error line
+                gotoErrorLine(editorPanes, e);
+                return;
+            }
+        }
     }
-    protected void gotoErrorLine(final EditorPanes editorPanes) {
+    protected void gotoErrorLine(final EditorPanes editorPanes, ErrorInfo error) {
+        final ErrorInfo ei = error;
         // goto error line
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ErrorInfo ei = errors.get(errorIndex);
                 // goto error line
                 editorPanes.gotoLine(ei.line, ei.column);
                 // set focus in edior pane
@@ -186,9 +211,9 @@ public class ErrorHandler {
             }
         });
     }
-    protected void openErrorTab(EditorPanes editorPanes) {
+    protected void openErrorTab(EditorPanes editorPanes, ErrorInfo error) {
         try {
-            File ef = getAbsoluteErrorFilePath();
+            File ef = getAbsoluteErrorFilePath(error);
             // check for null
             if (ef != null) {
                 // is error file opened?
@@ -204,32 +229,22 @@ public class ErrorHandler {
         } catch (IndexOutOfBoundsException ex) {
         }
     }
-    protected File getAbsoluteErrorFilePath() {
-        return getAbsoluteErrorFilePath(errorIndex);
-    }
-    protected File getAbsoluteErrorFilePath(int fileindex) {
-        // check index bounds
-        if (fileindex < 0 || fileindex >= errors.size()) fileindex = 0;
+    protected File getAbsoluteErrorFilePath(ErrorInfo error) {
         // does path exist, or is it relative?
-        return FileTools.getAbsolutePath(new File(basePath), errors.get(fileindex).file);
+        return FileTools.getAbsolutePath(new File(basePath), error.file);
     }
     public final void clearErrors() {
         errors.clear();
+        infos.clear();
         errorIndex = -1;
         basePath = "";
     }
     public boolean hasErrors() {
         return (errors != null && !errors.isEmpty());
     }
-    public File getErrorFile() {
-        if (hasErrors()) {
-            return getAbsoluteErrorFilePath();
-        }
-        return null;
-    }
-    public void scrollToErrorInLog(JTextArea ta) {
-        int line = errors.get(errorIndex).logline - 1;
-        int len = errors.get(errorIndex).loglen;
+    public void scrollToErrorInLog(JTextArea ta, ErrorInfo error) {
+        int line = error.logline - 1;
+        int len = error.loglen;
         if (line < 0) line = 0;
         try {
             // retrieve element and check whether line is inside bounds

@@ -222,7 +222,6 @@ class Assembler_kick implements Assembler
                     continue;
                 }
                 if (type.equals("")) continue;
-                if (ignore_warnings && type.equals("Warning")) { type = ""; continue; }
                 type = "";
                 m = p.matcher(line);
                 if (!m.matches()) continue;
@@ -231,6 +230,7 @@ class Assembler_kick implements Assembler
                         Integer.parseInt(m.group("line")),
                         Integer.parseInt(m.group("col")),
                         lineReader.getLineNumber() - 1, 2,
+                        ignore_warnings && type.equals("Warning"),
                         m.group("file")
                         );
                 errors.add(e);

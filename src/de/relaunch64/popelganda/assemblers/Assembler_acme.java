@@ -248,11 +248,11 @@ class Assembler_acme implements Assembler
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
                 if (!m.matches()) continue;
-                if (ignore_warnings && m.group("type").equals("Warning")) continue;
                 ErrorInfo e = new ErrorInfo(
                         Integer.parseInt(m.group("line")),
                         1,
                         lineReader.getLineNumber(), 1,
+                        ignore_warnings && m.group("type").equals("Warning"),
                         m.group("file")
                         );
                 errors.add(e);
