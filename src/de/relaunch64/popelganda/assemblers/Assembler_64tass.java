@@ -387,7 +387,7 @@ class Assembler_64tass implements Assembler {
         final ArrayList<ErrorInfo> errors = new ArrayList<>();
         String line;     // j.asm:4:5: error: not defined 'i'
         Pattern p = Pattern.compile("^(?<file>.*?):(?<line>\\d+):(?<col>\\d+): (?<type>fatal error|error|warning|note):.*");
-        Pattern p2 = Pattern.compile("^In file included from (?<file>.*?):(?<line>\\d+):(?<col>\\d+):(?<type>)");
+        Pattern p2 = Pattern.compile("^(?:In file included from|                     ) (?<file>.*?):(?<line>\\d+):(?<col>\\d+)[:,](?<type>)$");
         try {
             while ((line = lineReader.readLine()) != null) {
                 Matcher m = p.matcher(line);
