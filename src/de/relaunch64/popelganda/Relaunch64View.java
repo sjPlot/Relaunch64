@@ -1960,7 +1960,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     boolean isLastLine = cmd.equalsIgnoreCase(lines[lines.length - 1]);
                     // check if we have Relaunch64 command-line options, like 
                     // ignore warnings etc.
-                    if (cmd.startsWith("R64")) {
+                    if (cmd.startsWith("R64 ")) {
                         // log-string
                         log = "Compile options:";
                         // get options
@@ -1988,6 +1988,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         // log compiler options
                         ConstantsR64.r64logger.log(Level.INFO, log);
                     } else {
+                        boolean bg = cmd.startsWith("R64BG ");
+                        if (bg) {
+                             cmd = cmd.replaceFirst("R64BG ","");
+                        }
                         // surround pathes with quotes, if necessary
                         String sf = sourceFile.toString();
                         if (sf.contains(" ") && !sf.startsWith("\"") && !sf.startsWith("'")) {
@@ -2040,45 +2044,47 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             // start process
                             p = pb.start();
                             // create scanner to receive compiler messages
-                            try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
-                                // write output to string builder
-                                while (sc.hasNextLine()) {
-                                    compilerLog.append(sc.nextLine()).append(System.lineSeparator());
+                            if (!bg) {
+                                try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
+                                    // write output to string builder
+                                    while (sc.hasNextLine()) {
+                                        compilerLog.append(sc.nextLine()).append(System.lineSeparator());
+                                    }
                                 }
-                            }
-                            try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
-                                // write output to string builder
-                                while (sc.hasNextLine()) {
-                                    compilerLog.append(sc.nextLine()).append(System.lineSeparator());
+                                try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
+                                    // write output to string builder
+                                    while (sc.hasNextLine()) {
+                                        compilerLog.append(sc.nextLine()).append(System.lineSeparator());
+                                    }
                                 }
-                            }
-                            // print log to text area
-                            jTextAreaCompilerOutput.append(compilerLog.toString());
-                            // if we don't have last script line, or if each process should be waited
-                            // for, wait for process to be finished
-                            if (!isLastLine || (isLastLine && option_wait_for_process)) {
-                                // wait for other process to be finished
-                                p.waitFor();
-                                p.destroy();
-                            }
-                            // read and extract errors from log
-                            offset = errorHandler.readErrorLines(compilerLog.toString(),
-                                    editorPanes.getActiveAssembler(),
-                                    offset,
-                                    option_ignore_warnings);
-                            // break loop if we have any errors
-                            try {
-                                if (errorHandler.hasErrors() || p.exitValue() != 0) {
-                                    break;
+                                // print log to text area
+                                jTextAreaCompilerOutput.append(compilerLog.toString());
+                                // if we don't have last script line, or if each process should be waited
+                                // for, wait for process to be finished
+                                if (!isLastLine || (isLastLine && option_wait_for_process)) {
+                                    // wait for other process to be finished
+                                    p.waitFor();
+                                    p.destroy();
                                 }
-                            } catch (IllegalThreadStateException ex) {
-                                // thread has not been terminated correctly, so log warning
-                                ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
-                                // destroy thread
-                                p.destroy();
-                                // and leave
-                                if (errorHandler.hasErrors()) {
-                                    break;
+                                // read and extract errors from log
+                                offset = errorHandler.readErrorLines(compilerLog.toString(),
+                                        editorPanes.getActiveAssembler(),
+                                        offset,
+                                        option_ignore_warnings);
+                                // break loop if we have any errors
+                                try {
+                                    if (errorHandler.hasErrors() || p.exitValue() != 0) {
+                                        break;
+                                    }
+                                } catch (IllegalThreadStateException ex) {
+                                    // thread has not been terminated correctly, so log warning
+                                    ConstantsR64.r64logger.log(Level.WARNING, ex.getLocalizedMessage());
+                                    // destroy thread
+                                    p.destroy();
+                                    // and leave
+                                    if (errorHandler.hasErrors()) {
+                                        break;
+                                    }
                                 }
                             }
                         } catch (IOException | InterruptedException | SecurityException ex) {
