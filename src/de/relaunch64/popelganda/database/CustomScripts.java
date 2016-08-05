@@ -342,11 +342,17 @@ public class CustomScripts {
                         pb = new ProcessBuilder(commandline.split(" "));
                         // set parent directory to sourcecode fie
                         pb = pb.directory(new File(file).getParentFile());
-                        pb = pb.redirectInput(ProcessBuilder.Redirect.PIPE);
+                        pb = pb.redirectOutput(ProcessBuilder.Redirect.PIPE).redirectError(ProcessBuilder.Redirect.PIPE);
                         // start process
                         p = pb.start();
                         // create scanner to receive compiler messages
                         try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
+                            // write output to string builder
+                            while (sc.hasNextLine()) {
+                                helpText = helpText + sc.nextLine() + System.lineSeparator();
+                            }
+                        }
+                        try (Scanner sc = new Scanner(p.getErrorStream()).useDelimiter(System.lineSeparator())) {
                             // write output to string builder
                             while (sc.hasNextLine()) {
                                 helpText = helpText + sc.nextLine() + System.lineSeparator();
