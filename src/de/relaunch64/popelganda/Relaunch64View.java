@@ -2040,7 +2040,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             pb = new ProcessBuilder(Tools.tokeniseCommandLine(cmd));
                             // set parent directory to sourcecode fie
                             pb = pb.directory(sourceFile.getParentFile());
-                            pb = pb.redirectOutput(Redirect.PIPE).redirectError(Redirect.PIPE);
+                            if (!bg) pb = pb.redirectOutput(Redirect.PIPE).redirectError(Redirect.PIPE);
                             // start process
                             p = pb.start();
                             // create scanner to receive compiler messages
