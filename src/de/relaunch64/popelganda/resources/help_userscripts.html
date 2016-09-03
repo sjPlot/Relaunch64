@@ -75,6 +75,13 @@
             </li>
 	</ul>
 
+        <p>
+		In case you have problems with the <strong>-nowait</strong>-option, so Relaunch64 is
+                locked while an emulator is running, although you want to continue editing in Relaunch64,
+                use <span class="pcode">R64BG</span> as a prefix <em>of the command line for the tool that
+                should not block execution</em> (mostly the command line for starting the emulator).
+	</p>
+
 <p>
 	<strong>Note:</strong> See user script examples below.
 </p>
@@ -154,6 +161,10 @@ C:\Users\&lt;username&gt;\Documents\C64\WinVICE-2.4\x64.exe COMPFILE</div>
 <h3>ACME and Vice, when ACME-Path is in PATH-Environment (Vice is not)</h3>
 <div class="pcode">acme --outfile ROUTFILE --format cbm RSOURCEFILE<br>
 &quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; ROUTFILE</div>
+
+<h3>ACME and Vice, don't wait for Vice on Windows</h3>
+<div class="pcode">acme --outfile ROUTFILE --format cbm RSOURCEFILE<br>
+R64BG &quot;C:\Users\&lt;username&gt;\Documents\C64\WinVICE 2.4\x64.exe&quot; ROUTFILE</div>
 
 <h3>64tass on OS X</h3>
 <div class="pcode">/usr/local/bin/64tass -C -a -i SOURCEFILE -o OUTFILE<br>

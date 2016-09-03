@@ -1988,8 +1988,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                         // log compiler options
                         ConstantsR64.r64logger.log(Level.INFO, log);
                     } else {
-                        boolean bg = cmd.startsWith("R64BG ");
-                        if (bg) {
+                        // check whether user wants to ignore the error stream
+                        // and not wait for termination of running process
+                        boolean ignoreErrorStream = cmd.startsWith("R64BG ");
+                        if (ignoreErrorStream) {
                              cmd = cmd.replaceFirst("R64BG ","");
                         }
                         // surround pathes with quotes, if necessary
@@ -2040,11 +2042,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                             pb = new ProcessBuilder(Tools.tokeniseCommandLine(cmd));
                             // set parent directory to sourcecode fie
                             pb = pb.directory(sourceFile.getParentFile());
-                            if (!bg) pb = pb.redirectOutput(Redirect.PIPE).redirectError(Redirect.PIPE);
+                            if (!ignoreErrorStream) pb = pb.redirectOutput(Redirect.PIPE).redirectError(Redirect.PIPE);
                             // start process
                             p = pb.start();
                             // create scanner to receive compiler messages
-                            if (!bg) {
+                            if (!ignoreErrorStream) {
                                 try (Scanner sc = new Scanner(p.getInputStream()).useDelimiter(System.lineSeparator())) {
                                     // write output to string builder
                                     while (sc.hasNextLine()) {

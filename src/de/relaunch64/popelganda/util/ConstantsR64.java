@@ -46,7 +46,7 @@ public class ConstantsR64 {
     /**
      * This variable stores the current build version number
      */
-    public static final String BUILD_NUMBER = "20160405";
+    public static final String BUILD_NUMBER = "20160903";
     /**
      * This variable stores the current programme and build version number
      */
