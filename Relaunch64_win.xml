@@ -34,15 +34,17 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>3.3.6.0</fileVersion>
+    <fileVersion>3.3.7.0</fileVersion>
     <txtFileVersion>Relaunch64 V3</txtFileVersion>
     <fileDescription>A C64/65xx cross development IDE</fileDescription>
     <copyright>2003-2016 by Payday</copyright>
-    <productVersion>3.3.6.0</productVersion>
+    <productVersion>3.3.7.0</productVersion>
     <txtProductVersion>Relaunch64 V3</txtProductVersion>
     <productName>Relaunch64</productName>
     <companyName>Payday</companyName>
     <internalName>R64</internalName>
     <originalFilename>Relaunch64.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
   </versionInfo>
 </launch4jConfig>
