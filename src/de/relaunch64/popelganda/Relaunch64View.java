@@ -388,7 +388,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             @Override
             public void actionPerformed(ActionEvent evt) {
                 if (editorPanes.checkIfSyntaxChangeRequired()) {
-                    editorPanes.changeAssembler(Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
+                    editorPanes.changeAssembler(Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), 
+                            jComboBoxRunScripts.getSelectedIndex(), editorPanes.getActiveAlternativeScript());
                 }
                 // update recent doc
                 updateRecentDoc();
@@ -717,7 +718,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(1);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(1), settings.getRecentDocScript(1));
+                    openFile(fp, settings.getRecentDocAssembler(1), settings.getRecentDocScript(1), settings.getRecentDocAltScript(1));
                 }
             }
         });
@@ -726,7 +727,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(2);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(2), settings.getRecentDocScript(2));
+                    openFile(fp, settings.getRecentDocAssembler(2), settings.getRecentDocScript(2), settings.getRecentDocAltScript(2));
                 }
             }
         });
@@ -735,7 +736,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(3);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(3), settings.getRecentDocScript(3));
+                    openFile(fp, settings.getRecentDocAssembler(3), settings.getRecentDocScript(3), settings.getRecentDocAltScript(3));
                 }
             }
         });
@@ -744,7 +745,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(4);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(4), settings.getRecentDocScript(4));
+                    openFile(fp, settings.getRecentDocAssembler(4), settings.getRecentDocScript(4), settings.getRecentDocAltScript(4));
                 }
             }
         });
@@ -753,7 +754,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(5);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(5), settings.getRecentDocScript(5));
+                    openFile(fp, settings.getRecentDocAssembler(5), settings.getRecentDocScript(5), settings.getRecentDocAltScript(5));
                 }
             }
         });
@@ -762,7 +763,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(6);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(6), settings.getRecentDocScript(6));
+                    openFile(fp, settings.getRecentDocAssembler(6), settings.getRecentDocScript(6), settings.getRecentDocAltScript(6));
                 }
             }
         });
@@ -771,7 +772,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(7);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(7), settings.getRecentDocScript(7));
+                    openFile(fp, settings.getRecentDocAssembler(7), settings.getRecentDocScript(7), settings.getRecentDocAltScript(7));
                 }
             }
         });
@@ -780,7 +781,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(8);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(8), settings.getRecentDocScript(8));
+                    openFile(fp, settings.getRecentDocAssembler(8), settings.getRecentDocScript(8), settings.getRecentDocAltScript(8));
                 }
             }
         });
@@ -789,7 +790,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(9);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(9), settings.getRecentDocScript(9));
+                    openFile(fp, settings.getRecentDocAssembler(9), settings.getRecentDocScript(9), settings.getRecentDocAltScript(9));
                 }
             }
         });
@@ -798,7 +799,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             public void actionPerformed(ActionEvent evt) {
                 File fp = settings.getRecentDoc(10);
                 if (fp != null && fp.exists()) {
-                    openFile(fp, settings.getRecentDocAssembler(10), settings.getRecentDocScript(10));
+                    openFile(fp, settings.getRecentDocAssembler(10), settings.getRecentDocScript(10), settings.getRecentDocAltScript(10));
                 }
             }
         });
@@ -1668,7 +1669,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
      */
     @Action
     public final void addNewTab() {
-        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredAssembler(), jComboBoxRunScripts.getSelectedIndex());
+        editorPanes.addNewTab(null, null, "untitled", settings.getPreferredAssembler(), jComboBoxRunScripts.getSelectedIndex(), -1);
     }
 
     @Action
@@ -1686,6 +1687,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             File sourceFile = editorPanes.getActiveFilePath();
             Assembler asm = editorPanes.getActiveAssembler();
             int script = editorPanes.getActiveScript();
+            int altScript = editorPanes.getActiveAlternativeScript();
             String commentChar = asm.getLineComment();
             // go through source and find includes
             while ((line = lineReader.readLine()) != null) {
@@ -1696,7 +1698,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     File f = FileTools.getAbsolutePath(sourceFile, new File(m.group(2)));
                     // if it exists, open it
                     if (f != null && f.exists()) {
-                        openFile(f, asm, script);
+                        openFile(f, asm, script, altScript);
                     }
                 }
             }
@@ -1720,7 +1722,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             File f = FileTools.getAbsolutePath(editorPanes.getActiveFilePath(), new File(m.group(2)));
             // if it exists, open it
             if (f != null && f.exists()) {
-                openFile(f, editorPanes.getActiveAssembler(), editorPanes.getActiveScript());
+                openFile(f, editorPanes.getActiveAssembler(), editorPanes.getActiveScript(), editorPanes.getActiveAlternativeScript());
             }
         }
     }
@@ -1766,14 +1768,14 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     }
 
     private void openFile(File fileToOpen, Assembler assembler) {
-        openFile(fileToOpen, assembler, jComboBoxRunScripts.getSelectedIndex());
+        openFile(fileToOpen, assembler, jComboBoxRunScripts.getSelectedIndex(), -1);
     }
 
-    private void openFile(File fileToOpen, Assembler assembler, int script) {
+    private void openFile(File fileToOpen, Assembler assembler, int script, int alternativeScript) {
         // check if file could be opened
-        if (editorPanes.loadFile(fileToOpen, assembler, script)) {
+        if (editorPanes.loadFile(fileToOpen, assembler, script, alternativeScript)) {
             // add file path to recent documents history
-            settings.addToRecentDocs(fileToOpen.toString(), assembler, script);
+            settings.addToRecentDocs(fileToOpen.toString(), assembler, script, alternativeScript);
             // and update menus
             setRecentDocuments();
             // save last used path
@@ -1794,7 +1796,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         int rd = settings.findRecentDoc(cf);
         // if we have valid values, update recent doc
         if (rd != -1 && cf != null) {
-            settings.setRecentDoc(rd, cf.toString(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
+            settings.setRecentDoc(rd, cf.toString(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), 
+                    jComboBoxRunScripts.getSelectedIndex(), editorPanes.getActiveAlternativeScript());
         }
     }
 
@@ -1811,8 +1814,11 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 Assembler assembler = (Assembler) o[1];
                 // retrieve data: script
                 int script = Integer.parseInt(o[2].toString());
+                // retrieve data: alternative script
+                int altScript = -1;
+                if (o.length > 2) altScript = Integer.parseInt(o[3].toString());
                 // open file
-                openFile(fp, assembler, script);
+                openFile(fp, assembler, script, altScript);
             }
         }
     }
@@ -1821,7 +1827,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFile() {
         if (editorPanes.saveFile()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), 
+                    Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), 
+                    jComboBoxRunScripts.getSelectedIndex(),
+                    editorPanes.getActiveAlternativeScript());
             // and update menus
             setRecentDocuments();
         }
@@ -1872,12 +1881,29 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     public void saveFileAs() {
         if (editorPanes.saveFileAs()) {
             // add file path to recent documents history
-            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), jComboBoxRunScripts.getSelectedIndex());
+            settings.addToRecentDocs(editorPanes.getActiveFilePath().getPath(), 
+                    Assemblers.byID(jComboBoxAssemblers.getSelectedIndex()), 
+                    jComboBoxRunScripts.getSelectedIndex(),
+                    editorPanes.getActiveAlternativeScript());
             // and update menus
             setRecentDocuments();
         }
     }
 
+    /**
+     * Runs the second selected user script and - depending on the script - compiles the source
+     * code and start the compiled source in an emulator. If errors occur during the compile
+     * process, the error log is shown and the caret jumps to the related position in the source.
+     */
+    @Action
+    public void runScript2() {
+        String scriptName = customScripts.getScriptName(editorPanes.getActiveAlternativeScript());
+        // we have found a valid script name, so get script
+        String script = customScripts.getScript(scriptName);
+        
+        runGenericScript(script, scriptName);
+    }
+    
     /**
      * Runs the currently selected user script and - depending on the script - compiles the source
      * code and start the compiled source in an emulator. If errors occur during the compile
@@ -1906,6 +1932,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
             // we have found a valid script name, so get script
             script = customScripts.getScript(scriptName);
         }
+        runGenericScript(script, scriptName);
+    }
+    
+    private void runGenericScript(String script, String scriptName) {
         // log scriptname
         String log = "Executing script \"" + scriptName + "\"";
         ConstantsR64.r64logger.log(Level.INFO, log);
@@ -2168,6 +2198,30 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                     // update recent doc
                     updateRecentDoc();
                 }
+            }
+        }
+    }
+
+    @Action
+    public void selectAltUserScripts() {
+        // get script names
+        String[] sn = customScripts.getScriptNames();
+        // check for null
+        if (sn != null && sn.length > 0) {
+            // get editor pane properties of current tab
+            EditorPaneProperties ep = editorPanes.getEditorPaneProperties(jTabbedPane1.getSelectedIndex());
+            // sort arary
+            Arrays.sort(sn);
+            // if toolbar is not visible, show option dialog instead
+            Object selection = JOptionPane.showInputDialog(getFrame(), "Select script:", "", 
+                    JOptionPane.PLAIN_MESSAGE, null, sn, 
+                    customScripts.getScriptName(ep.getAltScript()));
+            // check if null
+            if (selection != null) {
+                // change script for current file
+                ep.setAltScript(customScripts.findScript(selection.toString()));
+                // update recent doc
+                updateRecentDoc();
             }
         }
     }
@@ -2789,7 +2843,10 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         jMenuItemPrevFold = new javax.swing.JMenuItem();
         sourceMenu = new javax.swing.JMenu();
         runScriptMenuItem = new javax.swing.JMenuItem();
+        debugScriptMenuIitem = new javax.swing.JMenuItem();
+        jSeparator36 = new javax.swing.JPopupMenu.Separator();
         focusScriptMenuItem = new javax.swing.JMenuItem();
+        selectAltScriptMenuItem = new javax.swing.JMenuItem();
         focusSyntaxMenuItem = new javax.swing.JMenuItem();
         jSeparator17 = new javax.swing.JPopupMenu.Separator();
         commentLineMenuItem = new javax.swing.JMenuItem();
@@ -3487,9 +3544,20 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
         runScriptMenuItem.setName("runScriptMenuItem"); // NOI18N
         sourceMenu.add(runScriptMenuItem);
 
+        debugScriptMenuIitem.setAction(actionMap.get("runScript2")); // NOI18N
+        debugScriptMenuIitem.setName("debugScriptMenuIitem"); // NOI18N
+        sourceMenu.add(debugScriptMenuIitem);
+
+        jSeparator36.setName("jSeparator36"); // NOI18N
+        sourceMenu.add(jSeparator36);
+
         focusScriptMenuItem.setAction(actionMap.get("selectUserScripts")); // NOI18N
         focusScriptMenuItem.setName("focusScriptMenuItem"); // NOI18N
         sourceMenu.add(focusScriptMenuItem);
+
+        selectAltScriptMenuItem.setAction(actionMap.get("selectAltUserScripts")); // NOI18N
+        selectAltScriptMenuItem.setName("selectAltScriptMenuItem"); // NOI18N
+        sourceMenu.add(selectAltScriptMenuItem);
 
         focusSyntaxMenuItem.setAction(actionMap.get("selectSyntax")); // NOI18N
         focusSyntaxMenuItem.setName("focusSyntaxMenuItem"); // NOI18N
@@ -3922,6 +3990,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem commentLineMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
+    private javax.swing.JMenuItem debugScriptMenuIitem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu findMenu;
     private javax.swing.JMenuItem findNextMenuItem;
@@ -4025,6 +4094,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JToolBar.Separator jSeparator33;
     private javax.swing.JPopupMenu.Separator jSeparator34;
     private javax.swing.JPopupMenu.Separator jSeparator35;
+    private javax.swing.JPopupMenu.Separator jSeparator36;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
@@ -4074,6 +4144,7 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JMenuItem selectAllMenuItem;
+    private javax.swing.JMenuItem selectAltScriptMenuItem;
     private javax.swing.JMenuItem settingsMenuItem;
     private javax.swing.JMenu sourceMenu;
     private javax.swing.JPanel statusPanel;

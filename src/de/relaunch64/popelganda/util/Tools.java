@@ -234,7 +234,7 @@ public class Tools {
     /**
      * This method searches the source code {@code source} for a script label
      * that defines a custom compiler script that should be used when compiling
-     * this sourc.
+     * this source.
      *
      * @param source The (current) source code which should be examined for
      * script label.
@@ -589,6 +589,8 @@ public class Tools {
         StringBuilder commandLine = new StringBuilder();
 
         for (String line : lines) {
+            // check for empty line
+            if (line.trim().isEmpty()) continue;
             Matcher joiningMatcher = continuationPattern.matcher(line);
 
             if (joiningMatcher.matches()) {

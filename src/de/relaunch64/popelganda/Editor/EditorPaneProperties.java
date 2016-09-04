@@ -47,6 +47,7 @@ public class EditorPaneProperties {
     private boolean modified;
     private File filePath;
     private int script;
+    private int alternativeScript;
     private String lineEnd;
     private int labelSourcePosition;
     private int labelDefinitionPosition;
@@ -60,6 +61,7 @@ public class EditorPaneProperties {
         modified = false;
         filePath = null;
         script = 0;
+        alternativeScript = -1;
         lastModified = 0L;
         lineEnd = System.lineSeparator();
     }
@@ -114,6 +116,12 @@ public class EditorPaneProperties {
     }
     public void setScript(int s) {
         script = s;
+    }
+    public void setAltScript(int s) {
+        alternativeScript = s;
+    }
+    public int getAltScript() {
+        return alternativeScript;
     }
     public String getLineEnd() {
         return lineEnd;

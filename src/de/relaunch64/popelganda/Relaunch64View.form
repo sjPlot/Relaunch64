@@ -1154,12 +1154,33 @@
                 <Property name="name" type="java.lang.String" value="runScriptMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="debugScriptMenuIitem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="runScript2" methodName="runScript2"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="debugScriptMenuIitem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator36">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator36" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="focusScriptMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="de.relaunch64.popelganda.Relaunch64View" id="selectUserScripts" methodName="selectUserScripts"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="focusScriptMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="selectAltScriptMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="de.relaunch64.popelganda.Relaunch64View" id="selectAltUserScripts" methodName="selectAltUserScripts"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="selectAltScriptMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="focusSyntaxMenuItem">

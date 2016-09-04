@@ -173,9 +173,11 @@ public class EditorPanes {
      * highlighting is applied
      * @param script the current selected user script that will be associated with this sourcecode
      * on init
+     * @param altScript the alternative selected user script that will be associated with this sourcecode
+     * on init
      * @return the new total amount of existing tabs after this tab has been added.
      */
-    public int addNewTab(File fp, String content, String title, Assembler assembler, int script) {
+    public int addNewTab(File fp, String content, String title, Assembler assembler, int script, int altScript) {
         // create new editor pane
         final RL64TextArea editorPane = new RL64TextArea(settings);
         editorPane.setName("jEditorPaneMain");
@@ -268,6 +270,8 @@ public class EditorPanes {
         editorPaneProperties.setFilePath(fp);
         // set script
         editorPaneProperties.setScript(script);
+        // set alternative script
+        editorPaneProperties.setAltScript(altScript);
         // set modified false
         editorPaneProperties.setModified(false);
         // add editorpane to list
@@ -552,8 +556,9 @@ public class EditorPanes {
      *
      * @param assembler
      * @param script
+     * @param altScript
      */
-    public void changeAssembler(Assembler assembler, int script) {
+    public void changeAssembler(Assembler assembler, int script, int altScript) {
         // get selected tab
         int selectedTab = tabbedPane.getSelectedIndex();
         if (selectedTab != -1) {
@@ -562,7 +567,7 @@ public class EditorPanes {
             // change syntax scheme for recent docs
             if (getFilePath(selectedTab) != null) {
                 int rd = settings.findRecentDoc(getFilePath(selectedTab).getPath());
-                settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), assembler, script);
+                settings.setRecentDoc(rd, getFilePath(selectedTab).getPath(), assembler, script, altScript);
             }
             // get editor pane
             final RL64TextArea editorpane = ep.getEditorPane();
@@ -837,12 +842,41 @@ public class EditorPanes {
     }
 
     /**
+     * returns the alternative (2nd) script which is associated with the sourcecode at the tab-index
+     * {@code index}.
+     *
+     * @param index the index of the tab whose run-script should be returned. the index of the
+     * selected tab equals the index of the {@link EditorPaneProperties} in the
+     * {@link #editorPaneArray editorPaneArray}.
+     * @return the alternative run-script of the editor pane / tab at the index {@code index}.
+     */
+    public int getAlternativeScript(int index) {
+        try {
+            // get editor pane
+            EditorPaneProperties ep = editorPaneArray.get(index);
+            // get editor pane
+            return ep.getAltScript();
+        } catch (IndexOutOfBoundsException ex) {
+            return -1;
+        }
+    }
+
+    /**
      * Returns the run-script of the currently activated editor pane / tab.
      *
      * @return the run-script of the currently activated editor pane / tab.
      */
     public int getActiveScript() {
         return getScript(tabbedPane.getSelectedIndex());
+    }
+
+    /**
+     * Returns the alternative run-script of the currently activated editor pane / tab.
+     *
+     * @return the alternative run-script of the currently activated editor pane / tab.
+     */
+    public int getActiveAlternativeScript() {
+        return getAlternativeScript(tabbedPane.getSelectedIndex());
     }
 
     /**
@@ -957,11 +991,12 @@ public class EditorPanes {
      * @param assembler a reference to the
      * {@link de.relaunch64.popelganda.assemblers.Assembler Assembler-class}.
      * @param script the user script that should initially be associated with the opened file
+     * @param altScript the alternative user script that should initially be associated with the opened file
      *
      * @return {@code true} if a new file was opened, {@code false} if an error occured or file was
      * already opened.
      */
-    public boolean loadFile(File filepath, Assembler assembler, int script) {
+    public boolean loadFile(File filepath, Assembler assembler, int script, int altScript) {
         // check if file is already opened
         int opened = getOpenedFileTab(filepath);
         if (opened != -1) {
@@ -993,7 +1028,7 @@ public class EditorPanes {
                     }
                     boolean LF = buf.contains("\n");
                     // if yes, add new tab
-                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script) - 1;
+                    int selectedTab = addNewTab(filepath, buf, FileTools.getFileName(filepath), assembler, script, altScript) - 1;
                     // get editor pane properties
                     EditorPaneProperties epp = editorPaneArray.get(selectedTab);
                     // set cursor

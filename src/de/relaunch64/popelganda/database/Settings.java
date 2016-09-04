@@ -94,6 +94,7 @@ public class Settings {
     private static final String SETTING_SCALE_FONT = "scalefont";
     private static final String REC_DOC_ASSEMBLER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
+    private static final String REC_DOC_ALT_SCRIPT = "altscript";
     private static final String SETTING_MAINFONT = "editorfont";
     private static final String SETTING_CHECKUPDATES = "checkupdates";
     private static final String SETTING_FINDFIELDFOCUS = "findfieldfocus";
@@ -116,6 +117,7 @@ public class Settings {
 
     private static final String ATTR_ASM = "compiler";
     private static final String ATTR_SCRIPT = "script";
+    private static final String ATTR_ALT_SCRIPT = "alt_script";
 
     private final File filepath;
     public static final int FONTNAME = 1;
@@ -366,6 +368,35 @@ public class Settings {
     }
 
     /**
+     * 
+     * @param nr
+     * @return 
+     */
+    public int getRecentDocAltScript(int nr) {
+        // checl for valid parameter
+        if (nr < 0) {
+            return 0;
+        }
+        // retrieve element
+        Element el = root.getChild(SETTING_RECENT_DOC + String.valueOf(nr));
+        // if we have any valid document
+        if (el != null) {
+            // retrieve compiler attribute
+            Attribute comp = el.getAttribute(REC_DOC_ALT_SCRIPT);
+            // if we have any valid attribute
+            if (comp != null) {
+                try {
+                    return Integer.parseInt(comp.getValue());
+                } catch (NumberFormatException ex) {
+                    return 0;
+                }
+            }
+        }
+        // else return null
+        return 0;
+    }
+
+    /**
      *
      * @param doc
      * @return
@@ -410,8 +441,9 @@ public class Settings {
      * @param fp the filepath to the document that should be added to the list of recent documents
      * @param assembler
      * @param userScript
+     * @param alternativeScript
      */
-    public void addToRecentDocs(String fp, Assembler assembler, int userScript) {
+    public void addToRecentDocs(String fp, Assembler assembler, int userScript, int alternativeScript) {
         // check for valid parameter
         if (null == fp || fp.isEmpty()) {
             return;
@@ -427,16 +459,20 @@ public class Settings {
         LinkedList<Assembler> recasms = new LinkedList<>();
         // linked list for scripts
         LinkedList<Integer> recscripts = new LinkedList<>();
+        // linked list for alternative scripts
+        LinkedList<Integer> recaltscripts = new LinkedList<>();
         // add new filepath to linked list
         recdocs.add(fp);
         recasms.add(assembler);
         recscripts.add(userScript);
+        recaltscripts.add(alternativeScript);
         // iterate all current recent documents
         for (int cnt = 1; cnt <= recentDocCount; cnt++) {
             // retrieve recent document
             String recentDoc = getRecentDocAsString(cnt);
             Assembler asm = getRecentDocAssembler(cnt);
             int script = getRecentDocScript(cnt);
+            int altScript = getRecentDocAltScript(cnt);
             // check whether the linked list already contains such a document
             if (recentDoc != null && !recentDoc.isEmpty()) {
                 // check for existing file
@@ -446,6 +482,7 @@ public class Settings {
                     recasms.add(asm);
                     recscripts.add(script);
                     recdocs.add(recentDoc);
+                    recaltscripts.add(altScript);
                 }
             }
         }
@@ -454,10 +491,10 @@ public class Settings {
             // check for valid bounds of linked list
             if (recdocs.size() >= cnt) {
                 // and set recent document
-                setRecentDoc(cnt, recdocs.get(cnt - 1), recasms.get(cnt - 1), recscripts.get(cnt - 1));
+                setRecentDoc(cnt, recdocs.get(cnt - 1), recasms.get(cnt - 1), recscripts.get(cnt - 1), recaltscripts.get(cnt - 1));
             } // else fill remaining recent documents with empty strings
             else {
-                setRecentDoc(cnt, "", Assemblers.ASM_KICKASSEMBLER, -1);
+                setRecentDoc(cnt, "", Assemblers.ASM_KICKASSEMBLER, -1, -1);
             }
         }
     }
@@ -470,8 +507,9 @@ public class Settings {
      * @param fp the filepath to the recently used document as string
      * @param assembler
      * @param userScript
+     * @param alternativeScript
      */
-    public void setRecentDoc(int nr, String fp, Assembler assembler, int userScript) {
+    public void setRecentDoc(int nr, String fp, Assembler assembler, int userScript, int alternativeScript) {
         // check for valid parameter
         if (null == fp || -1 == nr) {
             return;
@@ -488,6 +526,7 @@ public class Settings {
         el.setText(fp);
         el.setAttribute(REC_DOC_ASSEMBLER, String.valueOf(assembler.getID()));
         el.setAttribute(REC_DOC_SCRIPT, String.valueOf(userScript));
+        el.setAttribute(REC_DOC_ALT_SCRIPT, String.valueOf(alternativeScript));
     }
 
     public File getLastUsedPath() {
@@ -514,7 +553,7 @@ public class Settings {
     }
 
     public boolean getScaleFont() {
-        return genericBooleanGetter(SETTING_SCALE_FONT);
+        return genericBooleanGetter(SETTING_SCALE_FONT, false);
     }
 
     public void setScaleFont(boolean scale) {
@@ -522,7 +561,7 @@ public class Settings {
     }
 
     public boolean getSidebarIsHidden() {
-        return genericBooleanGetter(SETTING_SIDEBAR_ISHIDDEN);
+        return genericBooleanGetter(SETTING_SIDEBAR_ISHIDDEN, false);
     }
 
     public void setSidebarIsHidden(boolean val) {
@@ -530,37 +569,19 @@ public class Settings {
     }
 
     public boolean getUseNoTabs() {
-        Element el = root.getChild(SETTING_USE_NOTABS);
-        if (el != null) {
-            return el.getText().equals("1");
-        }
-        return false;
+        return genericBooleanGetter(SETTING_USE_NOTABS, false);
     }
 
     public void setUseNoTabs(boolean val) {
-        Element el = root.getChild(SETTING_USE_NOTABS);
-        if (null == el) {
-            el = new Element(SETTING_USE_NOTABS);
-            root.addContent(el);
-        }
-        el.setText(val == Boolean.TRUE ? "1" : "0");
+        genericBooleanSetter(SETTING_USE_NOTABS, val);
     }
 
     public boolean getFindByType() {
-        Element el = root.getChild(SETTING_FINDBYTYPE);
-        if (el != null) {
-            return el.getText().equals("1");
-        }
-        return false;
+        return genericBooleanGetter(SETTING_FINDBYTYPE, false);
     }
 
     public void setFindByType(boolean val) {
-        Element el = root.getChild(SETTING_FINDBYTYPE);
-        if (null == el) {
-            el = new Element(SETTING_FINDBYTYPE);
-            root.addContent(el);
-        }
-        el.setText(val == Boolean.TRUE ? "1" : "0");
+        genericBooleanSetter(SETTING_FINDBYTYPE, val);
     }
 
     public boolean getWaitForProcess() {
@@ -947,62 +968,27 @@ public class Settings {
     }
 
     public boolean getReopenOnStartup() {
-        Element el = root.getChild(SETTING_REOPEN_FILES_ON_STARTUP);
-        if (el != null) {
-            return el.getText().equals("1");
-        }
-        return true;
+        return genericBooleanGetter(SETTING_REOPEN_FILES_ON_STARTUP, true);
     }
 
     public void setReopenOnStartup(boolean val) {
-        Element el = root.getChild(SETTING_REOPEN_FILES_ON_STARTUP);
-        if (null == el) {
-            el = new Element(SETTING_REOPEN_FILES_ON_STARTUP);
-            root.addContent(el);
-        }
-        el.setText(val == Boolean.TRUE ? "1" : "0");
+        genericBooleanSetter(SETTING_REOPEN_FILES_ON_STARTUP, val);
     }
 
     public int getTabWidth() {
-        Element el = root.getChild(SETTING_TABWIDTH);
-        if (el != null) {
-            try {
-                return Integer.parseInt(el.getText());
-            } catch (NumberFormatException ex) {
-                return 4;
-            }
-        }
-        return 4;
+        return genericIntGetter(SETTING_TABWIDTH, 4);
     }
 
     public void setTabWidth(int tabwidth) {
-        Element el = root.getChild(SETTING_TABWIDTH);
-        if (null == el) {
-            el = new Element(SETTING_TABWIDTH);
-            root.addContent(el);
-        }
-        el.setText(String.valueOf(tabwidth));
+        genericIntSetter(SETTING_TABWIDTH, tabwidth);
     }
 
     public int getListGotoIndex() {
-        Element el = root.getChild(SETTING_LISTGOTOINDEX);
-        if (el != null) {
-            try {
-                return Integer.parseInt(el.getText());
-            } catch (NumberFormatException ex) {
-                return -1;
-            }
-        }
-        return -1;
+        return genericIntGetter(SETTING_LISTGOTOINDEX, -1);
     }
 
     public void setListGotoIndex(int tabwidth) {
-        Element el = root.getChild(SETTING_LISTGOTOINDEX);
-        if (null == el) {
-            el = new Element(SETTING_LISTGOTOINDEX);
-            root.addContent(el);
-        }
-        el.setText(String.valueOf(tabwidth));
+        genericIntSetter(SETTING_LISTGOTOINDEX, tabwidth);
     }
 
     public String getExternalEditorPath() {
@@ -1022,23 +1008,11 @@ public class Settings {
     }
 
     public int getLastUserScript() {
-        Element el = root.getChild(SETTING_LAST_SCRIPT);
-        try {
-            if (el != null) {
-                return Integer.parseInt(el.getText());
-            }
-        } catch (NumberFormatException ex) {
-        }
-        return 0;
+        return genericIntGetter(SETTING_LAST_SCRIPT, 0);
     }
 
     public void setLastUserScript(int index) {
-        Element el = root.getChild(SETTING_LAST_SCRIPT);
-        if (null == el) {
-            el = new Element(SETTING_LAST_SCRIPT);
-            root.addContent(el);
-        }
-        el.setText(String.valueOf(index));
+        genericIntSetter(SETTING_LAST_SCRIPT, index);
     }
 
     /**
@@ -1127,9 +1101,11 @@ public class Settings {
                 // get compiler value
                 String attr_c = e.getAttributeValue(ATTR_ASM);
                 String attr_s = e.getAttributeValue(ATTR_SCRIPT);
+                String attr_as = e.getAttributeValue(ATTR_ALT_SCRIPT);
                 // init defaults
                 Assembler assembler = Assemblers.ASM_KICKASSEMBLER;
                 int script = -1;
+                int altScript = -1;
                 // check if we have compiler value
                 try {
                     if (attr_c != null) {
@@ -1138,12 +1114,16 @@ public class Settings {
                     if (attr_s != null) {
                         script = Integer.parseInt(attr_s);
                     }
+                    if (attr_as != null) {
+                        altScript = Integer.parseInt(attr_as);
+                    }
                 } catch (NumberFormatException ex) {
                     assembler = Assemblers.ASM_KICKASSEMBLER;
                     script = -1;
+                    altScript = -1;
                 }
                 // add compiler and filepath to return value
-                rofiles.add(new Object[]{f, assembler, script});
+                rofiles.add(new Object[]{f, assembler, script, altScript});
             }
         }
         return rofiles;
@@ -1163,6 +1143,7 @@ public class Settings {
             File fp = ep.getFilePath(i);
             int c = ep.getAssembler(i).getID();
             int s = ep.getScript(i);
+            int as = ep.getAlternativeScript(i);
             // save if exists
             if (fp != null && fp.exists()) {
                 // create new child element
@@ -1171,19 +1152,36 @@ public class Settings {
                 child.setText(fp.getAbsolutePath());
                 child.setAttribute(ATTR_ASM, String.valueOf(c));
                 child.setAttribute(ATTR_SCRIPT, String.valueOf(s));
+                child.setAttribute(ATTR_ALT_SCRIPT, String.valueOf(as));
                 // add to database
                 el.addContent(child);
             }
         }
     }
 
-    private boolean genericBooleanGetter(String key) {
+    /**
+     * Returns the setting (saved value) for boolean values. Returns
+     * the argument {@code defaultValue} if element does not exist
+     * in the settings file.
+     * 
+     * @param key the key of the specific settings
+     * @param defaultValue a default value that will be returned in case the 
+     * setting {@code key} does not exist.
+     * @return the saved setting for {@code key} as integer value.
+     */
+    private boolean genericBooleanGetter(String key, boolean defaultValue) {
         Element el = settingsFile.getRootElement().getChild(key);
         if (el != null) {
             return el.getText().equals("1");
         }
-        return false;
+        return defaultValue;
     }
+    /**
+     * Sets application preferences value for settings saved as boolean values.
+     * 
+     * @param key the key of the specific settings
+     * @param val the values to be set
+     */
     private void genericBooleanSetter(String key, boolean val) {
         Element el = settingsFile.getRootElement().getChild(key);
         if (null == el) {
@@ -1194,7 +1192,7 @@ public class Settings {
     }
     
     /**
-     * Returns the setting (saved value) for integer values. Return
+     * Returns the setting (saved value) for integer values. Returns
      * the argument {@code defaultValue} if element does not exist
      * in the settings file.
      * 
@@ -1214,6 +1212,12 @@ public class Settings {
         }
         return defaultValue;
     }
+    /**
+     * Sets application preferences value for settings saved as integer values.
+     * 
+     * @param key the key of the specific settings
+     * @param val the values to be set
+     */
     private void genericIntSetter(String key, int val) {
         Element el = settingsFile.getRootElement().getChild(key);
         if (null == el) {
@@ -1222,6 +1226,16 @@ public class Settings {
         }
         el.setText(String.valueOf(val));
     }
+    /**
+     * Returns the setting (saved value) for string values. Returns
+     * the argument {@code defaultValue} if element does not exist
+     * in the settings file.
+     * 
+     * @param key the key of the specific settings
+     * @param defaultValue a default value that will be returned in case the 
+     * setting {@code key} does not exist.
+     * @return the saved setting for {@code key} as integer value.
+     */
     private String genericStringGetter(String key, String defaultValue) {
         Element el = settingsFile.getRootElement().getChild(key);
         String retval = defaultValue;
@@ -1230,6 +1244,12 @@ public class Settings {
         }
         return retval;
     }
+    /**
+     * Sets application preferences value for settings saved as string values.
+     * 
+     * @param key the key of the specific settings
+     * @param val the values to be set
+     */
     private void genericStringSetter(String key, String val) {
         Element el = settingsFile.getRootElement().getChild(key);
         if (null == el) {
@@ -1242,4 +1262,5 @@ public class Settings {
             el.setText("");
         }
     }
+    
 }

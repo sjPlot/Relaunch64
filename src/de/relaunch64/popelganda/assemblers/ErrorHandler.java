@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
@@ -74,6 +73,7 @@ public class ErrorHandler {
          * @param loglen the length of the error message in lines. most assemblers have 
          * all error information in one line. however, KickAss for instance,
          * uses two lines.
+         * @param info_only
          * @param file the source file where the error was found. can be used to
          * open the file with errors (if not already opened), by using the
          * {@link #getAbsoluteErrorFilePath()} method.
@@ -220,7 +220,7 @@ public class ErrorHandler {
                 int errorTab = editorPanes.getOpenedFileTab(ef);
                 // if not, open it
                 if (-1 == errorTab) {
-                    editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), 0);
+                    editorPanes.loadFile(ef, editorPanes.getActiveAssembler(), 0, -1);
                 } // if tab is opened, but not selected, select it
                 else if (errorTab != editorPanes.getSelectedTab()) {
                     editorPanes.setSelectedTab(errorTab);
