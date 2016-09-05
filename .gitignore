@@ -8,6 +8,16 @@
 /store/
 /build/
 /nbproject/private/
+/build/classes/
+/target/
+
+# IDE Settings #
+/nbproject/
+/nbproject/private/
+.classpath
+.settings/
+.project
+/bin/
 
 # =========================
 # Operating System Files
