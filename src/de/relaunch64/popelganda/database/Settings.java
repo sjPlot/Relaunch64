@@ -92,6 +92,8 @@ public class Settings {
     private static final String SETTING_SUGGEST_SORT_CASE = "suggestioncasesort";
     private static final String SETTING_ANTIALIAS = "antialias";
     private static final String SETTING_SCALE_FONT = "scalefont";
+    private static final String SETTING_USE_SCALE_FACTOR = "usescalefactor";
+    private static final String SETTING_SCALE_FACTOR = "scalefactor";
     private static final String REC_DOC_ASSEMBLER = "compiler";
     private static final String REC_DOC_SCRIPT = "script";
     private static final String REC_DOC_ALT_SCRIPT = "altscript";
@@ -232,6 +234,8 @@ public class Settings {
         genericElementInit(SETTING_CF_STRUCTS, "1");
         genericElementInit(SETTING_CF_SECTIONS, "1");
         genericElementInit(SETTING_SCALE_FONT, "1");
+        genericElementInit(SETTING_USE_SCALE_FACTOR, "0");
+        genericElementInit(SETTING_SCALE_FACTOR, "2.0");
         genericElementInit(SETTING_CHECKUPDATES, "1");
         genericElementInit(SETTING_FINDFIELDFOCUS, "0");
         genericElementInit(SETTING_ALT_ASM_MODE, "0");
@@ -558,6 +562,22 @@ public class Settings {
 
     public void setScaleFont(boolean scale) {
         genericBooleanSetter(SETTING_SCALE_FONT, scale);
+    }
+
+    public boolean getUseScaleFactor() {
+        return genericBooleanGetter(SETTING_USE_SCALE_FACTOR, false);
+    }
+
+    public void setUseScaleFactor(boolean useScaleFactor) {
+        genericBooleanSetter(SETTING_USE_SCALE_FACTOR, useScaleFactor);
+    }
+
+    public float getScaleFactor() {
+        return genericFloatGetter(SETTING_SCALE_FACTOR, 2.0f);
+    }
+
+    public void setScaleFactor(float scaleFactor) {
+        genericFloatSetter(SETTING_SCALE_FACTOR, scaleFactor);
     }
 
     public boolean getSidebarIsHidden() {
@@ -1219,6 +1239,41 @@ public class Settings {
      * @param val the values to be set
      */
     private void genericIntSetter(String key, int val) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (null == el) {
+            el = new Element(key);
+            settingsFile.getRootElement().addContent(el);
+        }
+        el.setText(String.valueOf(val));
+    }
+    /**
+     * Returns the setting (saved value) for float values. Returns
+     * the argument {@code defaultValue} if element does not exist
+     * in the settings file.
+     *
+     * @param key the key of the specific settings
+     * @param defaultValue a default value that will be returned in case the
+     * setting {@code key} does not exist.
+     * @return the saved setting for {@code key} as float value.
+     */
+    private float genericFloatGetter(String key, float defaultValue) {
+        Element el = settingsFile.getRootElement().getChild(key);
+        if (el != null) {
+            try {
+                return Float.parseFloat(el.getText());
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+    /**
+     * Sets application preferences value for settings saved as float values.
+     *
+     * @param key the key of the specific settings
+     * @param val the values to be set
+     */
+    private void genericFloatSetter(String key, float val) {
         Element el = settingsFile.getRootElement().getChild(key);
         if (null == el) {
             el = new Element(key);
