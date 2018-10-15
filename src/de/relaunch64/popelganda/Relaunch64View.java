@@ -2481,7 +2481,8 @@ public class Relaunch64View extends FrameView implements WindowListener, DropTar
                 Font fm = (Font) UIManager.getLookAndFeelDefaults().get("defaultFont");
                 // check if laf supports default font
                 if (fm != null) {
-                    UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * Toolkit.getDefaultToolkit().getScreenResolution() / 96));
+                    float scaleFactor = settings.getUseScaleFactor() ? settings.getScaleFactor() : Toolkit.getDefaultToolkit().getScreenResolution() / 96;
+                    UIManager.getLookAndFeelDefaults().put("defaultFont", fm.deriveFont(fm.getSize2D() * scaleFactor));
                 }
             } catch (HeadlessException e) {
             }
