@@ -65,11 +65,11 @@ class Assembler_64tass implements Assembler {
      * case the assembler supports this. Used for syntax highlighting keywords.
      */
     final static String[] scriptKeywords = {
-        "abs", "acos", "address", "all", "any", "asin", "atan", "atan2",
+        "abs", "acos", "address", "all", "any", "asin", "atan", "atan2", "binary"
         "bits", "bool", "bytes", "cbrt", "ceil", "code", "cos", "cosh", "deg",
         "dict", "exp", "float", "floor", "format", "frac", "gap", "hypot",
         "int", "len", "list", "log", "log10", "pow", "rad", "random", "range",
-        "repr", "round", "sign", "sin", "sinh", "size", "sqrt", "str", "tan",
+        "repr", "round", "sign", "sin", "sinh", "size", "sort", "sqrt", "str", "tan",
         "tanh", "trunc", "tuple", "type"
     };
 
@@ -480,6 +480,8 @@ class Assembler_64tass implements Assembler {
                         case ".weak":
                         case ".rept":
                         case ".for":
+                        case ".brept":
+                        case ".bfor":
                         case ".section":
                             if ((foldtokens & Assemblers.CF_TOKEN_STRUCTS) != 0) foldLevel = (foldLevel & ~1) + 2;
                             break;
@@ -536,6 +538,8 @@ class Assembler_64tass implements Assembler {
                             case ".weak":
                             case ".rept":
                             case ".for":
+                            case ".brept":
+                            case ".bfor":
                             case ".section":
                             case ".bend":
                             case ".pend":
