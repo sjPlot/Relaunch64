@@ -65,7 +65,7 @@ class Assembler_64tass implements Assembler {
      * case the assembler supports this. Used for syntax highlighting keywords.
      */
     final static String[] scriptKeywords = {
-        "abs", "acos", "address", "all", "any", "asin", "atan", "atan2", "binary"
+        "abs", "acos", "address", "all", "any", "asin", "atan", "atan2", "binary",
         "bits", "bool", "bytes", "cbrt", "ceil", "code", "cos", "cosh", "deg",
         "dict", "exp", "float", "floor", "format", "frac", "gap", "hypot",
         "int", "len", "list", "log", "log10", "pow", "rad", "random", "range",
