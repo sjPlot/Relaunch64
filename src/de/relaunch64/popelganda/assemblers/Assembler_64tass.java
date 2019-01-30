@@ -186,7 +186,7 @@ class Assembler_64tass implements Assembler {
         LinkedList<lineInfo> labels = new LinkedList<>(), localLabels = new LinkedList<>();
         String line;
         // Daniel: I love this regex-stuff! Unfortunately I'm too old to understand it...
-        Pattern p = Pattern.compile("(?i)^\\s*(?:(?<label>[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b):?)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu)\\b)?.*");
+        Pattern p = Pattern.compile("(?i)^\\s*(?:(?<label>[\\p{javaUnicodeIdentifierStart}_][\\p{javaUnicodeIdentifierPart}_.]*\\b):?)?\\s*(?<directive>\\.(?:block|bend|proc|pend|function|endf|macro|segment|endm|struct|ends|union|endu|namespace|endn)\\b)?.*");
         LinkedList<String> myscope = new LinkedList<>(), scopes = new LinkedList<>();
         boolean scopeFound = false;
         try {
@@ -224,6 +224,7 @@ class Assembler_64tass implements Assembler {
                         case ".proc":
                         case ".struct":
                         case ".union":
+                        case ".namespace":
                             if (label != null) scopes.add(label); // new scope
                             else scopes.add("");
                             break;
@@ -233,6 +234,7 @@ class Assembler_64tass implements Assembler {
                         case ".endm":
                         case ".ends":
                         case ".endu":
+                        case ".endn":
                             if (!scopes.isEmpty()) scopes.removeLast(); // leave scope
                             break;
                         case ".macro":
@@ -472,7 +474,9 @@ class Assembler_64tass implements Assembler {
                         case ".segment":
                         case ".struct":
                         case ".union":
+                        case ".namespace":
                         case ".logical":
+                        case ".virtual":
                         case ".weak":
                         case ".rept":
                         case ".for":
@@ -490,7 +494,9 @@ class Assembler_64tass implements Assembler {
                         case ".endm":
                         case ".ends":
                         case ".endu":
+                        case ".endn":
                         case ".here":
+                        case ".endv":
                         case ".endweak":
                         case ".next":
                         case ".send":
@@ -524,7 +530,9 @@ class Assembler_64tass implements Assembler {
                             case ".segment":
                             case ".struct":
                             case ".union":
+                            case ".namespace":
                             case ".logical":
+                            case ".virtual":
                             case ".weak":
                             case ".rept":
                             case ".for":
@@ -535,7 +543,9 @@ class Assembler_64tass implements Assembler {
                             case ".endm":
                             case ".ends":
                             case ".endu":
+                            case ".endn":
                             case ".here":
+                            case ".endv":
                             case ".endweak":
                             case ".next":
                             case ".send":
